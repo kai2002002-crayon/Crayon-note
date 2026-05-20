@@ -483,10 +483,17 @@
         }
 
         function buildFilterPanel() {
-            const keys = { personality: ["天真", "活潑", "冷靜", "狂亂", "憂鬱"], race: [], position: [], job: [] };
+            // 這裡強制設定好所有按鈕的先後順序！
+            const keys = { 
+                personality: ["天真", "活潑", "冷靜", "狂亂", "憂鬱"], 
+                race: [], 
+                position: ["前排", "中排", "後排"], 
+                job: [] 
+            };
+            
             INITIAL_DATA.forEach(c => {
                 if (c.race && !keys.race.includes(c.race)) keys.race.push(c.race);
-                if (c.position && !keys.position.includes(c.position)) keys.position.push(c.position);
+                // 站位 (position) 已經強制定好順序，這裡不需要推入
                 if (c.job && !keys.job.includes(c.job)) keys.job.push(c.job);
             });
 
