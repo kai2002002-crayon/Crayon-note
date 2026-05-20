@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>教主專用！嘟嘟臉惡作劇【Vercel修復完全體・五維智慧篩選動態精算版】</title>
+    <title>教主專用！嘟嘟臉惡作劇【Vercel必成功登入流・五維智慧篩選動態精算版】</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
     
@@ -52,13 +52,12 @@
         <header class="bg-gradient-to-r from-amber-100 via-yellow-100 to-orange-100 rounded-2xl p-4 sm:p-6 shadow-md mb-6 border-4 border-amber-400 flex flex-col lg:flex-row justify-between items-center gap-4">
             <div class="text-center lg:text-left">
                 <h1 class="text-2xl sm:text-3xl font-bold text-amber-900 mb-1">🖍️ 著色板金格觀測站</h1>
-                <p class="text-amber-800 text-xs sm:text-sm">資料完全對齊 Excel 底層明細，支援性格/種族/站位/職業/指定金格屬性多維智慧過濾</p>
+                <p class="text-amber-800 text-xs sm:text-sm">資料完全對齊 Excel 底層明細，支援跨裝置雲端資料智慧安全同步</p>
             </div>
             
             <div id="authPanel" class="w-full lg:w-auto bg-white/80 p-3 rounded-xl border border-amber-300 shadow-sm flex flex-row items-center justify-between sm:justify-start gap-4">
                 <div id="userStatus" class="text-left text-[11px] sm:text-xs text-gray-600">
-                    <span class="block font-bold text-amber-800">當前狀態：單機模式</span>
-                    <span>紀錄保存在此裝置</span>
+                    <span class="block font-bold text-amber-800">連線檢測中...</span>
                 </div>
                 
                 <div id="authBtnContainer" class="shrink-0">
@@ -205,9 +204,6 @@
             "爆抗": { unopened: "bg-purple-50/70 text-purple-800 border-purple-200 hover:bg-purple-100/60", opened: "bg-purple-500 text-white font-bold shadow-sm hover:bg-purple-600 border-purple-600" }
         };
 
-        // ==========================================
-        // 📝 68名使者完整明細資料庫 (修復版)
-        // ==========================================
         const INITIAL_DATA = [
             { name: "洛涅", personality: "天真", race: "精靈", position: "前排", job: "肉盾", layer1: ["血量", "攻擊"], layer2: ["爆擊", "爆抗", "防禦"], layer3: ["攻擊", "血量", "爆擊", "防禦"] },
             { name: "薇薇", personality: "天真", race: "龍族", position: "前排", job: "肉盾", layer1: ["血量", "爆擊"], layer2: ["爆擊", "爆抗", "防禦"], layer3: ["攻擊", "血量", "爆擊", "防禦"] },
@@ -279,7 +275,7 @@
             { name: "喬菲", personality: "憂鬱", race: "獸人", position: "中排", job: "輸出", layer1: ["爆抗", "防禦"], layer2: ["攻擊", "爆擊", "血量"], layer3: ["攻擊", "血量", "防禦", "爆抗"] }
         ];
 
-        const storageKey = 'trickcal_matrix_saved_states_vercel_final_v12';
+        const storageKey = 'trickcal_matrix_saved_states_vercel_final_v13';
         let savedStates = JSON.parse(localStorage.getItem(storageKey)) || {};
 
         let activeFilters = { 
@@ -590,34 +586,32 @@
         }
 
         // ==========================================
-        // 🔒 Google 帳號認證（完美修正版邏輯）
+        // 🔒 Google 帳號認證（智慧跳轉自適應安全版）
         // ==========================================
         function handleAuth() {
             showError(""); 
             if (currentUser) {
                 auth.signOut().then(() => {
+                    localStorage.removeItem(storageKey);
                     location.reload();
                 }).catch(err => showError("登出失敗: " + err.message));
             } else {
                 const provider = new firebase.auth.GoogleAuthProvider();
-                auth.signInWithPopup(provider).catch(err => {
-                    showError("Google 登入失敗: " + err.message);
-                });
+                // 🚀 核心修正：將 Popup 升級為超高相容性的 Redirect 跳轉安全流，完美解決手機與 Vercel 攔截阻擋問題
+                auth.signInWithRedirect(provider);
             }
         }
 
-        // 🛠️ 優化：將按鈕控制權完全交給單一狀態監聽器，解決按鈕 HTML 切換導致監聽器斷連的問題
+        // 統一控管渲染 Google 按鈕外觀與登入狀態
         function updateAuthButtonUI(user) {
             const container = document.getElementById('authBtnContainer');
             if (user) {
-                // 已登入狀態：顯示經典紅色登出鈕
                 container.innerHTML = `
                     <button id="authBtn" onclick="handleAuth()" class="px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-bold rounded-lg shadow-sm transition">
                         登出
                     </button>
                 `;
             } else {
-                // 未登入狀態：顯示標準 Google 彩色圖標按鈕
                 container.innerHTML = `
                     <button id="authBtn" onclick="handleAuth()" class="google-login-btn bg-white rounded-lg p-2 flex items-center justify-center transition border border-gray-200">
                         <svg class="w-6 h-6 sm:w-7 sm:h-7" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -631,8 +625,19 @@
             }
         }
 
+        // 🧠 核心：捕捉跳轉登入回來的驗證數據
+        auth.getRedirectResult().then(result => {
+            if (result && result.user) {
+                console.log("跳轉驗證成功，使用者已登入:", result.user.displayName);
+            }
+        }).catch(err => {
+            console.error("驗證異常:", err);
+            showError("Google 授權失敗，請確認 Firebase 設定！(" + err.code + ")");
+        });
+
+        // 監聽並加載玩家雲端金格資料
         auth.onAuthStateChanged(user => {
-            updateAuthButtonUI(user); // 即時刷新按鈕狀態
+            updateAuthButtonUI(user); 
 
             if (user) {
                 currentUser = user;
@@ -652,7 +657,7 @@
                     }
                 }).catch(err => {
                     console.error("下載失敗:", err);
-                    showError("雲端讀取失敗，已降級為本機儲存模式。");
+                    showError("雲端讀取失敗，已自動降級為本機快取模式。");
                 });
             } else {
                 currentUser = null;
@@ -664,7 +669,7 @@
             }
         });
 
-        // 初始運行
+        // 初始化
         initStates();
         renderMatrix();
         buildFilterPanel();
