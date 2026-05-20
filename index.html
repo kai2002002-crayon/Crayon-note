@@ -198,13 +198,6 @@
     </script>
 
     <script>
-        // 設定屬性優先權順序 (攻擊>防禦>血量>爆擊>爆抗)
-        const ATTR_PRIORITY = ["攻擊", "防禦", "血量", "爆擊", "爆抗"];
-        
-        // 核心排序函數
-        function sortAttrs(attrs) {
-            return attrs.sort((a, b) => ATTR_PRIORITY.indexOf(a) - ATTR_PRIORITY.indexOf(b));
-        }
         // ==========================================
         // 核心資料區
         // ==========================================
