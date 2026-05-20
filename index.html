@@ -648,6 +648,15 @@
             container.innerHTML = '';
             const personalities = ["天真", "活潑", "冷靜", "狂亂", "憂鬱"];
 
+            // 定義性格邊框顏色 Map
+            const personalityBorderColors = {
+                "天真": "border-green-500",
+                "冷靜": "border-blue-500",
+                "狂亂": "border-red-500",
+                "活潑": "border-yellow-400", // 黃色用 400 視覺效果較好
+                "憂鬱": "border-purple-500"
+            };
+
             personalities.forEach(pName => {
                 const pChars = INITIAL_DATA.filter(c => c.personality === pName);
                 if (pChars.length === 0) return;
@@ -680,6 +689,9 @@
                     const posPath = IMAGE_MAP[`position_${char.position}`] || "";
                     const jobPath = IMAGE_MAP[`job_${char.job}`] || "";
 
+                    // 獲取當前角色的邊框顏色，如果沒有定義則預設灰色
+                    const borderColorClass = personalityBorderColors[char.personality] || "border-gray-300";
+
                     const nameCol = document.createElement('div');
                     nameCol.className = "flex flex-row items-center justify-start gap-3 min-w-[210px] w-full md:w-auto border-b md:border-b-0 pb-2 md:pb-0 border-gray-200/50";
                     
@@ -687,8 +699,9 @@
                         <div class="relative shrink-0 w-12 h-12">
                             <img src="${avatarPath}" alt="${char.name}" 
                                  onerror="this.style.display='none'; document.getElementById('fall_av_${char.name}').classList.remove('hidden');"
-                                 class="char-avatar w-12 h-12 rounded-full border-2 border-amber-300 shadow-inner object-cover bg-white">
-                            <div id="fall_av_${char.name}" class="hidden char-avatar w-12 h-12 rounded-full border-2 border-amber-400 shadow-sm flex items-center justify-center font-bold text-amber-900 bg-gradient-to-br from-amber-100 to-yellow-200 text-lg">
+                                 class="char-avatar w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-inner object-cover bg-white">
+                            
+                            <div id="fall_av_${char.name}" class="hidden char-avatar w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-sm flex items-center justify-center font-bold text-amber-900 bg-gradient-to-br from-amber-100 to-yellow-200 text-lg">
                                 ${char.name.charAt(0)}
                             </div>
                         </div>
@@ -879,7 +892,7 @@
                         currentUser = null;
                         document.getElementById('userStatus').innerHTML = `
                             <span class="block font-bold text-amber-800">當前狀態：單機模式</span>
-                            <span>紀錄保存在此裝置</span>
+                            <span>紀錄保存在此装置</span>
                         `;
                     }
                 });
