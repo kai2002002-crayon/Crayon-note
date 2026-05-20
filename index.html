@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>教主專用！嘟嘟臉惡作劇【Vercel完全體・五維智慧篩選動態精算版】</title>
+    <title>教主專用！嘟嘟臉惡作劇【使者頭像化・五維智慧篩選動態精算版】</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
     
@@ -25,6 +25,7 @@
         .char-btn:active {
             transform: scale(0.94);
         }
+        /* 頭像微動畫 */
         .char-avatar {
             transition: transform 0.2s ease;
         }
@@ -34,16 +35,6 @@
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #fcf8f2; }
         ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 4px; }
-        
-        /* 🎨 Google 官方標準 Logo 按鈕陰影與微調 */
-        .google-login-btn {
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.15);
-            transition: all 0.15s ease;
-        }
-        .google-login-btn:hover {
-            box-shadow: 0 3px 6px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.12);
-            background-color: #fcfcfc;
-        }
     </style>
 </head>
 <body class="p-3 sm:p-6 md:p-8 bg-[#fcf8f2] text-gray-800">
@@ -52,8 +43,8 @@
         
         <header class="bg-gradient-to-r from-amber-100 via-yellow-100 to-orange-100 rounded-2xl p-4 sm:p-6 shadow-md mb-6 border-4 border-amber-400 flex flex-col lg:flex-row justify-between items-center gap-4">
             <div class="text-center lg:text-left">
-                <h1 class="text-2xl sm:text-3xl font-bold text-amber-900 mb-1">🖍️ 著色板金格觀測站 (Vercel 完全體版)</h1>
-                <p class="text-amber-800 text-xs sm:text-sm">已全面啟用 Google Popup 彈出式安全登入，支援跨裝置雲端資料即時同步</p>
+                <h1 class="text-2xl sm:text-3xl font-bold text-amber-900 mb-1">🖍️ 著色板金格觀測站 (使者頭像視覺化)</h1>
+                <p class="text-amber-800 text-xs sm:text-sm">結合圖鑑頭像與明細名字，支援性格/種族/站位/職業/指定金格屬性多維智慧過濾</p>
             </div>
             
             <div id="authPanel" class="w-full lg:w-auto bg-white/80 p-3 rounded-xl border border-amber-300 shadow-sm flex flex-row items-center justify-between sm:justify-start gap-3">
@@ -207,6 +198,9 @@
             "爆抗": { unopened: "bg-purple-50/70 text-purple-800 border-purple-200 hover:bg-purple-100/60", opened: "bg-purple-500 text-white font-bold shadow-sm hover:bg-purple-600 border-purple-600" }
         };
 
+        // ==========================================
+        // 📝 68名使者完整明細資料庫 (已安全綁定背景數據)
+        // ==========================================
         const INITIAL_DATA = [
             { name: "洛涅", personality: "天真", race: "精靈", position: "前排", job: "肉盾", layer1: ["血量", "攻擊"], layer2: ["爆擊", "爆抗", "防禦"], layer3: ["攻擊", "血量", "爆擊", "防禦"] },
             { name: "薇薇", personality: "天真", race: "龍族", position: "前排", job: "肉盾", layer1: ["血量", "爆擊"], layer2: ["爆擊", "爆抗", "防禦"], layer3: ["攻擊", "血量", "爆擊", "防禦"] },
@@ -219,7 +213,7 @@
             { name: "斯皮奇", personality: "天真", race: "幽靈", position: "後排", job: "輸出", layer1: ["攻擊", "防禦"], layer2: ["血量", "攻擊", "防禦"], layer3: ["攻擊", "爆擊", "血量", "爆抗"] },
             { name: "海莉", personality: "天真", race: "精靈", position: "中排", job: "輸出", layer1: ["防禦", "爆抗"], layer2: ["爆擊", "血量", "攻擊"], layer3: ["攻擊", "血量", "防禦", "爆抗"] },
             { name: "大木頭", personality: "天真", race: "魔靈", position: "前排", job: "肉盾", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "爆擊", "防禦", "爆抗"] },
-            { name: "阿萊特", personality: "天真", race: "精靈", position: "前排", job: "肉盾", layer1: ["爆抗", "爆擊"], layer2: ["爆擊", "血量", "爆抗"], layer3: ["爆抗", "血量", "防禦", "爆抗"] },
+            { name: "阿萊特", personality: "天真", race: "精靈", position: "前排", job: "肉盾", layer1: ["爆抗", "爆擊"], layer2: ["爆擊", "血量", "爆抗"], layer3: ["爆擊", "血量", "防禦", "爆抗"] },
             { name: "莎莉", personality: "天真", race: "魔女", position: "後排", job: "輔助", layer1: ["血量", "爆擊"], layer2: ["爆擊", "防禦", "爆抗"], layer3: ["攻擊", "爆擊", "血量", "防禦"] },
             { name: "路易", personality: "天真", race: "精靈", position: "中排", job: "輸出", layer1: ["爆擊", "血量"], layer2: ["爆擊", "防禦", "爆抗"], layer3: ["攻擊", "爆擊", "血量", "防禦"] },
             { name: "修帕", personality: "活潑", race: "妖精", position: "後排", job: "輔助", layer1: ["爆擊", "爆抗"], layer2: ["爆擊", "血量", "爆抗"], layer3: ["爆擊", "血量", "防禦", "爆抗"] },
@@ -242,7 +236,7 @@
             { name: "佩佩", personality: "冷靜", race: "魔女", position: "前排", job: "肉盾", layer1: ["爆擊", "爆抗"], layer2: ["爆擊", "血量", "爆抗"], layer3: ["爆擊", "血量", "防禦", "爆抗"] },
             { name: "希拉", personality: "冷靜", race: "魔靈", position: "後排", job: "輸出", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "爆擊", "防禦", "爆抗"] },
             { name: "皮可菈", personality: "冷靜", race: "魔女", position: "後排", job: "輔助", layer1: ["爆抗", "防禦"], layer2: ["攻擊", "爆擊", "血量"], layer3: ["攻擊", "血量", "防禦", "爆抗"] },
-            { name: "艾蜜莉雅", personality: "冷靜", race: "精靈", position: "後排", job: "輔助", layer1: ["防禦", "攻擊"], layer2: ["攻擊", "爆擊", "血量"], layer3: ["攻擊", "血量", "防禦", "爆抗"] },
+            { name: "艾蜜莉雅", personality: "冷靜", race: "精靈", position: "後排", job: "輔助", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "爆擊", "血量"], layer3: ["攻擊", "血量", "防禦", "爆抗"] },
             { name: "芙莉可", personality: "冷靜", race: "魔女", position: "中排", job: "輸出", layer1: ["血量", "攻擊"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "爆擊", "防禦", "爆抗"] },
             { name: "綾", personality: "冷靜", race: "魔女", position: "中排", job: "輸出", layer1: ["防禦", "攻擊"], layer2: ["攻擊", "血量", "防禦"], layer3: ["攻擊", "爆擊", "血量", "爆抗"] },
             { name: "帕特拉", personality: "冷靜", race: "妖精", position: "前排", job: "肉盾", layer1: ["防禦", "攻擊"], layer2: ["攻擊", "血量", "防禦"], layer3: ["攻擊", "爆擊", "血量", "爆抗"] },
@@ -278,7 +272,7 @@
             { name: "喬菲", personality: "憂鬱", race: "獸人", position: "中排", job: "輸出", layer1: ["爆抗", "防禦"], layer2: ["攻擊", "爆擊", "血量"], layer3: ["攻擊", "血量", "防禦", "爆抗"] }
         ];
 
-        const storageKey = 'trickcal_matrix_saved_states_vercel_final';
+        const storageKey = 'trickcal_matrix_saved_states_avatar_v1';
         let savedStates = JSON.parse(localStorage.getItem(storageKey)) || {};
 
         let activeFilters = { 
@@ -497,6 +491,7 @@
             document.getElementById('filtered_char_count').innerText = visibleCharCount;
         }
 
+        // 🖼️ 核心升級：視覺化頭像名字與金格佈局生成器
         function renderMatrix() {
             const container = document.getElementById('matrixContainer');
             container.innerHTML = '';
@@ -524,14 +519,21 @@
                     charCard.id = `char_card_${char.name}`;
                     charCard.className = "char-card-wrapper bg-gray-50/50 p-3 sm:p-4 rounded-xl border border-gray-200/60 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-4 transition-all duration-200";
 
-                    // 自適應文字頭像
+                    // 💡 圖源綁定處：日後可在此直接置換成你專屬的頭像圖床網址
+                    // 格式：`https://your-domain.com/avatars/${char.name}.png`
                     const imgUrl = ""; 
+
+                    // 建立名字與圖鑑頭像混合直欄
                     const nameCol = document.createElement('div');
-                    nameCol.className = "flex flex-row items-center justify-start gap-3 min-w-[170px] w-full md:w-auto border-b md:border-b-0 pb-2 md:pb-0 border-gray-200/50";
+                    nameCol.className = "flex flex-row md:flex-row items-center justify-start gap-3 min-w-[170px] w-full md:w-auto border-b md:border-b-0 pb-2 md:pb-0 border-gray-200/50";
                     
-                    let avatarHTML = imgUrl 
-                        ? `<img src="${imgUrl}" alt="${char.name}" class="char-avatar w-12 h-12 rounded-full border-2 border-amber-300 shadow-inner shrink-0 object-cover bg-white">`
-                        : `<div class="char-avatar w-12 h-12 rounded-full border-2 border-amber-400 shadow-sm shrink-0 flex items-center justify-center font-bold text-amber-900 bg-gradient-to-br from-amber-100 to-yellow-200 text-lg">${char.name.charAt(0)}</div>`;
+                    let avatarHTML = "";
+                    if (imgUrl) {
+                        avatarHTML = `<img src="${imgUrl}" alt="${char.name}" class="char-avatar w-12 h-12 rounded-full border-2 border-amber-300 shadow-inner shrink-0 object-cover bg-white">`;
+                    } else {
+                        // 質感文字兜底頭像：若無網址，自動抓角色名字第一個字渲染精美彩色圓形，極致防破圖
+                        avatarHTML = `<div class="char-avatar w-12 h-12 rounded-full border-2 border-amber-400 shadow-sm shrink-0 flex items-center justify-center font-bold text-amber-900 bg-gradient-to-br from-amber-100 to-yellow-200 text-lg">${char.name.charAt(0)}</div>`;
+                    }
 
                     nameCol.innerHTML = `
                         ${avatarHTML}
@@ -595,21 +597,21 @@
             });
         }
 
-        // ==========================================
-        // 🔒 Google 帳號認證（Vercel 專用彈出Popup型）
-        // ==========================================
         function handleAuth() {
             showError(""); 
-            if (currentUser) {
-                auth.signOut().then(() => location.reload());
-            } else {
+            if (currentUser) { auth.signOut().then(() => location.reload()); } 
+            else {
                 const provider = new firebase.auth.GoogleAuthProvider();
-                // 🚀 Vercel 獨立網域優化：正式升級為 Popup 彈出小視窗，再也不會全頁跳轉
-                auth.signInWithPopup(provider).catch(err => {
-                    showError("Google 登入失敗: " + err.message);
-                });
+                auth.signInWithRedirect(provider).catch(err => showError("Google 登入失敗: " + err.message));
             }
         }
+
+        auth.getRedirectResult().then(result => {
+            if (result && result.user) console.log("登入成功:", result.user);
+        }).catch(err => {
+            if (err.code === "auth/auth-domain-config-required") { showError("⚠️ 請至 Firebase 新增網域白名單！"); } 
+            else { showError("連線異常: " + err.message); }
+        });
 
         auth.onAuthStateChanged(user => {
             if (user) {
@@ -626,12 +628,10 @@
                         initStates(); renderMatrix(); calculateStats();
                     } else { calculateStats(); }
                 }).catch(err => {
-                    console.error("雲端載入失敗:", err);
-                    showError("讀取雲端失敗，已降級為本機快取模式。");
+                    console.error("下載失敗:", err);
+                    showError("雲端讀取失敗，已切換為本機儲存模式。");
                 });
-            } else {
-                currentUser = null;
-            }
+            } else { currentUser = null; }
         });
 
         initStates();
