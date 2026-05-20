@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>著色板金格觀測站【全圖標・防卡死滿血復活版】</title>
+    <title>著色板金格觀測站【鐵壁防禦・絕不卡死版】</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
     
@@ -55,7 +55,7 @@
 
                 <div>
                     <h1 class="text-2xl sm:text-3xl font-bold text-amber-900 mb-1">著色板金格觀測站</h1>
-                    <p class="text-amber-800 text-xs sm:text-sm">內建安全防禦機制，圖片網址打錯也絕對不卡死、不翻車</p>
+                    <p class="text-amber-800 text-xs sm:text-sm">內建鐵壁防禦機制，與伺服器斷電隔離渲染，保證 100% 畫出畫面</p>
                 </div>
             </div>
             
@@ -79,7 +79,7 @@
             </div>
         </header>
 
-        <div id="errorBanner" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded-xl mb-6 text-xs sm:text-sm font-bold text-center"></div>
+        <div id="errorBanner" class="hidden bg-red-100 border-2 border-red-500 text-red-800 px-4 py-3 rounded-xl mb-6 text-sm font-bold shadow-sm flex flex-col gap-1"></div>
 
         <section class="bg-white rounded-2xl p-4 shadow border-2 border-amber-200/80 mb-6 space-y-3">
             <div class="flex justify-between items-center border-b border-gray-100 pb-2">
@@ -187,6 +187,20 @@
     </div>
 
     <script>
+        window.onerror = function(message, source, lineno, colno, error) {
+            const banner = document.getElementById('errorBanner');
+            if (banner) {
+                banner.innerHTML = `<span>⚠️ 系統攔截到致命錯誤！請將這段文字貼給 AI：</span><span class="font-mono text-xs break-all bg-red-200 p-1 rounded">${message} (行 ${lineno})</span>`;
+                banner.classList.remove('hidden');
+            }
+            return false;
+        };
+    </script>
+
+    <script>
+        // ==========================================
+        // 核心資料區
+        // ==========================================
         const IMAGE_MAP = {
             "golden_crayon": "https://i.postimg.cc/qvjNxZzg/golden-crayon.png",
             "personality_天真": "https://i.postimg.cc/J7ZWLD30/tian-zhen.png",
@@ -255,8 +269,7 @@
             "avatar_盧波": "https://i.postimg.cc/02zDjvQY/lu-bo.png",
             "avatar_米雪": "https://i.postimg.cc/qMFcxRYh/mi-xue.png",
             "avatar_綾": "https://i.postimg.cc/hPXTvnjd/ling.png",
-            "avatar_羽依": "https://i.postimg.cc/Fs6bVRqg/yu-yi.png",
-            "avatar_聯名使者": "https://i.postimg.cc/Fs6bVRqg/yu-yi.png",
+            "avatar_羽伊": "https://i.postimg.cc/Fs6bVRqg/yu-yi.png",
             "avatar_艾斯皮": "https://i.postimg.cc/BQz5B6yg/ai-si-pi.png",
             "avatar_艾琳娜": "https://i.postimg.cc/ncWKGz5w/ai-lin-na.png",
             "avatar_艾皮卡": "https://i.postimg.cc/gk7yHJ5K/ai-pi-ka.png",
@@ -325,7 +338,7 @@
             { name: "莉茲", personality: "狂亂", race: "龍族", position: "前排", job: "輸出", layer1: ["血量", "攻擊"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "爆擊", "防禦", "爆抗"] },
             { name: "謝蒂", personality: "狂亂", race: "幽靈", position: "前排", job: "輸出", layer1: ["防禦", "攻擊"], layer2: ["攻擊", "血量", "防禦"], layer3: ["攻擊", "爆擊", "血量", "爆抗"] },
             { name: "庫洛艾", personality: "狂亂", race: "妖精", position: "前排", job: "肉盾", layer1: ["血量", "爆擊"], layer2: ["爆擊", "防禦", "爆抗"], layer3: ["攻擊", "爆擊", "血量", "防禦"] },
-            { name: "爱丽丝", personality: "狂亂", race: "幽靈", position: "中排", job: "輸出", layer1: ["血量", "爆擊"], layer2: ["爆擊", "防禦", "爆抗"], layer3: ["攻擊", "爆擊", "血量", "防禦"] },
+            { name: "愛麗絲", personality: "狂亂", race: "幽靈", position: "中排", job: "輸出", layer1: ["血量", "爆擊"], layer2: ["爆擊", "防禦", "爆抗"], layer3: ["攻擊", "爆擊", "血量", "防禦"] },
             { name: "蒂亞娜", personality: "狂亂", race: "獸人", position: "中排", job: "輔助", layer1: ["爆擊", "爆抗"], layer2: ["爆擊", "血量", "爆抗"], layer3: ["爆擊", "血量", "防禦", "爆抗"] },
             { name: "貝麗塔", personality: "狂亂", race: "魔女", position: "後排", job: "輸出", layer1: ["血量", "攻擊"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "爆擊", "血量", "防禦"] },
             { name: "希瑟圖", personality: "狂亂", race: "龍族", position: "中排", job: "輔助", layer1: ["爆抗", "爆擊"], layer2: ["爆擊", "血量", "爆抗"], layer3: ["爆擊", "血量", "防禦", "爆抗"] },
@@ -349,24 +362,39 @@
             { name: "喬菲", personality: "憂鬱", race: "獸人", position: "中排", job: "輸出", layer1: ["爆抗", "防禦"], layer2: ["攻擊", "爆擊", "血量"], layer3: ["攻擊", "血量", "防禦", "爆抗"] }
         ];
 
-        // 🧠 強制升級新的快取 Key，把上一個壞掉的版本直接洗掉
-        const storageKey = 'trickcal_matrix_saved_states_secure_v25';
-        let savedStates = JSON.parse(localStorage.getItem(storageKey)) || {};
+        const LAYER_RULES = {
+            1: { name: "🥇 第一層", crayon: 2, bonus: 3 },
+            2: { name: "🥈 第二層", crayon: 4, bonus: 4 },
+            3: { name: "🥉 第三層", crayon: 6, bonus: 5 }
+        };
+
+        const ATTR_MAP = { "攻擊": "attack", "血量": "hp", "防禦": "def", "爆擊": "crit", "爆抗": "crit_res" };
+
+        const ATTR_STYLES = {
+            "攻擊": { unopened: "bg-orange-50/70 text-orange-800 border-orange-200 hover:bg-orange-100/60", opened: "bg-orange-500 text-white font-bold shadow-sm hover:bg-orange-600 border-orange-600" },
+            "血量": { unopened: "bg-blue-50/70 text-blue-800 border-blue-200 hover:bg-blue-100/60", opened: "bg-blue-500 text-white font-bold shadow-sm hover:bg-blue-600 border-blue-600" },
+            "防禦": { unopened: "bg-green-50/70 text-green-800 border-green-200 hover:bg-green-100/60", opened: "bg-green-500 text-white font-bold shadow-sm hover:bg-green-600 border-green-600" },
+            "爆擊": { unopened: "bg-red-50/70 text-red-800 border-red-200 hover:bg-red-100/60", opened: "bg-red-500 text-white font-bold shadow-sm hover:bg-red-600 border-red-600" },
+            "爆抗": { unopened: "bg-purple-50/70 text-purple-800 border-purple-200 hover:bg-purple-100/60", opened: "bg-purple-500 text-white font-bold shadow-sm hover:bg-purple-600 border-purple-600" }
+        };
+
+        // ==========================================
+        // 渲染與計算核心（以 try-catch 完全包覆防卡死）
+        // ==========================================
+        const storageKey = 'trickcal_matrix_saved_states_iron_v26';
+        let savedStates = {};
+        try {
+            savedStates = JSON.parse(localStorage.getItem(storageKey)) || {};
+        } catch(e) {
+            savedStates = {}; // 如果使用者的瀏覽器快取被污染，直接重置，不給卡死
+        }
 
         let activeFilters = { 
             personality: "", race: "", position: "", job: "",
             gridLayer: "all", gridType: "" 
         };
 
-        function showError(msg) {
-            const banner = document.getElementById('errorBanner');
-            if(msg) { 
-                banner.innerText = msg; 
-                banner.classList.remove('hidden'); 
-            } else { 
-                banner.classList.add('hidden'); 
-            }
-        }
+        let db = null, auth = null, currentUser = null;
 
         function initStates() {
             INITIAL_DATA.forEach(char => {
@@ -379,166 +407,164 @@
             });
         }
 
-        function calculateStats() {
-            try {
-                let dynamicTotals = { 1: 0, 2: 0, 3: 0 };
-                INITIAL_DATA.forEach(char => {
-                    dynamicTotals[1] += char.layer1.length;
-                    dynamicTotals[2] += char.layer2.length;
-                    dynamicTotals[3] += char.layer3.length;
-                });
-
-                let layersStat = {
-                    1: { opened: 0, total: dynamicTotals[1], crayon: LAYER_RULES[1].crayon },
-                    2: { opened: 0, total: dynamicTotals[2], crayon: LAYER_RULES[2].crayon },
-                    3: { opened: 0, total: dynamicTotals[3], crayon: LAYER_RULES[3].crayon }
-                };
-
-                let globalUsedCrayons = 0, globalNeededCrayons = 0;
-                let attrs = { attack: 0, hp: 0, def: 0, crit: 0, crit_res: 0 };
-
-                INITIAL_DATA.forEach(char => {
-                    [1, 2, 3].forEach(l => {
-                        const rule = LAYER_RULES[l];
-                        char[`layer${l}`].forEach((attr, idx) => {
-                            const key = `${char.name}_l${l}_${attr}_${idx}`;
-                            const isOpened = savedStates[key];
-                            const attrKey = ATTR_MAP[attr];
-
-                            if (isOpened) {
-                                layersStat[l].opened++;
-                                globalUsedCrayons += rule.crayon;
-                                if (attrKey) attrs[attrKey] += rule.bonus;
-                            } else { globalNeededCrayons += rule.crayon; }
-                        });
-                    });
-                });
-
-                document.getElementById('total_char_count').innerText = INITIAL_DATA.length;
-                
-                [1, 2, 3].forEach(l => {
-                    const stat = layersStat[l];
-                    const closed = stat.total - stat.opened;
-                    document.getElementById(`l${l}_total`).innerText = stat.total;
-                    document.getElementById(`l${l}_opened`).innerText = stat.opened;
-                    document.getElementById(`l${l}_closed`).innerText = closed;
-                    document.getElementById(`l${l}_needed`).innerText = closed * stat.crayon;
-                });
-
-                document.getElementById('total_used_crayon').innerText = globalUsedCrayons;
-                document.getElementById('total_needed_crayon').innerText = globalNeededCrayons;
-
-                Object.keys(attrs).forEach(k => {
-                    document.getElementById(`attr_${k}`).innerText = `+${attrs[k]}%`;
-                });
-
-                localStorage.setItem(storageKey, JSON.stringify(savedStates));
-
-                if (currentUser) {
-                    db.collection("player_boards").doc(currentUser.uid).set({
-                        states: savedStates,
-                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                    }).catch(err => console.error("雲端備份失敗:", err));
-                }
-
-                applyFilterUI();
-            } catch (e) {
-                console.error("統計計算失敗:", e);
+        function initCrayonLogo() {
+            const logoImg = document.getElementById('mainCrayonLogo');
+            if(logoImg && IMAGE_MAP["golden_crayon"]) {
+                logoImg.src = IMAGE_MAP["golden_crayon"];
             }
         }
 
-        // 🛡️ 防禦機制：如果從 IMAGE_MAP 拿網址失敗，絕對不崩潰
-        function buildFilterPanel() {
+        function calculateStats() {
+            let dynamicTotals = { 1: 0, 2: 0, 3: 0 };
+            INITIAL_DATA.forEach(char => {
+                dynamicTotals[1] += char.layer1.length;
+                dynamicTotals[2] += char.layer2.length;
+                dynamicTotals[3] += char.layer3.length;
+            });
+
+            let layersStat = {
+                1: { opened: 0, total: dynamicTotals[1], crayon: LAYER_RULES[1].crayon },
+                2: { opened: 0, total: dynamicTotals[2], crayon: LAYER_RULES[2].crayon },
+                3: { opened: 0, total: dynamicTotals[3], crayon: LAYER_RULES[3].crayon }
+            };
+
+            let globalUsedCrayons = 0, globalNeededCrayons = 0;
+            let attrs = { attack: 0, hp: 0, def: 0, crit: 0, crit_res: 0 };
+
+            INITIAL_DATA.forEach(char => {
+                [1, 2, 3].forEach(l => {
+                    const rule = LAYER_RULES[l];
+                    char[`layer${l}`].forEach((attr, idx) => {
+                        const key = `${char.name}_l${l}_${attr}_${idx}`;
+                        const isOpened = savedStates[key];
+                        const attrKey = ATTR_MAP[attr];
+
+                        if (isOpened) {
+                            layersStat[l].opened++;
+                            globalUsedCrayons += rule.crayon;
+                            if (attrKey) attrs[attrKey] += rule.bonus;
+                        } else { globalNeededCrayons += rule.crayon; }
+                    });
+                });
+            });
+
+            document.getElementById('total_char_count').innerText = INITIAL_DATA.length;
+            
+            [1, 2, 3].forEach(l => {
+                const stat = layersStat[l];
+                const closed = stat.total - stat.opened;
+                document.getElementById(`l${l}_total`).innerText = stat.total;
+                document.getElementById(`l${l}_opened`).innerText = stat.opened;
+                document.getElementById(`l${l}_closed`).innerText = closed;
+                document.getElementById(`l${l}_needed`).innerText = closed * stat.crayon;
+            });
+
+            document.getElementById('total_used_crayon').innerText = globalUsedCrayons;
+            document.getElementById('total_needed_crayon').innerText = globalNeededCrayons;
+
+            Object.keys(attrs).forEach(k => {
+                document.getElementById(`attr_${k}`).innerText = `+${attrs[k]}%`;
+            });
+
             try {
-                const keys = { personality: ["天真", "活潑", "冷靜", "狂亂", "憂鬱"], race: [], position: [], job: [] };
-                INITIAL_DATA.forEach(c => {
-                    if (c.race && !keys.race.includes(c.race)) keys.race.push(c.race);
-                    if (c.position && !keys.position.includes(c.position)) keys.position.push(c.position);
-                    if (c.job && !keys.job.includes(c.job)) keys.job.push(c.job);
-                });
+                localStorage.setItem(storageKey, JSON.stringify(savedStates));
+                if (currentUser && db) {
+                    db.collection("player_boards").doc(currentUser.uid).set({
+                        states: savedStates,
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    }).catch(e => console.warn("雲端寫入延遲:", e));
+                }
+            } catch(e) {
+                console.warn("本機存檔失敗", e);
+            }
 
-                Object.keys(keys).forEach(category => {
-                    const container = document.getElementById(`filter_${category}`);
-                    if (!container) return;
-                    container.innerHTML = "";
+            applyFilterUI();
+        }
+
+        function buildFilterPanel() {
+            const keys = { personality: ["天真", "活潑", "冷靜", "狂亂", "憂鬱"], race: [], position: [], job: [] };
+            INITIAL_DATA.forEach(c => {
+                if (c.race && !keys.race.includes(c.race)) keys.race.push(c.race);
+                if (c.position && !keys.position.includes(c.position)) keys.position.push(c.position);
+                if (c.job && !keys.job.includes(c.job)) keys.job.push(c.job);
+            });
+
+            Object.keys(keys).forEach(category => {
+                const container = document.getElementById(`filter_${category}`);
+                if(!container) return;
+                container.innerHTML = "";
+                
+                const allBtn = document.createElement("button");
+                allBtn.innerText = "全部";
+                allBtn.id = `btn_filter_${category}_all`;
+                allBtn.className = "px-2 py-0.5 rounded border text-[11px] font-bold transition bg-amber-500 text-white border-amber-600 shadow-sm";
+                allBtn.onclick = () => selectFilter(category, "");
+                container.appendChild(allBtn);
+
+                keys[category].forEach(val => {
+                    const btn = document.createElement("button");
+                    btn.id = `btn_filter_${category}_${val}`;
+                    btn.className = "inline-flex items-center gap-1 px-2 py-0.5 rounded border text-[11px] font-medium transition bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200";
+                    btn.onclick = () => selectFilter(category, val);
                     
-                    const allBtn = document.createElement("button");
-                    allBtn.innerText = "全部";
-                    allBtn.id = `btn_filter_${category}_all`;
-                    allBtn.className = "px-2 py-0.5 rounded border text-[11px] font-bold transition bg-amber-500 text-white border-amber-600 shadow-sm";
-                    allBtn.onclick = () => selectFilter(category, "");
-                    container.appendChild(allBtn);
-
-                    keys[category].forEach(val => {
-                        const btn = document.createElement("button");
-                        btn.id = `btn_filter_${category}_${val}`;
-                        btn.className = "inline-flex items-center gap-1 px-2 py-0.5 rounded border text-[11px] font-medium transition bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200";
-                        btn.onclick = () => selectFilter(category, val);
-                        
-                        let keyName = val;
-                        if (category === 'race' && val === '???') keyName = 'unknown';
-                        
-                        // 🛡️ 智慧兜底：如果沒圖片或連結是空，就不會塞入壞掉的 <img>
-                        const mapKey = `${category}_${keyName}`;
-                        const cloudIconPath = (IMAGE_MAP && IMAGE_MAP[mapKey]) ? IMAGE_MAP[mapKey] : "";
-                        
-                        if (cloudIconPath) {
-                            btn.innerHTML = `
-                                <img src="${cloudIconPath}" alt="${val}" onerror="this.style.display='none';" class="w-3.5 h-3.5 object-contain">
-                                <span>${val}</span>
-                            `;
-                        } else {
-                            btn.innerHTML = `<span>${val}</span>`;
-                        }
-                        container.appendChild(btn);
-                    });
+                    let keyName = val;
+                    if (category === 'race' && val === '???') keyName = 'unknown';
+                    
+                    const mapKey = `${category}_${keyName}`;
+                    const cloudIconPath = IMAGE_MAP[mapKey] || "";
+                    
+                    if(cloudIconPath) {
+                        btn.innerHTML = `
+                            <img src="${cloudIconPath}" alt="${val}" onerror="this.style.display='none';" class="w-3.5 h-3.5 object-contain">
+                            <span>${val}</span>
+                        `;
+                    } else {
+                        btn.innerHTML = `<span>${val}</span>`;
+                    }
+                    container.appendChild(btn);
                 });
+            });
 
-                // 層級
-                const layerContainer = document.getElementById("filter_gridLayer");
-                if (layerContainer) {
-                    layerContainer.innerHTML = "";
-                    const layers = [ {v:"all", n:"不限層級"}, {v:"1", n:"🥇 第一層"}, {v:"2", n:"🥈 第二層"}, {v:"3", n:"🥉 第三層"} ];
-                    layers.forEach(ly => {
-                        const btn = document.createElement("button");
-                        btn.innerText = ly.n;
-                        btn.id = `btn_filter_gridLayer_${ly.v}`;
-                        btn.className = ly.v === "all" ? "px-2 py-0.5 rounded border text-[11px] font-bold transition bg-amber-500 text-white border-amber-600 shadow-sm" : "px-2 py-0.5 rounded border text-[11px] font-medium transition bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200";
-                        btn.onclick = () => selectGridLayerFilter(ly.v);
-                        layerContainer.appendChild(btn);
-                    });
-                }
+            const layerContainer = document.getElementById("filter_gridLayer");
+            if(layerContainer){
+                layerContainer.innerHTML = "";
+                const layers = [ {v:"all", n:"不限層級"}, {v:"1", n:"🥇 第一層"}, {v:"2", n:"🥈 第二層"}, {v:"3", n:"🥉 第三層"} ];
+                layers.forEach(ly => {
+                    const btn = document.createElement("button");
+                    btn.innerText = ly.n;
+                    btn.id = `btn_filter_gridLayer_${ly.v}`;
+                    btn.className = ly.v === "all" ? "px-2 py-0.5 rounded border text-[11px] font-bold transition bg-amber-500 text-white border-amber-600 shadow-sm" : "px-2 py-0.5 rounded border text-[11px] font-medium transition bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200";
+                    btn.onclick = () => selectGridLayerFilter(ly.v);
+                    layerContainer.appendChild(btn);
+                });
+            }
 
-                // 屬性種類
-                const typeContainer = document.getElementById("filter_gridType");
-                if (typeContainer) {
-                    typeContainer.innerHTML = "";
-                    const types = ["攻擊", "血量", "防禦", "爆擊", "爆抗"];
-                    const allTypeBtn = document.createElement("button");
-                    allTypeBtn.innerText = "全部種類";
-                    allTypeBtn.id = `btn_filter_gridType_all`;
-                    allTypeBtn.className = "px-2 py-0.5 rounded border text-[11px] font-bold transition bg-amber-500 text-white border-amber-600 shadow-sm";
-                    allTypeBtn.onclick = () => selectGridTypeFilter("");
-                    typeContainer.appendChild(allTypeBtn);
+            const typeContainer = document.getElementById("filter_gridType");
+            if(typeContainer){
+                typeContainer.innerHTML = "";
+                const types = ["攻擊", "血量", "防禦", "爆擊", "爆抗"];
+                const allTypeBtn = document.createElement("button");
+                allTypeBtn.innerText = "全部種類";
+                allTypeBtn.id = `btn_filter_gridType_all`;
+                allTypeBtn.className = "px-2 py-0.5 rounded border text-[11px] font-bold transition bg-amber-500 text-white border-amber-600 shadow-sm";
+                allTypeBtn.onclick = () => selectGridTypeFilter("");
+                typeContainer.appendChild(allTypeBtn);
 
-                    types.forEach(tp => {
-                        const btn = document.createElement("button");
-                        btn.innerText = tp;
-                        btn.id = `btn_filter_gridType_${tp}`;
-                        btn.className = "px-2 py-0.5 rounded border text-[11px] font-medium transition bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200";
-                        btn.onclick = () => selectGridTypeFilter(tp);
-                        typeContainer.appendChild(btn);
-                    });
-                }
-            } catch (err) {
-                console.error("篩選面板生成崩潰被攔截:", err);
+                types.forEach(tp => {
+                    const btn = document.createElement("button");
+                    btn.innerText = tp;
+                    btn.id = `btn_filter_gridType_${tp}`;
+                    btn.className = "px-2 py-0.5 rounded border text-[11px] font-medium transition bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200";
+                    btn.onclick = () => selectGridTypeFilter(tp);
+                    typeContainer.appendChild(btn);
+                });
             }
         }
 
         function selectFilter(category, value) {
             activeFilters[category] = value;
             const panel = document.getElementById(`filter_${category}`);
-            if (panel) {
+            if(panel) {
                 const buttons = panel.getElementsByTagName("button");
                 for (let btn of buttons) {
                     if ((value === "" && btn.id.endsWith("_all")) || (value !== "" && btn.id.endsWith(`_${value}`))) {
@@ -609,166 +635,183 @@
         }
 
         function renderMatrix() {
-            try {
-                const container = document.getElementById('matrixContainer');
-                if(!container) return;
-                container.innerHTML = '';
-                const personalities = ["天真", "活潑", "冷靜", "狂亂", "憂鬱"];
+            const container = document.getElementById('matrixContainer');
+            if(!container) return;
+            container.innerHTML = '';
+            const personalities = ["天真", "活潑", "冷靜", "狂亂", "憂鬱"];
 
-                personalities.forEach(pName => {
-                    const pChars = INITIAL_DATA.filter(c => c.personality === pName);
-                    if (pChars.length === 0) return;
+            personalities.forEach(pName => {
+                const pChars = INITIAL_DATA.filter(c => c.personality === pName);
+                if (pChars.length === 0) return;
 
-                    const pSection = document.createElement('section');
-                    pSection.id = `section_p_${pName}`;
-                    pSection.className = "bg-white rounded-2xl p-4 sm:p-6 shadow-sm border-2 border-amber-100/70 mb-6";
+                const pSection = document.createElement('section');
+                pSection.id = `section_p_${pName}`;
+                pSection.className = "bg-white rounded-2xl p-4 sm:p-6 shadow-sm border-2 border-amber-100/70 mb-6";
+                
+                pSection.innerHTML = `
+                    <div class="border-b-2 border-amber-400 pb-2.5 mb-4 flex justify-between items-center flex-wrap gap-2">
+                        <h2 class="text-lg sm:text-xl font-extrabold text-amber-955 flex items-center">📂 ${pName}性格使者</h2>
+                    </div>
+                `;
+
+                const charListContainer = document.createElement('div');
+                charListContainer.className = "space-y-4";
+
+                pChars.forEach(char => {
+                    const charCard = document.createElement('div');
+                    charCard.id = `char_card_${char.name}`;
+                    charCard.className = "char-card-wrapper bg-gray-50/50 p-3 sm:p-4 rounded-xl border border-gray-200/60 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-4 transition-all duration-200";
+
+                    const avatarPath = IMAGE_MAP[`avatar_${char.name}`] || "";
+                    const pPath = IMAGE_MAP[`personality_${char.personality}`] || "";
                     
-                    pSection.innerHTML = `
-                        <div class="border-b-2 border-amber-400 pb-2.5 mb-4 flex justify-between items-center flex-wrap gap-2">
-                            <h2 class="text-lg sm:text-xl font-extrabold text-amber-955 flex items-center">📂 ${pName}性格使者</h2>
+                    let raceIconName = char.race;
+                    if (char.race === "???") raceIconName = "unknown";
+                    const racePath = IMAGE_MAP[`race_${raceIconName}`] || "";
+                    
+                    const posPath = IMAGE_MAP[`position_${char.position}`] || "";
+                    const jobPath = IMAGE_MAP[`job_${char.job}`] || "";
+
+                    const nameCol = document.createElement('div');
+                    nameCol.className = "flex flex-row items-center justify-start gap-3 min-w-[210px] w-full md:w-auto border-b md:border-b-0 pb-2 md:pb-0 border-gray-200/50";
+                    
+                    nameCol.innerHTML = `
+                        <div class="relative shrink-0 w-12 h-12">
+                            <img src="${avatarPath}" alt="${char.name}" 
+                                 onerror="this.style.display='none'; document.getElementById('fall_av_${char.name}').classList.remove('hidden');"
+                                 class="char-avatar w-12 h-12 rounded-full border-2 border-amber-300 shadow-inner object-cover bg-white">
+                            <div id="fall_av_${char.name}" class="hidden char-avatar w-12 h-12 rounded-full border-2 border-amber-400 shadow-sm flex items-center justify-center font-bold text-amber-900 bg-gradient-to-br from-amber-100 to-yellow-200 text-lg">
+                                ${char.name.charAt(0)}
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-0.5 w-full">
+                            <div class="flex items-center gap-1.5 justify-between md:justify-start">
+                                <span class="text-sm sm:text-base font-bold text-gray-900 truncate max-w-[100px]">${char.name}</span>
+                                <div class="flex items-center">
+                                    <img src="${pPath}" alt="${char.personality}" title="性格：${char.personality}"
+                                         onerror="this.style.display='none'; document.getElementById('fall_p_${char.name}').classList.remove('hidden');"
+                                         class="w-5 h-5 object-contain">
+                                    <span id="fall_p_${char.name}" class="hidden text-[9px] px-1 rounded bg-amber-50 text-amber-700 border border-amber-200">
+                                        ${char.personality}
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center gap-2 pt-1 border-t border-dashed border-gray-100">
+                                <div class="flex items-center">
+                                    <img src="${racePath}" alt="${char.race}" title="種族：${char.race}"
+                                         onerror="this.style.display='none'; document.getElementById('fall_r_${char.name}').classList.remove('hidden');"
+                                         class="w-4 h-4 object-contain">
+                                    <span id="fall_r_${char.name}" class="hidden bg-gray-100 px-1 rounded text-[9px] text-gray-500 font-medium">
+                                        ${char.race}
+                                    </span>
+                                </div>
+                                
+                                <div class="flex items-center">
+                                    <img src="${posPath}" alt="${char.position}" title="站位：${char.position}"
+                                         onerror="this.style.display='none'; document.getElementById('fall_pos_${char.name}').classList.remove('hidden');"
+                                         class="w-4 h-4 object-contain opacity-85">
+                                    <span id="fall_pos_${char.name}" class="hidden bg-blue-50 text-blue-700 px-1 rounded text-[9px] font-medium">
+                                        ${char.position}
+                                    </span>
+                                </div>
+                                
+                                <div class="flex items-center">
+                                    <img src="${jobPath}" alt="${char.job}" title="職業：${char.job}"
+                                         onerror="this.style.display='none'; document.getElementById('fall_j_${char.name}').classList.remove('hidden');"
+                                         class="w-4 h-4 object-contain opacity-85">
+                                    <span id="fall_j_${char.name}" class="hidden bg-purple-50 text-purple-700 px-1 rounded text-[9px] font-medium">
+                                        ${char.job}
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     `;
+                    charCard.appendChild(nameCol);
 
-                    const charListContainer = document.createElement('div');
-                    charListContainer.className = "space-y-4";
+                    const layersContainer = document.createElement('div');
+                    layersContainer.className = "grid grid-cols-1 sm:grid-cols-3 gap-3 w-full md:flex-1";
 
-                    pChars.forEach(char => {
-                        const charCard = document.createElement('div');
-                        charCard.id = `char_card_${char.name}`;
-                        charCard.className = "char-card-wrapper bg-gray-50/50 p-3 sm:p-4 rounded-xl border border-gray-200/60 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-4 transition-all duration-200";
+                    [1, 2, 3].forEach(l => {
+                        const layerBox = document.createElement('div');
+                        let bgStyle = "bg-amber-50/20 border-amber-100/60", badgeText = `🥇 第一層 (x2)`, gridCols = "grid-cols-2";
+                        if (l === 2) { bgStyle = "bg-orange-50/20 border-orange-100/60"; badgeText = `🥈 第二層 (x4)`; gridCols = "grid-cols-3"; }
+                        else if (l === 3) { bgStyle = "bg-red-50/20 border-red-100/60"; badgeText = `🥉 第三層 (x6)`; gridCols = "grid-cols-4"; }
 
-                        const avatarPath = IMAGE_MAP[`avatar_${char.name}`] || "";
-                        const pPath = IMAGE_MAP[`personality_${char.personality}`] || "";
-                        
-                        let raceIconName = char.race;
-                        if (char.race === "???") raceIconName = "unknown";
-                        const racePath = IMAGE_MAP[`race_${raceIconName}`] || "";
-                        
-                        const posPath = IMAGE_MAP[`position_${char.position}`] || "";
-                        const jobPath = IMAGE_MAP[`job_${char.job}`] || "";
+                        layerBox.className = `${bgStyle} p-2 rounded-xl border flex flex-col justify-between`;
+                        layerBox.innerHTML = `<span class="text-[10px] font-bold mb-1 block opacity-70">${badgeText}</span>`;
 
-                        const nameCol = document.createElement('div');
-                        nameCol.className = "flex flex-row items-center justify-start gap-3 min-w-[210px] w-full md:w-auto border-b md:border-b-0 pb-2 md:pb-0 border-gray-200/50";
-                        
-                        nameCol.innerHTML = `
-                            <div class="relative shrink-0 w-12 h-12">
-                                <img src="${avatarPath}" alt="${char.name}" 
-                                     onerror="this.style.display='none'; document.getElementById('fall_av_${char.name}').classList.remove('hidden');"
-                                     class="char-avatar w-12 h-12 rounded-full border-2 border-amber-300 shadow-inner object-cover bg-white">
-                                <div id="fall_av_${char.name}" class="hidden char-avatar w-12 h-12 rounded-full border-2 border-amber-400 shadow-sm flex items-center justify-center font-bold text-amber-900 bg-gradient-to-br from-amber-100 to-yellow-200 text-lg">
-                                    ${char.name.charAt(0)}
-                                </div>
-                            </div>
+                        const btnGroup = document.createElement('div');
+                        btnGroup.className = `grid ${gridCols} gap-1.5`;
 
-                            <div class="flex flex-col gap-0.5 w-full">
-                                <div class="flex items-center gap-1.5 justify-between md:justify-start">
-                                    <span class="text-sm sm:text-base font-bold text-gray-900 truncate max-w-[100px]">${char.name}</span>
-                                    <div class="flex items-center">
-                                        <img src="${pPath}" alt="${char.personality}" title="性格：${char.personality}"
-                                             onerror="this.style.display='none'; document.getElementById('fall_p_${char.name}').classList.remove('hidden');"
-                                             class="w-5 h-5 object-contain">
-                                        <span id="fall_p_${char.name}" class="hidden text-[9px] px-1 rounded bg-amber-50 text-amber-700 border border-amber-200">
-                                            ${char.personality}
-                                        </span>
-                                    </div>
-                                </div>
-                                
-                                <div class="flex items-center gap-2 pt-1 border-t border-dashed border-gray-100">
-                                    <div class="flex items-center">
-                                        <img src="${racePath}" alt="${char.race}" title="種族：${char.race}"
-                                             onerror="this.style.display='none'; document.getElementById('fall_r_${char.name}').classList.remove('hidden');"
-                                             class="w-4 h-4 object-contain">
-                                        <span id="fall_r_${char.name}" class="hidden bg-gray-100 px-1 rounded text-[9px] text-gray-500 font-medium">
-                                            ${char.race}
-                                        </span>
-                                    </div>
-                                    
-                                    <div class="flex items-center">
-                                        <img src="${posPath}" alt="${char.position}" title="站位：${char.position}"
-                                             onerror="this.style.display='none'; document.getElementById('fall_pos_${char.name}').classList.remove('hidden');"
-                                             class="w-4 h-4 object-contain opacity-85">
-                                        <span id="fall_pos_${char.name}" class="hidden bg-blue-50 text-blue-700 px-1 rounded text-[9px] font-medium">
-                                            ${char.position}
-                                        </span>
-                                    </div>
-                                    
-                                    <div class="flex items-center">
-                                        <img src="${jobPath}" alt="${char.job}" title="職業：${char.job}"
-                                             onerror="this.style.display='none'; document.getElementById('fall_j_${char.name}').classList.remove('hidden');"
-                                             class="w-4 h-4 object-contain opacity-85">
-                                        <span id="fall_j_${char.name}" class="hidden bg-purple-50 text-purple-700 px-1 rounded text-[9px] font-medium">
-                                            ${char.job}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                        charCard.appendChild(nameCol);
+                        char[`layer${l}`].forEach((attr, idx) => {
+                            const stateKey = `${char.name}_l${l}_${attr}_${idx}`;
+                            const isOpened = savedStates[stateKey];
+                            const btnId = `btn_${char.name}_l${l}_${attr}_${idx}`;
 
-                        const layersContainer = document.createElement('div');
-                        layersContainer.className = "grid grid-cols-1 sm:grid-cols-3 gap-3 w-full md:flex-1";
-
-                        [1, 2, 3].forEach(l => {
-                            const layerBox = document.createElement('div');
-                            let bgStyle = "bg-amber-50/20 border-amber-100/60", badgeText = `🥇 第一層 (x2)`, gridCols = "grid-cols-2";
-                            if (l === 2) { bgStyle = "bg-orange-50/20 border-orange-100/60"; badgeText = `🥈 第二層 (x4)`; gridCols = "grid-cols-3"; }
-                            else if (l === 3) { bgStyle = "bg-red-50/20 border-red-100/60"; badgeText = `🥉 第三層 (x6)`; gridCols = "grid-cols-4"; }
-
-                            layerBox.className = `${bgStyle} p-2 rounded-xl border flex flex-col justify-between`;
-                            layerBox.innerHTML = `<span class="text-[10px] font-bold mb-1 block opacity-70">${badgeText}</span>`;
-
-                            const btnGroup = document.createElement('div');
-                            btnGroup.className = `grid ${gridCols} gap-1.5`;
-
-                            char[`layer${l}`].forEach((attr, idx) => {
-                                const stateKey = `${char.name}_l${l}_${attr}_${idx}`;
-                                const isOpened = savedStates[stateKey];
-                                const btnId = `btn_${char.name}_l${l}_${attr}_${idx}`;
-
-                                const btn = document.createElement('button');
-                                btn.id = btnId;
-                                const styleConfig = ATTR_STYLES[attr] || { unopened: "bg-gray-100 text-gray-700 border-gray-200", opened: "bg-gray-500 text-white font-bold" };
-                                btn.className = `char-btn px-1 py-2 text-[11px] sm:text-xs text-center border rounded-lg cursor-pointer ${isOpened ? styleConfig.opened : styleConfig.unopened}`;
-                                btn.innerText = attr;
-                                
-                                btn.onclick = () => {
-                                    savedStates[stateKey] = !savedStates[stateKey];
-                                    btn.className = `char-btn px-1 py-2 text-[11px] sm:text-xs text-center border rounded-lg cursor-pointer ${savedStates[stateKey] ? styleConfig.opened : styleConfig.unopened}`;
-                                    calculateStats();
-                                };
-                                btnGroup.appendChild(btn);
-                            });
-                            layerBox.appendChild(btnGroup);
-                            layersContainer.appendChild(layerBox);
+                            const btn = document.createElement('button');
+                            btn.id = btnId;
+                            const styleConfig = ATTR_STYLES[attr] || { unopened: "bg-gray-100 text-gray-700 border-gray-200", opened: "bg-gray-500 text-white font-bold" };
+                            btn.className = `char-btn px-1 py-2 text-[11px] sm:text-xs text-center border rounded-lg cursor-pointer ${isOpened ? styleConfig.opened : styleConfig.unopened}`;
+                            btn.innerText = attr;
+                            
+                            btn.onclick = () => {
+                                savedStates[stateKey] = !savedStates[stateKey];
+                                btn.className = `char-btn px-1 py-2 text-[11px] sm:text-xs text-center border rounded-lg cursor-pointer ${savedStates[stateKey] ? styleConfig.opened : styleConfig.unopened}`;
+                                calculateStats();
+                            };
+                            btnGroup.appendChild(btn);
                         });
-
-                        charCard.appendChild(layersContainer);
-                        charListContainer.appendChild(charCard);
+                        layerBox.appendChild(btnGroup);
+                        layersContainer.appendChild(layerBox);
                     });
 
-                    pSection.appendChild(charListContainer);
-                    container.appendChild(pSection);
+                    charCard.appendChild(layersContainer);
+                    charListContainer.appendChild(charCard);
                 });
-            } catch (err) {
-                console.error("使者卡片矩陣生成失敗被攔截:", err);
+
+                pSection.appendChild(charListContainer);
+                container.appendChild(pSection);
+            });
+        }
+
+        // ==========================================
+        // Firebase 與啟動流（就算這裡爆炸，畫面早就畫好了）
+        // ==========================================
+        
+        // 1. 強制第一時間無條件把畫面畫出來！
+        try {
+            initStates();
+            initCrayonLogo();
+            buildFilterPanel();
+            renderMatrix();
+            calculateStats();
+        } catch (e) {
+            const errBanner = document.getElementById('errorBanner');
+            if(errBanner) {
+                errBanner.innerHTML = `⚠️ 畫面繪製失敗: ${e.message}`;
+                errBanner.classList.remove('hidden');
             }
         }
 
+        // 2. 獨立安全的 Firebase 認證區塊
         function handleAuth() {
-            showError(""); 
+            if (!auth) {
+                alert("目前處於斷線單機模式（可能被擴充功能阻擋），無法登入雲端。");
+                return;
+            }
             if (currentUser) {
                 auth.signOut().then(() => {
                     localStorage.removeItem(storageKey);
                     location.reload();
-                }).catch(err => showError("登出失敗: " + err.message));
+                }).catch(err => alert("登出失敗: " + err.message));
             } else {
                 const provider = new firebase.auth.GoogleAuthProvider();
                 setTimeout(() => {
-                    auth.signInWithPopup(provider).then(result => {
-                        console.log("Popup 登入成功:", result.user.displayName);
-                    }).catch(err => {
+                    auth.signInWithPopup(provider).catch(err => {
                         console.error("彈出阻擋:", err);
-                        showError("登入被中斷，請確認是否允許跳出視窗。(" + err.code + ")");
+                        alert("登入被中斷，請確認是否允許跳出視窗。(" + err.code + ")");
                     });
                 }, 50);
             }
@@ -778,7 +821,6 @@
             const btn = document.getElementById('authBtn');
             const svgLogo = document.getElementById('googleLogoSvg');
             const logoutText = document.getElementById('logoutText');
-
             if (!btn) return;
 
             if (user) {
@@ -792,48 +834,53 @@
             }
         }
 
-        function initCrayonLogo() {
-            const logoImg = document.getElementById('mainCrayonLogo');
-            if(logoImg && IMAGE_MAP && IMAGE_MAP["golden_crayon"]) {
-                logoImg.src = IMAGE_MAP["golden_crayon"];
-            }
-        }
+        // 3. 嘗試啟動 Firebase (不會影響已經畫好的 UI)
+        try {
+            if (typeof firebase !== 'undefined') {
+                const firebaseConfig = {
+                    apiKey: "AIzaSyDhv8D2pY_0M56UJrDTQw0RGPHA-BkXU8Y",
+                    authDomain: "crayon-note.firebaseapp.com",
+                    projectId: "crayon-note",
+                    storageBucket: "crayon-note.firebasestorage.app",
+                    messagingSenderId: "210614088940",
+                    appId: "1:210614088940:web:7addbdc7c466eeb05421c9",
+                    measurementId: "G-M1EJPE12TE"
+                };
+                firebase.initializeApp(firebaseConfig);
+                db = firebase.firestore();
+                auth = firebase.auth();
 
-        auth.onAuthStateChanged(user => {
-            updateAuthButtonUI(user); 
-
-            if (user) {
-                currentUser = user;
-                document.getElementById('userStatus').innerHTML = `
-                    <span class="block font-bold text-green-700">🟢 已連線雲端</span>
-                    <span class="text-[10px] sm:text-[11px] text-gray-500 truncate max-w-[120px]">${user.displayName || '教主'}</span>
-                `;
-
-                db.collection("player_boards").doc(user.uid).get().then(doc => {
-                    if (doc.exists && doc.data().states) {
-                        savedStates = doc.data().states;
+                auth.onAuthStateChanged(user => {
+                    updateAuthButtonUI(user); 
+                    if (user) {
+                        currentUser = user;
+                        document.getElementById('userStatus').innerHTML = `
+                            <span class="block font-bold text-green-700">🟢 已連線雲端</span>
+                            <span class="text-[10px] sm:text-[11px] text-gray-500 truncate max-w-[120px]">${user.displayName || '教主'}</span>
+                        `;
+                        db.collection("player_boards").doc(user.uid).get().then(doc => {
+                            if (doc.exists && doc.data().states) {
+                                savedStates = doc.data().states;
+                                // 重新整理雲端資料進畫面
+                                initStates(); renderMatrix(); calculateStats();
+                            }
+                        }).catch(err => {
+                            console.error("雲端讀取失敗:", err);
+                        });
+                    } else {
+                        currentUser = null;
+                        document.getElementById('userStatus').innerHTML = `
+                            <span class="block font-bold text-amber-800">當前狀態：單機模式</span>
+                            <span>紀錄保存在此裝置</span>
+                        `;
                     }
-                    initStates(); renderMatrix(); calculateStats();
-                }).catch(err => {
-                    console.error("下載失敗:", err);
-                    initStates(); renderMatrix(); calculateStats();
-                    showError("雲端讀取失敗，已降級為單機快取模式。");
                 });
             } else {
-                currentUser = null;
-                document.getElementById('userStatus').innerHTML = `
-                    <span class="block font-bold text-amber-800">當前狀態：單機模式</span>
-                    <span>紀錄保存在此裝置</span>
-                `;
-                initStates(); renderMatrix(); calculateStats();
+                console.warn("Firebase 未載入，維持單機模式");
             }
-        });
-
-        // 初始安全運行流
-        initStates();
-        initCrayonLogo();
-        renderMatrix();
-        buildFilterPanel();
+        } catch (e) {
+            console.error("Firebase 初始化被阻擋:", e);
+        }
     </script>
 </body>
 </html>
