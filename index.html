@@ -538,7 +538,7 @@
             const layerContainer = document.getElementById("filter_gridLayer");
             if(layerContainer){
                 layerContainer.innerHTML = "";
-                const layers = [ {v:"all", n:"不限層數"}, {v:"1", n:"🥇 第一層"}, {v:"2", n:"🥈 第二層"}, {v:"3", n:"🥉 第三層"} ];
+                const layers = [ {v:"all", n:"全部"}, {v:"1", n:"🥇 第一層"}, {v:"2", n:"🥈 第二層"}, {v:"3", n:"🥉 第三層"} ];
                 layers.forEach(ly => {
                     const btn = document.createElement("button");
                     btn.innerText = ly.n;
@@ -554,7 +554,7 @@
                 typeContainer.innerHTML = "";
                 const types = ["攻擊", "血量", "防禦", "爆擊", "爆抗"];
                 const allTypeBtn = document.createElement("button");
-                allTypeBtn.innerText = "全部種類";
+                allTypeBtn.innerText = "全部";
                 allTypeBtn.id = `btn_filter_gridType_all`;
                 allTypeBtn.className = btnActiveStyle;
                 allTypeBtn.onclick = () => selectGridTypeFilter("");
