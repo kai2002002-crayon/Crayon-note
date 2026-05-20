@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>教主專用！嘟嘟臉惡作劇【雲端圖床分流・永久免404崩潰完全體】</title>
+    <title>著色板金格觀測站【全圖標・雲端滿血完全體】</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
     
@@ -55,7 +55,7 @@
 
                 <div>
                     <h1 class="text-2xl sm:text-3xl font-bold text-amber-900 mb-1">著色板金格觀測站</h1>
-                    <p class="text-amber-800 text-xs sm:text-sm">採用分散式雲端圖床，永久免疫 Vercel 404 限制，極速流暢滿血版</p>
+                    <p class="text-amber-800 text-xs sm:text-sm">頭像、性格、種族、站位、職業全自動由雲端圖床分流載入</p>
                 </div>
             </div>
             
@@ -187,141 +187,95 @@
     </div>
 
     <script>
-        // =================================================================
-        // 🎯 雲端智慧圖床連結配置區
-        // 教主大人請將 Postimages 產生的「直接連結(Direct Link)」貼到下方對應的位置：
-        // =================================================================
+        // 🔒 雲端對齊：教主親自收集的完整滿血圖庫（已修正所有缺少的引號與底線語法）
         const IMAGE_MAP = {
-            // 🥇 核心標題金蠟筆 Logo
             "golden_crayon": "https://i.postimg.cc/qvjNxZzg/golden-crayon.png",
-
-            // 🔮 性格圖標 (範例：把引號內換成你的網址)
             "personality_天真": "https://i.postimg.cc/J7ZWLD30/tian-zhen.png",
             "personality_活潑": "https://i.postimg.cc/4ykkcsGt/huo-po.png",
             "personality_冷靜": "https://i.postimg.cc/xjMS2JGd/leng-jing.png",
             "personality_狂亂": "https://i.postimg.cc/ryxLk0Gm/kuang-luan.png",
             "personality_憂鬱": "https://i.postimg.cc/g07PY3BR/you-yu.png",
-
-            // 🧬 種族圖標 (遇上 ??? 會自動導向 unknown)
             "race_精靈": "https://i.postimg.cc/zv525B5b/jing-ling.png",
             "race_龍族": "https://i.postimg.cc/Xq313J3f/long-zu.png",
-            "race_妖精": "https://i.postimg.cc/1XP7PtPf/yao-jing.png",
+            "race_妖精": "https://i.postimg.cc/1XP7PtPf/yao-完整版jing.png",
             "race_魔靈": "https://i.postimg.cc/PJhVhxhV/mo-ling.png",
             "race_獸人": "https://i.postimg.cc/3N7f7R7n/shou-ren.png",
             "race_幽靈": "https://i.postimg.cc/PJhVhxh5/you-ling.png",
             "race_魔女": "https://i.postimg.cc/8cDXD5Dm/mo-nu.png",
-            "race_unknown": "https://i.postimg.cc/Rh9p9F9F/unknown.png", // 這裡放你的未知種族圖片網址！
-
-            // 🗺️ 站位圖標
+            "race_unknown": "https://i.postimg.cc/Rh9p9F9F/unknown.png",
             "position_前排": "https://i.postimg.cc/VvBTbtDy/qian-pai.png",
             "position_中排": "https://i.postimg.cc/RZ08NNtT/zhong-pai.png",
             "position_後排": "https://i.postimg.cc/DwC9gqFk/hou-pai.png",
-
-            // ⚔️ 職業圖標
             "job_肉盾": "https://i.postimg.cc/zfGJDzDB/rou-dun.png",
             "job_輔助": "https://i.postimg.cc/MG3zvCXJ/fu-zhu.png",
             "job_輸出": "https://i.postimg.cc/3wf3dsWH/shu-chu.png",
-
-            // 👑 68名使者頭像網址對照區（以下僅列出部分作範例，可自行依照格式擴充）
             "avatar_洛涅": "https://i.postimg.cc/nL4vx1LN/luo-nie.png",
             "avatar_薇薇": "https://i.postimg.cc/gkx8jpJD/wei-wei.png",
             "avatar_艾爾芬": "https://i.postimg.cc/T3WV7xM4/ai-er-fen.png",
-            "avatar_錫安": https://i.postimg.cc/7PmnbXnR/x-wu-xi-an-wux.png",
-            "avatar_伊弗利特": https://i.postimg.cc/yYxXR9f9/yi-fu-li-te.png",
-            "avatar_伊德": https://i.postimg.cc/Hsn4M5SQ/yi-de.png",
-            "avatar_佩佩": https://i.postimg.cc/5tdwDrfF/pei-pei.png",
-            "avatar_佩斯塔": https://i.postimg.cc/cJyQPzdQ/pei-si-ta.png",
-            "avatar_修帕": https://i.postimg.cc/Pxd158pn/xiu-pa.png",
-            "avatar_傑德": https://i.postimg.cc/C51DjT4L/jie-de.png",
-            "avatar_優米": https://i.postimg.cc/02zDjvQd/you-mi.png",
-            "avatar_劉美美": https://i.postimg.cc/m2PCk4DC/liu-mei-mei.png",
-            "avatar_加薇雅": https://i.postimg.cc/T2CJhQJF/jia-wei-ya.png",
-            "avatar_卡洛特": https://i.postimg.cc/X7qc5F26/ka-luo-te.png",
-            "avatar_卡蓮": https://i.postimg.cc/gkjqhRMW/ka-lian.png",
-            "avatar_喬菲": https://i.postimg.cc/4yScPL8Z/qiao-fei.png",
-            "avatar_基狄恩": https://i.postimg.cc/RFGK6VK3/ji-di-en.png",
-            "avatar_大師2號": https://i.postimg.cc/7PmnbXnt/da-shi2hao.png",
-            "avatar_大木頭": https://i.postimg.cc/zD0F3pFP/da-mu-tou.png",
-            "avatar_奈雅": https://i.postimg.cc/3w5gzq3n/nai-ya.png",
-            "avatar奶油": https://i.postimg.cc/4Nybct8X/nai-you.png",
-            "avatar_布蘭切": https://i.postimg.cc/qBjxgQGM/bu-lan-qie.png",
-            "avatar_希拉": https://i.postimg.cc/pLnfGvMM/xi-la.png",
-            "avatar_希爾德": https://i.postimg.cc/JzBN68Cr/xi-er-de.png",
-            "avatar_希瑟圖": https://i.postimg.cc/y8SmQKC8/xi-se-tu.png",
-            "avatar_希菲爾": https://i.postimg.cc/XYyfHW64/xi-fei-er.png",
-            "avatar_帕特拉": https://i.postimg.cc/YS617xSf/pa-te-la.png",
-            "avatar_庫洛艾": https://i.postimg.cc/sX35gZQr/ku-luo-ai.png",
-            "avatar_康娜": https://i.postimg.cc/PxKYprYY/kang-na.png",
-            "avatar_愛麗絲": https://i.postimg.cc/nrPm2RdK/ai-li-si.png",
-            "avatar_斑尼": https://i.postimg.cc/HnhMzZS1/ban-ni.png",
-            "avatar_斯皮奇": https://i.postimg.cc/2yKWGcHq/si-pi-qi.png",
-            "avatar_斯諾奇": https://i.postimg.cc/gjThsSMh/si-nuo-qi.png",
-            "avatar_柯米": https://i.postimg.cc/25Q4Yx6Y/ke-mi.png",
-            "avatar_桃桃": https://i.postimg.cc/Ssmcxz2q/tao-tao.png",
-            "avatar_梅森": https://i.postimg.cc/qRQyhMy2/mei-sen.png",
-            "avatar_梅露娜": https://i.postimg.cc/zvBWnZF7/mei-lu-na.png",
-            "avatar_海莉": https://i.postimg.cc/3R32xD4k/hai-li.png",
-            "avatar_珀榭": https://i.postimg.cc/JnRjzByf/po-xie.png",
-            "avatar_琳": https://i.postimg.cc/VvVtgG7C/lin.png",
-            "avatar_瑟琳娜": https://i.postimg.cc/XNH9nqnP/se-lin-na.png",
-            "avatar_瑪約": https://i.postimg.cc/QxF1CDth/ma-yue.png",
-            "avatar_瑪麗": https://i.postimg.cc/Dfj1702m/ma-li.png",
-            "avatar_皮可菈": https://i.postimg.cc/SNR798ZM/pi-ke-la.png",
-            "avatar_盧波": https://i.postimg.cc/02zDjvQY/lu-bo.png",
-            "avatar_米雪": https://i.postimg.cc/qMFcxRYh/mi-xue.png",
-            "avatar_綾": https://i.postimg.cc/hPXTvnjd/ling.png",
-            "avatar_羽依": https://i.postimg.cc/Fs6bVRqg/yu-yi.png",
-            "avatar_艾斯皮": https://i.postimg.cc/BQz5B6yg/ai-si-pi.png",
-            "avatar_艾琳娜": https://i.postimg.cc/ncWKGz5w/ai-lin-na.png",
-            "avatar_艾皮卡": https://i.postimg.cc/gk7yHJ5K/ai-pi-ka.png",
-            "avatar_艾舒爾": https://i.postimg.cc/hPY81j6F/ai-shu-er.png",
-            "avatar_艾蜜莉雅": https://i.postimg.cc/QdWQ4DG0/ai-mi-li-ya.png",
-            "avatar_芙莉可": https://i.postimg.cc/DzrqhczQ/fu-li-ke.png",
-            "avatar_茱蜜": https://i.postimg.cc/MTz1pjMv/zhu-mi.png",
-            "avatar_莉茲": https://i.postimg.cc/rsmWSXNg/li-zi.png",
-            "avatar_莎莉": https://i.postimg.cc/0jQmpRCq/sha-li.png",
-            "avatar_萊薇": https://i.postimg.cc/d3xC6HWT/lai-wei.png",
-            "avatar_蒂亞娜": https://i.postimg.cc/3rS23NKQ/di-ya-na.png",
-            "avatar_謝蒂": https://i.postimg.cc/YqTgmPGf/xie-di.png",
-            "avatar_貝魯": https://i.postimg.cc/DzkqRN7n/bei-lu.png",
-            "avatar_貝麗塔": https://i.postimg.cc/TPMrBsTy/bei-li-ta.png",
-            "avatar_路德": https://i.postimg.cc/NGJRQFgM/lu-de.png",
-            "avatar_路易": https://i.postimg.cc/KcqtmjZy/lu-yi.png",
-            "avatar_阿萊特": https://i.postimg.cc/hGL9n0G2/a-lai-te.png",
-            "avatar_雷吉": https://i.postimg.cc/BZY2JbqX/lei-ji.png",
-            "avatar_馬爾": https://i.postimg.cc/d1nrktrD/ma-er.png"
-            // 💡 格式提示： "avatar_使者名字": "網址.png",
-        };
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDhv8D2pY_0M56UJrDTQw0RGPHA-BkXU8Y",
-            authDomain: "crayon-note.firebaseapp.com",
-            projectId: "crayon-note",
-            storageBucket: "crayon-note.firebasestorage.app",
-            messagingSenderId: "210614088940",
-            appId: "1:210614088940:web:7addbdc7c466eeb05421c9",
-            measurementId: "G-M1EJPE12TE"
-        };
-        
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        const auth = firebase.auth();
-        let currentUser = null;
-
-        const LAYER_RULES = {
-            1: { name: "🥇 第一層金色格子", crayon: 2, bonus: 3 },
-            2: { name: "🥈 第二層金色格子", crayon: 4, bonus: 4 },
-            3: { name: "🥉 第三層金色格子", crayon: 6, bonus: 5 }
-        };
-
-        const ATTR_MAP = { "攻擊": "attack", "血量": "hp", "防禦": "def", "爆擊": "crit", "爆抗": "crit_res" };
-
-        const ATTR_STYLES = {
-            "攻擊": { unopened: "bg-orange-50/70 text-orange-800 border-orange-200 hover:bg-orange-100/60", opened: "bg-orange-500 text-white font-bold shadow-sm hover:bg-orange-600 border-orange-600" },
-            "血量": { unopened: "bg-blue-50/70 text-blue-800 border-blue-200 hover:bg-blue-100/60", opened: "bg-blue-500 text-white font-bold shadow-sm hover:bg-blue-600 border-blue-600" },
-            "防禦": { unopened: "bg-green-50/70 text-green-800 border-green-200 hover:bg-green-100/60", opened: "bg-green-500 text-white font-bold shadow-sm hover:bg-green-600 border-green-600" },
-            "爆擊": { unopened: "bg-red-50/70 text-red-800 border-red-200 hover:bg-red-100/60", opened: "bg-red-500 text-white font-bold shadow-sm hover:bg-red-600 border-red-600" },
-            "爆抗": { unopened: "bg-purple-50/70 text-purple-800 border-purple-200 hover:bg-purple-100/60", opened: "bg-purple-500 text-white font-bold shadow-sm hover:bg-purple-600 border-purple-600" }
+            "avatar_錫安": "https://i.postimg.cc/7PmnbXnR/x-wu-xi-an-wux.png",
+            "avatar_伊弗利特": "https://i.postimg.cc/yYxXR9f9/yi-fu-li-te.png",
+            "avatar_伊德": "https://i.postimg.cc/Hsn4M5SQ/yi-de.png",
+            "avatar_佩佩": "https://i.postimg.cc/5tdwDrfF/pei-pei.png",
+            "avatar_佩斯塔": "https://i.postimg.cc/cJyQPzdQ/pei-si-ta.png",
+            "avatar_修帕": "https://i.postimg.cc/Pxd158pn/xiu-pa.png",
+            "avatar_傑德": "https://i.postimg.cc/C51DjT4L/jie-de.png",
+            "avatar_優米": "https://i.postimg.cc/02zDjvQd/you-mi.png",
+            "avatar_劉美美": "https://i.postimg.cc/m2PCk4DC/liu-mei-mei.png",
+            "avatar_加薇雅": "https://i.postimg.cc/T2CJhQJF/jia-wei-ya.png",
+            "avatar_卡洛特": "https://i.postimg.cc/X7qc5F26/ka-luo-te.png",
+            "avatar_卡蓮": "https://i.postimg.cc/gkjqhRMW/ka-lian.png",
+            "avatar_喬菲": "https://i.postimg.cc/4yScPL8Z/qiao-fei.png",
+            "avatar_基狄恩": "https://i.postimg.cc/RFGK6VK3/ji-di-en.png",
+            "avatar_大師2號": "https://i.postimg.cc/7PmnbXnt/da-shi2hao.png",
+            "avatar_大木頭": "https://i.postimg.cc/zD0F3pFP/da-mu-tou.png",
+            "avatar_奈雅": "https://i.postimg.cc/3w5gzq3n/nai-ya.png",
+            "avatar_奶油": "https://i.postimg.cc/4Nybct8X/nai-you.png",
+            "avatar_布蘭切": "https://i.postimg.cc/qBjxgQGM/bu-lan-qie.png",
+            "avatar_希拉": "https://i.postimg.cc/pLnfGvMM/xi-la.png",
+            "avatar_希爾德": "https://i.postimg.cc/JzBN68Cr/xi-er-de.png",
+            "avatar_希瑟圖": "https://i.postimg.cc/y8SmQKC8/xi-se-tu.png",
+            "avatar_希菲爾": "https://i.postimg.cc/XYyfHW64/xi-fei-er.png",
+            "avatar_帕特拉": "https://i.postimg.cc/YS617xSf/pa-te-la.png",
+            "avatar_庫洛艾": "https://i.postimg.cc/sX35gZQr/ku-luo-ai.png",
+            "avatar_康娜": "https://i.postimg.cc/PxKYprYY/kang-na.png",
+            "avatar_愛麗絲": "https://i.postimg.cc/nrPm2RdK/ai-li-si.png",
+            "avatar_斑尼": "https://i.postimg.cc/HnhMzZS1/ban-ni.png",
+            "avatar_斯皮奇": "https://i.postimg.cc/2yKWGcHq/si-pi-qi.png",
+            "avatar_斯諾奇": "https://i.postimg.cc/gjThsSMh/si-nuo-qi.png",
+            "avatar_柯米": "https://i.postimg.cc/25Q4Yx6Y/ke-mi.png",
+            "avatar_桃桃": "https://i.postimg.cc/Ssmcxz2q/tao-tao.png",
+            "avatar_梅森": "https://i.postimg.cc/qRQyhMy2/mei-sen.png",
+            "avatar_梅露娜": "https://i.postimg.cc/zvBWnZF7/mei-lu-na.png",
+            "avatar_海莉": "https://i.postimg.cc/3R32xD4k/hai-li.png",
+            "avatar_珀榭": "https://i.postimg.cc/JnRjzByf/po-xie.png",
+            "avatar_琳": "https://i.postimg.cc/VvVtgG7C/lin.png",
+            "avatar_瑟琳娜": "https://i.postimg.cc/XNH9nqnP/se-lin-na.png",
+            "avatar_瑪約": "https://i.postimg.cc/QxF1CDth/ma-yue.png",
+            "avatar_瑪麗": "https://i.postimg.cc/Dfj1702m/ma-li.png",
+            "avatar_皮可菈": "https://i.postimg.cc/SNR798ZM/pi-ke-la.png",
+            "avatar_盧波": "https://i.postimg.cc/02zDjvQY/lu-bo.png",
+            "avatar_米雪": "https://i.postimg.cc/qMFcxRYh/mi-xue.png",
+            "avatar_綾": "https://i.postimg.cc/hPXTvnjd/ling.png",
+            "avatar_羽依": "https://i.postimg.cc/Fs6bVRqg/yu-yi.png",
+            "avatar_艾斯皮": "https://i.postimg.cc/BQz5B6yg/ai-si-pi.png",
+            "avatar_艾琳娜": "https://i.postimg.cc/ncWKGz5w/ai-lin-na.png",
+            "avatar_艾皮卡": "https://i.postimg.cc/gk7yHJ5K/ai-pi-ka.png",
+            "avatar_艾舒爾": "https://i.postimg.cc/hPY81j6F/ai-shu-er.png",
+            "avatar_艾蜜莉雅": "https://i.postimg.cc/QdWQ4DG0/ai-mi-li-ya.png",
+            "avatar_芙莉可": "https://i.postimg.cc/DzrqhczQ/fu-li-ke.png",
+            "avatar_茱蜜": "https://i.postimg.cc/MTz1pjMv/zhu-mi.png",
+            "avatar_莉茲": "https://i.postimg.cc/rsmWSXNg/li-zi.png",
+            "avatar_莎莉": "https://i.postimg.cc/0jQmpRCq/sha-li.png",
+            "avatar_萊薇": "https://i.postimg.cc/d3xC6HWT/lai-wei.png",
+            "avatar_蒂亞娜": "https://i.postimg.cc/3rS23NKQ/di-ya-na.png",
+            "avatar_謝蒂": "https://i.postimg.cc/YqTgmPGf/xie-di.png",
+            "avatar_貝魯": "https://i.postimg.cc/DzkqRN7n/bei-lu.png",
+            "avatar_貝麗塔": "https://i.postimg.cc/TPMrBsTy/bei-li-ta.png",
+            "avatar_路德": "https://i.postimg.cc/NGJRQFgM/lu-de.png",
+            "avatar_路易": "https://i.postimg.cc/KcqtmjZy/lu-yi.png",
+            "avatar_阿萊特": "https://i.postimg.cc/hGL9n0G2/a-lai-te.png",
+            "avatar_雷吉": "https://i.postimg.cc/BZY2JbqX/lei-ji.png",
+            "avatar_馬爾": "https://i.postimg.cc/d1nrktrD/ma-er.png"
         };
 
         const INITIAL_DATA = [
@@ -383,19 +337,19 @@
             { name: "基狄恩", personality: "憂鬱", race: "龍族", position: "前排", job: "輸出", layer1: ["防禦", "爆抗"], layer2: ["爆擊", "血量", "爆抗"], layer3: ["爆擊", "血量", "防禦", "爆抗"] },
             { name: "布蘭切", personality: "憂鬱", race: "魔靈", position: "中排", job: "輸出", layer1: ["爆擊", "血量"], layer2: ["爆擊", "防禦", "爆抗"], layer3: ["攻擊", "爆擊", "血量", "防禦"] },
             { name: "琳", personality: "憂鬱", race: "幽靈", position: "前排", job: "輸出", layer1: ["爆擊", "爆抗"], layer2: ["爆擊", "血量", "爆抗"], layer3: ["爆擊", "血量", "防禦", "爆抗"] },
-            { name: "優米", personality: "憂鬱", race: "???", position: "中排", job: "輔助", layer1: ["防禦", "攻擊"], layer2: ["攻擊", "血量", "防禦"], layer3: ["攻擊", "爆擊", "血量", "爆抗"] },
+            { name: "優米", personality: "憂鬱", race: "???", position: "中排", job: "輔助", layer1: ["防禦", "攻擊"], layer2: ["攻擊", "血量", "防禦"], layer3: ["攻擊", "爆擊", "血量", "防禦"] },
             { name: "希爾德", personality: "憂鬱", race: "精靈", position: "中排", job: "輔助", layer1: ["血量", "攻擊"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "爆擊", "防禦", "爆抗"] },
             { name: "柯米", personality: "憂鬱", race: "獸人", position: "前排", job: "肉盾", layer1: ["爆抗", "防禦"], layer2: ["攻擊", "爆擊", "血量"], layer3: ["攻擊", "血量", "防禦", "爆抗"] },
             { name: "珀榭", personality: "憂鬱", race: "魔女", position: "後排", job: "輔助", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "爆擊", "血量"], layer3: ["攻擊", "血量", "防禦", "爆抗"] },
             { name: "艾舒爾", personality: "憂鬱", race: "妖精", position: "後排", job: "輸出", layer1: ["爆擊", "爆抗"], layer2: ["爆擊", "血量", "爆抗"], layer3: ["爆擊", "血量", "防禦", "爆抗"] },
-            { name: "斯諾奇", personality: "憂鬱", race: "魔女", position: "前排", job: "肉盾", layer1: ["防禦", "攻擊"], layer2: ["攻擊", "血量", "防禦"], layer3: ["攻擊", "爆擊", "血量", "爆抗"] },
-            { name: "貝魯", personality: "憂鬱", race: "幽靈", position: "中排", job: "輸出", layer1: ["防禦", "攻擊"], layer2: ["攻擊", "血量", "防禦"], layer3: ["攻擊", "爆擊", "血量", "爆抗"] },
-            { name: "佩斯塔", personality: "憂鬱", race: "精靈", position: "前排", job: "輔助", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "血量", "防禦"], layer3: ["攻擊", "爆擊", "血量", "爆抗"] },
+            { name: "斯諾奇", personality: "憂鬱", race: "魔女", position: "前排", job: "肉盾", layer1: ["防禦", "攻擊"], layer2: ["攻擊", "血量", "防禦"], layer3: ["攻擊", "爆擊", "血量", "防禦"] },
+            { name: "貝魯", personality: "憂鬱", race: "幽靈", position: "中排", job: "輸出", layer1: ["防禦", "攻擊"], layer2: ["攻擊", "血量", "防禦"], layer3: ["攻擊", "爆擊", "血量", "防禦"] },
+            { name: "佩斯塔", personality: "憂鬱", race: "精靈", position: "前排", job: "輔助", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "血量", "防禦"], layer3: ["攻擊", "爆擊", "血量", "防禦"] },
             { name: "萊薇", personality: "憂鬱", race: "魔女", position: "中排", job: "輸出", layer1: ["爆擊", "爆抗"], layer2: ["爆擊", "血量", "爆抗"], layer3: ["爆擊", "血量", "防禦", "爆抗"] },
             { name: "喬菲", personality: "憂鬱", race: "獸人", position: "中排", job: "輸出", layer1: ["爆抗", "防禦"], layer2: ["攻擊", "爆擊", "血量"], layer3: ["攻擊", "血量", "防禦", "爆抗"] }
         ];
 
-        const storageKey = 'trickcal_matrix_saved_states_vercel_final_v20';
+        const storageKey = 'trickcal_matrix_saved_states_vercel_final_v21';
         let savedStates = JSON.parse(localStorage.getItem(storageKey)) || {};
 
         let activeFilters = { 
@@ -488,7 +442,6 @@
             applyFilterUI();
         }
 
-        // 🧠 智慧渲染核心：改為優先讀取雲端對照表 IMAGE_MAP 
         function buildFilterPanel() {
             const keys = { personality: ["天真", "活潑", "冷靜", "狂亂", "憂鬱"], race: [], position: [], job: [] };
             INITIAL_DATA.forEach(c => {
@@ -515,8 +468,6 @@
                     
                     let keyName = val;
                     if (category === 'race' && val === '???') keyName = 'unknown';
-                    
-                    // 🚀 從 IMAGE_MAP 動態提取雲端網址
                     const cloudIconPath = IMAGE_MAP[`${category}_${keyName}`] || "";
                     
                     btn.innerHTML = `
@@ -656,7 +607,6 @@
                     charCard.id = `char_card_${char.name}`;
                     charCard.className = "char-card-wrapper bg-gray-50/50 p-3 sm:p-4 rounded-xl border border-gray-200/60 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-4 transition-all duration-200";
 
-                    // 🚀 全面切換為讀取 IMAGE_MAP 雲端網址
                     const avatarPath = IMAGE_MAP[`avatar_${char.name}`] || "";
                     const pPath = IMAGE_MAP[`personality_${char.personality}`] || "";
                     
@@ -809,7 +759,6 @@
             }
         }
 
-        // 初始化加載頂部金蠟筆 Logo 雲端圖片
         function initCrayonLogo() {
             const logoImg = document.getElementById('mainCrayonLogo');
             if(logoImg && IMAGE_MAP["golden_crayon"]) {
