@@ -538,7 +538,7 @@
             const layerContainer = document.getElementById("filter_gridLayer");
             if(layerContainer){
                 layerContainer.innerHTML = "";
-                const layers = [ {v:"all", n:"不限層級"}, {v:"1", n:"🥇 第一層"}, {v:"2", n:"🥈 第二層"}, {v:"3", n:"🥉 第三層"} ];
+                const layers = [ {v:"all", n:"不限層數"}, {v:"1", n:"🥇 第一層"}, {v:"2", n:"🥈 第二層"}, {v:"3", n:"🥉 第三層"} ];
                 layers.forEach(ly => {
                     const btn = document.createElement("button");
                     btn.innerText = ly.n;
