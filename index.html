@@ -84,36 +84,36 @@
         <section class="bg-white rounded-2xl p-4 shadow border-2 border-amber-200/80 mb-6 space-y-3">
             <div class="flex justify-between items-center border-b border-gray-100 pb-2">
                 <h3 class="font-bold text-amber-955 text-sm flex items-center gap-1">🔍 智慧使者多維度篩選器</h3>
-                <button onclick="resetFilters()" class="text-xs text-amber-700 hover:text-amber-900 font-bold bg-amber-50 px-2 py-1 rounded border border-amber-200 transition">重置全部篩選</button>
+                <button onclick="resetFilters()" class="text-xs text-amber-700 hover:text-amber-900 font-bold bg-amber-50 px-2 py-1 rounded border border-amber-200 transition whitespace-nowrap">重置全部篩選</button>
             </div>
             
             <div class="space-y-2 text-xs">
                 <div class="flex items-start gap-2 flex-wrap sm:flex-nowrap">
-                    <span class="font-bold text-gray-500 shrink-0 w-16 pt-1">🔮 角色性格：</span>
+                    <span class="font-bold text-gray-500 shrink-0 w-16 pt-1 whitespace-nowrap">🔮 角色性格：</span>
                     <div id="filter_personality" class="flex flex-wrap gap-1.5"></div>
                 </div>
                 <div class="flex items-start gap-2 flex-wrap sm:flex-nowrap">
-                    <span class="font-bold text-gray-500 shrink-0 w-16 pt-1">🧬 角色種族：</span>
+                    <span class="font-bold text-gray-500 shrink-0 w-16 pt-1 whitespace-nowrap">🧬 角色種族：</span>
                     <div id="filter_race" class="flex flex-wrap gap-1.5"></div>
                 </div>
                 <div class="flex items-start gap-2 flex-wrap sm:flex-nowrap">
-                    <span class="font-bold text-gray-500 shrink-0 w-16 pt-1">🗺️ 角色站位：</span>
+                    <span class="font-bold text-gray-500 shrink-0 w-16 pt-1 whitespace-nowrap">🗺️ 角色站位：</span>
                     <div id="filter_position" class="flex flex-wrap gap-1.5"></div>
                 </div>
                 <div class="flex items-start gap-2 flex-wrap sm:flex-nowrap">
-                    <span class="font-bold text-gray-500 shrink-0 w-16 pt-1">⚔️ 角色職業：</span>
+                    <span class="font-bold text-gray-500 shrink-0 w-16 pt-1 whitespace-nowrap">⚔️ 角色職業：</span>
                     <div id="filter_job" class="flex flex-wrap gap-1.5"></div>
                 </div>
                 <div class="flex flex-col sm:flex-row items-start gap-2 border-t border-dashed border-gray-100 pt-2">
-                    <span class="font-bold text-amber-800 shrink-0 w-16 pt-1 flex items-center gap-0.5">🖍️ 金格屬性：</span>
+                    <span class="font-bold text-amber-800 shrink-0 w-16 pt-1 flex items-center gap-0.5 whitespace-nowrap">🖍️ 金格屬性：</span>
                     <div class="flex flex-col gap-2 w-full">
                         <div class="flex items-center gap-1.5 flex-wrap">
-                            <span class="text-[11px] text-gray-400 font-medium bg-gray-50 px-1 rounded">指定層級:</span>
-                            <div id="filter_gridLayer" class="flex gap-1"></div>
+                            <span class="text-[11px] text-gray-400 font-medium bg-gray-50 px-1 rounded whitespace-nowrap">指定層級:</span>
+                            <div id="filter_gridLayer" class="flex flex-wrap gap-1"></div>
                         </div>
                         <div class="flex items-center gap-1.5 flex-wrap">
-                            <span class="text-[11px] text-gray-400 font-medium bg-gray-50 px-1 rounded">格子種類:</span>
-                            <div id="filter_gridType" class="flex gap-1.5 flex-wrap"></div>
+                            <span class="text-[11px] text-gray-400 font-medium bg-gray-50 px-1 rounded whitespace-nowrap">格子種類:</span>
+                            <div id="filter_gridType" class="flex flex-wrap gap-1.5"></div>
                         </div>
                     </div>
                 </div>
@@ -123,7 +123,7 @@
         <section class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
             <div class="bg-white rounded-xl p-3 sm:p-4 shadow border-2 border-amber-200 flex flex-col justify-between">
                 <div class="border-b border-amber-100 pb-1.5 mb-1.5">
-                    <h3 class="font-bold text-amber-900 flex items-center text-xs sm:text-sm">🥇 第一層統計</h3>
+                    <h3 class="font-bold text-amber-900 flex items-center text-xs sm:text-sm whitespace-nowrap">🥇 第一層統計</h3>
                     <span class="text-[9px] sm:text-[10px] text-amber-600 font-medium">(2枝金蠟筆 / 全員 +3%)</span>
                 </div>
                 <div class="space-y-1 text-[11px] sm:text-xs text-gray-700">
@@ -137,7 +137,7 @@
 
             <div class="bg-white rounded-xl p-3 sm:p-4 shadow border-2 border-orange-200 flex flex-col justify-between">
                 <div class="border-b border-orange-100 pb-1.5 mb-1.5">
-                    <h3 class="font-bold text-orange-900 flex items-center text-xs sm:text-sm">🥈 第二層統計</h3>
+                    <h3 class="font-bold text-orange-900 flex items-center text-xs sm:text-sm whitespace-nowrap">🥈 第二層統計</h3>
                     <span class="text-[9px] sm:text-[10px] text-orange-600 font-medium">(4枝金蠟筆 / 全員 +4%)</span>
                 </div>
                 <div class="space-y-1 text-[11px] sm:text-xs text-gray-700">
@@ -151,7 +151,7 @@
 
             <div class="bg-white rounded-xl p-3 sm:p-4 shadow border-2 border-red-200 flex flex-col justify-between">
                 <div class="border-b border-red-100 pb-1.5 mb-1.5">
-                    <h3 class="font-bold text-red-900 flex items-center text-xs sm:text-sm">🥉 第三層統計</h3>
+                    <h3 class="font-bold text-red-900 flex items-center text-xs sm:text-sm whitespace-nowrap">🥉 第三層統計</h3>
                     <span class="text-[9px] sm:text-[10px] text-red-600 font-medium">(6枝金蠟筆 / 全員 +5%)</span>
                 </div>
                 <div class="space-y-1 text-[11px] sm:text-xs text-gray-700">
@@ -165,7 +165,7 @@
 
             <div class="bg-gradient-to-br from-yellow-50 to-amber-100 rounded-xl p-3 sm:p-4 shadow border-2 border-yellow-300 flex flex-col justify-between col-span-2 lg:col-span-1">
                 <div>
-                    <h3 class="font-bold text-amber-955 text-xs sm:text-sm mb-1">📊 全局屬性累計</h3>
+                    <h3 class="font-bold text-amber-955 text-xs sm:text-sm mb-1 whitespace-nowrap">📊 全局屬性累計</h3>
                     <div class="text-[10px] sm:text-[11px] text-amber-900">目前符合：<span id="filtered_char_count" class="font-bold text-amber-955">0</span> / <span id="total_char_count" class="font-bold">0</span> 名</div>
                     <div class="text-[11px] sm:text-xs space-y-0.5 text-amber-900 mt-0.5">
                         <p>總已用蠟筆：<span id="total_used_crayon" class="font-bold text-green-600 text-xs sm:text-sm">0</span> 枝</p>
@@ -379,6 +379,10 @@
             "爆抗": { unopened: "bg-purple-50/70 text-purple-800 border-purple-200 hover:bg-purple-100/60", opened: "bg-purple-500 text-white font-bold shadow-sm hover:bg-purple-600 border-purple-600" }
         };
 
+        // 統一按鈕樣式 (加入 whitespace-nowrap)
+        const btnActiveStyle = "whitespace-nowrap inline-flex items-center justify-center gap-1 px-2 py-0.5 rounded border text-[11px] font-bold transition bg-amber-500 text-white border-amber-600 shadow-sm";
+        const btnInactiveStyle = "whitespace-nowrap inline-flex items-center justify-center gap-1 px-2 py-0.5 rounded border text-[11px] font-medium transition bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200";
+
         // ==========================================
         // 渲染與計算核心（以 try-catch 完全包覆防卡死）
         // ==========================================
@@ -483,7 +487,6 @@
         }
 
         function buildFilterPanel() {
-            // 這裡強制設定好所有按鈕的先後順序！
             const keys = { 
                 personality: ["天真", "活潑", "冷靜", "狂亂", "憂鬱"], 
                 race: [], 
@@ -493,7 +496,6 @@
             
             INITIAL_DATA.forEach(c => {
                 if (c.race && !keys.race.includes(c.race)) keys.race.push(c.race);
-                // 站位 (position) 已經強制定好順序，這裡不需要推入
                 if (c.job && !keys.job.includes(c.job)) keys.job.push(c.job);
             });
 
@@ -505,14 +507,14 @@
                 const allBtn = document.createElement("button");
                 allBtn.innerText = "全部";
                 allBtn.id = `btn_filter_${category}_all`;
-                allBtn.className = "px-2 py-0.5 rounded border text-[11px] font-bold transition bg-amber-500 text-white border-amber-600 shadow-sm";
+                allBtn.className = btnActiveStyle;
                 allBtn.onclick = () => selectFilter(category, "");
                 container.appendChild(allBtn);
 
                 keys[category].forEach(val => {
                     const btn = document.createElement("button");
                     btn.id = `btn_filter_${category}_${val}`;
-                    btn.className = "inline-flex items-center gap-1 px-2 py-0.5 rounded border text-[11px] font-medium transition bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200";
+                    btn.className = btnInactiveStyle;
                     btn.onclick = () => selectFilter(category, val);
                     
                     let keyName = val;
@@ -523,7 +525,7 @@
                     
                     if(cloudIconPath) {
                         btn.innerHTML = `
-                            <img src="${cloudIconPath}" alt="${val}" onerror="this.style.display='none';" class="w-3.5 h-3.5 object-contain">
+                            <img src="${cloudIconPath}" alt="${val}" onerror="this.style.display='none';" class="w-3.5 h-3.5 object-contain shrink-0">
                             <span>${val}</span>
                         `;
                     } else {
@@ -541,7 +543,7 @@
                     const btn = document.createElement("button");
                     btn.innerText = ly.n;
                     btn.id = `btn_filter_gridLayer_${ly.v}`;
-                    btn.className = ly.v === "all" ? "px-2 py-0.5 rounded border text-[11px] font-bold transition bg-amber-500 text-white border-amber-600 shadow-sm" : "px-2 py-0.5 rounded border text-[11px] font-medium transition bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200";
+                    btn.className = ly.v === "all" ? btnActiveStyle : btnInactiveStyle;
                     btn.onclick = () => selectGridLayerFilter(ly.v);
                     layerContainer.appendChild(btn);
                 });
@@ -554,7 +556,7 @@
                 const allTypeBtn = document.createElement("button");
                 allTypeBtn.innerText = "全部種類";
                 allTypeBtn.id = `btn_filter_gridType_all`;
-                allTypeBtn.className = "px-2 py-0.5 rounded border text-[11px] font-bold transition bg-amber-500 text-white border-amber-600 shadow-sm";
+                allTypeBtn.className = btnActiveStyle;
                 allTypeBtn.onclick = () => selectGridTypeFilter("");
                 typeContainer.appendChild(allTypeBtn);
 
@@ -562,7 +564,7 @@
                     const btn = document.createElement("button");
                     btn.innerText = tp;
                     btn.id = `btn_filter_gridType_${tp}`;
-                    btn.className = "px-2 py-0.5 rounded border text-[11px] font-medium transition bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200";
+                    btn.className = btnInactiveStyle;
                     btn.onclick = () => selectGridTypeFilter(tp);
                     typeContainer.appendChild(btn);
                 });
@@ -576,8 +578,8 @@
                 const buttons = panel.getElementsByTagName("button");
                 for (let btn of buttons) {
                     if ((value === "" && btn.id.endsWith("_all")) || (value !== "" && btn.id.endsWith(`_${value}`))) {
-                        btn.className = "inline-flex items-center gap-1 px-2 py-0.5 rounded border text-[11px] font-bold transition bg-amber-500 text-white border-amber-600 shadow-sm";
-                    } else { btn.className = "inline-flex items-center gap-1 px-2 py-0.5 rounded border text-[11px] font-medium transition bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200"; }
+                        btn.className = btnActiveStyle;
+                    } else { btn.className = btnInactiveStyle; }
                 }
             }
             applyFilterUI();
@@ -587,8 +589,8 @@
             activeFilters.gridLayer = layerValue;
             const buttons = document.getElementById("filter_gridLayer").getElementsByTagName("button");
             for (let btn of buttons) {
-                if (btn.id.endsWith(`_${layerValue}`)) { btn.className = "px-2 py-0.5 rounded border text-[11px] font-bold transition bg-amber-500 text-white border-amber-600 shadow-sm"; } 
-                else { btn.className = "px-2 py-0.5 rounded border text-[11px] font-medium transition bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200"; }
+                if (btn.id.endsWith(`_${layerValue}`)) { btn.className = btnActiveStyle; } 
+                else { btn.className = btnInactiveStyle; }
             }
             applyFilterUI();
         }
@@ -597,8 +599,8 @@
             activeFilters.gridType = typeValue;
             const buttons = document.getElementById("filter_gridType").getElementsByTagName("button");
             for (let btn of buttons) {
-                if ((typeValue === "" && btn.id.endsWith("_all")) || (typeValue !== "" && btn.id.endsWith(`_${typeValue}`))) { btn.className = "px-2 py-0.5 rounded border text-[11px] font-bold transition bg-amber-500 text-white border-amber-600 shadow-sm"; } 
-                else { btn.className = "px-2 py-0.5 rounded border text-[11px] font-medium transition bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200"; }
+                if ((typeValue === "" && btn.id.endsWith("_all")) || (typeValue !== "" && btn.id.endsWith(`_${typeValue}`))) { btn.className = btnActiveStyle; } 
+                else { btn.className = btnInactiveStyle; }
             }
             applyFilterUI();
         }
@@ -713,7 +715,7 @@
                                     <img src="${pPath}" alt="${char.personality}" title="性格：${char.personality}"
                                          onerror="this.style.display='none'; document.getElementById('fall_p_${char.name}').classList.remove('hidden');"
                                          class="w-5 h-5 object-contain">
-                                    <span id="fall_p_${char.name}" class="hidden text-[9px] px-1 rounded bg-amber-50 text-amber-700 border border-amber-200">
+                                    <span id="fall_p_${char.name}" class="hidden text-[9px] px-1 rounded bg-amber-50 text-amber-700 border border-amber-200 whitespace-nowrap">
                                         ${char.personality}
                                     </span>
                                 </div>
@@ -724,7 +726,7 @@
                                     <img src="${racePath}" alt="${char.race}" title="種族：${char.race}"
                                          onerror="this.style.display='none'; document.getElementById('fall_r_${char.name}').classList.remove('hidden');"
                                          class="w-4 h-4 object-contain">
-                                    <span id="fall_r_${char.name}" class="hidden bg-gray-100 px-1 rounded text-[9px] text-gray-500 font-medium">
+                                    <span id="fall_r_${char.name}" class="hidden bg-gray-100 px-1 rounded text-[9px] text-gray-500 font-medium whitespace-nowrap">
                                         ${char.race}
                                     </span>
                                 </div>
@@ -733,7 +735,7 @@
                                     <img src="${posPath}" alt="${char.position}" title="站位：${char.position}"
                                          onerror="this.style.display='none'; document.getElementById('fall_pos_${char.name}').classList.remove('hidden');"
                                          class="w-4 h-4 object-contain opacity-85">
-                                    <span id="fall_pos_${char.name}" class="hidden bg-blue-50 text-blue-700 px-1 rounded text-[9px] font-medium">
+                                    <span id="fall_pos_${char.name}" class="hidden bg-blue-50 text-blue-700 px-1 rounded text-[9px] font-medium whitespace-nowrap">
                                         ${char.position}
                                     </span>
                                 </div>
@@ -742,7 +744,7 @@
                                     <img src="${jobPath}" alt="${char.job}" title="職業：${char.job}"
                                          onerror="this.style.display='none'; document.getElementById('fall_j_${char.name}').classList.remove('hidden');"
                                          class="w-4 h-4 object-contain opacity-85">
-                                    <span id="fall_j_${char.name}" class="hidden bg-purple-50 text-purple-700 px-1 rounded text-[9px] font-medium">
+                                    <span id="fall_j_${char.name}" class="hidden bg-purple-50 text-purple-700 px-1 rounded text-[9px] font-medium whitespace-nowrap">
                                         ${char.job}
                                     </span>
                                 </div>
@@ -761,7 +763,7 @@
                         else if (l === 3) { bgStyle = "bg-red-50/20 border-red-100/60"; badgeText = `🥉 第三層 (x6)`; gridCols = "grid-cols-4"; }
 
                         layerBox.className = `${bgStyle} p-2 rounded-xl border flex flex-col justify-between`;
-                        layerBox.innerHTML = `<span class="text-[10px] font-bold mb-1 block opacity-70">${badgeText}</span>`;
+                        layerBox.innerHTML = `<span class="text-[10px] font-bold mb-1 block opacity-70 whitespace-nowrap">${badgeText}</span>`;
 
                         const btnGroup = document.createElement('div');
                         btnGroup.className = `grid ${gridCols} gap-1.5`;
@@ -774,12 +776,12 @@
                             const btn = document.createElement('button');
                             btn.id = btnId;
                             const styleConfig = ATTR_STYLES[attr] || { unopened: "bg-gray-100 text-gray-700 border-gray-200", opened: "bg-gray-500 text-white font-bold" };
-                            btn.className = `char-btn px-1 py-2 text-[11px] sm:text-xs text-center border rounded-lg cursor-pointer ${isOpened ? styleConfig.opened : styleConfig.unopened}`;
+                            btn.className = `char-btn px-1 py-2 text-[11px] sm:text-xs text-center border rounded-lg cursor-pointer whitespace-nowrap ${isOpened ? styleConfig.opened : styleConfig.unopened}`;
                             btn.innerText = attr;
                             
                             btn.onclick = () => {
                                 savedStates[stateKey] = !savedStates[stateKey];
-                                btn.className = `char-btn px-1 py-2 text-[11px] sm:text-xs text-center border rounded-lg cursor-pointer ${savedStates[stateKey] ? styleConfig.opened : styleConfig.unopened}`;
+                                btn.className = `char-btn px-1 py-2 text-[11px] sm:text-xs text-center border rounded-lg cursor-pointer whitespace-nowrap ${savedStates[stateKey] ? styleConfig.opened : styleConfig.unopened}`;
                                 calculateStats();
                             };
                             btnGroup.appendChild(btn);
@@ -847,7 +849,7 @@
             if (user) {
                 if (svgLogo) svgLogo.classList.add('hidden');
                 if (logoutText) logoutText.classList.remove('hidden');
-                btn.className = "px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-bold rounded-lg shadow-sm transition shrink-0";
+                btn.className = "px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-bold rounded-lg shadow-sm transition shrink-0 whitespace-nowrap";
             } else {
                 if (svgLogo) svgLogo.classList.remove('hidden');
                 if (logoutText) logoutText.classList.add('hidden');
@@ -876,7 +878,7 @@
                     if (user) {
                         currentUser = user;
                         document.getElementById('userStatus').innerHTML = `
-                            <span class="block font-bold text-green-700">🟢 已連線雲端</span>
+                            <span class="block font-bold text-green-700 whitespace-nowrap">🟢 已連線雲端</span>
                             <span class="text-[10px] sm:text-[11px] text-gray-500 truncate max-w-[120px]">${user.displayName || '教主'}</span>
                         `;
                         db.collection("player_boards").doc(user.uid).get().then(doc => {
@@ -891,8 +893,8 @@
                     } else {
                         currentUser = null;
                         document.getElementById('userStatus').innerHTML = `
-                            <span class="block font-bold text-amber-800">當前狀態：單機模式</span>
-                            <span>紀錄保存在此装置</span>
+                            <span class="block font-bold text-amber-800 whitespace-nowrap">當前狀態：單機模式</span>
+                            <span class="whitespace-nowrap">紀錄保存在此裝置</span>
                         `;
                     }
                 });
