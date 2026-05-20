@@ -525,6 +525,29 @@
                     container.appendChild(btn);
                 });
             });
+            function buildFilterPanel() {
+            const posOrder = ["前排", "中排", "後排"];
+            const posContainer = document.getElementById('filter_position');
+            if (!posContainer) return;
+            
+            posContainer.innerHTML = ""; // 清空舊內容
+            
+            // 加入「全部」按鈕
+            const allBtn = document.createElement("button");
+            allBtn.innerText = "全部";
+            allBtn.className = "px-2 py-0.5 rounded border text-[11px] font-bold transition bg-amber-500 text-white border-amber-600 shadow-sm";
+            allBtn.onclick = () => selectFilter("position", "");
+            posContainer.appendChild(allBtn);
+
+            // 強制依照 [前, 中, 後] 順序生成
+            posOrder.forEach(pos => {
+                const btn = document.createElement("button");
+                btn.className = "inline-flex items-center gap-1 px-2 py-0.5 rounded border text-[11px] font-medium transition bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200";
+                btn.innerText = pos;
+                btn.onclick = () => selectFilter("position", pos);
+                posContainer.appendChild(btn);
+            });
+        }
 
             const layerContainer = document.getElementById("filter_gridLayer");
             if(layerContainer){
