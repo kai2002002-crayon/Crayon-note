@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>教主專用！嘟嘟臉惡作劇【Vercel完美修復完全體】</title>
+    <title>教主專用！嘟嘟臉惡作劇【Vercel 滿血復活完全體版】</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
     
@@ -57,7 +57,7 @@
                 </div>
                 
                 <div id="authBtnContainer" class="shrink-0">
-                    <button id="authBtn" onclick="handleAuth()" class="google-login-btn bg-white rounded-lg p-2 flex items-center justify-center transition border border-gray-200">
+                    <button id="authBtn" onclick="handleAuth()" class="google-login-btn bg-white rounded-lg p-2 flex items-center justify-center transition border border-gray-200 shrink-0">
                         <svg id="googleLogoSvg" class="w-6 h-6 sm:w-7 sm:h-7" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                             <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
@@ -280,13 +280,24 @@
             { name: "喬菲", personality: "憂鬱", race: "獸人", position: "中排", job: "輸出", layer1: ["爆抗", "防禦"], layer2: ["攻擊", "爆擊", "血量"], layer3: ["攻擊", "血量", "防禦", "爆抗"] }
         ];
 
-        const storageKey = 'trickcal_matrix_saved_states_vercel_final_v14';
+        const storageKey = 'trickcal_matrix_saved_states_vercel_final_v15';
         let savedStates = JSON.parse(localStorage.getItem(storageKey)) || {};
 
         let activeFilters = { 
             personality: "", race: "", position: "", job: "",
             gridLayer: "all", gridType: "" 
         };
+
+        // 🎯 核心補回：定義 showError 函數，解決 console 內部的 ReferenceError
+        function showError(msg) {
+            const banner = document.getElementById('errorBanner');
+            if(msg) { 
+                banner.innerText = msg; 
+                banner.classList.remove('hidden'); 
+            } else { 
+                banner.classList.add('hidden'); 
+            }
+        }
 
         function initStates() {
             INITIAL_DATA.forEach(char => {
@@ -591,7 +602,7 @@
         }
 
         // ==========================================
-        // 🔒 Google 帳號認證（智慧跳轉自適應安全版）
+        // 🔒 Google 帳號認證（跳轉登入流）
         // ==========================================
         function handleAuth() {
             showError(""); 
@@ -606,7 +617,6 @@
             }
         }
 
-        // 🧠 核心改善：不重寫 HTML 標籤結構，純粹控制內部 SVG 與 文字的隱藏與顯示，徹底根治按鈕點擊失聯！
         function updateAuthButtonUI(user) {
             const btn = document.getElementById('authBtn');
             const svgLogo = document.getElementById('googleLogoSvg');
@@ -615,12 +625,10 @@
             if (!btn) return;
 
             if (user) {
-                // 登入後：隱藏 Google Logo，按鈕外觀轉為紅色的「登出」字樣
                 if (svgLogo) svgLogo.classList.add('hidden');
                 if (logoutText) logoutText.classList.remove('hidden');
                 btn.className = "px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-bold rounded-lg shadow-sm transition shrink-0";
             } else {
-                // 未登入：展現高質感的 Google 彩色四色官方 Logo
                 if (svgLogo) svgLogo.classList.remove('hidden');
                 if (logoutText) logoutText.classList.add('hidden');
                 btn.className = "google-login-btn bg-white rounded-lg p-2 flex items-center justify-center transition border border-gray-200 shrink-0";
