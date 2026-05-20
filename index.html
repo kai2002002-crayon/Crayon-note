@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>教主專用！嘟嘟臉惡作劇【Vercel必成功登入流・五維智慧篩選動態精算版】</title>
+    <title>教主專用！嘟嘟臉惡作劇【Vercel完美修復完全體】</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
     
@@ -22,19 +22,14 @@
             user-select: none;
             touch-action: manipulation;
         }
-        .char-btn:active {
-            transform: scale(0.94);
-        }
-        .char-avatar {
-            transition: transform 0.2s ease;
-        }
-        .char-card-wrapper:hover .char-avatar {
-            transform: scale(1.06);
-        }
+        .char-btn:active { transform: scale(0.94); }
+        .char-avatar { transition: transform 0.2s ease; }
+        .char-card-wrapper:hover .char-avatar { transform: scale(1.06); }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #fcf8f2; }
         ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 4px; }
         
+        /* Google 官方標準 Logo 按鈕陰影與微調 */
         .google-login-btn {
             box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.15);
             transition: all 0.15s ease;
@@ -57,11 +52,21 @@
             
             <div id="authPanel" class="w-full lg:w-auto bg-white/80 p-3 rounded-xl border border-amber-300 shadow-sm flex flex-row items-center justify-between sm:justify-start gap-4">
                 <div id="userStatus" class="text-left text-[11px] sm:text-xs text-gray-600">
-                    <span class="block font-bold text-amber-800">連線檢測中...</span>
+                    <span class="block font-bold text-amber-800">當前狀態：單機模式</span>
+                    <span>紀錄保存在此裝置</span>
                 </div>
                 
                 <div id="authBtnContainer" class="shrink-0">
-                    </div>
+                    <button id="authBtn" onclick="handleAuth()" class="google-login-btn bg-white rounded-lg p-2 flex items-center justify-center transition border border-gray-200">
+                        <svg id="googleLogoSvg" class="w-6 h-6 sm:w-7 sm:h-7" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
+                            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"/>
+                        </svg>
+                        <span id="logoutText" class="hidden text-white font-bold text-xs px-2 py-0.5">登出</span>
+                    </button>
+                </div>
             </div>
         </header>
 
@@ -275,7 +280,7 @@
             { name: "喬菲", personality: "憂鬱", race: "獸人", position: "中排", job: "輸出", layer1: ["爆抗", "防禦"], layer2: ["攻擊", "爆擊", "血量"], layer3: ["攻擊", "血量", "防禦", "爆抗"] }
         ];
 
-        const storageKey = 'trickcal_matrix_saved_states_vercel_final_v13';
+        const storageKey = 'trickcal_matrix_saved_states_vercel_final_v14';
         let savedStates = JSON.parse(localStorage.getItem(storageKey)) || {};
 
         let activeFilters = { 
@@ -597,45 +602,40 @@
                 }).catch(err => showError("登出失敗: " + err.message));
             } else {
                 const provider = new firebase.auth.GoogleAuthProvider();
-                // 🚀 核心修正：將 Popup 升級為超高相容性的 Redirect 跳轉安全流，完美解決手機與 Vercel 攔截阻擋問題
                 auth.signInWithRedirect(provider);
             }
         }
 
-        // 統一控管渲染 Google 按鈕外觀與登入狀態
+        // 🧠 核心改善：不重寫 HTML 標籤結構，純粹控制內部 SVG 與 文字的隱藏與顯示，徹底根治按鈕點擊失聯！
         function updateAuthButtonUI(user) {
-            const container = document.getElementById('authBtnContainer');
+            const btn = document.getElementById('authBtn');
+            const svgLogo = document.getElementById('googleLogoSvg');
+            const logoutText = document.getElementById('logoutText');
+
+            if (!btn) return;
+
             if (user) {
-                container.innerHTML = `
-                    <button id="authBtn" onclick="handleAuth()" class="px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-bold rounded-lg shadow-sm transition">
-                        登出
-                    </button>
-                `;
+                // 登入後：隱藏 Google Logo，按鈕外觀轉為紅色的「登出」字樣
+                if (svgLogo) svgLogo.classList.add('hidden');
+                if (logoutText) logoutText.classList.remove('hidden');
+                btn.className = "px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-bold rounded-lg shadow-sm transition shrink-0";
             } else {
-                container.innerHTML = `
-                    <button id="authBtn" onclick="handleAuth()" class="google-login-btn bg-white rounded-lg p-2 flex items-center justify-center transition border border-gray-200">
-                        <svg class="w-6 h-6 sm:w-7 sm:h-7" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
-                            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"/>
-                        </svg>
-                    </button>
-                `;
+                // 未登入：展現高質感的 Google 彩色四色官方 Logo
+                if (svgLogo) svgLogo.classList.remove('hidden');
+                if (logoutText) logoutText.classList.add('hidden');
+                btn.className = "google-login-btn bg-white rounded-lg p-2 flex items-center justify-center transition border border-gray-200 shrink-0";
             }
         }
 
-        // 🧠 核心：捕捉跳轉登入回來的驗證數據
         auth.getRedirectResult().then(result => {
             if (result && result.user) {
-                console.log("跳轉驗證成功，使用者已登入:", result.user.displayName);
+                console.log("登入引導成功:", result.user.displayName);
             }
         }).catch(err => {
-            console.error("驗證異常:", err);
-            showError("Google 授權失敗，請確認 Firebase 設定！(" + err.code + ")");
+            console.error("驗證攔截異常:", err);
+            showError("Google 授權失敗，請確認 Firebase Authorized domains 設定是否包含此 Vercel 網址。");
         });
 
-        // 監聽並加載玩家雲端金格資料
         auth.onAuthStateChanged(user => {
             updateAuthButtonUI(user); 
 
@@ -649,12 +649,8 @@
                 db.collection("player_boards").doc(user.uid).get().then(doc => {
                     if (doc.exists && doc.data().states) {
                         savedStates = doc.data().states;
-                        initStates(); 
-                        renderMatrix(); 
-                        calculateStats();
-                    } else { 
-                        calculateStats(); 
-                    }
+                        initStates(); renderMatrix(); calculateStats();
+                    } else { calculateStats(); }
                 }).catch(err => {
                     console.error("下載失敗:", err);
                     showError("雲端讀取失敗，已自動降級為本機快取模式。");
@@ -669,7 +665,7 @@
             }
         });
 
-        // 初始化
+        // 初始運行
         initStates();
         renderMatrix();
         buildFilterPanel();
