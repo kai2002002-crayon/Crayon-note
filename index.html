@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>教主專用！嘟嘟臉惡作劇【Vercel 滿血復活完全體版】</title>
+    <title>教主專用！嘟嘟臉惡作劇【Vercel 智慧彈窗終極修復版】</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
     
@@ -29,7 +29,6 @@
         ::-webkit-scrollbar-track { background: #fcf8f2; }
         ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 4px; }
         
-        /* Google 官方標準 Logo 按鈕陰影與微調 */
         .google-login-btn {
             box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.15);
             transition: all 0.15s ease;
@@ -258,7 +257,7 @@
             { name: "庫洛艾", personality: "狂亂", race: "妖精", position: "前排", job: "肉盾", layer1: ["血量", "爆擊"], layer2: ["爆擊", "防禦", "爆抗"], layer3: ["攻擊", "爆擊", "血量", "防禦"] },
             { name: "愛麗絲", personality: "狂亂", race: "幽靈", position: "中排", job: "輸出", layer1: ["血量", "爆擊"], layer2: ["爆擊", "防禦", "爆抗"], layer3: ["攻擊", "爆擊", "血量", "防禦"] },
             { name: "蒂亞娜", personality: "狂亂", race: "獸人", position: "中排", job: "輔助", layer1: ["爆擊", "爆抗"], layer2: ["爆擊", "血量", "爆抗"], layer3: ["爆擊", "血量", "防禦", "爆抗"] },
-            { name: "貝麗塔", personality: "狂亂", race: "魔女", position: "後排", job: "輸出", layer1: ["血量", "爆擊"], layer2: ["爆擊", "防禦", "爆抗"], layer3: ["攻擊", "爆擊", "血量", "防禦"] },
+            { name: "貝麗塔", personality: "狂亂", race: "魔女", position: "後排", job: "輸出", layer1: ["血量", "攻擊"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "爆擊", "血量", "防禦"] },
             { name: "希瑟圖", personality: "狂亂", race: "龍族", position: "中排", job: "輔助", layer1: ["爆抗", "爆擊"], layer2: ["爆擊", "血量", "爆抗"], layer3: ["爆擊", "血量", "防禦", "爆抗"] },
             { name: "大師2號", personality: "狂亂", race: "妖精", position: "中排", job: "輸出", layer1: ["爆擊", "血量"], layer2: ["爆擊", "防禦", "爆抗"], layer3: ["攻擊", "爆擊", "血量", "防禦"] },
             { name: "梅森", personality: "狂亂", race: "精靈", position: "後排", job: "輸出", layer1: ["爆擊", "爆抗"], layer2: ["爆擊", "血量", "爆抗"], layer3: ["爆擊", "血量", "防禦", "爆抗"] },
@@ -280,7 +279,7 @@
             { name: "喬菲", personality: "憂鬱", race: "獸人", position: "中排", job: "輸出", layer1: ["爆抗", "防禦"], layer2: ["攻擊", "爆擊", "血量"], layer3: ["攻擊", "血量", "防禦", "爆抗"] }
         ];
 
-        const storageKey = 'trickcal_matrix_saved_states_vercel_final_v15';
+        const storageKey = 'trickcal_matrix_saved_states_vercel_final_v16';
         let savedStates = JSON.parse(localStorage.getItem(storageKey)) || {};
 
         let activeFilters = { 
@@ -288,7 +287,6 @@
             gridLayer: "all", gridType: "" 
         };
 
-        // 🎯 核心補回：定義 showError 函數，解決 console 內部的 ReferenceError
         function showError(msg) {
             const banner = document.getElementById('errorBanner');
             if(msg) { 
@@ -602,7 +600,7 @@
         }
 
         // ==========================================
-        // 🔒 Google 帳號認證（跳轉登入流）
+        // 🔒 Google 帳號認證（全新智慧 Popup 跨網域防阻擋流）
         // ==========================================
         function handleAuth() {
             showError(""); 
@@ -613,7 +611,15 @@
                 }).catch(err => showError("登出失敗: " + err.message));
             } else {
                 const provider = new firebase.auth.GoogleAuthProvider();
-                auth.signInWithRedirect(provider);
+                // 🚀 正式切換回 Popup 彈出小視窗：利用 50 毫秒的安全執行緒延遲，強迫瀏覽器釋放對 SVG 按鈕點擊的防禦機制！
+                setTimeout(() => {
+                    auth.signInWithPopup(provider).then(result => {
+                        console.log("Popup 登入驗證成功:", result.user.displayName);
+                    }).catch(err => {
+                        console.error("彈出認證攔截:", err);
+                        showError("登入被中斷或封鎖，請確認是否允許該網頁跳出視窗。(" + err.code + ")");
+                    });
+                }, 50);
             }
         }
 
@@ -635,15 +641,6 @@
             }
         }
 
-        auth.getRedirectResult().then(result => {
-            if (result && result.user) {
-                console.log("登入引導成功:", result.user.displayName);
-            }
-        }).catch(err => {
-            console.error("驗證攔截異常:", err);
-            showError("Google 授權失敗，請確認 Firebase Authorized domains 設定是否包含此 Vercel 網址。");
-        });
-
         auth.onAuthStateChanged(user => {
             updateAuthButtonUI(user); 
 
@@ -660,7 +657,7 @@
                         initStates(); renderMatrix(); calculateStats();
                     } else { calculateStats(); }
                 }).catch(err => {
-                    console.error("下載失敗:", err);
+                    console.error("數據下載失敗:", err);
                     showError("雲端讀取失敗，已自動降級為本機快取模式。");
                 });
             } else {
