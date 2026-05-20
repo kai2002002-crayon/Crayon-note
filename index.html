@@ -758,9 +758,9 @@
 
                     [1, 2, 3].forEach(l => {
                         const layerBox = document.createElement('div');
-                        let bgStyle = "bg-amber-50/20 border-amber-100/60", badgeText = `🥇 第一層 (x2)`, gridCols = "grid-cols-2";
-                        if (l === 2) { bgStyle = "bg-orange-50/20 border-orange-100/60"; badgeText = `🥈 第二層 (x4)`; gridCols = "grid-cols-3"; }
-                        else if (l === 3) { bgStyle = "bg-red-50/20 border-red-100/60"; badgeText = `🥉 第三層 (x6)`; gridCols = "grid-cols-4"; }
+                        let bgStyle = "bg-amber-50/20 border-amber-100/60", badgeText = `🥇 第一層`, gridCols = "grid-cols-2";
+                        if (l === 2) { bgStyle = "bg-orange-50/20 border-orange-100/60"; badgeText = `🥈 第二層`; gridCols = "grid-cols-3"; }
+                        else if (l === 3) { bgStyle = "bg-red-50/20 border-red-100/60"; badgeText = `🥉 第三層`; gridCols = "grid-cols-4"; }
 
                         layerBox.className = `${bgStyle} p-2 rounded-xl border flex flex-col justify-between`;
                         layerBox.innerHTML = `<span class="text-[10px] font-bold mb-1 block opacity-70 whitespace-nowrap">${badgeText}</span>`;
