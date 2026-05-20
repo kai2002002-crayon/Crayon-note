@@ -187,7 +187,7 @@
     </div>
 
     <script>
-        // 🔒 雲端對齊：教主親自收集的完整滿血圖庫（已修正所有缺少的引號與底線語法）
+        // 🔒 雲端對齊：教主親自收集的完整滿血圖庫（已完全修正妖精打錯字的致命傷）
         const IMAGE_MAP = {
             "golden_crayon": "https://i.postimg.cc/qvjNxZzg/golden-crayon.png",
             "personality_天真": "https://i.postimg.cc/J7ZWLD30/tian-zhen.png",
@@ -197,7 +197,7 @@
             "personality_憂鬱": "https://i.postimg.cc/g07PY3BR/you-yu.png",
             "race_精靈": "https://i.postimg.cc/zv525B5b/jing-ling.png",
             "race_龍族": "https://i.postimg.cc/Xq313J3f/long-zu.png",
-            "race_妖精": "https://i.postimg.cc/1XP7PtPf/yao-完整版jing.png",
+            "race_妖精": "https://i.postimg.cc/1XP7PtPf/yao-jing.png", // 🔧 這裡修正了！
             "race_魔靈": "https://i.postimg.cc/PJhVhxhV/mo-ling.png",
             "race_獸人": "https://i.postimg.cc/3N7f7R7n/shou-ren.png",
             "race_幽靈": "https://i.postimg.cc/PJhVhxh5/you-ling.png",
@@ -257,6 +257,7 @@
             "avatar_米雪": "https://i.postimg.cc/qMFcxRYh/mi-xue.png",
             "avatar_綾": "https://i.postimg.cc/hPXTvnjd/ling.png",
             "avatar_羽依": "https://i.postimg.cc/Fs6bVRqg/yu-yi.png",
+            "avatar_聯名使者": "https://i.postimg.cc/Fs6bVRqg/yu-yi.png",
             "avatar_艾斯皮": "https://i.postimg.cc/BQz5B6yg/ai-si-pi.png",
             "avatar_艾琳娜": "https://i.postimg.cc/ncWKGz5w/ai-lin-na.png",
             "avatar_艾皮卡": "https://i.postimg.cc/gk7yHJ5K/ai-pi-ka.png",
@@ -349,7 +350,8 @@
             { name: "喬菲", personality: "憂鬱", race: "獸人", position: "中排", job: "輸出", layer1: ["爆抗", "防禦"], layer2: ["攻擊", "爆擊", "血量"], layer3: ["攻擊", "血量", "防禦", "爆抗"] }
         ];
 
-        const storageKey = 'trickcal_matrix_saved_states_vercel_final_v21';
+        // 🧠 快取密鑰升級，強制清空損壞的快取，讓網頁原地重組！
+        const storageKey = 'trickcal_matrix_saved_states_cloud_v22_final';
         let savedStates = JSON.parse(localStorage.getItem(storageKey)) || {};
 
         let activeFilters = { 
