@@ -273,7 +273,7 @@
                 filter_btn_all: "全部", filter_btn_show_all: "顯示全部", filter_btn_show_1: "僅第一層", filter_btn_show_2: "僅第二層", filter_btn_show_3: "僅第三層",
                 stats_toggle_hint: "點擊展開 / 收起", stats_layer_1_title: "🥇 第一層統計", stats_layer_2_title: "🥈 第二層統計", stats_layer_3_title: "🥉 第三層統計",
                 stats_layer_1_rule: "(每格+3%, 蠟筆×2)", stats_layer_2_rule: "(每格+4%, 蠟筆×4)", stats_layer_3_rule: "(每格+5%, 蠟筆×6)",
-                stats_global_bonus: "📊 全體屬性加成", stats_need_more_prefix: "缺 ", stats_need_more_suffix: " 蠟筆",
+                stats_global_bonus: "📊 全體屬性加成", : "尚要 ", stats_need_more_suffix: " 蠟筆",
                 x_label: "台港澳服官方X", official_x_url: "https://x.com/trickcal_TW",
                 footer_author: "📝 記事本製作者: 冷笑話幽靈", footer_copyright: "© 遊戲版權: EpidGames & Bilibili",
                 
@@ -308,7 +308,7 @@
                 filter_btn_all: "すべて", filter_btn_show_all: "すべて表示", filter_btn_show_1: "1段階目のみ", filter_btn_show_2: "2段階目のみ", filter_btn_show_3: "3段階目のみ",
                 stats_toggle_hint: "クリックで展開 / 折りたたみ", stats_layer_1_title: "🥇 1段階目の統計", stats_layer_2_title: "🥈 2段階目の統計", stats_layer_3_title: "🥉 3段階目の統計",
                 stats_layer_1_rule: "(各マス+3%, クレヨン×2)", stats_layer_2_rule: "(各マス+4%, クレヨン×4)", stats_layer_3_rule: "(各マス+5%, クレヨン×6)",
-                stats_global_bonus: "📊 全体ステータスバフ", stats_need_more_prefix: "不足: ", stats_need_more_suffix: " 本",
+                stats_global_bonus: "📊 全体ステータスバフ", stats_need_more_prefix: "必要クレヨン数: ", stats_need_more_suffix: " 本",
                 x_label: "公式 X", official_x_url: "https://x.com/trickcal_jp",
                 footer_author: "📝 ノート作成者: 冷笑話幽靈", footer_copyright: "© ゲーム著作権: EpidGames & Bilibili",
                 
@@ -716,7 +716,7 @@
                 html += `
                     <div class="mt-2 pt-1 border-t border-gray-100 dark:border-gray-700 flex justify-end">
                         <span class="bg-red-50 dark:bg-gray-700 text-red-600 dark:text-red-400 px-1.5 py-0.5 rounded text-[10px] font-bold border border-red-100 dark:border-gray-600">
-                            ${t('stats_need_more_prefix')}${layerMissingCrayons[l]}${t('stats_need_more_suffix')}
+                            ${t('')}${layerMissingCrayons[l]}${t('stats_need_more_suffix')}
                         </span>
                     </div>
                 `;
