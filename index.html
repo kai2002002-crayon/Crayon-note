@@ -17,13 +17,48 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
     <style>
+        :root {
+            /* ==============================================================
+               💡 圖片更換區：在這裡替換成您想要的背景圖片網址 
+               (請將下方網址換成您的圖片，並務必保留 url('...') 的單引號與括號)
+               ============================================================== */
+            --user-bg-image: url('https://i.postimg.cc/fTJ36ZFT/CG-Schedule-Rim.pngq=80&w=2070&auto=format&fit=crop'); 
+        }
+
         body { 
             font-family: 'Noto Sans TC', sans-serif; 
-            background-color: #fcf8f2;
+            
+            /* 背景圖片設定 */
+            background-image: var(--user-bg-image);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-color: #fcf8f2; 
+            
             -webkit-tap-highlight-color: transparent;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            transition: color 0.3s ease;
         }
-        .dark body { background-color: #1a202c; color: #e2e8f0; }
+
+        /* 建立一層覆蓋在背景圖上的全螢幕遮罩，確保文字與卡片好閱讀 */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: -1;
+            /* 日間模式：半透明米白色遮罩 (0.75 代表透光度，數字越小圖片越清楚，但文字可能較難閱讀) */
+            background-color: rgba(252, 248, 242, 0.75); 
+            transition: background-color 0.3s ease;
+        }
+
+        .dark body { 
+            color: #e2e8f0; 
+        }
+
+        .dark body::before {
+            /* 黑夜模式：切換成半透明深藍黑遮罩，讓圖片自動變暗 */
+            background-color: rgba(26, 32, 44, 0.85); 
+        }
+
         .char-btn { 
             transition: all 0.12s cubic-bezier(0.4, 0, 0.2, 1); 
             user-select: none;
@@ -33,9 +68,8 @@
         .char-avatar { transition: all 0.2s ease; cursor: pointer; }
         .char-card-wrapper:hover .char-avatar { transform: scale(1.06); }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #fcf8f2; }
-        .dark ::-webkit-scrollbar-track { background: #1a202c; }
-        ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         .dark ::-webkit-scrollbar-thumb { background: #4a5568; }
         
         .google-login-btn {
@@ -50,11 +84,11 @@
         .unowned-avatar { opacity: 0.35; filter: grayscale(100%); }
     </style>
 </head>
-<body class="p-3 sm:p-6 md:p-8 bg-[#fcf8f2] text-gray-800 dark:bg-gray-900 dark:text-gray-100">
+<body class="p-3 sm:p-6 md:p-8 text-gray-800 dark:text-gray-100">
 
     <div class="max-w-7xl mx-auto">
         
-        <header class="bg-gradient-to-r from-amber-100 via-yellow-100 to-orange-100 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800 rounded-2xl p-4 sm:p-6 shadow-md mb-6 border-4 border-amber-400 dark:border-gray-600 flex flex-col lg:flex-row justify-between items-center gap-4 transition-colors">
+        <header class="bg-gradient-to-r from-amber-100/90 via-yellow-100/90 to-orange-100/90 dark:from-gray-800/90 dark:via-gray-700/90 dark:to-gray-800/90 rounded-2xl p-4 sm:p-6 shadow-md mb-6 border-4 border-amber-400 dark:border-gray-600 flex flex-col lg:flex-row justify-between items-center gap-4 transition-colors backdrop-blur-sm">
             <div class="flex flex-row items-center justify-center lg:justify-start gap-3 text-center lg:text-left">
                 
                 <div class="shrink-0 flex items-center justify-center">
@@ -71,12 +105,12 @@
             </div>
             
             <div class="flex flex-row items-center gap-3 w-full lg:w-auto">
-                <button onclick="toggleDarkMode()" class="p-2 bg-white/80 dark:bg-gray-800 border border-amber-300 dark:border-gray-600 rounded-xl shadow-sm transition hover:bg-gray-50 dark:hover:bg-gray-700 shrink-0">
+                <button onclick="toggleDarkMode()" class="p-2 bg-white/80 dark:bg-gray-800/80 border border-amber-300 dark:border-gray-600 rounded-xl shadow-sm transition hover:bg-gray-50 dark:hover:bg-gray-700 shrink-0 backdrop-blur-sm">
                     <span id="themeIconLight" class="block dark:hidden">🌙</span>
                     <span id="themeIconDark" class="hidden dark:block">☀️</span>
                 </button>
 
-                <div id="authPanel" class="w-full bg-white/80 dark:bg-gray-800 p-3 rounded-xl border border-amber-300 dark:border-gray-600 shadow-sm flex flex-row items-center justify-between sm:justify-start gap-4">
+                <div id="authPanel" class="w-full bg-white/90 dark:bg-gray-800/90 p-3 rounded-xl border border-amber-300 dark:border-gray-600 shadow-sm flex flex-row items-center justify-between sm:justify-start gap-4 backdrop-blur-sm">
                     <div id="userStatus" class="text-left text-[11px] sm:text-xs text-gray-600 dark:text-gray-300">
                         <span class="block font-bold text-amber-800 dark:text-amber-500">當前狀態：單機模式</span>
                         <span>紀錄保存在此裝置</span>
@@ -99,7 +133,7 @@
 
         <div id="errorBanner" class="hidden bg-red-100 border-2 border-red-500 text-red-800 px-4 py-3 rounded-xl mb-6 text-sm font-bold shadow-sm flex flex-col gap-1"></div>
 
-        <section class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow border-2 border-amber-200/80 dark:border-gray-700 mb-6 transition-colors">
+        <section class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-2xl p-4 shadow border-2 border-amber-200/80 dark:border-gray-700 mb-6 transition-colors">
             <div class="flex justify-between items-center border-b border-gray-100 dark:border-gray-700 pb-2 cursor-pointer" onclick="toggleFilterPanel()">
                 <h3 class="font-bold text-amber-955 dark:text-amber-400 text-sm flex items-center gap-1 shrink-0">🔍 篩選器 <span id="filterToggleIcon" class="text-xs opacity-70 ml-1">▼</span></h3>
                 <div class="flex items-center gap-1.5 sm:gap-2">
@@ -153,34 +187,34 @@
         </section>
 
         <section class="grid grid-cols-1 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
-            <div class="bg-white dark:bg-gray-800 rounded-xl p-3 sm:p-4 shadow border-2 border-amber-200 dark:border-amber-900 flex flex-col justify-between h-full">
+            <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-xl p-3 sm:p-4 shadow border-2 border-amber-200 dark:border-amber-900 flex flex-col justify-between h-full">
                 <div class="border-b border-amber-100 dark:border-gray-700 pb-1.5 mb-2">
                     <h3 class="font-bold text-amber-900 dark:text-amber-500 flex items-center text-xs sm:text-sm whitespace-nowrap">🥇 第一層統計 <span class="text-[10px] ml-1 font-normal opacity-80">(每格加成3%, 需要2枝金蠟筆)</span></h3>
                 </div>
                 <div id="stat_layer_1" class="text-[10px] sm:text-[11px] text-gray-700 dark:text-gray-300 space-y-1 flex flex-col h-full justify-between"></div>
             </div>
 
-            <div class="bg-white dark:bg-gray-800 rounded-xl p-3 sm:p-4 shadow border-2 border-orange-200 dark:border-orange-900 flex flex-col justify-between h-full">
+            <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-xl p-3 sm:p-4 shadow border-2 border-orange-200 dark:border-orange-900 flex flex-col justify-between h-full">
                 <div class="border-b border-orange-100 dark:border-gray-700 pb-1.5 mb-2">
                     <h3 class="font-bold text-orange-900 dark:text-orange-500 flex items-center text-xs sm:text-sm whitespace-nowrap">🥈 第二層統計 <span class="text-[10px] ml-1 font-normal opacity-80">(每格加成4%, 需要4枝金蠟筆)</span></h3>
                 </div>
                 <div id="stat_layer_2" class="text-[10px] sm:text-[11px] text-gray-700 dark:text-gray-300 space-y-1 flex flex-col h-full justify-between"></div>
             </div>
 
-            <div class="bg-white dark:bg-gray-800 rounded-xl p-3 sm:p-4 shadow border-2 border-red-200 dark:border-red-900 flex flex-col justify-between h-full">
+            <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-xl p-3 sm:p-4 shadow border-2 border-red-200 dark:border-red-900 flex flex-col justify-between h-full">
                 <div class="border-b border-red-100 dark:border-gray-700 pb-1.5 mb-2">
                     <h3 class="font-bold text-red-900 dark:text-red-500 flex items-center text-xs sm:text-sm whitespace-nowrap">🥉 第三層統計 <span class="text-[10px] ml-1 font-normal opacity-80">(每格加成5%, 需要6枝金蠟筆)</span></h3>
                 </div>
                 <div id="stat_layer_3" class="text-[10px] sm:text-[11px] text-gray-700 dark:text-gray-300 space-y-1 flex flex-col h-full justify-between"></div>
             </div>
 
-            <div class="bg-gradient-to-br from-yellow-50 to-amber-100 dark:from-gray-800 dark:to-gray-800 rounded-xl p-3 sm:p-4 shadow border-2 border-yellow-300 dark:border-gray-600 flex flex-col justify-between h-full">
+            <div class="bg-gradient-to-br from-yellow-50/90 to-amber-100/90 dark:from-gray-800/90 dark:to-gray-800/90 backdrop-blur-md rounded-xl p-3 sm:p-4 shadow border-2 border-yellow-300 dark:border-gray-600 flex flex-col justify-between h-full">
                 <div>
                     <h3 class="font-bold text-amber-955 dark:text-amber-400 text-xs sm:text-sm mb-1 whitespace-nowrap border-b border-amber-200 dark:border-gray-700 pb-1.5">📊 全體屬性加成</h3>
                     <div class="text-[11px] sm:text-xs text-amber-900 dark:text-gray-300 mt-2 space-y-1">
                         <p>已擁有坨坨：<span id="owned_char_count" class="font-bold text-amber-600 dark:text-amber-400">0</span> / <span id="total_char_count" class="font-bold">0</span></p>
-                        <p>蠟筆使用量：<span id="total_used_crayon" class="font-bold text-green-600 dark:text-green-400">0</span></p>
-                        <p>蠟筆需求量：<span id="total_needed_crayon" class="font-bold text-red-600 dark:text-red-400">0</span></p>
+                        <p>總已用蠟筆：<span id="total_used_crayon" class="font-bold text-green-600 dark:text-green-400">0</span></p>
+                        <p>總尚需蠟筆：<span id="total_needed_crayon" class="font-bold text-red-600 dark:text-red-400">0</span></p>
                     </div>
                 </div>
                 <div class="grid grid-cols-5 gap-1 text-center mt-2 pt-2 border-t border-amber-200 dark:border-gray-700 text-[9px] sm:text-[10px]">
@@ -318,7 +352,7 @@
             "avatar_泰達": "https://i.postimg.cc/vH2GKCw8/tai-da.png"
         };
 
-                const INITIAL_DATA = [
+        const INITIAL_DATA = [
             { name: "洛涅", personality: "天真", race: "精靈", position: "前排", job: "肉盾", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
             { name: "薇薇", personality: "天真", race: "龍族", position: "前排", job: "肉盾", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
             { name: "卡洛特", personality: "天真", race: "妖精", position: "後排", job: "輔助", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
@@ -388,6 +422,7 @@
             { name: "萊薇", personality: "憂鬱", race: "魔女", position: "中排", job: "輸出", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] },
             { name: "喬菲", personality: "憂鬱", race: "獸人", position: "中排", job: "輸出", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] }
         ];
+
         const LAYER_RULES = {
             1: { name: "🥇 第一層", crayon: 2, bonus: 3 },
             2: { name: "🥈 第二層", crayon: 4, bonus: 4 },
@@ -533,7 +568,7 @@
                 html += `
                     <div class="mt-2 pt-1 border-t border-gray-100 dark:border-gray-700 flex justify-end">
                         <span class="bg-red-50 dark:bg-gray-700 text-red-600 dark:text-red-400 px-1.5 py-0.5 rounded text-[10px] font-bold border border-red-100 dark:border-gray-600">
-                            尚要 ${layerMissingCrayons[l]} 枝蠟筆
+                            尚需 ${layerMissingCrayons[l]} 枝蠟筆
                         </span>
                     </div>
                 `;
@@ -779,7 +814,7 @@
 
                 const pSection = document.createElement('section');
                 pSection.id = `section_p_${pName}`;
-                pSection.className = "bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 shadow-sm border-2 border-amber-100/70 dark:border-gray-700 mb-6 transition-colors";
+                pSection.className = "bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-2xl p-4 sm:p-6 shadow-sm border-2 border-amber-100/70 dark:border-gray-700 mb-6 transition-colors";
                 
                 pSection.innerHTML = `
                     <div class="border-b-2 border-amber-400 dark:border-gray-600 pb-2.5 mb-4 flex justify-between items-center flex-wrap gap-2">
@@ -793,7 +828,7 @@
                 pChars.forEach(char => {
                     const charCard = document.createElement('div');
                     charCard.id = `char_card_${char.name}`;
-                    charCard.className = "char-card-wrapper bg-gray-50/50 dark:bg-gray-750 p-3 sm:p-4 rounded-xl border border-gray-200/60 dark:border-gray-600 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-4 transition-all duration-200";
+                    charCard.className = "char-card-wrapper bg-white/50 dark:bg-gray-750/50 p-3 sm:p-4 rounded-xl border border-gray-200/60 dark:border-gray-600 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-4 transition-all duration-200";
 
                     const avatarPath = IMAGE_MAP[`avatar_${char.name}`] || "";
                     const pPath = IMAGE_MAP[`personality_${char.personality}`] || "";
@@ -873,11 +908,11 @@
                     [1, 2, 3].forEach(l => {
                         const layerBox = document.createElement('div');
                         layerBox.id = `layer_wrap_${char.name}_${l}`;
-                        let bgStyle = "bg-amber-50/20 border-amber-100/60 dark:border-amber-900/40", badgeText = `🥇 第一層`, gridCols = "grid-cols-2";
-                        if (l === 2) { bgStyle = "bg-orange-50/20 border-orange-100/60 dark:border-orange-900/40"; badgeText = `🥈 第二層`; gridCols = "grid-cols-3"; }
-                        else if (l === 3) { bgStyle = "bg-red-50/20 border-red-100/60 dark:border-red-900/40"; badgeText = `🥉 第三層`; gridCols = "grid-cols-4"; }
+                        let bgStyle = "bg-amber-50/40 border-amber-100/60 dark:border-amber-900/40", badgeText = `🥇 第一層`, gridCols = "grid-cols-2";
+                        if (l === 2) { bgStyle = "bg-orange-50/40 border-orange-100/60 dark:border-orange-900/40"; badgeText = `🥈 第二層`; gridCols = "grid-cols-3"; }
+                        else if (l === 3) { bgStyle = "bg-red-50/40 border-red-100/60 dark:border-red-900/40"; badgeText = `🥉 第三層`; gridCols = "grid-cols-4"; }
 
-                        layerBox.className = `${bgStyle} flex-1 p-2 rounded-xl border flex-col justify-between`;
+                        layerBox.className = `${bgStyle} flex-1 p-2 rounded-xl border flex-col justify-between backdrop-blur-sm`;
                         layerBox.innerHTML = `<span class="text-[10px] font-bold mb-1 block opacity-70 whitespace-nowrap">${badgeText}</span>`;
 
                         const btnGroup = document.createElement('div');
