@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>嘟嘟臉金蠟筆記事本</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
     
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -16,18 +21,22 @@
             font-family: 'Noto Sans TC', sans-serif; 
             background-color: #fcf8f2;
             -webkit-tap-highlight-color: transparent;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
+        .dark body { background-color: #1a202c; color: #e2e8f0; }
         .char-btn { 
             transition: all 0.12s cubic-bezier(0.4, 0, 0.2, 1); 
             user-select: none;
             touch-action: manipulation;
         }
         .char-btn:active { transform: scale(0.94); }
-        .char-avatar { transition: transform 0.2s ease; }
+        .char-avatar { transition: all 0.2s ease; cursor: pointer; }
         .char-card-wrapper:hover .char-avatar { transform: scale(1.06); }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #fcf8f2; }
+        .dark ::-webkit-scrollbar-track { background: #1a202c; }
         ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 4px; }
+        .dark ::-webkit-scrollbar-thumb { background: #4a5568; }
         
         .google-login-btn {
             box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.15);
@@ -37,13 +46,15 @@
             box-shadow: 0 3px 6px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.12);
             background-color: #fcfcfc;
         }
+        
+        .unowned-avatar { opacity: 0.35; filter: grayscale(100%); }
     </style>
 </head>
-<body class="p-3 sm:p-6 md:p-8 bg-[#fcf8f2] text-gray-800">
+<body class="p-3 sm:p-6 md:p-8 bg-[#fcf8f2] text-gray-800 dark:bg-gray-900 dark:text-gray-100">
 
     <div class="max-w-7xl mx-auto">
         
-        <header class="bg-gradient-to-r from-amber-100 via-yellow-100 to-orange-100 rounded-2xl p-4 sm:p-6 shadow-md mb-6 border-4 border-amber-400 flex flex-col lg:flex-row justify-between items-center gap-4">
+        <header class="bg-gradient-to-r from-amber-100 via-yellow-100 to-orange-100 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800 rounded-2xl p-4 sm:p-6 shadow-md mb-6 border-4 border-amber-400 dark:border-gray-600 flex flex-col lg:flex-row justify-between items-center gap-4 transition-colors">
             <div class="flex flex-row items-center justify-center lg:justify-start gap-3 text-center lg:text-left">
                 
                 <div class="shrink-0 flex items-center justify-center">
@@ -54,130 +65,130 @@
                 </div>
 
                 <div>
-                    <h1 class="text-2xl sm:text-3xl font-bold text-amber-900 mb-1">著色板金蠟筆記事本</h1>
-                    <p class="text-amber-800 text-xs sm:text-sm">祝各位教主日日出金蠟筆</p>
+                    <h1 class="text-2xl sm:text-3xl font-bold text-amber-900 dark:text-amber-400 mb-1">嘟嘟臉金蠟筆記事本</h1>
+                    <p class="text-amber-800 dark:text-gray-300 text-xs sm:text-sm">祝各位教主日日出金蠟筆</p>
                 </div>
             </div>
             
-            <div id="authPanel" class="w-full lg:w-auto bg-white/80 p-3 rounded-xl border border-amber-300 shadow-sm flex flex-row items-center justify-between sm:justify-start gap-4">
-                <div id="userStatus" class="text-left text-[11px] sm:text-xs text-gray-600">
-                    <span class="block font-bold text-amber-800">當前狀態：單機模式</span>
-                    <span>紀錄保存在此裝置</span>
-                </div>
-                
-                <div id="authBtnContainer" class="shrink-0">
-                    <button id="authBtn" onclick="handleAuth()" class="google-login-btn bg-white rounded-lg p-2 flex items-center justify-center transition border border-gray-200 shrink-0">
-                        <svg id="googleLogoSvg" class="w-6 h-6 sm:w-7 sm:h-7" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
-                            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"/>
-                        </svg>
-                        <span id="logoutText" class="hidden text-white font-bold text-xs px-2 py-0.5">登出</span>
-                    </button>
+            <div class="flex flex-row items-center gap-3 w-full lg:w-auto">
+                <button onclick="toggleDarkMode()" class="p-2 bg-white/80 dark:bg-gray-800 border border-amber-300 dark:border-gray-600 rounded-xl shadow-sm transition hover:bg-gray-50 dark:hover:bg-gray-700 shrink-0">
+                    <span id="themeIconLight" class="block dark:hidden">🌙</span>
+                    <span id="themeIconDark" class="hidden dark:block">☀️</span>
+                </button>
+
+                <div id="authPanel" class="w-full bg-white/80 dark:bg-gray-800 p-3 rounded-xl border border-amber-300 dark:border-gray-600 shadow-sm flex flex-row items-center justify-between sm:justify-start gap-4">
+                    <div id="userStatus" class="text-left text-[11px] sm:text-xs text-gray-600 dark:text-gray-300">
+                        <span class="block font-bold text-amber-800 dark:text-amber-500">當前狀態：單機模式</span>
+                        <span>紀錄保存在此裝置</span>
+                    </div>
+                    
+                    <div id="authBtnContainer" class="shrink-0">
+                        <button id="authBtn" onclick="handleAuth()" class="google-login-btn bg-white dark:bg-gray-700 rounded-lg p-2 flex items-center justify-center transition border border-gray-200 dark:border-gray-600 shrink-0">
+                            <svg id="googleLogoSvg" class="w-6 h-6 sm:w-7 sm:h-7" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
+                                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"/>
+                            </svg>
+                            <span id="logoutText" class="hidden text-white font-bold text-xs px-2 py-0.5">登出</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </header>
 
         <div id="errorBanner" class="hidden bg-red-100 border-2 border-red-500 text-red-800 px-4 py-3 rounded-xl mb-6 text-sm font-bold shadow-sm flex flex-col gap-1"></div>
 
-        <section class="bg-white rounded-2xl p-4 shadow border-2 border-amber-200/80 mb-6 space-y-3">
-            <div class="flex justify-between items-center border-b border-gray-100 pb-2">
-                <h3 class="font-bold text-amber-955 text-sm flex items-center gap-1">🔍 篩選器</h3>
-                <button onclick="resetFilters()" class="text-xs text-amber-700 hover:text-amber-900 font-bold bg-amber-50 px-2 py-1 rounded border border-amber-200 transition whitespace-nowrap">重置全部篩選</button>
+        <section class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow border-2 border-amber-200/80 dark:border-gray-700 mb-6 transition-colors">
+            <div class="flex justify-between items-center border-b border-gray-100 dark:border-gray-700 pb-2 cursor-pointer" onclick="toggleFilterPanel()">
+                <h3 class="font-bold text-amber-955 dark:text-amber-400 text-sm flex items-center gap-1">🔍 篩選器 <span id="filterToggleIcon" class="text-xs opacity-70">▼</span></h3>
+                <div class="flex items-center gap-2">
+                    <input type="text" id="searchInput" placeholder="搜尋坨坨..." oninput="handleSearch()" class="text-xs px-2 py-1 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" onclick="event.stopPropagation()">
+                    <button onclick="event.stopPropagation(); resetFilters()" class="text-xs text-amber-700 dark:text-amber-400 hover:text-amber-900 dark:hover:text-amber-300 font-bold bg-amber-50 dark:bg-gray-700 px-2 py-1 rounded border border-amber-200 dark:border-gray-600 transition whitespace-nowrap">重置全部篩選</button>
+                </div>
             </div>
             
-            <div class="space-y-2 text-xs">
+            <div id="filterPanelBody" class="space-y-3 text-xs mt-3">
                 <div class="flex items-start gap-2 flex-wrap sm:flex-nowrap">
-                    <span class="font-bold text-gray-500 shrink-0 w-16 pt-1 whitespace-nowrap">🔮 坨坨性格：</span>
+                    <span class="font-bold text-gray-500 dark:text-gray-400 shrink-0 w-16 pt-1 whitespace-nowrap">🔮 坨坨性格：</span>
                     <div id="filter_personality" class="flex flex-wrap gap-1.5"></div>
                 </div>
                 <div class="flex items-start gap-2 flex-wrap sm:flex-nowrap">
-                    <span class="font-bold text-gray-500 shrink-0 w-16 pt-1 whitespace-nowrap">🧬 坨坨種族：</span>
+                    <span class="font-bold text-gray-500 dark:text-gray-400 shrink-0 w-16 pt-1 whitespace-nowrap">🧬 坨坨種族：</span>
                     <div id="filter_race" class="flex flex-wrap gap-1.5"></div>
                 </div>
                 <div class="flex items-start gap-2 flex-wrap sm:flex-nowrap">
-                    <span class="font-bold text-gray-500 shrink-0 w-16 pt-1 whitespace-nowrap">🗺️ 坨坨站位：</span>
+                    <span class="font-bold text-gray-500 dark:text-gray-400 shrink-0 w-16 pt-1 whitespace-nowrap">🗺️ 坨坨站位：</span>
                     <div id="filter_position" class="flex flex-wrap gap-1.5"></div>
                 </div>
                 <div class="flex items-start gap-2 flex-wrap sm:flex-nowrap">
-                    <span class="font-bold text-gray-500 shrink-0 w-16 pt-1 whitespace-nowrap">⚔️ 坨坨職業：</span>
+                    <span class="font-bold text-gray-500 dark:text-gray-400 shrink-0 w-16 pt-1 whitespace-nowrap">⚔️ 坨坨職業：</span>
                     <div id="filter_job" class="flex flex-wrap gap-1.5"></div>
                 </div>
-                <div class="flex flex-col sm:flex-row items-start gap-2 border-t border-dashed border-gray-100 pt-2">
-                    <span class="font-bold text-amber-800 shrink-0 w-16 pt-1 flex items-center gap-0.5 whitespace-nowrap">🖍️ 金蠟筆格：</span>
+                <div class="flex flex-col sm:flex-row items-start gap-2 border-t border-dashed border-gray-100 dark:border-gray-700 pt-2">
+                    <span class="font-bold text-amber-800 dark:text-amber-500 shrink-0 w-16 pt-1 flex items-center gap-0.5 whitespace-nowrap">🖍️ 金蠟筆格：</span>
                     <div class="flex flex-col gap-2 w-full">
                         <div class="flex items-center gap-1.5 flex-wrap">
-                            <span class="text-[11px] text-gray-400 font-medium bg-gray-50 px-1 rounded whitespace-nowrap">指定層數:</span>
+                            <span class="text-[11px] text-gray-400 dark:text-gray-500 font-medium bg-gray-50 dark:bg-gray-700 px-1 rounded whitespace-nowrap">指定層數:</span>
                             <div id="filter_gridLayer" class="flex flex-wrap gap-1"></div>
                         </div>
                         <div class="flex items-center gap-1.5 flex-wrap">
-                            <span class="text-[11px] text-gray-400 font-medium bg-gray-50 px-1 rounded whitespace-nowrap">格子種類:</span>
+                            <span class="text-[11px] text-gray-400 dark:text-gray-500 font-medium bg-gray-50 dark:bg-gray-700 px-1 rounded whitespace-nowrap">格子種類:</span>
                             <div id="filter_gridType" class="flex flex-wrap gap-1.5"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col sm:flex-row items-start gap-2 border-t border-dashed border-gray-100 dark:border-gray-700 pt-2">
+                    <span class="font-bold text-blue-700 dark:text-blue-400 shrink-0 w-16 pt-1 flex items-center gap-0.5 whitespace-nowrap">👁️ 版面顯示：</span>
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                        <div id="filter_displayMode" class="flex flex-wrap gap-1">
+                            <button id="btn_disp_all" onclick="setDisplayMode('all')" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2 py-0.5 rounded border text-[11px] font-bold transition bg-blue-500 text-white border-blue-600 shadow-sm">顯示全部</button>
+                            <button id="btn_disp_1" onclick="setDisplayMode('1')" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2 py-0.5 rounded border text-[11px] font-medium transition bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600">僅第一層</button>
+                            <button id="btn_disp_2" onclick="setDisplayMode('2')" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2 py-0.5 rounded border text-[11px] font-medium transition bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600">僅第二層</button>
+                            <button id="btn_disp_3" onclick="setDisplayMode('3')" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2 py-0.5 rounded border text-[11px] font-medium transition bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600">僅第三層</button>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
-            <div class="bg-white rounded-xl p-3 sm:p-4 shadow border-2 border-amber-200 flex flex-col justify-between">
-                <div class="border-b border-amber-100 pb-1.5 mb-1.5">
-                    <h3 class="font-bold text-amber-900 flex items-center text-xs sm:text-sm whitespace-nowrap">🥇 第一層統計</h3>
-                    <span class="text-[9px] sm:text-[10px] text-amber-600 font-medium">(2枝金蠟筆 / 全員 +3%)</span>
+        <section class="grid grid-cols-1 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-3 sm:p-4 shadow border-2 border-amber-200 dark:border-amber-900 flex flex-col justify-between">
+                <div class="border-b border-amber-100 dark:border-gray-700 pb-1.5 mb-2">
+                    <h3 class="font-bold text-amber-900 dark:text-amber-500 flex items-center text-xs sm:text-sm whitespace-nowrap">🥇 第一層統計 (2枝金蠟筆)</h3>
                 </div>
-                <div class="space-y-1 text-[11px] sm:text-xs text-gray-700">
-                    <p>已開：<span id="l1_opened" class="font-bold text-green-600 text-xs sm:text-sm">0</span> / <span id="l1_total" class="font-bold">0</span> 格</p>
-                    <p>未開：<span id="l1_closed" class="font-bold text-amber-600 text-xs sm:text-sm">0</span> 格</p>
-                    <p class="pt-1 border-t border-dashed border-gray-200 font-bold text-amber-900">
-                        尚需：<span id="l1_needed" class="text-xs sm:text-sm text-red-500">0</span> 枝
-                    </p>
-                </div>
+                <div id="stat_layer_1" class="text-[10px] sm:text-[11px] text-gray-700 dark:text-gray-300 space-y-1"></div>
             </div>
 
-            <div class="bg-white rounded-xl p-3 sm:p-4 shadow border-2 border-orange-200 flex flex-col justify-between">
-                <div class="border-b border-orange-100 pb-1.5 mb-1.5">
-                    <h3 class="font-bold text-orange-900 flex items-center text-xs sm:text-sm whitespace-nowrap">🥈 第二層統計</h3>
-                    <span class="text-[9px] sm:text-[10px] text-orange-600 font-medium">(4枝金蠟筆 / 全員 +4%)</span>
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-3 sm:p-4 shadow border-2 border-orange-200 dark:border-orange-900 flex flex-col justify-between">
+                <div class="border-b border-orange-100 dark:border-gray-700 pb-1.5 mb-2">
+                    <h3 class="font-bold text-orange-900 dark:text-orange-500 flex items-center text-xs sm:text-sm whitespace-nowrap">🥈 第二層統計 (4枝金蠟筆)</h3>
                 </div>
-                <div class="space-y-1 text-[11px] sm:text-xs text-gray-700">
-                    <p>已開：<span id="l2_opened" class="font-bold text-green-600 text-xs sm:text-sm">0</span> / <span id="l2_total" class="font-bold">0</span> 格</p>
-                    <p>未開：<span id="l2_closed" class="font-bold text-orange-600 text-xs sm:text-sm">0</span> 格</p>
-                    <p class="pt-1 border-t border-dashed border-gray-200 font-bold text-orange-900">
-                        尚需：<span id="l2_needed" class="text-xs sm:text-sm text-red-500">0</span> 枝
-                    </p>
-                </div>
+                <div id="stat_layer_2" class="text-[10px] sm:text-[11px] text-gray-700 dark:text-gray-300 space-y-1"></div>
             </div>
 
-            <div class="bg-white rounded-xl p-3 sm:p-4 shadow border-2 border-red-200 flex flex-col justify-between">
-                <div class="border-b border-red-100 pb-1.5 mb-1.5">
-                    <h3 class="font-bold text-red-900 flex items-center text-xs sm:text-sm whitespace-nowrap">🥉 第三層統計</h3>
-                    <span class="text-[9px] sm:text-[10px] text-red-600 font-medium">(6枝金蠟筆 / 全員 +5%)</span>
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-3 sm:p-4 shadow border-2 border-red-200 dark:border-red-900 flex flex-col justify-between">
+                <div class="border-b border-red-100 dark:border-gray-700 pb-1.5 mb-2">
+                    <h3 class="font-bold text-red-900 dark:text-red-500 flex items-center text-xs sm:text-sm whitespace-nowrap">🥉 第三層統計 (6枝金蠟筆)</h3>
                 </div>
-                <div class="space-y-1 text-[11px] sm:text-xs text-gray-700">
-                    <p>已開：<span id="l3_opened" class="font-bold text-green-600 text-xs sm:text-sm">0</span> / <span id="l3_total" class="font-bold">0</span> 格</p>
-                    <p>未開：<span id="l3_closed" class="font-bold text-red-600 text-xs sm:text-sm">0</span> 格</p>
-                    <p class="pt-1 border-t border-dashed border-gray-200 font-bold text-red-900">
-                        尚需：<span id="l3_needed" class="text-xs sm:text-sm text-red-500">0</span> 枝
-                    </p>
-                </div>
+                <div id="stat_layer_3" class="text-[10px] sm:text-[11px] text-gray-700 dark:text-gray-300 space-y-1"></div>
             </div>
 
-            <div class="bg-gradient-to-br from-yellow-50 to-amber-100 rounded-xl p-3 sm:p-4 shadow border-2 border-yellow-300 flex flex-col justify-between col-span-2 lg:col-span-1">
+            <div class="bg-gradient-to-br from-yellow-50 to-amber-100 dark:from-gray-800 dark:to-gray-800 rounded-xl p-3 sm:p-4 shadow border-2 border-yellow-300 dark:border-gray-600 flex flex-col justify-between">
                 <div>
-                    <h3 class="font-bold text-amber-955 text-xs sm:text-sm mb-1 whitespace-nowrap">📊 全體屬性加成</h3>
-                    <div class="text-[10px] sm:text-[11px] text-amber-900">目前符合：<span id="filtered_char_count" class="font-bold text-amber-955">0</span> / <span id="total_char_count" class="font-bold">0</span> 名</div>
-                    <div class="text-[11px] sm:text-xs space-y-0.5 text-amber-900 mt-0.5">
-                        <p>總已用蠟筆：<span id="total_used_crayon" class="font-bold text-green-600 text-xs sm:text-sm">0</span> 枝</p>
-                        <p>總尚需蠟筆：<span id="total_needed_crayon" class="font-bold text-red-600 text-xs sm:text-sm">0</span> 枝</p>
+                    <h3 class="font-bold text-amber-955 dark:text-amber-400 text-xs sm:text-sm mb-1 whitespace-nowrap border-b border-amber-200 dark:border-gray-700 pb-1.5">📊 全體屬性加成</h3>
+                    <div class="text-[11px] sm:text-xs text-amber-900 dark:text-gray-300 mt-2 space-y-1">
+                        <p>已擁有坨坨：<span id="owned_char_count" class="font-bold text-amber-600 dark:text-amber-400">0</span> / <span id="total_char_count" class="font-bold">0</span></p>
+                        <p>總已用蠟筆：<span id="total_used_crayon" class="font-bold text-green-600 dark:text-green-400">0</span></p>
+                        <p>總尚需蠟筆：<span id="total_needed_crayon" class="font-bold text-red-600 dark:text-red-400">0</span></p>
                     </div>
                 </div>
-                <div class="grid grid-cols-5 gap-1 text-center mt-1.5 pt-1.5 border-t border-amber-200 text-[9px] sm:text-[10px]">
-                    <div class="bg-orange-50 rounded p-1"><span class="block text-gray-500 scale-90">攻</span><span id="attr_attack" class="font-bold text-orange-600">+0%</span></div>
-                    <div class="bg-blue-50 rounded p-1"><span class="block text-gray-500 scale-90">血</span><span id="attr_hp" class="font-bold text-blue-600">+0%</span></div>
-                    <div class="bg-green-50 rounded p-1"><span class="block text-gray-500 scale-90">防</span><span id="attr_def" class="font-bold text-green-600">+0%</span></div>
-                    <div class="bg-red-50 rounded p-1"><span class="block text-gray-500 scale-90">爆</span><span id="attr_crit" class="font-bold text-red-600">+0%</span></div>
-                    <div class="bg-purple-50 rounded p-1"><span class="block text-gray-500 scale-90">抗</span><span id="attr_crit_res" class="font-bold text-purple-600">+0%</span></div>
+                <div class="grid grid-cols-5 gap-1 text-center mt-2 pt-2 border-t border-amber-200 dark:border-gray-700 text-[9px] sm:text-[10px]">
+                    <div class="bg-orange-50 dark:bg-gray-700 rounded p-1"><span class="block text-gray-500 dark:text-gray-400 scale-90">攻</span><span id="attr_attack" class="font-bold text-orange-600 dark:text-orange-400">+0%</span></div>
+                    <div class="bg-green-50 dark:bg-gray-700 rounded p-1"><span class="block text-gray-500 dark:text-gray-400 scale-90">血</span><span id="attr_hp" class="font-bold text-green-600 dark:text-green-400">+0%</span></div>
+                    <div class="bg-blue-50 dark:bg-gray-700 rounded p-1"><span class="block text-gray-500 dark:text-gray-400 scale-90">防</span><span id="attr_def" class="font-bold text-blue-600 dark:text-blue-400">+0%</span></div>
+                    <div class="bg-red-50 dark:bg-gray-700 rounded p-1"><span class="block text-gray-500 dark:text-gray-400 scale-90">爆</span><span id="attr_crit" class="font-bold text-red-600 dark:text-red-400">+0%</span></div>
+                    <div class="bg-purple-50 dark:bg-gray-700 rounded p-1"><span class="block text-gray-500 dark:text-gray-400 scale-90">抗</span><span id="attr_crit_res" class="font-bold text-purple-600 dark:text-purple-400">+0%</span></div>
                 </div>
             </div>
         </section>
@@ -187,10 +198,25 @@
     </div>
 
     <script>
+        // 深色模式初始化與切換邏輯
+        let isDarkMode = localStorage.getItem('theme') === 'dark';
+        if (isDarkMode) {
+            document.documentElement.classList.add('dark');
+        } else if (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+            isDarkMode = true;
+        }
+
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            isDarkMode = document.documentElement.classList.contains('dark');
+            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+        }
+
         window.onerror = function(message, source, lineno, colno, error) {
             const banner = document.getElementById('errorBanner');
             if (banner) {
-                banner.innerHTML = `<span>⚠️ 系統攔截到致命錯誤！請將這段文字貼給 AI：</span><span class="font-mono text-xs break-all bg-red-200 p-1 rounded">${message} (行 ${lineno})</span>`;
+                banner.innerHTML = `<span>⚠️ 系統攔截到致命錯誤！請將這段文字貼給 AI：</span><span class="font-mono text-xs break-all bg-red-200 dark:bg-red-900 p-1 rounded">${message} (行 ${lineno})</span>`;
                 banner.classList.remove('hidden');
             }
             return false;
@@ -369,40 +395,44 @@
             3: { name: "🥉 第三層", crayon: 6, bonus: 5 }
         };
 
+        const ATTR_PRIORITY = ["攻擊", "防禦", "血量", "爆擊", "爆抗"];
         const ATTR_MAP = { "攻擊": "attack", "防禦": "def", "血量": "hp", "爆擊": "crit", "爆抗": "crit_res" };
 
         const ATTR_STYLES = {
-            "攻擊": { unopened: "bg-orange-50/70 text-orange-800 border-orange-200 hover:bg-orange-100/60", opened: "bg-orange-500 text-white font-bold shadow-sm hover:bg-orange-600 border-orange-600" },
-            "防禦": { unopened: "bg-green-50/70 text-green-800 border-green-200 hover:bg-green-100/60", opened: "bg-green-500 text-white font-bold shadow-sm hover:bg-green-600 border-green-600" },
-            "血量": { unopened: "bg-blue-50/70 text-blue-800 border-blue-200 hover:bg-blue-100/60", opened: "bg-blue-500 text-white font-bold shadow-sm hover:bg-blue-600 border-blue-600" },
-            "爆擊": { unopened: "bg-red-50/70 text-red-800 border-red-200 hover:bg-red-100/60", opened: "bg-red-500 text-white font-bold shadow-sm hover:bg-red-600 border-red-600" },
-            "爆抗": { unopened: "bg-purple-50/70 text-purple-800 border-purple-200 hover:bg-purple-100/60", opened: "bg-purple-500 text-white font-bold shadow-sm hover:bg-purple-600 border-purple-600" }
+            "攻擊": { unopened: "bg-orange-50/70 text-orange-800 border-orange-200 hover:bg-orange-100/60 dark:bg-gray-700 dark:text-orange-400 dark:border-gray-600 dark:hover:bg-gray-600", opened: "bg-orange-500 text-white font-bold shadow-sm hover:bg-orange-600 border-orange-600 dark:border-orange-500" },
+            // 血量改為綠色
+            "血量": { unopened: "bg-green-50/70 text-green-800 border-green-200 hover:bg-green-100/60 dark:bg-gray-700 dark:text-green-400 dark:border-gray-600 dark:hover:bg-gray-600", opened: "bg-green-500 text-white font-bold shadow-sm hover:bg-green-600 border-green-600 dark:border-green-500" },
+            // 防禦改為藍色
+            "防禦": { unopened: "bg-blue-50/70 text-blue-800 border-blue-200 hover:bg-blue-100/60 dark:bg-gray-700 dark:text-blue-400 dark:border-gray-600 dark:hover:bg-gray-600", opened: "bg-blue-500 text-white font-bold shadow-sm hover:bg-blue-600 border-blue-600 dark:border-blue-500" },
+            "爆擊": { unopened: "bg-red-50/70 text-red-800 border-red-200 hover:bg-red-100/60 dark:bg-gray-700 dark:text-red-400 dark:border-gray-600 dark:hover:bg-gray-600", opened: "bg-red-500 text-white font-bold shadow-sm hover:bg-red-600 border-red-600 dark:border-red-500" },
+            "爆抗": { unopened: "bg-purple-50/70 text-purple-800 border-purple-200 hover:bg-purple-100/60 dark:bg-gray-700 dark:text-purple-400 dark:border-gray-600 dark:hover:bg-gray-600", opened: "bg-purple-500 text-white font-bold shadow-sm hover:bg-purple-600 border-purple-600 dark:border-purple-500" }
         };
 
-        // 統一按鈕樣式 (加入 whitespace-nowrap)
         const btnActiveStyle = "whitespace-nowrap inline-flex items-center justify-center gap-1 px-2 py-0.5 rounded border text-[11px] font-bold transition bg-amber-500 text-white border-amber-600 shadow-sm";
-        const btnInactiveStyle = "whitespace-nowrap inline-flex items-center justify-center gap-1 px-2 py-0.5 rounded border text-[11px] font-medium transition bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200";
+        const btnInactiveStyle = "whitespace-nowrap inline-flex items-center justify-center gap-1 px-2 py-0.5 rounded border text-[11px] font-medium transition bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600";
+        const btnDispActiveStyle = "whitespace-nowrap inline-flex items-center justify-center gap-1 px-2 py-0.5 rounded border text-[11px] font-bold transition bg-blue-500 text-white border-blue-600 shadow-sm";
 
-        // ==========================================
-        // 渲染與計算核心（以 try-catch 完全包覆防卡死）
-        // ==========================================
         const storageKey = 'trickcal_matrix_saved_states_iron_v26';
         let savedStates = {};
         try {
             savedStates = JSON.parse(localStorage.getItem(storageKey)) || {};
         } catch(e) {
-            savedStates = {}; // 如果使用者的瀏覽器快取被污染，直接重置，不給卡死
+            savedStates = {}; 
         }
 
         let activeFilters = { 
             personality: "", race: "", position: "", job: "",
-            gridLayer: "all", gridType: "" 
+            gridLayer: "all", gridType: "", search: "", displayMode: "all"
         };
+        let isFilterOpen = true;
 
         let db = null, auth = null, currentUser = null;
 
         function initStates() {
             INITIAL_DATA.forEach(char => {
+                if (savedStates['owned_' + char.name] === undefined) {
+                    savedStates['owned_' + char.name] = false;
+                }
                 [1, 2, 3].forEach(l => {
                     char[`layer${l}`].forEach((attr, idx) => {
                         const key = `${char.name}_l${l}_${attr}_${idx}`;
@@ -419,33 +449,55 @@
             }
         }
 
+        function toggleOwnership(charName) {
+            savedStates['owned_' + charName] = !savedStates['owned_' + charName];
+            updateOwnershipUI(charName);
+            calculateStats();
+        }
+
+        function updateOwnershipUI(charName) {
+            const img = document.getElementById(`avatar_img_${charName}`);
+            if (img) {
+                if (savedStates['owned_' + charName]) {
+                    img.classList.remove('unowned-avatar');
+                } else {
+                    img.classList.add('unowned-avatar');
+                }
+            }
+        }
+
         function calculateStats() {
-            let dynamicTotals = { 1: 0, 2: 0, 3: 0 };
-            INITIAL_DATA.forEach(char => {
-                dynamicTotals[1] += char.layer1.length;
-                dynamicTotals[2] += char.layer2.length;
-                dynamicTotals[3] += char.layer3.length;
+            let layerTotals = { 1: {}, 2: {}, 3: {} };
+            let layerOpened = { 1: {}, 2: {}, 3: {} };
+            let layerBonus = { 1: {}, 2: {}, 3: {} };
+            
+            [1, 2, 3].forEach(l => {
+                ATTR_PRIORITY.forEach(a => {
+                    layerTotals[l][a] = 0;
+                    layerOpened[l][a] = 0;
+                    layerBonus[l][a] = 0;
+                });
             });
 
-            let layersStat = {
-                1: { opened: 0, total: dynamicTotals[1], crayon: LAYER_RULES[1].crayon },
-                2: { opened: 0, total: dynamicTotals[2], crayon: LAYER_RULES[2].crayon },
-                3: { opened: 0, total: dynamicTotals[3], crayon: LAYER_RULES[3].crayon }
-            };
-
             let globalUsedCrayons = 0, globalNeededCrayons = 0;
-            let attrs = { attack: 0, hp: 0, def: 0, crit: 0, crit_res: 0 };
+            let attrs = { attack: 0, def: 0, hp: 0, crit: 0, crit_res: 0 };
+            let ownedCount = 0;
 
             INITIAL_DATA.forEach(char => {
+                if (savedStates['owned_' + char.name]) ownedCount++;
+                
                 [1, 2, 3].forEach(l => {
                     const rule = LAYER_RULES[l];
                     char[`layer${l}`].forEach((attr, idx) => {
                         const key = `${char.name}_l${l}_${attr}_${idx}`;
                         const isOpened = savedStates[key];
                         const attrKey = ATTR_MAP[attr];
+                        
+                        layerTotals[l][attr]++;
 
                         if (isOpened) {
-                            layersStat[l].opened++;
+                            layerOpened[l][attr]++;
+                            layerBonus[l][attr] += rule.bonus;
                             globalUsedCrayons += rule.crayon;
                             if (attrKey) attrs[attrKey] += rule.bonus;
                         } else { globalNeededCrayons += rule.crayon; }
@@ -454,21 +506,31 @@
             });
 
             document.getElementById('total_char_count').innerText = INITIAL_DATA.length;
-            
-            [1, 2, 3].forEach(l => {
-                const stat = layersStat[l];
-                const closed = stat.total - stat.opened;
-                document.getElementById(`l${l}_total`).innerText = stat.total;
-                document.getElementById(`l${l}_opened`).innerText = stat.opened;
-                document.getElementById(`l${l}_closed`).innerText = closed;
-                document.getElementById(`l${l}_needed`).innerText = closed * stat.crayon;
-            });
-
+            document.getElementById('owned_char_count').innerText = ownedCount;
             document.getElementById('total_used_crayon').innerText = globalUsedCrayons;
             document.getElementById('total_needed_crayon').innerText = globalNeededCrayons;
 
             Object.keys(attrs).forEach(k => {
-                document.getElementById(`attr_${k}`).innerText = `+${attrs[k]}%`;
+                const el = document.getElementById(`attr_${k}`);
+                if (el) el.innerText = `+${attrs[k]}%`;
+            });
+            
+            // 更新各層細節統計
+            [1, 2, 3].forEach(l => {
+                let html = '<div class="grid grid-cols-2 gap-x-2 gap-y-1 mt-1">';
+                ATTR_PRIORITY.forEach(attr => {
+                    if(layerTotals[l][attr] > 0) {
+                        html += `
+                            <div class="flex justify-between border-b border-gray-100 dark:border-gray-700 pb-0.5">
+                                <span>${attr.substring(0,1)}: ${layerOpened[l][attr]}/${layerTotals[l][attr]}</span>
+                                <span class="font-bold text-amber-600 dark:text-amber-400">+${layerBonus[l][attr]}%</span>
+                            </div>
+                        `;
+                    }
+                });
+                html += '</div>';
+                const layerStatBox = document.getElementById(`stat_layer_${l}`);
+                if (layerStatBox) layerStatBox.innerHTML = html;
             });
 
             try {
@@ -483,6 +545,33 @@
                 console.warn("本機存檔失敗", e);
             }
 
+            applyFilterUI();
+        }
+
+        function toggleFilterPanel() {
+            isFilterOpen = !isFilterOpen;
+            const body = document.getElementById("filterPanelBody");
+            const icon = document.getElementById("filterToggleIcon");
+            if(isFilterOpen) {
+                body.classList.remove("hidden");
+                icon.innerText = "▼";
+            } else {
+                body.classList.add("hidden");
+                icon.innerText = "▶";
+            }
+        }
+
+        function handleSearch() {
+            activeFilters.search = document.getElementById("searchInput").value.trim().toLowerCase();
+            applyFilterUI();
+        }
+
+        function setDisplayMode(mode) {
+            activeFilters.displayMode = mode;
+            ["all", "1", "2", "3"].forEach(m => {
+                const btn = document.getElementById(`btn_disp_${m}`);
+                if(btn) btn.className = (mode === m) ? btnDispActiveStyle : btnInactiveStyle;
+            });
             applyFilterUI();
         }
 
@@ -608,15 +697,18 @@
         function resetFilters() {
             selectFilter("personality", ""); selectFilter("race", ""); selectFilter("position", ""); selectFilter("job", "");
             selectGridLayerFilter("all"); selectGridTypeFilter("");
+            document.getElementById("searchInput").value = "";
+            activeFilters.search = "";
+            setDisplayMode('all');
         }
 
         function applyFilterUI() {
-            let visibleCharCount = 0;
             INITIAL_DATA.forEach(char => {
                 const matchP = !activeFilters.personality || char.personality === activeFilters.personality;
                 const matchR = !activeFilters.race || char.race === activeFilters.race;
                 const matchPos = !activeFilters.position || char.position === activeFilters.position;
                 const matchJ = !activeFilters.job || char.job === activeFilters.job;
+                const matchSearch = !activeFilters.search || char.name.toLowerCase().includes(activeFilters.search);
 
                 let matchGrid = true;
                 if (activeFilters.gridType) {
@@ -627,8 +719,23 @@
 
                 const cardElement = document.getElementById(`char_card_${char.name}`);
                 if (cardElement) {
-                    if (matchP && matchR && matchPos && matchJ && matchGrid) { cardElement.classList.remove("hidden"); visibleCharCount++; } 
-                    else { cardElement.classList.add("hidden"); }
+                    if (matchP && matchR && matchPos && matchJ && matchGrid && matchSearch) { 
+                        cardElement.classList.remove("hidden"); 
+                    } else { 
+                        cardElement.classList.add("hidden"); 
+                    }
+
+                    // 處理層數顯示
+                    [1, 2, 3].forEach(l => {
+                        const layerWrap = document.getElementById(`layer_wrap_${char.name}_${l}`);
+                        if(layerWrap) {
+                            if(activeFilters.displayMode === 'all' || activeFilters.displayMode === String(l)) {
+                                layerWrap.style.display = 'flex';
+                            } else {
+                                layerWrap.style.display = 'none';
+                            }
+                        }
+                    });
                 }
             });
 
@@ -641,7 +748,6 @@
                     else pSection.classList.remove("hidden");
                 }
             });
-            document.getElementById('filtered_char_count').innerText = visibleCharCount;
         }
 
         function renderMatrix() {
@@ -650,12 +756,11 @@
             container.innerHTML = '';
             const personalities = ["天真", "活潑", "冷靜", "狂亂", "憂鬱"];
 
-            // 定義性格邊框顏色 Map
             const personalityBorderColors = {
                 "天真": "border-green-500",
                 "冷靜": "border-blue-500",
                 "狂亂": "border-red-500",
-                "活潑": "border-yellow-400", // 黃色用 400 視覺效果較好
+                "活潑": "border-yellow-400",
                 "憂鬱": "border-purple-500"
             };
 
@@ -665,11 +770,11 @@
 
                 const pSection = document.createElement('section');
                 pSection.id = `section_p_${pName}`;
-                pSection.className = "bg-white rounded-2xl p-4 sm:p-6 shadow-sm border-2 border-amber-100/70 mb-6";
+                pSection.className = "bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 shadow-sm border-2 border-amber-100/70 dark:border-gray-700 mb-6 transition-colors";
                 
                 pSection.innerHTML = `
-                    <div class="border-b-2 border-amber-400 pb-2.5 mb-4 flex justify-between items-center flex-wrap gap-2">
-                        <h2 class="text-lg sm:text-xl font-extrabold text-amber-955 flex items-center">📂 ${pName}坨坨</h2>
+                    <div class="border-b-2 border-amber-400 dark:border-gray-600 pb-2.5 mb-4 flex justify-between items-center flex-wrap gap-2">
+                        <h2 class="text-lg sm:text-xl font-extrabold text-amber-955 dark:text-amber-400 flex items-center">📂 ${pName}坨坨</h2>
                     </div>
                 `;
 
@@ -679,7 +784,7 @@
                 pChars.forEach(char => {
                     const charCard = document.createElement('div');
                     charCard.id = `char_card_${char.name}`;
-                    charCard.className = "char-card-wrapper bg-gray-50/50 p-3 sm:p-4 rounded-xl border border-gray-200/60 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-4 transition-all duration-200";
+                    charCard.className = "char-card-wrapper bg-gray-50/50 dark:bg-gray-750 p-3 sm:p-4 rounded-xl border border-gray-200/60 dark:border-gray-600 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-4 transition-all duration-200";
 
                     const avatarPath = IMAGE_MAP[`avatar_${char.name}`] || "";
                     const pPath = IMAGE_MAP[`personality_${char.personality}`] || "";
@@ -687,46 +792,46 @@
                     let raceIconName = char.race;
                     if (char.race === "???") raceIconName = "unknown";
                     const racePath = IMAGE_MAP[`race_${raceIconName}`] || "";
-                    
                     const posPath = IMAGE_MAP[`position_${char.position}`] || "";
                     const jobPath = IMAGE_MAP[`job_${char.job}`] || "";
 
-                    // 獲取當前角色的邊框顏色，如果沒有定義則預設灰色
                     const borderColorClass = personalityBorderColors[char.personality] || "border-gray-300";
+                    const isOwned = savedStates['owned_' + char.name];
+                    const avatarClass = isOwned ? "" : "unowned-avatar";
 
                     const nameCol = document.createElement('div');
-                    nameCol.className = "flex flex-row items-center justify-start gap-3 min-w-[210px] w-full md:w-auto border-b md:border-b-0 pb-2 md:pb-0 border-gray-200/50";
+                    nameCol.className = "flex flex-row items-center justify-start gap-3 min-w-[210px] w-full md:w-auto border-b md:border-b-0 pb-2 md:pb-0 border-gray-200/50 dark:border-gray-700";
                     
                     nameCol.innerHTML = `
-                        <div class="relative shrink-0 w-12 h-12">
-                            <img src="${avatarPath}" alt="${char.name}" 
+                        <div class="relative shrink-0 w-12 h-12" onclick="toggleOwnership('${char.name}')">
+                            <img id="avatar_img_${char.name}" src="${avatarPath}" alt="${char.name}" 
                                  onerror="this.style.display='none'; document.getElementById('fall_av_${char.name}').classList.remove('hidden');"
-                                 class="char-avatar w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-inner object-cover bg-white">
+                                 class="char-avatar w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-inner object-cover bg-white ${avatarClass}">
                             
-                            <div id="fall_av_${char.name}" class="hidden char-avatar w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-sm flex items-center justify-center font-bold text-amber-900 bg-gradient-to-br from-amber-100 to-yellow-200 text-lg">
+                            <div id="fall_av_${char.name}" class="hidden char-avatar w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-sm flex items-center justify-center font-bold text-amber-900 bg-gradient-to-br from-amber-100 to-yellow-200 text-lg ${avatarClass}">
                                 ${char.name.charAt(0)}
                             </div>
                         </div>
 
                         <div class="flex flex-col gap-0.5 w-full">
                             <div class="flex items-center gap-1.5 justify-between md:justify-start">
-                                <span class="text-sm sm:text-base font-bold text-gray-900 truncate max-w-[100px]">${char.name}</span>
+                                <span class="text-sm sm:text-base font-bold text-gray-900 dark:text-gray-100 truncate max-w-[100px]">${char.name}</span>
                                 <div class="flex items-center">
                                     <img src="${pPath}" alt="${char.personality}" title="性格：${char.personality}"
                                          onerror="this.style.display='none'; document.getElementById('fall_p_${char.name}').classList.remove('hidden');"
                                          class="w-5 h-5 object-contain">
-                                    <span id="fall_p_${char.name}" class="hidden text-[9px] px-1 rounded bg-amber-50 text-amber-700 border border-amber-200 whitespace-nowrap">
+                                    <span id="fall_p_${char.name}" class="hidden text-[9px] px-1 rounded bg-amber-50 dark:bg-gray-700 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-gray-600 whitespace-nowrap">
                                         ${char.personality}
                                     </span>
                                 </div>
                             </div>
                             
-                            <div class="flex items-center gap-2 pt-1 border-t border-dashed border-gray-100">
+                            <div class="flex items-center gap-2 pt-1 border-t border-dashed border-gray-100 dark:border-gray-700">
                                 <div class="flex items-center">
                                     <img src="${racePath}" alt="${char.race}" title="種族：${char.race}"
                                          onerror="this.style.display='none'; document.getElementById('fall_r_${char.name}').classList.remove('hidden');"
                                          class="w-4 h-4 object-contain">
-                                    <span id="fall_r_${char.name}" class="hidden bg-gray-100 px-1 rounded text-[9px] text-gray-500 font-medium whitespace-nowrap">
+                                    <span id="fall_r_${char.name}" class="hidden bg-gray-100 dark:bg-gray-700 px-1 rounded text-[9px] text-gray-500 dark:text-gray-400 font-medium whitespace-nowrap">
                                         ${char.race}
                                     </span>
                                 </div>
@@ -735,7 +840,7 @@
                                     <img src="${posPath}" alt="${char.position}" title="站位：${char.position}"
                                          onerror="this.style.display='none'; document.getElementById('fall_pos_${char.name}').classList.remove('hidden');"
                                          class="w-4 h-4 object-contain opacity-85">
-                                    <span id="fall_pos_${char.name}" class="hidden bg-blue-50 text-blue-700 px-1 rounded text-[9px] font-medium whitespace-nowrap">
+                                    <span id="fall_pos_${char.name}" class="hidden bg-blue-50 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-1 rounded text-[9px] font-medium whitespace-nowrap">
                                         ${char.position}
                                     </span>
                                 </div>
@@ -744,7 +849,7 @@
                                     <img src="${jobPath}" alt="${char.job}" title="職業：${char.job}"
                                          onerror="this.style.display='none'; document.getElementById('fall_j_${char.name}').classList.remove('hidden');"
                                          class="w-4 h-4 object-contain opacity-85">
-                                    <span id="fall_j_${char.name}" class="hidden bg-purple-50 text-purple-700 px-1 rounded text-[9px] font-medium whitespace-nowrap">
+                                    <span id="fall_j_${char.name}" class="hidden bg-purple-50 dark:bg-purple-900 text-purple-700 dark:text-purple-300 px-1 rounded text-[9px] font-medium whitespace-nowrap">
                                         ${char.job}
                                     </span>
                                 </div>
@@ -754,34 +859,45 @@
                     charCard.appendChild(nameCol);
 
                     const layersContainer = document.createElement('div');
-                    layersContainer.className = "grid grid-cols-1 sm:grid-cols-3 gap-3 w-full md:flex-1";
+                    layersContainer.className = "flex flex-col sm:flex-row gap-3 w-full md:flex-1";
 
                     [1, 2, 3].forEach(l => {
                         const layerBox = document.createElement('div');
-                        let bgStyle = "bg-amber-50/20 border-amber-100/60", badgeText = `🥇 第一層`, gridCols = "grid-cols-2";
-                        if (l === 2) { bgStyle = "bg-orange-50/20 border-orange-100/60"; badgeText = `🥈 第二層`; gridCols = "grid-cols-3"; }
-                        else if (l === 3) { bgStyle = "bg-red-50/20 border-red-100/60"; badgeText = `🥉 第三層`; gridCols = "grid-cols-4"; }
+                        layerBox.id = `layer_wrap_${char.name}_${l}`;
+                        let bgStyle = "bg-amber-50/20 border-amber-100/60 dark:border-amber-900/40", badgeText = `🥇 第一層`, gridCols = "grid-cols-2";
+                        if (l === 2) { bgStyle = "bg-orange-50/20 border-orange-100/60 dark:border-orange-900/40"; badgeText = `🥈 第二層`; gridCols = "grid-cols-3"; }
+                        else if (l === 3) { bgStyle = "bg-red-50/20 border-red-100/60 dark:border-red-900/40"; badgeText = `🥉 第三層`; gridCols = "grid-cols-4"; }
 
-                        layerBox.className = `${bgStyle} p-2 rounded-xl border flex flex-col justify-between`;
+                        layerBox.className = `${bgStyle} flex-1 p-2 rounded-xl border flex-col justify-between`;
                         layerBox.innerHTML = `<span class="text-[10px] font-bold mb-1 block opacity-70 whitespace-nowrap">${badgeText}</span>`;
 
                         const btnGroup = document.createElement('div');
-                        btnGroup.className = `grid ${gridCols} gap-1.5`;
+                        btnGroup.className = `grid ${gridCols} gap-1.5 h-full content-start`;
 
-                        char[`layer${l}`].forEach((attr, idx) => {
-                            const stateKey = `${char.name}_l${l}_${attr}_${idx}`;
+                        // 進行動態排序，確保依照 攻擊>防禦>血量>爆擊>爆抗 呈現
+                        const sortedAttrs = char[`layer${l}`].slice().sort((a, b) => ATTR_PRIORITY.indexOf(a) - ATTR_PRIORITY.indexOf(b));
+
+                        sortedAttrs.forEach((attr, idx) => {
+                            // 注意：為了對應原本的存檔 Key，必須找到原始陣列的索引，以免讀錯檔
+                            const originalIdx = char[`layer${l}`].indexOf(attr);
+                            const stateKey = `${char.name}_l${l}_${attr}_${originalIdx}`;
                             const isOpened = savedStates[stateKey];
-                            const btnId = `btn_${char.name}_l${l}_${attr}_${idx}`;
+                            const btnId = `btn_${char.name}_l${l}_${attr}_${originalIdx}`;
 
                             const btn = document.createElement('button');
                             btn.id = btnId;
-                            const styleConfig = ATTR_STYLES[attr] || { unopened: "bg-gray-100 text-gray-700 border-gray-200", opened: "bg-gray-500 text-white font-bold" };
-                            btn.className = `char-btn px-1 py-2 text-[11px] sm:text-xs text-center border rounded-lg cursor-pointer whitespace-nowrap ${isOpened ? styleConfig.opened : styleConfig.unopened}`;
+                            const styleConfig = ATTR_STYLES[attr] || { unopened: "bg-gray-100 text-gray-700 border-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600", opened: "bg-gray-500 text-white font-bold" };
+                            btn.className = `char-btn px-1 py-1.5 sm:py-2 text-[11px] sm:text-xs text-center border rounded-lg cursor-pointer whitespace-nowrap ${isOpened ? styleConfig.opened : styleConfig.unopened}`;
                             btn.innerText = attr;
                             
                             btn.onclick = () => {
                                 savedStates[stateKey] = !savedStates[stateKey];
-                                btn.className = `char-btn px-1 py-2 text-[11px] sm:text-xs text-center border rounded-lg cursor-pointer whitespace-nowrap ${savedStates[stateKey] ? styleConfig.opened : styleConfig.unopened}`;
+                                // 如果點了蠟筆格，自動變成擁有角色
+                                if(savedStates[stateKey] && !savedStates['owned_' + char.name]) {
+                                    savedStates['owned_' + char.name] = true;
+                                    updateOwnershipUI(char.name);
+                                }
+                                btn.className = `char-btn px-1 py-1.5 sm:py-2 text-[11px] sm:text-xs text-center border rounded-lg cursor-pointer whitespace-nowrap ${savedStates[stateKey] ? styleConfig.opened : styleConfig.unopened}`;
                                 calculateStats();
                             };
                             btnGroup.appendChild(btn);
@@ -797,13 +913,12 @@
                 pSection.appendChild(charListContainer);
                 container.appendChild(pSection);
             });
+            applyFilterUI();
         }
 
         // ==========================================
-        // Firebase 與啟動流（就算這裡爆炸，畫面早就畫好了）
+        // 啟動流
         // ==========================================
-        
-        // 1. 強制第一時間無條件把畫面畫出來！
         try {
             initStates();
             initCrayonLogo();
@@ -818,7 +933,6 @@
             }
         }
 
-        // 2. 獨立安全的 Firebase 認證區塊
         function handleAuth() {
             if (!auth) {
                 alert("目前處於斷線單機模式（可能被擴充功能阻擋），無法登入雲端。");
@@ -853,11 +967,10 @@
             } else {
                 if (svgLogo) svgLogo.classList.remove('hidden');
                 if (logoutText) logoutText.classList.add('hidden');
-                btn.className = "google-login-btn bg-white rounded-lg p-2 flex items-center justify-center transition border border-gray-200 shrink-0";
+                btn.className = "google-login-btn bg-white dark:bg-gray-700 rounded-lg p-2 flex items-center justify-center transition border border-gray-200 dark:border-gray-600 shrink-0";
             }
         }
 
-        // 3. 嘗試啟動 Firebase (不會影響已經畫好的 UI)
         try {
             if (typeof firebase !== 'undefined') {
                 const firebaseConfig = {
@@ -878,13 +991,12 @@
                     if (user) {
                         currentUser = user;
                         document.getElementById('userStatus').innerHTML = `
-                            <span class="block font-bold text-green-700 whitespace-nowrap">🟢 已連線雲端</span>
-                            <span class="text-[10px] sm:text-[11px] text-gray-500 truncate max-w-[120px]">${user.displayName || '教主'}</span>
+                            <span class="block font-bold text-green-700 dark:text-green-500 whitespace-nowrap">🟢 已連線雲端</span>
+                            <span class="text-[10px] sm:text-[11px] text-gray-500 dark:text-gray-400 truncate max-w-[120px]">${user.displayName || '教主'}</span>
                         `;
                         db.collection("player_boards").doc(user.uid).get().then(doc => {
                             if (doc.exists && doc.data().states) {
                                 savedStates = doc.data().states;
-                                // 重新整理雲端資料進畫面
                                 initStates(); renderMatrix(); calculateStats();
                             }
                         }).catch(err => {
@@ -893,7 +1005,7 @@
                     } else {
                         currentUser = null;
                         document.getElementById('userStatus').innerHTML = `
-                            <span class="block font-bold text-amber-800 whitespace-nowrap">當前狀態：單機模式</span>
+                            <span class="block font-bold text-amber-800 dark:text-amber-500 whitespace-nowrap">當前狀態：單機模式</span>
                             <span class="whitespace-nowrap">紀錄保存在此裝置</span>
                         `;
                     }
