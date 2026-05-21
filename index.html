@@ -105,13 +105,19 @@
                 <div class="flex flex-col items-center lg:items-start">
                     <h1 class="text-2xl sm:text-3xl font-bold text-amber-900 dark:text-amber-400 mb-1 flex items-center justify-center lg:justify-start gap-1.5 sm:gap-2">
                         <img src="https://i.postimg.cc/sDstHDN1/Aside-Skill-Rim-3.png" alt="RimIcon" class="h-[1.15em] w-auto object-contain drop-shadow-sm">
-                        嘟嘟臉金蠟筆記事本
+                        <span data-lang-key="app_title">嘟嘟臉金蠟筆記事本</span>
                     </h1>
-                    <p class="text-amber-800 dark:text-gray-300 text-xs sm:text-sm">祝各位教主日日出金蠟筆</p>
+                    <p data-lang-key="app_subtitle" class="text-amber-800 dark:text-gray-300 text-xs sm:text-sm">祝各位教主日日出金蠟筆</p>
                 </div>
             </div>
             
-            <div class="flex flex-row items-center gap-3 w-full lg:w-auto">
+            <div class="flex flex-row items-center gap-2 sm:gap-3 w-full lg:w-auto">
+                
+                <select id="langSelect" onchange="changeLanguage(this.value)" class="p-2 bg-white/80 dark:bg-gray-800/80 border border-amber-300 dark:border-gray-600 rounded-xl shadow-sm transition hover:bg-gray-50 dark:hover:bg-gray-700 shrink-0 backdrop-blur-sm text-xs font-bold outline-none cursor-pointer text-amber-900 dark:text-amber-400">
+                    <option value="zh-TW">繁中</option>
+                    <option value="ja">日本語</option>
+                </select>
+
                 <button onclick="toggleDarkMode()" class="p-2 bg-white/80 dark:bg-gray-800/80 border border-amber-300 dark:border-gray-600 rounded-xl shadow-sm transition hover:bg-gray-50 dark:hover:bg-gray-700 shrink-0 backdrop-blur-sm">
                     <span id="themeIconLight" class="block dark:hidden">🌙</span>
                     <span id="themeIconDark" class="hidden dark:block">☀️</span>
@@ -119,8 +125,8 @@
 
                 <div id="authPanel" class="w-full bg-white/90 dark:bg-gray-800/90 p-3 rounded-xl border border-amber-300 dark:border-gray-600 shadow-sm flex flex-row items-center justify-between sm:justify-start gap-4 backdrop-blur-sm">
                     <div id="userStatus" class="text-left text-[11px] sm:text-xs text-gray-600 dark:text-gray-300">
-                        <span class="block font-bold text-amber-800 dark:text-amber-500">當前狀態：單機模式</span>
-                        <span>紀錄保存在此裝置</span>
+                        <span class="block font-bold text-amber-800 dark:text-amber-500" data-lang-key="auth_offline_title">當前狀態：單機模式</span>
+                        <span data-lang-key="auth_offline_desc">紀錄保存在此裝置</span>
                     </div>
                     
                     <div id="authBtnContainer" class="shrink-0">
@@ -131,7 +137,7 @@
                                 <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
                                 <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"/>
                             </svg>
-                            <span id="logoutText" class="hidden text-white font-bold text-xs px-2 py-0.5">登出</span>
+                            <span id="logoutText" class="hidden text-white font-bold text-xs px-2 py-0.5" data-lang-key="auth_logout">登出</span>
                         </button>
                     </div>
                 </div>
@@ -142,51 +148,51 @@
 
         <section class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-2xl p-4 shadow border-2 border-amber-200/80 dark:border-gray-700 mb-6 transition-colors">
             <div class="flex justify-between items-center border-b border-gray-100 dark:border-gray-700 pb-2 cursor-pointer" onclick="toggleFilterPanel()">
-                <h3 class="font-bold text-amber-955 dark:text-amber-400 text-sm flex items-center gap-1 shrink-0">🔍 篩選器 <span id="filterToggleIcon" class="text-xs opacity-70 ml-1">▼</span></h3>
+                <h3 class="font-bold text-amber-955 dark:text-amber-400 text-sm flex items-center gap-1 shrink-0"><span data-lang-key="filter_title">🔍 篩選器</span> <span id="filterToggleIcon" class="text-xs opacity-70 ml-1">▼</span></h3>
                 <div class="flex items-center gap-1.5 sm:gap-2">
                     <input type="text" id="searchInput" placeholder="搜尋坨坨..." oninput="handleSearch()" class="w-24 sm:w-40 text-xs px-2 py-1 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:outline-none focus:border-amber-400" onclick="event.stopPropagation()">
-                    <button onclick="event.stopPropagation(); resetFilters()" class="text-[10px] sm:text-xs text-amber-700 dark:text-amber-400 hover:text-amber-900 dark:hover:text-amber-300 font-bold bg-amber-50 dark:bg-gray-700 px-1.5 py-1 rounded border border-amber-200 dark:border-gray-600 transition whitespace-nowrap">重置全部篩選</button>
+                    <button onclick="event.stopPropagation(); resetFilters()" class="text-[10px] sm:text-xs text-amber-700 dark:text-amber-400 hover:text-amber-900 dark:hover:text-amber-300 font-bold bg-amber-50 dark:bg-gray-700 px-1.5 py-1 rounded border border-amber-200 dark:border-gray-600 transition whitespace-nowrap" data-lang-key="filter_reset">重置全部篩選</button>
                 </div>
             </div>
             
             <div id="filterPanelBody" class="space-y-3 text-xs mt-3">
                 <div class="flex items-start gap-2 flex-wrap sm:flex-nowrap">
-                    <span class="font-bold text-gray-500 dark:text-gray-400 shrink-0 w-16 pt-1 whitespace-nowrap">🔮 坨坨性格：</span>
+                    <span class="font-bold text-gray-500 dark:text-gray-400 shrink-0 w-16 pt-1 whitespace-nowrap" data-lang-key="stats_personality">🔮 性格：</span>
                     <div id="filter_personality" class="flex flex-wrap gap-1.5"></div>
                 </div>
                 <div class="flex items-start gap-2 flex-wrap sm:flex-nowrap">
-                    <span class="font-bold text-gray-500 dark:text-gray-400 shrink-0 w-16 pt-1 whitespace-nowrap">🧬 坨坨種族：</span>
+                    <span class="font-bold text-gray-500 dark:text-gray-400 shrink-0 w-16 pt-1 whitespace-nowrap" data-lang-key="stats_race">🧬 種族：</span>
                     <div id="filter_race" class="flex flex-wrap gap-1.5"></div>
                 </div>
                 <div class="flex items-start gap-2 flex-wrap sm:flex-nowrap">
-                    <span class="font-bold text-gray-500 dark:text-gray-400 shrink-0 w-16 pt-1 whitespace-nowrap">🗺️ 坨坨站位：</span>
+                    <span class="font-bold text-gray-500 dark:text-gray-400 shrink-0 w-16 pt-1 whitespace-nowrap" data-lang-key="stats_position">🗺️ 站位：</span>
                     <div id="filter_position" class="flex flex-wrap gap-1.5"></div>
                 </div>
                 <div class="flex items-start gap-2 flex-wrap sm:flex-nowrap">
-                    <span class="font-bold text-gray-500 dark:text-gray-400 shrink-0 w-16 pt-1 whitespace-nowrap">⚔️ 坨坨職業：</span>
+                    <span class="font-bold text-gray-500 dark:text-gray-400 shrink-0 w-16 pt-1 whitespace-nowrap" data-lang-key="stats_job">⚔️ 職業：</span>
                     <div id="filter_job" class="flex flex-wrap gap-1.5"></div>
                 </div>
                 <div class="flex flex-col sm:flex-row items-start gap-2 border-t border-dashed border-gray-100 dark:border-gray-700 pt-2">
-                    <span class="font-bold text-amber-800 dark:text-amber-500 shrink-0 w-16 pt-1 flex items-center gap-0.5 whitespace-nowrap">🖍️ 金蠟筆格：</span>
+                    <span class="font-bold text-amber-800 dark:text-amber-500 shrink-0 w-16 pt-1 flex items-center gap-0.5 whitespace-nowrap" data-lang-key="stats_cell">🖍️ 金蠟筆格：</span>
                     <div class="flex flex-col gap-2 w-full">
                         <div class="flex items-center gap-1.5 flex-wrap">
-                            <span class="text-[11px] text-gray-400 dark:text-gray-500 font-medium bg-gray-50 dark:bg-gray-700 px-1 rounded whitespace-nowrap">指定層數:</span>
+                            <span class="text-[11px] text-gray-400 dark:text-gray-500 font-medium bg-gray-50 dark:bg-gray-700 px-1 rounded whitespace-nowrap" data-lang-key="stats_level">指定層數:</span>
                             <div id="filter_gridLayer" class="flex flex-wrap gap-1"></div>
                         </div>
                         <div class="flex items-center gap-1.5 flex-wrap">
-                            <span class="text-[11px] text-gray-400 dark:text-gray-500 font-medium bg-gray-50 dark:bg-gray-700 px-1 rounded whitespace-nowrap">格子種類:</span>
+                            <span class="text-[11px] text-gray-400 dark:text-gray-500 font-medium bg-gray-50 dark:bg-gray-700 px-1 rounded whitespace-nowrap" data-lang-key="cell_kind">格子種類:</span>
                             <div id="filter_gridType" class="flex flex-wrap gap-1.5"></div>
                         </div>
                     </div>
                 </div>
                 <div class="flex flex-col sm:flex-row items-start gap-2 border-t border-dashed border-gray-100 dark:border-gray-700 pt-2">
-                    <span class="font-bold text-blue-700 dark:text-blue-400 shrink-0 w-16 pt-1 flex items-center gap-0.5 whitespace-nowrap">👁️ 版面顯示：</span>
+                    <span class="font-bold text-blue-700 dark:text-blue-400 shrink-0 w-16 pt-1 flex items-center gap-0.5 whitespace-nowrap" data-lang-key="filter_display_mode">👁️ 版面顯示：</span>
                     <div class="flex items-center gap-1.5 flex-wrap">
                         <div id="filter_displayMode" class="flex flex-wrap gap-1">
-                            <button id="btn_disp_all" onclick="setDisplayMode('all')" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2 py-0.5 rounded border text-[11px] font-bold transition bg-blue-500 text-white border-blue-600 shadow-sm">顯示全部</button>
-                            <button id="btn_disp_1" onclick="setDisplayMode('1')" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2 py-0.5 rounded border text-[11px] font-medium transition bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600">僅第一層</button>
-                            <button id="btn_disp_2" onclick="setDisplayMode('2')" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2 py-0.5 rounded border text-[11px] font-medium transition bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600">僅第二層</button>
-                            <button id="btn_disp_3" onclick="setDisplayMode('3')" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2 py-0.5 rounded border text-[11px] font-medium transition bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600">僅第三層</button>
+                            <button id="btn_disp_all" onclick="setDisplayMode('all')" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2 py-0.5 rounded border text-[11px] font-bold transition bg-blue-500 text-white border-blue-600 shadow-sm" data-lang-key="filter_btn_show_all">顯示全部</button>
+                            <button id="btn_disp_1" onclick="setDisplayMode('1')" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2 py-0.5 rounded border text-[11px] font-medium transition bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600" data-lang-key="filter_btn_show_1">僅第一層</button>
+                            <button id="btn_disp_2" onclick="setDisplayMode('2')" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2 py-0.5 rounded border text-[11px] font-medium transition bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600" data-lang-key="filter_btn_show_2">僅第二層</button>
+                            <button id="btn_disp_3" onclick="setDisplayMode('3')" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2 py-0.5 rounded border text-[11px] font-medium transition bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600" data-lang-key="filter_btn_show_3">僅第三層</button>
                         </div>
                     </div>
                 </div>
@@ -195,9 +201,9 @@
 
         <div class="flex justify-between items-center mb-2 px-1 cursor-pointer select-none" onclick="toggleStatsPanel()">
             <h3 class="font-bold text-amber-955 dark:text-amber-400 text-sm flex items-center gap-1 drop-shadow-md">
-                📊 統計與加成資訊 <span id="statsToggleIcon" class="text-xs opacity-70 ml-1">▼</span>
+                <span data-lang-key="stats_title">📊 統計與加成資訊</span> <span id="statsToggleIcon" class="text-xs opacity-70 ml-1">▼</span>
             </h3>
-            <span class="text-[10px] sm:text-xs font-medium text-amber-800 dark:text-amber-200 bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm px-2 py-0.5 rounded-full border border-amber-200/50 dark:border-gray-600/50">
+            <span class="text-[10px] sm:text-xs font-medium text-amber-800 dark:text-amber-200 bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm px-2 py-0.5 rounded-full border border-amber-200/50 dark:border-gray-600/50" data-lang-key="stats_toggle_hint">
                 點擊展開 / 收起
             </span>
         </div>
@@ -205,40 +211,40 @@
         <section id="statsPanelBody" class="grid grid-cols-1 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 transition-all">
             <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-xl p-3 sm:p-4 shadow border-2 border-amber-200 dark:border-amber-900 flex flex-col justify-between h-full">
                 <div class="border-b border-amber-100 dark:border-gray-700 pb-1.5 mb-2">
-                    <h3 class="font-bold text-amber-900 dark:text-amber-500 flex items-center text-xs sm:text-sm whitespace-nowrap">🥇 第一層統計 <span class="text-[10px] ml-1 font-normal opacity-80">(每格加成3%, 需要2根金蠟筆)</span></h3>
+                    <h3 class="font-bold text-amber-900 dark:text-amber-500 flex items-center text-xs sm:text-sm whitespace-nowrap"><span data-lang-key="stats_layer_1_title">🥇 第一層統計</span> <span class="text-[10px] ml-1 font-normal opacity-80" data-lang-key="stats_layer_1_rule">(每格加成3%, 需要2根金蠟筆)</span></h3>
                 </div>
                 <div id="stat_layer_1" class="text-[10px] sm:text-[11px] text-gray-700 dark:text-gray-300 space-y-1 flex flex-col h-full justify-between"></div>
             </div>
 
             <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-xl p-3 sm:p-4 shadow border-2 border-orange-200 dark:border-orange-900 flex flex-col justify-between h-full">
                 <div class="border-b border-orange-100 dark:border-gray-700 pb-1.5 mb-2">
-                    <h3 class="font-bold text-orange-900 dark:text-orange-500 flex items-center text-xs sm:text-sm whitespace-nowrap">🥈 第二層統計 <span class="text-[10px] ml-1 font-normal opacity-80">(每格加成4%, 需要4根金蠟筆)</span></h3>
+                    <h3 class="font-bold text-orange-900 dark:text-orange-500 flex items-center text-xs sm:text-sm whitespace-nowrap"><span data-lang-key="stats_layer_2_title">🥈 第二層統計</span> <span class="text-[10px] ml-1 font-normal opacity-80" data-lang-key="stats_layer_2_rule">(每格加成4%, 需要4根金蠟筆)</span></h3>
                 </div>
                 <div id="stat_layer_2" class="text-[10px] sm:text-[11px] text-gray-700 dark:text-gray-300 space-y-1 flex flex-col h-full justify-between"></div>
             </div>
 
             <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-xl p-3 sm:p-4 shadow border-2 border-red-200 dark:border-red-900 flex flex-col justify-between h-full">
                 <div class="border-b border-red-100 dark:border-gray-700 pb-1.5 mb-2">
-                    <h3 class="font-bold text-red-900 dark:text-red-500 flex items-center text-xs sm:text-sm whitespace-nowrap">🥉 第三層統計 <span class="text-[10px] ml-1 font-normal opacity-80">(每格加成5%, 需要6根金蠟筆)</span></h3>
+                    <h3 class="font-bold text-red-900 dark:text-red-500 flex items-center text-xs sm:text-sm whitespace-nowrap"><span data-lang-key="stats_layer_3_title">🥉 第三層統計</span> <span class="text-[10px] ml-1 font-normal opacity-80" data-lang-key="stats_layer_3_rule">(每格加成5%, 需要6根金蠟筆)</span></h3>
                 </div>
                 <div id="stat_layer_3" class="text-[10px] sm:text-[11px] text-gray-700 dark:text-gray-300 space-y-1 flex flex-col h-full justify-between"></div>
             </div>
 
             <div class="bg-gradient-to-br from-yellow-50/90 to-amber-100/90 dark:from-gray-800/90 dark:to-gray-800/90 backdrop-blur-md rounded-xl p-3 sm:p-4 shadow border-2 border-yellow-300 dark:border-gray-600 flex flex-col justify-between h-full">
                 <div>
-                    <h3 class="font-bold text-amber-955 dark:text-amber-400 text-xs sm:text-sm mb-1 whitespace-nowrap border-b border-amber-200 dark:border-gray-700 pb-1.5">📊 全體屬性加成</h3>
+                    <h3 class="font-bold text-amber-955 dark:text-amber-400 text-xs sm:text-sm mb-1 whitespace-nowrap border-b border-amber-200 dark:border-gray-700 pb-1.5" data-lang-key="stats_global_bonus">📊 全體屬性加成</h3>
                     <div class="text-[11px] sm:text-xs text-amber-900 dark:text-gray-300 mt-2 space-y-1">
-                        <p>已擁有坨坨：<span id="owned_char_count" class="font-bold text-amber-600 dark:text-amber-400">0</span> / <span id="total_char_count" class="font-bold">0</span></p>
-                        <p>蠟筆消耗量：<span id="total_used_crayon" class="font-bold text-green-600 dark:text-green-400">0</span></p>
-                        <p>蠟筆需求量：<span id="total_needed_crayon" class="font-bold text-red-600 dark:text-red-400">0</span></p>
+                        <p><span data-lang-key="total_owned">已擁有坨坨</span>：<span id="owned_char_count" class="font-bold text-amber-600 dark:text-amber-400">0</span> / <span id="total_char_count" class="font-bold">0</span></p>
+                        <p><span data-lang-key="crayon_used">蠟筆消耗量</span>：<span id="total_used_crayon" class="font-bold text-green-600 dark:text-green-400">0</span></p>
+                        <p><span data-lang-key="crayon_needed">蠟筆需求量</span>：<span id="total_needed_crayon" class="font-bold text-red-600 dark:text-red-400">0</span></p>
                     </div>
                 </div>
                 <div class="grid grid-cols-5 gap-1 text-center mt-2 pt-2 border-t border-amber-200 dark:border-gray-700 text-[9px] sm:text-[10px]">
-                    <div class="bg-orange-50 dark:bg-gray-700 rounded p-1"><span class="block text-gray-500 dark:text-gray-400 scale-90">攻</span><span id="attr_attack" class="font-bold text-orange-600 dark:text-orange-400">+0%</span></div>
-                    <div class="bg-blue-50 dark:bg-gray-700 rounded p-1"><span class="block text-gray-500 dark:text-gray-400 scale-90">防</span><span id="attr_def" class="font-bold text-blue-600 dark:text-blue-400">+0%</span></div>
-                    <div class="bg-green-50 dark:bg-gray-700 rounded p-1"><span class="block text-gray-500 dark:text-gray-400 scale-90">血</span><span id="attr_hp" class="font-bold text-green-600 dark:text-green-400">+0%</span></div>
-                    <div class="bg-red-50 dark:bg-gray-700 rounded p-1"><span class="block text-gray-500 dark:text-gray-400 scale-90">爆</span><span id="attr_crit" class="font-bold text-red-600 dark:text-red-400">+0%</span></div>
-                    <div class="bg-purple-50 dark:bg-gray-700 rounded p-1"><span class="block text-gray-500 dark:text-gray-400 scale-90">抗</span><span id="attr_crit_res" class="font-bold text-purple-600 dark:text-purple-400">+0%</span></div>
+                    <div class="bg-orange-50 dark:bg-gray-700 rounded p-1"><span class="block text-gray-500 dark:text-gray-400 scale-90" data-lang-key="stats_attack">攻</span><span id="attr_attack" class="font-bold text-orange-600 dark:text-orange-400">+0%</span></div>
+                    <div class="bg-blue-50 dark:bg-gray-700 rounded p-1"><span class="block text-gray-500 dark:text-gray-400 scale-90" data-lang-key="stats_defence">防</span><span id="attr_def" class="font-bold text-blue-600 dark:text-blue-400">+0%</span></div>
+                    <div class="bg-green-50 dark:bg-gray-700 rounded p-1"><span class="block text-gray-500 dark:text-gray-400 scale-90" data-lang-key="stats_hp">血</span><span id="attr_hp" class="font-bold text-green-600 dark:text-green-400">+0%</span></div>
+                    <div class="bg-red-50 dark:bg-gray-700 rounded p-1"><span class="block text-gray-500 dark:text-gray-400 scale-90" data-lang-key="stats_critical">爆</span><span id="attr_crit" class="font-bold text-red-600 dark:text-red-400">+0%</span></div>
+                    <div class="bg-purple-50 dark:bg-gray-700 rounded p-1"><span class="block text-gray-500 dark:text-gray-400 scale-90" data-lang-key="stats_resist">抗</span><span id="attr_crit_res" class="font-bold text-purple-600 dark:text-purple-400">+0%</span></div>
                 </div>
             </div>
         </section>
@@ -247,15 +253,133 @@
 
         <footer class="mt-12 mb-6 text-center lg:text-left border-t border-gray-200 dark:border-gray-700 pt-6">
         <div class="flex flex-col gap-1 text-[11px] text-gray-500 dark:text-gray-400 opacity-80">
-            <p>📝 記事本製作者: 冷笑話幽靈</p>
-            <p>© 遊戲版權: EpidGames & Bilibili</p>
+            <p data-lang-key="footer_author">📝 記事本製作者: 冷笑話幽靈</p>
+            <p data-lang-key="footer_copyright">© 遊戲版權: EpidGames & Bilibili</p>
         </div>
     </footer>
         
     </div>
 
     <script>
+        // ==========================================
+        // 🌍 全域多國語言字典 (100% 完整 UI 與使徒翻譯)
+        // ==========================================
+        const LANG_DICT = {
+            "zh-TW": {
+                app_title: "嘟嘟臉金蠟筆記事本", app_subtitle: "祝各位教主日日出金蠟筆", stats_title: "📊 統計與加成資訊",
+                stats_stat: "統計", stats_character: "坨坨", stats_attack: "攻", stats_defence: "防", stats_hp: "血",
+                stats_critical: "爆", stats_resist: "抗", stats_personality: "🔮 性格：", stats_race: "🧬 種族：",
+                stats_position: "🗺️ 站位：", stats_job: "⚔️ 職業：", stats_cell: "🖍️ 金蠟筆格：", stats_crayon: "金蠟筆",
+                stats_level: "指定層數:", cell_kind: "格子種類:", level_1st: "🥇 第一層", level_2nd: "🥈 第二層", level_3st: "🥉 第三層",
+                total_owned: "已擁有坨坨", crayon_used: "蠟筆消耗量", crayon_needed: "蠟筆需求量",
+                crayon_attack: "攻擊", crayon_defence: "防禦", crayon_hp: "血量", crayon_critical: "爆擊", crayon_resist: "爆抗",
+                personality_naive: "天真", personality_calm: "冷靜", personality_mad: "狂亂", personality_vivid: "活潑", personality_gloomy: "憂鬱",
+                race_witch: "魔女", race_beast: "獸人", race_dragon: "龍族", race_spirit: "魔靈", race_fairy: "妖精", race_elf: "精靈", race_ghost: "幽靈", race_unknown: "???",
+                position_front: "前排", position_middle: "中排", position_back: "後排", job_attacker: "輸出", job_defender: "肉盾", job_supporter: "輔助",
+                auth_offline_title: "當前狀態：單機模式", auth_offline_desc: "紀錄保存在此裝置", auth_online_title: "🟢 已連線雲端", auth_logout: "登出",
+                filter_title: "🔍 篩選器", filter_search_placeholder: "搜尋坨坨...", filter_reset: "重置全部篩選", filter_display_mode: "👁️ 版面顯示：",
+                filter_btn_all: "全部", filter_btn_show_all: "顯示全部", filter_btn_show_1: "僅第一層", filter_btn_show_2: "僅第二層", filter_btn_show_3: "僅第三層",
+                stats_toggle_hint: "點擊展開 / 收起", stats_layer_1_title: "🥇 第一層統計", stats_layer_2_title: "🥈 第二層統計", stats_layer_3_title: "🥉 第三層統計",
+                stats_layer_1_rule: "(每格加成3%, 需要2根金蠟筆)", stats_layer_2_rule: "(每格加成4%, 需要4根金蠟筆)", stats_layer_3_rule: "(每格加成5%, 需要6根金蠟筆)",
+                stats_global_bonus: "📊 全體屬性加成", stats_need_more_prefix: "尚要 ", stats_need_more_suffix: " 根蠟筆",
+                x_label: "台港澳服官方X", official_x_url: "https://x.com/trickcal_TW",
+                footer_author: "📝 記事本製作者: 冷笑話幽靈", footer_copyright: "© 遊戲版權: EpidGames & Bilibili",
+                
+                // 使徒字典 & 遊戲術語 (作為翻譯對照)
+                "天真": "天真", "冷靜": "冷靜", "狂亂": "狂亂", "活潑": "活潑", "憂鬱": "憂鬱",
+                "魔女": "魔女", "獸人": "獸人", "龍族": "龍族", "魔靈": "魔靈", "妖精": "妖精", "精靈": "精靈", "幽靈": "幽靈", "???": "???",
+                "前排": "前排", "中排": "中排", "後排": "後排", "輸出": "輸出", "肉盾": "肉盾", "輔助": "輔助",
+                "攻擊": "攻擊", "防禦": "防禦", "血量": "血量", "爆擊": "爆擊", "爆抗": "爆抗", "全部": "全部",
+                "洛涅": "洛涅", "薇薇": "薇薇", "艾爾芬": "艾爾芬", "錫安": "錫安", "伊弗利特": "伊弗利特", "伊德": "伊德", "佩佩": "佩佩", "佩斯塔": "佩斯塔",
+                "修帕": "修帕", "傑德": "傑德", "優米": "優米", "劉美美": "劉美美", "加薇雅": "加薇雅", "卡洛特": "卡洛特", "卡蓮": "卡蓮", "喬菲": "喬菲",
+                "基狄恩": "基狄恩", "大師2號": "大師2號", "大木頭": "大木頭", "奈雅": "奈雅", "奶油": "奶油", "布蘭切": "布蘭切", "希拉": "希拉", "希爾德": "希爾德",
+                "希瑟圖": "希瑟圖", "希菲爾": "希菲爾", "帕特拉": "帕特拉", "庫洛艾": "庫洛艾", "康娜": "康娜", "愛麗絲": "愛麗絲", "斑尼": "斑尼", "斯皮奇": "斯皮奇",
+                "斯諾奇": "斯諾奇", "柯米": "柯米", "桃桃": "桃桃", "梅森": "梅森", "梅露娜": "梅露娜", "海莉": "海莉", "珀榭": "珀榭", "琳": "琳",
+                "瑟琳娜": "瑟琳娜", "瑪約": "瑪約", "瑪麗": "瑪麗", "皮可菈": "皮可菈", "盧波": "盧波", "米雪": "米雪", "綾": "綾", "羽伊": "羽伊",
+                "艾斯皮": "艾斯皮", "艾琳娜": "艾琳娜", "艾皮卡": "艾皮卡", "艾舒爾": "艾舒爾", "艾蜜莉雅": "艾蜜莉雅", "芙莉可": "芙莉可", "茱蜜": "茱蜜", "莉茲": "莉茲",
+                "莎莉": "莎莉", "萊薇": "萊薇", "蒂亞娜": "蒂亞娜", "謝蒂": "謝蒂", "貝魯": "貝魯", "貝麗塔": "貝麗塔", "路德": "路德", "路易": "路易",
+                "阿萊特": "阿萊特", "雷吉": "雷吉", "馬爾": "馬爾", "泰達": "泰達", "寧琉": "寧琉"
+            },
+            "ja": {
+                app_title: "トリッカル特級クレヨンノート", app_subtitle: "教主が毎日、特級クレヨンを受け取れますように。", stats_title: "📊 統計とボーナス情報",
+                stats_stat: "統計", stats_character: "使徒", stats_attack: "攻撃", stats_defence: "防御", stats_hp: "HP",
+                stats_critical: "会心", stats_resist: "抵抗", stats_personality: "🔮 性格：", stats_race: "🧬 種族：",
+                stats_position: "🗺️ 配置：", stats_job: "⚔️ 職業：", stats_cell: "🖍️ 特級クレヨンマス：", stats_crayon: "特級クレヨン",
+                stats_level: "特定ボード:", cell_kind: "ステータス:", level_1st: "1段階目", level_2nd: "2段階目", level_3st: "3段階目",
+                total_owned: "所有使徒", crayon_used: "消費クレヨン数", crayon_needed: "必要クレヨン数",
+                crayon_attack: "攻撃力", crayon_defence: "防御力", crayon_hp: "HP", crayon_critical: "会心", crayon_resist: "会心抵抗",
+                personality_naive: "純粋", personality_calm: "冷静", personality_mad: "狂気", personality_vivid: "活発", personality_gloomy: "憂鬱",
+                race_witch: "魔女", race_beast: "獣人", race_dragon: "竜族", race_spirit: "精霊", race_fairy: "妖精", race_elf: "エルフ", race_ghost: "幽霊", race_unknown: "???",
+                position_front: "前列", position_middle: "中列", position_back: "後列", job_attacker: "攻撃", job_defender: "守備", job_supporter: "支援",
+                auth_offline_title: "現在の状態：オフラインモード", auth_offline_desc: "データはこの端末に保存されます", auth_online_title: "🟢 クラウドに接続中", auth_logout: "ログアウト",
+                filter_title: "🔍 フィルター", filter_search_placeholder: "使徒を検索...", filter_reset: "すべてのフィルターをリセット", filter_display_mode: "👁️ ボード表示：",
+                filter_btn_all: "すべて", filter_btn_show_all: "すべて表示", filter_btn_show_1: "1段階目のみ", filter_btn_show_2: "2段階目のみ", filter_btn_show_3: "3段階目のみ",
+                stats_toggle_hint: "クリックで展開 / 折りたたみ", stats_layer_1_title: "🥇 1段階目の統計", stats_layer_2_title: "🥈 2段階目の統計", stats_layer_3_title: "🥉 3段階目の統計",
+                stats_layer_1_rule: "(1マスにつき+3%, 特級クレヨン2本必要)", stats_layer_2_rule: "(1マスにつき+4%, 特級クレヨン4本必要)", stats_layer_3_rule: "(1マスにつき+5%, 特級クレヨン6本必要)",
+                stats_global_bonus: "📊 全体ステータスバフ", stats_need_more_prefix: "あと ", stats_need_more_suffix: " 本必要",
+                x_label: "公式 X", official_x_url: "https://x.com/trickcal_jp",
+                footer_author: "📝 ノート作成者: 冷笑話幽靈", footer_copyright: "© ゲーム著作権: EpidGames & Bilibili",
+                
+                // 遊戲術語翻譯 (從中文映射到日文)
+                "天真": "純粋", "冷靜": "冷静", "狂亂": "狂気", "活潑": "活発", "憂鬱": "憂鬱",
+                "魔女": "魔女", "獸人": "獣人", "龍族": "竜族", "魔靈": "精霊", "妖精": "妖精", "精靈": "エルフ", "幽靈": "幽霊", "???": "???",
+                "前排": "前列", "中排": "中列", "後排": "後列", "輸出": "攻撃", "肉盾": "守備", "輔助": "支援",
+                "攻擊": "攻撃", "防禦": "防御", "血量": "HP", "爆擊": "会心", "爆抗": "会心抵抗", "全部": "すべて",
+                // 使徒名字翻譯
+                "洛涅": "ローネ", "薇薇": "ヴィヴィ", "艾爾芬": "エルフィン", "錫安": "シオン・ザ・DB", "伊弗利特": "イフリート", "伊德": "イード", "佩佩": "ベルベット", "佩斯塔": "フェスタ",
+                "修帕": "シュパン", "傑德": "ジェイド", "優米": "ヨミ", "劉美美": "ユミミ", "加薇雅": "ガヴィア", "卡洛特": "キャロット", "卡蓮": "カレン", "喬菲": "チョッピー",
+                "基狄恩": "ギデオン", "大師2號": "マエストロMK2", "大木頭": "ビッグウッド", "奈雅": "ナイア", "奶油": "バター", "布蘭切": "ブランセ", "希拉": "シーラ", "希爾德": "ヒルデ",
+                "希瑟圖": "シスト", "希菲爾": "シルフィール", "帕特拉": "パトラ", "庫洛艾": "クロエ", "康娜": "カンナ", "愛麗絲": "アリス", "斑尼": "ベニー", "斯皮奇": "スピッキー",
+                "斯諾奇": "スノキー", "柯米": "コミー", "桃桃": "モモ", "梅森": "メゾン", "梅露娜": "メロナ", "海莉": "ヘイリー", "珀榭": "ポーシャー", "琳": "リム",
+                "瑟琳娜": "セリーネ", "瑪約": "マヨ", "瑪麗": "マリー", "皮可菈": "ピコラ", "盧波": "ルポ", "米雪": "ミンス", "綾": "アヤ", "羽伊": "ウイ",
+                "艾斯皮": "エスピー", "艾琳娜": "エレナ", "艾皮卡": "エピカ", "艾舒爾": "エシュール", "艾蜜莉雅": "アメリア", "芙莉可": "フリックル", "茱蜜": "ジュビー", "莉茲": "リッツ",
+                "莎莉": "サリー", "萊薇": "レヴィ", "蒂亞娜": "ディアナ", "謝蒂": "シェイディ", "貝魯": "ベル", "貝麗塔": "ベリータ", "路德": "ルード", "路易": "キュウイ",
+                "阿萊特": "アレット", "雷吉": "レイジー", "馬爾": "マーゴ", "泰達": "タイダー", "寧琉": "ネル"
+            }
+        };
+
+        // 目前語系與翻譯輔助函數
+        let currentLang = localStorage.getItem('user_lang') || 'zh-TW';
+        document.getElementById('langSelect').value = currentLang;
+
+        function t(key) {
+            if (!LANG_DICT[currentLang]) return key;
+            return LANG_DICT[currentLang][key] || LANG_DICT["zh-TW"][key] || key;
+        }
+
+        function changeLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('user_lang', lang);
+            
+            // 更新靜態 DOM 元素
+            document.querySelectorAll('[data-lang-key]').forEach(el => {
+                const key = el.getAttribute('data-lang-key');
+                if (LANG_DICT[lang] && LANG_DICT[lang][key]) {
+                    el.innerText = LANG_DICT[lang][key];
+                }
+            });
+
+            // 更新 Placeholder
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) searchInput.placeholder = t('filter_search_placeholder');
+
+            // 更新官方 X 連結
+            const xLink = document.getElementById('dynamicXLink');
+            if (xLink) {
+                xLink.href = LANG_DICT[lang].official_x_url;
+                xLink.innerText = LANG_DICT[lang].x_label;
+            }
+
+            // 重新繪製動態面板
+            buildFilterPanel();
+            renderMatrix();
+            calculateStats();
+            updateAuthButtonUI(currentUser);
+        }
+
+        // ==========================================
         // 深色模式初始化與切換邏輯
+        // ==========================================
         let isDarkMode = localStorage.getItem('theme') === 'dark';
         if (isDarkMode) {
             document.documentElement.classList.add('dark');
@@ -376,7 +500,7 @@
             "avatar_寧琉": "https://i.postimg.cc/tgt95LY0/ning-liu.png"
         };
 
-                const INITIAL_DATA = [
+        const INITIAL_DATA = [
             { name: "洛涅", personality: "天真", race: "精靈", position: "前排", job: "肉盾", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
             { name: "薇薇", personality: "天真", race: "龍族", position: "前排", job: "肉盾", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
             { name: "卡洛特", personality: "天真", race: "妖精", position: "後排", job: "輔助", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
@@ -502,14 +626,9 @@
             });
         }
 
-        function initCrayonLogo() {
-            const logoImg = document.getElementById('mainCrayonLogo');
-            if(logoImg && IMAGE_MAP["golden_crayon"]) {
-                logoImg.src = IMAGE_MAP["golden_crayon"];
-            }
-        }
+        // 啟動翻譯功能
+        changeLanguage(currentLang);
 
-        // 切換統計區塊顯示/隱藏
         function toggleStatsPanel() {
             isStatsOpen = !isStatsOpen;
             const body = document.getElementById("statsPanelBody");
@@ -601,7 +720,7 @@
                     if(layerTotals[l][attr] > 0) {
                         html += `
                             <div class="flex justify-between border-b border-gray-100 dark:border-gray-700 pb-0.5">
-                                <span>${attr.substring(0,1)}: ${layerOpened[l][attr]}/${layerTotals[l][attr]}</span>
+                                <span>${t(attr).substring(0,2)}: ${layerOpened[l][attr]}/${layerTotals[l][attr]}</span>
                                 <span class="font-bold text-amber-600 dark:text-amber-400">+${layerBonus[l][attr]}%</span>
                             </div>
                         `;
@@ -612,7 +731,7 @@
                 html += `
                     <div class="mt-2 pt-1 border-t border-gray-100 dark:border-gray-700 flex justify-end">
                         <span class="bg-red-50 dark:bg-gray-700 text-red-600 dark:text-red-400 px-1.5 py-0.5 rounded text-[10px] font-bold border border-red-100 dark:border-gray-600">
-                            尚要 ${layerMissingCrayons[l]} 根蠟筆
+                            ${t('stats_need_more_prefix')}${layerMissingCrayons[l]}${t('stats_need_more_suffix')}
                         </span>
                     </div>
                 `;
@@ -682,7 +801,7 @@
                 container.innerHTML = "";
                 
                 const allBtn = document.createElement("button");
-                allBtn.innerText = "全部";
+                allBtn.innerText = t("全部");
                 allBtn.id = `btn_filter_${category}_all`;
                 allBtn.className = btnActiveStyle;
                 allBtn.onclick = () => selectFilter(category, "");
@@ -703,10 +822,10 @@
                     if(cloudIconPath) {
                         btn.innerHTML = `
                             <img src="${cloudIconPath}" alt="${val}" onerror="this.style.display='none';" class="w-3.5 h-3.5 object-contain shrink-0">
-                            <span>${val}</span>
+                            <span>${t(val)}</span>
                         `;
                     } else {
-                        btn.innerHTML = `<span>${val}</span>`;
+                        btn.innerHTML = `<span>${t(val)}</span>`;
                     }
                     container.appendChild(btn);
                 });
@@ -715,7 +834,7 @@
             const layerContainer = document.getElementById("filter_gridLayer");
             if(layerContainer){
                 layerContainer.innerHTML = "";
-                const layers = [ {v:"all", n:"全部"}, {v:"1", n:"🥇 第一層"}, {v:"2", n:"🥈 第二層"}, {v:"3", n:"🥉 第三層"} ];
+                const layers = [ {v:"all", n: t("全部")}, {v:"1", n:`🥇 ${t("level_1st")}`}, {v:"2", n:`🥈 ${t("level_2nd")}`}, {v:"3", n:`🥉 ${t("level_3st")}`} ];
                 layers.forEach(ly => {
                     const btn = document.createElement("button");
                     btn.innerText = ly.n;
@@ -731,7 +850,7 @@
                 typeContainer.innerHTML = "";
                 const types = ["攻擊", "防禦", "血量", "爆擊", "爆抗"];
                 const allTypeBtn = document.createElement("button");
-                allTypeBtn.innerText = "全部";
+                allTypeBtn.innerText = t("全部");
                 allTypeBtn.id = `btn_filter_gridType_all`;
                 allTypeBtn.className = btnActiveStyle;
                 allTypeBtn.onclick = () => selectGridTypeFilter("");
@@ -739,7 +858,7 @@
 
                 types.forEach(tp => {
                     const btn = document.createElement("button");
-                    btn.innerText = tp;
+                    btn.innerText = t(tp);
                     btn.id = `btn_filter_gridType_${tp}`;
                     btn.className = btnInactiveStyle;
                     btn.onclick = () => selectGridTypeFilter(tp);
@@ -796,7 +915,7 @@
                 const matchR = !activeFilters.race || char.race === activeFilters.race;
                 const matchPos = !activeFilters.position || char.position === activeFilters.position;
                 const matchJ = !activeFilters.job || char.job === activeFilters.job;
-                const matchSearch = !activeFilters.search || char.name.toLowerCase().includes(activeFilters.search);
+                const matchSearch = !activeFilters.search || t(char.name).toLowerCase().includes(activeFilters.search) || char.name.toLowerCase().includes(activeFilters.search);
 
                 let matchGrid = true;
                 if (activeFilters.gridType) {
@@ -862,7 +981,7 @@
                 
                 pSection.innerHTML = `
                     <div class="border-b-2 border-amber-400 dark:border-gray-600 pb-2.5 mb-4 flex justify-between items-center flex-wrap gap-2">
-                        <h2 class="text-lg sm:text-xl font-extrabold text-amber-955 dark:text-amber-400 flex items-center">📂 ${pName}坨坨</h2>
+                        <h2 class="text-lg sm:text-xl font-extrabold text-amber-955 dark:text-amber-400 flex items-center">📂 ${t(pName)}${t('stats_character')}</h2>
                     </div>
                 `;
 
@@ -892,53 +1011,53 @@
                     
                     nameCol.innerHTML = `
                         <div class="relative shrink-0 w-12 h-12" onclick="toggleOwnership('${char.name}')">
-                            <img id="avatar_img_${char.name}" src="${avatarPath}" alt="${char.name}" 
+                            <img id="avatar_img_${char.name}" src="${avatarPath}" alt="${t(char.name)}" 
                                  onerror="this.style.display='none'; document.getElementById('fall_av_${char.name}').classList.remove('hidden');"
                                  class="char-avatar w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-inner object-cover bg-white ${avatarClass}">
                             
                             <div id="fall_av_${char.name}" class="hidden char-avatar w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-sm flex items-center justify-center font-bold text-amber-900 bg-gradient-to-br from-amber-100 to-yellow-200 text-lg ${avatarClass}">
-                                ${char.name.charAt(0)}
+                                ${t(char.name).charAt(0)}
                             </div>
                         </div>
 
                         <div class="flex flex-col gap-0.5 w-full">
                             <div class="flex items-center gap-1.5 justify-between md:justify-start">
-                                <span class="text-sm sm:text-base font-bold text-gray-900 dark:text-gray-100 truncate max-w-[100px]">${char.name}</span>
+                                <span class="text-sm sm:text-base font-bold text-gray-900 dark:text-gray-100 truncate max-w-[100px]">${t(char.name)}</span>
                                 <div class="flex items-center">
-                                    <img src="${pPath}" alt="${char.personality}" title="性格：${char.personality}"
+                                    <img src="${pPath}" alt="${t(char.personality)}" title="${t(char.personality)}"
                                          onerror="this.style.display='none'; document.getElementById('fall_p_${char.name}').classList.remove('hidden');"
                                          class="w-5 h-5 object-contain">
                                     <span id="fall_p_${char.name}" class="hidden text-[9px] px-1 rounded bg-amber-50 dark:bg-gray-700 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-gray-600 whitespace-nowrap">
-                                        ${char.personality}
+                                        ${t(char.personality)}
                                     </span>
                                 </div>
                             </div>
                             
                             <div class="flex items-center gap-2 pt-1 border-t border-dashed border-gray-100 dark:border-gray-700">
                                 <div class="flex items-center">
-                                    <img src="${racePath}" alt="${char.race}" title="種族：${char.race}"
+                                    <img src="${racePath}" alt="${t(char.race)}" title="${t(char.race)}"
                                          onerror="this.style.display='none'; document.getElementById('fall_r_${char.name}').classList.remove('hidden');"
                                          class="w-4 h-4 object-contain">
                                     <span id="fall_r_${char.name}" class="hidden bg-gray-100 dark:bg-gray-700 px-1 rounded text-[9px] text-gray-500 dark:text-gray-400 font-medium whitespace-nowrap">
-                                        ${char.race}
+                                        ${t(char.race)}
                                     </span>
                                 </div>
                                 
                                 <div class="flex items-center">
-                                    <img src="${posPath}" alt="${char.position}" title="站位：${char.position}"
+                                    <img src="${posPath}" alt="${t(char.position)}" title="${t(char.position)}"
                                          onerror="this.style.display='none'; document.getElementById('fall_pos_${char.name}').classList.remove('hidden');"
                                          class="w-4 h-4 object-contain opacity-85">
                                     <span id="fall_pos_${char.name}" class="hidden bg-blue-50 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-1 rounded text-[9px] font-medium whitespace-nowrap">
-                                        ${char.position}
+                                        ${t(char.position)}
                                     </span>
                                 </div>
                                 
                                 <div class="flex items-center">
-                                    <img src="${jobPath}" alt="${char.job}" title="職業：${char.job}"
+                                    <img src="${jobPath}" alt="${t(char.job)}" title="${t(char.job)}"
                                          onerror="this.style.display='none'; document.getElementById('fall_j_${char.name}').classList.remove('hidden');"
                                          class="w-4 h-4 object-contain opacity-85">
                                     <span id="fall_j_${char.name}" class="hidden bg-purple-50 dark:bg-purple-900 text-purple-700 dark:text-purple-300 px-1 rounded text-[9px] font-medium whitespace-nowrap">
-                                        ${char.job}
+                                        ${t(char.job)}
                                     </span>
                                 </div>
                             </div>
@@ -952,9 +1071,9 @@
                     [1, 2, 3].forEach(l => {
                         const layerBox = document.createElement('div');
                         layerBox.id = `layer_wrap_${char.name}_${l}`;
-                        let bgStyle = "bg-amber-50/40 border-amber-100/60 dark:border-amber-900/40", badgeText = `🥇 第一層`, gridCols = "grid-cols-2";
-                        if (l === 2) { bgStyle = "bg-orange-50/40 border-orange-100/60 dark:border-orange-900/40"; badgeText = `🥈 第二層`; gridCols = "grid-cols-3"; }
-                        else if (l === 3) { bgStyle = "bg-red-50/40 border-red-100/60 dark:border-red-900/40"; badgeText = `🥉 第三層`; gridCols = "grid-cols-4"; }
+                        let bgStyle = "bg-amber-50/40 border-amber-100/60 dark:border-amber-900/40", badgeText = `🥇 ${t("level_1st")}`, gridCols = "grid-cols-2";
+                        if (l === 2) { bgStyle = "bg-orange-50/40 border-orange-100/60 dark:border-orange-900/40"; badgeText = `🥈 ${t("level_2nd")}`; gridCols = "grid-cols-3"; }
+                        else if (l === 3) { bgStyle = "bg-red-50/40 border-red-100/60 dark:border-red-900/40"; badgeText = `🥉 ${t("level_3st")}`; gridCols = "grid-cols-4"; }
 
                         layerBox.className = `${bgStyle} flex-1 p-2 rounded-xl border flex-col justify-between backdrop-blur-sm`;
                         layerBox.innerHTML = `<span class="text-[10px] font-bold mb-1 block opacity-70 whitespace-nowrap">${badgeText}</span>`;
@@ -974,7 +1093,7 @@
                             btn.id = btnId;
                             const styleConfig = ATTR_STYLES[attr] || { unopened: "bg-gray-100 text-gray-700 border-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600", opened: "bg-gray-500 text-white font-bold" };
                             btn.className = `char-btn px-1 py-1.5 sm:py-2 text-[11px] sm:text-xs text-center border rounded-lg cursor-pointer whitespace-nowrap ${isOpened ? styleConfig.opened : styleConfig.unopened}`;
-                            btn.innerText = attr;
+                            btn.innerText = t(attr);
                             
                             btn.onclick = () => {
                                 savedStates[stateKey] = !savedStates[stateKey];
@@ -1003,7 +1122,6 @@
 
         try {
             initStates();
-            initCrayonLogo();
             buildFilterPanel();
             renderMatrix();
             calculateStats();
@@ -1085,7 +1203,7 @@
                     if (user) {
                         currentUser = user;
                         document.getElementById('userStatus').innerHTML = `
-                            <span class="block font-bold text-green-700 dark:text-green-500 whitespace-nowrap">🟢 已連線雲端</span>
+                            <span class="block font-bold text-green-700 dark:text-green-500 whitespace-nowrap">${t('auth_online_title')}</span>
                             <span class="text-[10px] sm:text-[11px] text-gray-500 dark:text-gray-400 truncate max-w-[120px]">${user.displayName || '教主'}</span>
                         `;
                         db.collection("player_boards").doc(user.uid).get().then(doc => {
@@ -1099,8 +1217,8 @@
                     } else {
                         currentUser = null;
                         document.getElementById('userStatus').innerHTML = `
-                            <span class="block font-bold text-amber-800 dark:text-amber-500 whitespace-nowrap">當前狀態：單機模式</span>
-                            <span class="whitespace-nowrap">紀錄保存在此裝置</span>
+                            <span class="block font-bold text-amber-800 dark:text-amber-500 whitespace-nowrap" data-lang-key="auth_offline_title">${t('auth_offline_title')}</span>
+                            <span class="whitespace-nowrap" data-lang-key="auth_offline_desc">${t('auth_offline_desc')}</span>
                         `;
                     }
                 });
@@ -1114,7 +1232,7 @@
 
     <div class="social-fixed group">
         <div id="socialMenu" class="social-menu group-hover:flex">
-            <a href="https://x.com/trickcal_TW" target="_blank" class="bg-sky-500 text-white px-3 py-1 rounded-lg text-[10px] font-bold shadow-lg hover:bg-sky-600 transition">台港澳服官方X</a>
+            <a id="dynamicXLink" href="https://x.com/trickcal_TW" target="_blank" class="bg-sky-500 text-white px-3 py-1 rounded-lg text-[10px] font-bold shadow-lg hover:bg-sky-600 transition" data-lang-key="x_label">台港澳服官方X</a>
         </div>
         <button class="bg-black text-white w-10 h-10 rounded-full shadow-xl flex items-center justify-center font-bold text-sm">X</button>
     </div>
