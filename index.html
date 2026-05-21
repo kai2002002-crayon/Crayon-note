@@ -400,9 +400,7 @@
 
         const ATTR_STYLES = {
             "攻擊": { unopened: "bg-orange-50/70 text-orange-800 border-orange-200 hover:bg-orange-100/60 dark:bg-gray-700 dark:text-orange-400 dark:border-gray-600 dark:hover:bg-gray-600", opened: "bg-orange-500 text-white font-bold shadow-sm hover:bg-orange-600 border-orange-600 dark:border-orange-500" },
-            // 血量改為綠色
             "血量": { unopened: "bg-green-50/70 text-green-800 border-green-200 hover:bg-green-100/60 dark:bg-gray-700 dark:text-green-400 dark:border-gray-600 dark:hover:bg-gray-600", opened: "bg-green-500 text-white font-bold shadow-sm hover:bg-green-600 border-green-600 dark:border-green-500" },
-            // 防禦改為藍色
             "防禦": { unopened: "bg-blue-50/70 text-blue-800 border-blue-200 hover:bg-blue-100/60 dark:bg-gray-700 dark:text-blue-400 dark:border-gray-600 dark:hover:bg-gray-600", opened: "bg-blue-500 text-white font-bold shadow-sm hover:bg-blue-600 border-blue-600 dark:border-blue-500" },
             "爆擊": { unopened: "bg-red-50/70 text-red-800 border-red-200 hover:bg-red-100/60 dark:bg-gray-700 dark:text-red-400 dark:border-gray-600 dark:hover:bg-gray-600", opened: "bg-red-500 text-white font-bold shadow-sm hover:bg-red-600 border-red-600 dark:border-red-500" },
             "爆抗": { unopened: "bg-purple-50/70 text-purple-800 border-purple-200 hover:bg-purple-100/60 dark:bg-gray-700 dark:text-purple-400 dark:border-gray-600 dark:hover:bg-gray-600", opened: "bg-purple-500 text-white font-bold shadow-sm hover:bg-purple-600 border-purple-600 dark:border-purple-500" }
@@ -515,7 +513,6 @@
                 if (el) el.innerText = `+${attrs[k]}%`;
             });
             
-            // 更新各層細節統計
             [1, 2, 3].forEach(l => {
                 let html = '<div class="grid grid-cols-2 gap-x-2 gap-y-1 mt-1">';
                 ATTR_PRIORITY.forEach(attr => {
@@ -577,7 +574,7 @@
 
         function buildFilterPanel() {
             const keys = { 
-                personality: ["天真", "活潑", "冷靜", "狂亂", "憂鬱"], 
+                personality: ["天真", "冷靜", "狂亂", "活潑", "憂鬱"], 
                 race: [], 
                 position: ["前排", "中排", "後排"], 
                 job: [] 
@@ -725,7 +722,6 @@
                         cardElement.classList.add("hidden"); 
                     }
 
-                    // 處理層數顯示
                     [1, 2, 3].forEach(l => {
                         const layerWrap = document.getElementById(`layer_wrap_${char.name}_${l}`);
                         if(layerWrap) {
@@ -739,7 +735,7 @@
                 }
             });
 
-            const personalities = ["天真", "活潑", "冷靜", "狂亂", "憂鬱"];
+            const personalities = ["天真", "冷靜", "狂亂", "活潑", "憂鬱"];
             personalities.forEach(pName => {
                 const pSection = document.getElementById(`section_p_${pName}`);
                 if (pSection) {
@@ -754,7 +750,8 @@
             const container = document.getElementById('matrixContainer');
             if(!container) return;
             container.innerHTML = '';
-            const personalities = ["天真", "活潑", "冷靜", "狂亂", "憂鬱"];
+            
+            const personalities = ["天真", "冷靜", "狂亂", "活潑", "憂鬱"];
 
             const personalityBorderColors = {
                 "天真": "border-green-500",
@@ -874,11 +871,9 @@
                         const btnGroup = document.createElement('div');
                         btnGroup.className = `grid ${gridCols} gap-1.5 h-full content-start`;
 
-                        // 進行動態排序，確保依照 攻擊>防禦>血量>爆擊>爆抗 呈現
                         const sortedAttrs = char[`layer${l}`].slice().sort((a, b) => ATTR_PRIORITY.indexOf(a) - ATTR_PRIORITY.indexOf(b));
 
                         sortedAttrs.forEach((attr, idx) => {
-                            // 注意：為了對應原本的存檔 Key，必須找到原始陣列的索引，以免讀錯檔
                             const originalIdx = char[`layer${l}`].indexOf(attr);
                             const stateKey = `${char.name}_l${l}_${attr}_${originalIdx}`;
                             const isOpened = savedStates[stateKey];
@@ -892,7 +887,6 @@
                             
                             btn.onclick = () => {
                                 savedStates[stateKey] = !savedStates[stateKey];
-                                // 如果點了蠟筆格，自動變成擁有角色
                                 if(savedStates[stateKey] && !savedStates['owned_' + char.name]) {
                                     savedStates['owned_' + char.name] = true;
                                     updateOwnershipUI(char.name);
@@ -916,9 +910,6 @@
             applyFilterUI();
         }
 
-        // ==========================================
-        // 啟動流
-        // ==========================================
         try {
             initStates();
             initCrayonLogo();
