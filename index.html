@@ -20,9 +20,6 @@
 
     <style>
         :root {
-            /* ==============================================================
-               💡 圖片更換區：教主大人的專屬背景圖
-               ============================================================== */
             --user-bg-image: url('https://i.postimg.cc/fTJ36ZFT/CG-Schedule-Rim.png'); 
         }
 
@@ -33,43 +30,21 @@
             transition: color 0.3s ease;
         }
 
-        /* 🖼️ 第一層：獨立的背景圖層 (解決手機瀏覽器 background-attachment: fixed 跑版問題) */
         body::before {
-            content: "";
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            z-index: -2;
-            background-image: var(--user-bg-image);
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
+            content: ""; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            z-index: -2; background-image: var(--user-bg-image); background-size: cover;
+            background-position: center; background-repeat: no-repeat;
         }
 
-        /* 🌫️ 第二層：半透明遮罩層，確保文字與卡片好閱讀 */
         body::after {
-            content: "";
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            z-index: -1;
-            /* 日間模式：半透明米白色遮罩 (0.75 代表透光度) */
-            background-color: rgba(252, 248, 242, 0.75); 
-            transition: background-color 0.3s ease;
+            content: ""; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            z-index: -1; background-color: rgba(252, 248, 242, 0.75); transition: background-color 0.3s ease;
         }
 
-        .dark body { 
-            color: #e2e8f0; 
-        }
+        .dark body { color: #e2e8f0; }
+        .dark body::after { background-color: rgba(26, 32, 44, 0.85); }
 
-        .dark body::after {
-            /* 黑夜模式：切換成半透明深藍黑遮罩，讓圖片自動變暗 */
-            background-color: rgba(26, 32, 44, 0.85); 
-        }
-
-        .char-btn { 
-            transition: all 0.12s cubic-bezier(0.4, 0, 0.2, 1); 
-            user-select: none;
-            touch-action: manipulation;
-        }
+        .char-btn { transition: all 0.12s cubic-bezier(0.4, 0, 0.2, 1); user-select: none; touch-action: manipulation; }
         .char-btn:active { transform: scale(0.94); }
         .char-avatar { transition: all 0.2s ease; cursor: pointer; }
         .char-card-wrapper:hover .char-avatar { transform: scale(1.06); }
@@ -78,18 +53,27 @@
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         .dark ::-webkit-scrollbar-thumb { background: #4a5568; }
         
-        .google-login-btn {
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.15);
-            transition: all 0.15s ease;
-        }
-        .google-login-btn:hover {
-            box-shadow: 0 3px 6px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.12);
-            background-color: #fcfcfc;
-        }
-        
+        .google-login-btn { box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.15); transition: all 0.15s ease; }
+        .google-login-btn:hover { box-shadow: 0 3px 6px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.12); background-color: #fcfcfc; }
         .unowned-avatar { opacity: 0.35; filter: grayscale(100%); }
 
-        /* 懸浮按鈕樣式 */
+        /* ==============================================================
+           💡 跑馬燈特效 (針對過長名稱優化)
+           ============================================================== */
+        .marquee-box {
+            display: block; width: 120px; overflow: hidden;
+            white-space: nowrap; text-overflow: ellipsis;
+        }
+        .char-card-wrapper:hover .marquee-box { text-overflow: clip; }
+        .char-card-wrapper:hover .marquee-content {
+            display: inline-block;
+            animation: text-marquee 3.5s linear infinite alternate;
+        }
+        @keyframes text-marquee {
+            0%, 20% { transform: translateX(0); }
+            80%, 100% { transform: translateX(-35px); }
+        }
+
         .social-fixed { position: fixed; bottom: 20px; right: 20px; z-index: 100; }
         .social-menu { display: none; margin-bottom: 8px; flex-direction: column; gap: 8px; }
         .social-fixed:hover .social-menu { display: flex; }
@@ -99,46 +83,53 @@
 
     <div class="max-w-7xl mx-auto">
         
-        <header class="bg-gradient-to-r from-amber-100/90 via-yellow-100/90 to-orange-100/90 dark:from-gray-800/90 dark:via-gray-700/90 dark:to-gray-800/90 rounded-2xl p-4 sm:p-6 shadow-md mb-6 border-4 border-amber-400 dark:border-gray-600 flex flex-col lg:flex-row justify-between items-center gap-4 transition-colors backdrop-blur-sm">
-            <div class="flex flex-row items-center justify-center lg:justify-start gap-3 text-center lg:text-left">
-
-                <div class="flex flex-col items-center lg:items-start">
-                    <h1 class="text-2xl sm:text-3xl font-bold text-amber-900 dark:text-amber-400 mb-1 flex items-center justify-center lg:justify-start gap-1.5 sm:gap-2">
-                        <img src="https://i.postimg.cc/sDstHDN1/Aside-Skill-Rim-3.png" alt="RimIcon" class="h-[1.15em] w-auto object-contain drop-shadow-sm">
-                        <span data-lang-key="app_title">嘟嘟臉金蠟筆記事本</span>
-                    </h1>
-                    <p data-lang-key="app_subtitle" class="text-amber-800 dark:text-gray-300 text-xs sm:text-sm">祝各位教主日日出金蠟筆</p>
+        <header class="bg-gradient-to-r from-amber-100/90 via-yellow-100/90 to-orange-100/90 dark:from-gray-800/90 dark:via-gray-700/90 dark:to-gray-800/90 rounded-2xl p-4 sm:p-6 shadow-md mb-6 border-4 border-amber-400 dark:border-gray-600 flex flex-col transition-colors backdrop-blur-sm relative">
+            
+            <div class="w-full flex justify-start mb-3">
+                <div class="flex items-center gap-1.5 text-[10px] sm:text-xs font-bold text-amber-900/70 dark:text-gray-300 bg-white/60 dark:bg-gray-800/60 px-2.5 py-1 rounded-md backdrop-blur-sm border border-amber-200/80 dark:border-gray-600/80 shadow-sm">
+                    👥 <span data-lang-key="visit_count_prefix">使用總人次</span>: <span id="top_visit_counter" class="text-amber-700 dark:text-amber-400 tracking-wider">讀取中...</span>
                 </div>
             </div>
-            
-            <div class="flex flex-row items-center gap-2 sm:gap-3 w-full lg:w-auto">
-                
-                <select id="langSelect" onchange="changeLanguage(this.value)" class="p-2 bg-white/80 dark:bg-gray-800/80 border border-amber-300 dark:border-gray-600 rounded-xl shadow-sm transition hover:bg-gray-50 dark:hover:bg-gray-700 shrink-0 backdrop-blur-sm text-xs font-bold outline-none cursor-pointer text-amber-900 dark:text-amber-400">
-                    <option value="zh-TW">繁中</option>
-                    <option value="ja">日本語</option>
-                </select>
 
-                <button onclick="toggleDarkMode()" class="p-2 bg-white/80 dark:bg-gray-800/80 border border-amber-300 dark:border-gray-600 rounded-xl shadow-sm transition hover:bg-gray-50 dark:hover:bg-gray-700 shrink-0 backdrop-blur-sm">
-                    <span id="themeIconLight" class="block dark:hidden">🌙</span>
-                    <span id="themeIconDark" class="hidden dark:block">☀️</span>
-                </button>
-
-                <div id="authPanel" class="w-full bg-white/90 dark:bg-gray-800/90 p-3 rounded-xl border border-amber-300 dark:border-gray-600 shadow-sm flex flex-row items-center justify-between sm:justify-start gap-4 backdrop-blur-sm">
-                    <div id="userStatus" class="text-left text-[11px] sm:text-xs text-gray-600 dark:text-gray-300">
-                        <span class="block font-bold text-amber-800 dark:text-amber-500" data-lang-key="auth_offline_title">當前狀態：單機模式</span>
-                        <span data-lang-key="auth_offline_desc">紀錄保存在此裝置</span>
+            <div class="flex flex-col lg:flex-row justify-between items-center gap-4 w-full">
+                <div class="flex flex-row items-center justify-center lg:justify-start gap-3 text-center lg:text-left">
+                    <div class="flex flex-col items-center lg:items-start">
+                        <h1 class="text-2xl sm:text-3xl font-bold text-amber-900 dark:text-amber-400 mb-1 flex items-center justify-center lg:justify-start gap-1.5 sm:gap-2">
+                            <img src="https://i.postimg.cc/sDstHDN1/Aside-Skill-Rim-3.png" alt="RimIcon" class="h-[1.15em] w-auto object-contain drop-shadow-sm">
+                            <span data-lang-key="app_title">嘟嘟臉金蠟筆記事本</span>
+                        </h1>
+                        <p data-lang-key="app_subtitle" class="text-amber-800 dark:text-gray-300 text-xs sm:text-sm">祝各位教主日日出金蠟筆</p>
                     </div>
-                    
-                    <div id="authBtnContainer" class="shrink-0">
-                        <button id="authBtn" onclick="handleAuth()" class="google-login-btn bg-white dark:bg-gray-700 rounded-lg p-2 flex items-center justify-center transition border border-gray-200 dark:border-gray-600 shrink-0">
-                            <svg id="googleLogoSvg" class="w-6 h-6 sm:w-7 sm:h-7" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
-                                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"/>
-                            </svg>
-                            <span id="logoutText" class="hidden text-white font-bold text-xs px-2 py-0.5" data-lang-key="auth_logout">登出</span>
-                        </button>
+                </div>
+                
+                <div class="flex flex-row items-center gap-2 sm:gap-3 w-full lg:w-auto">
+                    <select id="langSelect" onchange="changeLanguage(this.value)" class="p-2 bg-white/80 dark:bg-gray-800/80 border border-amber-300 dark:border-gray-600 rounded-xl shadow-sm transition hover:bg-gray-50 dark:hover:bg-gray-700 shrink-0 backdrop-blur-sm text-xs font-bold outline-none cursor-pointer text-amber-900 dark:text-amber-400">
+                        <option value="zh-TW">繁中</option>
+                        <option value="ja">日本語</option>
+                    </select>
+
+                    <button onclick="toggleDarkMode()" class="p-2 bg-white/80 dark:bg-gray-800/80 border border-amber-300 dark:border-gray-600 rounded-xl shadow-sm transition hover:bg-gray-50 dark:hover:bg-gray-700 shrink-0 backdrop-blur-sm">
+                        <span id="themeIconLight" class="block dark:hidden">🌙</span>
+                        <span id="themeIconDark" class="hidden dark:block">☀️</span>
+                    </button>
+
+                    <div id="authPanel" class="w-full bg-white/90 dark:bg-gray-800/90 p-3 rounded-xl border border-amber-300 dark:border-gray-600 shadow-sm flex flex-row items-center justify-between sm:justify-start gap-4 backdrop-blur-sm">
+                        <div id="userStatus" class="text-left text-[11px] sm:text-xs text-gray-600 dark:text-gray-300">
+                            <span class="block font-bold text-amber-800 dark:text-amber-500" data-lang-key="auth_offline_title">當前狀態：單機模式</span>
+                            <span data-lang-key="auth_offline_desc">紀錄保存在此裝置</span>
+                        </div>
+                        
+                        <div id="authBtnContainer" class="shrink-0">
+                            <button id="authBtn" onclick="handleAuth()" class="google-login-btn bg-white dark:bg-gray-700 rounded-lg p-2 flex items-center justify-center transition border border-gray-200 dark:border-gray-600 shrink-0">
+                                <svg id="googleLogoSvg" class="w-6 h-6 sm:w-7 sm:h-7" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
+                                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"/>
+                                </svg>
+                                <span id="logoutText" class="hidden text-white font-bold text-xs px-2 py-0.5" data-lang-key="auth_logout">登出</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -211,21 +202,21 @@
         <section id="statsPanelBody" class="grid grid-cols-1 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 transition-all">
             <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-xl p-3 sm:p-4 shadow border-2 border-amber-200 dark:border-amber-900 flex flex-col justify-between h-full">
                 <div class="border-b border-amber-100 dark:border-gray-700 pb-1.5 mb-2">
-                    <h3 class="font-bold text-amber-900 dark:text-amber-500 flex items-center text-xs sm:text-sm whitespace-nowrap"><span data-lang-key="stats_layer_1_title">🥇 第一層統計</span> <span class="text-[10px] ml-1 font-normal opacity-80" data-lang-key="stats_layer_1_rule">(每格加成3%, 需要2根金蠟筆)</span></h3>
+                    <h3 class="font-bold text-amber-900 dark:text-amber-500 flex items-center text-xs sm:text-sm whitespace-nowrap"><span data-lang-key="stats_layer_1_title">🥇 第一層統計</span> <span class="text-[10px] ml-1 font-normal opacity-80" data-lang-key="stats_layer_1_rule">(每格+3%, 蠟筆×2)</span></h3>
                 </div>
                 <div id="stat_layer_1" class="text-[10px] sm:text-[11px] text-gray-700 dark:text-gray-300 space-y-1 flex flex-col h-full justify-between"></div>
             </div>
 
             <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-xl p-3 sm:p-4 shadow border-2 border-orange-200 dark:border-orange-900 flex flex-col justify-between h-full">
                 <div class="border-b border-orange-100 dark:border-gray-700 pb-1.5 mb-2">
-                    <h3 class="font-bold text-orange-900 dark:text-orange-500 flex items-center text-xs sm:text-sm whitespace-nowrap"><span data-lang-key="stats_layer_2_title">🥈 第二層統計</span> <span class="text-[10px] ml-1 font-normal opacity-80" data-lang-key="stats_layer_2_rule">(每格加成4%, 需要4根金蠟筆)</span></h3>
+                    <h3 class="font-bold text-orange-900 dark:text-orange-500 flex items-center text-xs sm:text-sm whitespace-nowrap"><span data-lang-key="stats_layer_2_title">🥈 第二層統計</span> <span class="text-[10px] ml-1 font-normal opacity-80" data-lang-key="stats_layer_2_rule">(每格+4%, 蠟筆×4)</span></h3>
                 </div>
                 <div id="stat_layer_2" class="text-[10px] sm:text-[11px] text-gray-700 dark:text-gray-300 space-y-1 flex flex-col h-full justify-between"></div>
             </div>
 
             <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-xl p-3 sm:p-4 shadow border-2 border-red-200 dark:border-red-900 flex flex-col justify-between h-full">
                 <div class="border-b border-red-100 dark:border-gray-700 pb-1.5 mb-2">
-                    <h3 class="font-bold text-red-900 dark:text-red-500 flex items-center text-xs sm:text-sm whitespace-nowrap"><span data-lang-key="stats_layer_3_title">🥉 第三層統計</span> <span class="text-[10px] ml-1 font-normal opacity-80" data-lang-key="stats_layer_3_rule">(每格加成5%, 需要6根金蠟筆)</span></h3>
+                    <h3 class="font-bold text-red-900 dark:text-red-500 flex items-center text-xs sm:text-sm whitespace-nowrap"><span data-lang-key="stats_layer_3_title">🥉 第三層統計</span> <span class="text-[10px] ml-1 font-normal opacity-80" data-lang-key="stats_layer_3_rule">(每格+5%, 蠟筆×6)</span></h3>
                 </div>
                 <div id="stat_layer_3" class="text-[10px] sm:text-[11px] text-gray-700 dark:text-gray-300 space-y-1 flex flex-col h-full justify-between"></div>
             </div>
@@ -262,7 +253,7 @@
 
     <script>
         // ==========================================
-        // 🌍 全域多國語言字典 (100% 完整 UI 與使徒翻譯)
+        // 🌍 全域多國語言字典 (精簡排版優化)
         // ==========================================
         const LANG_DICT = {
             "zh-TW": {
@@ -276,16 +267,16 @@
                 personality_naive: "天真", personality_calm: "冷靜", personality_mad: "狂亂", personality_vivid: "活潑", personality_gloomy: "憂鬱",
                 race_witch: "魔女", race_beast: "獸人", race_dragon: "龍族", race_spirit: "魔靈", race_fairy: "妖精", race_elf: "精靈", race_ghost: "幽靈", race_unknown: "???",
                 position_front: "前排", position_middle: "中排", position_back: "後排", job_attacker: "輸出", job_defender: "肉盾", job_supporter: "輔助",
+                visit_count_prefix: "使用總人次",
                 auth_offline_title: "當前狀態：單機模式", auth_offline_desc: "紀錄保存在此裝置", auth_online_title: "🟢 已連線雲端", auth_logout: "登出",
                 filter_title: "🔍 篩選器", filter_search_placeholder: "搜尋坨坨...", filter_reset: "重置全部篩選", filter_display_mode: "👁️ 版面顯示：",
                 filter_btn_all: "全部", filter_btn_show_all: "顯示全部", filter_btn_show_1: "僅第一層", filter_btn_show_2: "僅第二層", filter_btn_show_3: "僅第三層",
                 stats_toggle_hint: "點擊展開 / 收起", stats_layer_1_title: "🥇 第一層統計", stats_layer_2_title: "🥈 第二層統計", stats_layer_3_title: "🥉 第三層統計",
-                stats_layer_1_rule: "(每格加成3%, 需要2根金蠟筆)", stats_layer_2_rule: "(每格加成4%, 需要4根金蠟筆)", stats_layer_3_rule: "(每格加成5%, 需要6根金蠟筆)",
-                stats_global_bonus: "📊 全體屬性加成", stats_need_more_prefix: "尚要 ", stats_need_more_suffix: " 根蠟筆",
+                stats_layer_1_rule: "(每格+3%, 蠟筆×2)", stats_layer_2_rule: "(每格+4%, 蠟筆×4)", stats_layer_3_rule: "(每格+5%, 蠟筆×6)",
+                stats_global_bonus: "📊 全體屬性加成", stats_need_more_prefix: "缺 ", stats_need_more_suffix: " 蠟筆",
                 x_label: "台港澳服官方X", official_x_url: "https://x.com/trickcal_TW",
                 footer_author: "📝 記事本製作者: 冷笑話幽靈", footer_copyright: "© 遊戲版權: EpidGames & Bilibili",
                 
-                // 使徒字典 & 遊戲術語 (作為翻譯對照)
                 "天真": "天真", "冷靜": "冷靜", "狂亂": "狂亂", "活潑": "活潑", "憂鬱": "憂鬱",
                 "魔女": "魔女", "獸人": "獸人", "龍族": "龍族", "魔靈": "魔靈", "妖精": "妖精", "精靈": "精靈", "幽靈": "幽靈", "???": "???",
                 "前排": "前排", "中排": "中排", "後排": "後排", "輸出": "輸出", "肉盾": "肉盾", "輔助": "輔助",
@@ -301,31 +292,30 @@
                 "阿萊特": "阿萊特", "雷吉": "雷吉", "馬爾": "馬爾", "泰達": "泰達", "寧琉": "寧琉"
             },
             "ja": {
-                app_title: "トリッカル特級クレヨンノート", app_subtitle: "教主が毎日、特級クレヨンを受け取れますように。", stats_title: "📊 統計とボーナス情報",
+                app_title: "トリッカル特級クレヨンノート", app_subtitle: "教主が毎日特級クレヨンを受け取れますように", stats_title: "📊 統計とボーナス情報",
                 stats_stat: "統計", stats_character: "使徒", stats_attack: "攻撃", stats_defence: "防御", stats_hp: "HP",
                 stats_critical: "会心", stats_resist: "抵抗", stats_personality: "🔮 性格：", stats_race: "🧬 種族：",
-                stats_position: "🗺️ 配置：", stats_job: "⚔️ 職業：", stats_cell: "🖍️ 特級クレヨンマス：", stats_crayon: "特級クレヨン",
+                stats_position: "🗺️ 配置：", stats_job: "⚔️ 職業：", stats_cell: "🖍️ 特級クレヨン：", stats_crayon: "特級クレヨン",
                 stats_level: "特定ボード:", cell_kind: "ステータス:", level_1st: "1段階目", level_2nd: "2段階目", level_3st: "3段階目",
                 total_owned: "所有使徒", crayon_used: "消費クレヨン数", crayon_needed: "必要クレヨン数",
                 crayon_attack: "攻撃力", crayon_defence: "防御力", crayon_hp: "HP", crayon_critical: "会心", crayon_resist: "会心抵抗",
                 personality_naive: "純粋", personality_calm: "冷静", personality_mad: "狂気", personality_vivid: "活発", personality_gloomy: "憂鬱",
                 race_witch: "魔女", race_beast: "獣人", race_dragon: "竜族", race_spirit: "精霊", race_fairy: "妖精", race_elf: "エルフ", race_ghost: "幽霊", race_unknown: "???",
                 position_front: "前列", position_middle: "中列", position_back: "後列", job_attacker: "攻撃", job_defender: "守備", job_supporter: "支援",
+                visit_count_prefix: "総アクセス数",
                 auth_offline_title: "現在の状態：オフラインモード", auth_offline_desc: "データはこの端末に保存されます", auth_online_title: "🟢 クラウドに接続中", auth_logout: "ログアウト",
                 filter_title: "🔍 フィルター", filter_search_placeholder: "使徒を検索...", filter_reset: "すべてのフィルターをリセット", filter_display_mode: "👁️ ボード表示：",
                 filter_btn_all: "すべて", filter_btn_show_all: "すべて表示", filter_btn_show_1: "1段階目のみ", filter_btn_show_2: "2段階目のみ", filter_btn_show_3: "3段階目のみ",
                 stats_toggle_hint: "クリックで展開 / 折りたたみ", stats_layer_1_title: "🥇 1段階目の統計", stats_layer_2_title: "🥈 2段階目の統計", stats_layer_3_title: "🥉 3段階目の統計",
-                stats_layer_1_rule: "(1マスにつき+3%, 特級クレヨン2本必要)", stats_layer_2_rule: "(1マスにつき+4%, 特級クレヨン4本必要)", stats_layer_3_rule: "(1マスにつき+5%, 特級クレヨン6本必要)",
-                stats_global_bonus: "📊 全体ステータスバフ", stats_need_more_prefix: "あと ", stats_need_more_suffix: " 本必要",
+                stats_layer_1_rule: "(各マス+3%, クレヨン×2)", stats_layer_2_rule: "(各マス+4%, クレヨン×4)", stats_layer_3_rule: "(各マス+5%, クレヨン×6)",
+                stats_global_bonus: "📊 全体ステータスバフ", stats_need_more_prefix: "不足: ", stats_need_more_suffix: " 本",
                 x_label: "公式 X", official_x_url: "https://x.com/trickcal_jp",
                 footer_author: "📝 ノート作成者: 冷笑話幽靈", footer_copyright: "© ゲーム著作権: EpidGames & Bilibili",
                 
-                // 遊戲術語翻譯 (從中文映射到日文)
                 "天真": "純粋", "冷靜": "冷静", "狂亂": "狂気", "活潑": "活発", "憂鬱": "憂鬱",
                 "魔女": "魔女", "獸人": "獣人", "龍族": "竜族", "魔靈": "精霊", "妖精": "妖精", "精靈": "エルフ", "幽靈": "幽霊", "???": "???",
                 "前排": "前列", "中排": "中列", "後排": "後列", "輸出": "攻撃", "肉盾": "守備", "輔助": "支援",
                 "攻擊": "攻撃", "防禦": "防御", "血量": "HP", "爆擊": "会心", "爆抗": "会心抵抗", "全部": "すべて",
-                // 使徒名字翻譯
                 "洛涅": "ローネ", "薇薇": "ヴィヴィ", "艾爾芬": "エルフィン", "錫安": "シオン・ザ・DB", "伊弗利特": "イフリート", "伊德": "イード", "佩佩": "ベルベット", "佩斯塔": "フェスタ",
                 "修帕": "シュパン", "傑德": "ジェイド", "優米": "ヨミ", "劉美美": "ユミミ", "加薇雅": "ガヴィア", "卡洛特": "キャロット", "卡蓮": "カレン", "喬菲": "チョッピー",
                 "基狄恩": "ギデオン", "大師2號": "マエストロMK2", "大木頭": "ビッグウッド", "奈雅": "ナイア", "奶油": "バター", "布蘭切": "ブランセ", "希拉": "シーラ", "希爾德": "ヒルデ",
@@ -338,7 +328,6 @@
             }
         };
 
-        // 目前語系與翻譯輔助函數
         let currentLang = localStorage.getItem('user_lang') || 'zh-TW';
         document.getElementById('langSelect').value = currentLang;
 
@@ -351,7 +340,6 @@
             currentLang = lang;
             localStorage.setItem('user_lang', lang);
             
-            // 更新靜態 DOM 元素
             document.querySelectorAll('[data-lang-key]').forEach(el => {
                 const key = el.getAttribute('data-lang-key');
                 if (LANG_DICT[lang] && LANG_DICT[lang][key]) {
@@ -359,18 +347,15 @@
                 }
             });
 
-            // 更新 Placeholder
             const searchInput = document.getElementById('searchInput');
             if (searchInput) searchInput.placeholder = t('filter_search_placeholder');
 
-            // 更新官方 X 連結
             const xLink = document.getElementById('dynamicXLink');
             if (xLink) {
                 xLink.href = LANG_DICT[lang].official_x_url;
                 xLink.innerText = LANG_DICT[lang].x_label;
             }
 
-            // 重新繪製動態面板
             buildFilterPanel();
             renderMatrix();
             calculateStats();
@@ -1009,6 +994,7 @@
                     const nameCol = document.createElement('div');
                     nameCol.className = "flex flex-row items-center justify-start gap-3 min-w-[210px] w-full md:w-auto border-b md:border-b-0 pb-2 md:pb-0 border-gray-200/50 dark:border-gray-700";
                     
+                    // 🚨 將第一行的名字分離，第二行放置四個圖示，並為名字加入 CSS Marquee 特效
                     nameCol.innerHTML = `
                         <div class="relative shrink-0 w-12 h-12" onclick="toggleOwnership('${char.name}')">
                             <img id="avatar_img_${char.name}" src="${avatarPath}" alt="${t(char.name)}" 
@@ -1020,40 +1006,38 @@
                             </div>
                         </div>
 
-                        <div class="flex flex-col gap-0.5 w-full">
-                            <div class="flex items-center gap-1.5 justify-between md:justify-start">
-                                <span class="text-sm sm:text-base font-bold text-gray-900 dark:text-gray-100 truncate max-w-[100px]">${t(char.name)}</span>
+                        <div class="flex flex-col gap-0.5 w-full overflow-hidden">
+                            <div class="marquee-box text-sm sm:text-base font-bold text-gray-900 dark:text-gray-100" title="${t(char.name)}">
+                                <span class="marquee-content">${t(char.name)}</span>
+                            </div>
+                            
+                            <div class="flex items-center gap-1.5 pt-1 border-t border-dashed border-gray-100 dark:border-gray-700">
                                 <div class="flex items-center">
-                                    <img src="${pPath}" alt="${t(char.personality)}" title="${t(char.personality)}"
+                                    <img src="${pPath}" alt="${t(char.personality)}" title="${t('stats_personality')} ${t(char.personality)}"
                                          onerror="this.style.display='none'; document.getElementById('fall_p_${char.name}').classList.remove('hidden');"
-                                         class="w-5 h-5 object-contain">
+                                         class="w-4 h-4 object-contain">
                                     <span id="fall_p_${char.name}" class="hidden text-[9px] px-1 rounded bg-amber-50 dark:bg-gray-700 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-gray-600 whitespace-nowrap">
                                         ${t(char.personality)}
                                     </span>
                                 </div>
-                            </div>
-                            
-                            <div class="flex items-center gap-2 pt-1 border-t border-dashed border-gray-100 dark:border-gray-700">
                                 <div class="flex items-center">
-                                    <img src="${racePath}" alt="${t(char.race)}" title="${t(char.race)}"
+                                    <img src="${racePath}" alt="${t(char.race)}" title="${t('stats_race')} ${t(char.race)}"
                                          onerror="this.style.display='none'; document.getElementById('fall_r_${char.name}').classList.remove('hidden');"
                                          class="w-4 h-4 object-contain">
                                     <span id="fall_r_${char.name}" class="hidden bg-gray-100 dark:bg-gray-700 px-1 rounded text-[9px] text-gray-500 dark:text-gray-400 font-medium whitespace-nowrap">
                                         ${t(char.race)}
                                     </span>
                                 </div>
-                                
                                 <div class="flex items-center">
-                                    <img src="${posPath}" alt="${t(char.position)}" title="${t(char.position)}"
+                                    <img src="${posPath}" alt="${t(char.position)}" title="${t('stats_position')} ${t(char.position)}"
                                          onerror="this.style.display='none'; document.getElementById('fall_pos_${char.name}').classList.remove('hidden');"
                                          class="w-4 h-4 object-contain opacity-85">
                                     <span id="fall_pos_${char.name}" class="hidden bg-blue-50 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-1 rounded text-[9px] font-medium whitespace-nowrap">
                                         ${t(char.position)}
                                     </span>
                                 </div>
-                                
                                 <div class="flex items-center">
-                                    <img src="${jobPath}" alt="${t(char.job)}" title="${t(char.job)}"
+                                    <img src="${jobPath}" alt="${t(char.job)}" title="${t('stats_job')} ${t(char.job)}"
                                          onerror="this.style.display='none'; document.getElementById('fall_j_${char.name}').classList.remove('hidden');"
                                          class="w-4 h-4 object-contain opacity-85">
                                     <span id="fall_j_${char.name}" class="hidden bg-purple-50 dark:bg-purple-900 text-purple-700 dark:text-purple-300 px-1 rounded text-[9px] font-medium whitespace-nowrap">
@@ -1120,13 +1104,35 @@
             applyFilterUI();
         }
 
+        // ==========================================
+        // 📊 Firebase 總次數更新機制
+        // ==========================================
+        function updateVisitCount() {
+            if (!db) return;
+            const countRef = db.collection("metadata").doc("site_stats");
+            
+            db.runTransaction((transaction) => {
+                return transaction.get(countRef).then((doc) => {
+                    const newCount = (doc.exists ? doc.data().total_visits : 0) + 1;
+                    transaction.set(countRef, { total_visits: newCount });
+                    return newCount;
+                });
+            }).then((newCount) => {
+                const counterEl = document.getElementById('top_visit_counter');
+                if (counterEl) counterEl.innerText = newCount.toLocaleString();
+            }).catch((err) => {
+                console.warn("統計更新失敗:", err);
+                const counterEl = document.getElementById('top_visit_counter');
+                if (counterEl) counterEl.innerText = "N/A";
+            });
+        }
+
         try {
             initStates();
             buildFilterPanel();
             renderMatrix();
             calculateStats();
             
-            // 如果目前是在手機上 (小於 768px)，自動將統計面板收起來
             if (!isStatsOpen) {
                 const body = document.getElementById("statsPanelBody");
                 const icon = document.getElementById("statsToggleIcon");
@@ -1136,7 +1142,6 @@
                     icon.innerText = "▶";
                 }
             }
-            
         } catch (e) {
             const errBanner = document.getElementById('errorBanner');
             if(errBanner) {
@@ -1197,6 +1202,9 @@
                 firebase.initializeApp(firebaseConfig);
                 db = firebase.firestore();
                 auth = firebase.auth();
+
+                // 呼叫更新人次
+                updateVisitCount();
 
                 auth.onAuthStateChanged(user => {
                     updateAuthButtonUI(user); 
