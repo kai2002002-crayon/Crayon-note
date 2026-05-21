@@ -88,6 +88,11 @@
         }
         
         .unowned-avatar { opacity: 0.35; filter: grayscale(100%); }
+
+        /* 懸浮按鈕樣式 */
+        .social-fixed { position: fixed; bottom: 20px; right: 20px; z-index: 100; }
+        .social-menu { display: none; margin-bottom: 8px; flex-direction: column; gap: 8px; }
+        .social-fixed:hover .social-menu { display: flex; }
     </style>
 </head>
 <body class="p-3 sm:p-6 md:p-8 text-gray-800 dark:text-gray-100">
@@ -1097,5 +1102,15 @@
             console.error("Firebase 初始化被阻擋:", e);
         }
     </script>
+
+    <div class="social-fixed group">
+        <div id="socialMenu" class="social-menu group-hover:flex">
+            <a href="https://x.com/trickcal_jp" target="_blank" class="bg-black text-white px-3 py-1 rounded-lg text-[10px] font-bold shadow-lg hover:bg-gray-800 transition">日服 X</a>
+            <a href="https://x.com/trickcal_TW" target="_blank" class="bg-sky-500 text-white px-3 py-1 rounded-lg text-[10px] font-bold shadow-lg hover:bg-sky-600 transition">台港澳 X</a>
+            <a href="https://x.com/trickcal_en" target="_blank" class="bg-gray-600 text-white px-3 py-1 rounded-lg text-[10px] font-bold shadow-lg hover:bg-gray-700 transition">國際 X</a>
+        </div>
+        <button class="bg-black text-white w-10 h-10 rounded-full shadow-xl flex items-center justify-center font-bold text-sm">X</button>
+    </div>
+    
 </body>
 </html>
