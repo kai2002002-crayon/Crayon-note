@@ -153,28 +153,28 @@
         </section>
 
         <section class="grid grid-cols-1 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
-            <div class="bg-white dark:bg-gray-800 rounded-xl p-3 sm:p-4 shadow border-2 border-amber-200 dark:border-amber-900 flex flex-col justify-between">
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-3 sm:p-4 shadow border-2 border-amber-200 dark:border-amber-900 flex flex-col justify-between h-full">
                 <div class="border-b border-amber-100 dark:border-gray-700 pb-1.5 mb-2">
                     <h3 class="font-bold text-amber-900 dark:text-amber-500 flex items-center text-xs sm:text-sm whitespace-nowrap">🥇 第一層統計 <span class="text-[10px] ml-1 font-normal opacity-80">(每格加成3%, 需要2枝金蠟筆)</span></h3>
                 </div>
-                <div id="stat_layer_1" class="text-[10px] sm:text-[11px] text-gray-700 dark:text-gray-300 space-y-1"></div>
+                <div id="stat_layer_1" class="text-[10px] sm:text-[11px] text-gray-700 dark:text-gray-300 space-y-1 flex flex-col h-full justify-between"></div>
             </div>
 
-            <div class="bg-white dark:bg-gray-800 rounded-xl p-3 sm:p-4 shadow border-2 border-orange-200 dark:border-orange-900 flex flex-col justify-between">
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-3 sm:p-4 shadow border-2 border-orange-200 dark:border-orange-900 flex flex-col justify-between h-full">
                 <div class="border-b border-orange-100 dark:border-gray-700 pb-1.5 mb-2">
                     <h3 class="font-bold text-orange-900 dark:text-orange-500 flex items-center text-xs sm:text-sm whitespace-nowrap">🥈 第二層統計 <span class="text-[10px] ml-1 font-normal opacity-80">(每格加成4%, 需要4枝金蠟筆)</span></h3>
                 </div>
-                <div id="stat_layer_2" class="text-[10px] sm:text-[11px] text-gray-700 dark:text-gray-300 space-y-1"></div>
+                <div id="stat_layer_2" class="text-[10px] sm:text-[11px] text-gray-700 dark:text-gray-300 space-y-1 flex flex-col h-full justify-between"></div>
             </div>
 
-            <div class="bg-white dark:bg-gray-800 rounded-xl p-3 sm:p-4 shadow border-2 border-red-200 dark:border-red-900 flex flex-col justify-between">
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-3 sm:p-4 shadow border-2 border-red-200 dark:border-red-900 flex flex-col justify-between h-full">
                 <div class="border-b border-red-100 dark:border-gray-700 pb-1.5 mb-2">
                     <h3 class="font-bold text-red-900 dark:text-red-500 flex items-center text-xs sm:text-sm whitespace-nowrap">🥉 第三層統計 <span class="text-[10px] ml-1 font-normal opacity-80">(每格加成5%, 需要6枝金蠟筆)</span></h3>
                 </div>
-                <div id="stat_layer_3" class="text-[10px] sm:text-[11px] text-gray-700 dark:text-gray-300 space-y-1"></div>
+                <div id="stat_layer_3" class="text-[10px] sm:text-[11px] text-gray-700 dark:text-gray-300 space-y-1 flex flex-col h-full justify-between"></div>
             </div>
 
-            <div class="bg-gradient-to-br from-yellow-50 to-amber-100 dark:from-gray-800 dark:to-gray-800 rounded-xl p-3 sm:p-4 shadow border-2 border-yellow-300 dark:border-gray-600 flex flex-col justify-between">
+            <div class="bg-gradient-to-br from-yellow-50 to-amber-100 dark:from-gray-800 dark:to-gray-800 rounded-xl p-3 sm:p-4 shadow border-2 border-yellow-300 dark:border-gray-600 flex flex-col justify-between h-full">
                 <div>
                     <h3 class="font-bold text-amber-955 dark:text-amber-400 text-xs sm:text-sm mb-1 whitespace-nowrap border-b border-amber-200 dark:border-gray-700 pb-1.5">📊 全體屬性加成</h3>
                     <div class="text-[11px] sm:text-xs text-amber-900 dark:text-gray-300 mt-2 space-y-1">
@@ -318,7 +318,7 @@
             "avatar_泰達": "https://i.postimg.cc/vH2GKCw8/tai-da.png"
         };
 
-        const INITIAL_DATA = [
+                const INITIAL_DATA = [
             { name: "洛涅", personality: "天真", race: "精靈", position: "前排", job: "肉盾", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
             { name: "薇薇", personality: "天真", race: "龍族", position: "前排", job: "肉盾", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
             { name: "卡洛特", personality: "天真", race: "妖精", position: "後排", job: "輔助", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
@@ -388,7 +388,6 @@
             { name: "萊薇", personality: "憂鬱", race: "魔女", position: "中排", job: "輸出", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] },
             { name: "喬菲", personality: "憂鬱", race: "獸人", position: "中排", job: "輸出", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] }
         ];
-        
         const LAYER_RULES = {
             1: { name: "🥇 第一層", crayon: 2, bonus: 3 },
             2: { name: "🥈 第二層", crayon: 4, bonus: 4 },
@@ -468,6 +467,7 @@
             let layerTotals = { 1: {}, 2: {}, 3: {} };
             let layerOpened = { 1: {}, 2: {}, 3: {} };
             let layerBonus = { 1: {}, 2: {}, 3: {} };
+            let layerMissingCrayons = { 1: 0, 2: 0, 3: 0 };
             
             [1, 2, 3].forEach(l => {
                 ATTR_PRIORITY.forEach(a => {
@@ -498,7 +498,10 @@
                             layerBonus[l][attr] += rule.bonus;
                             globalUsedCrayons += rule.crayon;
                             if (attrKey) attrs[attrKey] += rule.bonus;
-                        } else { globalNeededCrayons += rule.crayon; }
+                        } else { 
+                            globalNeededCrayons += rule.crayon; 
+                            layerMissingCrayons[l] += rule.crayon;
+                        }
                     });
                 });
             });
@@ -514,7 +517,7 @@
             });
             
             [1, 2, 3].forEach(l => {
-                let html = '<div class="grid grid-cols-2 gap-x-2 gap-y-1 mt-1">';
+                let html = '<div><div class="grid grid-cols-2 gap-x-2 gap-y-1 mt-1">';
                 ATTR_PRIORITY.forEach(attr => {
                     if(layerTotals[l][attr] > 0) {
                         html += `
@@ -525,7 +528,16 @@
                         `;
                     }
                 });
-                html += '</div>';
+                html += '</div></div>';
+                
+                html += `
+                    <div class="mt-2 pt-1 border-t border-gray-100 dark:border-gray-700 flex justify-end">
+                        <span class="bg-red-50 dark:bg-gray-700 text-red-600 dark:text-red-400 px-1.5 py-0.5 rounded text-[10px] font-bold border border-red-100 dark:border-gray-600">
+                            尚需 ${layerMissingCrayons[l]} 枝蠟筆
+                        </span>
+                    </div>
+                `;
+                
                 const layerStatBox = document.getElementById(`stat_layer_${l}`);
                 if (layerStatBox) layerStatBox.innerHTML = html;
             });
