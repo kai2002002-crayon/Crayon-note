@@ -380,7 +380,7 @@
         function changeLanguage(lang) {
             currentLang = lang;
             localStorage.setItem('user_lang', lang);
-            
+            document.title = t('app_title');
             document.querySelectorAll('[data-lang-key]').forEach(el => {
                 const key = el.getAttribute('data-lang-key');
                 if (LANG_DICT[lang] && LANG_DICT[lang][key]) {
