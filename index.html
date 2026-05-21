@@ -101,10 +101,10 @@
 
         <section class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow border-2 border-amber-200/80 dark:border-gray-700 mb-6 transition-colors">
             <div class="flex justify-between items-center border-b border-gray-100 dark:border-gray-700 pb-2 cursor-pointer" onclick="toggleFilterPanel()">
-                <h3 class="font-bold text-amber-955 dark:text-amber-400 text-sm flex items-center gap-1">🔍 篩選器 <span id="filterToggleIcon" class="text-xs opacity-70">▼</span></h3>
-                <div class="flex items-center gap-2">
-                    <input type="text" id="searchInput" placeholder="搜尋坨坨..." oninput="handleSearch()" class="text-xs px-2 py-1 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" onclick="event.stopPropagation()">
-                    <button onclick="event.stopPropagation(); resetFilters()" class="text-xs text-amber-700 dark:text-amber-400 hover:text-amber-900 dark:hover:text-amber-300 font-bold bg-amber-50 dark:bg-gray-700 px-2 py-1 rounded border border-amber-200 dark:border-gray-600 transition whitespace-nowrap">重置全部篩選</button>
+                <h3 class="font-bold text-amber-955 dark:text-amber-400 text-sm flex items-center gap-1 shrink-0">🔍 篩選器 <span id="filterToggleIcon" class="text-xs opacity-70 ml-1">▼</span></h3>
+                <div class="flex items-center gap-1.5 sm:gap-2">
+                    <input type="text" id="searchInput" placeholder="搜尋坨坨..." oninput="handleSearch()" class="w-24 sm:w-40 text-xs px-2 py-1 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:outline-none focus:border-amber-400" onclick="event.stopPropagation()">
+                    <button onclick="event.stopPropagation(); resetFilters()" class="text-[10px] sm:text-xs text-amber-700 dark:text-amber-400 hover:text-amber-900 dark:hover:text-amber-300 font-bold bg-amber-50 dark:bg-gray-700 px-1.5 py-1 rounded border border-amber-200 dark:border-gray-600 transition whitespace-nowrap">重置全部篩選</button>
                 </div>
             </div>
             
@@ -155,21 +155,21 @@
         <section class="grid grid-cols-1 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
             <div class="bg-white dark:bg-gray-800 rounded-xl p-3 sm:p-4 shadow border-2 border-amber-200 dark:border-amber-900 flex flex-col justify-between">
                 <div class="border-b border-amber-100 dark:border-gray-700 pb-1.5 mb-2">
-                    <h3 class="font-bold text-amber-900 dark:text-amber-500 flex items-center text-xs sm:text-sm whitespace-nowrap">🥇 第一層統計 (2枝金蠟筆)</h3>
+                    <h3 class="font-bold text-amber-900 dark:text-amber-500 flex items-center text-xs sm:text-sm whitespace-nowrap">🥇 第一層統計 <span class="text-[10px] ml-1 font-normal opacity-80">(每格加成3%, 需要2枝金蠟筆)</span></h3>
                 </div>
                 <div id="stat_layer_1" class="text-[10px] sm:text-[11px] text-gray-700 dark:text-gray-300 space-y-1"></div>
             </div>
 
             <div class="bg-white dark:bg-gray-800 rounded-xl p-3 sm:p-4 shadow border-2 border-orange-200 dark:border-orange-900 flex flex-col justify-between">
                 <div class="border-b border-orange-100 dark:border-gray-700 pb-1.5 mb-2">
-                    <h3 class="font-bold text-orange-900 dark:text-orange-500 flex items-center text-xs sm:text-sm whitespace-nowrap">🥈 第二層統計 (4枝金蠟筆)</h3>
+                    <h3 class="font-bold text-orange-900 dark:text-orange-500 flex items-center text-xs sm:text-sm whitespace-nowrap">🥈 第二層統計 <span class="text-[10px] ml-1 font-normal opacity-80">(每格加成4%, 需要4枝金蠟筆)</span></h3>
                 </div>
                 <div id="stat_layer_2" class="text-[10px] sm:text-[11px] text-gray-700 dark:text-gray-300 space-y-1"></div>
             </div>
 
             <div class="bg-white dark:bg-gray-800 rounded-xl p-3 sm:p-4 shadow border-2 border-red-200 dark:border-red-900 flex flex-col justify-between">
                 <div class="border-b border-red-100 dark:border-gray-700 pb-1.5 mb-2">
-                    <h3 class="font-bold text-red-900 dark:text-red-500 flex items-center text-xs sm:text-sm whitespace-nowrap">🥉 第三層統計 (6枝金蠟筆)</h3>
+                    <h3 class="font-bold text-red-900 dark:text-red-500 flex items-center text-xs sm:text-sm whitespace-nowrap">🥉 第三層統計 <span class="text-[10px] ml-1 font-normal opacity-80">(每格加成5%, 需要6枝金蠟筆)</span></h3>
                 </div>
                 <div id="stat_layer_3" class="text-[10px] sm:text-[11px] text-gray-700 dark:text-gray-300 space-y-1"></div>
             </div>
@@ -185,8 +185,8 @@
                 </div>
                 <div class="grid grid-cols-5 gap-1 text-center mt-2 pt-2 border-t border-amber-200 dark:border-gray-700 text-[9px] sm:text-[10px]">
                     <div class="bg-orange-50 dark:bg-gray-700 rounded p-1"><span class="block text-gray-500 dark:text-gray-400 scale-90">攻</span><span id="attr_attack" class="font-bold text-orange-600 dark:text-orange-400">+0%</span></div>
-                    <div class="bg-green-50 dark:bg-gray-700 rounded p-1"><span class="block text-gray-500 dark:text-gray-400 scale-90">血</span><span id="attr_hp" class="font-bold text-green-600 dark:text-green-400">+0%</span></div>
                     <div class="bg-blue-50 dark:bg-gray-700 rounded p-1"><span class="block text-gray-500 dark:text-gray-400 scale-90">防</span><span id="attr_def" class="font-bold text-blue-600 dark:text-blue-400">+0%</span></div>
+                    <div class="bg-green-50 dark:bg-gray-700 rounded p-1"><span class="block text-gray-500 dark:text-gray-400 scale-90">血</span><span id="attr_hp" class="font-bold text-green-600 dark:text-green-400">+0%</span></div>
                     <div class="bg-red-50 dark:bg-gray-700 rounded p-1"><span class="block text-gray-500 dark:text-gray-400 scale-90">爆</span><span id="attr_crit" class="font-bold text-red-600 dark:text-red-400">+0%</span></div>
                     <div class="bg-purple-50 dark:bg-gray-700 rounded p-1"><span class="block text-gray-500 dark:text-gray-400 scale-90">抗</span><span id="attr_crit_res" class="font-bold text-purple-600 dark:text-purple-400">+0%</span></div>
                 </div>
@@ -317,77 +317,6 @@
             "avatar_馬爾": "https://i.postimg.cc/d1nrktrD/ma-er.png",
             "avatar_泰達": "https://i.postimg.cc/vH2GKCw8/tai-da.png"
         };
-
-        const INITIAL_DATA = [
-            { name: "洛涅", personality: "天真", race: "精靈", position: "前排", job: "肉盾", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-            { name: "薇薇", personality: "天真", race: "龍族", position: "前排", job: "肉盾", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-            { name: "卡洛特", personality: "天真", race: "妖精", position: "後排", job: "輔助", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-            { name: "奈雅", personality: "天真", race: "魔靈", position: "中排", job: "輔助", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-            { name: "艾爾芬", personality: "天真", race: "妖精", position: "後排", job: "輸出", layer1: ["攻擊", "防禦"], layer2: ["血量", "攻擊", "防禦"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-            { name: "馬爾", personality: "天真", race: "獸人", position: "中排", job: "輔助", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-            { name: "加薇雅", personality: "天真", race: "魔靈", position: "中排", job: "輔助", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "爆擊", "防禦", "爆抗"] },
-            { name: "希菲爾", personality: "天真", race: "龍族", position: "中排", job: "輸出", layer1: ["爆擊", "血量"], layer2: ["爆擊", "防禦", "爆抗"], layer3: ["攻擊", "爆擊", "血量", "防禦"] },
-            { name: "斯皮奇", personality: "天真", race: "幽靈", position: "後排", job: "輸出", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-            { name: "海莉", personality: "天真", race: "精靈", position: "中排", job: "輸出", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-            { name: "大木頭", personality: "天真", race: "魔靈", position: "前排", job: "肉盾", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-            { name: "阿萊特", personality: "天真", race: "精靈", position: "前排", job: "肉盾", layer1: ["爆擊", "爆抗"], layer2: ["爆擊", "血量", "爆抗"], layer3: ["爆擊", "防禦", "血量", "爆抗"] },
-            { name: "莎莉", personality: "天真", race: "幽靈", position: "中排", job: "輸出", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-            { name: "路易", personality: "天真", race: "妖精", position: "中排", job: "輔助", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-            { name: "修帕", personality: "活潑", race: "妖精", position: "後排", job: "輔助", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] },
-            { name: "奶油", personality: "活潑", race: "獸人", position: "後排", job: "輸出", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-            { name: "桃桃", personality: "活潑", race: "獸人", position: "後排", job: "輸出", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊",  "防禦", "爆擊", "爆抗"] },
-            { name: "瑟琳娜", personality: "活潑", race: "幽靈", position: "前排", job: "肉盾", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-            { name: "羽伊", personality: "活潑", race: "魔靈", position: "中排", job: "輔助", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] },
-            { name: "艾皮卡", personality: "活潑", race: "獸人", position: "中排", job: "輸出", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] },
-            { name: "路德", personality: "活潑", race: "龍族", position: "前排", job: "肉盾", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-            { name: "康娜", personality: "活潑", race: "精靈", position: "後排", job: "輸出", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-            { name: "斑尼", personality: "活潑", race: "獸人", position: "前排", job: "輸出", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-            { name: "盧波", personality: "活潑", race: "獸人", position: "中排", job: "輸出", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] },
-            { name: "茱蜜", personality: "活潑", race: "魔靈", position: "中排", job: "輸出", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-            { name: "卡蓮", personality: "活潑", race: "妖精", position: "後排", job: "輔助", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] },
-            { name: "泰達", personality: "活潑", race: "精靈", position: "後排", job: "輸出", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-            { name: "瑪麗", personality: "活潑", race: "妖精", position: "中排", job: "輸出", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-            { name: "米雪", personality: "活潑", race: "獸人", position: "前排", job: "輸出", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-            { name: "伊德", personality: "冷靜", race: "精靈", position: "前排", job: "肉盾", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-            { name: "艾琳娜", personality: "冷靜", race: "精靈", position: "中排", job: "輸出", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-            { name: "佩佩", personality: "冷靜", race: "魔女", position: "前排", job: "肉盾", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] },
-            { name: "希拉", personality: "冷靜", race: "魔靈", position: "後排", job: "輸出", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-            { name: "皮可菈", personality: "冷靜", race: "魔女", position: "後排", job: "輔助", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-            { name: "艾蜜莉雅", personality: "冷靜", race: "精靈", position: "後排", job: "輔助", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-            { name: "芙莉可", personality: "冷靜", race: "魔女", position: "中排", job: "輸出", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-            { name: "綾", personality: "冷靜", race: "魔女", position: "中排", job: "輸出", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-            { name: "帕特拉", personality: "冷靜", race: "妖精", position: "前排", job: "輸出", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-            { name: "梅露娜", personality: "冷靜", race: "魔靈", position: "後排", job: "輔助", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-            { name: "傑德", personality: "冷靜", race: "龍族", position: "中排", job: "輸出", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-            { name: "艾斯皮", personality: "冷靜", race: "幽靈", position: "中排", job: "輔助", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] },
-            { name: "雷吉", personality: "冷靜", race: "魔靈", position: "後排", job: "輸出", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-            { name: "瑪約", personality: "狂亂", race: "妖精", position: "後排", job: "輸出", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-            { name: "莉茲", personality: "狂亂", race: "龍族", position: "前排", job: "輸出", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-            { name: "謝蒂", personality: "狂亂", race: "幽靈", position: "前排", job: "輸出", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-            { name: "庫洛艾", personality: "狂亂", race: "妖精", position: "前排", job: "肉盾", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-            { name: "愛麗絲", personality: "狂亂", race: "幽靈", position: "中排", job: "輸出", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-            { name: "蒂亞娜", personality: "狂亂", race: "獸人", position: "中排", job: "輔助", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["血量", "爆擊", "爆抗"] },
-            { name: "貝麗塔", personality: "狂亂", race: "魔女", position: "後排", job: "輸出", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-            { name: "希瑟圖", personality: "狂亂", race: "龍族", position: "中排", job: "輸出", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["爆擊", "防禦", "血量", "爆抗"] },
-            { name: "大師2號", personality: "狂亂", race: "精靈", position: "前排", job: "肉盾", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-            { name: "梅森", personality: "狂亂", race: "幽靈", position: "後排", job: "輸出", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] },
-            { name: "伊弗利特", personality: "狂亂", race: "魔靈", position: "前排", job: "輸出", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-            { name: "劉美美", personality: "狂亂", race: "獸人", position: "後排", job: "輸出", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-            { name: "錫安", personality: "憂鬱", race: "幽靈", position: "後排", job: "輸出", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-            { name: "基狄恩", personality: "憂鬱", race: "龍族", position: "前排", job: "輸出", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-            { name: "布蘭切", personality: "憂鬱", race: "魔靈", position: "中排", job: "輸出", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-            { name: "琳", personality: "憂鬱", race: "幽靈", position: "前排", job: "輸出", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] },
-            { name: "優米", personality: "憂鬱", race: "???", position: "中排", job: "輔助", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-            { name: "希爾德", personality: "憂鬱", race: "精靈", position: "中排", job: "輔助", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-            { name: "柯米", personality: "憂鬱", race: "獸人", position: "前排", job: "肉盾", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-            { name: "珀榭", personality: "憂鬱", race: "魔女", position: "後排", job: "輔助", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-            { name: "艾舒爾", personality: "憂鬱", race: "妖精", position: "後排", job: "輸出", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] },
-            { name: "斯諾奇", personality: "憂鬱", race: "魔女", position: "前排", job: "肉盾", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-            { name: "貝魯", personality: "憂鬱", race: "幽靈", position: "中排", job: "輸出", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-            { name: "佩斯塔", personality: "憂鬱", race: "精靈", position: "前排", job: "輔助", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-            { name: "萊薇", personality: "憂鬱", race: "魔女", position: "中排", job: "輸出", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] },
-            { name: "喬菲", personality: "憂鬱", race: "獸人", position: "中排", job: "輸出", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] }
-        ];
 
         const LAYER_RULES = {
             1: { name: "🥇 第一層", crayon: 2, bonus: 3 },
