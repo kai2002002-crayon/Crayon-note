@@ -97,7 +97,18 @@
         .swap-avatars .avatar-alt {
             opacity: 1;
         }
-
+        /* 針對小圖示與蠟筆按鈕的懸停微放大特效 */
+        .hover-scale {
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            z-index: 1;
+        }
+        @media (hover: hover) and (pointer: fine) {
+            .hover-scale:hover {
+                transform: scale(1.15); /* 放大 15% 恰到好處，既有動感又不會破版 */
+                z-index: 10; /* 確保放大的元素會蓋在別人上面 */
+            }
+        }
         /* ==============================================================
             💡 跑馬燈特效 (針對過長名稱優化)
             ============================================================== */
@@ -1178,7 +1189,7 @@
                             </div>
                             
                             <div class="flex items-center gap-1.5 pt-1 border-t border-dashed border-gray-100 dark:border-gray-700">
-                                <div class="flex items-center">
+                                <div class="flex items-center hover-scale cursor-help">
                                     <img src="${pPath}" alt="${t(char.personality)}" title="${t('stats_personality')} ${t(char.personality)}"
                                          onerror="this.style.display='none'; document.getElementById('fall_p_${char.name}').classList.remove('hidden');"
                                          class="w-4 h-4 object-contain">
@@ -1186,7 +1197,7 @@
                                         ${t(char.personality)}
                                     </span>
                                 </div>
-                                <div class="flex items-center">
+                                <div class="flex items-center hover-scale cursor-help">
                                     <img src="${racePath}" alt="${t(char.race)}" title="${t('stats_race')} ${t(char.race)}"
                                          onerror="this.style.display='none'; document.getElementById('fall_r_${char.name}').classList.remove('hidden');"
                                          class="w-4 h-4 object-contain">
@@ -1194,7 +1205,7 @@
                                         ${t(char.race)}
                                     </span>
                                 </div>
-                                <div class="flex items-center">
+                                <div class="flex items-center hover-scale cursor-help">
                                     <img src="${posPath}" alt="${t(char.position)}" title="${t('stats_position')} ${t(char.position)}"
                                          onerror="this.style.display='none'; document.getElementById('fall_pos_${char.name}').classList.remove('hidden');"
                                          class="w-4 h-4 object-contain opacity-85">
@@ -1202,7 +1213,7 @@
                                         ${t(char.position)}
                                     </span>
                                 </div>
-                                <div class="flex items-center">
+                                <div class="flex items-center hover-scale cursor-help">
                                     <img src="${jobPath}" alt="${t(char.job)}" title="${t('stats_job')} ${t(char.job)}"
                                          onerror="this.style.display='none'; document.getElementById('fall_j_${char.name}').classList.remove('hidden');"
                                          class="w-4 h-4 object-contain opacity-85">
@@ -1242,7 +1253,7 @@
                             const btn = document.createElement('button');
                             btn.id = btnId;
                             const styleConfig = ATTR_STYLES[attr] || { unopened: "bg-gray-100 text-gray-700 border-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600", opened: "bg-gray-500 text-white font-bold" };
-                            btn.className = `char-btn px-1 py-1.5 sm:py-2 text-[11px] sm:text-xs text-center border rounded-lg cursor-pointer whitespace-nowrap ${isOpened ? styleConfig.opened : styleConfig.unopened}`;
+                            btn.className = `char-btn hover-scale px-1 py-1.5 sm:py-2 text-[11px] sm:text-xs text-center border rounded-lg cursor-pointer whitespace-nowrap ${isOpened ? styleConfig.opened : styleConfig.unopened}`;
                             btn.innerText = t(attr);
                             
                             btn.onclick = () => {
@@ -1251,7 +1262,7 @@
                                     savedStates['owned_' + char.name] = true;
                                     updateOwnershipUI(char.name);
                                 }
-                                btn.className = `char-btn px-1 py-1.5 sm:py-2 text-[11px] sm:text-xs text-center border rounded-lg cursor-pointer whitespace-nowrap ${savedStates[stateKey] ? styleConfig.opened : styleConfig.unopened}`;
+                                btn.className = `char-btn hover-scale px-1 py-1.5 sm:py-2 text-[11px] sm:text-xs text-center border rounded-lg cursor-pointer whitespace-nowrap ${savedStates[stateKey] ? styleConfig.opened : styleConfig.unopened}`;
                                 calculateStats();
                             };
                             btnGroup.appendChild(btn);
