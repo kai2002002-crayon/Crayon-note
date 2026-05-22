@@ -46,8 +46,7 @@
 
         .char-btn { transition: all 0.12s cubic-bezier(0.4, 0, 0.2, 1); user-select: none; touch-action: manipulation; }
         .char-btn:active { transform: scale(0.94); }
-        .char-avatar { transition: all 0.2s ease; cursor: pointer; }
-        .char-card-wrapper:hover .char-avatar { transform: scale(1.06); }
+        
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
@@ -58,8 +57,50 @@
         .unowned-avatar { opacity: 0.35; filter: grayscale(100%); }
 
         /* ==============================================================
-           💡 跑馬燈特效 (針對過長名稱優化)
-           ============================================================== */
+            🌟 角色圖片外層容器與自動輪播、放大特效
+            ============================================================== */
+        .char-avatar-container { 
+            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); 
+            cursor: pointer; 
+            position: relative; 
+            z-index: 1; 
+            transform-origin: center; 
+            overflow: hidden; 
+            -webkit-touch-callout: none; 
+            -webkit-user-select: none; 
+            user-select: none; 
+        }
+
+        /* 僅在支援滑鼠的設備上啟用懸停放大 */
+        @media (hover: hover) and (pointer: fine) {
+            .char-avatar-container:hover { 
+                transform: scale(1.5); 
+                z-index: 50; 
+                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3); 
+            }
+        }
+
+        .char-avatar-container img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-alt {
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .swap-avatars .avatar-alt {
+            opacity: 1;
+        }
+
+        /* ==============================================================
+            💡 跑馬燈特效 (針對過長名稱優化)
+            ============================================================== */
         .marquee-box {
             display: block; width: 120px; overflow: hidden;
             white-space: nowrap; text-overflow: ellipsis;
@@ -455,6 +496,8 @@
             "job_肉盾": "https://i.postimg.cc/zfGJDzDB/rou-dun.png",
             "job_輔助": "https://i.postimg.cc/MG3zvCXJ/fu-zhu.png",
             "job_輸出": "https://i.postimg.cc/3wf3dsWH/shu-chu.png",
+            
+            // 原始頭像
             "avatar_洛涅": "https://i.postimg.cc/nL4vx1LN/luo-nie.png",
             "avatar_薇薇": "https://i.postimg.cc/gkx8jpJD/wei-wei.png",
             "avatar_艾爾芬": "https://i.postimg.cc/T3WV7xM4/ai-er-fen.png",
@@ -523,7 +566,78 @@
             "avatar_雷吉": "https://i.postimg.cc/BZY2JbqX/lei-ji.png",
             "avatar_馬爾": "https://i.postimg.cc/d1nrktrD/ma-er.png",
             "avatar_泰達": "https://i.postimg.cc/vH2GKCw8/tai-da.png",
-            "avatar_寧琉": "https://i.postimg.cc/tgt95LY0/ning-liu.png"
+            "avatar_寧琉": "https://i.postimg.cc/tgt95LY0/ning-liu.png",
+            
+            // Hover動態輪播頭像
+            "hover_avatar_伊弗利特": "https://i.postimg.cc/zVmkt7qp/yi-fu-li-te2.png",
+            "hover_avatar_伊德": "https://i.postimg.cc/6yshjcB0/yi-de2.png",
+            "hover_avatar_佩佩": "https://i.postimg.cc/jLz4Gf5V/pei-pei2.png",
+            "hover_avatar_佩斯塔": "https://i.postimg.cc/HVQ9fMLf/pei-si-ta2.png",
+            "hover_avatar_修帕": "https://i.postimg.cc/XpwkT5JV/xiu-pa2.png",
+            "hover_avatar_傑德": "https://i.postimg.cc/qN4x07h8/jie-de2.png",
+            "hover_avatar_優米": "https://i.postimg.cc/fVCjbhY4/you-mi2.png",
+            "hover_avatar_劉美美": "https://i.postimg.cc/G4KJp1Gf/liu-mei-mei2.png",
+            "hover_avatar_加薇雅": "https://i.postimg.cc/7fvNs9q5/jia-wei-ya2.png",
+            "hover_avatar_卡洛特": "https://i.postimg.cc/w7Kkf29t/ka-luo-te2.png",
+            "hover_avatar_卡蓮": "https://i.postimg.cc/JGwQ6xRZ/ka-lian2.png",
+            "hover_avatar_喬菲": "https://i.postimg.cc/5XbS1tYB/qiao-fei2.png",
+            "hover_avatar_基狄恩": "https://i.postimg.cc/WdTwj4F3/ji-di-en2.png",
+            "hover_avatar_大師2號": "https://i.postimg.cc/hfF0ysKz/da-shi2hao2.png",
+            "hover_avatar_大木頭": "https://i.postimg.cc/svFJ6m3G/da-mu-tou2.png",
+            "hover_avatar_奈雅": "https://i.postimg.cc/hf91HmGk/nai-ya2.png",
+            "hover_avatar_奶油": "https://i.postimg.cc/XpMgHLnK/nai-you2.png",
+            "hover_avatar_寧琉": "https://i.postimg.cc/hXsbGqT2/ning-liu2.png",
+            "hover_avatar_布蘭切": "https://i.postimg.cc/QHLq4mjc/bu-lan-qie2.png",
+            "hover_avatar_希拉": "https://i.postimg.cc/VdjW3tND/xi-la2.png",
+            "hover_avatar_希爾德": "https://i.postimg.cc/tYhNL6gm/xi-er-de2.png",
+            "hover_avatar_希瑟圖": "https://i.postimg.cc/PPmQBDqV/xi-se-tu2.png",
+            "hover_avatar_希菲爾": "https://i.postimg.cc/svp4tW26/xi-fei-er2.png",
+            "hover_avatar_帕特拉": "https://i.postimg.cc/56wSZz0J/pa-te-la2.png",
+            "hover_avatar_庫洛艾": "https://i.postimg.cc/RW4L906z/ku-luo-ai2.png",
+            "hover_avatar_康娜": "https://i.postimg.cc/87NmDCJj/kang-na2.png",
+            "hover_avatar_愛麗絲": "https://i.postimg.cc/Snd7KpC6/ai-li-si2.png",
+            "hover_avatar_斑尼": "https://i.postimg.cc/jDcQjrPw/ban-ni2.png",
+            "hover_avatar_斯皮奇": "https://i.postimg.cc/zy7Sf1KR/si-pi-qi2.png",
+            "hover_avatar_斯諾奇": "https://i.postimg.cc/RWdQ0zKJ/si-nuo-qi2.png",
+            "hover_avatar_柯米": "https://i.postimg.cc/N51kWXMQ/ke-mi2.png",
+            "hover_avatar_桃桃": "https://i.postimg.cc/cv0BZJgS/tao-tao2.png",
+            "hover_avatar_梅森": "https://i.postimg.cc/QFhJsM9F/mei-sen2.png",
+            "hover_avatar_梅露娜": "https://i.postimg.cc/LJ23RsY1/mei-lu-na2.png",
+            "hover_avatar_泰達": "https://i.postimg.cc/18srPznP/tai-da2.png",
+            "hover_avatar_洛涅": "https://i.postimg.cc/N51kWXMj/luo-nie2.png",
+            "hover_avatar_海莉": "https://i.postimg.cc/MnqmxGMz/hai-li2.png",
+            "hover_avatar_珀榭": "https://i.postimg.cc/TprJZbwP/po-xie2.png",
+            "hover_avatar_琳": "https://i.postimg.cc/xX5ydSMH/lin2.png",
+            "hover_avatar_瑟琳娜": "https://i.postimg.cc/hXsbGqT8/se-lin-na2.png",
+            "hover_avatar_瑪約": "https://i.postimg.cc/w12cBdL4/ma-yue2.png",
+            "hover_avatar_瑪麗": "https://i.postimg.cc/pmCYdtz7/ma-li2.png",
+            "hover_avatar_皮可菈": "https://i.postimg.cc/tY0zSk9N/pi-ke-la2.png",
+            "hover_avatar_盧波": "https://i.postimg.cc/zy7Sf1K9/lu-bo2.png",
+            "hover_avatar_米雪": "https://i.postimg.cc/zVmkt7qd/mi-xue2.png",
+            "hover_avatar_綾": "https://i.postimg.cc/68cLQNn1/ling2.png",
+            "hover_avatar_羽伊": "https://i.postimg.cc/Czy4P7wP/yu-yi2.png",
+            "hover_avatar_艾斯皮": "https://i.postimg.cc/nC81R2nw/ai-si-pi2.png",
+            "hover_avatar_艾爾芬": "https://i.postimg.cc/rKSNv4pN/ai-er-fen2.png",
+            "hover_avatar_艾琳娜": "https://i.postimg.cc/BXWCYpJV/ai-lin-na2.png",
+            "hover_avatar_艾皮卡": "https://i.postimg.cc/rK69njqZ/ai-pi-ka2.png",
+            "hover_avatar_艾舒爾": "https://i.postimg.cc/SJWfw9KG/ai-shu-er2.png",
+            "hover_avatar_艾蜜莉雅": "https://i.postimg.cc/ZCrx1Nqw/ai-mi-li-ya2.png",
+            "hover_avatar_芙莉可": "https://i.postimg.cc/crQBV3HS/fu-li-ke2.png",
+            "hover_avatar_茱蜜": "https://i.postimg.cc/nXpGZLjH/zhu-mi2.png",
+            "hover_avatar_莉茲": "https://i.postimg.cc/yDsyBNgg/li-zi2.png",
+            "hover_avatar_莎莉": "https://i.postimg.cc/v4btMmg9/sha-li2.png",
+            "hover_avatar_萊薇": "https://i.postimg.cc/K1frYyBB/lai-wei2.png",
+            "hover_avatar_蒂亞娜": "https://i.postimg.cc/21GF5fhF/di-ya-na2.png",
+            "hover_avatar_薇薇": "https://i.postimg.cc/w12cBdD8/wei-wei2.png",
+            "hover_avatar_謝蒂": "https://i.postimg.cc/McG0Mrm9/xie-di2.png",
+            "hover_avatar_貝魯": "https://i.postimg.cc/3dgFPGwc/bei-lu2.png",
+            "hover_avatar_貝麗塔": "https://i.postimg.cc/QHpJR7Mv/bei-li-ta2.png",
+            "hover_avatar_路德": "https://i.postimg.cc/hXsbGqTr/lu-de2.png",
+            "hover_avatar_路易": "https://i.postimg.cc/TK0qPXgc/lu-yi2.png",
+            "hover_avatar_錫安": "https://i.postimg.cc/sMm92R7k/xi-an2.png",
+            "hover_avatar_阿萊特": "https://i.postimg.cc/crQBV3HZ/a-lai-te2.png",
+            "hover_avatar_雷吉": "https://i.postimg.cc/Wd864PgS/lei-ji2.png",
+            "hover_avatar_馬爾": "https://i.postimg.cc/pmRJxdhd/ma-er2.png"
         };
 
         const INITIAL_DATA = [
@@ -676,13 +790,17 @@
             calculateStats();
         }
 
+        // 修改 OwnershipUI 來對應新的 char-avatar-container
         function updateOwnershipUI(charName) {
-            const img = document.getElementById(`avatar_img_${charName}`);
-            if (img) {
+            const container = document.getElementById(`avatar_container_${charName}`);
+            const fallAvatar = document.getElementById(`fall_av_${charName}`);
+            if (container) {
                 if (savedStates['owned_' + charName]) {
-                    img.classList.remove('unowned-avatar');
+                    container.classList.remove('unowned-avatar');
+                    if (fallAvatar) fallAvatar.classList.remove('unowned-avatar');
                 } else {
-                    img.classList.add('unowned-avatar');
+                    container.classList.add('unowned-avatar');
+                    if (fallAvatar) fallAvatar.classList.add('unowned-avatar');
                 }
             }
         }
@@ -1020,6 +1138,7 @@
                     charCard.className = "char-card-wrapper bg-white/50 dark:bg-gray-750/50 p-3 sm:p-4 rounded-xl border border-gray-200/60 dark:border-gray-600 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-4 transition-all duration-200";
 
                     const avatarPath = IMAGE_MAP[`avatar_${char.name}`] || "";
+                    const hoverPath = IMAGE_MAP[`hover_avatar_${char.name}`] || avatarPath;
                     const pPath = IMAGE_MAP[`personality_${char.personality}`] || "";
                     
                     let raceIconName = char.race;
@@ -1035,16 +1154,20 @@
                     const nameCol = document.createElement('div');
                     nameCol.className = "flex flex-row items-center justify-start gap-3 min-w-[210px] w-full md:w-auto border-b md:border-b-0 pb-2 md:pb-0 border-gray-200/50 dark:border-gray-700";
                     
-                    // 🚨 將第一行的名字分離，第二行放置四個圖示，並為名字加入 CSS Marquee 特效
+                    // 👉 這裡置入了包含雙圖片的「自動漸入漸出輪播」與「懸停放大」結構
                     nameCol.innerHTML = `
                         <div class="relative shrink-0 w-12 h-12" onclick="toggleOwnership('${char.name}')">
-                            <img id="avatar_img_${char.name}" src="${avatarPath}" alt="${t(char.name)}" 
-                                 onerror="this.style.display='none'; document.getElementById('fall_av_${char.name}').classList.remove('hidden');"
-                                 class="char-avatar w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-inner object-cover bg-white ${avatarClass}">
                             
-                            <div id="fall_av_${char.name}" class="hidden char-avatar w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-sm flex items-center justify-center font-bold text-amber-900 bg-gradient-to-br from-amber-100 to-yellow-200 text-lg ${avatarClass}">
-                                ${t(char.name).charAt(0)}
+                            <div id="avatar_container_${char.name}" class="char-avatar-container w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-inner bg-white ${avatarClass}">
+                                <img src="${avatarPath}" alt="${t(char.name)}" 
+                                     onerror="this.style.display='none'; document.getElementById('fall_av_${char.name}').classList.remove('hidden');">
+                                <img src="${hoverPath}" class="avatar-alt" alt="${t(char.name)}" 
+                                     onerror="this.style.display='none';">
                             </div>
+                            
+                            <div id="fall_av_${char.name}" class="hidden char-avatar-container w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-sm flex items-center justify-center font-bold text-amber-900 bg-gradient-to-br from-amber-100 to-yellow-200 text-lg ${avatarClass}">
+                                ${t(char.name).charAt(0)}
+            </div>
                         </div>
 
                         <div class="flex flex-col gap-0.5 w-full overflow-hidden">
@@ -1277,6 +1400,14 @@
         } catch (e) {
             console.error("Firebase 初始化被阻擋:", e);
         }
+
+        // ==========================================
+        // 🌟 自動輪播定時器 (每 3 秒漸變切換)
+        // ==========================================
+        setInterval(() => {
+            document.body.classList.toggle('swap-avatars');
+        }, 3000);
+
     </script>
 
     <div class="social-fixed group">
