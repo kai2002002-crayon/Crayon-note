@@ -108,7 +108,7 @@
         .char-card-wrapper:hover .marquee-box { text-overflow: clip; }
         .char-card-wrapper:hover .marquee-content {
             display: inline-block;
-            animation: text-marquee 3.5s linear infinite alternate;
+            
         }
         @keyframes text-marquee {
             0%, 20% { transform: translateX(0); }
@@ -1136,7 +1136,9 @@
                     const charCard = document.createElement('div');
                     charCard.id = `char_card_${char.name}`;
                     charCard.className = "char-card-wrapper bg-white/50 dark:bg-gray-750/50 p-3 sm:p-4 rounded-xl border border-gray-200/60 dark:border-gray-600 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-4 transition-all duration-200";
-
+                    charCard.setAttribute('onmouseenter', 'checkMarquee(this, true)');
+                    charCard.setAttribute('onmouseleave', 'checkMarquee(this, false)');
+                    
                     const avatarPath = IMAGE_MAP[`avatar_${char.name}`] || "";
                     const hoverPath = IMAGE_MAP[`hover_avatar_${char.name}`] || avatarPath;
                     const pPath = IMAGE_MAP[`personality_${char.personality}`] || "";
@@ -1407,7 +1409,21 @@
         setInterval(() => {
             document.body.classList.toggle('swap-avatars');
         }, 3000);
-
+        // ==========================================
+        // 🌟 跑馬燈智慧判斷 (字數過長才滾動)
+        // ==========================================
+        function checkMarquee(card, isHover) {
+            const box = card.querySelector('.marquee-box');
+            const content = card.querySelector('.marquee-content');
+            if (box && content) {
+                // 如果是滑鼠移入，且「文字實際寬度 (scrollWidth)」大於「容器寬度 (clientWidth)」，才掛上動畫
+                if (isHover && box.scrollWidth > box.clientWidth) {
+                    content.style.animation = 'text-marquee 3.5s linear infinite alternate';
+                } else {
+                    content.style.animation = 'none';
+                }
+            }
+        }
     </script>
 
     <div class="social-fixed group">
