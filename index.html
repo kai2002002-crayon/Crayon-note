@@ -17,7 +17,8 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
+    <link rel="stylesheet" href="https://unpkg.com/@esotericsoftware/spine-player@4.1/dist/spine-player.css">
+    <script src="https://unpkg.com/@esotericsoftware/spine-player@4.1/dist/iife/spine-player.js"></script>
     <style>
         :root {
             --user-bg-image: url('https://i.postimg.cc/fTJ36ZFT/CG-Schedule-Rim.png'); 
@@ -129,6 +130,32 @@
         .social-fixed { position: fixed; bottom: 20px; right: 20px; z-index: 100; }
         .social-menu { display: none; margin-bottom: 8px; flex-direction: column; gap: 8px; }
         .social-fixed:hover .social-menu { display: flex; }
+        /* ==============================================================
+            🌟 看板娘 Rim 專屬容器
+            ============================================================== */
+        #rim-live-container {
+            position: fixed !important;
+            bottom: 20px !important;
+            left: 20px !important;
+            z-index: 2147483647 !important; /* 強制最高層級 */
+            pointer-events: none; /* 讓滑鼠可以穿透看板娘點擊後面的按鈕 */
+        }
+
+        /* 電腦版/平板自動稍微放大 */
+        @media (min-width: 768px) {
+            #rim-live-container {
+                bottom: 20px;
+                left: 20px;
+                width: 150px; 
+                height: 150px;
+            }
+        }
+        
+        #rim-live-container canvas {
+            width: 100% !important;
+            height: 100% !important;
+            display: block !important;
+        }
     </style>
 </head>
 <body class="p-3 sm:p-6 md:p-8 text-gray-800 dark:text-gray-100">
@@ -296,11 +323,11 @@
         <main id="matrixContainer" class="space-y-6 sm:space-y-8"></main>
 
         <footer class="mt-12 mb-6 text-center lg:text-left border-t border-gray-200 dark:border-gray-700 pt-6">
-        <div class="flex flex-col gap-1 text-[11px] text-gray-500 dark:text-gray-400 opacity-80">
-            <p data-lang-key="footer_author">📝 記事本製作者: 冷笑話幽靈</p>
-            <p data-lang-key="footer_copyright">© 遊戲版權: EpidGames & Bilibili</p>
-        </div>
-    </footer>
+            <div class="flex flex-col gap-1 text-[11px] text-gray-500 dark:text-gray-400 opacity-80">
+                <p data-lang-key="footer_author">📝 記事本製作者: 冷笑話幽靈</p>
+                <p data-lang-key="footer_copyright">© 遊戲版權: EpidGames & Bilibili</p>
+            </div>
+        </footer>
         
     </div>
 
@@ -371,7 +398,7 @@
                 "攻擊": "攻撃", "防禦": "防御", "血量": "HP", "爆擊": "会心", "爆抗": "会心抵抗", "全部": "すべて",
                 "洛涅": "ローネ", "薇薇": "ヴィヴィ", "艾爾芬": "エルフィン", "錫安": "シオン・ザ・DB", "伊弗利特": "イフリート", "伊德": "イード", "佩佩": "ベルベット", "佩斯塔": "フェスタ",
                 "修帕": "シュパン", "傑德": "ジェイド", "優米": "ヨミ", "劉美美": "ユミミ", "加薇雅": "ガヴィア", "卡洛特": "キャロット", "卡蓮": "カレン", "喬菲": "チョッピー",
-                "基狄恩": "ギデオン", "大師2號": "マエストロMK2", "大木頭": "ビッグウッド", "奈雅": "ナイア", "奶油": "バター", "布蘭切": "ブランセ", "希拉": "シーラ", "希爾德": "ヒルデ",
+                "基狄恩": "ギデオン", "大師2號": "マエストロMK2", "大木頭": "ビッグウッド", "奈雅": "ナイア", "奶油": "バター", "布蘭切": "ブランセ", "希拉": "シーラ", "ヒルデ": "ヒルデ",
                 "希瑟圖": "シスト", "希菲爾": "シルフィール", "帕特拉": "パトラ", "庫洛艾": "クロエ", "康娜": "カンナ", "愛麗絲": "アリス", "斑尼": "ベニー", "斯皮奇": "スピッキー",
                 "斯諾奇": "スノキー", "柯米": "コミー", "桃桃": "モモ", "梅森": "メゾン", "梅露娜": "メロナ", "海莉": "ヘイリー", "珀榭": "ポーシャー", "琳": "リム",
                 "瑟琳娜": "セリーネ", "瑪約": "マヨ", "瑪麗": "マリー", "皮可菈": "ピコラ", "盧波": "ルポ", "米雪": "ミンス", "綾": "アヤ", "羽伊": "ウイ",
@@ -615,7 +642,7 @@
             "hover_avatar_梅森": "https://i.postimg.cc/QFhJsM9F/mei-sen2.png",
             "hover_avatar_梅露娜": "https://i.postimg.cc/LJ23RsY1/mei-lu-na2.png",
             "hover_avatar_泰達": "https://i.postimg.cc/18srPznP/tai-da2.png",
-            "hover_avatar_洛涅": "https://i.postimg.cc/N51kWXMj/luo-nie2.png",
+            "hover_avatar_洛涅": "https://i.postimg.cc/N51kWXMj/lu-nie2.png",
             "hover_avatar_海莉": "https://i.postimg.cc/MnqmxGMz/hai-li2.png",
             "hover_avatar_珀榭": "https://i.postimg.cc/TprJZbwP/po-xie2.png",
             "hover_avatar_琳": "https://i.postimg.cc/xX5ydSMH/lin2.png",
@@ -1167,7 +1194,6 @@
                     const nameCol = document.createElement('div');
                     nameCol.className = "flex flex-row items-center justify-start gap-3 min-w-[210px] w-full md:w-auto border-b md:border-b-0 pb-2 md:pb-0 border-gray-200/50 dark:border-gray-700";
                     
-                    // 👉 這裡置入了包含雙圖片的「自動漸入漸出輪播」與「懸停放大」結構
                     nameCol.innerHTML = `
                         <div class="relative shrink-0 w-12 h-12" onclick="toggleOwnership('${char.name}')">
                             
@@ -1180,7 +1206,7 @@
                             
                             <div id="fall_av_${char.name}" class="hidden char-avatar-container w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-sm flex items-center justify-center font-bold text-amber-900 bg-gradient-to-br from-amber-100 to-yellow-200 text-lg ${avatarClass}">
                                 ${t(char.name).charAt(0)}
-            </div>
+                            </div>
                         </div>
 
                         <div class="flex flex-col gap-0.5 w-full overflow-hidden">
@@ -1443,6 +1469,55 @@
         </div>
         <button class="bg-black text-white w-10 h-10 rounded-full shadow-xl flex items-center justify-center font-bold text-sm">X</button>
     </div>
-    
+    <div id="rim-live-container"></div>
+
+<script>
+        window.addEventListener('load', function() {
+            if (typeof spine === 'undefined') {
+                console.error("Spine library 未載入");
+                return;
+            }
+
+            new spine.SpinePlayer("rim-live-container", {
+                skelUrl: "Rim.skel.bytes",
+                atlasUrl: "Rim.atlas.txt",
+                alpha: true,                 // 允許背景透明
+                backgroundColor: "#00000000",
+                showControls: false,         // 隱藏下方控制列
+                premultipliedAlpha: false,
+                skin: "Normal",
+                animation: "Happy_4",        // 初始預設動畫
+                viewport: { 
+                    transitionTime: 0        // 關閉相機過渡，防止切換動畫時畫面亂跳
+                },
+        
+                success: function (player) {
+                    console.log("Spine 載入成功，準備輪播動畫！");
+                    
+                    const animations = ["Happy_4", "Pat_End", "Tickle_Idle_2"];
+                    let currentIndex = 1; // 因為初始化已經播了第一個，從第二個開始輪替
+
+                    function playNextAnimation() {
+                        const nextAnim = animations[currentIndex % animations.length];
+                        
+                        // 1. 先將骨架強制歸零回到原點，防止帶有「位移」的動畫讓角色默默走出畫面外
+                        player.skeleton.setToSetupPose(); 
+                        
+                        // 2. 單純下達切換動畫的指令，剩下的更新與渲染交給 Player 內部引擎自己處理
+                        player.animationState.setAnimation(0, nextAnim, true);
+                        
+                        currentIndex++;
+                    }
+            
+                   // 每 5 秒無縫切換一次動畫
+                   setInterval(playNextAnimation, 5000);
+                }, 
+        
+                error: function (player, reason) {
+                    console.error("Spine 渲染錯誤:", reason);
+                } 
+            }); 
+        });
+    </script>
 </body>
 </html>
