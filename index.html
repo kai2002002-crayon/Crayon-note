@@ -133,10 +133,13 @@
         /* ==============================================================
             🌟 看板娘 Rim 專屬容器
             ============================================================== */
+        /* 手機版預設尺寸 (縮小 50%，並固定在左下角) */
         #rim-live-container {
             position: fixed !important;
-            bottom: 20px !important;
-            left: 20px !important;
+            bottom: 10px !important;  /* 手機版離底部近一點 */
+            left: 10px !important;    /* 手機版離左側近一點 */
+            width: 75px !important;   /* 寬度縮小 50% */
+            height: 75px !important;  /* 高度縮小 50% */
             z-index: 2147483647 !important; /* 強制最高層級 */
             pointer-events: none; /* 讓滑鼠可以穿透看板娘點擊後面的按鈕 */
         }
@@ -144,10 +147,10 @@
         /* 電腦版/平板自動稍微放大 */
         @media (min-width: 768px) {
             #rim-live-container {
-                bottom: 20px;
-                left: 20px;
-                width: 150px; 
-                height: 150px;
+                bottom: 20px !important;
+                left: 20px !important;
+                width: 150px !important; 
+                height: 150px !important;
             }
         }
         
