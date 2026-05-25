@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>角色詳細資料</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <script src="data.js"></script>
+    <script src="skill.js"></script>
+    
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #fcf8f2; }
+    </style>
+</head>
+<body class="p-4 sm:p-8 text-gray-800">
+
+    <div id="mainContainer" class="max-w-3xl mx-auto bg-white/90 backdrop-blur-md p-6 rounded-2xl shadow-md border-4 border-amber-400">
+        
+        <button onclick="window.close()" class="mb-4 px-4 py-2 bg-amber-500 text-white text-xs font-bold rounded-xl shadow hover:bg-amber-600 transition">
+            ⬅️ 關閉此頁
+        </button>
+
+        <div class="flex flex-col sm:flex-row items-center gap-6 border-b-2 border-amber-200 pb-6 mb-6">
+            <div id="charAvatar" class="w-24 h-24 rounded-2xl border-4 border-amber-500 bg-white overflow-hidden shadow-md flex items-center justify-center text-3xl font-bold text-amber-900 flex-shrink-0">
+            </div>
+            <div class="text-center sm:text-left w-full">
+                <h1 id="charName" class="text-3xl font-extrabold text-amber-950 mb-4 tracking-tight">載入中...</h1>
+                
+                <div class="flex flex-wrap justify-center sm:justify-start gap-2 text-xs font-bold">
+                    <span id="charPersonality" class="px-3 py-1 bg-green-100 text-green-700 rounded-lg shadow-sm border border-green-200 flex items-center"></span>
+                    <span id="charRace" class="px-3 py-1 bg-blue-100 text-blue-700 rounded-lg shadow-sm border border-blue-200 flex items-center"></span>
+                    <span id="charPosition" class="px-3 py-1 bg-orange-100 text-orange-700 rounded-lg shadow-sm border border-orange-200 flex items-center"></span>
+                    <span id="charJob" class="px-3 py-1 bg-purple-100 text-purple-700 rounded-lg shadow-sm border border-purple-200 flex items-center"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-8">
+            <h2 class="text-lg font-bold text-amber-900 mb-3 flex items-center gap-1">🖍️ 金蠟筆分佈詳情</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-amber-50/60 border border-amber-200 p-3 rounded-xl">
+                    <h3 class="font-bold text-amber-800 text-sm mb-2 border-b border-amber-200 pb-1">🥇 第一層屬性</h3>
+                    <ul id="layer1List" class="space-y-1 text-xs font-medium text-gray-700 list-disc list-inside"></ul>
+                </div>
+                <div class="bg-orange-50/60 border border-orange-200 p-3 rounded-xl">
+                    <h3 class="font-bold text-orange-800 text-sm mb-2 border-b border-orange-200 pb-1">🥈 第二層屬性</h3>
+                    <ul id="layer2List" class="space-y-1 text-xs font-medium text-gray-700 list-disc list-inside"></ul>
+                </div>
+                <div class="bg-red-50/60 border border-red-200 p-3 rounded-xl">
+                    <h3 class="font-bold text-red-800 text-sm mb-2 border-b border-red-200 pb-1">🥉 第三層屬性</h3>
+                    <ul id="layer3List" class="space-y-1 text-xs font-medium text-gray-700 list-disc list-inside"></ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-6 pt-6 border-t-2 border-amber-200">
+            <h2 class="text-xl font-black text-amber-950 mb-4 flex items-center gap-1.5">⚔️ 技能資料</h2>
+            <div id="skillsContainer" class="space-y-5">
+                <div class="text-sm text-gray-500">技能載入中...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const IMAGE_MAP = {
+            "avatar_洛涅": "https://i.postimg.cc/nL4vx1LN/luo-nie.png", "avatar_薇薇": "https://i.postimg.cc/gkx8jpJD/wei-wei.png", "avatar_艾爾芬": "https://i.postimg.cc/T3WV7xM4/ai-er-fen.png", "avatar_錫安": "https://i.postimg.cc/7PmnbXnR/x-wu-xi-an-wux.png", "avatar_伊弗利特": "https://i.postimg.cc/yYxXR9f9/yi-fu-li-te.png", "avatar_伊德": "https://i.postimg.cc/Hsn4M5SQ/yi-de.png", "avatar_佩佩": "https://i.postimg.cc/5tdwDrfF/pei-pei.png", "avatar_佩斯塔": "https://i.postimg.cc/cJyQPzdQ/pei-si-ta.png", "avatar_修帕": "https://i.postimg.cc/Pxd158pn/xiu-pa.png", "avatar_傑德": "https://i.postimg.cc/C51DjT4L/jie-de.png", "avatar_優米": "https://i.postimg.cc/02zDjvQd/you-mi.png", "avatar_劉美美": "https://i.postimg.cc/m2PCk4DC/liu-mei-mei.png", "avatar_加薇雅": "https://i.postimg.cc/T2CJhQJF/jia-wei-ya.png", "avatar_卡洛特": "https://i.postimg.cc/X7qc5F26/ka-luo-te.png", "avatar_卡蓮": "https://i.postimg.cc/gkjqhRMW/ka-lian.png", "avatar_喬菲": "https://i.postimg.cc/4yScPL8Z/qiao-fei.png", "avatar_基狄恩": "https://i.postimg.cc/RFGK6VK3/ji-di-en.png", "avatar_大師2號": "https://i.postimg.cc/7PmnbXnt/da-shi2hao.png", "avatar_大木頭": "https://i.postimg.cc/zD0F3pFP/da-mu-tou.png", "avatar_奈雅": "https://i.postimg.cc/3w5gzq3n/nai-ya.png", "avatar_奶油": "https://i.postimg.cc/4Nybct8X/nai-you.png", "avatar_布蘭切": "https://i.postimg.cc/qBjxgQGM/bu-lan-qie.png", "avatar_希拉": "https://i.postimg.cc/pLnfGvMM/xi-la.png", "avatar_希爾德": "https://i.postimg.cc/JzBN68Cr/xi-er-de.png", "avatar_希瑟圖": "https://i.postimg.cc/y8SmQKC8/xi-se-tu.png", "avatar_希菲爾": "https://i.postimg.cc/XYyfHW64/xi-fei-er.png", "avatar_帕特拉": "https://i.postimg.cc/YS617xSf/pa-te-la.png", "avatar_庫洛艾": "https://i.postimg.cc/sX35gZQr/ku-luo-ai.png", "avatar_康娜": "https://i.postimg.cc/PxKYprYY/kang-na.png", "avatar_愛麗絲": "https://i.postimg.cc/nrPm2RdK/ai-li-si.png", "avatar_斑尼": "https://i.postimg.cc/HnhMzZS1/ban-ni.png", "avatar_斯皮奇": "https://i.postimg.cc/2yKWGcHq/si-pi-qi.png", "avatar_斯諾奇": "https://i.postimg.cc/gjThsSMh/si-nuo-qi.png", "avatar_柯米": "https://i.postimg.cc/25Q4Yx6Y/ke-mi.png", "avatar_桃桃": "https://i.postimg.cc/Ssmcxz2q/tao-tao.png", "avatar_梅森": "https://i.postimg.cc/qRQyhMy2/mei-sen.png", "avatar_梅露娜": "https://i.postimg.cc/zvBWnZF7/mei-lu-na.png", "avatar_海莉": "https://i.postimg.cc/3R32xD4k/hai-li.png", "avatar_珀榭": "https://i.postimg.cc/JnRjzByf/po-xie.png", "avatar_琳": "https://i.postimg.cc/VvVtgG7C/lin.png", "avatar_瑟琳娜": "https://i.postimg.cc/XNH9nqnP/se-lin-na.png", "avatar_瑪約": "https://i.postimg.cc/QxF1CDth/ma-yue.png", "avatar_瑪麗": "https://i.postimg.cc/Dfj1702m/ma-li.png", "avatar_皮可菈": "https://i.postimg.cc/SNR798ZM/pi-ke-la.png", "avatar_盧波": "https://i.postimg.cc/02zDjvQY/lu-bo.png", "avatar_米雪": "https://i.postimg.cc/qMFcxRYh/mi-xue.png", "avatar_綾": "https://i.postimg.cc/hPXTvnjd/ling.png", "avatar_羽伊": "https://i.postimg.cc/Fs6bVRqg/yu-yi.png", "avatar_艾斯皮": "https://i.postimg.cc/BQz5B6yg/ai-si-pi.png", "avatar_艾琳娜": "https://i.postimg.cc/ncWKGz5w/ai-lin-na.png", "avatar_艾皮卡": "https://i.postimg.cc/gk7yHJ5K/ai-pi-ka.png", "avatar_艾舒爾": "https://i.postimg.cc/hPY81j6F/ai-shu-er.png", "avatar_艾蜜莉雅": "https://i.postimg.cc/QdWQ4DG0/ai-mi-li-ya.png", "avatar_芙莉可": "https://i.postimg.cc/DzrqhczQ/fu-li-ke.png", "avatar_茱蜜": "https://i.postimg.cc/MTz1pjMv/zhu-mi.png", "avatar_莉茲": "https://i.postimg.cc/rsmWSXNg/li-zi.png", "avatar_莎莉": "https://i.postimg.cc/0jQmpRCq/sha-li.png", "avatar_萊薇": "https://i.postimg.cc/d3xC6HWT/lai-wei.png", "avatar_蒂亞娜": "https://i.postimg.cc/3rS23NKQ/di-ya-na.png", "avatar_謝蒂": "https://i.postimg.cc/YqTgmPGf/xie-di.png", "avatar_貝魯": "https://i.postimg.cc/DzkqRN7n/bei-lu.png", "avatar_貝麗塔": "https://i.postimg.cc/TPMrBsTy/bei-li-ta.png", "avatar_路德": "https://i.postimg.cc/NGJRQFgM/lu-de.png", "avatar_路易": "https://i.postimg.cc/KcqtmjZy/lu-yi.png", "avatar_阿萊特": "https://i.postimg.cc/hGL9n0G2/a-lai-te.png", "avatar_雷吉": "https://i.postimg.cc/BZY2JbqX/lei-ji.png", "avatar_馬爾": "https://i.postimg.cc/d1nrktrD/ma-er.png", "avatar_泰達": "https://i.postimg.cc/vH2GKCw8/tai-da.png", "avatar_寧琉": "https://i.postimg.cc/tgt95LY0/ning-liu.png"
+        };
+
+        const ICON_MAP = {
+            "personality_天真": "https://i.postimg.cc/J7ZWLD30/tian-zhen.png", "personality_活潑": "https://i.postimg.cc/4ykkcsGt/huo-po.png", "personality_冷靜": "https://i.postimg.cc/xjMS2JGd/leng-jing.png", "personality_狂亂": "https://i.postimg.cc/ryxLk0Gm/kuang-luan.png", "personality_憂鬱": "https://i.postimg.cc/g07PY3BR/you-yu.png",
+            "race_精靈": "https://i.postimg.cc/D4THRGwZ/jing-ling.png", "race_龍族": "https://i.postimg.cc/QK3wv7dB/long-zu.png", "race_妖精": "https://i.postimg.cc/SYh3H9xn/yao-jing.png", "race_魔靈": "https://i.postimg.cc/H89RmLrW/mo-ling.png", "race_獸人": "https://i.postimg.cc/sGrqbWgQ/shou-ren.png", "race_幽靈": "https://i.postimg.cc/tnjw8647/you-ling.png", "race_魔女": "https://i.postimg.cc/H8gRFMk8/mo-nu.png", "race_???": "https://i.postimg.cc/zHr64hGf/unknown.png",
+            "position_前排": "https://i.postimg.cc/VvBTbtDy/qian-pai.png", "position_中排": "https://i.postimg.cc/RZ08NNtT/zhong-pai.png", "position_後排": "https://i.postimg.cc/DwC9gqFk/hou-pai.png",
+            "job_肉盾": "https://i.postimg.cc/zfGJDzDB/rou-dun.png", "job_輔助": "https://i.postimg.cc/MG3zvCXJ/fu-zhu.png", "job_輸出": "https://i.postimg.cc/3wf3dsWH/shu-chu.png"
+        };
+
+        const SKILL_ICONS = {
+            "attack_物理": "https://i.postimg.cc/7Cng30rY/wu-li-gong-ji.png", "attack_魔法": "https://i.postimg.cc/Nyk16mvM/mo-fa-gong-ji.png",
+            "skill_normal_伊弗利特": "https://i.postimg.cc/cgDH2ngX/yi-fu-li-te3.png", "skill_normal_伊德": "https://i.postimg.cc/njdzgDj3/yi-de3.png", "skill_normal_佩佩": "https://i.postimg.cc/MMsTNQf6/pei-pei3.png", "skill_normal_佩斯塔": "https://i.postimg.cc/478dq9H4/pei-si-ta3.png", "skill_normal_修帕": "https://i.postimg.cc/2LV6DSnj/xiu-pa3.png", "skill_normal_傑德": "https://i.postimg.cc/1VftQ3DG/jie-de3.png", "skill_normal_優米": "https://i.postimg.cc/z3B3W04G/you-mi3.png", "skill_normal_劉美美": "https://i.postimg.cc/vDBD93CG/liu-mei-mei3.png", "skill_normal_加薇雅": "https://i.postimg.cc/CBM5cN1c/jia-wei-ya3.png", "skill_normal_卡洛特": "https://i.postimg.cc/mzZkmwDd/ka-luo-te3.png", "skill_normal_卡蓮": "https://i.postimg.cc/34LRVv4F/ka-lian3.png", "skill_normal_喬菲": "https://i.postimg.cc/4Hmdgxpz/qiao-fei3.png", "skill_normal_基狄恩": "https://i.postimg.cc/D48ZTw1S/ji-di-en3.png", "skill_normal_大師2號": "https://i.postimg.cc/mzZkmwDN/da-shi2hao3.png", "skill_normal_大木頭": "https://i.postimg.cc/sQfxTcXP/da-mu-tou3.png", "skill_normal_奈雅": "https://i.postimg.cc/Cnz1gxbT/nai-ya3.png", "skill_normal_奶油": "https://i.postimg.cc/ZBYnwcRQ/nai-you3.png", "skill_normal_寧琉": "https://i.postimg.cc/2363v2gm/ning-liu3.png", "skill_normal_布蘭切": "https://i.postimg.cc/vgPBkVgX/bu-lan-qie3.png", "skill_normal_希拉": "https://i.postimg.cc/wyWvZmyC/xi-la3.png", "skill_normal_希爾德": "https://i.postimg.cc/njdzgD9p/xi-er-de3.png", "skill_normal_希瑟圖": "https://i.postimg.cc/dkW1pyZv/xi-se-tu3.png", "skill_normal_希菲爾": "https://i.postimg.cc/XG2JmCBb/xi-fei-er3.png", "skill_normal_帕特拉": "https://i.postimg.cc/5Q60V28M/pa-te-la3.png", "skill_normal_庫洛艾": "https://i.postimg.cc/4Hmdgxpx/ku-luo-ai3.png", "skill_normal_康娜": "https://i.postimg.cc/kRB4mgWR/kang-na3.png", "skill_normal_愛麗絲": "https://i.postimg.cc/yWdW9vtG/ai-li-si3.png", "skill_normal_斑尼": "https://i.postimg.cc/BPX60n25/ban-ni3.png", "skill_normal_斯皮奇": "https://i.postimg.cc/PvPxj51Q/si-pi-qi3.png", "skill_normal_斯諾奇": "https://i.postimg.cc/s1X1Swq6/si-nuo-qi3.png", "skill_normal_柯米": "https://i.postimg.cc/SYJshxcy/ke-mi3.png", "skill_normal_桃桃": "https://i.postimg.cc/rRKmkw5m/tao-tao3.png", "skill_normal_梅森": "https://i.postimg.cc/V0d68kXb/mei-sen3.png", "skill_normal_梅露娜": "https://i.postimg.cc/XBpJbY9C/mei-lu-na3.png", "skill_normal_泰達": "https://i.postimg.cc/K3Rz28tj/tai-da3.png", "skill_normal_洛涅": "https://i.postimg.cc/ZvCRS56J/luo-nie3.png", "skill_normal_海莉": "https://i.postimg.cc/wR7vpjD3/hai-li3.png", "skill_normal_珀榭": "https://i.postimg.cc/PvPxj51X/po-xie3.png", "skill_normal_琳": "https://i.postimg.cc/dD1Dd4pN/lin3.png", "skill_normal_瑟琳娜": "https://i.postimg.cc/Bt6tDMky/se-lin-na3.png", "skill_normal_瑪約": "https://i.postimg.cc/LhXhfNGS/ma-yue3.png", "skill_normal_瑪麗": "https://i.postimg.cc/3WRWpnzJ/ma-li3.png", "skill_normal_皮可菈": "https://i.postimg.cc/WF93CkF7/pi-ke-la.png", "skill_normal_盧波": "https://i.postimg.cc/rzmzWQ7y/lu-bo3.png", "skill_normal_米雪": "https://i.postimg.cc/9RxMK7RN/mi-xue3.png", "skill_normal_綾": "https://i.postimg.cc/7b6b7mjH/ling3.png", "skill_normal_羽伊": "https://i.postimg.cc/BLh6kKLY/yu-yi3.png", "skill_normal_艾斯皮": "https://i.postimg.cc/62H3gv2m/ai-si-pi3.png", "skill_normal_艾爾芬": "https://i.postimg.cc/wyWvZmyS/ai-er-fen3.png", "skill_normal_艾琳娜": "https://i.postimg.cc/34LRVv4q/ai-lin-na3.png", "skill_normal_艾皮卡": "https://i.postimg.cc/HcSxRycv/ai-pi-ka3.png", "skill_normal_艾舒爾": "https://i.postimg.cc/WF93CkFx/ai-shu-er3.png", "skill_normal_艾蜜莉雅": "https://i.postimg.cc/0MtQFwK1/ai-mi-li-ya3.png", "skill_normal_芙莉可": "https://i.postimg.cc/5Q60V28V/fu-li-ke3.png", "skill_normal_茱蜜": "https://i.postimg.cc/H8VxgkbV/zhu-mi3.png", "skill_normal_莉茲": "https://i.postimg.cc/RJNFBZwf/li-zi3.png", "skill_normal_莎莉": "https://i.postimg.cc/Wqh3v100/sha-li3.png", "skill_normal_萊薇": "https://i.postimg.cc/8s5sWt90/lai-wei3.png", "skill_normal_蒂亞娜": "https://i.postimg.cc/dD1Dd4pg/di-ya-na3.png", "skill_normal_薇薇": "https://i.postimg.cc/DmZmsBRm/wei-wei3.png", "skill_normal_謝蒂": "https://i.postimg.cc/jC5CNZBL/xie-di3.png", "skill_normal_貝魯": "https://i.postimg.cc/7GB6d2J4/bei-lu3.png", "skill_normal_貝麗塔": "https://i.postimg.cc/DJCZHX47/bei-li-ta3.png", "skill_normal_路德": "https://i.postimg.cc/t7T7P28G/lu-de3.png", "skill_normal_路易": "https://i.postimg.cc/Yj9jgbZ5/lu-yi3.png", "skill_normal_錫安": "https://i.postimg.cc/14t46Jb8/xi-an3.png", "skill_normal_阿萊特": "https://i.postimg.cc/XBpJbY93/a-lai-te3.png", "skill_normal_雷吉": "https://i.postimg.cc/dD1Dd4gP/lei-ji3.png", "skill_normal_馬爾": "https://i.postimg.cc/fSJLNRY3/ma-er3.png",
+            "hover_avatar_伊弗利特": "https://i.postimg.cc/zVmkt7qp/yi-fu-li-te2.png", "hover_avatar_伊德": "https://i.postimg.cc/6yshjcB0/yi-de2.png", "hover_avatar_佩佩": "https://i.postimg.cc/jLz4Gf5V/pei-pei2.png", "hover_avatar_佩斯塔": "https://i.postimg.cc/HVQ9fMLf/pei-si-ta2.png", "hover_avatar_修帕": "https://i.postimg.cc/XpwkT5JV/xiu-pa2.png", "hover_avatar_傑德": "https://i.postimg.cc/qN4x07h8/jie-de2.png", "hover_avatar_優米": "https://i.postimg.cc/fVCjbhY4/you-mi2.png", "hover_avatar_劉美美": "https://i.postimg.cc/G4KJp1Gf/liu-mei-mei2.png", "hover_avatar_加薇雅": "https://i.postimg.cc/7fvNs9q5/jia-wei-ya2.png", "hover_avatar_卡洛特": "https://i.postimg.cc/w7Kkf29t/ka-luo-te2.png", "hover_avatar_卡蓮": "https://i.postimg.cc/JGwQ6xRZ/ka-lian2.png", "hover_avatar_喬菲": "https://i.postimg.cc/5XbS1tYB/qiao-fei2.png", "hover_avatar_基狄恩": "https://i.postimg.cc/WdTwj4F3/ji-di-en2.png", "hover_avatar_大師2號": "https://i.postimg.cc/hfF0ysKz/da-shi2hao2.png", "hover_avatar_大木頭": "https://i.postimg.cc/svFJ6m3G/da-mu-tou2.png", "hover_avatar_奈雅": "https://i.postimg.cc/hf91HmGk/nai-ya2.png", "hover_avatar_奶油": "https://i.postimg.cc/XpMgHLnK/nai-you2.png", "hover_avatar_寧琉": "https://i.postimg.cc/hXsbGqT2/ning-liu2.png", "hover_avatar_布蘭切": "https://i.postimg.cc/QHLq4mjc/bu-lan-qie2.png", "hover_avatar_希拉": "https://i.postimg.cc/VdjW3tND/xi-la2.png", "hover_avatar_希爾德": "https://i.postimg.cc/tYhNL6gm/xi-er-de2.png", "hover_avatar_希瑟圖": "https://i.postimg.cc/PPmQBDqV/xi-se-tu2.png", "hover_avatar_希菲爾": "https://i.postimg.cc/svp4tW26/xi-fei-er2.png", "hover_avatar_帕特拉": "https://i.postimg.cc/56wSZz0J/pa-te-la2.png", "hover_avatar_庫洛艾": "https://i.postimg.cc/RW4L906z/ku-luo-ai2.png", "hover_avatar_康娜": "https://i.postimg.cc/87NmDCJj/kang-na2.png", "hover_avatar_愛麗絲": "https://i.postimg.cc/Snd7KpC6/ai-li-si2.png", "hover_avatar_斑尼": "https://i.postimg.cc/jDcQjrPw/ban-ni2.png", "hover_avatar_斯皮奇": "https://i.postimg.cc/zy7Sf1KR/si-pi-qi2.png", "hover_avatar_斯諾奇": "https://i.postimg.cc/RWdQ0zKJ/si-nuo-qi2.png", "hover_avatar_柯米": "https://i.postimg.cc/N51kWXMQ/ke-mi2.png", "hover_avatar_桃桃": "https://i.postimg.cc/cv0BZJgS/tao-tao2.png", "hover_avatar_梅森": "https://i.postimg.cc/QFhJsM9F/mei-sen2.png", "hover_avatar_梅露娜": "https://i.postimg.cc/LJ23RsY1/mei-lu-na2.png", "hover_avatar_泰達": "https://i.postimg.cc/18srPznP/tai-da2.png", "hover_avatar_洛涅": "https://i.postimg.cc/N51kWXMj/lu-nie2.png", "hover_avatar_海莉": "https://i.postimg.cc/MnqmxGMz/hai-li2.png", "hover_avatar_珀榭": "https://i.postimg.cc/TprJZbwP/po-xie2.png", "hover_avatar_琳": "https://i.postimg.cc/xX5ydSMH/lin2.png", "hover_avatar_瑟琳娜": "https://i.postimg.cc/hXsbGqT8/se-lin-na2.png", "hover_avatar_瑪約": "https://i.postimg.cc/w12cBdL4/ma-yue2.png", "hover_avatar_瑪麗": "https://i.postimg.cc/pmCYdtz7/ma-li2.png", "hover_avatar_皮可菈": "https://i.postimg.cc/tY0zSk9N/pi-ke-la2.png", "hover_avatar_盧波": "https://i.postimg.cc/zy7Sf1K9/lu-bo2.png", "hover_avatar_米雪": "https://i.postimg.cc/zVmkt7qd/mi-xue2.png", "hover_avatar_綾": "https://i.postimg.cc/68cLQNn1/ling2.png", "hover_avatar_羽伊": "https://i.postimg.cc/Czy4P7wP/yu-yi2.png", "hover_avatar_艾斯皮": "https://i.postimg.cc/nC81R2nw/ai-si-pi2.png", "hover_avatar_艾爾芬": "https://i.postimg.cc/rKSNv4pN/ai-er-fen2.png", "hover_avatar_艾琳娜": "https://i.postimg.cc/BXWCYpJV/ai-lin-na2.png", "hover_avatar_艾皮卡": "https://i.postimg.cc/rK69njqZ/ai-pi-ka2.png", "hover_avatar_艾舒爾": "https://i.postimg.cc/SJWfw9KG/ai-shu-er2.png", "hover_avatar_艾蜜莉雅": "https://i.postimg.cc/ZCrx1Nqw/ai-mi-li-ya2.png", "hover_avatar_芙莉可": "https://i.postimg.cc/crQBV3HS/fu-li-ke2.png", "hover_avatar_茱蜜": "https://i.postimg.cc/nXpGZLjH/zhu-mi2.png", "hover_avatar_莉茲": "https://i.postimg.cc/yDsyBNgg/li-zi2.png", "hover_avatar_莎莉": "https://i.postimg.cc/v4btMmg9/sha-li2.png", "hover_avatar_萊薇": "https://i.postimg.cc/K1frYyBB/lai-wei2.png", "hover_avatar_蒂亞娜": "https://i.postimg.cc/21GF5fhF/di-ya-na2.png", "hover_avatar_薇薇": "https://i.postimg.cc/w12cBdD8/wei-wei2.png", "hover_avatar_謝蒂": "https://i.postimg.cc/McG0Mrm9/xie-di2.png", "hover_avatar_貝魯": "https://i.postimg.cc/3dgFPGwc/bei-lu2.png", "hover_avatar_貝麗塔": "https://i.postimg.cc/QHpJR7Mv/bei-li-ta2.png", "hover_avatar_路德": "https://i.postimg.cc/hXsbGqTr/lu-de2.png", "hover_avatar_路易": "https://i.postimg.cc/TK0qPXgc/lu-yi2.png", "hover_avatar_錫安": "https://i.postimg.cc/sMm92R7k/xi-an2.png", "hover_avatar_阿萊特": "https://i.postimg.cc/crQBV3HZ/a-lai-te2.png", "hover_avatar_雷吉": "https://i.postimg.cc/Wd864PgS/lei-ji2.png", "hover_avatar_馬爾": "https://i.postimg.cc/pmRJxdhd/ma-er2.png",
+            "skill_passive_伊弗利特": "https://i.postimg.cc/wRKb1DXf/yi-fu-li-te4.png", "skill_passive_伊德": "https://i.postimg.cc/hQ9ZThs0/yi-de4.png", "skill_passive_佩佩": "https://i.postimg.cc/grRTfBpx/pei-pei4.png", "skill_passive_佩斯塔": "https://i.postimg.cc/jCNFGkTW/pei-si-ta4.png", "skill_passive_修帕": "https://i.postimg.cc/qgn59ZrZ/xiu-pa4.png", "skill_passive_傑德": "https://i.postimg.cc/ppH6xYXR/jie-de4.png", "skill_passive_優米": "https://i.postimg.cc/ykyrNgkX/you-mi4.png", "skill_passive_劉美美": "https://i.postimg.cc/vctSmgc6/liu-mei-mei4.png", "skill_passive_加薇雅": "https://i.postimg.cc/2LpX1nQ4/jia-wei-ya4.png", "skill_passive_卡洛特": "https://i.postimg.cc/D4VYS1rQ/ka-luo-te4.jpg", "skill_passive_卡蓮": "https://i.postimg.cc/RJrbWw7Q/ka-lian4.png", "skill_passive_喬菲": "https://i.postimg.cc/1fQjPc5S/qiao-fei4.png", "skill_passive_基狄恩": "https://i.postimg.cc/7fkWDMPt/ji-di-en4.png", "skill_passive_大師2號": "https://i.postimg.cc/GT0S4vFF/da-shi2hao4.png", "skill_passive_大木頭": "https://i.postimg.cc/XBMDr9fd/da-mu-tou4.png", "skill_passive_奈雅": "https://i.postimg.cc/grRTfBp6/nai-ya4.png", "skill_passive_奶油": "https://i.postimg.cc/30Mbk2XF/nai-you4.png", "skill_passive_寧琉": "https://i.postimg.cc/mty6rztr/ning-liu4.jpg", "skill_passive_布蘭切": "https://i.postimg.cc/bSXFZ1x3/bu-lan-qie4.png", "skill_passive_希拉": "https://i.postimg.cc/Cnjrkd7W/xi-la4.png", "skill_passive_希爾德": "https://i.postimg.cc/ctQkw6Td/xi-er-de4.png", "skill_passive_希瑟圖": "https://i.postimg.cc/tnhvW7Dj/xi-se-tu4.png", "skill_passive_希菲爾": "https://i.postimg.cc/vxW2fDXw/xi-fei-er4.png", "skill_passive_帕特拉": "https://i.postimg.cc/hhx5H3nQ/pa-te-la4.png", "skill_passive_庫洛艾": "https://i.postimg.cc/7b7WpQ4R/ku-luo-ai4.png", "skill_passive_康娜": "https://i.postimg.cc/BX0VscZV/kang-na4.png", "skill_passive_愛麗絲": "https://i.postimg.cc/MvSFxbKT/ai-li-si4.png", "skill_passive_斑尼": "https://i.postimg.cc/LnpbRB6R/ban-ni4.png", "skill_passive_斯皮奇": "https://i.postimg.cc/BX0VscQJ/si-pi-qi4.png", "skill_passive_斯諾奇": "https://i.postimg.cc/crSbZM4C/si-nuo-qi4.jpg", "skill_passive_柯米": "https://i.postimg.cc/Z03M1DmP/ke-mi4.png", "skill_passive_桃桃": "https://i.postimg.cc/w3JGSbzS/tao-tao4.png", "skill_passive_梅森": "https://i.postimg.cc/ppH6xYVg/mei-sen4.png", "skill_passive_梅露娜": "https://i.postimg.cc/crSbZM12/mei-lu-na4.png", "skill_passive_泰達": "https://i.postimg.cc/9zTnvN2S/tai-da4.png", "skill_passive_洛涅": "https://i.postimg.cc/Hj5hfPmt/luo-nie4.png", "skill_passive_海莉": "https://i.postimg.cc/RNBD9QCP/hai-li4.png", "skill_passive_珀榭": "https://i.postimg.cc/MXRFhrwt/po-xie4.png", "skill_passive_琳": "https://i.postimg.cc/PPQFqpPj/lin4.png", "skill_passive_瑟琳娜": "https://i.postimg.cc/YhzySGht/se-lin-na4.jpg", "skill_passive_瑪約": "https://i.postimg.cc/2V7X5bV6/ma-yue4.png", "skill_passive_瑪麗": "https://i.postimg.cc/xc3FdJcH/ma-li4.png", "skill_passive_皮可菈": "https://i.postimg.cc/1VxY8DGB/pi-ke-la4.png", "skill_passive_盧波": "https://i.postimg.cc/PPQFqpPY/lu-bo4.png", "skill_passive_米雪": "https://i.postimg.cc/5QwKLjg8/mi-xue4.png", "skill_passive_綾": "https://i.postimg.cc/ZCxDqBCB/ling4.png", "skill_passive_羽伊": "https://i.postimg.cc/sGpH71mw/yu-yi4.png", "skill_passive_艾斯皮": "https://i.postimg.cc/Zvrsp0Hw/ai-si-pi4.png", "skill_passive_艾爾芬": "https://i.postimg.cc/9wGgZzbS/ai-er-fen4.png", "skill_passive_艾琳娜": "https://i.postimg.cc/BPx7Htp7/ai-lin-na4.png", "skill_passive_艾皮卡": "https://i.postimg.cc/1Vp7w4BB/ai-pi-ka4.png", "skill_passive_艾舒爾": "https://i.postimg.cc/fSxqmkCg/ai-shu-er4.png", "skill_passive_艾蜜莉雅": "https://i.postimg.cc/YL1DYjRT/ai-mi-li-ya4.png", "skill_passive_芙莉可": "https://i.postimg.cc/3WpcPbhg/fu-li-ke4.png", "skill_passive_茱蜜": "https://i.postimg.cc/1fQjPcRB/zhu-mi4.png", "skill_passive_莉茲": "https://i.postimg.cc/bshB8HY7/li-zi4.png", "skill_passive_莎莉": "https://i.postimg.cc/RNBD9QV5/sha-li4.png", "skill_passive_萊薇": "https://i.postimg.cc/JGL2mc4h/lai-wei4.png", "skill_passive_蒂亞娜": "https://i.postimg.cc/gnHB0XnY/di-ya-na4.png", "skill_passive_薇薇": "https://i.postimg.cc/MnZ3f6Qj/wei-wei4.png", "skill_passive_謝蒂": "https://i.postimg.cc/pmVc5WFF/xie-di4.png", "skill_passive_貝魯": "https://i.postimg.cc/FkjC31GQ/bei-lu4.png", "skill_passive_貝麗塔": "https://i.postimg.cc/9wGgZz1W/bei-li-ta4.png", "skill_passive_路德": "https://i.postimg.cc/rKNYp0Kz/lu-de4.png", "skill_passive_路易": "https://i.postimg.cc/crB5Jgrx/lu-yi4.png", "skill_passive_錫安": "https://i.postimg.cc/dLjS0kLj/xi-an4.png", "skill_passive_阿萊特": "https://i.postimg.cc/YjgsJy7Y/a-lai-te4.png", "skill_passive_雷吉": "https://i.postimg.cc/MvmrGMvp/lei-ji4.png", "skill_passive_馬爾": "https://i.postimg.cc/6yXmwL6M/ma-er4.png"
+        };
+
+        const updateTag = (id, label, value, prefix) => {
+            const el = document.getElementById(id);
+            const iconUrl = ICON_MAP[`${prefix}_${value}`] || "";
+            el.innerHTML = `
+                ${iconUrl ? `<img src="${iconUrl}" class="w-4 h-4 object-contain mr-1.5">` : ""}
+                <span>${label}：${value}</span>
+            `;
+        };
+
+        const renderError = (msg) => {
+            document.getElementById('mainContainer').innerHTML = `
+                <div class="text-center p-10 font-bold text-red-600 text-lg">
+                    ${msg}
+                </div>
+            `;
+        };
+
+        // 強制在網頁載入後才執行，避免抓不到元素
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            // 加入 trim() 防止前後有看不見的空白字元
+            const targetName = urlParams.get('char')?.trim();
+
+            if (!targetName) {
+                renderError("❌ 未指定角色，請從主頁點擊角色按鈕進入。");
+                return;
+            }
+
+            if (typeof INITIAL_DATA === 'undefined') {
+                renderError("❌ 載入失敗：找不到 INITIAL_DATA。<br>請確認 data.js 檔案存在且在同一資料夾。");
+                return;
+            }
+
+            // 同樣加上 trim() 確保比對精準
+            const charData = INITIAL_DATA.find(c => c.name.trim() === targetName);
+            if (!charData) {
+                renderError(`❌ 找不到名稱為「${targetName}」的角色資料。`);
+                return;
+            }
+
+            // 開始填入資料
+            document.getElementById('charName').innerText = charData.name;
+            updateTag('charPersonality', '性格', charData.personality, 'personality');
+            updateTag('charRace', '種族', charData.race, 'race');
+            updateTag('charPosition', '站位', charData.position, 'position');
+            updateTag('charJob', '職業', charData.job, 'job');
+
+            const avatarBox = document.getElementById('charAvatar');
+            const imgUrl = IMAGE_MAP[`avatar_${charData.name}`];
+            if (imgUrl) {
+                avatarBox.innerHTML = `<img src="${imgUrl}" class="w-full h-full object-cover">`;
+            } else {
+                avatarBox.innerText = charData.name.charAt(0);
+            }
+
+            const renderCrayonList = (elementId, array) => {
+                const ul = document.getElementById(elementId);
+                ul.innerHTML = array.map(attr => `<li>${attr}</li>`).join('');
+            };
+            renderCrayonList('layer1List', charData.layer1);
+            renderCrayonList('layer2List', charData.layer2);
+            renderCrayonList('layer3List', charData.layer3);
+
+            document.title = `${charData.name} - 角色詳細資料`;
+
+            // 處理技能區塊
+            const skillsContainer = document.getElementById('skillsContainer');
+            
+            if (typeof characterSkills === 'undefined') {
+                skillsContainer.innerHTML = `<div class="p-4 bg-red-50 text-red-600 font-bold border border-red-200 rounded-xl text-center">❌ 找不到 skill.js 資料，請確認檔案存在。</div>`;
+                return;
+            }
+
+            const charSkillData = characterSkills.find(s => s.name.trim() === targetName);
+            
+            if (charSkillData) {
+                let html = "";
+                const makeStatChips = (statsArray) => {
+                    if (!statsArray || statsArray.length === 0) return '';
+                    return `<div class="flex flex-wrap gap-1.5 mt-2">` + 
+                        statsArray.map(stat => `<span class="px-2 py-0.5 bg-white border border-gray-200 text-gray-700 text-[11px] font-bold rounded-md shadow-sm">${stat}</span>`).join('') + 
+                        `</div>`;
+                };
+
+                const normalAttackIcon = charSkillData.attribute === "物理" ? SKILL_ICONS["attack_物理"] : SKILL_ICONS["attack_魔法"];
+                const normalSkillIcon = SKILL_ICONS[`skill_normal_${targetName}`] || "";
+                const ultSkillIcon = SKILL_ICONS[`hover_avatar_${targetName}`] || "";
+                const passiveSkillIcon = SKILL_ICONS[`skill_passive_${targetName}`] || "";
+
+                html += `
+                    <div class="bg-slate-50 border-2 border-slate-300 rounded-xl p-4 shadow-sm">
+                        <div class="flex justify-between items-center border-b border-slate-200 pb-2 mb-3">
+                            <div class="flex items-center gap-2">
+                                ${normalAttackIcon ? `<img src="${normalAttackIcon}" class="w-8 h-8 rounded-lg shadow-sm border border-slate-300">` : `<span>🎯</span>`}
+                                <span class="font-extrabold text-slate-800 text-base">普通攻擊</span>
+                            </div>
+                        </div>
+                        <div class="space-y-2 text-xs">
+                            <p class="text-gray-600"><strong class="text-slate-700">【基本】</strong>${charSkillData.normalAttack.basic}</p>
+                            ${charSkillData.normalAttack.enhanced !== "無" ? `<p class="text-gray-600"><strong class="text-slate-700">【強化】</strong>${charSkillData.normalAttack.enhanced}</p>` : ''}
+                        </div>
+                    </div>
+                `;
+
+                html += `
+                    <div class="bg-emerald-50/80 border-2 border-emerald-300 rounded-xl p-4 shadow-sm">
+                        <div class="flex justify-between items-center border-b border-emerald-200 pb-2 mb-3">
+                            <div class="flex items-center gap-2">
+                                ${normalSkillIcon ? `<img src="${normalSkillIcon}" class="w-8 h-8 rounded-lg shadow-sm border border-emerald-300">` : `<span>🟢</span>`}
+                                <span class="font-extrabold text-emerald-800 text-base">${charSkillData.normalSkill.name}</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-600 font-medium leading-relaxed">${charSkillData.normalSkill.desc}</p>
+                        ${makeStatChips(charSkillData.normalSkill.stats)}
+                    </div>
+                `;
+
+                html += `
+                    <div class="bg-violet-50/80 border-2 border-violet-300 rounded-xl p-4 shadow-sm">
+                        <div class="flex justify-between items-center border-b border-violet-200 pb-2 mb-3">
+                            <div class="flex items-center gap-2">
+                                ${ultSkillIcon ? `<img src="${ultSkillIcon}" class="w-8 h-8 rounded-lg shadow-sm border border-violet-300">` : `<span>🔥</span>`}
+                                <span class="font-extrabold text-violet-800 text-base">${charSkillData.ultimateSkill.name}</span>
+                            </div>
+                            <span class="px-2 py-0.5 bg-violet-600 text-white font-black text-[10px] rounded-md shadow-sm">CD: ${charSkillData.ultimateSkill.cooldown}</span>
+                        </div>
+                        <p class="text-xs text-gray-600 font-medium leading-relaxed">${charSkillData.ultimateSkill.desc}</p>
+                        ${makeStatChips(charSkillData.ultimateSkill.stats)}
+                    </div>
+                `;
+
+                html += `
+                    <div class="bg-amber-50/70 border-2 border-amber-300 rounded-xl p-4 shadow-sm">
+                        <div class="flex justify-between items-center border-b border-amber-200 pb-2 mb-3">
+                            <div class="flex items-center gap-2">
+                                ${passiveSkillIcon ? `<img src="${passiveSkillIcon}" class="w-8 h-8 rounded-lg shadow-sm border border-amber-300">` : `<span>✨</span>`}
+                                <span class="font-extrabold text-amber-800 text-base">被動技能</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-600 font-medium leading-relaxed">${charSkillData.passiveSkill.desc}</p>
+                        ${makeStatChips(charSkillData.passiveSkill.stats)}
+                    </div>
+                `;
+
+                skillsContainer.innerHTML = html;
+            } else {
+                skillsContainer.innerHTML = `<div class="p-4 bg-gray-50 text-gray-500 font-bold border border-gray-200 rounded-xl text-center">⚠️ 找不到「${targetName}」的技能資料，請確認 skill.js 中有此角色。</div>`;
+            }
+        };
+    </script>
+</body>
+</html>
