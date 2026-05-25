@@ -21,6 +21,9 @@
         }
     </script>
 
+    <link rel="stylesheet" href="https://unpkg.com/@esotericsoftware/spine-player@4.1.*/dist/spine-player.css">
+    <script src="https://unpkg.com/@esotericsoftware/spine-player@4.1.*/dist/iife/spine-player.js"></script>
+
     <script src="data.js"></script>
     <script src="skill.js"></script>
 
@@ -29,6 +32,8 @@
     
     <style>
         body { font-family: 'Noto Sans TC', sans-serif; }
+        /* 隱藏 Spine 播放器下方預設的黑色漸層與時間軸 */
+        .spine-player-controls { display: none !important; }
     </style>
 </head>
 <body class="p-4 sm:p-8 bg-[#fcf8f2] dark:bg-slate-900 text-gray-800 dark:text-gray-200 transition-colors duration-300">
@@ -40,8 +45,12 @@
         </button>
 
         <div class="flex flex-col sm:flex-row items-center gap-6 border-b-2 border-amber-200 dark:border-slate-700 pb-6 mb-6">
-            <div id="charAvatar" class="w-24 h-24 rounded-2xl border-4 border-amber-500 dark:border-slate-600 bg-white dark:bg-slate-700 overflow-hidden shadow-md flex items-center justify-center text-3xl font-bold text-amber-900 dark:text-amber-100 flex-shrink-0">
+            <div id="charAvatar" class="w-32 h-40 sm:w-40 sm:h-48 rounded-2xl border-4 border-amber-500 dark:border-slate-600 bg-slate-100 dark:bg-slate-800 overflow-hidden shadow-md flex items-center justify-center text-3xl font-bold text-amber-900 dark:text-amber-100 flex-shrink-0 relative cursor-pointer group">
+                <div class="absolute inset-0 bg-black/40 hidden group-hover:flex items-center justify-center text-white text-xs font-bold z-10 pointer-events-none transition-opacity">
+                    👆 點擊戳戳
+                </div>
             </div>
+            
             <div class="text-center sm:text-left w-full">
                 <h1 id="charName" class="text-3xl font-extrabold text-amber-950 dark:text-amber-400 mb-4 tracking-tight">載入中...</h1>
                 
@@ -112,7 +121,19 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // 圖片與圖示字典 (保持不變)
+        // 🌟 新增：69位角色的 Spine 名稱對應表
+        const SPINE_MAP = {
+            "洛涅": "Rohne", "薇薇": "Vivi", "艾爾芬": "Erpin", "錫安": "xXionx", "伊弗利特": "Ifrit", "伊德": "Ed", "佩佩": "Velvet", "佩斯塔": "Festa",
+            "修帕": "Shoupan", "傑德": "Jade", "優米": "Yomi", "劉美美": "Yumimi", "加薇雅": "Gabia", "卡洛特": "Kyarot", "卡蓮": "Carren", "喬菲": "Chopi",
+            "基狄恩": "Kidian", "大師2號": "MaestroMK2", "大木頭": "BigWood", "奈雅": "Naia", "奶油": "Butter", "布蘭切": "Blanchet", "希拉": "Sylla", "希爾德": "Hilde",
+            "希瑟圖": "Sist", "希菲爾": "Silphir", "帕特拉": "Patula", "庫洛艾": "Chloe", "康娜": "Canna", "愛麗絲": "Alice", "斑尼": "Beni", "斯皮奇": "Speaki",
+            "斯諾奇": "Snorky", "柯米": "Kommy", "桃桃": "Momo", "梅森": "Maison", "梅露娜": "Meluna", "海莉": "Haley", "珀榭": "Posher", "琳": "Rim",
+            "瑟琳娜": "Selline", "瑪約": "Mayo", "瑪麗": "Marie", "皮可菈": "Picora", "盧波": "Rufo", "米雪": "Mynx", "綾": "Aya", "羽伊": "Ui",
+            "艾斯皮": "Espi", "艾琳娜": "Elena", "艾皮卡": "Epica", "艾舒爾": "Ashur", "艾蜜莉雅": "Amelia", "芙莉可": "Fricle", "茱蜜": "Jubee", "莉茲": "Leets",
+            "莎莉": "Sari", "萊薇": "Levi", "蒂亞娜": "Diana", "謝蒂": "Shady", "貝魯": "Veroo", "貝麗塔": "Belita", "路德": "Rude", "路易": "Cuee",
+            "阿萊特": "Allet", "雷吉": "Lazy", "馬爾": "Mago", "泰達": "Taida", "寧琉": "Ner"
+        };
+
         const IMAGE_MAP = {
             "avatar_洛涅": "https://i.postimg.cc/nL4vx1LN/luo-nie.png", "avatar_薇薇": "https://i.postimg.cc/gkx8jpJD/wei-wei.png", "avatar_艾爾芬": "https://i.postimg.cc/T3WV7xM4/ai-er-fen.png", "avatar_錫安": "https://i.postimg.cc/7PmnbXnR/x-wu-xi-an-wux.png", "avatar_伊弗利特": "https://i.postimg.cc/yYxXR9f9/yi-fu-li-te.png", "avatar_伊德": "https://i.postimg.cc/Hsn4M5SQ/yi-de.png", "avatar_佩佩": "https://i.postimg.cc/5tdwDrfF/pei-pei.png", "avatar_佩斯塔": "https://i.postimg.cc/cJyQPzdQ/pei-si-ta.png", "avatar_修帕": "https://i.postimg.cc/Pxd158pn/xiu-pa.png", "avatar_傑德": "https://i.postimg.cc/C51DjT4L/jie-de.png", "avatar_優米": "https://i.postimg.cc/02zDjvQd/you-mi.png", "avatar_劉美美": "https://i.postimg.cc/m2PCk4DC/liu-mei-mei.png", "avatar_加薇雅": "https://i.postimg.cc/T2CJhQJF/jia-wei-ya.png", "avatar_卡洛特": "https://i.postimg.cc/X7qc5F26/ka-luo-te.png", "avatar_卡蓮": "https://i.postimg.cc/gkjqhRMW/ka-lian.png", "avatar_喬菲": "https://i.postimg.cc/4yScPL8Z/qiao-fei.png", "avatar_基狄恩": "https://i.postimg.cc/RFGK6VK3/ji-di-en.png", "avatar_大師2號": "https://i.postimg.cc/7PmnbXnt/da-shi2hao.png", "avatar_大木頭": "https://i.postimg.cc/zD0F3pFP/da-mu-tou.png", "avatar_奈雅": "https://i.postimg.cc/3w5gzq3n/nai-ya.png", "avatar_奶油": "https://i.postimg.cc/4Nybct8X/nai-you.png", "avatar_布蘭切": "https://i.postimg.cc/qBjxgQGM/bu-lan-qie.png", "avatar_希拉": "https://i.postimg.cc/pLnfGvMM/xi-la.png", "avatar_希爾德": "https://i.postimg.cc/JzBN68Cr/xi-er-de.png", "avatar_希瑟圖": "https://i.postimg.cc/y8SmQKC8/xi-se-tu.png", "avatar_希菲爾": "https://i.postimg.cc/XYyfHW64/xi-fei-er.png", "avatar_帕特拉": "https://i.postimg.cc/YS617xSf/pa-te-la.png", "avatar_庫洛艾": "https://i.postimg.cc/sX35gZQr/ku-luo-ai.png", "avatar_康娜": "https://i.postimg.cc/PxKYprYY/kang-na.png", "avatar_愛麗絲": "https://i.postimg.cc/nrPm2RdK/ai-li-si.png", "avatar_斑尼": "https://i.postimg.cc/HnhMzZS1/ban-ni.png", "avatar_斯皮奇": "https://i.postimg.cc/2yKWGcHq/si-pi-qi.png", "avatar_斯諾奇": "https://i.postimg.cc/gjThsSMh/si-nuo-qi.png", "avatar_柯米": "https://i.postimg.cc/25Q4Yx6Y/ke-mi.png", "avatar_桃桃": "https://i.postimg.cc/Ssmcxz2q/tao-tao.png", "avatar_梅森": "https://i.postimg.cc/qRQyhMy2/mei-sen.png", "avatar_梅露娜": "https://i.postimg.cc/zvBWnZF7/mei-lu-na.png", "avatar_海莉": "https://i.postimg.cc/3R32xD4k/hai-li.png", "avatar_珀榭": "https://i.postimg.cc/JnRjzByf/po-xie.png", "avatar_琳": "https://i.postimg.cc/VvVtgG7C/lin.png", "avatar_瑟琳娜": "https://i.postimg.cc/XNH9nqnP/se-lin-na.png", "avatar_瑪約": "https://i.postimg.cc/QxF1CDth/ma-yue.png", "avatar_瑪麗": "https://i.postimg.cc/Dfj1702m/ma-li.png", "avatar_皮可菈": "https://i.postimg.cc/SNR798ZM/pi-ke-la.png", "avatar_盧波": "https://i.postimg.cc/02zDjvQY/lu-bo.png", "avatar_米雪": "https://i.postimg.cc/qMFcxRYh/mi-xue.png", "avatar_綾": "https://i.postimg.cc/hPXTvnjd/ling.png", "avatar_羽伊": "https://i.postimg.cc/Fs6bVRqg/yu-yi.png", "avatar_艾斯皮": "https://i.postimg.cc/BQz5B6yg/ai-si-pi.png", "avatar_艾琳娜": "https://i.postimg.cc/ncWKGz5w/ai-lin-na.png", "avatar_艾皮卡": "https://i.postimg.cc/gk7yHJ5K/ai-pi-ka.png", "avatar_艾舒爾": "https://i.postimg.cc/hPY81j6F/ai-shu-er.png", "avatar_艾蜜莉雅": "https://i.postimg.cc/QdWQ4DG0/ai-mi-li-ya.png", "avatar_芙莉可": "https://i.postimg.cc/DzrqhczQ/fu-li-ke.png", "avatar_茱蜜": "https://i.postimg.cc/MTz1pjMv/zhu-mi.png", "avatar_莉茲": "https://i.postimg.cc/rsmWSXNg/li-zi.png", "avatar_莎莉": "https://i.postimg.cc/0jQmpRCq/sha-li.png", "avatar_萊薇": "https://i.postimg.cc/d3xC6HWT/lai-wei.png", "avatar_蒂亞娜": "https://i.postimg.cc/3rS23NKQ/di-ya-na.png", "avatar_薇薇": "https://i.postimg.cc/DmZmsBRm/wei-wei3.png", "avatar_謝蒂": "https://i.postimg.cc/YqTgmPGf/xie-di.png", "avatar_貝魯": "https://i.postimg.cc/DzkqRN7n/bei-lu.png", "avatar_貝麗塔": "https://i.postimg.cc/TPMrBsTy/bei-li-ta.png", "avatar_路德": "https://i.postimg.cc/NGJRQFgM/lu-de.png", "avatar_路易": "https://i.postimg.cc/KcqtmjZy/lu-yi.png", "avatar_阿萊特": "https://i.postimg.cc/hGL9n0G2/a-lai-te.png", "avatar_雷吉": "https://i.postimg.cc/BZY2JbqX/lei-ji.png", "avatar_馬爾": "https://i.postimg.cc/d1nrktrD/ma-er.png", "avatar_泰達": "https://i.postimg.cc/vH2GKCw8/tai-da.png", "avatar_寧琉": "https://i.postimg.cc/tgt95LY0/ning-liu.png"
         };
@@ -172,12 +193,76 @@
             updateTag('charPosition', '站位', charData.position, 'position');
             updateTag('charJob', '職業', charData.job, 'job');
 
+            // 🌟 核心升級：Spine 動態圖讀取與互動邏輯
             const avatarBox = document.getElementById('charAvatar');
-            const imgUrl = IMAGE_MAP[`avatar_${charData.name}`];
-            if (imgUrl) {
-                avatarBox.innerHTML = `<img src="${imgUrl}" class="w-full h-full object-cover">`;
+            const spineKey = SPINE_MAP[charData.name]; // 拿取您對應的英文路徑名稱
+
+            if (spineKey) {
+                avatarBox.innerHTML = ''; // 清空 fallback 文字或提示
+                
+                let player = new spine.SpinePlayer(avatarBox, {
+                    skelUrl: `./spine_assets/${spineKey}/${spineKey}.skel.bytes`,
+                    atlasUrl: `./spine_assets/${spineKey}/${spineKey}.atlas.txt`,
+                    animation: "Idle_1",     
+                    premultipliedAlpha: true,
+                    backgroundColor: "#00000000",
+                    alpha: true,
+                    showControls: false,
+                    
+                    // 🌟 關鍵升級：鎖定固定鏡頭，關閉自動縮放，還原真實身高差！
+                    viewport: {
+                        x: -400,     // 鏡頭起始 X 座標 (以 0 為中心，往左抓 400 單位)
+                        y: 0,        // 鏡頭起始 Y 座標 (0 通常是角色的腳底板)
+                        width: 800,  // 鏡頭總寬度 (數值越大，鏡頭越遠，角色看起來越小)
+                        height: 1000 // 鏡頭總高度
+                    },
+
+                    success: function (player) {
+                        // ... 後面的程式碼維持不變 ...
+                        console.log(`✅ ${charData.name} 的 Spine 動畫載入成功！`);
+                        
+                        // 👗 外觀優化邏輯：優先套用 'Normal'，其次套用非 'default' 的外觀
+                        const skins = player.skeleton.data.skins;
+                        if (skins && skins.length > 1) {
+                            // 🔍 優先找叫 'Normal' 的外觀；如果沒有，就找第一個不是 'default' 的
+                            const targetSkin = skins.find(s => s.name === 'Normal') || skins.find(s => s.name !== 'default');
+                            
+                            if (targetSkin) {
+                                player.skeleton.setSkinByName(targetSkin.name);
+                                player.skeleton.setSlotsToSetupPose(); // 強制刷新骨架與貼圖，把衣服手腳穿上！
+                                console.log(`👗 ${charData.name} 自動裝備外觀: ${targetSkin.name}`);
+                            }
+                        }
+
+                        // 🌟 互動魔法：點擊切換隨機動作
+                        const canvas = avatarBox.querySelector('canvas');
+                        if(canvas) {
+                            canvas.addEventListener('click', () => {
+                                const animations = player.skeleton.data.animations;
+                                if (animations && animations.length > 1) {
+                                    const animsToPlay = animations.filter(a => a.name !== 'Idle_1');
+                                    const randomAnim = animsToPlay[Math.floor(Math.random() * animsToPlay.length)].name;
+                                    player.animationState.setAnimation(0, randomAnim, false);
+                                    player.animationState.addAnimation(0, "Idle_1", true, 0);
+                                }
+                            });
+                        }
+                    },
+                    error: function (player, reason) {
+                        console.warn(`⚠️ Spine 載入失敗，降級顯示靜態圖。原因:`, reason);
+                        // 如果破圖或是路徑打錯，退回顯示靜態圖片
+                        const imgUrl = IMAGE_MAP[`avatar_${charData.name}`];
+                        avatarBox.innerHTML = imgUrl ? `<img src="${imgUrl}" class="w-full h-full object-cover">` : charData.name.charAt(0);
+                    }
+                });
             } else {
-                avatarBox.innerText = charData.name.charAt(0);
+                // 如果角色不在清單中，維持原本的靜態圖片
+                const imgUrl = IMAGE_MAP[`avatar_${charData.name}`];
+                if (imgUrl) {
+                    avatarBox.innerHTML = `<img src="${imgUrl}" class="w-full h-full object-cover">`;
+                } else {
+                    avatarBox.innerText = charData.name.charAt(0);
+                }
             }
 
             const renderCrayonList = (elementId, array) => {
@@ -211,7 +296,6 @@
                     const ultSkillIcon = SKILL_ICONS[`hover_avatar_${currentTargetName}`] || "";
                     const passiveSkillIcon = SKILL_ICONS[`skill_passive_${currentTargetName}`] || "";
 
-                    // 🗡️ 普通攻擊 (加入 whitespace-pre-wrap 與統一行距)
                     html += `
                         <div class="bg-slate-50 dark:bg-slate-700/40 border-2 border-slate-300 dark:border-slate-600 rounded-xl p-4 shadow-sm">
                             <div class="flex justify-between items-center border-b border-slate-200 dark:border-slate-600 pb-2 mb-3">
@@ -234,7 +318,6 @@
                         </div>
                     `;
 
-                    // 🟢 一般技能
                     html += `
                         <div class="bg-emerald-50/80 dark:bg-emerald-900/20 border-2 border-emerald-300 dark:border-emerald-700 rounded-xl p-4 shadow-sm">
                             <div class="flex justify-between items-center border-b border-emerald-200 dark:border-emerald-800 pb-2 mb-3">
@@ -248,7 +331,6 @@
                         </div>
                     `;
 
-                    // 🔥 大絕招
                     html += `
                         <div class="bg-violet-50/80 dark:bg-violet-900/20 border-2 border-violet-300 dark:border-violet-700 rounded-xl p-4 shadow-sm">
                             <div class="flex justify-between items-center border-b border-violet-200 dark:border-violet-800 pb-2 mb-3">
@@ -263,7 +345,6 @@
                         </div>
                     `;
 
-                    // ✨ 被動技能
                     html += `
                         <div class="bg-amber-50/70 dark:bg-amber-900/20 border-2 border-amber-300 dark:border-amber-700 rounded-xl p-4 shadow-sm">
                             <div class="flex justify-between items-center border-b border-amber-200 dark:border-amber-800 pb-2 mb-3">
@@ -286,7 +367,6 @@
             loadComments(currentTargetName);
         };
 
-        // 🌟 獲取專屬匿名 ID 函數
         function getAnonymousId() {
             let anonId = localStorage.getItem('trickcal_anon_id');
             if (!anonId) {
@@ -305,7 +385,6 @@
                   const list = document.getElementById('commentsList');
                   
                   if (snapshot.empty) {
-                      // 🌟 修改：空留言提示暗黑適配
                       list.innerHTML = `<div class="text-center text-sm font-bold text-gray-400 dark:text-gray-500 py-8 bg-gray-50 dark:bg-slate-800/50 rounded-xl border border-dashed border-gray-200 dark:border-slate-600">目前還沒有評價，來搶頭香吧！ 🐾</div>`;
                       return;
                   }
@@ -317,7 +396,6 @@
                           month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit'
                       }) : "剛剛";
                       
-                      // 🌟 修改：留言卡片暗黑適配
                       html += `
                           <div class="bg-white dark:bg-slate-700/80 p-3 sm:p-4 rounded-xl border border-gray-200 dark:border-slate-600 shadow-sm transition hover:shadow-md">
                               <div class="flex justify-between items-baseline mb-2 border-b border-gray-100 dark:border-slate-600 pb-2">
@@ -336,24 +414,14 @@
                   list.innerHTML = `<div class="text-center text-red-500 dark:text-red-400 font-bold text-sm py-4">讀取留言失敗，請確認資料庫權限設定。</div>`;
               });
         }
-        // 💡 這個函數會把「描述 | 效果」切分處理
+
         function renderSkillContent(text) {
             if (!text) return "";
-    
-            // 1. 先用 | 切分描述與效果
             const parts = text.split('|');
             const description = parts[0].trim();
-    
-            // 2. 如果後半段有內容，用逗號(，)、頓號(、)、句號(。)將效果切分成陣列
-            // 這裡我們把所有這些符號都當作切點
-            const effects = parts.length > 1 
-                ? parts[1].split(/[,、]/).filter(p => p.trim() !== "") 
-                : [];
+            const effects = parts.length > 1 ? parts[1].split(/[,、]/).filter(p => p.trim() !== "") : [];
 
-            // 3. 渲染描述文字
             let html = `<p class="text-xs text-gray-600 dark:text-gray-300 font-medium leading-relaxed whitespace-pre-wrap">${description}</p>`;
-    
-            // 4. 如果有多個效果，每一個都會變成一個獨立的小方塊
             if (effects.length > 0) {
                 html += `<div class="flex flex-wrap gap-1.5 mt-2">` + 
                     effects.map(eff => `<span class="px-2 py-0.5 bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 text-gray-700 dark:text-gray-300 text-[11px] font-bold rounded-md shadow-sm">${eff.trim()}</span>`).join('') + 
@@ -361,6 +429,7 @@
             }
             return html;
         }
+
         function submitComment() {
             let authorInput = document.getElementById('commentAuthor').value.trim();
             if (!authorInput) {
