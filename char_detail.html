@@ -81,6 +81,24 @@
             </div>
         </div>
 
+        <div class="mt-8 bg-gradient-to-br from-amber-50 to-rose-50 dark:from-gray-800/80 dark:to-gray-800/80 backdrop-blur border border-rose-200 dark:border-gray-700/50 rounded-2xl p-6 shadow-xl shadow-rose-100/50 dark:shadow-none transition-colors duration-300">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="text-2xl">🎁</span>
+                <h3 class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-rose-500 to-orange-400 dark:from-pink-400 dark:to-purple-400">
+                    坨坨珍藏品
+                </h3>
+            </div>
+    
+            <div class="flex flex-col items-center justify-center rounded-xl bg-white/60 dark:bg-gray-900/50 border border-rose-100 dark:border-gray-800 p-4 min-h-[200px] transition-colors duration-300">
+                <div id="presentName" class="hidden">
+                    </div>
+        
+                <div id="presentContainer" class="w-full flex justify-center items-center overflow-hidden">
+                    <p class="text-orange-400 dark:text-gray-500 text-sm animate-pulse">正在開啟珍藏品寶箱...</p>
+                </div>
+            </div>
+        </div>
+        
         <div class="mt-6 pt-6 border-t-2 border-amber-200 dark:border-slate-700">
             <h2 class="text-xl font-black text-amber-950 dark:text-amber-400 mb-4 flex items-center gap-1.5">⚔️ 技能詳細資料</h2>
             <div id="skillsContainer" class="space-y-5">
@@ -134,6 +152,74 @@
             "阿萊特": "Allet", "雷吉": "Lazy", "馬爾": "Mago", "泰達": "Taida", "寧琉": "Ner"
         };
 
+        // 🎁 珍藏品圖片與名稱完整對照表 (已同步 Spine 英文名)
+        const PRESENT_MAP = {
+            "Alice": { name: "愛麗絲的卡片冊", url: "https://i.postimg.cc/SXd1YT62/Present-List-Alice.png" },
+            "Allet": { name: "無限保存拌飯醬", url: "https://i.postimg.cc/JyxYH6Ny/Present-List-Allet.png" },
+            "Amelia": { name: "莫納蒂姆的待審文件堆", url: "https://i.postimg.cc/d76NZH2Z/Present-List-Amelia.png" },
+            "Ashur": { name: "艾心堂全年免費自由使用劵", url: "https://i.postimg.cc/R3dpJs7f/Present-List-Ashur.png" },
+            "Aya": { name: "雪花雕像", url: "https://i.postimg.cc/XZL1BHfc/Present-List-Aya.png" },
+            "Belita": { name: "老舊的木雕玩偶", url: "https://i.postimg.cc/FfpCkWyC/Present-List-Belita.png" },
+            "Beni": { name: "高級釣魚包", url: "https://i.postimg.cc/cgJ9RRh7/Present-List-Beni.png" },
+            "BigWood": { name: "大木頭的種子", url: "https://i.postimg.cc/1nzCGGBr/Present-List-Big-Wood.png" },
+            "Blanchet": { name: "藍玫瑰花束", url: "https://i.postimg.cc/7GLs339V/Present-List-Blanchet.png" },
+            "Butter": { name: "花草花冠", url: "https://i.postimg.cc/Ppq3WWyS/Present-List-Butter.png" },
+            "Canna": { name: "客製化遊戲機", url: "https://i.postimg.cc/G8p7FFKg/Present-List-Canna.png" },
+            "Carren": { name: "胡蘿蔔幼苗種子包", url: "https://i.postimg.cc/gX0SVVsB/Present-List-Carren.png" },
+            "Chloe": { name: "王國風景掛毯", url: "https://i.postimg.cc/TLP7VV0B/Present-List-Chloe.png" },
+            "Chopi": { name: "教主簽名簿", url: "https://i.postimg.cc/473L66wC/Present-List-Chopi.png" },
+            "Diana": { name: "橡樹實木搖椅", url: "https://i.postimg.cc/MMGP77tq/Present-List-Diana.png" },
+            "Ed": { name: "夢中的姐妹畫作", url: "https://i.postimg.cc/qhZmjNDP/Present-List-Ed.png" },
+            "Elena": { name: "精靈製最新型筆記型電腦", url: "https://i.postimg.cc/34bLnkbT/Present-List-Elena.png" },
+            "Epica": { name: "教主史詩抄本", url: "https://i.postimg.cc/BLwhMjwS/Present-List-Epica.png" },
+            "Erpin": { name: "昨晚的蠟筆", url: "https://i.postimg.cc/Kks9J1sx/Present-List-Erpin.png" },
+            "Espi": { name: "夢境筆記", url: "https://i.postimg.cc/CB6vmR6F/Present-List-Espi.png" },
+            "Festa": { name: "全盛時期簽名專輯", url: "https://i.postimg.cc/WFf9Xdfz/Present-List-Festa.png" },
+            "Fricle": { name: "友情荊棘戒指", url: "https://i.postimg.cc/S2tZDnt2/Present-List-Fricle.png" },
+            "Gabia": { name: "高級奇石套裝", url: "https://i.postimg.cc/CB6vmR6Z/Present-List-Gabia.png" },
+            "Haley": { name: "莫納蒂姆戰略圖", url: "https://i.postimg.cc/ph10qm1z/Present-List-Haley.png" },
+            "Hilde": { name: "專業學位證書", url: "https://i.postimg.cc/7JGKcqpb/Present-List-Hilde.png" },
+            "Ifrit": { name: "銀箔套裝", url: "https://i.postimg.cc/k6hjf2hx/Present-List-Ifrit.png" },
+            "Jade": { name: "高級玉石地板", url: "https://i.postimg.cc/0KMV39Lj/Present-List-Jade.png" },
+            "Jubee": { name: "皇家蜂蜜", url: "https://i.postimg.cc/xNJ679Wm/Present-List-Jubee.png" },
+            "Kidian": { name: "黑曜石短劍", url: "https://i.postimg.cc/xNJ679Wz/Present-List-Kidian.png" },
+            "Kommy": { name: "名牌枕頭", url: "https://i.postimg.cc/fSt8FM6v/Present-List-Kommy.png" },
+            "Kyarot": { name: "", url: "https://i.postimg.cc/dZk5XJzj/Present-List-Kyarot.png" },
+            "Lazy": { name: "最先進工具組", url: "https://i.postimg.cc/jnwM9RGM/Present-List-Lazy.png" },
+            "Leets": { name: "超重鋼鐵盔甲", url: "https://i.postimg.cc/N29dVQWz/Present-List-Leets.png" },
+            "Levi": { name: "超大尺寸保暖內衣", url: "https://i.postimg.cc/zHbxMq9Q/Present-List-Levi.png" },
+            "MaestroMK2": { name: "充滿回憶的硬碟", url: "https://i.postimg.cc/14f74Kfs/Present-List-Maestro-MK2.png" },
+            "Mago": { name: "羊毛大衣", url: "https://i.postimg.cc/dDLND9Lq/Present-List-Mago.png" },
+            "Marie": { name: "反物質中子炸彈", url: "https://i.postimg.cc/9zrgzBrF/Present-List-Marie.png" },
+            "Mayo": { name: "奇怪的石膏像", url: "https://i.postimg.cc/xqcpqPcN/Present-List-Mayo.png" },
+            "Meluna": { name: "遊艇啟動匙", url: "https://i.postimg.cc/8sjXsbjj/Present-List-Meluna.png" },
+            "Momo": { name: "忍術替身木", url: "https://i.postimg.cc/SjJ1jGJn/Present-List-Momo.png" },
+            "Naia": { name: "海豚大砲", url: "https://i.postimg.cc/XXp1XgpC/Present-List-Naia.png" },
+            "Ner": { name: "", url: "https://i.postimg.cc/23McWBZW/Present-List-Ner.png" },
+            "Picora": { name: "精緻的時尚貼紙簿", url: "https://i.postimg.cc/Cdzrd4zN/Present-List-Picora.png" },
+            "Posher": { name: "健康防禦葡萄汁", url: "https://i.postimg.cc/8s9Kvr6L/Present-List-Posher.png" },
+            "Rim": { name: "高級茶杯套裝", url: "https://i.postimg.cc/dDpHCTy6/Present-List-Rim.png" },
+            "Rohne": { name: "教主觀察日記", url: "https://i.postimg.cc/4nqLch92/Present-List-Rohne.png" },
+            "Rude": { name: "莫納蒂姆健身房高級會員卡", url: "https://i.postimg.cc/MXNPBjQg/Present-List-Rude.png" },
+            "Rufo": { name: "作弊骰子", url: "https://i.postimg.cc/qgSbKC3P/Present-List-Rufo.png" },
+            "Sari": { name: "反應卡片", url: "https://i.postimg.cc/XXmH5y5S/Present-List-Sari.png" },
+            "Selline": { name: "挑釁用的比賽服", url: "https://i.postimg.cc/RqystntB/Present-List-Selline.png" },
+            "Shady": { name: "魔法水晶珠", url: "https://i.postimg.cc/4mc8QN6F/Present-List-Shady.png" },
+            "Shoupan": { name: "艾利亞斯英雄勳章", url: "https://i.postimg.cc/mt9dy2Y0/Present-List-Shoupan.png" },
+            "Silphir": { name: "對練用稻草人", url: "https://i.postimg.cc/TpbkJYjv/Present-List-Silphir.png" },
+            "Sist": { name: "紫水晶存錢筒", url: "https://i.postimg.cc/1fFWr50Z/Present-List-Sist.png" },
+            "Snorky": { name: "手工豆漿48包", url: "https://i.postimg.cc/ZCNfxKPT/Present-List-Snorky.png" },
+            "Speaki": { name: "南瓜南瓜套裝", url: "https://i.postimg.cc/cr3DB47H/Present-List-Speaki.png" },
+            "Sylla": { name: "攜帶型電風扇", url: "https://i.postimg.cc/PCkS3sKr/Present-List-Sylla.png" },
+            "Taida": { name: "偷懶專用睡袋", url: "https://i.postimg.cc/fJdHfT79/Present-List-Taida.png" },
+            "Ui": { name: "魔靈池塘的蓮花", url: "https://i.postimg.cc/YvwdnK84/Present-List-Ui.png" },
+            "Velvet": { name: "黃金荊棘王冠", url: "https://i.postimg.cc/fVh82n5X/Present-List-Velvet.png" },
+            "Vivi": { name: "銀製高腳杯", url: "https://i.postimg.cc/bZjmCcL9/Present-List-Vivi.png" },
+            "xXionx": { name: "網絡小說單行本", url: "https://i.postimg.cc/4YTWLkw6/Present-List-x-Xionx.png" },
+            "Yomi": { name: "向月花花環", url: "https://i.postimg.cc/68NMjJzM/Present-List-Yomi.png" },
+            "Yumimi": { name: "偽裝用木製面具", url: "https://i.postimg.cc/5XMs7dpn/Present-List-Yumimi.png" }
+        };
+        
         const IMAGE_MAP = {
             "avatar_洛涅": "https://i.postimg.cc/nL4vx1LN/luo-nie.png", "avatar_薇薇": "https://i.postimg.cc/gkx8jpJD/wei-wei.png", "avatar_艾爾芬": "https://i.postimg.cc/T3WV7xM4/ai-er-fen.png", "avatar_錫安": "https://i.postimg.cc/7PmnbXnR/x-wu-xi-an-wux.png", "avatar_伊弗利特": "https://i.postimg.cc/yYxXR9f9/yi-fu-li-te.png", "avatar_伊德": "https://i.postimg.cc/Hsn4M5SQ/yi-de.png", "avatar_佩佩": "https://i.postimg.cc/5tdwDrfF/pei-pei.png", "avatar_佩斯塔": "https://i.postimg.cc/cJyQPzdQ/pei-si-ta.png", "avatar_修帕": "https://i.postimg.cc/Pxd158pn/xiu-pa.png", "avatar_傑德": "https://i.postimg.cc/C51DjT4L/jie-de.png", "avatar_優米": "https://i.postimg.cc/02zDjvQd/you-mi.png", "avatar_劉美美": "https://i.postimg.cc/m2PCk4DC/liu-mei-mei.png", "avatar_加薇雅": "https://i.postimg.cc/T2CJhQJF/jia-wei-ya.png", "avatar_卡洛特": "https://i.postimg.cc/X7qc5F26/ka-luo-te.png", "avatar_卡蓮": "https://i.postimg.cc/gkjqhRMW/ka-lian.png", "avatar_喬菲": "https://i.postimg.cc/4yScPL8Z/qiao-fei.png", "avatar_基狄恩": "https://i.postimg.cc/RFGK6VK3/ji-di-en.png", "avatar_大師2號": "https://i.postimg.cc/7PmnbXnt/da-shi2hao.png", "avatar_大木頭": "https://i.postimg.cc/zD0F3pFP/da-mu-tou.png", "avatar_奈雅": "https://i.postimg.cc/3w5gzq3n/nai-ya.png", "avatar_奶油": "https://i.postimg.cc/4Nybct8X/nai-you.png", "avatar_布蘭切": "https://i.postimg.cc/qBjxgQGM/bu-lan-qie.png", "avatar_希拉": "https://i.postimg.cc/pLnfGvMM/xi-la.png", "avatar_希爾德": "https://i.postimg.cc/JzBN68Cr/xi-er-de.png", "avatar_希瑟圖": "https://i.postimg.cc/y8SmQKC8/xi-se-tu.png", "avatar_希菲爾": "https://i.postimg.cc/XYyfHW64/xi-fei-er.png", "avatar_帕特拉": "https://i.postimg.cc/YS617xSf/pa-te-la.png", "avatar_庫洛艾": "https://i.postimg.cc/sX35gZQr/ku-luo-ai.png", "avatar_康娜": "https://i.postimg.cc/PxKYprYY/kang-na.png", "avatar_愛麗絲": "https://i.postimg.cc/nrPm2RdK/ai-li-si.png", "avatar_斑尼": "https://i.postimg.cc/HnhMzZS1/ban-ni.png", "avatar_斯皮奇": "https://i.postimg.cc/2yKWGcHq/si-pi-qi.png", "avatar_斯諾奇": "https://i.postimg.cc/gjThsSMh/si-nuo-qi.png", "avatar_柯米": "https://i.postimg.cc/25Q4Yx6Y/ke-mi.png", "avatar_桃桃": "https://i.postimg.cc/Ssmcxz2q/tao-tao.png", "avatar_梅森": "https://i.postimg.cc/qRQyhMy2/mei-sen.png", "avatar_梅露娜": "https://i.postimg.cc/zvBWnZF7/mei-lu-na.png", "avatar_海莉": "https://i.postimg.cc/3R32xD4k/hai-li.png", "avatar_珀榭": "https://i.postimg.cc/JnRjzByf/po-xie.png", "avatar_琳": "https://i.postimg.cc/VvVtgG7C/lin.png", "avatar_瑟琳娜": "https://i.postimg.cc/XNH9nqnP/se-lin-na.png", "avatar_瑪約": "https://i.postimg.cc/QxF1CDth/ma-yue.png", "avatar_瑪麗": "https://i.postimg.cc/Dfj1702m/ma-li.png", "avatar_皮可菈": "https://i.postimg.cc/SNR798ZM/pi-ke-la.png", "avatar_盧波": "https://i.postimg.cc/02zDjvQY/lu-bo.png", "avatar_米雪": "https://i.postimg.cc/qMFcxRYh/mi-xue.png", "avatar_綾": "https://i.postimg.cc/hPXTvnjd/ling.png", "avatar_羽伊": "https://i.postimg.cc/Fs6bVRqg/yu-yi.png", "avatar_艾斯皮": "https://i.postimg.cc/BQz5B6yg/ai-si-pi.png", "avatar_艾琳娜": "https://i.postimg.cc/ncWKGz5w/ai-lin-na.png", "avatar_艾皮卡": "https://i.postimg.cc/gk7yHJ5K/ai-pi-ka.png", "avatar_艾舒爾": "https://i.postimg.cc/hPY81j6F/ai-shu-er.png", "avatar_艾蜜莉雅": "https://i.postimg.cc/QdWQ4DG0/ai-mi-li-ya.png", "avatar_芙莉可": "https://i.postimg.cc/DzrqhczQ/fu-li-ke.png", "avatar_茱蜜": "https://i.postimg.cc/MTz1pjMv/zhu-mi.png", "avatar_莉茲": "https://i.postimg.cc/rsmWSXNg/li-zi.png", "avatar_莎莉": "https://i.postimg.cc/0jQmpRCq/sha-li.png", "avatar_萊薇": "https://i.postimg.cc/d3xC6HWT/lai-wei.png", "avatar_蒂亞娜": "https://i.postimg.cc/3rS23NKQ/di-ya-na.png", "avatar_薇薇": "https://i.postimg.cc/DmZmsBRm/wei-wei3.png", "avatar_謝蒂": "https://i.postimg.cc/YqTgmPGf/xie-di.png", "avatar_貝魯": "https://i.postimg.cc/DzkqRN7n/bei-lu.png", "avatar_貝麗塔": "https://i.postimg.cc/TPMrBsTy/bei-li-ta.png", "avatar_路德": "https://i.postimg.cc/NGJRQFgM/lu-de.png", "avatar_路易": "https://i.postimg.cc/KcqtmjZy/lu-yi.png", "avatar_阿萊特": "https://i.postimg.cc/hGL9n0G2/a-lai-te.png", "avatar_雷吉": "https://i.postimg.cc/BZY2JbqX/lei-ji.png", "avatar_馬爾": "https://i.postimg.cc/d1nrktrD/ma-er.png", "avatar_泰達": "https://i.postimg.cc/vH2GKCw8/tai-da.png", "avatar_寧琉": "https://i.postimg.cc/tgt95LY0/ning-liu.png"
         };
@@ -198,11 +284,78 @@
             const spineKey = SPINE_MAP[charData.name]; // 拿取您對應的英文路徑名稱
 
             if (spineKey) {
+    
+                // ==========================================
+                // 🎁 升級版：動態顯示珍藏品名稱與圖片邏輯
+                // ==========================================
+                const presentContainer = document.getElementById('presentContainer');
+                const presentNameBox = document.getElementById('presentName');
+                const DEFAULT_NO_PRESENT_URL = "https://i.postimg.cc/qtwD6bsq/Icon-Present.png";
+    
+                let finalImgUrl = DEFAULT_NO_PRESENT_URL;
+                let presentDisplayName = "珍藏品正在送遞中..."; // 🌟 關鍵修改：未實裝角色的預設文字
+                let isHasPresent = false;
+
+                // 🔍 比對並取得當前角色的珍藏品資料
+                if (PRESENT_MAP[spineKey]) {
+                    finalImgUrl = PRESENT_MAP[spineKey].url;
+                    isHasPresent = true;
+        
+                    // 如果名稱不為空值，就用表單內的名字；如果是空的（例如 Kyarot/Ner），就自動填寫「角色名 的珍藏品」
+                    if (PRESENT_MAP[spineKey].name && PRESENT_MAP[spineKey].name.trim() !== "") {
+                        presentDisplayName = PRESENT_MAP[spineKey].name;
+                    } else {
+                        presentDisplayName = `${charData.name}的珍藏品`;
+                    }
+                }
+
+                // ✍️ 渲染名稱區塊
+                if (presentNameBox) {
+                    presentNameBox.innerText = presentDisplayName;
+        
+                    // 賦予溫馨主題與暗夜模式的基礎設定
+                    presentNameBox.className = "mb-3 tracking-wide px-4 py-1 rounded-full border transition-colors duration-300 block";
+        
+                    if (!isHasPresent) {
+                        // ⏳ 送遞中狀態：淡淡的玫瑰色底，虛線外框
+                        presentNameBox.classList.add(
+                            'text-sm', 'text-rose-400', 'dark:text-gray-400', 
+                            'bg-rose-50', 'dark:bg-gray-800/50', 
+                            'border-rose-200', 'dark:border-gray-700', 'border-dashed'
+                        );
+                    } else {
+                        // 🎁 已實裝狀態：溫暖且明顯的粉橘色實體框
+                        presentNameBox.classList.add(
+                            'text-lg', 'font-bold', 'text-rose-900', 'dark:text-gray-100', 
+                            'bg-rose-100', 'dark:bg-gray-800', 
+                            'border-rose-300', 'dark:border-gray-600', 'shadow-sm'
+                        );
+                    }
+                }
+
+                // 🚀 渲染圖片區塊
+                const altText = isHasPresent ? `${charData.name} - ${presentDisplayName}` : "珍藏品正在送遞中";
+                const imgClass = isHasPresent 
+                    ? "max-w-full max-h-48 object-contain transition-transform duration-300 hover:scale-105"
+                    : "max-w-full max-h-32 object-contain opacity-70"; // 🌟 UI 小優化：送遞中的統一圖示稍微半透明 (opacity-70)
+
+                if (presentContainer) {
+                    presentContainer.innerHTML = `
+                        <img src="${finalImgUrl}" 
+                             alt="${altText}" 
+                             class="${imgClass}"
+                             loading="lazy"
+                             onerror="if(this.src != '${DEFAULT_NO_PRESENT_URL}') this.src='${DEFAULT_NO_PRESENT_URL}'; else this.parentElement.innerHTML='<p class=\'text-gray-500 text-sm\'>⚠️ 珍藏品載入錯誤</p>'">
+                    `;
+                }
+                // ==========================================
+                // 🎁 珍藏品代碼結束
+                // ==========================================
                 avatarBox.innerHTML = ''; // 清空 fallback 文字或提示
                 
                 let player = new spine.SpinePlayer(avatarBox, {
-                    skelUrl: `./spine_assets/${spineKey}/${spineKey}.skel.bytes`,
-                    atlasUrl: `./spine_assets/${spineKey}/${spineKey}.atlas.txt`,
+                    skelUrl: `./spine_assests/${spineKey}/${spineKey}.skel.bytes`,
+                    atlasUrl: `./spine_assests/${spineKey}/${spineKey}.atlas.txt`,
                     animation: "Idle_1",     
                     premultipliedAlpha: true,
                     backgroundColor: "#00000000",
