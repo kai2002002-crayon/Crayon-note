@@ -218,34 +218,74 @@
                     },
 
                     success: function (player) {
-                        // ... 後面的程式碼維持不變 ...
                         console.log(`✅ ${charData.name} 的 Spine 動畫載入成功！`);
                         
-                        // 👗 外觀優化邏輯：優先套用 'Normal'，其次套用非 'default' 的外觀
+                        // 👗 外觀優化邏輯 (維持不變)
                         const skins = player.skeleton.data.skins;
                         if (skins && skins.length > 1) {
-                            // 🔍 優先找叫 'Normal' 的外觀；如果沒有，就找第一個不是 'default' 的
                             const targetSkin = skins.find(s => s.name === 'Normal') || skins.find(s => s.name !== 'default');
-                            
                             if (targetSkin) {
                                 player.skeleton.setSkinByName(targetSkin.name);
-                                player.skeleton.setSlotsToSetupPose(); // 強制刷新骨架與貼圖，把衣服手腳穿上！
-                                console.log(`👗 ${charData.name} 自動裝備外觀: ${targetSkin.name}`);
+                                player.skeleton.setSlotsToSetupPose();
                             }
                         }
 
-                        // 🌟 互動魔法：點擊切換隨機動作
-                        const canvas = avatarBox.querySelector('canvas');
-                        if(canvas) {
-                            canvas.addEventListener('click', () => {
-                                const animations = player.skeleton.data.animations;
-                                if (animations && animations.length > 1) {
-                                    const animsToPlay = animations.filter(a => a.name !== 'Idle_1');
+                        // 🎬 閒置與互動計時器魔法
+                        const animations = player.skeleton.data.animations;
+                        if (animations && animations.length > 1) {
+                            
+                            let idleTimer = null; // 用來儲存計時器的變數
+
+                            // 📦 封裝：播放動作並確保至少循環 5 秒
+                            function playRandomAction() {
+                                const animsToPlay = animations.filter(a => a.name !== 'Idle_1');
+                                if (animsToPlay.length > 0) {
                                     const randomAnim = animsToPlay[Math.floor(Math.random() * animsToPlay.length)].name;
-                                    player.animationState.setAnimation(0, randomAnim, false);
-                                    player.animationState.addAnimation(0, "Idle_1", true, 0);
+        
+                                    console.log(`🤖 觸發動作: ${randomAnim}`);
+        
+                                    // 1. 播放隨機動作 (設定為 true，讓它先開始循環)
+                                    player.animationState.setAnimation(0, randomAnim, true);
+        
+                                    // 2. 清除舊計時器
+                                    clearTimeout(idleTimer);
+        
+                                    // 3. 設定一個計時器，5 秒後才准許切換回 Idle_1
+                                    idleTimer = setTimeout(() => {
+                                        // 切換回待機，且設定為循環
+                                        player.animationState.setAnimation(0, "Idle_1", true);
+            
+                                        // 重新啟動 5 秒後的下一次自動動作
+                                        startIdleTimer();
+                                    }, 5000); // 強制執行 5 秒
+        
+                                } else {
+                                    startIdleTimer();
                                 }
-                            });
+                            }
+
+                            // ⏱️ 封裝：啟動/重設計時器的函數
+                            function startIdleTimer() {
+                                // 先清除舊的計時器，避免重複疊加
+                                clearTimeout(idleTimer);
+                                // 重新設定 5 秒 (5000 毫秒) 後執行
+                                idleTimer = setTimeout(() => {
+                                    playRandomAction();
+                                }, 5000);
+                            }
+
+                            // 🚀 第一次初始化：載入成功後立刻開始倒數 5 秒
+                            startIdleTimer();
+
+                            // 🌟 互動魔法：玩家主動點擊
+                            const canvas = avatarBox.querySelector('canvas');
+                            if(canvas) {
+                                canvas.addEventListener('click', () => {
+                                    console.log("👆 玩家主動戳了角色");
+                                    // 點擊時直接觸發動作 (內部會自動清除舊計時器並重開 5 秒)
+                                    playRandomAction();
+                                });
+                            }
                         }
                     },
                     error: function (player, reason) {
