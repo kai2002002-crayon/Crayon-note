@@ -152,6 +152,15 @@
             "阿萊特": "Allet", "雷吉": "Lazy", "馬爾": "Mago", "泰達": "Taida", "寧琉": "Ner"
         };
 
+        // 🌆 遊戲大廳隨機背景圖清單
+        const LOBBY_BACKGROUNDS = [
+            "https://i.postimg.cc/WhSFdxt3/Lobby-100010-1.png",
+            "https://i.postimg.cc/CzJBR9dy/Lobby-10002-1.png",
+            "https://i.postimg.cc/vcXg4CTC/Lobby-10003-1.png",
+            "https://i.postimg.cc/svKQMb1r/Lobby-10007-1.png",
+            "https://i.postimg.cc/jLvwDBCT/Lobby-10008-1.png",
+            "https://i.postimg.cc/svKQMb1D/Lobby-10009-1.png"
+        ];
         // 🎁 珍藏品圖片與名稱完整對照表 (已同步 Spine 英文名)
         const PRESENT_MAP = {
             "Alice": { name: "愛麗絲的卡片冊", url: "https://i.postimg.cc/SXd1YT62/Present-List-Alice.png" },
@@ -351,23 +360,39 @@
                 // ==========================================
                 // 🎁 珍藏品代碼結束
                 // ==========================================
-                avatarBox.innerHTML = ''; // 清空 fallback 文字或提示
+                // 1. 清空容器原本的內容
+                avatarBox.innerHTML = ''; 
                 
+                // 🌆 2. 隨機背景魔法：從清單抽一張背景圖套用給外框
+                if (LOBBY_BACKGROUNDS && LOBBY_BACKGROUNDS.length > 0) {
+                    const randomBg = LOBBY_BACKGROUNDS[Math.floor(Math.random() * LOBBY_BACKGROUNDS.length)];
+                    
+                    // 運用 JS 賦予外框美麗的背景圖樣式
+                    avatarBox.style.backgroundImage = `url('${randomBg}')`;
+                    avatarBox.style.backgroundSize = 'cover';       // 讓背景完美填滿外框
+                    avatarBox.style.backgroundPosition = 'center';  // 鏡頭置中
+                    avatarBox.style.backgroundRepeat = 'no-repeat'; // 不重複拼貼
+                    
+                    // 💡 視覺微調：確保外框有圓角且背景不會超出外框
+                    avatarBox.classList.add('overflow-hidden', 'rounded-2xl', 'shadow-inner');
+                }
+                
+                // 3. 初始化 Spine 播放器 (維持您原本的設定)
                 let player = new spine.SpinePlayer(avatarBox, {
-                    skelUrl: `./spine_assests/${spineKey}/${spineKey}.skel.bytes`,
-                    atlasUrl: `./spine_assests/${spineKey}/${spineKey}.atlas.txt`,
+                    skelUrl: `./spine_assets/${spineKey}/${spineKey}.skel.bytes`, // 拼法已修正為 assets
+                    atlasUrl: `./spine_assets/${spineKey}/${spineKey}.atlas.txt`,
                     animation: "Idle_1",     
                     premultipliedAlpha: true,
-                    backgroundColor: "#00000000",
-                    alpha: true,
-                    showControls: false,
+                    backgroundColor: "#00000000", // 🌟 關鍵：維持全透明，背景圖才看得到
+                    alpha: true,                  // 🌟 關鍵：維持全透明
+                    showControls: false,     
                     
-                    // 🌟 關鍵升級：鎖定固定鏡頭，關閉自動縮放，還原真實身高差！
+                    // 攝影機鏡頭鎖定 (維持您之前調好的高矮比例)
                     viewport: {
-                        x: -400,     // 鏡頭起始 X 座標 (以 0 為中心，往左抓 400 單位)
-                        y: 0,        // 鏡頭起始 Y 座標 (0 通常是角色的腳底板)
-                        width: 800,  // 鏡頭總寬度 (數值越大，鏡頭越遠，角色看起來越小)
-                        height: 1000 // 鏡頭總高度
+                        x: -400,     
+                        y: 0,        
+                        width: 800,  
+                        height: 1000 
                     },
 
                     success: function (player) {
