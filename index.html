@@ -1135,7 +1135,11 @@
 
                     const detailBtn = document.createElement('button');
                     detailBtn.onclick = () => window.open(`char_detail.html?char=${encodeURIComponent(char.name)}`, '_blank');
-                    detailBtn.className = "w-8 sm:w-10 shrink-0 flex items-center justify-center bg-amber-500/10 hover:bg-amber-300 dark:bg-gray-700/50 dark:hover:bg-gray-600 border-r border-amber-200/50 dark:border-gray-600 transition-colors cursor-pointer group";
+
+                    // 💡 新增邏輯：判斷當前語言。只有在繁中 (zh-TW) 時使用 flex 顯示，其他語言則套用 hidden 隱藏
+                    const displayClass = (currentLang === 'zh-TW') ? 'flex' : 'hidden';
+
+                    detailBtn.className = `w-8 sm:w-10 shrink-0 ${displayClass} items-center justify-center bg-amber-500/10 hover:bg-amber-300 dark:bg-gray-700/50 dark:hover:bg-gray-600 border-r border-amber-200/50 dark:border-gray-600 transition-colors cursor-pointer group`;
                     detailBtn.title = `查看 ${t(char.name)} 的詳細資料`;
 
                     detailBtn.innerHTML = `
