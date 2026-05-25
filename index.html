@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="referrer" content="no-referrer">
+    
     <title>嘟嘟臉金蠟筆記事本</title>
     <link rel="icon" href="https://i.postimg.cc/SsdYCfTT/rimrim.png" type="image/png">
-    
+    <script src="data.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -70,12 +72,16 @@
             -webkit-touch-callout: none; 
             -webkit-user-select: none; 
             user-select: none; 
+            /* 🛠️ 修復 2：強制 GPU 加速，解決 Opera Hover 時的閃爍與黑邊問題 */
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            will-change: transform;
         }
 
         /* 僅在支援滑鼠的設備上啟用懸停放大 */
         @media (hover: hover) and (pointer: fine) {
             .char-avatar-container:hover { 
-                transform: scale(1.5); 
+                transform: scale(1.5) translateZ(0); /* 同步保留 GPU 加速屬性 */
                 z-index: 50; 
                 box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3); 
             }
@@ -98,15 +104,19 @@
         .swap-avatars .avatar-alt {
             opacity: 1;
         }
+        
         /* 針對小圖示與蠟筆按鈕的懸停微放大特效 */
         .hover-scale {
             transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
             position: relative;
             z-index: 1;
+            /* 🛠️ 修復 2：強制 GPU 加速 */
+            transform: translateZ(0);
+            backface-visibility: hidden;
         }
         @media (hover: hover) and (pointer: fine) {
             .hover-scale:hover {
-                transform: scale(1.15); /* 放大 15% 恰到好處，既有動感又不會破版 */
+                transform: scale(1.15) translateZ(0); /* 放大 15% 恰到好處，既有動感又不會破版 */
                 z-index: 10; /* 確保放大的元素會蓋在別人上面 */
             }
         }
@@ -130,6 +140,7 @@
         .social-fixed { position: fixed; bottom: 20px; right: 20px; z-index: 100; }
         .social-menu { display: none; margin-bottom: 8px; flex-direction: column; gap: 8px; }
         .social-fixed:hover .social-menu { display: flex; }
+        
         /* ==============================================================
             🌟 看板娘 Rim 專屬容器
             ============================================================== */
@@ -401,7 +412,7 @@
                 "攻擊": "攻撃", "防禦": "防御", "血量": "HP", "爆擊": "会心", "爆抗": "会心抵抗", "全部": "すべて",
                 "洛涅": "ローネ", "薇薇": "ヴィヴィ", "艾爾芬": "エルフィン", "錫安": "シオン・ザ・DB", "伊弗利特": "イフリート", "伊德": "イード", "佩佩": "ベルベット", "佩斯塔": "フェスタ",
                 "修帕": "シュパン", "傑德": "ジェイド", "優米": "ヨミ", "劉美美": "ユミミ", "加薇雅": "ガヴィア", "卡洛特": "キャロット", "卡蓮": "カレン", "喬菲": "チョッピー",
-                "基狄恩": "ギデオン", "大師2號": "マエストロMK2", "大木頭": "ビッグウッド", "奈雅": "ナイア", "奶油": "バター", "布蘭切": "ブランセ", "希拉": "シーラ", "ヒルデ": "ヒルデ",
+                "基狄恩": "ギデオン", "大師2號": "マエストロMK2", "大木頭": "ビッグウッド", "奈雅": "ナイア", "奶油": "バター", "布蘭切": "ブランセ", "希拉": "シーラ", "希爾德": "ヒルデ",
                 "希瑟圖": "シスト", "希菲爾": "シルフィール", "帕特拉": "パトラ", "庫洛艾": "クロエ", "康娜": "カンナ", "愛麗絲": "アリス", "斑尼": "ベニー", "斯皮奇": "スピッキー",
                 "斯諾奇": "スノキー", "柯米": "コミー", "桃桃": "モモ", "梅森": "メゾン", "梅露娜": "メロナ", "海莉": "ヘイリー", "珀榭": "ポーシャー", "琳": "リム",
                 "瑟琳娜": "セリーネ", "瑪約": "マヨ", "瑪麗": "マリー", "皮可菈": "ピコラ", "盧波": "ルポ", "米雪": "ミンス", "綾": "アヤ", "羽伊": "ウイ",
@@ -523,14 +534,14 @@
             "personality_冷靜": "https://i.postimg.cc/xjMS2JGd/leng-jing.png",
             "personality_狂亂": "https://i.postimg.cc/ryxLk0Gm/kuang-luan.png",
             "personality_憂鬱": "https://i.postimg.cc/g07PY3BR/you-yu.png",
-            "race_精靈": "https://i.postimg.cc/zv525B5b/jing-ling.png",
-            "race_龍族": "https://i.postimg.cc/Xq313J3f/long-zu.png",
-            "race_妖精": "https://i.postimg.cc/1XP7PtPf/yao-jing.png", 
-            "race_魔靈": "https://i.postimg.cc/PJhVhxhV/mo-ling.png",
-            "race_獸人": "https://i.postimg.cc/3N7f7R7n/shou-ren.png",
-            "race_幽靈": "https://i.postimg.cc/PJhVhxh5/you-ling.png",
-            "race_魔女": "https://i.postimg.cc/8cDXD5Dm/mo-nu.png",
-            "race_unknown": "https://i.postimg.cc/Rh9p9F9F/unknown.png",
+            "race_精靈": "https://i.postimg.cc/D4THRGwZ/jing-ling.png",
+            "race_龍族": "https://i.postimg.cc/QK3wv7dB/long-zu.png",
+            "race_妖精": "https://i.postimg.cc/SYh3H9xn/yao-jing.png", 
+            "race_魔靈": "https://i.postimg.cc/H89RmLrW/mo-ling.png",
+            "race_獸人": "https://i.postimg.cc/sGrqbWgQ/shou-ren.png",
+            "race_幽靈": "https://i.postimg.cc/tnjw8647/you-ling.png",
+            "race_魔女": "https://i.postimg.cc/H8gRFMk8/mo-nu.png",
+            "race_unknown": "https://i.postimg.cc/zHr64hGf/unknown.png",
             "position_前排": "https://i.postimg.cc/VvBTbtDy/qian-pai.png",
             "position_中排": "https://i.postimg.cc/RZ08NNtT/zhong-pai.png",
             "position_後排": "https://i.postimg.cc/DwC9gqFk/hou-pai.png",
@@ -680,78 +691,6 @@
             "hover_avatar_雷吉": "https://i.postimg.cc/Wd864PgS/lei-ji2.png",
             "hover_avatar_馬爾": "https://i.postimg.cc/pmRJxdhd/ma-er2.png"
         };
-
-        const INITIAL_DATA = [
-            { name: "洛涅", personality: "天真", race: "精靈", position: "前排", job: "肉盾", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-            { name: "薇薇", personality: "天真", race: "龍族", position: "前排", job: "肉盾", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-            { name: "卡洛特", personality: "天真", race: "妖精", position: "後排", job: "輔助", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-            { name: "奈雅", personality: "天真", race: "魔靈", position: "中排", job: "輔助", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-            { name: "艾爾芬", personality: "天真", race: "妖精", position: "後排", job: "輸出", layer1: ["攻擊", "防禦"], layer2: ["血量", "攻擊", "防禦"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-            { name: "馬爾", personality: "天真", race: "獸人", position: "中排", job: "輔助", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-            { name: "加薇雅", personality: "天真", race: "魔靈", position: "中排", job: "輔助", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "爆擊", "防禦", "爆抗"] },
-            { name: "希菲爾", personality: "天真", race: "龍族", position: "中排", job: "輸出", layer1: ["爆擊", "血量"], layer2: ["爆擊", "防禦", "爆抗"], layer3: ["攻擊", "爆擊", "血量", "防禦"] },
-            { name: "斯皮奇", personality: "天真", race: "幽靈", position: "後排", job: "輸出", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-            { name: "海莉", personality: "天真", race: "精靈", position: "中排", job: "輸出", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-            { name: "大木頭", personality: "天真", race: "魔靈", position: "前排", job: "肉盾", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-            { name: "阿萊特", personality: "天真", race: "精靈", position: "前排", job: "肉盾", layer1: ["爆擊", "爆抗"], layer2: ["爆擊", "血量", "爆抗"], layer3: ["爆擊", "防禦", "血量", "爆抗"] },
-            { name: "莎莉", personality: "天真", race: "幽靈", position: "中排", job: "輸出", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-            { name: "路易", personality: "天真", race: "妖精", position: "中排", job: "輔助", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-            { name: "修帕", personality: "活潑", race: "妖精", position: "後排", job: "輔助", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] },
-            { name: "奶油", personality: "活潑", race: "獸人", position: "後排", job: "輸出", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-            { name: "桃桃", personality: "活潑", race: "獸人", position: "後排", job: "輸出", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊",  "防禦", "爆擊", "爆抗"] },
-            { name: "瑟琳娜", personality: "活潑", race: "幽靈", position: "前排", job: "肉盾", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-            { name: "羽伊", personality: "活潑", race: "魔靈", position: "中排", job: "輔助", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] },
-            { name: "艾皮卡", personality: "活潑", race: "獸人", position: "中排", job: "輸出", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] },
-            { name: "路德", personality: "活潑", race: "龍族", position: "前排", job: "肉盾", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-            { name: "康娜", personality: "活潑", race: "精靈", position: "後排", job: "輸出", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-            { name: "斑尼", personality: "活潑", race: "獸人", position: "前排", job: "輸出", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-            { name: "盧波", personality: "活潑", race: "獸人", position: "中排", job: "輸出", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] },
-            { name: "茱蜜", personality: "活潑", race: "魔靈", position: "中排", job: "輸出", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-            { name: "卡蓮", personality: "活潑", race: "妖精", position: "後排", job: "輔助", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] },
-            { name: "泰達", personality: "活潑", race: "精靈", position: "後排", job: "輸出", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-            { name: "瑪麗", personality: "活潑", race: "妖精", position: "中排", job: "輸出", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-            { name: "米雪", personality: "活潑", race: "獸人", position: "前排", job: "輸出", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-            { name: "伊德", personality: "冷靜", race: "精靈", position: "前排", job: "肉盾", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-            { name: "艾琳娜", personality: "冷靜", race: "精靈", position: "中排", job: "輸出", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-            { name: "佩佩", personality: "冷靜", race: "魔女", position: "前排", job: "肉盾", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] },
-            { name: "希拉", personality: "冷靜", race: "魔靈", position: "後排", job: "輸出", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-            { name: "皮可菈", personality: "冷靜", race: "魔女", position: "後排", job: "輔助", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-            { name: "艾蜜莉雅", personality: "冷靜", race: "精靈", position: "後排", job: "輔助", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-            { name: "芙莉可", personality: "冷靜", race: "魔女", position: "中排", job: "輸出", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-            { name: "綾", personality: "冷靜", race: "魔女", position: "中排", job: "輸出", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-            { name: "帕特拉", personality: "冷靜", race: "妖精", position: "前排", job: "輸出", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-            { name: "梅露娜", personality: "冷靜", race: "魔靈", position: "後排", job: "輔助", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-            { name: "傑德", personality: "冷靜", race: "龍族", position: "中排", job: "輸出", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-            { name: "艾斯皮", personality: "冷靜", race: "幽靈", position: "中排", job: "輔助", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] },
-            { name: "雷吉", personality: "冷靜", race: "精靈", position: "後排", job: "輸出", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-            { name: "瑪約", personality: "狂亂", race: "妖精", position: "後排", job: "輸出", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-            { name: "莉茲", personality: "狂亂", race: "龍族", position: "前排", job: "輸出", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-            { name: "謝蒂", personality: "狂亂", race: "幽靈", position: "前排", job: "輸出", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-            { name: "庫洛艾", personality: "狂亂", race: "妖精", position: "前排", job: "肉盾", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-            { name: "愛麗絲", personality: "狂亂", race: "幽靈", position: "中排", job: "輸出", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-            { name: "蒂亞娜", personality: "狂亂", race: "獸人", position: "中排", job: "輔助", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] },
-            { name: "貝麗塔", personality: "狂亂", race: "魔女", position: "後排", job: "輸出", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-            { name: "希瑟圖", personality: "狂亂", race: "龍族", position: "中排", job: "輸出", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["爆擊", "防禦", "血量", "爆抗"] },
-            { name: "大師2號", personality: "狂亂", race: "精靈", position: "前排", job: "肉盾", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-            { name: "梅森", personality: "狂亂", race: "幽靈", position: "後排", job: "輸出", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] },
-            { name: "伊弗利特", personality: "狂亂", race: "魔靈", position: "前排", job: "輸出", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-            { name: "劉美美", personality: "狂亂", race: "獸人", position: "後排", job: "輸出", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-            { name: "錫安", personality: "憂鬱", race: "幽靈", position: "後排", job: "輸出", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-            { name: "基狄恩", personality: "憂鬱", race: "龍族", position: "前排", job: "輸出", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-            { name: "布蘭切", personality: "憂鬱", race: "魔靈", position: "中排", job: "輸出", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-            { name: "琳", personality: "憂鬱", race: "幽靈", position: "前排", job: "輸出", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] },
-            { name: "優米", personality: "憂鬱", race: "???", position: "中排", job: "輔助", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-            { name: "希爾德", personality: "憂鬱", race: "精靈", position: "中排", job: "輔助", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-            { name: "柯米", personality: "憂鬱", race: "獸人", position: "前排", job: "肉盾", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-            { name: "珀榭", personality: "憂鬱", race: "魔女", position: "後排", job: "輔助", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-            { name: "艾舒爾", personality: "憂鬱", race: "妖精", position: "後排", job: "輸出", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] },
-            { name: "斯諾奇", personality: "憂鬱", race: "魔女", position: "前排", job: "肉盾", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-            { name: "貝魯", personality: "憂鬱", race: "幽靈", position: "中排", job: "輸出", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-            { name: "佩斯塔", personality: "憂鬱", race: "精靈", position: "前排", job: "輔助", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-            { name: "萊薇", personality: "憂鬱", race: "魔女", position: "中排", job: "輸出", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] },
-            { name: "喬菲", personality: "憂鬱", race: "獸人", position: "中排", job: "輸出", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-            { name: "寧琉", personality: "狂亂", race: "妖精", position: "前排", job: "輔助", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] }
-        ];
         
         const LAYER_RULES = {
             1: { name: "🥇 第一層", crayon: 2, bonus: 3 },
@@ -1176,7 +1115,7 @@
                 pChars.forEach(char => {
                     const charCard = document.createElement('div');
                     charCard.id = `char_card_${char.name}`;
-                    charCard.className = "char-card-wrapper bg-white/50 dark:bg-gray-750/50 p-3 sm:p-4 rounded-xl border border-gray-200/60 dark:border-gray-600 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-4 transition-all duration-200";
+                    charCard.className = "char-card-wrapper bg-white/50 dark:bg-gray-750/50 rounded-xl border border-gray-200/60 dark:border-gray-600 flex flex-row items-stretch transition-all duration-200 overflow-hidden";
                     charCard.setAttribute('onmouseenter', 'checkMarquee(this, true)');
                     charCard.setAttribute('onmouseleave', 'checkMarquee(this, false)');
                     
@@ -1194,12 +1133,27 @@
                     const isOwned = savedStates['owned_' + char.name];
                     const avatarClass = isOwned ? "" : "unowned-avatar";
 
+                    const detailBtn = document.createElement('button');
+                    detailBtn.onclick = () => window.open(`char_detail.html?char=${encodeURIComponent(char.name)}`, '_blank');
+                    detailBtn.className = "w-8 sm:w-10 shrink-0 flex items-center justify-center bg-amber-500/10 hover:bg-amber-300 dark:bg-gray-700/50 dark:hover:bg-gray-600 border-r border-amber-200/50 dark:border-gray-600 transition-colors cursor-pointer group";
+                    detailBtn.title = `查看 ${t(char.name)} 的詳細資料`;
+
+                    detailBtn.innerHTML = `
+                        <img src="https://i.postimg.cc/T1Y9CC22/Album-Icon-Info.png" 
+                             alt="Info" 
+                             class="w-5 h-5 sm:w-6 sm:h-6 opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-200">
+                    `;
+                    charCard.appendChild(detailBtn);
+
+                    const cardInner = document.createElement('div');
+                    cardInner.className = "flex-1 p-3 sm:p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-4 w-full overflow-hidden";
+
                     const nameCol = document.createElement('div');
                     nameCol.className = "flex flex-row items-center justify-start gap-3 min-w-[210px] w-full md:w-auto border-b md:border-b-0 pb-2 md:pb-0 border-gray-200/50 dark:border-gray-700";
                     
+                    // 🛠️ 修復 3：移除這裡面 img 的 loading="lazy"，避免 Opera 延遲載入破圖
                     nameCol.innerHTML = `
                         <div class="relative shrink-0 w-12 h-12" onclick="toggleOwnership('${char.name}')">
-                            
                             <div id="avatar_container_${char.name}" class="char-avatar-container w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-inner bg-white ${avatarClass}">
                                 <img src="${avatarPath}" alt="${t(char.name)}" 
                                      onerror="this.style.display='none'; document.getElementById('fall_av_${char.name}').classList.remove('hidden');">
@@ -1253,7 +1207,7 @@
                             </div>
                         </div>
                     `;
-                    charCard.appendChild(nameCol);
+                    cardInner.appendChild(nameCol);
 
                     const layersContainer = document.createElement('div');
                     layersContainer.className = "flex flex-col sm:flex-row gap-3 w-full md:flex-1";
@@ -1300,7 +1254,8 @@
                         layersContainer.appendChild(layerBox);
                     });
 
-                    charCard.appendChild(layersContainer);
+                    cardInner.appendChild(layersContainer);
+                    charCard.appendChild(cardInner);
                     charListContainer.appendChild(charCard);
                 });
 
