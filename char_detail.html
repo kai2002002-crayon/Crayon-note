@@ -326,13 +326,31 @@
                   document.getElementById('commentsList').innerHTML = `<div class="text-center text-red-500 font-bold text-sm py-4">讀取留言失敗，請確認資料庫權限設定。</div>`;
               });
         }
-
+        // 取得或產生專屬的匿名 ID
+        function getAnonymousId() {
+            // 先檢查瀏覽器有沒有記住之前的代號
+            let anonId = localStorage.getItem('trickcal_anon_id');
+    
+            // 如果沒有，就抽一個新的，然後存起來
+            if (!anonId) {
+                const randomNum = Math.floor(Math.random() * 9000) + 1000;
+                anonId = `匿名教主#${randomNum}`;
+                localStorage.setItem('trickcal_anon_id', anonId);
+            }
+            return anonId;
+        }
         // 送出留言
         function submitComment() {
-            const authorInput = document.getElementById('commentAuthor').value.trim() || '匿名教主';
+            // 💡 替換成這一段：判斷有沒有填名字，沒填就呼叫上面的函數拿專屬代號
+            let authorInput = document.getElementById('commentAuthor').value.trim();
+            if (!authorInput) {
+                authorInput = getAnonymousId();
+            }
+    
             const contentInput = document.getElementById('commentContent').value.trim();
             const btn = document.getElementById('submitCommentBtn');
 
+            // ... 下面的程式碼維持原樣 ...
             if (!contentInput) {
                 alert('請輸入評價內容！');
                 return;
