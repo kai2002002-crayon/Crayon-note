@@ -6,7 +6,10 @@
     <meta name="referrer" content="no-referrer">
     
     <title>嘟嘟臉金蠟筆記事本</title>
-    <link rel="icon" href="https://i.postimg.cc/SsdYCfTT/rimrim.png" type="image/png">
+    <meta name="description" content="《Trickcal: Chibi Go》各位教主，歡迎來到嘟嘟臉金蠟筆記事本！這裡提供最新的《嘟嘟臉惡作劇》角色圖鑑、金蠟筆分佈與技能資料。獨家收錄坨坨們的珍藏品與情信，馬上來查詢最實用的攻略情報吧！">
+    <link rel="icon" href="./favicon.png" type="image/png">
+
+    <link rel="icon" href="https://i.postimg.cc/mkfSTq5k/Favicon.png" type="image/png">
     <script src="data.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -170,10 +173,15 @@
             height: 100% !important;
             display: block !important;
         }
+        #rim-live-container .spine-player-canvas {
+    background-color: transparent !important;
+}
     </style>
 </head>
 <body class="p-3 sm:p-6 md:p-8 text-gray-800 dark:text-gray-100">
-
+    <div id="loader" class="fixed inset-0 bg-[#fcf8f2] dark:bg-slate-900 z-[9999] flex items-center justify-center">
+        <div class="animate-bounce text-2xl">🖍️</div>
+    </div>
     <div class="max-w-7xl mx-auto">
         
         <header class="bg-gradient-to-r from-amber-100/90 via-yellow-100/90 to-orange-100/90 dark:from-gray-800/90 dark:via-gray-700/90 dark:to-gray-800/90 rounded-2xl p-4 sm:p-6 shadow-md mb-6 border-4 border-amber-400 dark:border-gray-600 flex flex-col transition-colors backdrop-blur-sm relative">
@@ -462,7 +470,44 @@
                 "阿萊特": "Allet", "雷吉": "Layze", "馬爾": "Mago", "泰達": "Taida", "寧琉": "Ner"
             }
         };
+        
+        // Spine 名稱對應表
+        const SPINE_MAP = {
+            "洛涅": "Rohne", "薇薇": "Vivi", "艾爾芬": "Erpin", "錫安": "xXionx", "伊弗利特": "Ifrit", "伊德": "Ed", "佩佩": "Velvet", "佩斯塔": "Festa",
+            "修帕": "Shoupan", "傑德": "Jade", "優米": "Yomi", "劉美美": "Yumimi", "加薇雅": "Gabia", "卡洛特": "Kyarot", "卡蓮": "Carren", "喬菲": "Chopi",
+            "基狄恩": "Kidian", "大師2號": "MaestroMK2", "大木頭": "BigWood", "奈雅": "Naia", "奶油": "Butter", "布蘭切": "Blanchet", "希拉": "Sylla", "希爾德": "Hilde",
+            "希瑟圖": "Sist", "希菲爾": "Silphir", "帕特拉": "Patula", "庫洛艾": "Chloe", "康娜": "Canna", "愛麗絲": "Alice", "斑尼": "Beni", "斯皮奇": "Speaki",
+            "斯諾奇": "Snorky", "柯米": "Kommy", "桃桃": "Momo", "梅森": "Maison", "梅露娜": "Meluna", "海莉": "Haley", "珀榭": "Posher", "琳": "Rim",
+            "瑟琳娜": "Selline", "瑪約": "Mayo", "瑪麗": "Marie", "皮可菈": "Picora", "盧波": "Rufo", "米雪": "Mynx", "綾": "Aya", "羽伊": "Ui",
+            "艾斯皮": "Espi", "艾琳娜": "Elena", "艾皮卡": "Epica", "艾舒爾": "Ashur", "艾蜜莉雅": "Amelia", "芙莉可": "Fricle", "茱蜜": "Jubee", "莉茲": "Leets",
+            "莎莉": "Sari", "萊薇": "Levi", "蒂亞娜": "Diana", "謝蒂": "Shady", "貝魯": "Veroo", "貝麗塔": "Belita", "路德": "Rude", "路易": "Cuee",
+            "阿萊特": "Allet", "雷吉": "Lazy", "馬爾": "Mago", "泰達": "Taida", "寧琉": "Ner"
+        };
+        
+        // 📝 建立一個記憶清單，記住哪些角色已經預載過了
+        const preloadedSpines = new Set(); 
 
+        function preloadSpineAssets(charName) {
+            // 💡 檢查機制：如果這個角色已經預載過了，就直接跳過，不浪費效能！
+            if (preloadedSpines.has(charName)) return;
+            
+            const spineKey = SPINE_MAP[charName]; 
+            if (!spineKey) return;
+
+            // 取得該角色預設服裝的路徑
+            const basePath = `./spine_assets/${spineKey}/${spineKey}`;
+
+            // 偷偷在背景抓取檔案，寫入瀏覽器快取 (Cache)
+            fetch(`${basePath}.png`, { mode: 'no-cors' }); 
+            fetch(`${basePath}.skel.bytes`, { mode: 'no-cors' });
+            fetch(`${basePath}.atlas.txt`, { mode: 'no-cors' });
+
+            // 幫這個角色打勾，加進記憶清單中
+            preloadedSpines.add(charName);
+            // 您可以按 F12 看看滑鼠滑過時，有沒有成功觸發這行字
+            console.log(`🚀 已在背景悄悄預載了 ${charName} 的動畫檔案！`);
+        }
+        
         let currentLang = localStorage.getItem('user_lang') || 'zh-TW';
         document.getElementById('langSelect').value = currentLang;
 
@@ -521,7 +566,10 @@
                 banner.classList.remove('hidden');
             }
             return false;
-        };
+        }
+        window.addEventListener('load', () => {
+            document.getElementById('loader').style.display = 'none';
+        });
     </script>
 
     <script>
@@ -1117,7 +1165,7 @@
                     const charCard = document.createElement('div');
                     charCard.id = `char_card_${char.name}`;
                     charCard.className = "char-card-wrapper bg-white/50 dark:bg-gray-750/50 rounded-xl border border-gray-200/60 dark:border-gray-600 flex flex-row items-stretch transition-all duration-200 overflow-hidden";
-                    charCard.setAttribute('onmouseenter', 'checkMarquee(this, true)');
+                    charCard.setAttribute('onmouseenter', `checkMarquee(this, true); preloadSpineAssets('${char.name}');`);
                     charCard.setAttribute('onmouseleave', 'checkMarquee(this, false)');
                     
                     const avatarPath = IMAGE_MAP[`avatar_${char.name}`] || "";
@@ -1482,5 +1530,6 @@
             }); 
         });
     </script>
+    
 </body>
 </html>
