@@ -554,13 +554,16 @@
 
                         function playNextAnimation() {
                             const targetAnims = playList.length > 0 ? playList : ['Idle_1'];
-                            const nextAnim = targetAnims[currentIndex % targetAnims.length];
-                            
-                            console.log(`🔄 自動輪播: ${nextAnim}`);
+    
+                            // 🌟 修改這裡：不再使用 currentIndex，改為隨機抽取
+                            const randomIndex = Math.floor(Math.random() * targetAnims.length);
+                            const nextAnim = targetAnims[randomIndex];
+    
+                            console.log(`🎲 隨機輪播: ${nextAnim}`);
                             player.animationState.setAnimation(0, nextAnim, true); 
-                            currentIndex++;
-                            
-                            // 照搬舊版的完美防破圖機制：動作播 5 秒 -> 切回 Idle_1 -> 再等 5 秒播下一個動作
+    
+                            // 刪掉 currentIndex++，因為我們不需要記順序了
+    
                             clearTimeout(globalIdleTimer);
                             globalIdleTimer = setTimeout(playNextAnimation, 5000);
                         }
