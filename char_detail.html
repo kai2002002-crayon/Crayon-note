@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
@@ -8,57 +8,55 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
 
     <script>
-        tailwind.config = {
-            darkMode: 'class',
-        }
+        tailwind.config = { darkMode: 'class', }
     </script>
 
     <script>
         const isDarkMode = localStorage.getItem('theme') === 'dark' || 
                            (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
-        if (isDarkMode) {
-            document.documentElement.classList.add('dark');
-        }
+        if (isDarkMode) { document.documentElement.classList.add('dark'); }
     </script>
 
-    <link rel="stylesheet" href="https://unpkg.com/@esotericsoftware/spine-player@4.1.*/dist/spine-player.css">
-    <script src="https://unpkg.com/@esotericsoftware/spine-player@4.1.*/dist/iife/spine-player.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@esotericsoftware/spine-player@4.1.23/dist/spine-player.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@esotericsoftware/spine-player@4.1.23/dist/iife/spine-player.min.js"></script>
 
     <script src="data.js"></script>
     <script src="skill.js"></script>
-
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
     
     <style>
         body { font-family: 'Noto Sans TC', sans-serif; }
-        /* 隱藏 Spine 播放器下方預設的黑色漸層與時間軸 */
         .spine-player-controls { display: none !important; }
+        .costume-btn { transition: all 0.2s ease; }
+        .costume-btn:active { transform: scale(0.95); }
+        .spine-player-loading, .spine-player-progress, .spine-player-progress-bar {
+            display: none !important;
+            opacity: 0 !important;
+        }
     </style>
 </head>
 <body class="p-4 sm:p-8 bg-[#fcf8f2] dark:bg-slate-900 text-gray-800 dark:text-gray-200 transition-colors duration-300">
 
-    <div id="mainContainer" class="max-w-3xl mx-auto bg-white/90 dark:bg-slate-800/95 backdrop-blur-md p-6 rounded-2xl shadow-md border-4 border-amber-400 dark:border-slate-600 transition-colors">
+    <div id="mainContainer" class="max-w-4xl mx-auto bg-white/90 dark:bg-slate-800/95 backdrop-blur-md p-6 rounded-2xl shadow-md border-4 border-amber-400 dark:border-slate-600 transition-colors">
         
         <button onclick="window.close()" class="mb-4 px-4 py-2 bg-amber-500 text-white text-xs font-bold rounded-xl shadow hover:bg-amber-600 dark:bg-slate-700 dark:hover:bg-slate-600 transition">
             ⬅️ 關閉此頁
         </button>
 
-        <div class="flex flex-col sm:flex-row items-center gap-6 border-b-2 border-amber-200 dark:border-slate-700 pb-6 mb-6">
-            <div id="charAvatar" class="w-32 h-40 sm:w-40 sm:h-48 rounded-2xl border-4 border-amber-500 dark:border-slate-600 bg-slate-100 dark:bg-slate-800 overflow-hidden shadow-md flex items-center justify-center text-3xl font-bold text-amber-900 dark:text-amber-100 flex-shrink-0 relative cursor-pointer group">
-                <div class="absolute inset-0 bg-black/40 hidden group-hover:flex items-center justify-center text-white text-xs font-bold z-10 pointer-events-none transition-opacity">
-                    👆 點擊戳戳
-                </div>
+        <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6 border-b-2 border-amber-200 dark:border-slate-700 pb-6 mb-6">
+            <div class="flex flex-col items-center gap-3 flex-shrink-0">
+                <div id="charAvatar" class="w-80 h-[400px] sm:w-80 sm:h-96 rounded-2xl border-4 border-amber-500 dark:border-slate-600 bg-slate-100 dark:bg-slate-800 overflow-hidden shadow-md flex items-center justify-center text-3xl font-bold text-amber-900 dark:text-amber-100 relative cursor-pointer group"></div>
+                <div id="costumeButtonsContainer" class="flex flex-wrap justify-center gap-2 hidden w-full max-w-[320px]"></div>
             </div>
             
-            <div class="text-center sm:text-left w-full">
+            <div class="text-center sm:text-left w-full mt-2 sm:mt-0">
                 <h1 id="charName" class="text-3xl font-extrabold text-amber-950 dark:text-amber-400 mb-4 tracking-tight">載入中...</h1>
-                
-                <div class="flex flex-wrap justify-center sm:justify-start gap-2 text-xs font-bold">
-                    <span id="charPersonality" class="px-3 py-1 bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 rounded-lg shadow-sm border border-green-200 dark:border-green-800 flex items-center"></span>
-                    <span id="charRace" class="px-3 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-lg shadow-sm border border-blue-200 dark:border-blue-800 flex items-center"></span>
-                    <span id="charPosition" class="px-3 py-1 bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-300 rounded-lg shadow-sm border border-orange-200 dark:border-orange-800 flex items-center"></span>
-                    <span id="charJob" class="px-3 py-1 bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 rounded-lg shadow-sm border border-purple-200 dark:border-purple-800 flex items-center"></span>
+                <div class="flex justify-center sm:justify-start gap-5 sm:gap-4 pt-3 flex-wrap">
+                    <div id="charPersonality"></div>
+                    <div id="charRace"></div>
+                    <div id="charPosition"></div>
+                    <div id="charJob"></div>
                 </div>
             </div>
         </div>
@@ -89,25 +87,28 @@
                 </h3>
             </div>
     
-            <div class="flex flex-col md:flex-row gap-6 items-center md:items-start rounded-xl bg-white/60 dark:bg-gray-900/50 border border-rose-100 dark:border-gray-800 p-5">
+            <div id="presentWrapper" class="flex flex-col md:flex-row gap-6 items-center md:items-start rounded-xl bg-white/60 dark:bg-gray-900/50 border border-rose-100 dark:border-gray-800 p-5">
         
-                <div class="w-full md:w-1/3 flex flex-col items-center gap-3">
+                <div id="presentLeft" class="w-full md:w-1/3 flex flex-col items-center gap-3 transition-all duration-300">
                     <div id="presentContainer" class="w-full flex justify-center items-center overflow-hidden">
                         <p class="text-orange-400 dark:text-gray-500 text-sm animate-pulse">寶箱開啟中...</p>
                     </div>
                     <div id="presentName" class="hidden text-center font-bold text-rose-900 dark:text-rose-200 bg-rose-100/50 dark:bg-rose-900/30 px-3 py-1 rounded-lg border border-rose-200 dark:border-rose-800 text-sm"></div>
                 </div>
 
-                <div class="w-full md:w-2/3 flex flex-col gap-3">
+                <div id="presentRight" class="w-full md:w-2/3 flex flex-col gap-3 transition-all duration-300">
                     <div class="flex gap-2">
                         <button id="btnLetter" onclick="switchPresentTab('letter')" class="flex-1 py-1.5 text-sm font-bold rounded-lg transition-all bg-rose-500 text-white shadow-md">坨坨情信</button>
                         <button id="btnThought" onclick="switchPresentTab('thought')" class="flex-1 py-1.5 text-sm font-bold rounded-lg transition-all bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300">教主感想</button>
                     </div>
 
-                    <div class="relative bg-rose-50/80 dark:bg-gray-800/80 border border-rose-200 dark:border-gray-700 rounded-xl p-4 min-h-[120px]">
-                        <p id="presentText" class="text-gray-700 dark:text-gray-300 text-sm md:text-base leading-relaxed">請選擇顯示內容...</p>
+                    <div id="presentTextContainer" class="relative rounded-xl border border-rose-200 dark:border-gray-700 overflow-hidden transition-all duration-300 bg-rose-50 dark:bg-gray-800 flex flex-col min-h-[160px]">
+                        <div id="presentTextWrapper" class="relative z-20 flex-1 w-full p-5 flex flex-col transition-all">
+                            <p id="presentText" class="text-sm md:text-base leading-relaxed w-full drop-shadow-md text-gray-700 dark:text-gray-300">請選擇顯示內容...</p>
+                        </div>
                     </div>
                 </div>
+                
             </div>
         </div>
         
@@ -123,7 +124,19 @@
             
             <div class="bg-amber-50/80 dark:bg-slate-700/60 p-4 rounded-xl border border-amber-300 dark:border-slate-600 mb-6 shadow-sm transition-colors">
                 <input type="text" id="commentAuthor" placeholder="您的暱稱 (留白將以匿名顯示)" class="w-full sm:w-1/2 mb-3 px-3 py-2 text-sm font-bold text-amber-900 dark:text-white placeholder-amber-700/50 dark:placeholder-gray-400 rounded-lg border border-amber-300 dark:border-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white dark:bg-slate-800 shadow-inner">
-                <textarea id="commentContent" rows="3" placeholder="寫下您對這位坨坨的評價、組隊心得或是發廚發言..." class="w-full mb-3 px-3 py-2 text-sm font-medium text-gray-800 dark:text-gray-200 rounded-lg border border-amber-300 dark:border-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white dark:bg-slate-800 resize-none shadow-inner"></textarea>
+                <textarea id="commentContent" 
+                          rows="3"
+                          maxlength="500"
+                          oninput="document.getElementById('charCount').innerText = this.value.length + ' / 500'"
+                          placeholder="寫下您對這位坨坨的評價、組隊心得或是發廚發言..."
+                          class="w-full mb-1 px-3 py-2 text-sm font-medium text-gray-800 dark:text-gray-200 rounded-lg border border-amber-300 dark:border-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white dark:bg-slate-800 resize-none shadow-inner"></textarea>
+                </textarea>
+
+                <!-- 字數顯示區 -->
+                <div class="flex justify-end mb-3">
+                    <span id="charCount" class="text-[10px] font-bold text-amber-700/60 dark:text-gray-400">0 / 500</span>
+                </div>
+
                 <div class="flex justify-end">
                     <button onclick="submitComment()" id="submitCommentBtn" class="px-5 py-2 bg-amber-500 text-white text-sm font-bold rounded-xl shadow-md hover:bg-amber-600 dark:bg-amber-600 dark:hover:bg-amber-500 transition transform active:scale-95">
                         送出評價 🚀
@@ -151,7 +164,9 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // 🌟 新增：69位角色的 Spine 名稱對應表
+        // ==========================================
+        // 📚 角色巨型字典庫 (維持教主的原始資料不變)
+        // ==========================================
         const SPINE_MAP = {
             "洛涅": "Rohne", "薇薇": "Vivi", "艾爾芬": "Erpin", "錫安": "xXionx", "伊弗利特": "Ifrit", "伊德": "Ed", "佩佩": "Velvet", "佩斯塔": "Festa",
             "修帕": "Shoupan", "傑德": "Jade", "優米": "Yomi", "劉美美": "Yumimi", "加薇雅": "Gabia", "卡洛特": "Kyarot", "卡蓮": "Carren", "喬菲": "Chopi",
@@ -163,17 +178,17 @@
             "莎莉": "Sari", "萊薇": "Levi", "蒂亞娜": "Diana", "謝蒂": "Shady", "貝魯": "Veroo", "貝麗塔": "Belita", "路德": "Rude", "路易": "Cuee",
             "阿萊特": "Allet", "雷吉": "Lazy", "馬爾": "Mago", "泰達": "Taida", "寧琉": "Ner"
         };
-
-        // 🌆 遊戲大廳隨機背景圖清單
+        const COSTUME_MAP = {
+            "劉美美": ["Yumimi"], "卡蓮": ["Carren"], "喬菲": ["Chopi"], "帕特拉": ["Patula"], "梅森": ["Maison"], "瑪麗": ["Marie"], "米雪": ["Mynx"], "茱蜜": ["Jubee"], "莎莉": ["Sari"], "貝魯": ["Veroo"], "路易": ["Cuee"], "阿萊特": ["Allet"], "雷吉": ["Lazy"], "泰達": ["Taida"],
+            "艾舒爾": ["Ashur", "AshurSkin1"], "貝麗塔": ["Belita", "BelitaSkin1"], "斑尼": ["Beni", "BeniSkin1"], "大木頭": ["BigWood", "BigWoodSkin1"], "艾斯皮": ["Espi", "EspiSkin1"], "佩斯塔": ["Festa", "FestaSkin1"], "伊弗利特": ["Ifrit", "IfritSkin1"], "傑德": ["Jade", "JadeSkin1"], "莉茲": ["Leets", "LeetsSkin1"], "萊薇": ["Levi", "LeviSkin1"], "大師2號": ["MaestroMK2", "MaestroMK2Skin1"], "馬爾": ["Mago", "MagoSkin1"], "瑪約": ["Mayo", "MayoSkin1"], "梅露娜": ["Meluna", "MelunaSkin1"], "路德": ["Rude", "RudeSkin1"], "盧波": ["Rufo", "RufoSkin1"], "修帕": ["Shoupan", "ShoupanSkin1"], "希菲爾": ["Silphir", "SilphirSkin1"], "斯諾奇": ["Snorky", "SnorkySkin1"], "斯皮奇": ["Speaki", "SpeakiSkin1"], "佩佩": ["Velvet", "VelvetSkin1"],
+            "布蘭切": ["Blanchet", "BlanchetSkin1", "BlanchetSkin2"], "奶油": ["Butter", "ButterSkin1", "ButterSkin2"], "康娜": ["Canna", "CannaSkin1", "CannaSkin2"], "伊德": ["Ed", "EdSkin1", "EdSkin2"], "艾琳娜": ["Elena", "ElenaSkin1", "ElenaSkin2"], "艾皮卡": ["Epica", "EpicaSkin1", "EpicaSkin2"], "芙莉可": ["Fricle", "FricleSkin1", "FricleSkin2"], "加薇雅": ["Gabia", "GabiaSkin1", "GabiaSkin2"], "海莉": ["Haley", "HaleySkin1", "HaleySkin2"], "希爾德": ["Hilde", "HildeSkin1", "HildeSkin2"], "基狄恩": ["Kidian", "KidianSkin1", "KidianSkin2"], "柯米": ["Kommy", "KommySkin1", "KommySkin2"], "卡洛特": ["Kyarot", "KyarotSkin1", "KyarotSkin2"], "奈雅": ["Naia", "NaiaSkin1", "NaiaSkin2"], "寧琉": ["Ner", "NerSkin1", "NerSkin2"], "皮可菈": ["Picora", "PicoraSkin1", "PicoraSkin2"], "珀榭": ["Posher", "PosherSkin1", "PosherSkin2"], "琳": ["Rim", "RimSkin1", "RimSkin2"], "洛涅": ["Rohne", "RohneSkin1", "RohneSkin2"], "謝蒂": ["Shady", "ShadySkin1", "ShadySkin2"], "希瑟圖": ["Sist", "SistSkin1", "SistSkin2"], "希拉": ["Sylla", "SyllaSkin1", "SyllaSkin2"], "優米": ["Yomi", "YomiSkin1", "YomiSkin2"],
+            "愛麗絲": ["Alice", "AliceSkin1", "AliceSkin2", "AliceSkin3"], "艾蜜莉雅": ["Amelia", "AmeliaSkin1", "AmeliaSkin2", "AmeliaSkin3"], "綾": ["Aya", "AyaSkin1", "AyaSkin2", "AyaSkin3"], "庫洛艾": ["Chloe", "ChloeSkin1", "ChloeSkin2", "ChloeSkin3"], "蒂亞娜": ["Diana", "DianaSkin1", "DianaSkin2", "DianaSkin3"], "桃桃": ["Momo", "MomoSkin1", "MomoSkin2", "MomoSkin3"], "瑟琳娜": ["Selline", "SellineSkin1", "SellineSkin2", "SellineSkin3"], "羽伊": ["Ui", "UiSkin1", "UiSkin2", "UiSkin3"], "薇薇": ["Vivi", "ViviSkin1", "ViviSkin2", "ViviSkin3"], "錫安": ["xXionx", "xXionxSkin1", "xXionxSkin2", "xXionxSkin3"],
+            "艾爾芬": ["Erpin", "ErpinSkin1", "ErpinSkin2", "ErpinSkin3", "ErpinSkin4"]
+        };
         const LOBBY_BACKGROUNDS = [
-            "https://i.postimg.cc/WhSFdxt3/Lobby-100010-1.png",
-            "https://i.postimg.cc/CzJBR9dy/Lobby-10002-1.png",
-            "https://i.postimg.cc/vcXg4CTC/Lobby-10003-1.png",
-            "https://i.postimg.cc/svKQMb1r/Lobby-10007-1.png",
-            "https://i.postimg.cc/jLvwDBCT/Lobby-10008-1.png",
-            "https://i.postimg.cc/svKQMb1D/Lobby-10009-1.png"
+            "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/lobby%2FLobby-100010-1.webp?alt=media&token=91171715-07aa-4c3d-aee6-0daf8099536c", "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/lobby%2FLobby-10002-1.webp?alt=media&token=e44c4eba-f9b0-4e1e-bd2c-bbcd5891be84", "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/lobby%2FLobby-10003-1.webp?alt=media&token=11071be4-520c-4bd4-ae9d-10aae72e6dd1",
+            "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/lobby%2FLobby-10007-1.webp?alt=media&token=d5e8d59e-8dc0-41af-a18b-ed5e62a7cff2", "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/lobby%2FLobby-10008-1.webp?alt=media&token=daba6fe4-8708-4767-896f-e40867e86a2f", "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/lobby%2FLobby-10009-1.webp?alt=media&token=153f26aa-b336-4301-bffa-130172c0af75", "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/lobby%2FLobby_10001_1.webp?alt=media&token=97f5b368-2818-46f7-a957-6af54f9e3d33"
         ];
-        // 🎁 珍藏品圖片與名稱完整對照表 (已同步 Spine 英文名)
         const PRESENT_MAP = {
             "Alice": { name: "愛麗絲的卡片冊", url: "https://i.postimg.cc/SXd1YT62/Present-List-Alice.png" },
             "Allet": { name: "無限保存拌飯醬", url: "https://i.postimg.cc/JyxYH6Ny/Present-List-Allet.png" },
@@ -240,8 +255,6 @@
             "Yomi": { name: "向月花花環", url: "https://i.postimg.cc/68NMjJzM/Present-List-Yomi.png" },
             "Yumimi": { name: "偽裝用木製面具", url: "https://i.postimg.cc/5XMs7dpn/Present-List-Yumimi.png" }
         };
-
-        // 💌 珍藏品書信內容對照表
         const LETTER_MAP = {
             "Alice": "教主，你還記得嗎？之前問過你要不要和鏡子裡的姊姊一起生活的事。我決定取消了。雖然有點可惜，但也沒辦法。因為我已經發現了，讓給姊姊實在是太浪費了，因為你這個傢伙實在是太有趣了。讓我看上可不是件容易的事，所以你應該感到榮幸。下次再來找我占卜塔羅牌吧。我會幫你抽出最好的運勢。不過，至於那運勢對誰來說最好，我可不會告訴你。",
             "Allet": "教主大人，您好！我是莫納蒂姆鎮壓隊的阿萊特。平時總是因公事聯絡，這次用私人的名義寫信，還真有點不習慣呢。其實寫這封信的主要原因是想向教主大人表達感謝。教主在任何事情上都能身先士卒，這一點是我最敬佩的地方！啊，不過康娜隊長也是我最敬佩的人之一……唔，真難抉擇！總之，教主大人，以後如果在莫納蒂姆遇到什麼困難，請一定要找我阿萊特。我將全力以赴，竭誠為您效勞！忠誠！",
@@ -271,9 +284,9 @@
             "Ifrit": "喂，教主！是我，伊弗利特！寫信這件事，為什麼這麼難啊？寫著寫著，紙就一直被燒掉，這已經是第四張了。不過也沒什麼大不了的……只是想感謝你這段時間一直聽我抱怨，還耐心陪我說話。而且，我聽說你對宴會廳裡的初級火之靈也一直很友善，是吧？教主，我覺得你真的值得信賴。所以才說，以後我們也要好好相處啊！",
             "Jade": "教主，感到榮幸吧！這封由本傑德大人親筆寫的信，很快就會被視為艾利亞斯的寶典珍藏呢！嗯，其實我不是要說這個。我是想跟你說聲謝謝。看著每天只會唠叨的教主，我總在想為什麼會這樣……有本書上說，唠叨全～是因為在乎！所以今後也請多多關照。\n——傑德敬上",
             "Jubee": "邀請教主參加茱蜜派對嗡！專屬茱蜜的秘密派對即將舉行嗡！會有鐵茶蜜3項競技、蜂蜜收集大賽、找出錯誤茶蜜等豐富活動，以及豪華蜂蜜自助餐唷！絕對可以期待唷！希望教主一定要來參加，並擔任派對開場的特別演講嘉賓嗡！不用準備參加費或任何物品嗡！總覺得好像漏掉什麼重要的話，但想不起來嗡，就先寫到這裡唷！",
-            "Kidian": "自從和達雅吵架後，我就不想再交朋友了。或許是因為害怕再和朋友吵架後，又會變得孤單吧。所以當教主主動來找我說話時，我真的很驚訝。我也很好奇，自己是否還能再次交到朋友。教主總是一步步接近我，努力拉近我們的距離。現在，換我來努力了。我可以稱呼教主為我的朋友嗎？",
+            "Kidian": "自從和達雅吵架後，我就不想再交朋友了。或許是因為害怕再和朋友吵架後，又會變得孤單吧。所以當教主主提來找我說話時，我真的很驚訝。我也很好奇，自己是否還能再次交到朋友。教主總是一步步接近我，努力拉近我們的距離。現在，換我來努力了。我可以稱呼教主為我的朋友嗎？",
             "Kommy": "教主真有用呢。不僅給柯米飯吃，還陪柯米玩得很開心。只要以後繼續這樣，柯米心中的好友排行榜上，你肯定能名列前茅！是不是很好奇柯米為什麼突然寫信？因為柯米在書上看到一句話：「語言的界限就是世界的界限。」也就是說，教主現在已經進入柯米的世界了，恭喜你哦！不過，寫信實在太麻煩了、手好痠。柯米要去睡覺了。就寫到這裡吧，教主。",
-            "Kyarot": "",
+            "Kyarot": "嘿、教主!雖然在宴會廳常聊天,但寫信還是第一次呢!能交到像我的植物一樣高大的朋友,我真的超開心的!聽說教主住的世界也有茄子、胡蘿蔔跟南瓜, 我最近常夢到去教主的世界玩呢。以後你一定會帶我去的對吧?我會好好期待喔!在那之前,要常常來我的花園玩喔!",
             "Lazy": "啊，教主大人，您好！我是雷吉。這是我第一次寫信給您。雖然直接見面打招呼會更好，但每次遠遠看到您時，您總是看起來很忙碌的樣子。我自己呢，總是會莫名其妙地被捲進一些事情裡而忙得團團轉，但教主大人您看起來是那種會主動去找事做的類型。啊，不過這絕對不是批評的意思！只是想說，從您身上真的感覺到，您為了艾利亞斯付出了許多努力，也帶來了不少幫助。真的非常感謝您，教主大人。那下次我們就別用信件了，直接見面吧！",
             "Leets": "嗨，教主！您過的好嗎？我今天也完成了一天的鍛鍊，然後努力地四處尋找下一個對手！我絕對不是窩在家裡被路德訓斥才被趕出來的！……所以說啊，教團裡會不會有什麼值得一戰的事情啊？啊，我並不是希望有那種事情才這麼說的！只是覺得突然有點事情發生也不錯……呵呵，總之，有什麼事情一定要找我唷，教主！",
             "Levi": "以前我做過「幸運信」寫作的工讀生……但要說給誰寫信，這還是第一次，或者說真的很久沒寫過了。啊，我之前寫過一封魔女升級審核用的請願書……那麼，這應該是我第一次懷著愉快心情寫的信了吧！多虧教主大人設置了宴會廳，讓我能嘗到各式各樣的料理。也因為這樣，我充滿了力量，甚至多接了兩份兼職呢！\n心懷感謝，萊薇敬上。",
@@ -289,7 +302,7 @@
             "Posher": "教主，我這次又製作了一種新藥水，要不要來試試看？我已經說過很多次了，像我的藥水這樣苦口的東西，才是對身體好的，你懂的吧？不過嘛，為了教主，我可以破例考慮一下製作一款味道好一點的藥水。當然，也別抱太高期待，畢竟味道的好壞是很主觀的。呵呵。有空的話，記得來找我玩。我會等著你的。",
             "Rim": "在山坡上的偏僻小屋獨自生活的我，自從來到宴會廳後結識了許多朋友。似乎也有喜歡我笑話的朋友，讓我感到欣慰。喜歡檸檬茶的朋友多嗎？希望有一天朋友們也能來我家玩。多虧教主大人在宴會廳讓我認識了這麼多使者，真是太好了。",
             "Rohne": "我是親切的間諜，能力出眾的間諜！且從不浪費食物的間諜，洛涅！能和教主大人聊各種話題，紓解工作的壓力，真的非常開心。不知道教主大人和我聊天，是否也覺得有趣呢？不過我有點擔心，自己會不會不小心把機密內容說漏嘴了！希望教主大人也能非常非常開心！對了，我常去宴會廳這件事，請務必保密，特別是不能讓艾蜜莉雅小姐知道！",
-            "Rude": "教主，你好。用文字而不是口頭來交流，對我來說還是挺陌生的。每次在宴會廳總是吃到許多對身體有益的東西，我想藉這個機會向你表達感謝。最近，你還有在好好鍛鍊嗎？雖然我每次見到你都會問這個問題，可能有點煩，但這是我表達關心的方式。下次來我的訓練室吧，我準備了新的訓練課程。",
+            "Rude": "教主，你好。用文字而不是口頭來交流，對我來說還是挺陌生的。每次在宴會廳總是吃到許多對身體有益的東西，我想藉這個機會向向你表達感謝。最近，你還有在好好鍛鍊嗎？雖然我每次見到你都會問這個問題，可能有點煩，但這是我表達關心的方式。下次來我的訓練室吧，我準備了新的訓練課程。",
             "Rufo": "反對獸糧黨的首腦虛波，向氣象局一等猛將教主寄送了這封信。不過我對如何寫信不太擅長。提格隊長還說要我幫她寫一份，但虛波真的很忙啊！教主，你是怎麼弄到那麼多食材的？要小心別被班尼發現了。我真的很想和你玩一次桌遊。我願意借出精靈的特製裝置，讓教主擲骰子更順手！但一定要對提格隊長保密。",
             "Sari": "你好，教主！好久不見！果然，寫信這件事真的很困難，因為看不到對方的話語或行動。因此我現在正想像著腦海中的教主正在和我說話，一邊把這種想像寫下來！喔，現在腦海裡的教主正在和我聊昨天吃到的焦糖布丁。哇，超棒的！一定很好吃吧！教主你連解說都這麼親切、清楚呢！嗯，不過果然還是和腦海中的教主對話有點彆扭。我好想趕快像平時那樣直接和你見面！快來親自講一些有趣的事情給我聽，教主！知道吧？",
             "Selline": "嗨～整理相簿時發現了教主拍得不錯的照片耶？覺得只有我看太可惜了，就發給你一張。別擔心，不是什麼奇怪的照片。看著照片突然想起跟你下棋的時候。雖然一個人玩也不錯，但果然兩個人一起玩才是最棒的。下次再陪我玩一局吧？我保證不會笑你技術爛的。呵呵，我認真的啦～",
@@ -308,8 +321,6 @@
             "Yomi": "給教主大人寫信時，雀躍的心情實在難以平復。畢竟用文字傳達，和用言語表達是兩種不同的情感。經過半日的思考，我想以詩歌來表達我的感恩之心，於是寫下這一首。希望您會喜歡。\n迎月花一朵，抬首望明月。\n僅得月光照，恩澤已浩蕩。\n月卻回首望，此生復何求。",
             "Yumimi": "嗯~最近我的別墅都沒有人來，想來是教主您特別留意了吧？謝謝！以後如果在森林裡遇到什麼珍貴的藥草或香菇，我會包裝好寄給您!今後也請多多指教，若是您想享受大自然的生活，隨時都可以到附近來玩。但請您務必一個人來喔?因為我不太喜歡別墅裡太過熱鬧。"
         };
-
-        // 💡 教主感想對照表
         const THOUGHT_MAP = {
             "Alice": "每天抽1張就可以得知大概運勢的卡片簿。不知道這上面是不是有魔法，卡片會自動洗牌。",
             "Allet": "據說這是一種在沒有像樣餐點時，撒在食物上吃的醬料。真的能無限保存嗎？",
@@ -341,7 +352,7 @@
             "Jubee": "裝在一個小小的玻璃瓶裡，每天早晨喝完後，茱蜜似乎都會悄悄幫我重新填滿。味道比我所想得更香甜。",
             "Kidian": "好像是基狄恩自己費心打造的短劍。雖然打磨得不精緻，但感受得到她的真心。",
             "Kommy": "據說是一顆只要碰到就會入睡的名牌枕頭。還聽說她特意買了一個跟她自己用的一模一樣的枕頭送給我。",
-            "Kyarot": "",
+            "Kyarot": "這是卡洛特在最盛大的農作物大會中勇奪第一的獎盃。",
             "Lazy": "從扳手到焊炬，內含各種工具的組合。是一份非常符合雷吉喜好的禮物。",
             "Leets": "莉茲親自製作的防身用盔甲。是依照龍族的體型製作的，所以非常重，只能拿來裝飾了。",
             "Levi": "這是萊薇打工存錢買給我的人類尺寸保暖內衣，總覺得有點欣慰驕傲。",
@@ -376,16 +387,29 @@
             "Yomi": "優米用向月花編成的花環。她還說希望我每天都戴著它。",
             "Yumimi": "戴上這個木製面具後，據說不會被野生動物襲擊。建議在森林裡行走時佩戴。"
         };
-        
         const IMAGE_MAP = {
             "avatar_洛涅": "https://i.postimg.cc/nL4vx1LN/luo-nie.png", "avatar_薇薇": "https://i.postimg.cc/gkx8jpJD/wei-wei.png", "avatar_艾爾芬": "https://i.postimg.cc/T3WV7xM4/ai-er-fen.png", "avatar_錫安": "https://i.postimg.cc/7PmnbXnR/x-wu-xi-an-wux.png", "avatar_伊弗利特": "https://i.postimg.cc/yYxXR9f9/yi-fu-li-te.png", "avatar_伊德": "https://i.postimg.cc/Hsn4M5SQ/yi-de.png", "avatar_佩佩": "https://i.postimg.cc/5tdwDrfF/pei-pei.png", "avatar_佩斯塔": "https://i.postimg.cc/cJyQPzdQ/pei-si-ta.png", "avatar_修帕": "https://i.postimg.cc/Pxd158pn/xiu-pa.png", "avatar_傑德": "https://i.postimg.cc/C51DjT4L/jie-de.png", "avatar_優米": "https://i.postimg.cc/02zDjvQd/you-mi.png", "avatar_劉美美": "https://i.postimg.cc/m2PCk4DC/liu-mei-mei.png", "avatar_加薇雅": "https://i.postimg.cc/T2CJhQJF/jia-wei-ya.png", "avatar_卡洛特": "https://i.postimg.cc/X7qc5F26/ka-luo-te.png", "avatar_卡蓮": "https://i.postimg.cc/gkjqhRMW/ka-lian.png", "avatar_喬菲": "https://i.postimg.cc/4yScPL8Z/qiao-fei.png", "avatar_基狄恩": "https://i.postimg.cc/RFGK6VK3/ji-di-en.png", "avatar_大師2號": "https://i.postimg.cc/7PmnbXnt/da-shi2hao.png", "avatar_大木頭": "https://i.postimg.cc/zD0F3pFP/da-mu-tou.png", "avatar_奈雅": "https://i.postimg.cc/3w5gzq3n/nai-ya.png", "avatar_奶油": "https://i.postimg.cc/4Nybct8X/nai-you.png", "avatar_布蘭切": "https://i.postimg.cc/qBjxgQGM/bu-lan-qie.png", "avatar_希拉": "https://i.postimg.cc/pLnfGvMM/xi-la.png", "avatar_希爾德": "https://i.postimg.cc/JzBN68Cr/xi-er-de.png", "avatar_希瑟圖": "https://i.postimg.cc/y8SmQKC8/xi-se-tu.png", "avatar_希菲爾": "https://i.postimg.cc/XYyfHW64/xi-fei-er.png", "avatar_帕特拉": "https://i.postimg.cc/YS617xSf/pa-te-la.png", "avatar_庫洛艾": "https://i.postimg.cc/sX35gZQr/ku-luo-ai.png", "avatar_康娜": "https://i.postimg.cc/PxKYprYY/kang-na.png", "avatar_愛麗絲": "https://i.postimg.cc/nrPm2RdK/ai-li-si.png", "avatar_斑尼": "https://i.postimg.cc/HnhMzZS1/ban-ni.png", "avatar_斯皮奇": "https://i.postimg.cc/2yKWGcHq/si-pi-qi.png", "avatar_斯諾奇": "https://i.postimg.cc/gjThsSMh/si-nuo-qi.png", "avatar_柯米": "https://i.postimg.cc/25Q4Yx6Y/ke-mi.png", "avatar_桃桃": "https://i.postimg.cc/Ssmcxz2q/tao-tao.png", "avatar_梅森": "https://i.postimg.cc/qRQyhMy2/mei-sen.png", "avatar_梅露娜": "https://i.postimg.cc/zvBWnZF7/mei-lu-na.png", "avatar_海莉": "https://i.postimg.cc/3R32xD4k/hai-li.png", "avatar_珀榭": "https://i.postimg.cc/JnRjzByf/po-xie.png", "avatar_琳": "https://i.postimg.cc/VvVtgG7C/lin.png", "avatar_瑟琳娜": "https://i.postimg.cc/XNH9nqnP/se-lin-na.png", "avatar_瑪約": "https://i.postimg.cc/QxF1CDth/ma-yue.png", "avatar_瑪麗": "https://i.postimg.cc/Dfj1702m/ma-li.png", "avatar_皮可菈": "https://i.postimg.cc/SNR798ZM/pi-ke-la.png", "avatar_盧波": "https://i.postimg.cc/02zDjvQY/lu-bo.png", "avatar_米雪": "https://i.postimg.cc/qMFcxRYh/mi-xue.png", "avatar_綾": "https://i.postimg.cc/hPXTvnjd/ling.png", "avatar_羽伊": "https://i.postimg.cc/Fs6bVRqg/yu-yi.png", "avatar_艾斯皮": "https://i.postimg.cc/BQz5B6yg/ai-si-pi.png", "avatar_艾琳娜": "https://i.postimg.cc/ncWKGz5w/ai-lin-na.png", "avatar_艾皮卡": "https://i.postimg.cc/gk7yHJ5K/ai-pi-ka.png", "avatar_艾舒爾": "https://i.postimg.cc/hPY81j6F/ai-shu-er.png", "avatar_艾蜜莉雅": "https://i.postimg.cc/QdWQ4DG0/ai-mi-li-ya.png", "avatar_芙莉可": "https://i.postimg.cc/DzrqhczQ/fu-li-ke.png", "avatar_茱蜜": "https://i.postimg.cc/MTz1pjMv/zhu-mi.png", "avatar_莉茲": "https://i.postimg.cc/rsmWSXNg/li-zi.png", "avatar_莎莉": "https://i.postimg.cc/0jQmpRCq/sha-li.png", "avatar_萊薇": "https://i.postimg.cc/d3xC6HWT/lai-wei.png", "avatar_蒂亞娜": "https://i.postimg.cc/3rS23NKQ/di-ya-na.png", "avatar_薇薇": "https://i.postimg.cc/DmZmsBRm/wei-wei3.png", "avatar_謝蒂": "https://i.postimg.cc/YqTgmPGf/xie-di.png", "avatar_貝魯": "https://i.postimg.cc/DzkqRN7n/bei-lu.png", "avatar_貝麗塔": "https://i.postimg.cc/TPMrBsTy/bei-li-ta.png", "avatar_路德": "https://i.postimg.cc/NGJRQFgM/lu-de.png", "avatar_路易": "https://i.postimg.cc/KcqtmjZy/lu-yi.png", "avatar_阿萊特": "https://i.postimg.cc/hGL9n0G2/a-lai-te.png", "avatar_雷吉": "https://i.postimg.cc/BZY2JbqX/lei-ji.png", "avatar_馬爾": "https://i.postimg.cc/d1nrktrD/ma-er.png", "avatar_泰達": "https://i.postimg.cc/vH2GKCw8/tai-da.png", "avatar_寧琉": "https://i.postimg.cc/tgt95LY0/ning-liu.png"
         };
         const ICON_MAP = {
-            "personality_天真": "https://i.postimg.cc/J7ZWLD30/tian-zhen.png", "personality_活潑": "https://i.postimg.cc/4ykkcsGt/huo-po.png", "personality_冷靜": "https://i.postimg.cc/xjMS2JGd/leng-jing.png", "personality_狂亂": "https://i.postimg.cc/ryxLk0Gm/kuang-luan.png", "personality_憂鬱": "https://i.postimg.cc/g07PY3BR/you-yu.png",
-            "race_精靈": "https://i.postimg.cc/D4THRGwZ/jing-ling.png", "race_龍族": "https://i.postimg.cc/QK3wv7dB/long-zu.png", "race_妖精": "https://i.postimg.cc/SYh3H9xn/yao-jing.png", "race_魔靈": "https://i.postimg.cc/H89RmLrW/mo-ling.png", "race_獸人": "https://i.postimg.cc/sGrqbWgQ/shou-ren.png", "race_幽靈": "https://i.postimg.cc/tnjw8647/you-ling.png", "race_魔女": "https://i.postimg.cc/H8gRFMk8/mo-nu.png", "race_???": "https://i.postimg.cc/zHr64hGf/unknown.png",
-            "position_前排": "https://i.postimg.cc/VvBTbtDy/qian-pai.png", "position_中排": "https://i.postimg.cc/RZ08NNtT/zhong-pai.png", "position_後排": "https://i.postimg.cc/DwC9gqFk/hou-pai.png",
-            "job_肉盾": "https://i.postimg.cc/zfGJDzDB/rou-dun.png", "job_輔助": "https://i.postimg.cc/MG3zvCXJ/fu-zhu.png", "job_輸出": "https://i.postimg.cc/3wf3dsWH/shu-chu.png"
+            "personality_天真": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/personality%2FPickUpPersonality_Naive.webp?alt=media&token=5439c0fb-4c8e-4097-a868-5534180db07f", "personality_活潑": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/personality%2FPickUpPersonality_Jolly.webp?alt=media&token=701ad789-557c-4de7-ac4d-fc42e6b82cfb", "personality_冷靜": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/personality%2FPickUpPersonality_Cool.webp?alt=media&token=d93be2cb-d36b-4923-badd-5c16557cb844", "personality_狂亂": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/personality%2FPickUpPersonality_Mad.webp?alt=media&token=47f62ae9-38a3-489d-92fc-f034b6249cbe", "personality_憂鬱": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/personality%2FPickUpPersonality_Gloomy.webp?alt=media&token=e22b91ef-4364-4055-986b-bad568c484c2",
+            "race_精靈": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/race%2Fjing-ling.webp?alt=media&token=4d4e6dff-b29c-42ea-a99c-231dd74a8d2c", "race_龍族": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/race%2Flong-zu.webp?alt=media&token=9045bd8a-fd98-412c-a0ef-2fb57678776d", "race_妖精": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/race%2Fyao-jing.webp?alt=media&token=02063405-85bd-48d5-91c3-5581a9e331a2", "race_魔靈": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/race%2Fmo-ling.webp?alt=media&token=e7d63700-cfbe-4c98-8ea5-57ff4bdbe413", "race_獸人": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/race%2Fshou-ren.webp?alt=media&token=dc1ffcdc-3cc6-4e0c-802b-b84cf3880415", "race_幽靈": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/race%2Fyou-ling.webp?alt=media&token=5a07255e-9cc2-4a6e-9b66-9c828cba31c3", "race_魔女": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/race%2Fmo-nu.webp?alt=media&token=f35ec5cd-7f58-4c98-9057-198160095847", "race_???": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/race%2Funknown.webp?alt=media&token=ce9dc20a-eb6c-4030-aa4f-d685ce01b7ee",
+            "position_前排": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/position%2Fqian-pai.webp?alt=media&token=2d783ffa-a9d0-439a-ad9b-6312dd5b7917", "position_中排": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/position%2Fzhong-pai.webp?alt=media&token=80552f69-ee52-48d7-a6b4-9c46e01f545d", "position_後排": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/position%2Fhou-pai.webp?alt=media&token=8a03dca6-bc7f-443d-a0f1-1a193c91e7da",
+            "job_肉盾": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/job%2Frou-dun.webp?alt=media&token=168d2a45-3f81-4deb-a47b-f750404d2428", "job_輔助": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/job%2Ffu-zhu.webp?alt=media&token=8076d16b-716f-4216-bcd4-c1f9930dc1d3", "job_輸出": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/job%2Fshu-chu.webp?alt=media&token=d7bcfc6c-c908-4e6c-86e4-967cc5ba92fe"
         };
+        
+        // 📚 喚醒沉睡的魔法：這些背景圖將在下面被應用到種族專屬情信中！
+        const LETTER_BG_MAP = {
+            "龍族": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/Letterform%2FLetter_Dragon.webp?alt=media&token=d50f759a-b6f4-4fd2-80d6-9c5b231f936a",
+            "精靈": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/Letterform%2FLetter_Elf.webp?alt=media&token=bbdc66b5-a6e2-4896-a093-20a2c45d6c7e",
+            "妖精": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/Letterform%2FLetter_Fairy.webp?alt=media&token=f45fe84d-e3f2-4ea8-8e0d-7702c95da182",
+            "獸人": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/Letterform%2FLetter_Furry.webp?alt=media&token=ceb0815e-6340-4fe5-b38a-99ea20c764d5",
+            "幽靈": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/Letterform%2FLetter_Ghost.webp?alt=media&token=b3e0fb74-1e97-43d9-924b-94b0fd8e61cb",
+            "???": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/Letterform%2FLetter_Mystic.webp?alt=media&token=dfca4a07-db72-42a6-b6b6-8c50e182c972",
+            "魔靈": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/Letterform%2FLetter_Spirit.webp?alt=media&token=31013865-2551-4673-88b5-189e29a47e9d",
+            "魔女": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/Letterform%2FLetter_Witch.webp?alt=media&token=760c3296-7bf1-4f1f-aa6d-5788ded9b5a5"
+        };
+        const LOVE_LETTER_BG = "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/Letterform%2FLoveLetter.webp?alt=media&token=760be735-9479-4c19-ac8d-25b55f0fbcf9";
+        
         const SKILL_ICONS = {
             "attack_物理": "https://i.postimg.cc/7Cng30rY/wu-li-gong-ji.png", "attack_魔法": "https://i.postimg.cc/Nyk16mvM/mo-fa-gong-ji.png",
             "skill_normal_伊弗利特": "https://i.postimg.cc/cgDH2ngX/yi-fu-li-te3.png", "skill_normal_伊德": "https://i.postimg.cc/njdzgDj3/yi-de3.png", "skill_normal_佩佩": "https://i.postimg.cc/MMsTNQf6/pei-pei3.png", "skill_normal_佩斯塔": "https://i.postimg.cc/478dq9H4/pei-si-ta3.png", "skill_normal_修帕": "https://i.postimg.cc/2LV6DSnj/xiu-pa3.png", "skill_normal_傑德": "https://i.postimg.cc/1VftQ3DG/jie-de3.png", "skill_normal_優米": "https://i.postimg.cc/z3B3W04G/you-mi3.png", "skill_normal_劉美美": "https://i.postimg.cc/vDBD93CG/liu-mei-mei3.png", "skill_normal_加薇雅": "https://i.postimg.cc/CBM5cN1c/jia-wei-ya3.png", "skill_normal_卡洛特": "https://i.postimg.cc/mzZkmwDd/ka-luo-te3.png", "skill_normal_卡蓮": "https://i.postimg.cc/34LRVv4F/ka-lian3.png", "skill_normal_喬菲": "https://i.postimg.cc/4Hmdgxpz/qiao-fei3.png", "skill_normal_基狄恩": "https://i.postimg.cc/D48ZTw1S/ji-di-en3.png", "skill_normal_大師2號": "https://i.postimg.cc/mzZkmwDN/da-shi2hao3.png", "skill_normal_大木頭": "https://i.postimg.cc/sQfxTcXP/da-mu-tou3.png", "skill_normal_奈雅": "https://i.postimg.cc/Cnz1gxbT/nai-ya3.png", "skill_normal_奶油": "https://i.postimg.cc/ZBYnwcRQ/nai-you3.png", "skill_normal_寧琉": "https://i.postimg.cc/2363v2gm/ning-liu3.png", "skill_normal_布蘭切": "https://i.postimg.cc/vgPBkVgX/bu-lan-qie3.png", "skill_normal_希拉": "https://i.postimg.cc/wyWvZmyC/xi-la3.png", "skill_normal_希爾德": "https://i.postimg.cc/njdzgD9p/xi-er-de3.png", "skill_normal_希瑟圖": "https://i.postimg.cc/dkW1pyZv/xi-se-tu3.png", "skill_normal_希菲爾": "https://i.postimg.cc/XG2JmCBb/xi-fei-er3.png", "skill_normal_帕特拉": "https://i.postimg.cc/5Q60V28M/pa-te-la3.png", "skill_normal_庫洛艾": "https://i.postimg.cc/4Hmdgxpx/ku-luo-ai3.png", "skill_normal_康娜": "https://i.postimg.cc/kRB4mgWR/kang-na3.png", "skill_normal_愛麗絲": "https://i.postimg.cc/yWdW9vtG/ai-li-si3.png", "skill_normal_斑尼": "https://i.postimg.cc/BPX60n25/ban-ni3.png", "skill_normal_斯皮奇": "https://i.postimg.cc/PvPxj51Q/si-pi-qi3.png", "skill_normal_斯諾奇": "https://i.postimg.cc/s1X1Swq6/si-nuo-qi3.png", "skill_normal_柯米": "https://i.postimg.cc/SYJshxcy/ke-mi3.png", "skill_normal_桃桃": "https://i.postimg.cc/rRKmkw5m/tao-tao3.png", "skill_normal_梅森": "https://i.postimg.cc/V0d68kXb/mei-sen3.png", "skill_normal_梅露娜": "https://i.postimg.cc/XBpJbY9C/mei-lu-na3.png", "skill_normal_泰達": "https://i.postimg.cc/K3Rz28tj/tai-da3.png", "skill_normal_洛涅": "https://i.postimg.cc/ZvCRS56J/luo-nie3.png", "skill_normal_海莉": "https://i.postimg.cc/wR7vpjD3/hai-li3.png", "skill_normal_珀榭": "https://i.postimg.cc/PvPxj51X/po-xie3.png", "skill_normal_琳": "https://i.postimg.cc/dD1Dd4pN/lin3.png", "skill_normal_瑟琳娜": "https://i.postimg.cc/Bt6tDMky/se-lin-na3.png", "skill_normal_瑪約": "https://i.postimg.cc/LhXhfNGS/ma-yue3.png", "skill_normal_瑪麗": "https://i.postimg.cc/3WRWpnzJ/ma-li3.png", "skill_normal_皮可菈": "https://i.postimg.cc/WF93CkF7/pi-ke-la.png", "skill_normal_盧波": "https://i.postimg.cc/rzmzWQ7y/lu-bo3.png", "skill_normal_米雪": "https://i.postimg.cc/9RxMK7RN/mi-xue3.png", "skill_normal_綾": "https://i.postimg.cc/7b6b7mjH/ling3.png", "skill_normal_羽伊": "https://i.postimg.cc/BLh6kKLY/yu-yi3.png", "skill_normal_艾斯皮": "https://i.postimg.cc/62H3gv2m/ai-si-pi3.png", "skill_normal_艾爾芬": "https://i.postimg.cc/wyWvZmyS/ai-er-fen3.png", "skill_normal_艾琳娜": "https://i.postimg.cc/34LRVv4q/ai-lin-na3.png", "skill_normal_艾皮卡": "https://i.postimg.cc/HcSxRycv/ai-pi-ka3.png", "skill_normal_艾舒爾": "https://i.postimg.cc/WF93CkFx/ai-shu-er3.png", "skill_normal_艾蜜莉雅": "https://i.postimg.cc/0MtQFwK1/ai-mi-li-ya3.png", "skill_normal_芙莉可": "https://i.postimg.cc/5Q60V28V/fu-li-ke3.png", "skill_normal_茱蜜": "https://i.postimg.cc/H8VxgkbV/zhu-mi3.png", "skill_normal_莉茲": "https://i.postimg.cc/RJNFBZwf/li-zi3.png", "skill_normal_莎莉": "https://i.postimg.cc/Wqh3v100/sha-li3.png", "skill_normal_萊薇": "https://i.postimg.cc/8s5sWt90/lai-wei3.png", "skill_normal_蒂亞娜": "https://i.postimg.cc/dD1Dd4pg/di-ya-na3.png", "skill_normal_薇薇": "https://i.postimg.cc/DmZmsBRm/wei-wei3.png", "skill_normal_謝蒂": "https://i.postimg.cc/jC5CNZBL/xie-di3.png", "skill_normal_貝魯": "https://i.postimg.cc/7GB6d2J4/bei-lu3.png", "skill_normal_貝麗塔": "https://i.postimg.cc/DJCZHX47/bei-li-ta3.png", "skill_normal_路德": "https://i.postimg.cc/t7T7P28G/lu-de3.png", "skill_normal_路易": "https://i.postimg.cc/Yj9jgbZ5/lu-yi3.png", "skill_normal_錫安": "https://i.postimg.cc/14t46Jb8/xi-an3.png", "skill_normal_阿萊特": "https://i.postimg.cc/XBpJbY93/a-lai-te3.png", "skill_normal_雷吉": "https://i.postimg.cc/dD1Dd4gP/lei-ji3.png", "skill_normal_馬爾": "https://i.postimg.cc/fSJLNRY3/ma-er3.png",
@@ -393,12 +417,32 @@
             "skill_passive_伊弗利特": "https://i.postimg.cc/wRKb1DXf/yi-fu-li-te4.png", "skill_passive_伊德": "https://i.postimg.cc/hQ9ZThs0/yi-de4.png", "skill_passive_佩佩": "https://i.postimg.cc/grRTfBpx/pei-pei4.png", "skill_passive_佩斯塔": "https://i.postimg.cc/jCNFGkTW/pei-si-ta4.png", "skill_passive_修帕": "https://i.postimg.cc/qgn59ZrZ/xiu-pa4.png", "skill_passive_傑德": "https://i.postimg.cc/ppH6xYXR/jie-de4.png", "skill_passive_優米": "https://i.postimg.cc/ykyrNgkX/you-mi4.png", "skill_passive_劉美美": "https://i.postimg.cc/vctSmgc6/liu-mei-mei4.png", "skill_passive_加薇雅": "https://i.postimg.cc/2LpX1nQ4/jia-wei-ya4.png", "skill_passive_卡洛特": "https://i.postimg.cc/D4VYS1rQ/ka-luo-te4.jpg", "skill_passive_卡蓮": "https://i.postimg.cc/RJrbWw7Q/ka-lian4.png", "skill_passive_喬菲": "https://i.postimg.cc/1fQjPc5S/qiao-fei4.png", "skill_passive_基狄恩": "https://i.postimg.cc/7fkWDMPt/ji-di-en4.png", "skill_passive_大師2號": "https://i.postimg.cc/GT0S4vFF/da-shi2hao4.png", "skill_passive_大木頭": "https://i.postimg.cc/XBMDr9fd/da-mu-tou4.png", "skill_passive_奈雅": "https://i.postimg.cc/grRTfBp6/nai-ya4.png", "skill_passive_奶油": "https://i.postimg.cc/30Mbk2XF/nai-you4.png", "skill_passive_寧琉": "https://i.postimg.cc/mty6rztr/ning-liu4.jpg", "skill_passive_布蘭切": "https://i.postimg.cc/bSXFZ1x3/bu-lan-qie4.png", "skill_passive_希拉": "https://i.postimg.cc/Cnjrkd7W/xi-la4.png", "skill_passive_希爾德": "https://i.postimg.cc/ctQkw6Td/xi-er-de4.png", "skill_passive_希瑟圖": "https://i.postimg.cc/tnhvW7Dj/xi-se-tu4.png", "skill_passive_希菲爾": "https://i.postimg.cc/vxW2fDXw/xi-fei-er4.png", "skill_passive_帕特拉": "https://i.postimg.cc/hhx5H3nQ/pa-te-la4.png", "skill_passive_庫洛艾": "https://i.postimg.cc/7b7WpQ4R/ku-luo-ai4.png", "skill_passive_康娜": "https://i.postimg.cc/BX0VscZV/kang-na4.png", "skill_passive_愛麗絲": "https://i.postimg.cc/MvSFxbKT/ai-li-si4.png", "skill_passive_斑尼": "https://i.postimg.cc/LnpbRB6R/ban-ni4.png", "skill_passive_斯皮奇": "https://i.postimg.cc/BX0VscQJ/si-pi-qi4.png", "skill_passive_斯諾奇": "https://i.postimg.cc/crSbZM4C/si-nuo-qi4.jpg", "skill_passive_柯米": "https://i.postimg.cc/Z03M1DmP/ke-mi4.png", "skill_passive_桃桃": "https://i.postimg.cc/w3JGSbzS/tao-tao4.png", "skill_passive_梅森": "https://i.postimg.cc/ppH6xYVg/mei-sen4.png", "skill_passive_梅露娜": "https://i.postimg.cc/crSbZM12/mei-lu-na4.png", "skill_passive_泰達": "https://i.postimg.cc/9zTnvN2S/tai-da4.png", "skill_passive_洛涅": "https://i.postimg.cc/Hj5hfPmt/luo-nie4.png", "skill_passive_海莉": "https://i.postimg.cc/RNBD9QCP/hai-li4.png", "skill_passive_珀榭": "https://i.postimg.cc/MXRFhrwt/po-xie4.png", "skill_passive_琳": "https://i.postimg.cc/PPQFqpPj/lin4.png", "skill_passive_瑟琳娜": "https://i.postimg.cc/YhzySGht/se-lin-na4.jpg", "skill_passive_瑪約": "https://i.postimg.cc/2V7X5bV6/ma-yue4.png", "skill_passive_瑪麗": "https://i.postimg.cc/xc3FdJcH/ma-li4.png", "skill_passive_皮可菈": "https://i.postimg.cc/1VxY8DGB/pi-ke-la4.png", "skill_passive_盧波": "https://i.postimg.cc/PPQFqpPY/lu-bo4.png", "skill_passive_米雪": "https://i.postimg.cc/5QwKLjg8/mi-xue4.png", "skill_passive_綾": "https://i.postimg.cc/ZCxDqBCB/ling4.png", "skill_passive_羽伊": "https://i.postimg.cc/sGpH71mw/yu-yi4.png", "skill_passive_艾斯皮": "https://i.postimg.cc/Zvrsp0Hw/ai-si-pi4.png", "skill_passive_艾爾芬": "https://i.postimg.cc/9wGgZzbS/ai-er-fen4.png", "skill_passive_艾琳娜": "https://i.postimg.cc/BPx7Htp7/ai-lin-na4.png", "skill_passive_艾皮卡": "https://i.postimg.cc/1Vp7w4BB/ai-pi-ka4.png", "skill_passive_艾舒爾": "https://i.postimg.cc/fSxqmkCg/ai-shu-er4.png", "skill_passive_艾蜜莉雅": "https://i.postimg.cc/YL1DYjRT/ai-mi-li-ya4.png", "skill_passive_芙莉可": "https://i.postimg.cc/3WpcPbhg/fu-li-ke4.png", "skill_passive_茱蜜": "https://i.postimg.cc/1fQjPcRB/zhu-mi4.png", "skill_passive_莉茲": "https://i.postimg.cc/bshB8HY7/li-zi4.png", "skill_passive_莎莉": "https://i.postimg.cc/RNBD9QV5/sha-li4.png", "skill_passive_萊薇": "https://i.postimg.cc/JGL2mc4h/lai-wei4.png", "skill_passive_蒂亞娜": "https://i.postimg.cc/gnHB0XnY/di-ya-na4.png", "skill_passive_薇薇": "https://i.postimg.cc/MnZ3f6Qj/wei-wei4.png", "skill_passive_謝蒂": "https://i.postimg.cc/pmVc5WFF/xie-di4.png", "skill_passive_貝魯": "https://i.postimg.cc/FkjC31GQ/bei-lu4.png", "skill_passive_貝麗塔": "https://i.postimg.cc/9wGgZz1W/bei-li-ta4.png", "skill_passive_路德": "https://i.postimg.cc/rKNYp0Kz/lu-de4.png", "skill_passive_路易": "https://i.postimg.cc/crB5Jgrx/lu-yi4.png", "skill_passive_錫安": "https://i.postimg.cc/dLjS0kLj/xi-an4.png", "skill_passive_阿萊特": "https://i.postimg.cc/YjgsJy7Y/a-lai-te4.png", "skill_passive_雷吉": "https://i.postimg.cc/MvmrGMvp/lei-ji4.png", "skill_passive_馬爾": "https://i.postimg.cc/6yXmwL6M/ma-er4.png"
         };
 
+        // ==========================================
+        // 🌟 核心升級：大圖示懸浮提示標籤 (Tooltip)
+        // ==========================================
         const updateTag = (id, label, value, prefix) => {
             const el = document.getElementById(id);
             const iconUrl = ICON_MAP[`${prefix}_${value}`] || "";
+            
+            if (!iconUrl) {
+                el.classList.add('hidden'); // 如果沒圖示，就隱藏整個容器
+                return;
+            }
+
+            // 💡 優化：直接重置並賦予基礎的相對定位，省去移除幾十個 CSS class 的麻煩
+            el.className = 'relative group flex items-center justify-center'; 
+
+            // 渲染大圖示與懸浮 Tooltip 結構
             el.innerHTML = `
-                ${iconUrl ? `<img src="${iconUrl}" class="w-4 h-4 object-contain mr-1.5">` : ""}
-                <span>${label}：${value}</span>
+                <img src="${iconUrl}" 
+                     alt="${label}" 
+                     class="w-8 h-8 object-contain transition-transform duration-300 group-hover:scale-125 cursor-help drop-shadow-sm">
+
+                <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 px-3 py-1.5 bg-slate-900 dark:bg-slate-700 text-white dark:text-gray-100 text-[11px] font-black rounded-lg shadow-xl whitespace-nowrap pointer-events-none
+                            hidden group-hover:block transition-all duration-300 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 translate-y-1 z-50">
+                    ${label}：${value}
+                    <div class="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-900 dark:border-t-slate-700"></div>
+                </div>
             `;
         };
 
@@ -419,41 +463,164 @@
         };
 
         let currentTargetName = "";
+        let currentCharData = null;
+        let globalSpinePlayer = null;
+        let globalIdleTimer = null;
         
         // ==========================================
         // 🎁 珍藏品切換頁籤邏輯
         // ==========================================
-        let currentTab = 'thought'; // 預設頁籤
+        let currentTab = 'thought';
 
         function switchPresentTab(tab) {
             currentTab = tab;
             const btnLetter = document.getElementById('btnLetter');
             const btnThought = document.getElementById('btnThought');
             const presentText = document.getElementById('presentText');
-            
-            // 確保拿到正確的角色英文名
             const spineKey = SPINE_MAP[currentTargetName]; 
-
-            // 重置所有按鈕為灰色（未選中狀態）
-            const inactiveClass = "flex-1 py-1.5 text-sm font-bold rounded-lg transition-all bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300";
             
+            const inactiveClass = "flex-1 py-1.5 text-sm font-bold rounded-lg transition-all bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300";
+
             if (tab === 'letter') {
-                // 選中 [書信]
                 btnLetter.className = "flex-1 py-1.5 text-sm font-bold rounded-lg transition-all bg-rose-500 text-white shadow-md";
                 btnThought.className = inactiveClass;
-                
-                const content = LETTER_MAP[spineKey] || "（書信正在傳遞中...）";
-                presentText.innerHTML = content.replace(/\n/g, '<br>');
+                presentText.innerHTML = (LETTER_MAP[spineKey] || "（這隻坨坨好像還沒寫信給你呢...）").replace(/\n/g, '<br>');
             } else {
-                // 選中 [感想]
                 btnThought.className = "flex-1 py-1.5 text-sm font-bold rounded-lg transition-all bg-amber-500 text-white shadow-md";
                 btnLetter.className = inactiveClass;
-                
-                const content = THOUGHT_MAP[spineKey] || "（教主目前還沒寫下對這個珍藏品的感想呢...）";
-                presentText.innerHTML = content.replace(/\n/g, '<br>');
+                presentText.innerHTML = (THOUGHT_MAP[spineKey] || "（教主目前還沒寫下對這個珍藏品的感想呢...）").replace(/\n/g, '<br>');
             }
         }
+        
         // ==========================================
+        // 🌟 Spine 獨立渲染邏輯 (支援換裝與同資料夾讀取)
+        // ==========================================
+        function loadSpineAnimation(costumeKey) {
+            const avatarBox = document.getElementById('charAvatar');
+            const baseFolderKey = SPINE_MAP[currentTargetName]; 
+            
+            clearTimeout(globalIdleTimer);
+            avatarBox.innerHTML = ''; 
+
+            // 隨機背景魔法：僅在首次進入或無背景時賦予背景，避免每次換裝都閃爍切換背景
+            if (!avatarBox.style.backgroundImage && LOBBY_BACKGROUNDS && LOBBY_BACKGROUNDS.length > 0) {
+                const randomBg = LOBBY_BACKGROUNDS[Math.floor(Math.random() * LOBBY_BACKGROUNDS.length)];
+                avatarBox.style.backgroundImage = `url('${randomBg}')`;
+                avatarBox.style.backgroundSize = 'cover';       
+                avatarBox.style.backgroundPosition = 'center';  
+                avatarBox.style.backgroundRepeat = 'no-repeat'; 
+                avatarBox.classList.add('overflow-hidden', 'rounded-2xl', 'shadow-inner');
+            }
+
+            globalSpinePlayer = new spine.SpinePlayer(avatarBox, {
+                skelUrl: `./spine_assets/${baseFolderKey}/${costumeKey}.skel.bytes`,
+                atlasUrl: `./spine_assets/${baseFolderKey}/${costumeKey}.atlas.txt`,
+                animation: "Idle_1",     
+                premultipliedAlpha: true,
+                backgroundColor: "#00000000", 
+                alpha: true,                 
+                showControls: false,     
+                
+                viewport: {
+                    x: -400,     
+                    y: 0,        
+                    width: 800,  
+                    height: 1000 
+                },
+
+                success: function (player) {
+                    console.log(`✅ ${costumeKey} 的 Spine 動畫載入成功！(路徑: ${baseFolderKey}/${costumeKey})`);
+                    
+                    const skins = player.skeleton.data.skins;
+                    // 修改後的 Skin 設定邏輯
+                    if (skins && skins.length > 1) {
+                        const targetSkin = skins.find(s => s.name === 'Normal') || skins.find(s => s.name !== 'default');
+                        if (targetSkin) {
+                            player.skeleton.setSkin(targetSkin); // 使用 setSkin(object) 比 setSkinByName 更直觀
+                            player.skeleton.setSlotsToSetupPose();
+                        }
+                    }
+
+                    const animations = player.skeleton.data.animations;
+                    if (animations && animations.length > 1) {
+                        
+                        // 🚫 排除清單：過濾掉基礎待機，以及只有在觸控放開時才該播的結尾動作
+                        const excludeList = ['Idle_1', 'Smash_End_1', 'Smash_End_2', 'Tickle_End', 'Touch_End'];
+                        const randomAnims = animations.filter(a => !excludeList.includes(a.name));
+
+                        // 🎲 播放隨機動作，播完後「自動無縫接回 Idle_1」
+                        function playRandomAction() {
+                            if (randomAnims.length > 0) {
+                                const randomAnim = randomAnims[Math.floor(Math.random() * randomAnims.length)].name;
+                                
+                                player.animationState.setAnimation(0, randomAnim, false); 
+                                player.animationState.addAnimation(0, "Idle_1", true, 0); 
+                                
+                                startIdleTimer();
+                            }
+                        }
+
+                        function startIdleTimer() {
+                            clearTimeout(globalIdleTimer);
+                            globalIdleTimer = setTimeout(() => {
+                                playRandomAction();
+                            }, 5000);
+                        }
+
+                        startIdleTimer();
+
+                        const canvas = avatarBox.querySelector('canvas');
+                        if (canvas) {
+                            canvas.addEventListener('click', () => {
+                                playRandomAction();
+                            });
+                        }
+                    }
+                },
+                error: function (player, reason) {
+                    console.warn(`⚠️ Spine 載入失敗，降級顯示靜態圖。原因:`, reason);
+                    // 降級顯示角色的預設圖
+                    const imgUrl = IMAGE_MAP[`avatar_${currentCharData.name}`];
+                    avatarBox.innerHTML = imgUrl ? `<img src="${imgUrl}" class="w-full h-full object-cover">` : currentCharData.name.charAt(0);
+                }
+            });
+        }
+
+        // ==========================================
+        // 👗 換裝按鈕渲染與點擊邏輯
+        // ==========================================
+        function renderCostumeButtons(charName) {
+            const container = document.getElementById('costumeButtonsContainer');
+            const costumes = COSTUME_MAP[charName];
+            
+            if (!costumes || costumes.length <= 1) {
+                container.classList.add('hidden');
+                return;
+            }
+
+            container.classList.remove('hidden');
+            let html = '';
+            costumes.forEach((costumeKey, idx) => {
+                let displayName = idx === 0 ? "預設" : `服裝${idx}`;
+                let activeStyle = idx === 0 ? 'bg-amber-500 text-white border-amber-600 shadow-sm' : 'bg-white dark:bg-slate-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-slate-600 hover:bg-amber-100 dark:hover:bg-slate-600';
+                
+                html += `<button onclick="changeCostume('${costumeKey}', this)" class="costume-btn px-4 py-1.5 text-xs font-bold rounded-lg border ${activeStyle}">${displayName}</button>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function changeCostume(costumeKey, btnElement) {
+            // 💡 優化：使用 classList 操作，更安全乾淨
+            document.querySelectorAll('.costume-btn').forEach(btn => {
+                btn.classList.remove('bg-amber-500', 'text-white', 'border-amber-600', 'shadow-sm');
+                btn.classList.add('bg-white', 'dark:bg-slate-700', 'text-gray-700', 'dark:text-gray-200', 'border-gray-300', 'dark:border-slate-600', 'hover:bg-amber-100', 'dark:hover:bg-slate-600');
+            });
+            // 套用選取樣式
+            btnElement.classList.remove('bg-white', 'dark:bg-slate-700', 'text-gray-700', 'dark:text-gray-200', 'border-gray-300', 'dark:border-slate-600', 'hover:bg-amber-100', 'dark:hover:bg-slate-600');
+            btnElement.classList.add('bg-amber-500', 'text-white', 'border-amber-600', 'shadow-sm');
+
+            loadSpineAnimation(costumeKey);
+        }
 
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -462,28 +629,23 @@
             if (!currentTargetName) { renderError("❌ 未指定角色，請從主頁點擊角色按鈕進入。"); return; }
             if (typeof INITIAL_DATA === 'undefined') { renderError("❌ 載入失敗：找不到 INITIAL_DATA。"); return; }
 
-            const charData = INITIAL_DATA.find(c => c.name.trim() === currentTargetName);
-            if (!charData) { renderError(`❌ 找不到名稱為「${currentTargetName}」的角色資料。`); return; }
+            currentCharData = INITIAL_DATA.find(c => c.name.trim() === currentTargetName);
+            if (!currentCharData) { renderError(`❌ 找不到名稱為「${currentTargetName}」的角色資料。`); return; }
 
-            document.getElementById('charName').innerText = charData.name;
-            updateTag('charPersonality', '性格', charData.personality, 'personality');
-            updateTag('charRace', '種族', charData.race, 'race');
-            updateTag('charPosition', '站位', charData.position, 'position');
-            updateTag('charJob', '職業', charData.job, 'job');
+            document.getElementById('charName').innerText = currentCharData.name;
+            updateTag('charPersonality', '性格', currentCharData.personality, 'personality');
+            updateTag('charRace', '種族', currentCharData.race, 'race');
+            updateTag('charPosition', '站位', currentCharData.position, 'position');
+            updateTag('charJob', '職業', currentCharData.job, 'job');
 
-            // 🌟 核心升級：Spine 動態圖讀取與互動邏輯
-            const avatarBox = document.getElementById('charAvatar');
-            const spineKey = SPINE_MAP[charData.name]; // 拿取您對應的英文路徑名稱
+            const spineKey = SPINE_MAP[currentCharData.name];
 
             if (spineKey) {
-    
-                // ==========================================
-                // 🎁 升級版：動態顯示珍藏品名稱、圖片與書信邏輯
-                // ==========================================
+                // 🎁 珍藏品邏輯
+                const presentLeft = document.getElementById('presentLeft');
+                const presentRight = document.getElementById('presentRight');
                 const presentContainer = document.getElementById('presentContainer');
                 const presentNameBox = document.getElementById('presentName');
-                const presentLetterContainer = document.getElementById('presentLetterContainer');
-                const presentLetterBox = document.getElementById('presentLetter');
     
                 const DEFAULT_NO_PRESENT_URL = "https://i.postimg.cc/qtwD6bsq/Icon-Present.png";
     
@@ -491,7 +653,6 @@
                 let presentDisplayName = "珍藏品正在送遞中..."; 
                 let isHasPresent = false;
 
-                // 🔍 取得當前角色的珍藏品資料
                 if (PRESENT_MAP[spineKey]) {
                     finalImgUrl = PRESENT_MAP[spineKey].url;
                     isHasPresent = true;
@@ -499,26 +660,21 @@
                     if (PRESENT_MAP[spineKey].name && PRESENT_MAP[spineKey].name.trim() !== "") {
                         presentDisplayName = PRESENT_MAP[spineKey].name;
                     } else {
-                        presentDisplayName = `${charData.name}的珍藏品`;
+                        presentDisplayName = `${currentCharData.name}的珍藏品`;
                     }
                 }
 
-                // ✍️ 渲染名稱區塊
                 if (presentNameBox) {
                     presentNameBox.innerText = presentDisplayName;
-        
-                    // 賦予溫馨主題與暗夜模式的基礎設定 (改為 inline-block 以適應靠左排版)
                     presentNameBox.className = "inline-block mb-1 tracking-wide px-4 py-1.5 rounded-full border transition-colors duration-300";
         
                     if (!isHasPresent) {
-                        // ⏳ 送遞中狀態
                         presentNameBox.classList.add(
                             'text-sm', 'text-rose-400', 'dark:text-gray-400', 
                             'bg-rose-50', 'dark:bg-gray-800/50', 
                             'border-rose-200', 'dark:border-gray-700', 'border-dashed'
                         );
                     } else {
-                        // 🎁 已實裝狀態
                         presentNameBox.classList.add(
                             'text-base', 'font-bold', 'text-rose-900', 'dark:text-gray-100', 
                             'bg-rose-100', 'dark:bg-gray-800', 
@@ -528,27 +684,10 @@
                     presentNameBox.classList.remove('hidden');
                 }
 
-                // 💌 渲染書信內容區塊
-                if (presentLetterContainer && presentLetterBox) {
-                    if (isHasPresent) {
-                        presentLetterContainer.classList.remove('hidden');
-            
-                        // 讀取 LETTER_MAP 裡的信，如果還沒寫，就顯示預設佔位文字
-                        let letterContent = LETTER_MAP[spineKey] || "（隨附的信件內容整理中，敬請期待...）";
-            
-                        // 將文字中的 \n 轉換為網頁換行標籤 <br>
-                        presentLetterBox.innerHTML = letterContent.replace(/\n/g, '<br>');
-                    } else {
-                       // 如果連珍藏品都沒實裝，就隱藏整個書信框
-                        presentLetterContainer.classList.add('hidden');
-                    }
-                }
-
-                // 🚀 渲染圖片區塊
-                const altText = isHasPresent ? `${charData.name} - ${presentDisplayName}` : "珍藏品正在送遞中";
+                const altText = isHasPresent ? `${currentCharData.name} - ${presentDisplayName}` : "珍藏品正在送遞中";
                 const imgClass = isHasPresent 
-                    ? "w-32 md:w-40 object-contain transition-transform duration-300 hover:scale-110 drop-shadow-md"
-                    : "w-24 md:w-32 object-contain opacity-70"; 
+                    ? "w-32 h-32 md:w-40 md:h-40 object-contain transition-transform duration-300 hover:scale-110 drop-shadow-md"
+                    : "w-24 h-24 md:w-32 md:h-32 object-contain opacity-70 animate-pulse"; 
 
                 if (presentContainer) {
                     presentContainer.innerHTML = `
@@ -556,132 +695,32 @@
                              alt="${altText}" 
                              class="${imgClass}"
                              loading="lazy"
-                             onerror="if(this.src != '${DEFAULT_NO_PRESENT_URL}') this.src='${DEFAULT_NO_PRESENT_URL}'; else this.parentElement.innerHTML='<p class=\'text-gray-500 text-sm\'>⚠️ 珍藏品載入錯誤</p>'">
+                             onerror="if(this.src != '${DEFAULT_NO_PRESENT_URL}') this.src='${DEFAULT_NO_PRESENT_URL}'; else this.parentElement.innerHTML='<p class=\\'text-gray-500 text-sm\\'>⚠️ 珍藏品載入錯誤</p>'">
                     `;
                 }
-                // ==========================================
-                // 🎁 珍藏品代碼結束
-                // ==========================================
-                // 1. 清空容器原本的內容
-                avatarBox.innerHTML = ''; 
-                
-                // 🌆 2. 隨機背景魔法：從清單抽一張背景圖套用給外框
-                if (LOBBY_BACKGROUNDS && LOBBY_BACKGROUNDS.length > 0) {
-                    const randomBg = LOBBY_BACKGROUNDS[Math.floor(Math.random() * LOBBY_BACKGROUNDS.length)];
-                    
-                    // 運用 JS 賦予外框美麗的背景圖樣式
-                    avatarBox.style.backgroundImage = `url('${randomBg}')`;
-                    avatarBox.style.backgroundSize = 'cover';       // 讓背景完美填滿外框
-                    avatarBox.style.backgroundPosition = 'center';  // 鏡頭置中
-                    avatarBox.style.backgroundRepeat = 'no-repeat'; // 不重複拼貼
-                    
-                    // 💡 視覺微調：確保外框有圓角且背景不會超出外框
-                    avatarBox.classList.add('overflow-hidden', 'rounded-2xl', 'shadow-inner');
+
+                if (!isHasPresent) {
+                    if (presentRight) presentRight.classList.add('hidden');
+                    if (presentLeft) presentLeft.className = "w-full flex flex-col items-center justify-center gap-4 py-6 transition-all duration-300";
+                } else {
+                    if (presentRight) presentRight.classList.remove('hidden');
+                    if (presentLeft) presentLeft.className = "w-full md:w-1/3 flex flex-col items-center gap-3 transition-all duration-300";
                 }
                 
-                // 3. 初始化 Spine 播放器 (維持您原本的設定)
-                let player = new spine.SpinePlayer(avatarBox, {
-                    skelUrl: `./spine_assets/${spineKey}/${spineKey}.skel.bytes`, // 拼法已修正為 assets
-                    atlasUrl: `./spine_assets/${spineKey}/${spineKey}.atlas.txt`,
-                    animation: "Idle_1",     
-                    premultipliedAlpha: true,
-                    backgroundColor: "#00000000", // 🌟 關鍵：維持全透明，背景圖才看得到
-                    alpha: true,                  // 🌟 關鍵：維持全透明
-                    showControls: false,     
-                    
-                    // 攝影機鏡頭鎖定 (維持您之前調好的高矮比例)
-                    viewport: {
-                        x: -400,     
-                        y: 0,        
-                        width: 800,  
-                        height: 1000 
-                    },
+                renderCostumeButtons(currentCharData.name);
 
-                    success: function (player) {
-                        console.log(`✅ ${charData.name} 的 Spine 動畫載入成功！`);
-                        
-                        // 👗 外觀優化邏輯 (維持不變)
-                        const skins = player.skeleton.data.skins;
-                        if (skins && skins.length > 1) {
-                            const targetSkin = skins.find(s => s.name === 'Normal') || skins.find(s => s.name !== 'default');
-                            if (targetSkin) {
-                                player.skeleton.setSkinByName(targetSkin.name);
-                                player.skeleton.setSlotsToSetupPose();
-                            }
-                        }
+                const initialCostumeKey = (COSTUME_MAP[currentCharData.name] && COSTUME_MAP[currentCharData.name].length > 0) 
+                                          ? COSTUME_MAP[currentCharData.name][0] 
+                                          : spineKey;
+                loadSpineAnimation(initialCostumeKey);
 
-                        // 🎬 閒置與互動計時器魔法
-                        const animations = player.skeleton.data.animations;
-                        if (animations && animations.length > 1) {
-                            
-                            let idleTimer = null; // 用來儲存計時器的變數
-
-                            // 📦 封裝：播放動作並確保至少循環 5 秒
-                            function playRandomAction() {
-                                const animsToPlay = animations.filter(a => a.name !== 'Idle_1');
-                                if (animsToPlay.length > 0) {
-                                    const randomAnim = animsToPlay[Math.floor(Math.random() * animsToPlay.length)].name;
-        
-                                    console.log(`🤖 觸發動作: ${randomAnim}`);
-        
-                                    // 1. 播放隨機動作 (設定為 true，讓它先開始循環)
-                                    player.animationState.setAnimation(0, randomAnim, true);
-        
-                                    // 2. 清除舊計時器
-                                    clearTimeout(idleTimer);
-        
-                                    // 3. 設定一個計時器，5 秒後才准許切換回 Idle_1
-                                    idleTimer = setTimeout(() => {
-                                        // 切換回待機，且設定為循環
-                                        player.animationState.setAnimation(0, "Idle_1", true);
-            
-                                        // 重新啟動 5 秒後的下一次自動動作
-                                        startIdleTimer();
-                                    }, 5000); // 強制執行 5 秒
-        
-                                } else {
-                                    startIdleTimer();
-                                }
-                            }
-
-                            // ⏱️ 封裝：啟動/重設計時器的函數
-                            function startIdleTimer() {
-                                // 先清除舊的計時器，避免重複疊加
-                                clearTimeout(idleTimer);
-                                // 重新設定 5 秒 (5000 毫秒) 後執行
-                                idleTimer = setTimeout(() => {
-                                    playRandomAction();
-                                }, 5000);
-                            }
-
-                            // 🚀 第一次初始化：載入成功後立刻開始倒數 5 秒
-                            startIdleTimer();
-
-                            // 🌟 互動魔法：玩家主動點擊
-                            const canvas = avatarBox.querySelector('canvas');
-                            if(canvas) {
-                                canvas.addEventListener('click', () => {
-                                    console.log("👆 玩家主動戳了角色");
-                                    // 點擊時直接觸發動作 (內部會自動清除舊計時器並重開 5 秒)
-                                    playRandomAction();
-                                });
-                            }
-                        }
-                    },
-                    error: function (player, reason) {
-                        console.warn(`⚠️ Spine 載入失敗，降級顯示靜態圖。原因:`, reason);
-                        // 如果破圖或是路徑打錯，退回顯示靜態圖片
-                        const imgUrl = IMAGE_MAP[`avatar_${charData.name}`];
-                        avatarBox.innerHTML = imgUrl ? `<img src="${imgUrl}" class="w-full h-full object-cover">` : charData.name.charAt(0);
-                    }
-                });
             } else {
-                // 如果角色不在清單中，維持原本的靜態圖片
-                const imgUrl = IMAGE_MAP[`avatar_${charData.name}`];
+                const avatarBox = document.getElementById('charAvatar');
+                const imgUrl = IMAGE_MAP[`avatar_${currentCharData.name}`];
                 if (imgUrl) {
                     avatarBox.innerHTML = `<img src="${imgUrl}" class="w-full h-full object-cover">`;
                 } else {
-                    avatarBox.innerText = charData.name.charAt(0);
+                    avatarBox.innerText = currentCharData.name.charAt(0);
                 }
             }
 
@@ -689,11 +728,11 @@
                 const ul = document.getElementById(elementId);
                 ul.innerHTML = array.map(attr => `<li>${attr}</li>`).join('');
             };
-            renderCrayonList('layer1List', charData.layer1);
-            renderCrayonList('layer2List', charData.layer2);
-            renderCrayonList('layer3List', charData.layer3);
+            renderCrayonList('layer1List', currentCharData.layer1);
+            renderCrayonList('layer2List', currentCharData.layer2);
+            renderCrayonList('layer3List', currentCharData.layer3);
 
-            document.title = `${charData.name} - 角色詳細資料`;
+            document.title = `${currentCharData.name} - 角色詳細資料`;
 
             const skillsContainer = document.getElementById('skillsContainer');
             
@@ -785,9 +824,11 @@
             }
 
             loadComments(currentTargetName);
-
-            // 🎁 載入完畢後，預設顯示珍藏品的「教主感想」
-            switchPresentTab('thought');
+            switchPresentTab('thought'); 
+            
+            // 預載空信封圖示，以防沒情信時出現延遲
+            const preloadImg = new Image();
+            preloadImg.src = LOVE_LETTER_BG;
             
         };
 
