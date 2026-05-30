@@ -477,6 +477,7 @@
             const btnLetter = document.getElementById('btnLetter');
             const btnThought = document.getElementById('btnThought');
             const presentText = document.getElementById('presentText');
+            const presentTextWrapper = document.getElementById('presentTextWrapper'); // 抓取要換背景的容器
             const spineKey = SPINE_MAP[currentTargetName]; 
             
             const inactiveClass = "flex-1 py-1.5 text-sm font-bold rounded-lg transition-all bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300";
@@ -485,10 +486,23 @@
                 btnLetter.className = "flex-1 py-1.5 text-sm font-bold rounded-lg transition-all bg-rose-500 text-white shadow-md";
                 btnThought.className = inactiveClass;
                 presentText.innerHTML = (LETTER_MAP[spineKey] || "（這隻坨坨好像還沒寫信給你呢...）").replace(/\n/g, '<br>');
+                
+                // 🌟 喚醒魔法：套用種族專屬背景圖
+                const race = currentCharData.race;
+                const bgUrl = LETTER_BG_MAP[race] || LOVE_LETTER_BG;
+                presentTextWrapper.style.backgroundImage = `url('${bgUrl}')`;
+                presentTextWrapper.style.backgroundSize = 'cover';
+                presentTextWrapper.style.backgroundPosition = 'center';
+                // 為了讓文字在花俏的背景上更清楚，加上半透明底色遮罩
+                presentText.className = "text-sm md:text-base leading-relaxed w-full drop-shadow-md text-gray-800 dark:text-gray-100 bg-white/60 dark:bg-black/40 p-3 rounded-lg backdrop-blur-sm";
             } else {
                 btnThought.className = "flex-1 py-1.5 text-sm font-bold rounded-lg transition-all bg-amber-500 text-white shadow-md";
                 btnLetter.className = inactiveClass;
                 presentText.innerHTML = (THOUGHT_MAP[spineKey] || "（教主目前還沒寫下對這個珍藏品的感想呢...）").replace(/\n/g, '<br>');
+                
+                // 取消背景圖，恢復預設樣式
+                presentTextWrapper.style.backgroundImage = 'none';
+                presentText.className = "text-sm md:text-base leading-relaxed w-full drop-shadow-md text-gray-700 dark:text-gray-300";
             }
         }
         
@@ -500,6 +514,13 @@
             const baseFolderKey = SPINE_MAP[currentTargetName]; 
             
             clearTimeout(globalIdleTimer);
+
+            // 🌟 關鍵防崩潰修復：先正規銷毀舊的 Spine 實例，釋放 WebGL 記憶體
+            if (window.globalSpinePlayer) {
+                window.globalSpinePlayer.dispose();
+                window.globalSpinePlayer = null;
+            }
+            
             avatarBox.innerHTML = ''; 
 
             // 隨機背景魔法：僅在首次進入或無背景時賦予背景，避免每次換裝都閃爍切換背景
@@ -573,21 +594,28 @@
                         // 🌟 2 & 4. 終極整合：高畫質縮放 + 多指防呆 + 部位互動系統
                         const canvas = avatarBox.querySelector('canvas');
                         if (canvas) {
-                            canvas.style.touchAction = 'none'; // 鎖定手機滑動，專注於觸控互動！
+                            canvas.style.touchAction = 'none';
 
                             // 💡 共用變數
                             let currentZoom = 1.0;
                             const ZOOM_ANCHOR_Y = 600; 
-                            const baseViewport = { x: -400, y: 0, width: 800, height: 1000 }; // 🌟 新增：解決 ReferenceError
-                            const pointers = {}; // 用來追蹤目前螢幕上有幾根手指
+                            const baseViewport = { x: -400, y: 0, width: 800, height: 1000 }; 
+                            const pointers = {}; 
                             let initialPinchDistance = 0;
             
                             let isPointerDown = false;
                             let dragDistance = 0;
                             let lastX = 0, lastY = 0;
+                            let startX = 0, startY = 0; 
+                            
                             let hitZoneOnDown = null;
                             let hasTriggeredRub = false; 
                             let tickleTimer = null; 
+                            
+                            // 🌟 新增：記錄臉頰骨骼最初的局部座標，用來完美歸位！
+                            let activeFaceBone = null; 
+                            let initialBoneX = 0;
+                            let initialBoneY = 0;
 
                             // --- 🖱️ 電腦專用：滾輪縮放 ---
                             avatarBox.addEventListener('wheel', function(event) {
@@ -618,7 +646,7 @@
                                 let clickedPart = null;
                                 let minDistance = Infinity;
                                 const hitZones = [
-                                    { name: "頭部", bones: ["Character_Pat", "S3_Head"], radius: 120 },
+                                    { name: "頭部", bones: ["Character_Pat", "S3_Head"], radius: 220 },
                                     { name: "身體", bones: ["Character_Tickle", "S3_Body_1", "S3_Body_Root"], radius: 150 }
                                 ];
                                 hitZones.forEach(zone => {
@@ -646,25 +674,57 @@
 
                             // 👆 整合階段 1：按下
                             canvas.addEventListener('pointerdown', (e) => {
-                                pointers[e.pointerId] = { x: e.clientX, y: e.clientY }; // 紀錄觸控點
+                                pointers[e.pointerId] = { x: e.clientX, y: e.clientY }; 
                                 const pointerKeys = Object.keys(pointers);
 
                                 if (pointerKeys.length === 2) {
-                                    // ✌️ 雙指按下：進入縮放模式
-                                    isPointerDown = false; // 強制關閉撫摸判定
+                                    isPointerDown = false; 
                                     clearTimeout(tickleTimer); 
                                     const p1 = pointers[pointerKeys[0]];
                                     const p2 = pointers[pointerKeys[1]];
                                     initialPinchDistance = Math.hypot(p1.x - p2.x, p1.y - p2.y);
                                 } else if (pointerKeys.length === 1) {
-                                    // ☝️ 單指按下：進入互動判定
                                     isPointerDown = true;
                                     dragDistance = 0;
+                                    startX = e.clientX;
+                                    startY = e.clientY;
                                     lastX = e.clientX;
                                     lastY = e.clientY;
+                                    activeFaceBone = null;
                                     hasTriggeredRub = false;
                                     const rect = canvas.getBoundingClientRect();
                                     hitZoneOnDown = getHitZone(e.clientX - rect.left, e.clientY - rect.top);
+
+                                    if (hitZoneOnDown && hitZoneOnDown.name === "頭部") {
+                                        let minBoneDist = Infinity;
+                                        
+                                        // 🌟 最終正解：鎖定韓國畫師專用的臉頰骨骼「Ball (볼)」！
+                                        const candidateBones = ["S1_Ball_L_CT", "S1_Ball_L", "S1_Ball_L_Root", "S1_Ball_R_CT", "S1_Ball_R_Root"];
+                                        
+                                        for (let bName of candidateBones) {
+                                            let bone = player.skeleton.findBone(bName);
+                                            if (bone) {
+                                                const boneCanvasX = ((bone.worldX - baseViewport.x) / baseViewport.width) * rect.width;
+                                                const boneCanvasY = rect.height - ((bone.worldY - baseViewport.y) / baseViewport.height) * rect.height;
+                                                const dist = Math.hypot((e.clientX - rect.left) - boneCanvasX, (e.clientY - rect.top) - boneCanvasY);
+                                                
+                                                if (dist < minBoneDist) {
+                                                    minBoneDist = dist;
+                                                    activeFaceBone = bone; 
+                                                }
+                                            }
+                                        }
+
+                                        const maxPullRadius = 150 * currentZoom * (rect.height / baseViewport.height);
+                                        
+                                        if (minBoneDist > maxPullRadius) {
+                                            activeFaceBone = null; // 太遠就不捏臉
+                                        } else if (activeFaceBone) {
+                                            // 🌟 記住臉頰骨最初始的局部座標！
+                                            initialBoneX = activeFaceBone.x;
+                                            initialBoneY = activeFaceBone.y;
+                                        }
+                                    }
                                 }
                             });
 
@@ -675,7 +735,6 @@
                                 const pointerKeys = Object.keys(pointers);
 
                                 if (pointerKeys.length === 2) {
-                                    // 🔍 雙指縮放中
                                     e.preventDefault();
                                     const p1 = pointers[pointerKeys[0]];
                                     const p2 = pointers[pointerKeys[1]];
@@ -692,37 +751,60 @@
                                     initialPinchDistance = currentDistance;
 
                                 } else if (pointerKeys.length === 1 && isPointerDown) {
-                                    // ✋ 單指拖拉中 (撫摸判定)
                                     const dx = e.clientX - lastX;
                                     const dy = e.clientY - lastY;
                                     dragDistance += Math.sqrt(dx * dx + dy * dy);
-                                    lastX = e.clientX;
-                                    lastY = e.clientY;
-
-                                    if (dragDistance > 30 && !hasTriggeredRub && hitZoneOnDown) {
+                    
+                                    if (dragDistance > 10 && !hasTriggeredRub && hitZoneOnDown) {
                                         hasTriggeredRub = true;
                                         clearTimeout(globalIdleTimer);
-                                        const animNames = player.skeleton.data.animations.map(a => a.name);
+                                        clearTimeout(tickleTimer);
                                         
                                         if (hitZoneOnDown.name === "頭部") {
-                                            const targetAnim = animNames.includes("Touch_Idle") ? "Touch_Idle" : 
-                                                              (animNames.filter(n => n.includes('Touch') && !n.includes('_End'))[0] || "Idle_1");
-                                            player.animationState.setAnimation(0, targetAnim, true);
-
+                                            player.animationState.setAnimation(0, "Touch_Idle", true);
                                         } else if (hitZoneOnDown.name === "身體") {
-                                            if (animNames.includes("Tickle_Idle_1")) {
-                                                player.animationState.setAnimation(0, "Tickle_Idle_1", true);
-                                                tickleTimer = setTimeout(() => {
-                                                    if (isPointerDown && animNames.includes("Tickle_Idle_2")) {
-                                                        player.animationState.setAnimation(0, "Tickle_Idle_2", true);
-                                                    }
-                                                }, 5000);
-                                            } else {
-                                                const tickleAnims = animNames.filter(n => n.includes('Tickle') && !n.includes('_End'));
-                                                if (tickleAnims.length > 0) player.animationState.setAnimation(0, tickleAnims[Math.floor(Math.random() * tickleAnims.length)], true);
-                                            }
+                                            player.animationState.setAnimation(0, "Tickle_Idle_1", true);
+                                            tickleTimer = setTimeout(() => {
+                                                const animNames = player.skeleton.data.animations.map(a => a.name);
+                                                if (animNames.includes("Tickle_Idle_2")) {
+                                                    player.animationState.setAnimation(0, "Tickle_Idle_2", true);
+                                                }
+                                            }, 5000);
                                         }
                                     }
+
+                                    // 🌟 拉臉變形核心邏輯
+                                    if (hasTriggeredRub && hitZoneOnDown && hitZoneOnDown.name === "頭部" && activeFaceBone) {
+                                        const rect = canvas.getBoundingClientRect();
+                                        const spineScaleX = baseViewport.width / rect.width / currentZoom;
+                                        const spineScaleY = baseViewport.height / rect.height / currentZoom;
+                                        
+                                        // 計算滑鼠在世界中的位移量
+                                        const stretchIntensity = 1.3; // 可以調整拉伸幅度
+                                        let worldDx = (e.clientX - startX) * spineScaleX * stretchIntensity; 
+                                        let worldDy = -(e.clientY - startY) * spineScaleY * stretchIntensity; 
+                                        
+                                        // 關鍵防暴走：先把骨骼重置回「剛點擊時」的初始狀態，然後再算加上位移後的位置
+                                        activeFaceBone.x = initialBoneX;
+                                        activeFaceBone.y = initialBoneY;
+                                        activeFaceBone.updateWorldTransform(); 
+                                        
+                                        let targetWorld = { 
+                                            x: activeFaceBone.worldX + worldDx, 
+                                            y: activeFaceBone.worldY + worldDy 
+                                        };
+                                        
+                                        // 將世界座標換算回局部座標，賦予給骨骼
+                                        if (activeFaceBone.parent) {
+                                            activeFaceBone.parent.worldToLocal(targetWorld);
+                                        }
+                                        
+                                        activeFaceBone.x = targetWorld.x;
+                                        activeFaceBone.y = targetWorld.y;
+                                    }
+
+                                    lastX = e.clientX;
+                                    lastY = e.clientY;
                                 }
                             });
 
@@ -731,7 +813,6 @@
                                 delete pointers[e.pointerId];
                                 const pointerKeys = Object.keys(pointers);
 
-                                // 💡 防呆：如果原本是雙指縮放，放開了一指，強制中斷撫摸判定，避免剩下那指突然發出點擊指令
                                 if (pointerKeys.length === 1) {
                                     isPointerDown = false;
                                     return;
@@ -740,52 +821,58 @@
                                 if (pointerKeys.length === 0 && isPointerDown) {
                                     isPointerDown = false;
                                     const animNames = player.skeleton.data.animations.map(a => a.name);
+                    
+                                    // 🌟 完美歸位魔法：放開滑鼠時，強制把臉頰骨骼「推回」最初記錄的位置
+                                    if (activeFaceBone) {
+                                        activeFaceBone.x = initialBoneX;
+                                        activeFaceBone.y = initialBoneY;
+                                        activeFaceBone = null;
+                                    }
+                                    
+                                    clearTimeout(tickleTimer); 
 
-                                    if (!hasTriggeredRub) {
-                                        // --- 單指：點擊邏輯 ---
-                                        clearTimeout(globalIdleTimer);
-                                        if (hitZoneOnDown) {
-                                            if (hitZoneOnDown.name === "頭部") {
-                                                const hasSmash1 = animNames.includes("Smash_End_1");
-                                                const hasSmash2 = animNames.includes("Smash_End_2");
-                                                if (hasSmash1 && hasSmash2) {
-                                                    player.animationState.setAnimation(0, "Smash_End_1", false);
-                                                    player.animationState.addAnimation(0, "Smash_End_2", true, 0); 
-                                                } else if (hasSmash1) {
-                                                    player.animationState.setAnimation(0, "Smash_End_1", true);
-                                                } else {
-                                                    playNextAnimation();
-                                                }
-                                            } else {
-                                                playNextAnimation(); 
-                                            }
-                                        } else {
-                                            playNextAnimation();
-                                        }
-                                        globalIdleTimer = setTimeout(playNextAnimation, 5000);
-                                        
-                                    } else {
-                                        // --- 單指：中斷撫摸邏輯 ---
-                                        clearTimeout(tickleTimer); 
-
-                                        if (hitZoneOnDown && hitZoneOnDown.name === "身體") {
-                                            if (animNames.includes("Tickle_End")) {
-                                                player.animationState.setAnimation(0, "Tickle_End", false); 
-                                                player.animationState.addAnimation(0, "Idle_1", true, 0);   
-                                            }
-                                        } else if (hitZoneOnDown && hitZoneOnDown.name === "頭部") {
+                                    if (hasTriggeredRub) {
+                                        if (hitZoneOnDown && hitZoneOnDown.name === "頭部") {
                                             if (animNames.includes("Touch_End")) {
                                                 player.animationState.setAnimation(0, "Touch_End", false);
                                                 player.animationState.addAnimation(0, "Idle_1", true, 0);
+                                            } else {
+                                                player.animationState.setAnimation(0, "Idle_1", true);
+                                            }
+                                        } else if (hitZoneOnDown && hitZoneOnDown.name === "身體") {
+                                            if (animNames.includes("Tickle_End")) {
+                                                player.animationState.setAnimation(0, "Tickle_End", false);
+                                                player.animationState.addAnimation(0, "Idle_1", true, 0);
+                                            } else {
+                                                player.animationState.setAnimation(0, "Idle_1", true);
                                             }
                                         }
-                                        clearTimeout(globalIdleTimer);
-                                        globalIdleTimer = setTimeout(playNextAnimation, 5000);
+                                    } else {
+                                        if (hitZoneOnDown && hitZoneOnDown.name === "頭部") {
+                                            if (animNames.includes("Smash_End_1")) {
+                                                player.animationState.setAnimation(0, "Smash_End_1", false);
+                                                if (animNames.includes("Smash_End_2")) {
+                                                    player.animationState.addAnimation(0, "Smash_End_2", false, 0);
+                                                }
+                                                player.animationState.addAnimation(0, "Idle_1", true, 0);
+                                            } else {
+                                                player.animationState.setAnimation(0, "Idle_1", true);
+                                            }
+                                        } else if (hitZoneOnDown && hitZoneOnDown.name === "身體") {
+                                            if (animNames.includes("Tickle_End")) {
+                                                player.animationState.setAnimation(0, "Tickle_End", false);
+                                                player.animationState.addAnimation(0, "Idle_1", true, 0);
+                                            } else {
+                                                player.animationState.setAnimation(0, "Idle_1", true);
+                                            }
+                                        }
                                     }
+                                    
+                                    clearTimeout(globalIdleTimer);
+                                    globalIdleTimer = setTimeout(playNextAnimation, 5000);
                                 }
                             };
 
-                            // 綁定所有可能讓手指離開畫布的事件
                             canvas.addEventListener('pointerup', handlePointerUp);
                             canvas.addEventListener('pointerout', handlePointerUp);
                             canvas.addEventListener('pointercancel', handlePointerUp);
@@ -1135,6 +1222,7 @@
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             }).then(() => {
                 document.getElementById('commentContent').value = '';
+                document.getElementById('charCount').innerText = '0 / 500'; // 🌟 加上這行，重置字數提示
                 btn.disabled = false;
                 btn.innerHTML = '送出評價 🚀';
                 btn.classList.replace('bg-gray-400', 'bg-amber-500');
@@ -1158,3 +1246,5 @@
     </footer>
 </body>
 </html>
+
+
