@@ -545,16 +545,23 @@
                     // 💡 縮放控制變數
                     let currentZoom = 1.0;
                     let initialPinchDistance = 0; 
+    
+                    // 📍 縮放中心高度 (你可以依據角色的身高微調這個數字)
+                    // 數字越大，縮放中心越往上 (例如 700 大約是頭部，500 大約是肚子)
+                    const ZOOM_ANCHOR_Y = 600; 
 
                     // --- 🖱️ 電腦：滑鼠滾輪縮放 ---
                     avatarBox.addEventListener('wheel', function(event) {
                         event.preventDefault();
                         currentZoom = event.deltaY < 0 ? Math.min(currentZoom + 0.1, 4.0) : Math.max(currentZoom - 0.1, 0.5);
         
-                        // 🌟 終極高清秘訣：不拉伸畫布，直接放大 WebGL 骨架！
                         if (player.skeleton) {
                             player.skeleton.scaleX = currentZoom;
                             player.skeleton.scaleY = currentZoom;
+            
+                            // 🌟 關鍵魔法：加上反向高度補償，讓視覺中心固定在頭部
+                            player.skeleton.y = ZOOM_ANCHOR_Y * (1 - currentZoom);
+                            player.skeleton.x = 0; // X 軸保持置中
                         }
                     }, { passive: false });
 
@@ -577,10 +584,13 @@
                             const zoomChange = currentDistance / initialPinchDistance;
                             currentZoom = Math.min(Math.max(currentZoom * zoomChange, 0.5), 4.0);
             
-                            // 🌟 直接縮放 WebGL 骨架
                             if (player.skeleton) {
                                 player.skeleton.scaleX = currentZoom;
                                 player.skeleton.scaleY = currentZoom;
+                
+                                // 🌟 同樣加上反向高度補償
+                                player.skeleton.y = ZOOM_ANCHOR_Y * (1 - currentZoom);
+                                player.skeleton.x = 0;
                             }
             
                             initialPinchDistance = currentDistance; 
@@ -593,9 +603,10 @@
                         if (player.skeleton) {
                             player.skeleton.scaleX = 1.0;
                             player.skeleton.scaleY = 1.0;
-                            // 順便把座標歸零 (如果之後你想加拖曳功能，這行會很有用)
+            
+                            // 重置時記得把座標歸零！
                             player.skeleton.x = 0;
-                            player.skeleton.y = 0;
+                            player.skeleton.y = 0; 
                         }
                         console.log("🔄 視角與大小已重置");
                     });
