@@ -604,6 +604,10 @@
                         // 🌟 4. 進階互動系統 (支援 5 秒持續搔癢與中斷反應)
                         const canvas = avatarBox.querySelector('canvas');
                        if (canvas) {
+                           // 💡 加上這行：禁止手機在這個畫布上觸發網頁滑動或縮放，專心處理撫摸！
+                           canvas.style.touchAction = 'none'; 
+    
+                           let isPointerDown = false;
                            let isPointerDown = false;
                            let dragDistance = 0;
                            let lastX = 0, lastY = 0;
