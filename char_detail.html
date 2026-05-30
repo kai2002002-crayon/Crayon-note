@@ -132,9 +132,7 @@
                           oninput="document.getElementById('charCount').innerText = this.value.length + ' / 500'"
                           placeholder="寫下您對這位坨坨的評價、組隊心得或是發廚發言..."
                           class="w-full mb-1 px-3 py-2 text-sm font-medium text-gray-800 dark:text-gray-200 rounded-lg border border-amber-300 dark:border-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white dark:bg-slate-800 resize-none shadow-inner"></textarea>
-                </textarea>
-
-                <!-- 字數顯示區 -->
+                
                 <div class="flex justify-end mb-3">
                     <span id="charCount" class="text-[10px] font-bold text-amber-700/60 dark:text-gray-400">0 / 500</span>
                 </div>
@@ -546,12 +544,12 @@
                             player.skeleton.setSlotsToSetupPose();
                         }
                     }
+                    
                     // 🌟 2. 動作輪播邏輯
                     const animations = player.skeleton.data.animations;
                     if (animations && animations.length > 0) {
                         const animNames = animations.map(a => a.name);
                         const playList = animNames;
-                        let currentIndex = 0;
 
                         function playNextAnimation() {
                             const targetAnims = playList.length > 0 ? playList : ['Idle_1'];
@@ -580,6 +578,7 @@
                             // 💡 共用變數
                             let currentZoom = 1.0;
                             const ZOOM_ANCHOR_Y = 600; 
+                            const baseViewport = { x: -400, y: 0, width: 800, height: 1000 }; // 🌟 新增：解決 ReferenceError
                             const pointers = {}; // 用來追蹤目前螢幕上有幾根手指
                             let initialPinchDistance = 0;
             
@@ -704,7 +703,7 @@
                                         hasTriggeredRub = true;
                                         clearTimeout(globalIdleTimer);
                                         const animNames = player.skeleton.data.animations.map(a => a.name);
-                        
+                                        
                                         if (hitZoneOnDown.name === "頭部") {
                                             const targetAnim = animNames.includes("Touch_Idle") ? "Touch_Idle" : 
                                                               (animNames.filter(n => n.includes('Touch') && !n.includes('_End'))[0] || "Idle_1");
@@ -764,7 +763,7 @@
                                             playNextAnimation();
                                         }
                                         globalIdleTimer = setTimeout(playNextAnimation, 5000);
-                        
+                                        
                                     } else {
                                         // --- 單指：中斷撫摸邏輯 ---
                                         clearTimeout(tickleTimer); 
