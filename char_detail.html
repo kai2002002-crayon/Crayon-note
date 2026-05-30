@@ -543,23 +543,50 @@
                     }
 
                     // 🌟 2. 視角縮放與重置邏輯 (新增的部分)
+                    // 💡 縮放控制變數
                     let currentZoom = 1.0;
-                    const baseViewport = { x: -400, y: 0, width: 800, height: 1000 };
-                    const avatarBox = document.getElementById('charAvatar');
+                    let initialPinchDistance = 0; // 用來計算兩指距離
+                    const canvas = avatarBox.querySelector('canvas');
 
-                    // 💡 修改這兩個事件監聽，直接對畫布 CSS 下手
+                    // --- 滑鼠滾輪縮放 (電腦用) ---
                     avatarBox.addEventListener('wheel', function(event) {
                         event.preventDefault();
-                        const zoomSpeed = 0.1;
-                        currentZoom = event.deltaY < 0 ? Math.min(currentZoom + zoomSpeed, 3.0) : Math.max(currentZoom - zoomSpeed, 0.5);
+                        currentZoom = event.deltaY < 0 ? Math.min(currentZoom + 0.1, 3.0) : Math.max(currentZoom - 0.1, 0.5);
+                        if (canvas) canvas.style.transform = `scale(${currentZoom})`;
+                    }, { passive: false });
 
-                        // 直接調整 Canvas 的縮放樣式
-                        const canvas = avatarBox.querySelector('canvas');
-                        if (canvas) {
-                            canvas.style.transform = `scale(${currentZoom})`;
-                            canvas.style.transformOrigin = 'center center';
+                    // --- 手機雙指縮放 (觸控用) ---
+                    avatarBox.addEventListener('touchstart', function(event) {
+                        if (event.touches.length === 2) {
+                            // 計算兩指初始距離
+                            const dx = event.touches[0].clientX - event.touches[1].clientX;
+                            const dy = event.touches[0].clientY - event.touches[1].clientY;
+                            initialPinchDistance = Math.sqrt(dx * dx + dy * dy);
                         }
                     }, { passive: false });
+
+                    avatarBox.addEventListener('touchmove', function(event) {
+                        if (event.touches.length === 2) {
+                            event.preventDefault();
+                            // 計算當前兩指距離
+                            const dx = event.touches[0].clientX - event.touches[1].clientX;
+                            const dy = event.touches[0].clientY - event.touches[1].clientY;
+                            const currentDistance = Math.sqrt(dx * dx + dy * dy);
+            
+                            // 根據距離變化比例計算縮放
+                            const zoomChange = currentDistance / initialPinchDistance;
+                            currentZoom = Math.min(Math.max(currentZoom * zoomChange, 0.5), 3.0);
+                            if (canvas) canvas.style.transform = `scale(${currentZoom})`;
+            
+                            initialPinchDistance = currentDistance; // 更新基準點
+                        }
+                    }, { passive: false });
+
+    // --- 雙擊重置 (電腦與手機通用) ---
+    avatarBox.addEventListener('dblclick', function() {
+        currentZoom = 1.0;
+        if (canvas) canvas.style.transform = `scale(1.0)`;
+    });
 
                     avatarBox.addEventListener('dblclick', function() {
                         currentZoom = 1.0;
