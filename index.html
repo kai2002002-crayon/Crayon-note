@@ -770,9 +770,10 @@
             savedStates = {}; 
         }
 
+        // 修改後的 activeFilters (所有類別改為陣列)
         let activeFilters = { 
-            personality: "", race: "", position: "", job: "",
-            gridLayer: "all", gridType: "", search: "", displayMode: "all"
+            personality: [], race: [], position: [], job: [], 
+            gridLayer: "all", gridType: [], search: "", displayMode: "all" 
         };
         let isFilterOpen = true;
 
@@ -1041,14 +1042,33 @@
         }
 
         function selectFilter(category, value) {
-            activeFilters[category] = value;
-            const panel = document.getElementById(`filter_${category}`);
-            if(panel) {
-                const buttons = panel.getElementsByTagName("button");
-                for (let btn of buttons) {
-                    if ((value === "" && btn.id.endsWith("_all")) || (value !== "" && btn.id.endsWith(`_${value}`))) {
-                        btn.className = btnActiveStyle;
-                    } else { btn.className = btnInactiveStyle; }
+            const btnAll = document.getElementById(`btn_filter_${category}_all`);
+    
+            // 如果點擊「全部」
+            if (value === "") {
+                activeFilters[category] = [];
+                btnAll.className = btnActiveStyle;
+                // 把該類別的其他按鈕設為未選
+                document.querySelectorAll(`[id^='btn_filter_${category}_']`).forEach(btn => {
+                    if(btn.id !== btnAll.id) btn.className = btnInactiveStyle;
+                });
+            } else {
+                // 多選邏輯
+                btnAll.className = btnInactiveStyle;
+                const index = activeFilters[category].indexOf(value);
+                const btn = document.getElementById(`btn_filter_${category}_${value}`);
+        
+                if (index > -1) {
+                    activeFilters[category].splice(index, 1); // 已選則移除
+                    btn.className = btnInactiveStyle;
+                } else {
+                    activeFilters[category].push(value); // 未選則加入
+                    btn.className = btnActiveStyle;
+                }
+        
+                // 如果全部取消選取，則自動回到「全部」狀態
+                if (activeFilters[category].length === 0) {
+                    btnAll.className = btnActiveStyle;
                 }
             }
             applyFilterUI();
@@ -1084,18 +1104,22 @@
 
         function applyFilterUI() {
             INITIAL_DATA.forEach(char => {
-                const matchP = !activeFilters.personality || char.personality === activeFilters.personality;
-                const matchR = !activeFilters.race || char.race === activeFilters.race;
-                const matchPos = !activeFilters.position || char.position === activeFilters.position;
-                const matchJ = !activeFilters.job || char.job === activeFilters.job;
-                const matchSearch = !activeFilters.search || t(char.name).toLowerCase().includes(activeFilters.search) || char.name.toLowerCase().includes(activeFilters.search);
-
+                // 陣列長度為 0 表示全選，否則檢查是否包含該特徵
+                const matchP = activeFilters.personality.length === 0 || activeFilters.personality.includes(char.personality);
+                const matchR = activeFilters.race.length === 0 || activeFilters.race.includes(char.race);
+                const matchPos = activeFilters.position.length === 0 || activeFilters.position.includes(char.position);
+                const matchJ = activeFilters.job.length === 0 || activeFilters.job.includes(char.job);
+        
+                // gridType 同理也改為陣列檢查 (選多種屬性代表包含其一即可)
                 let matchGrid = true;
-                if (activeFilters.gridType) {
-                    const targetType = activeFilters.gridType;
-                    if (activeFilters.gridLayer === "all") { matchGrid = char.layer1.includes(targetType) || char.layer2.includes(targetType) || char.layer3.includes(targetType); } 
-                    else { const targetLayerArray = char[`layer${activeFilters.gridLayer}`]; matchGrid = targetLayerArray && targetLayerArray.includes(targetType); }
+                if (activeFilters.gridType.length > 0) {
+                    const layersToSearch = activeFilters.gridLayer === "all" ? [1,2,3] : [parseInt(activeFilters.gridLayer)];
+                    matchGrid = layersToSearch.some(l => 
+                        char[`layer${l}`].some(attr => activeFilters.gridType.includes(attr))
+                    );
                 }
+
+                const matchSearch = !activeFilters.search || t(char.name).toLowerCase().includes(activeFilters.search) || char.name.toLowerCase().includes(activeFilters.search);
 
                 const cardElement = document.getElementById(`char_card_${char.name}`);
                 if (cardElement) {
