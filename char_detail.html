@@ -944,19 +944,36 @@
               });
         }
 
-        function renderSkillContent(text) {
-            if (!text) return "";
-            const parts = text.split('|');
-            const description = parts[0].trim();
-            const effects = parts.length > 1 ? parts[1].split(/[,、]/).filter(p => p.trim() !== "") : [];
-
-            let html = `<p class="text-xs text-gray-600 dark:text-gray-300 font-medium leading-relaxed whitespace-pre-wrap">${description}</p>`;
-            if (effects.length > 0) {
-                html += `<div class="flex flex-wrap gap-1.5 mt-2">` + 
-                    effects.map(eff => `<span class="px-2 py-0.5 bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 text-gray-700 dark:text-gray-300 text-[11px] font-bold rounded-md shadow-sm">${eff.trim()}</span>`).join('') + 
-                    `</div>`;
+        function renderSkillContent(skillData) {
+            if (!skillData || skillData === "無" || skillData.desc === "無") return "";
+            
+            // 🆕 如果是新版物件格式：有 desc 與 stats 陣列
+            if (typeof skillData === 'object') {
+                let html = `<p class="text-xs text-gray-600 dark:text-gray-300 font-medium leading-relaxed whitespace-pre-wrap">${skillData.desc || ''}</p>`;
+                if (skillData.stats && skillData.stats.length > 0) {
+                    html += `<div class="flex flex-wrap gap-1.5 mt-2">` + 
+                        skillData.stats.map(eff => `<span class="px-2 py-0.5 bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 text-gray-700 dark:text-gray-300 text-[11px] font-bold rounded-md shadow-sm">${eff}</span>`).join('') + 
+                        `</div>`;
+                }
+                return html;
             }
-            return html;
+
+            // 🕰️ 如果是舊版字串格式（用 | 和 、 分隔）
+            if (typeof skillData === 'string') {
+                const parts = skillData.split('|');
+                const description = parts[0].trim();
+                const effects = parts.length > 1 ? parts[1].split(/[,、]/).filter(p => p.trim() !== "") : [];
+
+                let html = `<p class="text-xs text-gray-600 dark:text-gray-300 font-medium leading-relaxed whitespace-pre-wrap">${description}</p>`;
+                if (effects.length > 0) {
+                    html += `<div class="flex flex-wrap gap-1.5 mt-2">` + 
+                        effects.map(eff => `<span class="px-2 py-0.5 bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 text-gray-700 dark:text-gray-300 text-[11px] font-bold rounded-md shadow-sm">${eff.trim()}</span>`).join('') + 
+                        `</div>`;
+                }
+                return html;
+            }
+            
+            return "";
         }
 
         function submitComment() {
