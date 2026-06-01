@@ -823,6 +823,9 @@
                     const ultSkillIcon = SKILL_ICONS[`hover_avatar_${currentTargetName}`] || "";
                     const passiveSkillIcon = SKILL_ICONS[`skill_passive_${currentTargetName}`] || "";
 
+                    const enhancedData = charSkillData.normalAttack.enhanced;
+                    const hasEnhanced = enhancedData && enhancedData !== "無" && enhancedData.desc !== "無";
+
                     html += `
                         <div class="bg-slate-50 dark:bg-slate-700/40 border-2 border-slate-300 dark:border-slate-600 rounded-xl p-4 shadow-sm">
                             <div class="flex justify-between items-center border-b border-slate-200 dark:border-slate-600 pb-2 mb-3">
@@ -833,12 +836,12 @@
                             </div>
                             <div class="space-y-4">
                                 <div>
-                                    <p class="text-xs font-bold text-slate-700 dark:text-slate-300">【基本】</p>
+                                    <p class="text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">【基本】</p>
                                     ${renderSkillContent(charSkillData.normalAttack.basic)}
                                 </div>
-                                ${charSkillData.normalAttack.enhanced !== "無" ? `
+                                ${hasEnhanced ? `
                                 <div>
-                                    <p class="text-xs font-bold text-slate-700 dark:text-slate-300">【強化】</p>
+                                    <p class="text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">【強化】</p>
                                     ${renderSkillContent(charSkillData.normalAttack.enhanced)}
                                 </div>` : ''}
                             </div>
