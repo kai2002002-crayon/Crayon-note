@@ -536,98 +536,114 @@
                                 }
                             });
 
-                            const handlePointerUp = (e) => {
-                                delete pointers[e.pointerId];
-                                const pointerKeys = Object.keys(pointers);
+                            // 🚫 定義「絕對不該被隨機觸發」的特殊動作黑名單
+                            const EXCLUDED_RANDOM_ANIMS = [
+                            "Smash_End_1",   // 敲頭動作1
+                            "Idle_1"         // 預設待機 (避免隨機抽到自己，看起來像沒反應)
+                        ];
 
-                                if (pointerKeys.length === 1) {
-                                    isPointerDown = false;
-                                    return;
-                                }
+                        const handlePointerUp = (e) => {
+                            delete pointers[e.pointerId];
+                            const pointerKeys = Object.keys(pointers);
 
-                                if (pointerKeys.length === 0 && isPointerDown) {
-                                    isPointerDown = false;
-                                    const animNames = player.skeleton.data.animations.map(a => a.name);
+                            if (pointerKeys.length === 1) {
+                                isPointerDown = false;
+                                return;
+                            }
 
-                                    if (activeFaceBone) {
-                                        let targetX = initialBoneX;
-                                        let targetY = initialBoneY;
+                            if (pointerKeys.length === 0 && isPointerDown) {
+                                isPointerDown = false;
+                                const allAnimNames = player.skeleton.data.animations.map(a => a.name);
 
-                                        let bouncingFaceBone = activeFaceBone;
-                                        activeFaceBone = null; 
+                                // --- 1. 處理臉部回彈效果 (不變) ---
+                                if (activeFaceBone) {
+                                    let targetX = initialBoneX;
+                                    let targetY = initialBoneY;
+                                    let bouncingFaceBone = activeFaceBone;
+                                    activeFaceBone = null; 
 
-                                        const tension = 0.35;  
-                                        const friction = 0.65; 
-                                        let velX = 0, velY = 0;
+                                    const tension = 0.35;  
+                                    const friction = 0.65; 
+                                    let velX = 0, velY = 0;
 
-                                        function applyBounce() {
-                                            let currentX = bouncingFaceBone.x;
-                                            let currentY = bouncingFaceBone.y;
+                                    function applyBounce() {
+                                        let currentX = bouncingFaceBone.x;
+                                        let currentY = bouncingFaceBone.y;
 
-                                            let dx = targetX - currentX;
-                                            let dy = targetY - currentY;
+                                        let dx = targetX - currentX;
+                                        let dy = targetY - currentY;
 
-                                            velX += dx * tension;
-                                            velY += dy * tension;
-                                            velX *= friction;
-                                            velY *= friction;
+                                        velX += dx * tension;
+                                        velY += dy * tension;
+                                        velX *= friction;
+                                        velY *= friction;
 
-                                            bouncingFaceBone.x += velX;
-                                            bouncingFaceBone.y += velY;
+                                        bouncingFaceBone.x += velX;
+                                        bouncingFaceBone.y += velY;
 
-                                            if (Math.abs(dx) > 0.1 || Math.abs(velX) > 0.1 || Math.abs(dy) > 0.1 || Math.abs(velY) > 0.1) {
-                                                requestAnimationFrame(applyBounce);
-                                            } else {
-                                                bouncingFaceBone.x = targetX;
-                                                bouncingFaceBone.y = targetY;
-                                            }
+                                        if (Math.abs(dx) > 0.1 || Math.abs(velX) > 0.1 || Math.abs(dy) > 0.1 || Math.abs(velY) > 0.1) {
+                                            requestAnimationFrame(applyBounce);
+                                        } else {
+                                            bouncingFaceBone.x = targetX;
+                                            bouncingFaceBone.y = targetY;
                                         }
-                                        applyBounce();
                                     }
-                                    
-                                    clearTimeout(tickleTimer); 
+                                    applyBounce();
+                                }
+        
+                                clearTimeout(tickleTimer); 
 
-                                    if (hasTriggeredRub) {
-                                        if (hitZoneOnDown && hitZoneOnDown.name === "頭部") {
-                                            if (animNames.includes("Touch_End")) {
-                                                player.animationState.setAnimation(0, "Touch_End", false);
-                                                player.animationState.addAnimation(0, "Idle_1", true, 0);
-                                            } else {
-                                                player.animationState.setAnimation(0, "Idle_1", true);
+                                // --- 2. 處理動畫觸發邏輯 ---
+                                if (hasTriggeredRub) {
+                                    // 【狀況 A】長按/撫摸後的釋放邏輯
+                                    if (hitZoneOnDown && hitZoneOnDown.name === "頭部") {
+                                        if (allAnimNames.includes("Touch_End")) {
+                                            player.animationState.setAnimation(0, "Touch_End", false);
+                                        } else {
+                                            player.animationState.setAnimation(0, "Idle_1", true);
+                                        }
+                                    } else if (hitZoneOnDown && hitZoneOnDown.name === "身體") {
+                                        if (allAnimNames.includes("Tickle_End")) {
+                                            player.animationState.setAnimation(0, "Tickle_End", false);
+                                        } else {
+                                            player.animationState.setAnimation(0, "Idle_1", true);
+                                        }
+                                    }
+                                    player.animationState.addAnimation(0, "Idle_1", true, 0);
+
+                                } else {
+                                    // 【狀況 B】短點擊的邏輯
+                                    if (hitZoneOnDown && hitZoneOnDown.name === "頭部") {
+                                        // 🎯 點擊頭部：專屬觸發 Smash 動作
+                                        if (allAnimNames.includes("Smash_End_1")) {
+                                            player.animationState.setAnimation(0, "Smash_End_1", false);
+                                            if (allAnimNames.includes("Smash_End_2")) {
+                                                player.animationState.addAnimation(0, "Smash_End_2", false, 0);
                                             }
-                                        } else if (hitZoneOnDown && hitZoneOnDown.name === "身體") {
-                                            if (animNames.includes("Tickle_End")) {
-                                                player.animationState.setAnimation(0, "Tickle_End", false);
-                                                player.animationState.addAnimation(0, "Idle_1", true, 0);
-                                            } else {
-                                                player.animationState.setAnimation(0, "Idle_1", true);
-                                            }
+                                            player.animationState.addAnimation(0, "Idle_1", true, 0);
+                                        } else {
+                                            player.animationState.setAnimation(0, "Idle_1", true);
                                         }
                                     } else {
-                                        if (hitZoneOnDown && hitZoneOnDown.name === "頭部") {
-                                            if (animNames.includes("Smash_End_1")) {
-                                                player.animationState.setAnimation(0, "Smash_End_1", false);
-                                                if (animNames.includes("Smash_End_2")) {
-                                                    player.animationState.addAnimation(0, "Smash_End_2", false, 0);
-                                                }
-                                                player.animationState.addAnimation(0, "Idle_1", true, 0);
-                                            } else {
-                                                player.animationState.setAnimation(0, "Idle_1", true);
-                                            }
-                                        } else if (hitZoneOnDown && hitZoneOnDown.name === "身體") {
-                                            if (animNames.includes("Tickle_End")) {
-                                                player.animationState.setAnimation(0, "Tickle_End", false);
-                                                player.animationState.addAnimation(0, "Idle_1", true, 0);
-                                            } else {
-                                                player.animationState.setAnimation(0, "Idle_1", true);
-                                            }
+                                        // 🎲 點擊身體 或 其他空白處：隨機轉換動作 (嚴格排除黑名單)
+                                        const safeAnims = allAnimNames.filter(name => !EXCLUDED_RANDOM_ANIMS.includes(name));
+                
+                                        if (safeAnims.length > 0) {
+                                            // 從安全清單中隨機抽取一個動作播放，播完後接回 Idle_1
+                                            const randomAnim = safeAnims[Math.floor(Math.random() * safeAnims.length)];
+                                            console.log(`🎲 點擊觸發隨機動作: ${randomAnim}`);
+                                            player.animationState.setAnimation(0, randomAnim, false);
+                                            player.animationState.addAnimation(0, "Idle_1", true, 0);
+                                        } else {
+                                            player.animationState.setAnimation(0, "Idle_1", true);
                                         }
                                     }
-                                    
-                                    startRandomAnimationLoop();
                                 }
-                            };
-
+        
+                                // 點擊結束後，重新啟動放置時的隨機動畫計時器
+                                startRandomAnimationLoop();
+                            }
+                        };
                             canvas.addEventListener('pointerup', handlePointerUp);
                             canvas.addEventListener('pointerout', handlePointerUp);
                             canvas.addEventListener('pointercancel', handlePointerUp);
