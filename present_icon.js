@@ -40,7 +40,7 @@ const PRESENT_MAP = {
             "Meluna": { name: "遊艇啟動匙", url: "https://i.postimg.cc/8sjXsbjj/Present-List-Meluna.png" },
             "Momo": { name: "忍術替身木", url: "https://i.postimg.cc/SjJ1jGJn/Present-List-Momo.png" },
             "Naia": { name: "海豚大砲", url: "https://i.postimg.cc/XXp1XgpC/Present-List-Naia.png" },
-            "Ner": { name: "", url: "https://i.postimg.cc/23McWBZW/Present-List-Ner.png" },
+            "Ner": { name: "女王育兒日記", url: "https://i.postimg.cc/23McWBZW/Present-List-Ner.png" },
             "Picora": { name: "精緻的時尚貼紙簿", url: "https://i.postimg.cc/Cdzrd4zN/Present-List-Picora.png" },
             "Posher": { name: "健康防禦葡萄汁", url: "https://i.postimg.cc/8s9Kvr6L/Present-List-Posher.png" },
             "Rim": { name: "高級茶杯套裝", url: "https://i.postimg.cc/dDpHCTy6/Present-List-Rim.png" },
