@@ -7,5 +7,5 @@ const SPINE_MAP = {
             "瑟琳娜": "Selline", "瑪約": "Mayo", "瑪麗": "Marie", "皮可菈": "Picora", "盧波": "Rufo", "米雪": "Mynx", "綾": "Aya", "羽伊": "Ui",
             "艾斯皮": "Espi", "艾琳娜": "Elena", "艾皮卡": "Epica", "艾舒爾": "Ashur", "艾蜜莉雅": "Amelia", "芙莉可": "Fricle", "茱蜜": "Jubee", "莉茲": "Leets",
             "莎莉": "Sari", "萊薇": "Levi", "蒂亞娜": "Diana", "謝蒂": "Shady", "貝魯": "Veroo", "貝麗塔": "Belita", "路德": "Rude", "路易": "Cuee",
-            "阿萊特": "Allet", "雷吉": "Lazy", "馬爾": "Mago", "泰達": "Taida", "寧琉": "Ner"
+            "阿萊特": "Allet", "雷吉": "Lazy", "馬爾": "Mago", "泰達": "Taida", "寧琉": "Ner", "莉絲蒂": "Risty"
         };
