@@ -591,7 +591,9 @@
                                     applyBounce();
                                 }
         
+                                // 清除正在進行的其他計時器，避免互相衝突
                                 clearTimeout(tickleTimer); 
+                                clearTimeout(globalIdleTimer); 
 
                                 // --- 2. 處理動畫觸發邏輯 ---
                                 if (hasTriggeredRub) {
@@ -610,13 +612,16 @@
                                         }
                                     }
                                     player.animationState.addAnimation(0, "Idle_1", true, 0);
+            
+                                    // 動作結束後，立刻重新啟動放置計時器
+                                    startRandomAnimationLoop();
 
                                 } else {
                                     // 【狀況 B】短點擊的邏輯
                                     if (hitZoneOnDown && hitZoneOnDown.name === "頭部") {
                                         // 🎯 點擊頭部：專屬觸發 Smash 動作
                                         if (allAnimNames.includes("Smash_End_1")) {
-                                            player.animationState.setAnimation(0, "Smash_End_1", false);
+                                           player.animationState.setAnimation(0, "Smash_End_1", false);
                                             if (allAnimNames.includes("Smash_End_2")) {
                                                 player.animationState.addAnimation(0, "Smash_End_2", false, 0);
                                             }
@@ -624,24 +629,33 @@
                                         } else {
                                             player.animationState.setAnimation(0, "Idle_1", true);
                                         }
+                
+                                        // 動作結束後，立刻重新啟動放置計時器
+                                        startRandomAnimationLoop();
+                
                                     } else {
                                         // 🎲 點擊身體 或 其他空白處：隨機轉換動作 (嚴格排除黑名單)
                                         const safeAnims = allAnimNames.filter(name => !EXCLUDED_RANDOM_ANIMS.includes(name));
                 
                                         if (safeAnims.length > 0) {
-                                            // 從安全清單中隨機抽取一個動作播放，播完後接回 Idle_1
                                             const randomAnim = safeAnims[Math.floor(Math.random() * safeAnims.length)];
                                             console.log(`🎲 點擊觸發隨機動作: ${randomAnim}`);
-                                            player.animationState.setAnimation(0, randomAnim, false);
-                                            player.animationState.addAnimation(0, "Idle_1", true, 0);
+                    
+                                            // 1. 設定為 true，讓這個隨機動作「維持/循環」播放
+                                            player.animationState.setAnimation(0, randomAnim, true);
+                    
+                                            // 2. 獨立設定 5 秒的倒數，時間到才切回 Idle_1，並重啟放置循環
+                                            globalIdleTimer = setTimeout(() => {
+                                                player.animationState.setAnimation(0, "Idle_1", true);
+                                                startRandomAnimationLoop();
+                                            }, 5000);
+                    
                                         } else {
                                             player.animationState.setAnimation(0, "Idle_1", true);
+                                            startRandomAnimationLoop();
                                         }
                                     }
                                 }
-        
-                                // 點擊結束後，重新啟動放置時的隨機動畫計時器
-                                startRandomAnimationLoop();
                             }
                         };
                             canvas.addEventListener('pointerup', handlePointerUp);
