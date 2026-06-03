@@ -1136,7 +1136,7 @@ const characterSkills = [
         "總魔法傷害:1470%",
         "總SP減少:184"
       ],
-      "cooldown": "16秒"
+      "cooldown": "38秒"
     },
     "passiveSkill": {
       "desc": "回合開始時，在一定時間內給予自身無敵效果。對致盲免疫",
