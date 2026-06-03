@@ -2319,7 +2319,7 @@ const characterSkills = [
       "name": "",
       "desc": "",
       "stats": [
-        "。"
+        ""
       ]
     },
     "ultimateSkill": {
