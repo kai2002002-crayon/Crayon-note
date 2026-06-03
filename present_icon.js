@@ -29,7 +29,7 @@ const PRESENT_MAP = {
             "Jubee": { name: "皇家蜂蜜", url: "https://i.postimg.cc/901sDMbL/Present-List-Jubee.png" },
             "Kidian": { name: "黑曜石短劍", url: "https://i.postimg.cc/zvp4yB70/Present-List-Kidian.png" },
             "Kommy": { name: "名牌枕頭", url: "https://i.postimg.cc/XqxtrJLt/Present-List-Kommy.png" },
-            "Kyarot": { name: "", url: "https://i.postimg.cc/RhG2WFdy/Present-List-Kyarot.png" },
+            "Kyarot": { name: "優良農業獎杯", url: "https://i.postimg.cc/RhG2WFdy/Present-List-Kyarot.png" },
             "Lazy": { name: "最先進工具組", url: "https://i.postimg.cc/Gtz642zn/Present-List-Lazy.png" },
             "Leets": { name: "超重鋼鐵盔甲", url: "https://i.postimg.cc/vTXC4BXb/Present-List-Leets.png" },
             "Levi": { name: "超大尺寸保暖內衣", url: "https://i.postimg.cc/QCSvFtSj/Present-List-Levi.png" },
