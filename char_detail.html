@@ -308,9 +308,11 @@
                     const skins = player.skeleton.data.skins;
                     if (skins && skins.length > 1) {
                         const targetSkin = skins.find(s => s.name === 'Normal') || skins.find(s => s.name !== 'default');
+                        // ⚠️ 請將它改成這樣（增加骨架重置與世界座標刷新）：
                         if (targetSkin) {
                             player.skeleton.setSkinByName(targetSkin.name);
-                            player.skeleton.setSlotsToSetupPose();
+                            player.skeleton.setToSetupPose(); // 強制重置所有骨骼與插槽到初始狀態
+                            player.skeleton.updateWorldTransform(); // 強制重新計算所有網格與骨架的絕對座標
                         }
                     }
                     
