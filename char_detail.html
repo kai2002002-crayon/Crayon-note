@@ -46,6 +46,26 @@
             display: none !important;
             opacity: 0 !important;
         }
+        /* 背景動態縮放動畫 */
+        .animated-bg {
+            position: relative;
+            z-index: 1; /* 建立層級，確保背景不會跑到更後面 */
+        }
+        .animated-bg::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: var(--bg-image);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: -1; /* 將背景放在 Spine 動畫的後方 */
+            animation: slowZoom 15s ease-in-out infinite alternate; /* 15秒放大，15秒縮小，無限循環 */
+        }
+        @keyframes slowZoom {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.15); /* 放大到 1.15 倍 */ }
+        }
     </style>
 </head>
 <body class="p-4 sm:p-8 bg-[#fcf8f2] dark:bg-slate-900 text-gray-800 dark:text-gray-200 transition-colors duration-300">
@@ -258,13 +278,11 @@
             
             avatarBox.innerHTML = ''; 
 
-            if (!avatarBox.style.backgroundImage && LOBBY_BACKGROUNDS && LOBBY_BACKGROUNDS.length > 0) {
+            // 改用 CSS 變數與 class 來觸發背景縮放動畫
+            if (!avatarBox.style.getPropertyValue('--bg-image') && LOBBY_BACKGROUNDS && LOBBY_BACKGROUNDS.length > 0) {
                 const randomBg = LOBBY_BACKGROUNDS[Math.floor(Math.random() * LOBBY_BACKGROUNDS.length)];
-                avatarBox.style.backgroundImage = `url('${randomBg}')`;
-                avatarBox.style.backgroundSize = 'cover';       
-                avatarBox.style.backgroundPosition = 'center';  
-                avatarBox.style.backgroundRepeat = 'no-repeat'; 
-                avatarBox.classList.add('overflow-hidden', 'rounded-2xl', 'shadow-inner');
+                avatarBox.style.setProperty('--bg-image', `url('${randomBg}')`);
+                avatarBox.classList.add('animated-bg', 'overflow-hidden', 'rounded-2xl', 'shadow-inner');
             }
 
             window.globalSpinePlayer = new spine.SpinePlayer(avatarBox, {
