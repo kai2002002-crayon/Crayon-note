@@ -1,8 +1,3 @@
-/**
- * @file skill.js
- * @description 國際版 69 名角色完整技能資料庫
- */
-
 const characterSkills = [
   {
     "name": "路德",
