@@ -2308,6 +2308,35 @@ const characterSkills = [
       ]
     }
   }
+  {
+    "name": "莉絲蒂",
+    "attribute": "物理",
+    "normalAttack": {
+      "basic": "",
+      "enhanced": "無"
+    },
+    "normalSkill": {
+      "name": "",
+      "desc": "",
+      "stats": [
+        "。"
+      ]
+    },
+    "ultimateSkill": {
+      "name": "",
+      "desc": "",
+      "stats": [
+        ""
+      ],
+      "cooldown": "秒"
+    },
+    "passiveSkill": {
+      "desc": "",
+      "stats": [
+        ""
+      ]
+    }
+  }
 ];
 
 if (typeof module !== 'undefined' && module.exports) {
