@@ -824,12 +824,59 @@
                 const charSkillData = characterSkills.find(s => s.name.trim() === currentTargetName);
                 
                 if (charSkillData) {
-                    let html = "";
+                    // 🆕 進階版方格產生器：自動拆分逗號或頓號，確保「每個效果」都有自己的獨立方格
                     const makeStatChips = (statsArray) => {
                         if (!statsArray || statsArray.length === 0) return '';
+                        
+                        let processedStats = [];
+                        statsArray.forEach(stat => {
+                            if (typeof stat === 'string') {
+                                // 自動將合併在同一行的效果字串切開
+                                processedStats.push(...stat.split(/[、,，]/).map(s => s.trim()).filter(Boolean));
+                            } else {
+                                processedStats.push(stat);
+                            }
+                        });
+                        
+                        if (processedStats.length === 0) return '';
                         return `<div class="flex flex-wrap gap-1.5 mt-2">` + 
-                            statsArray.map(stat => `<span class="px-2 py-0.5 bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 text-gray-700 dark:text-gray-300 text-[11px] font-bold rounded-md shadow-sm">${stat}</span>`).join('') + 
+                            processedStats.map(stat => `<span class="px-2 py-0.5 bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 text-gray-700 dark:text-gray-300 text-[11px] font-bold rounded-md shadow-sm">${stat}</span>`).join('') + 
                             `</div>`;
+                    };
+
+                    // 🆕 統一的技能渲染函式，支援解析中括號 [...] 與物件格式
+                    const renderUnifiedSkill = (skillObj) => {
+                        if (!skillObj || skillObj === "無") return "";
+                        
+                        // 處理純字串格式 (例如普通攻擊: "對敵人揮動拳頭... [物理傷害：100%]")
+                        if (typeof skillObj === 'string') {
+                            let desc = skillObj;
+                            let stats = [];
+                            
+                            // 1. 偵測並取出中括號 [...] 內的文字當作方格
+                            const bracketMatches = skillObj.match(/\[(.*?)\]/g);
+                            if (bracketMatches) {
+                                bracketMatches.forEach(match => {
+                                    // 將括號內的文字抽出來放入 stats 陣列
+                                    stats.push(match.replace(/[\[\]]/g, '').trim());
+                                    // 將原文中的 [...] 刪除，剩下的留給 desc
+                                    desc = desc.replace(match, '').trim();
+                                });
+                            } 
+                            // 2. 兼容早期用 "|" 隔開的寫法
+                            else if (skillObj.includes('|')) {
+                                const parts = skillObj.split('|');
+                                desc = parts[0].trim();
+                                stats = parts.length > 1 ? parts[1].split(/[,、，]/).map(s => s.trim()).filter(Boolean) : [];
+                            }
+
+                            return `<p class="text-xs text-gray-600 dark:text-gray-300 font-medium leading-relaxed whitespace-pre-wrap">${desc}</p>
+                                    ${makeStatChips(stats)}`;
+                        }
+                        
+                        // 支援新版物件寫法 (有 desc 和 stats 陣列)
+                        return `<p class="text-xs text-gray-600 dark:text-gray-300 font-medium leading-relaxed whitespace-pre-wrap">${skillObj.desc || ''}</p>
+                                ${makeStatChips(skillObj.stats)}`;
                     };
 
                     const normalAttackIcon = charSkillData.attribute === "物理" ? SKILL_ICONS["attack_物理"] : SKILL_ICONS["attack_魔法"];
@@ -838,9 +885,9 @@
                     const passiveSkillIcon = SKILL_ICONS[`skill_passive_${currentTargetName}`] || "";
 
                     const enhancedData = charSkillData.normalAttack.enhanced;
-                    const hasEnhanced = enhancedData && enhancedData !== "無" && enhancedData.desc !== "無";
+                    const hasEnhanced = enhancedData && enhancedData !== "無" && (typeof enhancedData === 'string' ? true : enhancedData.desc !== "無");
 
-                    html += `
+                    let html = `
                         <div class="bg-slate-50 dark:bg-slate-700/40 border-2 border-slate-300 dark:border-slate-600 rounded-xl p-4 shadow-sm">
                             <div class="flex justify-between items-center border-b border-slate-200 dark:border-slate-600 pb-2 mb-3">
                                 <div class="flex items-center gap-2">
@@ -851,12 +898,12 @@
                             <div class="space-y-4">
                                 <div>
                                     <p class="text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">【基本】</p>
-                                    ${renderSkillContent(charSkillData.normalAttack.basic)}
+                                    ${renderUnifiedSkill(charSkillData.normalAttack.basic)}
                                 </div>
                                 ${hasEnhanced ? `
                                 <div>
                                     <p class="text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">【強化】</p>
-                                    ${renderSkillContent(charSkillData.normalAttack.enhanced)}
+                                    ${renderUnifiedSkill(charSkillData.normalAttack.enhanced)}
                                 </div>` : ''}
                             </div>
                         </div>
