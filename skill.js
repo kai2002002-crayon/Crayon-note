@@ -2307,7 +2307,7 @@ const characterSkills = [
         "HP恢復：最大HP的215%"
       ]
     }
-  }
+  },
   {
     "name": "莉絲蒂",
     "attribute": "物理",
