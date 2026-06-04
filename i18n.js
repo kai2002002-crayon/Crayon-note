@@ -61,7 +61,7 @@
 		skill_basic: "【基本】", skill_enhanced: "【強化】",
 		skill_passive: "被動技能",
 		skill_admission: "普通技能",
-		skill_graduate: "高級技能"
+		skill_graduate: "高級技能",
 		costume_default: "預設",
 		costume_prefix: "服裝",
 
