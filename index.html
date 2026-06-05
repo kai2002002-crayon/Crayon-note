@@ -1182,9 +1182,14 @@ function changeLanguage(lang) {
                     updateAuthButtonUI(user); 
                     if (user) {
                         currentUser = user;
+                        // 修改後的 JavaScript 渲染邏輯
                         document.getElementById('userStatus').innerHTML = `
-                            <span class="block font-bold text-green-700 dark:text-green-500 whitespace-nowrap">${t('auth_online_title')}</span>
-                            <span class="text-[10px] sm:text-[11px] text-gray-500 dark:text-gray-400 truncate max-w-[120px]">${user.displayName || '教主'}</span>
+                            <span id="authStatusText" class="block font-bold text-green-700 dark:text-green-500 whitespace-nowrap" data-i18n="auth_online_title">
+                                ${t('auth_online_title')}
+                            </span>
+                            <span class="text-[10px] sm:text-[11px] text-gray-500 dark:text-gray-400 truncate max-w-[120px]">
+                                ${user.displayName || '教主'}
+                            </span>
                         `;
                         db.collection("player_boards").doc(user.uid).get().then(doc => {
                             if (doc.exists && doc.data().states) {
