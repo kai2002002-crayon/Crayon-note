@@ -405,7 +405,10 @@ function changeLanguage(lang) {
     // 取得安全字典 (避開 en 導致的 undefined 錯誤)
     const safeLang = (typeof LANG_DICT !== 'undefined' && LANG_DICT[lang]) ? lang : 'zh-TW';
     const dict = typeof LANG_DICT !== 'undefined' ? LANG_DICT[safeLang] : {};
-
+    const statusText = document.getElementById('authStatusText');
+    if (statusText) {
+        statusText.innerText = t("auth_online_title");
+    }
     document.title = t('app_title') || dict.app_title || "嘟嘟臉金蠟筆記事本";
 
     // 替換靜態標籤
