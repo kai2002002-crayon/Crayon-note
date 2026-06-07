@@ -183,9 +183,9 @@
 </head>
 <body class="p-3 sm:p-6 md:p-8 text-gray-800 dark:text-gray-100">
     
-    <!-- 🌟 跑酷專屬軌道 -->
+    <!-- 🌟 跑酷專屬軌道 (原生面朝左，點擊互動版) -->
     <div class="fixed top-0 left-0 w-full h-[150px] z-[100] pointer-events-none overflow-hidden">
-        <div id="runnerTrack" class="absolute top-0 w-[150px] h-[150px] pointer-events-auto cursor-pointer" style="right: 0px; transform: translateX(0); opacity: 0;">
+        <div id="runnerTrack" class="absolute top-0 w-[150px] h-[150px] pointer-events-auto cursor-pointer" style="right: -50px; transform: translateX(0); opacity: 0;">
             <div style="width: 100%; height: 100%; transform: scale(0.75); transform-origin: center;">
                 <div id="topRunnerContainer" class="w-full h-full relative"></div>
             </div>
@@ -458,12 +458,18 @@
                                 
                                 // 💡 改用 Web Animations API (Element.animate) 來控制移動
                                 // 這樣我們才能在點擊時隨時呼叫 .pause() 和 .play()
+                                // 💡 自動偵測裝置寬度，設定不同跑酷速度
+                                // 手機(小於 768px)設為 7 秒，電腦設為 12 秒
+                                const isMobile = window.matchMedia("(max-width: 768px)").matches;
+                                const runDuration = isMobile ? 6000 : 12000; 
+
+                                // 改用 Web Animations API，並套用偵測到的時間
                                 runAnimation = track.animate([
                                     { transform: 'translateX(0)' },
-                                    { transform: 'translateX(calc(-100vw + 150px))' }
+                                    { transform: 'translateX(calc(-100vw + 60px))' }
                                 ], {
-                                    duration: 10000,   // 跑完全程 10 秒
-                                    fill: 'forwards'   // 結束時停在最後一個畫面
+                                    duration: runDuration, // 手機 7秒 / 電腦 12秒
+                                    fill: 'forwards'
                                 });
 
                                 // 當位移真正結束時 (它會自動扣除你在 Groggy 暫停花費的時間！)
