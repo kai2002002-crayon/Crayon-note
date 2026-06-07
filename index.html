@@ -24,6 +24,15 @@
     <link rel="stylesheet" href="https://unpkg.com/@esotericsoftware/spine-player@4.1/dist/spine-player.css">
     <script src="https://unpkg.com/@esotericsoftware/spine-player@4.1/dist/iife/spine-player.js"></script>
     <style>
+        #topRunnerContainer canvas {
+            width: 100% !important;
+            height: 100% !important;
+            display: block !important;
+        }
+        #topRunnerContainer .spine-player-canvas {
+            background-color: transparent !important;
+        }
+
         :root {
             --user-bg-image: url('https://i.postimg.cc/fTJ36ZFT/CG-Schedule-Rim.png'); 
         }
@@ -74,16 +83,14 @@
             -webkit-touch-callout: none; 
             -webkit-user-select: none; 
             user-select: none; 
-            /* 🛠️ 修復 2：強制 GPU 加速，解決 Opera Hover 時的閃爍與黑邊問題 */
             transform: translateZ(0);
             backface-visibility: hidden;
             will-change: transform;
         }
 
-        /* 僅在支援滑鼠的設備上啟用懸停放大 */
         @media (hover: hover) and (pointer: fine) {
             .char-avatar-container:hover { 
-                transform: scale(1.5) translateZ(0); /* 同步保留 GPU 加速屬性 */
+                transform: scale(1.5) translateZ(0); 
                 z-index: 50; 
                 box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3); 
             }
@@ -107,21 +114,20 @@
             opacity: 1;
         }
         
-        /* 針對小圖示與蠟筆按鈕的懸停微放大特效 */
         .hover-scale {
             transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
             position: relative;
             z-index: 1;
-            /* 🛠️ 修復 2：強制 GPU 加速 */
             transform: translateZ(0);
             backface-visibility: hidden;
         }
         @media (hover: hover) and (pointer: fine) {
             .hover-scale:hover {
-                transform: scale(1.15) translateZ(0); /* 放大 15% 恰到好處，既有動感又不會破版 */
-                z-index: 10; /* 確保放大的元素會蓋在別人上面 */
+                transform: scale(1.15) translateZ(0); 
+                z-index: 10; 
             }
         }
+        
         /* ==============================================================
             💡 跑馬燈特效 (針對過長名稱優化)
             ============================================================== */
@@ -146,7 +152,6 @@
         /* ==============================================================
             🌟 看板娘 Rim 專屬容器
             ============================================================== */
-        /* 手機版預設尺寸 (縮小 50%，並固定在左下角) */
         #rim-live-container {
             position: fixed !important;
             bottom: 15px !important; 
@@ -157,7 +162,6 @@
             pointer-events: none;
         }
 
-        /* 電腦版/平板自動稍微放大 */
         @media (min-width: 768px) {
             #rim-live-container {
                 bottom: 20px !important;
@@ -173,17 +177,26 @@
             display: block !important;
         }
         #rim-live-container .spine-player-canvas {
-    background-color: transparent !important;
-}
+            background-color: transparent !important;
+        }
     </style>
 </head>
 <body class="p-3 sm:p-6 md:p-8 text-gray-800 dark:text-gray-100">
+    
+    <!-- 🌟 跑酷專屬軌道 (原生面朝左，點擊互動版) -->
+    <div class="fixed top-0 left-0 w-full h-[150px] z-[100] pointer-events-none overflow-hidden">
+        <!-- 軌道層：加入 pointer-events-auto 讓他可以被點擊，並加上 cursor-pointer -->
+        <div id="runnerTrack" class="absolute top-0 w-[150px] h-[150px] pointer-events-auto cursor-pointer" style="right: 0px; transform: translateX(0); opacity: 0;">
+            <!-- 畫布層 -->
+            <div id="topRunnerContainer" class="w-full h-full relative"></div>
+        </div>
+    </div>
     <div id="loader" class="fixed inset-0 bg-[#fcf8f2] dark:bg-slate-900 z-[9999] flex items-center justify-center">
         <div class="animate-bounce text-2xl">🖍️</div>
     </div>
     <div class="max-w-7xl mx-auto">
         
-        <header class="bg-gradient-to-r from-amber-100/90 via-yellow-100/90 to-orange-100/90 dark:from-gray-800/90 dark:via-gray-700/90 dark:to-gray-800/90 rounded-2xl p-4 sm:p-6 shadow-md mb-6 border-4 border-amber-400 dark:border-gray-600 flex flex-col transition-colors backdrop-blur-sm relative">
+        <header class="bg-gradient-to-r from-amber-100/90 via-yellow-100/90 to-orange-100/90 dark:from-gray-800/90 dark:via-gray-700/90 dark:to-gray-800/90 rounded-2xl p-4 sm:p-6 shadow-md mb-6 border-4 border-amber-400 dark:border-gray-600 flex flex-col transition-colors backdrop-blur-sm relative z-10">
             
             <div class="w-full flex justify-start mb-3">
                 <div class="flex items-center gap-1.5 text-[10px] sm:text-xs font-bold text-amber-900/70 dark:text-gray-300 bg-white/60 dark:bg-gray-800/60 px-2.5 py-1 rounded-md backdrop-blur-sm border border-amber-200/80 dark:border-gray-600/80 shadow-sm">
@@ -288,7 +301,7 @@
                        <button id="btn_disp_3" onclick="setDisplayMode('3')" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-medium transition bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600" data-lang-key="filter_btn_show_3">僅第三層</button>
                    </div>
                </div>
-           </div>
+            </div>
         </section>
 
         <div class="flex justify-between items-center mb-2 px-1 cursor-pointer select-none" onclick="toggleStatsPanel()">
@@ -353,7 +366,137 @@
         
     </div>
 
-    <script>       
+    <script>
+        // 🌟 初始化頂部跑酷小人 (Spawn -> Move -> Groggy互動 -> Die 完整演出版)
+        function initTopRunner() {
+            if (typeof INITIAL_DATA === 'undefined' || INITIAL_DATA.length === 0) return;
+
+            const randomCharData = INITIAL_DATA[Math.floor(Math.random() * INITIAL_DATA.length)];
+            const charName = randomCharData.name;
+            const folderKey = typeof SPINE_MAP !== 'undefined' ? SPINE_MAP[charName] : charName;
+
+            const sdSkelUrl = `./spine_sd_assets/${folderKey}.skel.bytes`;
+            const sdAtlasUrl = `./spine_sd_assets/${folderKey}.atlas.txt`;
+
+            new spine.SpinePlayer("topRunnerContainer", {
+                skelUrl: sdSkelUrl,
+                atlasUrl: sdAtlasUrl,
+                animation: "Spawn",
+                skin: "Normal",
+                backgroundColor: "#00000000",
+                alpha: true,
+                premultipliedAlpha: false,
+                showControls: false,
+                viewport: { transitionTime: 0 },
+                success: function (player) {
+                    console.log(`🏃 跑酷彩蛋啟動 (加入點擊互動)：${charName}`);
+                    
+                    try {
+                        const skins = player.skeleton.data.skins;
+                        if (skins && skins.length > 0) {
+                            const targetSkin = skins.find(s => s.name === 'Normal') || skins.find(s => s.name === 'default') || skins[0];
+                            if (targetSkin) {
+                                player.skeleton.setSkinByName(targetSkin.name);
+                                player.skeleton.setSlotsToSetupPose();
+                            }
+                        }
+                    } catch (e) {
+                        console.warn("Skin 切換失敗", e);
+                    }
+
+                    const track = document.getElementById('runnerTrack');
+                    
+                    // 💡 狀態管理器：防止連點干擾演出
+                    let currentPhase = "init"; // init, spawn, move, groggy, die
+                    let runAnimation = null;   // 控制軌道移動的動畫物件
+                    let groggyTimeout = null;  // 控制 5 秒暈眩的定時器
+
+                    // 👆 綁定點擊事件：當處於 Move (奔跑) 狀態時觸發
+                    track.onclick = () => {
+                        if (currentPhase === "move") {
+                            currentPhase = "groggy"; // 鎖定狀態，防止連點
+                            
+                            // 1. 暫停畫面上的位移
+                            if (runAnimation) runAnimation.pause();
+                            
+                            // 2. 播放暈眩動作 (Groggy)
+                            try { player.animationState.setAnimation(0, "Groggy", true); } catch(e){}
+
+                            // 3. 停留 5 秒後恢復
+                            groggyTimeout = setTimeout(() => {
+                                currentPhase = "move"; // 解除鎖定
+                                try { player.animationState.setAnimation(0, "Move", true); } catch(e){}
+                                // 繼續剩下的路程
+                                if (runAnimation) runAnimation.play(); 
+                            }, 5000);
+                        }
+                    };
+
+                    // 🎬 核心劇本
+                    function playLifecycleSequence() {
+                        // 初始化重置 (清空上一輪的參數)
+                        currentPhase = "init";
+                        if (groggyTimeout) clearTimeout(groggyTimeout);
+                        if (runAnimation) runAnimation.cancel();
+                        
+                        track.style.transition = 'none';
+                        track.style.transform = 'translateX(0)';
+                        
+                        setTimeout(() => {
+                            // 淡入顯示
+                            track.style.transition = 'opacity 0.3s ease-in';
+                            track.style.opacity = '1';
+                            
+                            currentPhase = "spawn";
+                            let spawnTrack = null;
+                            try { spawnTrack = player.animationState.setAnimation(0, "Spawn", false); } catch(e){}
+                            let spawnDuration = (spawnTrack && spawnTrack.animation ? spawnTrack.animation.duration : 1.5) * 1000;
+
+                            setTimeout(() => {
+                                currentPhase = "move";
+                                try { player.animationState.setAnimation(0, "Move", true); } catch(e){}
+                                
+                                // 💡 改用 Web Animations API (Element.animate) 來控制移動
+                                // 這樣我們才能在點擊時隨時呼叫 .pause() 和 .play()
+                                runAnimation = track.animate([
+                                    { transform: 'translateX(0)' },
+                                    { transform: 'translateX(calc(-100vw + 150px))' }
+                                ], {
+                                    duration: 10000,   // 跑完全程 10 秒
+                                    fill: 'forwards'   // 結束時停在最後一個畫面
+                                });
+
+                                // 當位移真正結束時 (它會自動扣除你在 Groggy 暫停花費的時間！)
+                                runAnimation.onfinish = () => {
+                                    currentPhase = "die";
+                                    let dieTrack = null;
+                                    try { dieTrack = player.animationState.setAnimation(0, "Die", false); } catch(e){}
+                                    let dieDuration = (dieTrack && dieTrack.animation ? dieTrack.animation.duration : 2.0) * 1000;
+
+                                    setTimeout(() => {
+                                        track.style.transition = 'opacity 0.5s ease-out';
+                                        track.style.opacity = '0';
+                                        
+                                        setTimeout(() => {
+                                            playLifecycleSequence();
+                                        }, 600);
+                                        
+                                    }, dieDuration);
+                                };
+
+                            }, spawnDuration);
+
+                        }, 50);
+                    }
+
+                    // 🚀 開始執行循環劇本！
+                    playLifecycleSequence();
+                },
+                error: function (player, reason) {
+                    console.warn(`頂部跑酷載入失敗:`, reason);
+                }
+            });
+        }
         // 📝 建立一個記憶清單，記住哪些角色已經預載過了
         const preloadedSpines = new Set(); 
 
@@ -382,64 +525,64 @@
         document.getElementById('langSelect').value = currentLang;
 
         // 💡 強化版翻譯函數：加入 .trim() 去除多餘空白，並防止字典找不到時出錯
-function t(key) {
-    if (!key) return key;
-    const lang = window.currentLang || 'zh-TW';
-    const cleanKey = String(key).trim(); // 自動清除字尾多餘的空白
-    
-    // 防呆機制：如果選擇了沒有字典的語言（如 en），預設拿 zh-TW 的翻譯來墊檔
-    const safeLang = (typeof LANG_DICT !== 'undefined' && LANG_DICT[lang]) ? lang : 'zh-TW';
-    
-    if (typeof LANG_DICT !== 'undefined' && LANG_DICT[safeLang] && LANG_DICT[safeLang][cleanKey]) {
-        return LANG_DICT[safeLang][cleanKey];
-    }
-    return cleanKey; 
-}
-
-// 💡 強化版語言切換：防止讀取 official_x_url 時當機
-function changeLanguage(lang) {
-    window.currentLang = lang; 
-    localStorage.setItem('user_lang', lang);
-    document.documentElement.lang = lang === "ja" ? "ja" : "zh-TW"; 
-
-    // 取得安全字典 (避開 en 導致的 undefined 錯誤)
-    const safeLang = (typeof LANG_DICT !== 'undefined' && LANG_DICT[lang]) ? lang : 'zh-TW';
-    const dict = typeof LANG_DICT !== 'undefined' ? LANG_DICT[safeLang] : {};
-    const statusText = document.getElementById('authStatusText');
-    if (statusText) {
-        statusText.innerText = t("auth_online_title");
-    }
-    document.title = t('app_title') || dict.app_title || "嘟嘟臉金蠟筆記事本";
-
-    // 替換靜態標籤
-    document.querySelectorAll('[data-lang-key]').forEach(el => {
-        const key = el.getAttribute('data-lang-key');
-        if (dict[key]) {
-            el.innerText = dict[key];
+        function t(key) {
+            if (!key) return key;
+            const lang = window.currentLang || 'zh-TW';
+            const cleanKey = String(key).trim(); // 自動清除字尾多餘的空白
+            
+            // 防呆機制：如果選擇了沒有字典的語言（如 en），預設拿 zh-TW 的翻譯來墊檔
+            const safeLang = (typeof LANG_DICT !== 'undefined' && LANG_DICT[lang]) ? lang : 'zh-TW';
+            
+            if (typeof LANG_DICT !== 'undefined' && LANG_DICT[safeLang] && LANG_DICT[safeLang][cleanKey]) {
+                return LANG_DICT[safeLang][cleanKey];
+            }
+            return cleanKey; 
         }
-    });
 
-    const searchInput = document.getElementById('searchInput');
-    if (searchInput) searchInput.placeholder = t('filter_search_placeholder') || dict.filter_search_placeholder || "搜尋坨坨...";
+        // 💡 強化版語言切換：防止讀取 official_x_url 時當機
+        function changeLanguage(lang) {
+            window.currentLang = lang; 
+            localStorage.setItem('user_lang', lang);
+            document.documentElement.lang = lang === "ja" ? "ja" : "zh-TW"; 
 
-    // 🌟 修改這裡：如果 dict.official_x_url 找不到，會給預設值，不會再報錯當機！
-    const xLink = document.getElementById('dynamicXLink');
-    if (xLink) {
-        xLink.href = dict.official_x_url || "https://x.com/trickcal_TW";
-        xLink.innerText = dict.x_label || "台港澳服官方X";
-    }
+            // 取得安全字典 (避開 en 導致的 undefined 錯誤)
+            const safeLang = (typeof LANG_DICT !== 'undefined' && LANG_DICT[lang]) ? lang : 'zh-TW';
+            const dict = typeof LANG_DICT !== 'undefined' ? LANG_DICT[safeLang] : {};
+            const statusText = document.getElementById('authStatusText');
+            if (statusText) {
+                statusText.innerText = t("auth_online_title");
+            }
+            document.title = t('app_title') || dict.app_title || "嘟嘟臉金蠟筆記事本";
+            
+            // 替換靜態標籤
+            document.querySelectorAll('[data-lang-key]').forEach(el => {
+                const key = el.getAttribute('data-lang-key');
+                if (dict[key]) {
+                    el.innerText = dict[key];
+                }
+            });
 
-    // 重新繪製動態畫面 (現在它絕對能順利執行到了！)
-    if (typeof INITIAL_DATA !== 'undefined') {
-        buildFilterPanel();
-        renderMatrix();
-        calculateStats();
-    }
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) searchInput.placeholder = t('filter_search_placeholder') || dict.filter_search_placeholder || "搜尋坨坨...";
 
-    if (typeof updateAuthButtonUI === 'function' && typeof currentUser !== 'undefined') {
-        updateAuthButtonUI(currentUser);
-    }
-}
+            // 🌟 修改這裡：如果 dict.official_x_url 找不到，會給預設值，不會再報錯當機！
+            const xLink = document.getElementById('dynamicXLink');
+            if (xLink) {
+                xLink.href = dict.official_x_url || "https://x.com/trickcal_TW";
+                xLink.innerText = dict.x_label || "台港澳服官方X";
+            }
+
+            // 重新繪製動態畫面 (現在它絕對能順利執行到了！)
+            if (typeof INITIAL_DATA !== 'undefined') {
+                buildFilterPanel();
+                renderMatrix();
+                calculateStats();
+            }
+
+            if (typeof updateAuthButtonUI === 'function' && typeof currentUser !== 'undefined') {
+                updateAuthButtonUI(currentUser);
+            }
+        }
         // ==========================================
         // 深色模式初始化與切換邏輯
         // ==========================================
@@ -467,6 +610,8 @@ function changeLanguage(lang) {
         }
         window.addEventListener('load', () => {
             document.getElementById('loader').style.display = 'none';
+            // 🚀 在畫面載入完成時，順便啟動頂部跑酷小人
+            initTopRunner();
         });
     </script>
 
