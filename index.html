@@ -367,10 +367,30 @@
     </div>
 
     <script>
-        // 🌟 初始化頂部跑酷小人 (Spawn -> Move -> Groggy互動 -> Die 完整演出版)
+        // 🌟 初始化頂部跑酷小人 (每次跑完都會隨機換角版)
+        let currentRunnerPlayer = null; // 紀錄當前的 Spine Player 實例，用來清理記憶體
+
         function initTopRunner() {
             if (typeof INITIAL_DATA === 'undefined' || INITIAL_DATA.length === 0) return;
 
+            const container = document.getElementById('topRunnerContainer');
+            const track = document.getElementById('runnerTrack');
+
+            // ✨ 關鍵修復：在載入新角色前，徹底清除上一輪的動畫殘留與強制隱藏
+            track.style.opacity = '0';
+            track.style.transition = 'none';
+            track.getAnimations().forEach(anim => anim.cancel()); // 砍掉上一輪 fill: 'forwards' 的鎖定狀態
+            track.style.transform = 'translateX(0)';              // 安心將軌道拉回最右側原點
+
+            // 1. 清理上一輪的角色 (避免 WebGL 記憶體洩漏與畫面重疊)
+            if (currentRunnerPlayer) {
+                try { currentRunnerPlayer.dispose(); } catch(e) {}
+                currentRunnerPlayer = null;
+            }
+            container.innerHTML = ''; // 清空畫布容器
+            track.onclick = null;     // 移除舊角色的點擊事件，避免重複觸發
+
+            // 2. 重新隨機選擇一位角色
             const randomCharData = INITIAL_DATA[Math.floor(Math.random() * INITIAL_DATA.length)];
             const charName = randomCharData.name;
             const folderKey = typeof SPINE_MAP !== 'undefined' ? SPINE_MAP[charName] : charName;
@@ -378,7 +398,7 @@
             const sdSkelUrl = `./spine_sd_assets/${folderKey}.skel.bytes`;
             const sdAtlasUrl = `./spine_sd_assets/${folderKey}.atlas.txt`;
 
-            new spine.SpinePlayer("topRunnerContainer", {
+            currentRunnerPlayer = new spine.SpinePlayer("topRunnerContainer", {
                 skelUrl: sdSkelUrl,
                 atlasUrl: sdAtlasUrl,
                 animation: "Spawn",
@@ -389,8 +409,8 @@
                 showControls: false,
                 viewport: { transitionTime: 0 },
                 success: function (player) {
-                    console.log(`🏃 跑酷彩蛋啟動 (加入點擊互動)：${charName}`);
-                    
+                    console.log(`🏃 跑酷小人進場：${charName}`);
+            
                     try {
                         const skins = player.skeleton.data.skins;
                         if (skins && skins.length > 0) {
@@ -404,8 +424,6 @@
                         console.warn("Skin 切換失敗", e);
                     }
 
-                    const track = document.getElementById('runnerTrack');
-                    
                     // 💡 狀態管理器：防止連點干擾演出
                     let currentPhase = "init"; // init, spawn, move, groggy, die
                     let runAnimation = null;   // 控制軌道移動的動畫物件
@@ -415,10 +433,10 @@
                     track.onclick = () => {
                         if (currentPhase === "move") {
                             currentPhase = "groggy"; // 鎖定狀態，防止連點
-                            
+                    
                             // 1. 暫停畫面上的位移
                             if (runAnimation) runAnimation.pause();
-                            
+                    
                             // 2. 播放暈眩動作 (Groggy)
                             try { player.animationState.setAnimation(0, "Groggy", true); } catch(e){}
 
@@ -432,74 +450,59 @@
                         }
                     };
 
-                    // 🎬 核心劇本
-                    function playLifecycleSequence() {
-                        // 初始化重置 (清空上一輪的參數)
-                        currentPhase = "init";
-                        if (groggyTimeout) clearTimeout(groggyTimeout);
-                        if (runAnimation) runAnimation.cancel();
-                        
-                        track.style.transition = 'none';
-                        track.style.transform = 'translateX(0)';
-                        
+                    // 🎬 開始劇本演出
+                    // 這裡不需要再重設一次 transform，因為最上面已經做過了
+                    setTimeout(() => {
+                        // 淡入顯示
+                        track.style.transition = 'opacity 0.3s ease-in';
+                        track.style.opacity = '1';
+                
+                        currentPhase = "spawn";
+                        let spawnTrack = null;
+                        try { spawnTrack = player.animationState.setAnimation(0, "Spawn", false); } catch(e){}
+                        let spawnDuration = (spawnTrack && spawnTrack.animation ? spawnTrack.animation.duration : 1.5) * 1000;
+
                         setTimeout(() => {
-                            // 淡入顯示
-                            track.style.transition = 'opacity 0.3s ease-in';
-                            track.style.opacity = '1';
+                            currentPhase = "move";
+                            try { player.animationState.setAnimation(0, "Move", true); } catch(e){}
+                    
+                            const isMobile = window.matchMedia("(max-width: 768px)").matches;
+                            const runDuration = isMobile ? 6000 : 12000; 
+
+                            runAnimation = track.animate([
+                                { transform: 'translateX(0)' },
+                                { transform: 'translateX(calc(-100vw + 60px))' }
+                            ], {
+                                duration: runDuration, 
+                                fill: 'forwards'
+                            });
+
+                            runAnimation.onfinish = () => {
+                                currentPhase = "die";
+                                let dieTrack = null;
+                                try { dieTrack = player.animationState.setAnimation(0, "Die", false); } catch(e){}
+                                let dieDuration = (dieTrack && dieTrack.animation ? dieTrack.animation.duration : 2.0) * 1000;
+
+                                setTimeout(() => {
+                                    track.style.transition = 'opacity 0.5s ease-out';
+                                    track.style.opacity = '0';
                             
-                            currentPhase = "spawn";
-                            let spawnTrack = null;
-                            try { spawnTrack = player.animationState.setAnimation(0, "Spawn", false); } catch(e){}
-                            let spawnDuration = (spawnTrack && spawnTrack.animation ? spawnTrack.animation.duration : 1.5) * 1000;
-
-                            setTimeout(() => {
-                                currentPhase = "move";
-                                try { player.animationState.setAnimation(0, "Move", true); } catch(e){}
-                                
-                                // 💡 改用 Web Animations API (Element.animate) 來控制移動
-                                // 這樣我們才能在點擊時隨時呼叫 .pause() 和 .play()
-                                // 💡 自動偵測裝置寬度，設定不同跑酷速度
-                                // 手機(小於 768px)設為 7 秒，電腦設為 12 秒
-                                const isMobile = window.matchMedia("(max-width: 768px)").matches;
-                                const runDuration = isMobile ? 6000 : 12000; 
-
-                                // 改用 Web Animations API，並套用偵測到的時間
-                                runAnimation = track.animate([
-                                    { transform: 'translateX(0)' },
-                                    { transform: 'translateX(calc(-100vw + 60px))' }
-                                ], {
-                                    duration: runDuration, // 手機 7秒 / 電腦 12秒
-                                    fill: 'forwards'
-                                });
-
-                                // 當位移真正結束時 (它會自動扣除你在 Groggy 暫停花費的時間！)
-                                runAnimation.onfinish = () => {
-                                    currentPhase = "die";
-                                    let dieTrack = null;
-                                    try { dieTrack = player.animationState.setAnimation(0, "Die", false); } catch(e){}
-                                    let dieDuration = (dieTrack && dieTrack.animation ? dieTrack.animation.duration : 2.0) * 1000;
-
                                     setTimeout(() => {
-                                        track.style.transition = 'opacity 0.5s ease-out';
-                                        track.style.opacity = '0';
-                                        
-                                        setTimeout(() => {
-                                            playLifecycleSequence();
-                                        }, 600);
-                                        
-                                    }, dieDuration);
-                                };
+                                        // 動畫徹底消失後，呼叫自己，重新抽一個新角色載入
+                                        initTopRunner();
+                                    }, 600);
+                            
+                                }, dieDuration);
+                            };
 
-                            }, spawnDuration);
+                        }, spawnDuration);
 
-                        }, 50);
-                    }
-
-                    // 🚀 開始執行循環劇本！
-                    playLifecycleSequence();
+                    }, 50);
                 },
                 error: function (player, reason) {
                     console.warn(`頂部跑酷載入失敗:`, reason);
+                    // 萬一該角色沒檔案報錯了，等 3 秒後自動重骰下一位
+                    setTimeout(initTopRunner, 3000);
                 }
             });
         }
