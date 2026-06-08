@@ -185,7 +185,7 @@
     
     <!-- 🌟 跑酷專屬軌道 (原生面朝左，點擊互動版) -->
     <div class="fixed top-0 left-0 w-full h-[150px] z-[100] pointer-events-none overflow-hidden">
-        <div id="runnerTrack" class="absolute top-0 w-[150px] h-[150px] pointer-events-auto cursor-pointer" style="right: -50px; transform: translateX(0); opacity: 0;">
+        <div id="runnerTrack" class="absolute top-0 w-[250px] h-[150px] pointer-events-auto cursor-pointer" style="right: 0px; transform: translateX(0); opacity: 0;">
             <div style="width: 100%; height: 100%; transform: scale(0.75); transform-origin: center;">
                 <div id="topRunnerContainer" class="w-full h-full relative"></div>
             </div>
@@ -367,8 +367,8 @@
     </div>
 
     <script>
-        // 🌟 初始化頂部跑酷小人 (每次跑完都會隨機換角版)
-        let currentRunnerPlayer = null; // 紀錄當前的 Spine Player 實例，用來清理記憶體
+        // 🌟 初始化頂部跑酷小人 (雙平台獨立微調版)
+        let currentRunnerPlayer = null; 
 
         function initTopRunner() {
             if (typeof INITIAL_DATA === 'undefined' || INITIAL_DATA.length === 0) return;
@@ -376,21 +376,37 @@
             const container = document.getElementById('topRunnerContainer');
             const track = document.getElementById('runnerTrack');
 
-            // ✨ 關鍵修復：在載入新角色前，徹底清除上一輪的動畫殘留與強制隱藏
+            // 📱 偵測是否為手機螢幕 (小於等於 768px)
+            const isMobile = window.innerWidth <= 768;
+
+            // =======================================================
+            // ✨ 關鍵微調 1：出生位置 (右側)
+            // 數字越「負」(例如 -180px)，起點越往畫面右側外隱藏
+            // =======================================================
+            const startRightOffset = isMobile ? '-140px' : '-110px'; 
+            track.style.right = startRightOffset;
+
+            // =======================================================
+            // ✨ 關鍵微調 2：死亡位置 (左側)
+            // 數字越「小」(例如 30px)，停下來的位置越貼近左邊螢幕邊緣
+            // =======================================================
+            const endLeftPos = isMobile ? '35px' : '110px'; 
+
+            // 在載入新角色前，徹底清除上一輪的動畫殘留與強制隱藏
             track.style.opacity = '0';
             track.style.transition = 'none';
-            track.getAnimations().forEach(anim => anim.cancel()); // 砍掉上一輪 fill: 'forwards' 的鎖定狀態
-            track.style.transform = 'translateX(0)';              // 安心將軌道拉回最右側原點
+            track.getAnimations().forEach(anim => anim.cancel()); 
+            track.style.transform = 'translateX(0)';              
 
-            // 1. 清理上一輪的角色 (避免 WebGL 記憶體洩漏與畫面重疊)
+            // 清理上一輪的角色
             if (currentRunnerPlayer) {
                 try { currentRunnerPlayer.dispose(); } catch(e) {}
                 currentRunnerPlayer = null;
             }
-            container.innerHTML = ''; // 清空畫布容器
-            track.onclick = null;     // 移除舊角色的點擊事件，避免重複觸發
+            container.innerHTML = ''; 
+            track.onclick = null;     
 
-            // 2. 重新隨機選擇一位角色
+            // 重新隨機選擇一位角色
             const randomCharData = INITIAL_DATA[Math.floor(Math.random() * INITIAL_DATA.length)];
             const charName = randomCharData.name;
             const folderKey = typeof SPINE_MAP !== 'undefined' ? SPINE_MAP[charName] : charName;
@@ -407,10 +423,20 @@
                 alpha: true,
                 premultipliedAlpha: false,
                 showControls: false,
-                viewport: { transitionTime: 0 },
+                
+                // 這裡保持你上一輪設定好的寬廣攝影機視角
+                viewport: { 
+                    x: -800,        
+                    y: -250,        
+                    width: 2500,    
+                    height: 1500,   
+                    padLeft: "0%", padRight: "0%", padTop: "0%", padBottom: "0%",
+                    transitionTime: 0 
+                },
+
                 success: function (player) {
                     console.log(`🏃 跑酷小人進場：${charName}`);
-            
+                    
                     try {
                         const skins = player.skeleton.data.skins;
                         if (skins && skins.length > 0) {
@@ -424,39 +450,30 @@
                         console.warn("Skin 切換失敗", e);
                     }
 
-                    // 💡 狀態管理器：防止連點干擾演出
-                    let currentPhase = "init"; // init, spawn, move, groggy, die
-                    let runAnimation = null;   // 控制軌道移動的動畫物件
-                    let groggyTimeout = null;  // 控制 5 秒暈眩的定時器
+                    let currentPhase = "init"; 
+                    let runAnimation = null;   
+                    let groggyTimeout = null;  
 
-                    // 👆 綁定點擊事件：當處於 Move (奔跑) 狀態時觸發
+                    // 點擊暈眩事件
                     track.onclick = () => {
                         if (currentPhase === "move") {
-                            currentPhase = "groggy"; // 鎖定狀態，防止連點
-                    
-                            // 1. 暫停畫面上的位移
+                            currentPhase = "groggy"; 
                             if (runAnimation) runAnimation.pause();
-                    
-                            // 2. 播放暈眩動作 (Groggy)
                             try { player.animationState.setAnimation(0, "Groggy", true); } catch(e){}
 
-                            // 3. 停留 5 秒後恢復
                             groggyTimeout = setTimeout(() => {
-                                currentPhase = "move"; // 解除鎖定
+                                currentPhase = "move"; 
                                 try { player.animationState.setAnimation(0, "Move", true); } catch(e){}
-                                // 繼續剩下的路程
                                 if (runAnimation) runAnimation.play(); 
                             }, 5000);
                         }
                     };
 
-                    // 🎬 開始劇本演出
-                    // 這裡不需要再重設一次 transform，因為最上面已經做過了
+                    // 開始劇本演出
                     setTimeout(() => {
-                        // 淡入顯示
                         track.style.transition = 'opacity 0.3s ease-in';
                         track.style.opacity = '1';
-                
+                        
                         currentPhase = "spawn";
                         let spawnTrack = null;
                         try { spawnTrack = player.animationState.setAnimation(0, "Spawn", false); } catch(e){}
@@ -465,13 +482,13 @@
                         setTimeout(() => {
                             currentPhase = "move";
                             try { player.animationState.setAnimation(0, "Move", true); } catch(e){}
-                    
-                            const isMobile = window.matchMedia("(max-width: 768px)").matches;
-                            const runDuration = isMobile ? 6000 : 12000; 
+                            
+                            const runDuration = isMobile ? 6000 : 14000; 
 
+                            // 應用剛剛設定好的動態終點
                             runAnimation = track.animate([
                                 { transform: 'translateX(0)' },
-                                { transform: 'translateX(calc(-100vw + 60px))' }
+                                { transform: `translateX(calc(-100vw + ${endLeftPos}))` } 
                             ], {
                                 duration: runDuration, 
                                 fill: 'forwards'
@@ -484,15 +501,14 @@
                                 let dieDuration = (dieTrack && dieTrack.animation ? dieTrack.animation.duration : 2.0) * 1000;
 
                                 setTimeout(() => {
-                                    track.style.transition = 'opacity 0.5s ease-out';
+                                    track.style.transition = 'opacity 0.6s ease-out';
                                     track.style.opacity = '0';
-                            
+                                    
                                     setTimeout(() => {
-                                        // 動畫徹底消失後，呼叫自己，重新抽一個新角色載入
                                         initTopRunner();
                                     }, 600);
-                            
-                                }, dieDuration);
+                                    
+                                }, dieDuration + 400); // 倒地後多躺 0.4 秒
                             };
 
                         }, spawnDuration);
@@ -501,7 +517,6 @@
                 },
                 error: function (player, reason) {
                     console.warn(`頂部跑酷載入失敗:`, reason);
-                    // 萬一該角色沒檔案報錯了，等 3 秒後自動重骰下一位
                     setTimeout(initTopRunner, 3000);
                 }
             });
