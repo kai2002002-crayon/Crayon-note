@@ -443,10 +443,15 @@
             track.getAnimations().forEach(anim => anim.cancel()); 
             track.style.transform = 'translateX(0)';              
 
-            // 清理上一輪的角色
+            // 清理上一輪的角色 (💡 優化3: 強化 DOM 動態記憶體清理防呆)
             if (currentRunnerPlayer) {
-                try { currentRunnerPlayer.dispose(); } catch(e) {}
-                currentRunnerPlayer = null;
+                try { 
+                    currentRunnerPlayer.dispose(); 
+                } catch(e) {
+                    console.warn("Spine 清理異常:", e);
+                } finally {
+                    currentRunnerPlayer = null;
+                }
             }
             container.innerHTML = ''; 
             track.onclick = null;     
@@ -862,16 +867,18 @@
                 if (layerStatBox) layerStatBox.innerHTML = html;
             });
 
+            // 💡 優化5: 將本機存檔的錯誤捕捉從雲端存檔中分離
             try {
                 localStorage.setItem(storageKey, JSON.stringify(savedStates));
-                if (currentUser && db) {
-                    db.collection("player_boards").doc(currentUser.uid).set({
-                        states: savedStates,
-                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                    }).catch(e => console.warn("雲端寫入延遲:", e));
-                }
             } catch(e) {
-                console.warn("本機存檔失敗", e);
+                console.warn("本機存檔失敗 (可能是無痕模式或空間不足):", e);
+            }
+
+            if (currentUser && db) {
+                db.collection("player_boards").doc(currentUser.uid).set({
+                    states: savedStates,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                }).catch(e => console.warn("雲端寫入延遲:", e));
             }
 
             applyFilterUI();
@@ -1154,7 +1161,6 @@
                     const isOwned = savedStates['owned_' + char.name];
                     const avatarClass = isOwned ? "" : "unowned-avatar";
 
-                    // 在產生 detailBtn 的地方這樣寫：
                     const detailBtn = document.createElement('button');
                     detailBtn.onclick = () => window.open(`char_detail.html?char=${encodeURIComponent(char.name)}`, '_blank');
 
@@ -1177,7 +1183,6 @@
                     const nameCol = document.createElement('div');
                     nameCol.className = "flex flex-row items-center justify-start gap-3 min-w-[210px] w-full md:w-auto border-b md:border-b-0 pb-2 md:pb-0 border-gray-200/50 dark:border-gray-700";
                     
-                    // 🛠️ 修復 3：移除這裡面 img 的 loading="lazy"，避免 Opera 延遲載入破圖
                     nameCol.innerHTML = `
                         <div class="relative shrink-0 w-12 h-12" onclick="toggleOwnership('${char.name}')">
                             <div id="avatar_container_${char.name}" class="char-avatar-container w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-inner bg-white ${avatarClass}">
@@ -1387,6 +1392,7 @@
         try {
             if (typeof firebase !== 'undefined') {
                 const firebaseConfig = {
+                    /* 💡 資安小提醒：請至 Google Cloud / Firebase 後台，將這組 API Key 設定 HTTP 網域限制，避免他人盜用配額 */
                     apiKey: "AIzaSyDhv8D2pY_0M56UJrDTQw0RGPHA-BkXU8Y",
                     authDomain: "crayon-note.firebaseapp.com",
                     projectId: "crayon-note",
@@ -1395,7 +1401,14 @@
                     appId: "1:210614088940:web:7addbdc7c466eeb05421c9",
                     measurementId: "G-M1EJPE12TE"
                 };
-                firebase.initializeApp(firebaseConfig);
+                
+                // 💡 優化2: 檢查是否已經初始化過，避免重複初始化導致報錯
+                if (!firebase.apps.length) {
+                    firebase.initializeApp(firebaseConfig);
+                } else {
+                    firebase.app(); // 如果已存在，直接取用
+                }
+
                 db = firebase.firestore();
                 auth = firebase.auth();
 
@@ -1561,8 +1574,8 @@
         function checkCrayonCollision() {
             const chibi = document.getElementById(chibiId);
             
-            // 確保小人存在，且沒有處於隱藏狀態 (opacity > 0 代表小人正在場上跑)
-            const isChibiVisible = chibi && window.getComputedStyle(chibi).opacity > 0;
+            // 💡 優化1：移除耗能的 getComputedStyle，直接讀取 inline style 判斷顯示狀態
+            const isChibiVisible = chibi && chibi.style.opacity === '1';
 
             if (isChibiVisible && activeCrayons.length > 0) {
                 // 取得小人當下在畫面中的精準座標
