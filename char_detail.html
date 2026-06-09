@@ -7,6 +7,7 @@
     <script src="data_core.js"></script>
     <script src="data_skills.js"></script>
     <script src="data_collectibles.js"></script>
+    <script src="data_intro.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" href="https://i.postimg.cc/mkfSTq5k/Favicon.png" type="image/png">
     <link rel="preconnect" href="https://firebasestorage.googleapis.com">
@@ -34,13 +35,88 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
     
     <style>
+        /* 🌟 新增：種族專屬背景的平鋪與移動動畫 */
+        #raceBackground {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: -10; /* 確保它在最底層 */
+            background-repeat: repeat;
+            background-size: 200px; /* 這裡可以調整圖案的縮放大小 */
+            /* 調整透明度，才不會讓背景圖太搶眼影響文字閱讀 */
+            opacity: 0.9; 
+            /* 執行動畫：40秒跑完一圈，無限循環，保持等速(linear) */
+            animation: raceBgPan 40s linear infinite;
+        }
+
+        /* 深色模式時，稍微把透明度再調低一點 */
+        .dark #raceBackground {
+            opacity: 0.4;
+        }
+
+        /* 背景移動軌跡：(左上 -> 左下 -> 右下 -> 右上 -> 回原點) */
+        @keyframes raceBgPan {
+            0%   { background-position: 0px 0px; }
+            25%  { background-position: -200px 200px; }
+            50%  { background-position: 0px 400px; }
+            75%  { background-position: 200px 200px; }
+            100% { background-position: 0px 0px; }
+        }
         body { font-family: 'Noto Sans TC', sans-serif; }
         .spine-player-controls { display: none !important; }
         .costume-btn { transition: all 0.2s ease; }
         .costume-btn:active { transform: scale(0.95); }
-        .spine-player-loading, .spine-player-progress, .spine-player-progress-bar {
+
+        /* 🌟 使用更精確的父子選取器，確保完全覆蓋 Spine 原生樣式 */
+        .spine-player-loading {
+            /* 強制將原本的轉圈圈動畫歸零並隱藏 */
+            background-image: none !important;
+            border: none !important;
+            animation: none !important;
+            
+            /* 放入金蠟筆作為背景，並強制置中 */
+            background: transparent url('https://i.postimg.cc/qvjNxZzg/golden-crayon.png') no-repeat center center !important;
+            background-size: contain !important;
+            
+            /* 設定蠟筆大小與定位 */
+            width: 80px !important;
+            height: 80px !important;
+            position: absolute !important;
+            left: 50% !important;
+            top: 50% !important;
+            margin-top: -40px !important;
+            margin-left: -40px !important;
+            
+            /* 重新套用浮動動畫 */
+            animation: crayonFloat 1.5s ease-in-out infinite !important;
+            opacity: 1 !important;
+        }
+
+        /* 🌟 強力隱藏 Spine 預設的轉圈圈內部元件 */
+        .spine-player-loading > div, 
+        .spine-player-loading::before, 
+        .spine-player-loading::after {
+            display: none !important;
+            content: none !important;
+        }
+
+        /* 隱藏進度條 */
+        .spine-player-progress, .spine-player-progress-bar {
             display: none !important;
             opacity: 0 !important;
+        }
+        .spine-player-loading-custom {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 80px; height: 80px;
+            margin: -40px 0 0 -40px;
+            background: url('https://i.postimg.cc/qvjNxZzg/golden-crayon.png') no-repeat center center;
+            background-size: contain;
+            animation: crayonFloat 1.5s ease-in-out infinite;
+            z-index: 10;
+        }
+        @keyframes crayonFloat {
+            0%, 100% { transform: translateY(0) scale(1); filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.5)); }
+            50% { transform: translateY(-10px) scale(1.05); filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.9)); }
         }
         /* 背景動態縮放動畫 */
         .animated-bg {
@@ -66,9 +142,10 @@
 </head>
 <body class="p-4 sm:p-8 bg-[#fcf8f2] dark:bg-slate-900 text-gray-800 dark:text-gray-200 transition-colors duration-300">
 
+    <div id="raceBackground"></div>
+
     <div id="mainContainer" class="max-w-4xl mx-auto bg-white/90 dark:bg-slate-800/95 backdrop-blur-md p-6 rounded-2xl shadow-md border-4 border-amber-400 dark:border-slate-600 transition-colors">
         
-        <!-- 更新 data-i18n 鍵值對應 LANG_DICT -->
         <button onclick="window.close()" data-i18n="btn_close_page" class="mb-4 px-4 py-2 bg-amber-500 text-white text-xs font-bold rounded-xl shadow hover:bg-amber-600 dark:bg-slate-700 dark:hover:bg-slate-600 transition">
             ⬅️ 關閉此頁
         </button>
@@ -80,14 +157,38 @@
             </div>
             
             <div class="text-center sm:text-left w-full mt-2 sm:mt-0">
-                <h1 id="charName" data-i18n="loading" class="text-3xl font-extrabold text-amber-950 dark:text-amber-400 mb-4 tracking-tight">載入中...</h1>
+                <h1 id="charName" data-i18n="loading" class="text-3xl font-extrabold text-amber-950 dark:text-amber-400 mb-1 tracking-tight">載入中...</h1>
+                
+                <div id="charStars" class="flex justify-center sm:justify-start items-center min-h-[28px] mb-3"></div>
+
                 <div class="flex justify-center sm:justify-start gap-5 sm:gap-4 pt-3 flex-wrap">
                     <div id="charPersonality"></div>
                     <div id="charRace"></div>
                     <div id="charPosition"></div>
                     <div id="charJob"></div>
                 </div>
-            </div>
+                
+                <div class="mt-6 pt-5 border-t border-dashed border-amber-200 dark:border-slate-600 space-y-4">
+                    <p id="charIntro" class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed font-medium bg-amber-50/50 dark:bg-slate-800/50 p-4 rounded-xl border border-amber-100 dark:border-slate-700 shadow-sm text-left"></p>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left bg-white/50 dark:bg-slate-800/30 p-4 rounded-xl border border-gray-100 dark:border-slate-700">
+                        <div class="flex items-center gap-2 text-sm sm:col-span-2 border-b border-gray-100 dark:border-slate-700 pb-2">
+                            <span class="font-black text-amber-800 dark:text-amber-400 shrink-0" data-i18n="info_cv">🎙️ CV：</span>
+                            <span id="charCV" class="text-gray-800 dark:text-gray-200 font-bold text-base"></span>
+                        </div>
+                        
+                        <div class="flex items-center gap-3">
+                            <span class="font-black text-amber-800 dark:text-amber-400 shrink-0" data-i18n="info_food">🍲 喜好料理：</span>
+                            <div id="charFoodIcon"></div>
+                        </div>
+                        
+                        <div class="flex items-center gap-3">
+                            <span class="font-black text-amber-800 dark:text-amber-400 shrink-0" data-i18n="info_job_reward">💰 打工獎勵：</span>
+                            <div id="charRewardIcon"></div>
+                        </div>
+                    </div>
+                </div>
+                </div>
         </div>
 
         <div class="mb-8">
@@ -179,22 +280,18 @@
     </div>
 
     <script>
-        // 【優化】直接利用 data_core.js 裡的 LANG_DICT，刪除多餘的重複字典
-        // 💡 升級版：加入清除空白與安全語系防呆機制
         function getI18n(key) {
             if (!key) return key;
-            const cleanKey = String(key).trim(); // 清除字尾多餘空白
+            const cleanKey = String(key).trim();
             
-            // 如果找不到該語言的字典，預設退回 zh-TW
             const safeLang = (typeof LANG_DICT !== 'undefined' && LANG_DICT[window.currentLang]) ? window.currentLang : 'zh-TW';
             
             if (typeof LANG_DICT !== 'undefined' && LANG_DICT[safeLang] && LANG_DICT[safeLang][cleanKey]) {
                 return LANG_DICT[safeLang][cleanKey];
             }
-            return cleanKey; // 找不到翻譯就回傳原文
+            return cleanKey; 
         }
 
-        // 用來翻譯屬性資料 (如"攻擊", "天真", "前排")，因為你的 LANG_DICT 已經包含了這些，直接調用
         function t(text) {
             return getI18n(text);
         }
@@ -205,7 +302,7 @@
                     const key = el.getAttribute('data-i18n');
                     const text = getI18n(key);
                     
-                    if (text === key) return; // 💡 找不到對應的翻譯，保留原本 HTML 裡的中文，不會變成英文 ID
+                    if (text === key) return; 
                     
                     if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
                         el.placeholder = text;
@@ -218,7 +315,6 @@
             }
         }
 
-        // 初始化 Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyDhv8D2pY_0M56UJrDTQw0RGPHA-BkXU8Y",
             authDomain: "crayon-note.firebaseapp.com",
@@ -255,6 +351,112 @@
             `;
         };
 
+        // 🌟 新增：帶有 Hover 特效的大圖示 (供料理與打工獎勵使用)
+        function createBigHoverIcon(containerId, imgUrl, tooltipText) {
+            const container = document.getElementById(containerId);
+            if (!imgUrl) {
+                container.innerHTML = `<span class="text-xs text-gray-400 font-bold px-2 py-1 bg-gray-100 dark:bg-slate-700 rounded-md">無圖片</span>`;
+                return;
+            }
+            container.innerHTML = `
+                <div class="relative group flex items-center justify-center cursor-help">
+                    <div class="w-14 h-14 sm:w-16 sm:h-16 bg-white dark:bg-slate-700 rounded-xl border-2 border-amber-200 dark:border-slate-600 shadow-sm overflow-hidden transition-transform duration-300 group-hover:scale-110 group-active:scale-95">
+                        <img src="${imgUrl}" alt="icon" class="w-full h-full object-contain p-1 drop-shadow-sm">
+                    </div>
+                    <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-slate-900 dark:bg-slate-800 text-white dark:text-gray-100 text-xs sm:text-sm font-black rounded-lg shadow-xl whitespace-nowrap pointer-events-none hidden group-hover:block transition-all duration-300 z-50 border border-slate-700">
+                        ${tooltipText}
+                        <div class="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-900 dark:border-t-slate-800"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 🌟 新增：渲染角色星數 (稀有度)
+        function renderStars(charName) {
+            const starsContainer = document.getElementById('charStars');
+            if (!starsContainer) return;
+
+            // 預設為 3 星
+            let grade = "3"; 
+            if (typeof GRADE_MAP !== 'undefined' && GRADE_MAP[charName]) {
+                grade = GRADE_MAP[charName];
+            }
+
+            let starIconUrl = "";
+            if (typeof ICON_MAP !== 'undefined') {
+                starIconUrl = ICON_MAP[`grade_${grade}`];
+            }
+
+            if (starIconUrl) {
+                // 顯示對應的星數圖片
+                starsContainer.innerHTML = `<img src="${starIconUrl}" class="h-6 sm:h-7 object-contain drop-shadow-md" alt="${grade} Stars">`;
+            } else {
+                // 找不到圖片的備用方案：印出文字星星
+                const starCount = parseInt(grade) || 3;
+                starsContainer.innerHTML = `<span class="text-amber-500 dark:text-amber-400 text-xl sm:text-2xl tracking-widest drop-shadow-sm">${'★'.repeat(starCount)}</span>`;
+            }
+        }
+
+        // 🌟 新增：渲染額外情報 (簡介、CV、料理、打工)
+        // 🌟 新增：渲染額外情報 (簡介、CV、料理、打工)
+        function renderExtraInfo(charName) {
+            // 1. 渲染 CV (找不到預設 ???)
+            const cvText = (typeof CV_MAP !== 'undefined' && CV_MAP[charName]) ? CV_MAP[charName] : "???";
+            document.getElementById('charCV').innerText = cvText;
+
+            // ==========================================
+            // ✨ 修正區塊：渲染簡介 (字體大小分層排版)
+            // ==========================================
+            const introKey = typeof SPINE_MAP !== 'undefined' && SPINE_MAP[charName] ? SPINE_MAP[charName] : charName;
+            const safeLang = (typeof INTRO_MAP !== 'undefined' && INTRO_MAP[window.currentLang]) ? window.currentLang : 'zh-TW';
+            let introText = "（資料建檔中...）";
+            
+            if (typeof INTRO_MAP !== 'undefined' && INTRO_MAP[safeLang] && INTRO_MAP[safeLang][introKey]) {
+                let rawText = INTRO_MAP[safeLang][introKey];
+                let lines = rawText.split('\n'); // 透過換行符號將文字切成陣列
+                
+                if (lines.length >= 3) {
+                    // 第一行：最大、最粗 (稱號)
+                    let titleText = `<span class="block text-lg sm:text-xl font-black text-amber-950 dark:text-amber-300 mb-1">${lines[0]}</span>`;
+                    // 第二行：稍微大一點、粗體 (名言/台詞)
+                    let quoteText = `<span class="block text-base sm:text-lg font-bold text-amber-700 dark:text-amber-500 mb-3">${lines[1]}</span>`;
+                    // 第三行以後：一般大小，並加一條淡淡的頂部虛線分隔 (詳細介紹)
+                    let descText = `<span class="block text-sm text-gray-700 dark:text-gray-300 leading-relaxed border-t border-dashed border-amber-200 dark:border-slate-600 pt-3">${lines.slice(2).join('<br>')}</span>`;
+                    
+                    introText = titleText + quoteText + descText;
+                } else {
+                    // 如果沒有標準的3行格式，則退回原來的直接換行顯示
+                    introText = rawText.replace(/\n/g, '<br>');
+                }
+            }
+            document.getElementById('charIntro').innerHTML = introText;
+            // ==========================================
+
+            // 3. 處理料理與獎勵 (從 REWARD_MAP 取中文 Key -> 找 ICON_MAP -> 找 LANG_DICT 翻譯)
+            let foodUrl = "";
+            let rewardUrl = "";
+            let foodDisplay = "未知料理";
+            let rewardDisplay = "未知獎勵";
+            
+            if (typeof REWARD_MAP !== 'undefined' && REWARD_MAP[charName]) {
+                const foodKey = REWARD_MAP[charName].food;     // e.g. "秘密葡萄汁"
+                const rewardKey = REWARD_MAP[charName].reward; // e.g. "金幣"
+
+                // 透過 getI18n 翻譯，若無翻譯則顯示原本的中文 Key
+                foodDisplay = getI18n(foodKey) !== foodKey ? getI18n(foodKey) : foodKey;
+                rewardDisplay = getI18n(rewardKey) !== rewardKey ? getI18n(rewardKey) : rewardKey;
+
+                // 找尋圖片連結
+                if (typeof ICON_MAP !== 'undefined') {
+                    foodUrl = ICON_MAP[foodKey] || "";
+                    rewardUrl = ICON_MAP[rewardKey] || "";
+                }
+            }
+
+            createBigHoverIcon('charFoodIcon', foodUrl, foodDisplay);
+            createBigHoverIcon('charRewardIcon', rewardUrl, rewardDisplay);
+        }
+
         const renderError = (msg) => {
             document.getElementById('mainContainer').innerHTML = `
                 <div class="text-center p-10 font-bold text-red-600 dark:text-red-400 text-lg">
@@ -262,7 +464,6 @@
                 </div>
             `;
         };
-
         const escapeHTML = (str) => {
             return str.replace(/[&<>'"]/g, 
                 tag => ({
@@ -270,11 +471,24 @@
                 }[tag])
             );
         };
+
+        // 🌟 新增：根據種族設定背景圖
+        const updateRaceBackground = (raceName) => {
+            const bgDiv = document.getElementById('raceBackground');
+            if (bgDiv && typeof CHAR_BACKGROUNDS !== 'undefined' && CHAR_BACKGROUNDS[raceName]) {
+                const bgUrl = CHAR_BACKGROUNDS[raceName];
+                // 💡 修改這裡：改用傳統的雙引號與加號字串串接，避免特殊符號解析錯誤
+                bgDiv.style.backgroundImage = "url('" + bgUrl + "')";
+            } else {
+                // 如果找不到該種族的背景 (或發生錯誤)，就清空背景
+                if(bgDiv) bgDiv.style.backgroundImage = "none";
+            }
+        };
         // 🌟 新增：艾爾丁名單與身份圖示網址
         const ELDAIN_LIST = ['綾', '庫洛艾', '艾皮卡', '伊德', '羽依', '薇薇', '錫安', '優米'];
         const ICON_ELDAIN = "https://i.postimg.cc/NMQHVyPQ/Pick-Perconality-Icon-Eldain-Hero.png";
         const ICON_NORMAL = "https://i.postimg.cc/ZRJdg9D4/Pick-Perconality-Icon-Normal-Hero.png";
-        
+
         let currentTargetName = "";
         let currentCharData = null;
         let globalSpinePlayer = null;
@@ -299,7 +513,6 @@
             const langDataL = (typeof LETTER_MAP !== 'undefined' && LETTER_MAP[window.currentLang]) ? LETTER_MAP[window.currentLang] : ((typeof LETTER_MAP !== 'undefined') ? LETTER_MAP["zh-TW"] : {});
             const langDataT = (typeof THOUGHT_MAP !== 'undefined' && THOUGHT_MAP[window.currentLang]) ? THOUGHT_MAP[window.currentLang] : ((typeof THOUGHT_MAP !== 'undefined') ? THOUGHT_MAP["zh-TW"] : {});
             
-            // 替換為你的字典對應的 key
             let defaultNoLetter = getI18n('no_letter_hint');
             if(defaultNoLetter === 'no_letter_hint') defaultNoLetter = '（這隻坨坨好像還沒寫信給你呢...）';
             let defaultNoThought = getI18n('no_thought_hint');
@@ -327,29 +540,28 @@
                 window.globalSpinePlayer = null;
             }
             
-            avatarBox.innerHTML = ''; 
-
-            if (!avatarBox.style.getPropertyValue('--bg-image') && typeof LOBBY_BACKGROUNDS !== 'undefined' && LOBBY_BACKGROUNDS.length > 0) {
-                const randomBg = LOBBY_BACKGROUNDS[Math.floor(Math.random() * LOBBY_BACKGROUNDS.length)];
-                avatarBox.style.setProperty('--bg-image', `url('${randomBg}')`);
-                avatarBox.classList.add('animated-bg', 'overflow-hidden', 'rounded-2xl', 'shadow-inner');
-            }
+            // 💡 這裡手動插入金蠟筆作為載入中的圖案
+            avatarBox.innerHTML = '<div class="spine-player-loading-custom"></div>';
 
             window.globalSpinePlayer = new spine.SpinePlayer(avatarBox, {
                 skelUrl: `./spine_assets/${baseFolderKey}/${costumeKey}.skel.bytes`,
                 atlasUrl: `./spine_assets/${baseFolderKey}/${costumeKey}.atlas.txt`,
-                
                 animation: "Idle_1",     
-                
                 premultipliedAlpha: true,
                 backgroundColor: "#00000000", 
-                alpha: true,                 
+                alpha: true,
                 showControls: false,
+                showLoading: false, // 🚫 關閉原廠載入圖案
                 viewport: { x: -400, y: 0, width: 800, height: 1000 },
         
                 success: function (player) {
+                    // 載入成功後，把我們自訂的蠟筆刪掉
+                    const loader = avatarBox.querySelector('.spine-player-loading-custom');
+                    if (loader) loader.remove();
+
                     window.myPlayer = player;
-    
+                    // ...
+
                     let activeFaceBone = null; 
                     let initialBoneX = 0;
                     let initialBoneY = 0;
@@ -730,37 +942,32 @@
 
             loadSpineAnimation(costumeKey);
         }
-        // 🌟 專屬函數：渲染珍藏品與信件區塊
+
         function renderCollectibles(charName) {
-            // 取得當前語言 (如果找不到預設為 zh-TW)
             const lang = window.currentLang || 'zh-TW';
     
-            // 防呆：如果該語言在 THOUGHT_MAP 裡還沒準備好 (例如切到 en 但沒英文)，強制退回中文
             const safeLang = (typeof THOUGHT_MAP !== 'undefined' && THOUGHT_MAP[lang]) ? lang : 'zh-TW';
 
-            // 1. 渲染珍藏品圖示與名稱
             if (typeof PRESENT_MAP !== 'undefined' && PRESENT_MAP[charName]) {
                 const presentData = PRESENT_MAP[charName];
                 const presentImg = document.getElementById('present_image');
                 const presentName = document.getElementById('present_name');
         
                 if (presentImg) presentImg.src = presentData.url;
-                // 讀取對應語言的名稱，如果沒有則退回中文
                 if (presentName) presentName.innerText = presentData.name[safeLang] || presentData.name['zh-TW'];
             }
 
-            // 2. 渲染教主心聲
             if (typeof THOUGHT_MAP !== 'undefined' && THOUGHT_MAP[safeLang] && THOUGHT_MAP[safeLang][charName]) {
                 const thoughtText = document.getElementById('thought_text');
                 if (thoughtText) thoughtText.innerText = THOUGHT_MAP[safeLang][charName];
             }
 
-            // 3. 渲染坨坨情信
             if (typeof LETTER_MAP !== 'undefined' && LETTER_MAP[safeLang] && LETTER_MAP[safeLang][charName]) {
                 const letterText = document.getElementById('letter_text');
                 if (letterText) letterText.innerText = LETTER_MAP[safeLang][charName];
             }
         }
+        
         function renderSkills(charName) {
             const skillsContainer = document.getElementById('skillsContainer');
             
@@ -911,19 +1118,15 @@
                 }
             }
         }
-        // ==========================================
-        // 🌟 專為詳細頁設計的動態語言切換函數
-        // ==========================================
+
         window.changeLanguage = function(lang) {
             window.currentLang = lang;
             document.documentElement.lang = lang === "ja" ? "ja" : "zh-TW";
             
             if (!currentCharData) return;
 
-            // 1. 更新純靜態文字 (使用 data-i18n 的標籤)
             applyI18n();
             
-            // 2. 重新渲染角色名稱與標題
             const displayName = getI18n(currentCharData.name);
             
             // 🌟 新增：判斷是否為艾爾丁，並在名字後方加上 150% 大小的圖示
@@ -933,7 +1136,6 @@
             
             document.title = `${displayName} - ${getI18n('page_title_char_detail') || '詳細資料'}`;
 
-            // 3. 重新渲染上方屬性標籤 (性格、種族等)
             let pLabel = getI18n('stats_personality'); if(pLabel === 'stats_personality') pLabel = '性格';
             let rLabel = getI18n('stats_race'); if(rLabel === 'stats_race') rLabel = '種族';
             let posLabel = getI18n('stats_position'); if(posLabel === 'stats_position') posLabel = '站位';
@@ -943,8 +1145,11 @@
             updateTag('charRace', rLabel, currentCharData.race, 'race');
             updateTag('charPosition', posLabel, currentCharData.position, 'position');
             updateTag('charJob', jLabel, currentCharData.job, 'job');
+            updateRaceBackground(currentCharData.race);
+            // 🚀 重新渲染額外情報與星數
+            renderStars(currentTargetName);
+            renderExtraInfo(currentTargetName);
 
-            // 4. 重新渲染金蠟筆格屬性列表
             const renderCrayonList = (elementId, array) => {
                 const ul = document.getElementById(elementId);
                 ul.innerHTML = array.map(attr => `<li>${t(attr)}</li>`).join('');
@@ -953,17 +1158,12 @@
             renderCrayonList('layer2List', currentCharData.layer2);
             renderCrayonList('layer3List', currentCharData.layer3);
 
-            // 5. 重新渲染技能說明
             renderSkills(currentTargetName);
 
-            // 6. 🌟 重新渲染珍藏品、信件，並刷新當前選中的分頁文字
             renderCollectibles(currentTargetName);
             switchPresentTab(currentTab);
         };
 
-        // ==========================================
-        // 🌟 神奇連動：監聽其他分頁(主頁)的語言切換
-        // ==========================================
         window.addEventListener('storage', (e) => {
             if (e.key === 'user_lang' && e.newValue && e.newValue !== window.currentLang) {
                 console.log(`📡 偵測到主頁將語言切換至 ${e.newValue}，自動同步更新！`);
@@ -971,12 +1171,9 @@
             }
         });
 
-
-        // (這下面是你原本的 window.onload = function() { ... )
         window.onload = function() {
             applyI18n(); 
  
-            
             const urlParams = new URLSearchParams(window.location.search);
             currentTargetName = urlParams.get('char')?.trim();
 
@@ -1002,6 +1199,11 @@
             updateTag('charRace', rLabel, currentCharData.race, 'race');
             updateTag('charPosition', posLabel, currentCharData.position, 'position');
             updateTag('charJob', jLabel, currentCharData.job, 'job');
+            updateRaceBackground(currentCharData.race);
+            
+            // 🚀 初次渲染額外情報與星數
+            renderStars(currentTargetName);
+            renderExtraInfo(currentTargetName);
 
             const spineKey = typeof SPINE_MAP !== 'undefined' ? SPINE_MAP[currentCharData.name] : currentCharData.name;
 
@@ -1099,14 +1301,12 @@
 
             const renderCrayonList = (elementId, array) => {
                 const ul = document.getElementById(elementId);
-                // 💡 加入 t(attr) 以實現屬性名稱(攻擊、血量等)日文翻譯
                 ul.innerHTML = array.map(attr => `<li>${t(attr)}</li>`).join('');
             };
             renderCrayonList('layer1List', currentCharData.layer1);
             renderCrayonList('layer2List', currentCharData.layer2);
             renderCrayonList('layer3List', currentCharData.layer3);
 
-            // 把它改成這樣（使用翻譯後的 displayName）：
             document.title = `${displayName} - ${getI18n('page_title_char_detail')}`;
 
             renderSkills(currentTargetName);
