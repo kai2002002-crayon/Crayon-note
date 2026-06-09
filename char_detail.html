@@ -35,25 +35,21 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
     
     <style>
-        /* 🌟 新增：種族專屬背景的平鋪與移動動畫 */
+        /* 🌟 種族專屬背景的平鋪與移動動畫 (全域背景) */
         #raceBackground {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            z-index: -10; /* 確保它在最底層 */
+            z-index: -10; 
             background-repeat: repeat;
-            background-size: 200px; /* 這裡可以調整圖案的縮放大小 */
-            /* 調整透明度，才不會讓背景圖太搶眼影響文字閱讀 */
+            background-size: 200px; 
             opacity: 0.9; 
-            /* 執行動畫：40秒跑完一圈，無限循環，保持等速(linear) */
             animation: raceBgPan 40s linear infinite;
         }
 
-        /* 深色模式時，稍微把透明度再調低一點 */
         .dark #raceBackground {
             opacity: 0.4;
         }
 
-        /* 背景移動軌跡：(左上 -> 左下 -> 右下 -> 右上 -> 回原點) */
         @keyframes raceBgPan {
             0%   { background-position: 0px 0px; }
             25%  { background-position: -200px 200px; }
@@ -61,23 +57,19 @@
             75%  { background-position: 200px 200px; }
             100% { background-position: 0px 0px; }
         }
+
         body { font-family: 'Noto Sans TC', sans-serif; }
         .spine-player-controls { display: none !important; }
         .costume-btn { transition: all 0.2s ease; }
         .costume-btn:active { transform: scale(0.95); }
 
-        /* 🌟 使用更精確的父子選取器，確保完全覆蓋 Spine 原生樣式 */
+        /* 🌟 Spine 原生樣式覆蓋與金蠟筆載入圖 */
         .spine-player-loading {
-            /* 強制將原本的轉圈圈動畫歸零並隱藏 */
             background-image: none !important;
             border: none !important;
             animation: none !important;
-            
-            /* 放入金蠟筆作為背景，並強制置中 */
             background: transparent url('https://i.postimg.cc/qvjNxZzg/golden-crayon.png') no-repeat center center !important;
             background-size: contain !important;
-            
-            /* 設定蠟筆大小與定位 */
             width: 80px !important;
             height: 80px !important;
             position: absolute !important;
@@ -85,13 +77,10 @@
             top: 50% !important;
             margin-top: -40px !important;
             margin-left: -40px !important;
-            
-            /* 重新套用浮動動畫 */
             animation: crayonFloat 1.5s ease-in-out infinite !important;
             opacity: 1 !important;
         }
 
-        /* 🌟 強力隱藏 Spine 預設的轉圈圈內部元件 */
         .spine-player-loading > div, 
         .spine-player-loading::before, 
         .spine-player-loading::after {
@@ -99,11 +88,11 @@
             content: none !important;
         }
 
-        /* 隱藏進度條 */
         .spine-player-progress, .spine-player-progress-bar {
             display: none !important;
             opacity: 0 !important;
         }
+
         .spine-player-loading-custom {
             position: absolute;
             top: 50%; left: 50%;
@@ -114,14 +103,17 @@
             animation: crayonFloat 1.5s ease-in-out infinite;
             z-index: 10;
         }
+
         @keyframes crayonFloat {
             0%, 100% { transform: translateY(0) scale(1); filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.5)); }
             50% { transform: translateY(-10px) scale(1.05); filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.9)); }
         }
-        /* 背景動態縮放動畫 */
+
+        /* 🌟 角色展示框的動態縮放背景 (LOBBY_BACKGROUNDS) */
         .animated-bg {
             position: relative;
             z-index: 1; 
+            /* 移除實體背景色交給子元素或原本的背景處理，以防遮擋 */
         }
         .animated-bg::before {
             content: "";
@@ -132,11 +124,11 @@
             background-position: center;
             background-repeat: no-repeat;
             z-index: -1; 
-            animation: slowZoom 10s ease-in-out infinite alternate; 
+            animation: slowZoom 12s ease-in-out infinite alternate; /* 放慢一點點更優雅 */
         }
         @keyframes slowZoom {
             0% { transform: scale(1); }
-            100% { transform: scale(1.30); }
+            100% { transform: scale(1.25); } /* 微微縮小一點放大比例，防邊緣穿幫 */
         }
     </style>
 </head>
@@ -152,7 +144,7 @@
 
         <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6 border-b-2 border-amber-200 dark:border-slate-700 pb-6 mb-6">
             <div class="flex flex-col items-center gap-3 flex-shrink-0">
-                <div id="charAvatar" class="w-80 h-[400px] sm:w-80 sm:h-96 rounded-2xl border-4 border-amber-500 dark:border-slate-600 bg-slate-100 dark:bg-slate-800 overflow-hidden shadow-md flex items-center justify-center text-3xl font-bold text-amber-900 dark:text-amber-100 relative cursor-pointer group"></div>
+                <div id="charAvatar" class="w-80 h-[400px] sm:w-80 sm:h-96 rounded-2xl border-4 border-amber-500 dark:border-slate-600 overflow-hidden shadow-md flex items-center justify-center text-3xl font-bold text-amber-900 dark:text-amber-100 relative cursor-pointer group animated-bg bg-transparent"></div>
                 <div id="costumeButtonsContainer" class="flex flex-wrap justify-center gap-2 hidden w-full max-w-[320px]"></div>
             </div>
             
@@ -188,7 +180,7 @@
                         </div>
                     </div>
                 </div>
-                </div>
+            </div>
         </div>
 
         <div class="mb-8">
@@ -351,7 +343,6 @@
             `;
         };
 
-        // 🌟 新增：帶有 Hover 特效的大圖示 (供料理與打工獎勵使用)
         function createBigHoverIcon(containerId, imgUrl, tooltipText) {
             const container = document.getElementById(containerId);
             if (!imgUrl) {
@@ -371,12 +362,10 @@
             `;
         }
 
-        // 🌟 新增：渲染角色星數 (稀有度)
         function renderStars(charName) {
             const starsContainer = document.getElementById('charStars');
             if (!starsContainer) return;
 
-            // 預設為 3 星
             let grade = "3"; 
             if (typeof GRADE_MAP !== 'undefined' && GRADE_MAP[charName]) {
                 grade = GRADE_MAP[charName];
@@ -388,65 +377,48 @@
             }
 
             if (starIconUrl) {
-                // 顯示對應的星數圖片
                 starsContainer.innerHTML = `<img src="${starIconUrl}" class="h-6 sm:h-7 object-contain drop-shadow-md" alt="${grade} Stars">`;
             } else {
-                // 找不到圖片的備用方案：印出文字星星
                 const starCount = parseInt(grade) || 3;
                 starsContainer.innerHTML = `<span class="text-amber-500 dark:text-amber-400 text-xl sm:text-2xl tracking-widest drop-shadow-sm">${'★'.repeat(starCount)}</span>`;
             }
         }
 
-        // 🌟 新增：渲染額外情報 (簡介、CV、料理、打工)
-        // 🌟 新增：渲染額外情報 (簡介、CV、料理、打工)
         function renderExtraInfo(charName) {
-            // 1. 渲染 CV (找不到預設 ???)
             const cvText = (typeof CV_MAP !== 'undefined' && CV_MAP[charName]) ? CV_MAP[charName] : "???";
             document.getElementById('charCV').innerText = cvText;
 
-            // ==========================================
-            // ✨ 修正區塊：渲染簡介 (字體大小分層排版)
-            // ==========================================
             const introKey = typeof SPINE_MAP !== 'undefined' && SPINE_MAP[charName] ? SPINE_MAP[charName] : charName;
             const safeLang = (typeof INTRO_MAP !== 'undefined' && INTRO_MAP[window.currentLang]) ? window.currentLang : 'zh-TW';
             let introText = "（資料建檔中...）";
             
             if (typeof INTRO_MAP !== 'undefined' && INTRO_MAP[safeLang] && INTRO_MAP[safeLang][introKey]) {
                 let rawText = INTRO_MAP[safeLang][introKey];
-                let lines = rawText.split('\n'); // 透過換行符號將文字切成陣列
+                let lines = rawText.split('\n');
                 
                 if (lines.length >= 3) {
-                    // 第一行：最大、最粗 (稱號)
                     let titleText = `<span class="block text-lg sm:text-xl font-black text-amber-950 dark:text-amber-300 mb-1">${lines[0]}</span>`;
-                    // 第二行：稍微大一點、粗體 (名言/台詞)
                     let quoteText = `<span class="block text-base sm:text-lg font-bold text-amber-700 dark:text-amber-500 mb-3">${lines[1]}</span>`;
-                    // 第三行以後：一般大小，並加一條淡淡的頂部虛線分隔 (詳細介紹)
                     let descText = `<span class="block text-sm text-gray-700 dark:text-gray-300 leading-relaxed border-t border-dashed border-amber-200 dark:border-slate-600 pt-3">${lines.slice(2).join('<br>')}</span>`;
-                    
                     introText = titleText + quoteText + descText;
                 } else {
-                    // 如果沒有標準的3行格式，則退回原來的直接換行顯示
                     introText = rawText.replace(/\n/g, '<br>');
                 }
             }
             document.getElementById('charIntro').innerHTML = introText;
-            // ==========================================
 
-            // 3. 處理料理與獎勵 (從 REWARD_MAP 取中文 Key -> 找 ICON_MAP -> 找 LANG_DICT 翻譯)
             let foodUrl = "";
             let rewardUrl = "";
             let foodDisplay = "未知料理";
             let rewardDisplay = "未知獎勵";
             
             if (typeof REWARD_MAP !== 'undefined' && REWARD_MAP[charName]) {
-                const foodKey = REWARD_MAP[charName].food;     // e.g. "秘密葡萄汁"
-                const rewardKey = REWARD_MAP[charName].reward; // e.g. "金幣"
+                const foodKey = REWARD_MAP[charName].food;     
+                const rewardKey = REWARD_MAP[charName].reward; 
 
-                // 透過 getI18n 翻譯，若無翻譯則顯示原本的中文 Key
                 foodDisplay = getI18n(foodKey) !== foodKey ? getI18n(foodKey) : foodKey;
                 rewardDisplay = getI18n(rewardKey) !== rewardKey ? getI18n(rewardKey) : rewardKey;
 
-                // 找尋圖片連結
                 if (typeof ICON_MAP !== 'undefined') {
                     foodUrl = ICON_MAP[foodKey] || "";
                     rewardUrl = ICON_MAP[rewardKey] || "";
@@ -472,19 +444,16 @@
             );
         };
 
-        // 🌟 新增：根據種族設定背景圖
         const updateRaceBackground = (raceName) => {
             const bgDiv = document.getElementById('raceBackground');
             if (bgDiv && typeof CHAR_BACKGROUNDS !== 'undefined' && CHAR_BACKGROUNDS[raceName]) {
                 const bgUrl = CHAR_BACKGROUNDS[raceName];
-                // 💡 修改這裡：改用傳統的雙引號與加號字串串接，避免特殊符號解析錯誤
                 bgDiv.style.backgroundImage = "url('" + bgUrl + "')";
             } else {
-                // 如果找不到該種族的背景 (或發生錯誤)，就清空背景
                 if(bgDiv) bgDiv.style.backgroundImage = "none";
             }
         };
-        // 🌟 新增：艾爾丁名單與身份圖示網址
+
         const ELDAIN_LIST = ['綾', '庫洛艾', '艾皮卡', '伊德', '羽依', '薇薇', '錫安', '優米'];
         const ICON_ELDAIN = "https://i.postimg.cc/NMQHVyPQ/Pick-Perconality-Icon-Eldain-Hero.png";
         const ICON_NORMAL = "https://i.postimg.cc/ZRJdg9D4/Pick-Perconality-Icon-Normal-Hero.png";
@@ -540,7 +509,6 @@
                 window.globalSpinePlayer = null;
             }
             
-            // 💡 這裡手動插入金蠟筆作為載入中的圖案
             avatarBox.innerHTML = '<div class="spine-player-loading-custom"></div>';
 
             window.globalSpinePlayer = new spine.SpinePlayer(avatarBox, {
@@ -551,16 +519,14 @@
                 backgroundColor: "#00000000", 
                 alpha: true,
                 showControls: false,
-                showLoading: false, // 🚫 關閉原廠載入圖案
+                showLoading: false, 
                 viewport: { x: -400, y: 0, width: 800, height: 1000 },
         
                 success: function (player) {
-                    // 載入成功後，把我們自訂的蠟筆刪掉
                     const loader = avatarBox.querySelector('.spine-player-loading-custom');
                     if (loader) loader.remove();
 
                     window.myPlayer = player;
-                    // ...
 
                     let activeFaceBone = null; 
                     let initialBoneX = 0;
@@ -1129,7 +1095,6 @@
             
             const displayName = getI18n(currentCharData.name);
             
-            // 🌟 新增：判斷是否為艾爾丁，並在名字後方加上 150% 大小的圖示
             const isEldain = ELDAIN_LIST.includes(currentCharData.name);
             const identityIconUrl = isEldain ? ICON_ELDAIN : ICON_NORMAL;
             document.getElementById('charName').innerHTML = `${displayName} <img src="${identityIconUrl}" class="inline-block h-[1.5em] align-middle ml-1 -mt-1 drop-shadow-sm" alt="Identity">`;
@@ -1146,7 +1111,7 @@
             updateTag('charPosition', posLabel, currentCharData.position, 'position');
             updateTag('charJob', jLabel, currentCharData.job, 'job');
             updateRaceBackground(currentCharData.race);
-            // 🚀 重新渲染額外情報與星數
+            
             renderStars(currentTargetName);
             renderExtraInfo(currentTargetName);
 
@@ -1183,9 +1148,18 @@
             currentCharData = INITIAL_DATA.find(c => c.name.trim() === currentTargetName);
             if (!currentCharData) { renderError(`${getI18n('error_char_not_found') || "❌ 找不到角色資料: "}${currentTargetName}`); return; }
 
+            // 🌟 新增：在此處隨機抽取 LOBBY_BACKGROUNDS 並套用至 #charAvatar 
+            const avatarBox = document.getElementById('charAvatar');
+            if (typeof LOBBY_BACKGROUNDS !== 'undefined' && LOBBY_BACKGROUNDS.length > 0) {
+                const randomIndex = Math.floor(Math.random() * LOBBY_BACKGROUNDS.length);
+                const randomBgUrl = LOBBY_BACKGROUNDS[randomIndex];
+                avatarBox.style.setProperty('--bg-image', `url('${randomBgUrl}')`);
+            } else {
+                avatarBox.style.setProperty('--bg-image', `none`);
+            }
+
             const displayName = getI18n(currentCharData.name);
             
-            // 🌟 新增：判斷是否為艾爾丁，並在名字後方加上 150% 大小的圖示
             const isEldain = ELDAIN_LIST.includes(currentCharData.name);
             const identityIconUrl = isEldain ? ICON_ELDAIN : ICON_NORMAL;
             document.getElementById('charName').innerHTML = `${displayName} <img src="${identityIconUrl}" class="inline-block h-[1.5em] align-middle ml-1 -mt-1 drop-shadow-sm" alt="Identity">`;
@@ -1201,7 +1175,6 @@
             updateTag('charJob', jLabel, currentCharData.job, 'job');
             updateRaceBackground(currentCharData.race);
             
-            // 🚀 初次渲染額外情報與星數
             renderStars(currentTargetName);
             renderExtraInfo(currentTargetName);
 
@@ -1290,7 +1263,6 @@
                 }, 100);
 
             } else {
-                const avatarBox = document.getElementById('charAvatar');
                 const imgUrl = typeof IMAGE_MAP !== 'undefined' ? IMAGE_MAP[`avatar_${currentCharData.name}`] : '';
                 if (imgUrl) {
                     avatarBox.innerHTML = `<img src="${imgUrl}" class="w-full h-full object-cover">`;
