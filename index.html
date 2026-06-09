@@ -179,12 +179,43 @@
         #rim-live-container .spine-player-canvas {
             background-color: transparent !important;
         }
+        /* ==============================================================
+            🖍️ 跑道金蠟筆特效
+           ============================================================== */
+        .track-crayon {
+            position: absolute;
+            width: 23px; 
+            height: 18px;
+            background-image: url('https://i.postimg.cc/qvjNxZzg/golden-crayon.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            bottom: 35px; /* 貼齊跑道底部 */
+            z-index: 50;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+            animation: crayonIdle 2s ease-in-out infinite;
+            transition: transform 0.6s ease-out, opacity 0.5s ease-out, filter 0.6s ease-out;
+            opacity: 0;
+        }
+
+        /* 蠟筆被吃掉時的特效（放大、往上飄、變透明、發光） */
+        .crayon-collected {
+            /* 🌟 關鍵修復：強制停止原地浮動，讓手機版能順利往上飄 */
+            animation: none !important; 
+            transform: scale(1.8) translateY(-40px) !important;
+            opacity: 0 !important;
+            filter: drop-shadow(0 0 15px rgba(251, 191, 36, 1));
+        }
+        @keyframes crayonIdle {
+            0%, 100% { transform: translateY(0) rotate(-5deg); }
+            50% { transform: translateY(-10px) rotate(5deg); filter: drop-shadow(0 8px 6px rgba(0,0,0,0.2)); }
+        }
     </style>
 </head>
 <body class="p-3 sm:p-6 md:p-8 text-gray-800 dark:text-gray-100">
     
     <!-- 🌟 跑酷專屬軌道 (原生面朝左，點擊互動版) -->
-    <div class="fixed top-0 left-0 w-full h-[150px] z-[100] pointer-events-none overflow-hidden">
+    <div id="runnerArea" class="fixed top-0 left-0 w-full h-[150px] z-[100] pointer-events-none overflow-hidden">
         <div id="runnerTrack" class="absolute top-0 w-[250px] h-[150px] pointer-events-auto cursor-pointer" style="right: 0px; transform: translateX(0); opacity: 0;">
             <div style="width: 100%; height: 100%; transform: scale(0.75); transform-origin: center;">
                 <div id="topRunnerContainer" class="w-full h-full relative"></div>
@@ -192,7 +223,7 @@
         </div>
     </div>
     <div id="loader" class="fixed inset-0 bg-[#fcf8f2] dark:bg-slate-900 z-[9999] flex items-center justify-center">
-        <div class="animate-bounce text-2xl">🖍️</div>
+        <img src="https://i.postimg.cc/qvjNxZzg/golden-crayon.png" class="animate-bounce h-10 w-auto object-contain drop-shadow-md" alt="Loading...">
     </div>
     <div class="max-w-7xl mx-auto">
         
@@ -1463,6 +1494,85 @@
                     console.error("Spine 渲染錯誤:", reason);
                 } 
             }); 
+        });
+    </script>
+    <script>
+        // ==========================================
+        // 🖍️ 金蠟筆收集系統 (跑道互動)
+        // ==========================================
+        const runnerAreaId = 'runnerArea'; // 我們在步驟1加的外層容器
+        const chibiId = 'runnerTrack';     // 你原本會移動的小人容器
+
+        let activeCrayons = [];
+
+        function spawnCrayonOnTrack() {
+            const area = document.getElementById(runnerAreaId);
+            if (!area) return;
+
+            const crayon = document.createElement('div');
+            crayon.className = 'track-crayon';
+            
+            // 隨機生成在畫面的 X 軸位置 (15% 到 85% 之間，避免太靠邊緣)
+            const randomX = Math.floor(Math.random() * 70) + 15;
+            crayon.style.left = `${randomX}%`;
+            
+            area.appendChild(crayon);
+            activeCrayons.push(crayon);
+
+            // 稍微延遲後淡入 (產生平滑出現的感覺)
+            requestAnimationFrame(() => {
+                crayon.style.opacity = '1';
+            });
+
+            // 隨機 5 到 12 秒生成下一支蠟筆
+            const nextSpawnTime = Math.random() * 7000 + 5000;
+            setTimeout(spawnCrayonOnTrack, nextSpawnTime);
+        }
+
+        function checkCrayonCollision() {
+            const chibi = document.getElementById(chibiId);
+            
+            // 確保小人存在，且沒有處於隱藏狀態 (opacity > 0 代表小人正在場上跑)
+            const isChibiVisible = chibi && window.getComputedStyle(chibi).opacity > 0;
+
+            if (isChibiVisible && activeCrayons.length > 0) {
+                // 取得小人當下在畫面中的精準座標
+                const chibiRect = chibi.getBoundingClientRect();
+                // 抓取小人的中心點 (可以稍微往左偏移一點點，對齊小人的臉)
+                const chibiCenterX = chibiRect.left + (chibiRect.width / 2) - 20;
+
+                activeCrayons.forEach((crayon, index) => {
+                    const crayonRect = crayon.getBoundingClientRect();
+                    const crayonCenterX = crayonRect.left + (crayonRect.width / 2);
+
+                    // 計算 X 軸距離
+                    const distance = Math.abs(chibiCenterX - crayonCenterX);
+
+                    // 碰撞判定：距離小於 45px 視為吃到蠟筆
+                    if (distance < 45) {
+                        // 播放吃掉的特效
+                        crayon.classList.add('crayon-collected');
+                        
+                        // 從陣列中移除，不再判定碰撞
+                        activeCrayons.splice(index, 1);
+
+                        // 特效播完後徹底移除 DOM 元素
+                        setTimeout(() => {
+                            crayon.remove();
+                        }, 600);
+                    }
+                });
+            }
+
+            // 無限循環持續偵測
+            requestAnimationFrame(checkCrayonCollision);
+        }
+
+        // 啟動系統
+        window.addEventListener('load', () => {
+            // 延遲 4 秒後生成第一支蠟筆，配合小人進場
+            setTimeout(spawnCrayonOnTrack, 4000);
+            requestAnimationFrame(checkCrayonCollision);
         });
     </script>
     
