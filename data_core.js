@@ -232,8 +232,32 @@ const INITIAL_DATA = [
     { name: "萊薇", personality: "憂鬱", race: "魔女", position: "中排", job: "輸出", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] },
     { name: "喬菲", personality: "憂鬱", race: "獸人", position: "中排", job: "輸出", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
     { name: "寧琉", personality: "狂亂", race: "妖精", position: "前排", job: "輔助", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-    { name: "莉絲蒂", personality: "憂鬱", race: "精靈", position: "後排", job: "輸出", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] }
+    { name: "莉絲蒂", personality: "憂鬱", race: "精靈", position: "後排", job: "輸出", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: [""] }
 ];
+
+const CV_MAP = {
+    "洛涅": "田向結月", "薇薇": "新井里美", "艾爾芬": "木野日菜", "錫安": "上坂すみれ", "伊弗利特": "安堂ななこ", "伊德": "内田真礼", "佩佩": "上田瞳", "佩斯塔": "仁見紗綾",
+    "修帕": "大空直美", "傑德": "行成とあ", "優米": "高野麻里佳", "劉美美": "兼田めぐみ", "加薇雅": "大谷衣里奈", "卡洛特": "牧野由依", "卡蓮": "咲谷怜奈", "喬菲": "漆山ゆうき",
+    "基狄恩": "鈴木愛唯", "大師2號": "田中音緒", "大木頭": "上田瞳", "奈雅": "佐伯伊織", "奶油": "長月あおい", "布蘭切": "和氣あず未", "希拉": "大木咲絵子", "希爾德": "秦佐和子",
+    "希瑟圖": "野口瑠璃子", "希菲爾": "葵あずさ", "帕特拉": "大園朱花子", "庫洛艾": "田村ゆかり", "康娜": "岡本美歌", "愛麗絲": "小見川千明", "斑尼": "熊崎愛", "斯皮奇": "小坂井祐莉絵",
+    "斯諾奇": "高柳知葉", "柯米": "河瀨茉希", "桃桃": "平塚紗依", "梅森": "赤堀実華琉", "梅露娜": "美坂朱音", "海莉": "衣川里佳", "珀榭": "優木かな", "琳": "渕上舞",
+    "瑟琳娜": "石上靜香", "瑪約": "船戸ゆり絵", "瑪麗": "野村真悠華", "皮可菈": "小澤亜李", "盧波": "木村千咲", "米雪": "咲咲谷怜奈", "綾": "日笠陽子", "羽伊": "長縄まりあ",
+    "艾斯皮": "內海まり", "艾琳娜": "塚田悠衣", "艾皮卡": "日高里菜", "艾舒爾": "長尾玲奈", "艾蜜莉雅": "中林新夏", "芙莉可": "百瀨帆南", "茱蜜": "山田聖奈", "莉茲": "藤本侑里",
+    "莎莉": "漆山ゆうき", "萊薇": "上永紗也華", "蒂亞娜": "立花日菜", "謝蒂": "山城リアン", "貝魯": "若山なつみ", "貝麗塔": "松岡美里", "路德": "渡部惠子", "路易": "兼田めぐみ",
+    "阿萊特": "若山なつみ", "雷吉": "大園朱花子", "馬爾": "花咲心優", "泰達": "赤堀実華琉", "寧琉": "アンデルソンゆり子", "莉絲蒂": "黒沢ともよ"
+};
+
+const GRADE_MAP = {
+    "洛涅": "3", "薇薇": "3", "艾爾芬": "3", "錫安": "3", "伊弗利特": "3", "伊德": "3", "佩佩": "3", "佩斯塔": "3",
+    "修帕": "3", "傑德": "3", "優米": "3", "劉美美": "2", "加薇雅": "3", "卡洛特": "3", "卡蓮": "2", "喬菲": "2",
+    "基狄恩": "3", "大師2號": "2", "大木頭": "2", "奈雅": "3", "奶油": "3", "布蘭切": "3", "希拉": "3", "希爾德": "3",
+    "希瑟圖": "3", "希菲爾": "3", "帕特拉": "1", "庫洛艾": "3", "康娜": "3", "愛麗絲": "3", "斑尼": "Beni", "斯皮奇": "3",
+    "斯諾奇": "3", "柯米": "3", "桃桃": "3", "梅森": "1", "梅露娜": "2", "海莉": "3", "珀榭": "3", "琳": "3",
+    "瑟琳娜": "3", "瑪約": "3", "瑪麗": "2", "皮可菈": "3", "盧波": "3", "米雪": "1", "綾": "3", "羽伊": "3",
+    "艾斯皮": "2", "艾琳娜": "3", "艾皮卡": "3", "艾舒爾": "3", "艾蜜莉雅": "3", "芙莉可": "3", "茱蜜": "2", "莉茲": "3",
+    "莎莉": "2", "萊薇": "3", "蒂亞娜": "3", "謝蒂": "3", "貝魯": "1", "貝麗塔": "3", "路德": "3", "路易": "1",
+    "阿萊特": "2", "雷吉": "2", "馬爾": "3", "泰達": "2", "寧琉": "3", "莉絲蒂": "3"
+};
 
 // ------------------------------------------
 // 3. 圖標與圖片對應表
@@ -246,7 +270,8 @@ const ICON_MAP = {
     "personality_天真": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/personality%2FPickUpPersonality_Naive.webp?alt=media&token=5439c0fb-4c8e-4097-a868-5534180db07f", "personality_活潑": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/personality%2FPickUpPersonality_Jolly.webp?alt=media&token=701ad789-557c-4de7-ac4d-fc42e6b82cfb", "personality_冷靜": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/personality%2FPickUpPersonality_Cool.webp?alt=media&token=d93be2cb-d36b-4923-badd-5c16557cb844", "personality_狂亂": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/personality%2FPickUpPersonality_Mad.webp?alt=media&token=47f62ae9-38a3-489d-92fc-f034b6249cbe", "personality_憂鬱": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/personality%2FPickUpPersonality_Gloomy.webp?alt=media&token=e22b91ef-4364-4055-986b-bad568c484c2",
     "race_精靈": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/race%2Fjing-ling.webp?alt=media&token=4d4e6dff-b29c-42ea-a99c-231dd74a8d2c", "race_龍族": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/race%2Flong-zu.webp?alt=media&token=9045bd8a-fd98-412c-a0ef-2fb57678776d", "race_妖精": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/race%2Fyao-jing.webp?alt=media&token=02063405-85bd-48d5-91c3-5581a9e331a2", "race_魔靈": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/race%2Fmo-ling.webp?alt=media&token=e7d63700-cfbe-4c98-8ea5-57ff4bdbe413", "race_獸人": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/race%2Fshou-ren.webp?alt=media&token=dc1ffcdc-3cc6-4e0c-802b-b84cf3880415", "race_幽靈": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/race%2Fyou-ling.webp?alt=media&token=5a07255e-9cc2-4a6e-9b66-9c828cba31c3", "race_魔女": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/race%2Fmo-nu.webp?alt=media&token=f35ec5cd-7f58-4c98-9057-198160095847", "race_???": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/race%2Funknown.webp?alt=media&token=ce9dc20a-eb6c-4030-aa4f-d685ce01b7ee",
     "position_前排": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/position%2Fqian-pai.webp?alt=media&token=2d783ffa-a9d0-439a-ad9b-6312dd5b7917", "position_中排": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/position%2Fzhong-pai.webp?alt=media&token=80552f69-ee52-48d7-a6b4-9c46e01f545d", "position_後排": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/position%2Fhou-pai.webp?alt=media&token=8a03dca6-bc7f-443d-a0f1-1a193c91e7da",
-    "job_肉盾": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/job%2Frou-dun.webp?alt=media&token=168d2a45-3f81-4deb-a47b-f750404d2428", "job_輔助": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/job%2Ffu-zhu.webp?alt=media&token=8076d16b-716f-4216-bcd4-c1f9930dc1d3", "job_輸出": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/job%2Fshu-chu.webp?alt=media&token=d7bcfc6c-c908-4e6c-86e4-967cc5ba92fe"
+    "job_肉盾": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/job%2Frou-dun.webp?alt=media&token=168d2a45-3f81-4deb-a47b-f750404d2428", "job_輔助": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/job%2Ffu-zhu.webp?alt=media&token=8076d16b-716f-4216-bcd4-c1f9930dc1d3", "job_輸出": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/job%2Fshu-chu.webp?alt=media&token=d7bcfc6c-c908-4e6c-86e4-967cc5ba92fe",
+    "grade_3":"https://i.postimg.cc/sDqK3Vk3/3STAR.png", "grade_2":"https://i.postimg.cc/wTZF96Cx/2STAR.png", "grade_1":"https://i.postimg.cc/TYFQTRzd/1STAR.png"
 };
 const IMAGE_MAP = {
     "personality_天真": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/personality%2FPickUpPersonality_Naive.webp?alt=media&token=5439c0fb-4c8e-4097-a868-5534180db07f", "personality_活潑": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/personality%2FPickUpPersonality_Jolly.webp?alt=media&token=701ad789-557c-4de7-ac4d-fc42e6b82cfb", "personality_冷靜": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/personality%2FPickUpPersonality_Cool.webp?alt=media&token=d93be2cb-d36b-4923-badd-5c16557cb844", "personality_狂亂": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/personality%2FPickUpPersonality_Mad.webp?alt=media&token=47f62ae9-38a3-489d-92fc-f034b6249cbe", "personality_憂鬱": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/personality%2FPickUpPersonality_Gloomy.webp?alt=media&token=e22b91ef-4364-4055-986b-bad568c484c2",
