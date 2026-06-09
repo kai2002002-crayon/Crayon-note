@@ -270,7 +270,11 @@
                 }[tag])
             );
         };
-
+        // 🌟 新增：艾爾丁名單與身份圖示網址
+        const ELDAIN_LIST = ['綾', '庫洛艾', '艾皮卡', '伊德', '羽依', '薇薇', '錫安', '優米'];
+        const ICON_ELDAIN = "https://i.postimg.cc/NMQHVyPQ/Pick-Perconality-Icon-Eldain-Hero.png";
+        const ICON_NORMAL = "https://i.postimg.cc/ZRJdg9D4/Pick-Perconality-Icon-Normal-Hero.png";
+        
         let currentTargetName = "";
         let currentCharData = null;
         let globalSpinePlayer = null;
@@ -921,7 +925,12 @@
             
             // 2. 重新渲染角色名稱與標題
             const displayName = getI18n(currentCharData.name);
-            document.getElementById('charName').innerText = displayName;
+            
+            // 🌟 新增：判斷是否為艾爾丁，並在名字後方加上 150% 大小的圖示
+            const isEldain = ELDAIN_LIST.includes(currentCharData.name);
+            const identityIconUrl = isEldain ? ICON_ELDAIN : ICON_NORMAL;
+            document.getElementById('charName').innerHTML = `${displayName} <img src="${identityIconUrl}" class="inline-block h-[1.5em] align-middle ml-1 -mt-1 drop-shadow-sm" alt="Identity">`;
+            
             document.title = `${displayName} - ${getI18n('page_title_char_detail') || '詳細資料'}`;
 
             // 3. 重新渲染上方屬性標籤 (性格、種族等)
@@ -978,7 +987,11 @@
             if (!currentCharData) { renderError(`${getI18n('error_char_not_found') || "❌ 找不到角色資料: "}${currentTargetName}`); return; }
 
             const displayName = getI18n(currentCharData.name);
-            document.getElementById('charName').innerText = displayName;
+            
+            // 🌟 新增：判斷是否為艾爾丁，並在名字後方加上 150% 大小的圖示
+            const isEldain = ELDAIN_LIST.includes(currentCharData.name);
+            const identityIconUrl = isEldain ? ICON_ELDAIN : ICON_NORMAL;
+            document.getElementById('charName').innerHTML = `${displayName} <img src="${identityIconUrl}" class="inline-block h-[1.5em] align-middle ml-1 -mt-1 drop-shadow-sm" alt="Identity">`;
 
             let pLabel = getI18n('stats_personality'); if(pLabel === 'stats_personality') pLabel = '性格';
             let rLabel = getI18n('stats_race'); if(rLabel === 'stats_race') rLabel = '種族';
