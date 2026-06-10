@@ -113,7 +113,6 @@
         .animated-bg {
             position: relative;
             z-index: 1; 
-            /* 移除實體背景色交給子元素或原本的背景處理，以防遮擋 */
         }
         .animated-bg::before {
             content: "";
@@ -124,11 +123,11 @@
             background-position: center;
             background-repeat: no-repeat;
             z-index: -1; 
-            animation: slowZoom 12s ease-in-out infinite alternate; /* 放慢一點點更優雅 */
+            animation: slowZoom 12s ease-in-out infinite alternate;
         }
         @keyframes slowZoom {
             0% { transform: scale(1); }
-            100% { transform: scale(1.25); } /* 微微縮小一點放大比例，防邊緣穿幫 */
+            100% { transform: scale(1.25); } 
         }
     </style>
 </head>
@@ -163,18 +162,18 @@
                 <div class="mt-6 pt-5 border-t border-dashed border-amber-200 dark:border-slate-600 space-y-4">
                     <p id="charIntro" class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed font-medium bg-amber-50/50 dark:bg-slate-800/50 p-4 rounded-xl border border-amber-100 dark:border-slate-700 shadow-sm text-left"></p>
                     
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left bg-white/50 dark:bg-slate-800/30 p-4 rounded-xl border border-gray-100 dark:border-slate-700">
-                        <div class="flex items-center gap-2 text-sm sm:col-span-2 border-b border-gray-100 dark:border-slate-700 pb-2">
+                    <div class="flex flex-col gap-4 text-left bg-white/50 dark:bg-slate-800/30 p-4 rounded-xl border border-gray-100 dark:border-slate-700">
+                        <div class="flex items-center gap-2 text-sm border-b border-gray-100 dark:border-slate-700 pb-2">
                             <span class="font-black text-amber-800 dark:text-amber-400 shrink-0" data-i18n="info_cv">🎙️ CV：</span>
                             <span id="charCV" class="text-gray-800 dark:text-gray-200 font-bold text-base"></span>
                         </div>
-                        
-                        <div class="flex items-center gap-3">
+    
+                        <div class="flex flex-col gap-2">
                             <span class="font-black text-amber-800 dark:text-amber-400 shrink-0" data-i18n="info_food">🍲 喜好料理：</span>
-                            <div id="charFoodIcon"></div>
+                            <div id="charFoodIcon" class="flex flex-wrap gap-2 justify-start"></div>
                         </div>
-                        
-                        <div class="flex items-center gap-3">
+    
+                        <div class="flex items-center gap-3 pt-2 border-t border-gray-100 dark:border-slate-700">
                             <span class="font-black text-amber-800 dark:text-amber-400 shrink-0" data-i18n="info_job_reward">💰 打工獎勵：</span>
                             <div id="charRewardIcon"></div>
                         </div>
@@ -345,6 +344,7 @@
 
         function createBigHoverIcon(containerId, imgUrl, tooltipText) {
             const container = document.getElementById(containerId);
+            if (!container) return;
             if (!imgUrl) {
                 container.innerHTML = `<span class="text-xs text-gray-400 font-bold px-2 py-1 bg-gray-100 dark:bg-slate-700 rounded-md">無圖片</span>`;
                 return;
@@ -384,6 +384,14 @@
             }
         }
 
+        // 🌟 新增安全獲取食物圖示的輔助函式，兼容字串與物件格式
+        function getSafeFoodIconUrl(foodKey) {
+            if (typeof FOOD_ICON !== 'undefined' && FOOD_ICON[foodKey]) {
+                return typeof FOOD_ICON[foodKey] === 'object' ? FOOD_ICON[foodKey].url : FOOD_ICON[foodKey];
+            }
+            return "";
+        }
+
         function renderExtraInfo(charName) {
             const cvText = (typeof CV_MAP !== 'undefined' && CV_MAP[charName]) ? CV_MAP[charName] : "???";
             document.getElementById('charCV').innerText = cvText;
@@ -407,25 +415,87 @@
             }
             document.getElementById('charIntro').innerHTML = introText;
 
-            let foodUrl = "";
+            // --- 處理喜好料理 ---
+            // --- 修正後的料理資料讀取 ---
+           // --- 處理喜好料理 ---
+            const foodContainer = document.getElementById('charFoodIcon');
+            foodContainer.innerHTML = '';
+
+            const spineKey = typeof SPINE_MAP !== 'undefined' && SPINE_MAP[charName] ? SPINE_MAP[charName] : charName;
+            const foodData = (typeof FOOD_MAP !== 'undefined') ? FOOD_MAP[spineKey] : null;
+
+            if (foodData && foodData !== "無" && foodData !== "餐牌") {
+                let html = "";
+                let superFoods = [];
+                let specialFoods = [];
+
+                // 自動兼容各種常見的鍵值寫法
+                if (typeof foodData === 'object' && !Array.isArray(foodData)) {
+                    const superKeys = ['super', 'super_like', '超級', '超級喜好'];
+                    const specialKeys = ['special', 'special_like', '特別', '特別喜好'];
+
+                    superKeys.forEach(k => {
+                        if (foodData[k]) superFoods = superFoods.concat(Array.isArray(foodData[k]) ? foodData[k] : [foodData[k]]);
+                    });
+                    specialKeys.forEach(k => {
+                        if (foodData[k]) specialFoods = specialFoods.concat(Array.isArray(foodData[k]) ? foodData[k] : [foodData[k]]);
+                    });
+                }
+
+                // 渲染超級喜好
+                superFoods.forEach(foodName => {
+                    const imgUrl = getSafeFoodIconUrl(foodName);
+                    html += `
+                        <div class="w-12 h-12 sm:w-14 sm:h-14 bg-white dark:bg-slate-700 rounded-xl border-[3px] border-[#F06292] shadow-[0_0_8px_#ff00ff80] flex items-center justify-center overflow-hidden transition-transform duration-300 hover:scale-110">
+                            ${imgUrl ? `<img src="${imgUrl}" class="w-full h-full object-contain p-1 drop-shadow-sm">` : `<span class="text-[10px] text-gray-400 font-bold">${foodName}</span>`}
+                        </div>
+                    `;
+                });
+
+                // 渲染特別喜好
+                specialFoods.forEach(foodName => {
+                    const imgUrl = getSafeFoodIconUrl(foodName);
+                    html += `
+                        <div class="w-12 h-12 sm:w-14 sm:h-14 bg-white dark:bg-slate-700 rounded-xl border-[3px] border-[#00ff00] shadow-[0_0_8px_#00ff0080] flex items-center justify-center overflow-hidden transition-transform duration-300 hover:scale-110">
+                            ${imgUrl ? `<img src="${imgUrl}" class="w-full h-full object-contain p-1 drop-shadow-sm">` : `<span class="text-[10px] text-gray-400 font-bold">${foodName}</span>`}
+                        </div>
+                    `;
+                });
+
+                // 若非 object 格式，當作陣列處理
+                if (html === "" && Array.isArray(foodData)) {
+                    foodData.forEach(foodName => {
+                        const imgUrl = getSafeFoodIconUrl(foodName);
+                        html += `
+                            <div class="w-12 h-12 sm:w-14 sm:h-14 bg-white dark:bg-slate-700 rounded-xl border-[3px] border-amber-400 shadow-sm flex items-center justify-center overflow-hidden transition-transform duration-300 hover:scale-110">
+                                ${imgUrl ? `<img src="${imgUrl}" class="w-full h-full object-contain p-1 drop-shadow-sm">` : `<span class="text-[10px] text-gray-400 font-bold">${foodName}</span>`}
+                            </div>
+                        `;
+                    });
+                }
+                
+                foodContainer.innerHTML = html;
+
+            } else {
+                // 如果找不到資料，顯示餐牌
+                const placeholderUrl = getSafeFoodIconUrl("餐牌") || "https://i.postimg.cc/qtwD6bsq/Icon-Present.png"; 
+                foodContainer.innerHTML = `
+                    <div class="w-12 h-12 sm:w-14 sm:h-14 bg-gray-50 dark:bg-slate-700 rounded-xl border-2 border-gray-300 dark:border-slate-600 shadow-inner flex items-center justify-center overflow-hidden">
+                        <img src="${placeholderUrl}" alt="餐牌" class="w-3/4 h-3/4 object-contain opacity-50 grayscale">
+                    </div>
+                `;
+            }
+
+            // --- 處理打工獎勵 ---
             let rewardUrl = "";
-            let foodDisplay = "未知料理";
             let rewardDisplay = "未知獎勵";
-            
             if (typeof REWARD_MAP !== 'undefined' && REWARD_MAP[charName]) {
-                const foodKey = REWARD_MAP[charName].food;     
                 const rewardKey = REWARD_MAP[charName].reward; 
-
-                foodDisplay = getI18n(foodKey) !== foodKey ? getI18n(foodKey) : foodKey;
                 rewardDisplay = getI18n(rewardKey) !== rewardKey ? getI18n(rewardKey) : rewardKey;
-
                 if (typeof ICON_MAP !== 'undefined') {
-                    foodUrl = ICON_MAP[foodKey] || "";
                     rewardUrl = ICON_MAP[rewardKey] || "";
                 }
             }
-
-            createBigHoverIcon('charFoodIcon', foodUrl, foodDisplay);
             createBigHoverIcon('charRewardIcon', rewardUrl, rewardDisplay);
         }
 
