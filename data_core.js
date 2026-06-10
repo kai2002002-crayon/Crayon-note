@@ -364,6 +364,49 @@ const FOOD_ICON = {
     // 給 1 星角色使用的通用餐牌
     "餐牌": { ja: "メニュー", url: "https://i.postimg.cc/RFjzhf55/My-Home-Restaurant-Menu-Icon.png" }
 };
+
+const REWARD_ICON = {
+    // 🍕 食材類
+    "麵粉": { ja: "小麦粉", url: "https://i.postimg.cc/nLD2ZQkR/Icon-Food-Made-Low1.png" },
+    "雞蛋": { ja: "卵", url: "https://i.postimg.cc/wBm2HsVW/Icon-Food-Made-Low2.png" },
+    "家禽肉": { ja: "鶏肉", url: "https://i.postimg.cc/BvKps1gM/Icon-Food-Made-Low3.png" },
+    "水果": { ja: "果物", url: "https://i.postimg.cc/nLD2ZQkS/Icon-Food-Made-Low4.png" },
+    "巧克力": { ja: "チョコ", url: "https://i.postimg.cc/wBm2HsVb/Icon-Food-Made-Low5.png" },
+    "糖": { ja: "砂糖", url: "https://i.postimg.cc/zfg75Rjc/Icon-Food-Made-Low6.png" },
+    "牛肉": { ja: "牛肉", url: "https://i.postimg.cc/Ls1DRZTW/Icon-Food-Made-Low7.png" },
+    "魚": { ja: "魚", url: "https://i.postimg.cc/ZRzcqK7F/Icon-Food-Made-Low8.png" },
+    "堅硬的黑色果實": { ja: "黒くて硬い実", url: "https://i.postimg.cc/63x0Q5jf/Icon-Food-Made-Low9.png" },
+    "各式穀物": { ja: "雑穀", url: "https://i.postimg.cc/xCVRdTxP/Icon-Food-Made-Low10.png" },
+    "蔬菜": { ja: "野菜", url: "https://i.postimg.cc/tTG5gCS5/Icon-Food-Made-Low11.png" },
+    "蜂蜜": { ja: "蜜", url: "https://i.postimg.cc/0Q1fN2Wn/Icon-Food-Made-Low12.png" },
+    "百老師萬能醬料": { ja: "万能スパイス", url: "https://i.postimg.cc/rm2JpFng/Icon-Food-Made-Low13.png" },
+    "牛奶": { ja: "牛乳", url: "https://i.postimg.cc/Twv9PY7t/Icon-Food-Made-Low14.png" },
+    "米": { ja: "米", url: "https://i.postimg.cc/ZRzcqK7f/Icon-Food-Made-Low15.png" },
+    "起司": { ja: "チーズ", url: "https://i.postimg.cc/G2nQph77/Icon-Food-Made-Low16.png" },
+    "樹葉": { ja: "木の葉", url: "https://i.postimg.cc/fLQKbT2q/Icon-Food-Made-Low17.png" },
+    "巧克力米": { ja: "スプリンクル", url: "https://i.postimg.cc/RFxR0Vsb/Icon-Food-Made-Low18.png" },
+
+    // 🪵 素材類
+    "軟棉棉的樹木": { ja: "加工しやすい木", url: "https://i.postimg.cc/ZRPLvtXq/Icon-Made-Low1.png" },
+    "堅硬的石頭": { ja: "固い石", url: "https://i.postimg.cc/3RjZ05zR/Icon-Made-Low2.png" },
+    "細膩的鐵粉": { ja: "サラサラの鉄粉", url: "https://i.postimg.cc/SsLGYFHj/Icon-Made-Low3.png" },
+    "酥脆的金箔": { ja: "パリパリの金箔", url: "https://i.postimg.cc/V69F0Q2d/Icon-Made-Low4.png" },
+    "寶石碎片": { ja: "宝石の欠片", url: "https://i.postimg.cc/tTdznQ8Z/Icon-Made-Low5.png" },
+    "閃亮的玻璃": { ja: "キラキラのガラス", url: "https://i.postimg.cc/RF1TJ52W/Icon-Made-Low6.png" },
+    "黏膩的黏土": { ja: "やわらか粘土", url: "https://i.postimg.cc/rmG9RX7d/Icon-Made-Low7.png" },
+    "濕潤的紙漿": { ja: "湿っぽい紙の原料", url: "https://i.postimg.cc/mD3S1fKM/Icon-Made-Low9.png" },
+    "回收塑膠": { ja: "再生プラスチック", url: "https://i.postimg.cc/Y9NxLKT1/Icon-Made-Low10.png" },
+    "彩虹花汁": { ja: "虹の花の汁", url: "https://i.postimg.cc/wv5kR8nD/Icon-Made-Low12.png" },
+    "堅硬的碎布": { ja: "ごわごわの布切れ", url: "https://i.postimg.cc/0QGCKRhY/Icon-Made-Low13.png" },
+    "皮革樹葉": { ja: "レザーウッドの葉", url: "https://i.postimg.cc/j56hn0B6/Icon-Made-Low14.png" },
+    "柔軟的棉花": { ja: "ふわふわ綿", url: "https://i.postimg.cc/V69F0Q2B/Icon-Made-Low15.png" },
+    "槭樹樹液": { ja: "カエデの樹液", url: "https://i.postimg.cc/RhMLcpzW/Icon-Made-Low16.png" },
+    "眨眼墨水": { ja: "ウィンクウィンク", url: "https://i.postimg.cc/Hnp9QvCc/Icon-Made-Low18.png" },
+    "睡眠眼罩": { ja: "睡眠アイマスク", url: "https://i.postimg.cc/brz9QVjt/Icon-Made-Low20.png" },
+    "銅湯匙": { ja: "銅の匙", url: "https://i.postimg.cc/sxV4pHRS/Icon-Made-Low21.png" },
+    "尖銳的針": { ja: "尖った針", url: "https://i.postimg.cc/NFgk1Cwk/Icon-Made-Low25.png" },
+    "可彎曲金屬": { ja: "曲がったもの", url: "https://i.postimg.cc/QC8RBdFP/Icon-Food-Made-Low26.png" }
+};
 // ------------------------------------------
 // 4. Spine 與服裝對應表
 // ------------------------------------------
