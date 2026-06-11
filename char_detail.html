@@ -1160,7 +1160,7 @@
             }
         }
 
-        // 🌟 最終完美版：加入最高層級浮空與滑鼠穿透
+        // 🌟 最終完美版：加入最高層級浮空、滑鼠穿透與「多段連招自動接續」邏輯
         function loadSkillSpines(charName) {
             if (window.skillSpinePlayers && window.skillSpinePlayers.length > 0) {
                 window.skillSpinePlayers.forEach(p => p.dispose());
@@ -1180,16 +1180,12 @@
                 if (!container) return;
 
                 // 🌟 【排版魔法】強制將小人區塊拉到最頂層
-                container.style.position = "absolute"; // 讓他脫離原本的排版，直接浮空
-                container.style.zIndex = "999";        // 數字設到超大，保證在所有文字和背景之上
-                container.style.pointerEvents = "none"; // 🌟 滑鼠穿透：讓滑鼠點擊和反白可以穿過小人，不會擋到玩家選取文字！
-                container.style.minWidth = "240px";    // 確保框框夠大
+                container.style.position = "absolute"; 
+                container.style.zIndex = "999";        
+                container.style.pointerEvents = "none"; 
+                container.style.minWidth = "240px";    
                 container.style.minHeight = "240px";
-                container.style.transform = "translate(375px, 0px)"; //第一個參數是左右，第二個是上下,正數愈大愈右愈下
-                
-                // 依據你的版面，如果他沒有靠在右下角，可以取消下面兩行的註解：
-                // container.style.bottom = "5px"; 
-                // container.style.right = "5px";
+                container.style.transform = "translate(375px, 0px)"; 
 
                 const player = new spine.SpinePlayer(target.id, {
                     skelUrl: `./spine_sd_assets/${baseFolderKey}.skel.bytes`,
@@ -1202,18 +1198,17 @@
                     showControls: false, 
                     showLoading: false,
                     
-                    // 🌟 加上這段！固定攝影機大小，還原真實身高差
+                    // 🌟 固定攝影機大小，還原真實身高差
                     viewport: { 
-                        x: -500,        // 鏡頭 X 軸偏移 (通常是 width 的一半負數)
-                        y: -150,        // 鏡頭 Y 軸偏移 (控制小人的腳底要踩在哪裡，數字越負，小人位置越高)
-                        width: 1500,    // 📸 鏡頭寬度：決定小人大小的核心！
-                        height: 4500,   // 📸 鏡頭高度：數字【越大】，小人看起來越【小】
+                        x: -500,        
+                        y: -150,        
+                        width: 1500,    
+                        height: 4500,   
                         padLeft: "0%", padRight: "0%", padTop: "0%", padBottom: "0%",
                         transitionTime: 0 
                     },
 
                     success: function (player) {
-                        // ... 後面的程式碼完全不用動 ...
                         window.skillSpinePlayers.push(player);
 
                         // 強制畫布寬高與層級
@@ -1222,7 +1217,7 @@
                             canvas.style.width = '100%';
                             canvas.style.height = '100%';
                             canvas.style.position = 'relative';
-                            canvas.style.zIndex = '999'; // 畫布本體也拉到最頂層
+                            canvas.style.zIndex = '999'; 
                         }
 
                         // 套用皮膚
@@ -1235,42 +1230,79 @@
                             }
                         }
 
-                        // 取得動作
+                        // 取得所有動作
                         const allAnims = player.skeleton.data.animations.map(a => a.name);
+                        const hasIdle = allAnims.includes("Idle") ? "Idle" : null;
                         
+                        // 1. 篩選出符合前綴的動作 (如 Attack)
                         const regex = new RegExp(`^${target.prefix}`, 'i'); 
-                        let sequence = allAnims.filter(name => regex.test(name));
-                        sequence.sort((a, b) => {
-                            const numA = parseInt(a.replace(/\D/g, '') || '1');
-                            const numB = parseInt(b.replace(/\D/g, '') || '1');
-                            return numA - numB;
+                        let matchedAnims = allAnims.filter(name => regex.test(name));
+                        
+                        // 2. 智慧排序：確保 1_2 會排在 1_10 前面
+                        matchedAnims.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+
+                        // 3. 🌟 核心：連招自動分組邏輯
+                        let groups = [];
+                        let groupMap = {};
+                        
+                        matchedAnims.forEach(anim => {
+                            // 擷取最後一個底線前面的名稱作為分組基準 (例如 Skill1_1 -> Skill1)
+                            let lastIdx = anim.lastIndexOf('_');
+                            let baseName = lastIdx !== -1 ? anim.substring(0, lastIdx) : anim;
+                            
+                            if (!groupMap[baseName]) {
+                                groupMap[baseName] = [];
+                                groups.push(groupMap[baseName]); // 建立新群組並加入陣列
+                            }
+                            groupMap[baseName].push(anim); // 將動作塞入對應群組
                         });
 
-                        const targetAnim = sequence.length > 0 ? sequence[0] : null;
-                        const hasIdle = allAnims.includes("Idle") ? "Idle" : null;
+                        // 4. 🌟 執行多段連播邏輯
+                        if (groups.length > 0) {
+                            let currentGroupIndex = 0;
 
-                        // 輪播邏輯
-                        if (targetAnim) {
-                            setTimeout(() => {
-                                if (player.skeleton) {
-                                    player.animationState.setAnimation(0, targetAnim, false);
-                                    if (hasIdle) {
-                                        player.animationState.addAnimation(0, hasIdle, true, 0);
-                                    }
+                            // 定義播放一個「群組(連招)」的函數
+                            function playCurrentGroup() {
+                                if (!player.skeleton) return;
+                                const currentGroup = groups[currentGroupIndex];
+                                
+                                // 第 1 步：播放連招的第一段 (例如 Skill1_1)
+                                player.animationState.setAnimation(0, currentGroup[0], false);
+                                
+                                // 第 2 步：如果有後續段數 (例如 1_2, 1_3)，全部「排隊」接在後面
+                                for (let i = 1; i < currentGroup.length; i++) {
+                                    player.animationState.addAnimation(0, currentGroup[i], false, 0);
                                 }
+                                
+                                // 第 3 步：連招全數打完後，排隊進入 Idle
+                                if (hasIdle) {
+                                    player.animationState.addAnimation(0, hasIdle, true, 0);
+                                }
+                            }
+
+                            // 延遲 0.5 秒後打出第一套連招
+                            setTimeout(() => {
+                                playCurrentGroup();
                             }, 500);
 
+                            // 監聽動作播放完畢的事件
                             player.animationState.addListener({
                                 complete: function(entry) {
-                                    if (entry.animation.name === targetAnim) {
+                                    const currentGroup = groups[currentGroupIndex];
+                                    // 找出目前這套連招的「最後一個動作」 (例如 1_3)
+                                    const lastAnimInGroup = currentGroup[currentGroup.length - 1];
+                                    
+                                    // 只有當「最後一個動作」播完時，才觸發計時器換下一套
+                                    if (entry.animation.name === lastAnimInGroup) {
                                         setTimeout(() => {
                                             if (player.skeleton) {
-                                                player.animationState.setAnimation(0, targetAnim, false);
-                                                if (hasIdle) {
-                                                    player.animationState.addAnimation(0, hasIdle, true, 0);
-                                                }
+                                                // 輪替到下一個技能組 (例如從 Skill1 換到 Skill2)
+                                                currentGroupIndex++;
+                                                if (currentGroupIndex >= groups.length) currentGroupIndex = 0;
+                                                
+                                                playCurrentGroup();
                                             }
-                                        }, 2000); 
+                                        }, 2000); // 在 Idle 狀態下休息 2 秒再打下一套
                                     }
                                 }
                             });
