@@ -1202,6 +1202,19 @@
                     container.style.minHeight = "240px";
                     container.style.transform = "translate(375px, 0px)"; 
                 }
+                const desktopViewport = { 
+                    x: -500, y: -150, width: 1500, height: 4500, 
+                    padLeft: "0%", padRight: "0%", padTop: "0%", padBottom: "0%", transitionTime: 0
+                };
+                
+                // 📱 手機版專屬鏡頭 (數字比電腦版小 ＝ 鏡頭拉近 ＝ 小人變大！)
+                const mobileViewport = { 
+                    x: -300,        // 配合縮小的寬度微調 X 軸
+                    y: -100,        // 配合縮小的高度微調腳底 Y 軸
+                    width: 900,     // 🌟 數字調小，讓小人在手機上放大！
+                    height: 2700,   // 🌟 數字調小，讓小人在手機上放大！
+                    padLeft: "0%", padRight: "0%", padTop: "0%", padBottom: "0%", transitionTime: 0 
+                };
 
                 const player = new spine.SpinePlayer(target.id, {
                     // ... 後面的 SpinePlayer 設定完全不用動 ...
@@ -1215,15 +1228,8 @@
                     showControls: false, 
                     showLoading: false,
                     
-                    // 🌟 固定攝影機大小，還原真實身高差
-                    viewport: { 
-                        x: -500,        
-                        y: -150,        
-                        width: 1500,    
-                        height: 4500,   
-                        padLeft: "0%", padRight: "0%", padTop: "0%", padBottom: "0%",
-                        transitionTime: 0 
-                    },
+                    // 🔀 智慧判斷：如果是手機就用手機鏡頭，電腦就用電腦鏡頭
+                    viewport: isMobile ? mobileViewport : desktopViewport,
 
                     success: function (player) {
                         window.skillSpinePlayers.push(player);
