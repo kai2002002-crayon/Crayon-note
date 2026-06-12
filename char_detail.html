@@ -509,9 +509,11 @@
                     let html = "";
                     rewards.forEach((rewardKey, idx) => {
                         const rewardDisplay = getI18n(rewardKey) !== rewardKey ? getI18n(rewardKey) : rewardKey;
+                        
+                        // 🔥 改為從 REWARD_ICON 尋找圖示，並兼容字串與物件格式
                         let rewardUrl = "";
-                        if (typeof ICON_MAP !== 'undefined') {
-                            rewardUrl = ICON_MAP[rewardKey] || "";
+                        if (typeof REWARD_ICON !== 'undefined' && REWARD_ICON[rewardKey]) {
+                            rewardUrl = typeof REWARD_ICON[rewardKey] === 'object' ? REWARD_ICON[rewardKey].url : REWARD_ICON[rewardKey];
                         }
 
                         // 第一個使用螢光綠外框，其餘使用普通灰外框
