@@ -510,7 +510,7 @@
                     rewards.forEach((rewardKey, idx) => {
                         const rewardDisplay = getI18n(rewardKey) !== rewardKey ? getI18n(rewardKey) : rewardKey;
                         
-                        // 🔥 改為從 REWARD_ICON 尋找圖示，並兼容字串與物件格式
+                        // 從 REWARD_ICON 尋找圖示，並兼容字串與物件格式
                         let rewardUrl = "";
                         if (typeof REWARD_ICON !== 'undefined' && REWARD_ICON[rewardKey]) {
                             rewardUrl = typeof REWARD_ICON[rewardKey] === 'object' ? REWARD_ICON[rewardKey].url : REWARD_ICON[rewardKey];
@@ -521,15 +521,10 @@
                             ? "border-[3px] border-[#39ff14] shadow-[0_0_8px_rgba(57,255,20,0.6)]" // 螢光綠色 + 些微發光
                             : "border-2 border-gray-300 dark:border-slate-600 shadow-sm"; // 普通灰色
 
+                        // 移除了自訂浮動文字區塊，僅保留原生 title 屬性
                         html += `
-                            <div class="relative group flex items-center justify-center cursor-help">
-                                <div class="w-12 h-12 sm:w-14 sm:h-14 bg-white dark:bg-slate-700 rounded-xl ${borderClass} flex items-center justify-center overflow-hidden transition-transform duration-300 hover:scale-110">
-                                    ${rewardUrl ? `<img src="${rewardUrl}" alt="${rewardDisplay}" class="w-full h-full object-contain p-1 drop-shadow-sm">` : `<span class="text-[10px] text-gray-400 font-bold text-center p-1 break-words">${rewardDisplay}</span>`}
-                                </div>
-                                <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-slate-900 dark:bg-slate-800 text-white dark:text-gray-100 text-xs sm:text-sm font-black rounded-lg shadow-xl whitespace-nowrap pointer-events-none hidden group-hover:block transition-all duration-300 z-50 border border-slate-700">
-                                    ${rewardDisplay}
-                                    <div class="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-900 dark:border-t-slate-800"></div>
-                                </div>
+                            <div class="w-12 h-12 sm:w-14 sm:h-14 bg-white dark:bg-slate-700 rounded-xl ${borderClass} flex items-center justify-center overflow-hidden transition-transform duration-300 hover:scale-110" title="${rewardDisplay}">
+                                ${rewardUrl ? `<img src="${rewardUrl}" alt="${rewardDisplay}" class="w-full h-full object-contain p-1 drop-shadow-sm">` : `<span class="text-[10px] text-gray-400 font-bold text-center p-1 break-words">${rewardDisplay}</span>`}
                             </div>
                         `;
                     });
