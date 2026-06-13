@@ -805,8 +805,8 @@
                         bossContainer.classList.add('shake-anim');
                         setTimeout(() => bossContainer.classList.remove('shake-anim'), 400);
 
-                        // 2. 觸發專屬金蠟筆特效
-                        triggerCrayonAttack(isRanged, atkDur, bossContainer, container);
+                        // 將原有的呼叫改為：
+                        triggerCrayonAttack(isRanged, atkDur, bossContainer, container, isRanged ? -240 : 0);
 
                         // 3. 動作結束前 0.5 秒：更強烈的震動爆破
                         setTimeout(() => {
@@ -869,7 +869,8 @@
                                     bossContainer.classList.add('shake-anim');
                                     setTimeout(() => bossContainer.classList.remove('shake-anim'), 400);
                                     
-                                    triggerCrayonAttack(isRanged, currentAnimDurMs, bossContainer, container);
+                                    // 在迴圈內呼叫的部分改為：
+                                    triggerCrayonAttack(isRanged, currentAnimDurMs, bossContainer, container, isRanged ? -240 : 0);
                                 }, totalSkillDurationMs);
 
                                 // 在當前子動作「結束前 0.5 秒」觸發：強烈震動
@@ -889,7 +890,8 @@
                             bossContainer.classList.add('shake-anim');
                             setTimeout(() => bossContainer.classList.remove('shake-anim'), 400);
                             
-                            triggerCrayonAttack(isRanged, totalSkillDurationMs, bossContainer, container);
+                            // 在 fallback (無連續技時) 的部分改為：
+                            triggerCrayonAttack(isRanged, totalSkillDurationMs, bossContainer, container, isRanged ? -240 : 0);
 
                             setTimeout(() => {
                                 bossContainer.classList.add('shake-strong-anim');
