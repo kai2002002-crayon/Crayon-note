@@ -781,7 +781,7 @@
                 bossTrack.style.pointerEvents = 'none'; 
 
                 // 判斷是否為遠程職業 (射手、法師、治療)
-                const isRanged = ["射手", "法師", "治療"].some(j => randomCharData.job && randomCharData.job.includes(j));
+                const isRanged = ["中排", "後排"].some(j => randomCharData.job && randomCharData.job.includes(j));
                 const attackOffset = isRanged ? "translateX(60px)" : "translateX(0px)"; // 遠程向後退拉開距離
 
                 if (chasePhase === 1) {
