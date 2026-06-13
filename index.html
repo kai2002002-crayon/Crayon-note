@@ -496,44 +496,52 @@
         }
 
         // 🎇 處理攻擊的金蠟筆特效 (彈道與打擊)
-        function triggerCrayonAttack(isRanged, attackDurationMs, bossContainer, runnerContainer) {
+        function triggerCrayonAttack(isRanged, attackDurationMs, bossContainer, runnerContainer, isCombo = false) {
             const area = document.getElementById('runnerArea');
-            const rRect = runnerContainer.getBoundingClientRect();
-            const bRect = bossContainer.getBoundingClientRect();
+    const rRect = runnerContainer.getBoundingClientRect();
+    const bRect = bossContainer.getBoundingClientRect();
+    
+    const startX = rRect.left + rRect.width * 0.5;
+    const startY = rRect.top + rRect.height * 0.5;
+    const endX = bRect.left + bRect.width * 0.5 - 30;
+    const endY = bRect.top + bRect.height * 0.5;
+
+    // 規定：動作開始 0.5 秒後射出
+    const launchDelay = 500; 
+    // 規定：動作結束前 0.5 秒爆裂 (確保不會超過總長度)
+    const burstTime = Math.max(launchDelay + 100, attackDurationMs - 500);
+
+    if (isRanged) {
+        // 等待 0.5 秒後射出
+        setTimeout(() => {
+            const proj = document.createElement('div');
+            proj.className = 'projectile-crayon';
+            proj.style.left = `${startX}px`;
+            proj.style.top = `${startY}px`;
+            area.appendChild(proj);
             
-            const startX = rRect.left + rRect.width * 0.5;
-            const startY = rRect.top + rRect.height * 0.5;
-            const endX = bRect.left + bRect.width * 0.5 - 30; // 稍微偏向 Boss 中心
-            const endY = bRect.top + bRect.height * 0.5;
+            // 飛行時間 = 從射出到爆裂的時間差
+            const flightTime = burstTime - launchDelay;
+            
+            setTimeout(() => {
+                proj.style.transition = `all ${flightTime}ms cubic-bezier(0.25, 0.1, 0.25, 1)`;
+                proj.style.left = `${endX}px`;
+                proj.style.top = `${endY}px`;
+                proj.style.transform = `rotate(720deg)`;
+            }, 50);
 
-            if (isRanged) {
-                // 產生飛行的金蠟筆
-                const proj = document.createElement('div');
-                proj.className = 'projectile-crayon';
-                proj.style.left = `${startX}px`;
-                proj.style.top = `${startY}px`;
-                area.appendChild(proj);
-                
-                // 動畫飛行
-                setTimeout(() => {
-                    proj.style.transition = `all ${Math.max(200, attackDurationMs - 150)}ms cubic-bezier(0.25, 0.1, 0.25, 1)`;
-                    proj.style.left = `${endX}px`;
-                    proj.style.top = `${endY}px`;
-                    proj.style.transform = `rotate(720deg)`;
-                }, 50);
-
-                // 擊中時爆裂
-                setTimeout(() => {
-                    if(proj && proj.parentNode) proj.remove();
-                    createCrayonBurst(endX, endY, area);
-                }, attackDurationMs - 100);
-            } else {
-                // 近戰直接在結算時爆裂
-                setTimeout(() => {
-                    createCrayonBurst(endX, endY, area);
-                }, attackDurationMs - 100);
-            }
-        }
+            setTimeout(() => {
+                if(proj && proj.parentNode) proj.remove();
+                createCrayonBurst(endX, endY, area);
+            }, flightTime);
+        }, launchDelay);
+    } else {
+        // 近戰則在結算點爆裂
+        setTimeout(() => {
+            createCrayonBurst(endX, endY, area);
+        }, burstTime);
+    }
+}
 
         function initTopRunner() {
             if (typeof INITIAL_DATA === 'undefined' || INITIAL_DATA.length === 0) return;
@@ -780,14 +788,14 @@
                 bossRunAnimation.pause();
                 bossTrack.style.pointerEvents = 'none'; 
 
-                // 判斷是否為遠程職業 (射手、法師、治療)
-                const isRanged = ["中排", "後排"].some(j => randomCharData.job && randomCharData.job.includes(j));
-                const attackOffset = isRanged ? "translateX(60px)" : "translateX(0px)"; // 遠程向後退拉開距離
+                // 依據小人站位判斷：中排、後排為遠距離，前排為近距離
+                const isRanged = ["中排", "後排"].includes(randomCharData.position);
+                const attackOffset = isRanged ? "translateX(-240px)" : "translateX(0px)"; // 遠程向左後退拉開距離
 
                 if (chasePhase === 1) {
                     if (Math.random() < 0.4) {
                         console.log("⚔️ 一階：坨坨轉向右方反擊！");
-                        container.style.transform = `scaleX(-1) ${attackOffset}`; 
+                        container.style.transform = `${attackOffset} scaleX(-1)`; 
                         
                         let attackTrack = safePlaySpine(runnerPlayer, "Attack1_1", false);
                         let atkDur = (attackTrack && attackTrack.animation ? attackTrack.animation.duration : 1.0) * 1000;
@@ -801,15 +809,15 @@
                         // 2. 觸發專屬金蠟筆特效
                         triggerCrayonAttack(isRanged, atkDur, bossContainer, container);
 
-                        // 3. 動作結束前：更強烈的震動爆破
+                        // 3. 動作結束前 0.5 秒：更強烈的震動爆破
                         setTimeout(() => {
                             bossContainer.classList.add('shake-strong-anim');
                             setTimeout(() => bossContainer.classList.remove('shake-strong-anim'), 500);
-                        }, Math.max(0, atkDur - 100));
+                        }, Math.max(0, atkDur - 500));
 
                         setTimeout(() => {
                             // 攻擊結束，坨坨轉回來繼續逃跑
-                            container.style.transform = 'scaleX(1) translateX(0px)'; 
+                            container.style.transform = 'translateX(0px) scaleX(1)'; 
                             safePlaySpine(runnerPlayer, "Move", true);
                             charRunAnimation.play();
 
@@ -838,44 +846,63 @@
                     if (Math.random() < 0.70) {
                         console.log("🌟 二階：絕地大反攻，連續技擊殺 BOSS！");
                         chasePhase = 0; 
-                        container.style.transform = `scaleX(-1) ${attackOffset}`; 
+                        container.style.transform = `${attackOffset} scaleX(-1)`; 
                         safePlaySpine(bossPlayer, "Groggy", true); 
-
-                        // 1. 動作起始：普通震動
-                        bossContainer.classList.add('shake-anim');
-                        setTimeout(() => bossContainer.classList.remove('shake-anim'), 400);
 
                         const anims = runnerPlayer.skeleton.data.animations.map(a => a.name);
                         const skillAnims = anims.filter(a => a.startsWith("Skill1_")).sort();
-                        let totalSkillDuration = 0;
+                        let totalSkillDurationMs = 0;
 
                         if (skillAnims.length > 0) {
-                            let firstTrack = safePlaySpine(runnerPlayer, skillAnims[0], false);
-                            totalSkillDuration += (firstTrack && firstTrack.animation ? firstTrack.animation.duration : 1.0);
-                            for (let i = 1; i < skillAnims.length; i++) {
-                                let nextTrack = runnerPlayer.animationState.addAnimation(0, skillAnims[i], false, 0);
-                                totalSkillDuration += (nextTrack && nextTrack.animation ? nextTrack.animation.duration : 1.0);
-                            }
+                            // 針對每一個分段動作安排特效
+                            skillAnims.forEach((animName, index) => {
+                                let track;
+                                if (index === 0) {
+                                    track = safePlaySpine(runnerPlayer, animName, false);
+                                } else {
+                                    track = runnerPlayer.animationState.addAnimation(0, animName, false, 0);
+                                }
+                                
+                                let currentAnimDurMs = (track && track.animation ? track.animation.duration : 1.0) * 1000;
+
+                                // 在當前子動作「起手時」觸發：輕微震動與子彈發射
+                                setTimeout(() => {
+                                    bossContainer.classList.add('shake-anim');
+                                    setTimeout(() => bossContainer.classList.remove('shake-anim'), 400);
+                                    
+                                    triggerCrayonAttack(isRanged, currentAnimDurMs, bossContainer, container);
+                                }, totalSkillDurationMs);
+
+                                // 在當前子動作「結束前 0.5 秒」觸發：強烈震動
+                                setTimeout(() => {
+                                    bossContainer.classList.add('shake-strong-anim');
+                                    setTimeout(() => bossContainer.classList.remove('shake-strong-anim'), 500);
+                                }, totalSkillDurationMs + Math.max(0, currentAnimDurMs - 500));
+
+                                // 累加總時間供下一個動作使用
+                                totalSkillDurationMs += currentAnimDurMs;
+                            });
                         } else {
+                            // 若無連續技，執行單一動作邏輯
                             let fallbackTrack = safePlaySpine(runnerPlayer, "Attack1_1", false);
-                            totalSkillDuration += (fallbackTrack && fallbackTrack.animation ? fallbackTrack.animation.duration : 1.0);
+                            totalSkillDurationMs = (fallbackTrack && fallbackTrack.animation ? fallbackTrack.animation.duration : 1.0) * 1000;
+                            
+                            bossContainer.classList.add('shake-anim');
+                            setTimeout(() => bossContainer.classList.remove('shake-anim'), 400);
+                            
+                            triggerCrayonAttack(isRanged, totalSkillDurationMs, bossContainer, container);
+
+                            setTimeout(() => {
+                                bossContainer.classList.add('shake-strong-anim');
+                                setTimeout(() => bossContainer.classList.remove('shake-strong-anim'), 500);
+                            }, Math.max(0, totalSkillDurationMs - 500));
                         }
 
-                        let atkDur = totalSkillDuration * 1000;
-                        
-                        // 2. 觸發連續技蠟筆特效
-                        triggerCrayonAttack(isRanged, atkDur, bossContainer, container);
-
-                        // 3. 動作結束前：強烈致命打擊震動
-                        setTimeout(() => {
-                            bossContainer.classList.add('shake-strong-anim');
-                            setTimeout(() => bossContainer.classList.remove('shake-strong-anim'), 500);
-                        }, Math.max(0, atkDur - 100));
-
+                        // 整段連續技播完後的結算
                         setTimeout(() => {
                             console.log("💀 BOSS 倒地身亡！");
                             safePlaySpine(bossPlayer, "Die", false);
-                            container.style.transform = 'scaleX(1) translateX(0px)'; // 坨坨轉回左邊
+                            container.style.transform = 'translateX(0px) scaleX(1)'; // 坨坨轉回左邊
                             safePlaySpine(runnerPlayer, "Move", true);
                             
                             isCaught = false; 
@@ -885,7 +912,7 @@
                                 bossTrack.style.transition = 'opacity 0.6s ease-out';
                                 bossTrack.style.opacity = '0';
                             }, 3000); 
-                        }, atkDur);
+                        }, totalSkillDurationMs);
 
                     } else {
                         console.log("💀 二階：極限逃生失敗，被處決");
