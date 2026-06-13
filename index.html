@@ -55,6 +55,7 @@
             display: block !important;
             z-index: 105 !important; 
             pointer-events: none;
+            overflow: visible !important; /* 👈 這是關鍵，確保超出容器的翅膀也能顯示 */
         }
 
         /* 💥 起始受擊震動特效 */
@@ -262,14 +263,14 @@
 </head>
 <body class="p-3 sm:p-6 md:p-8 text-gray-800 dark:text-gray-100">
     
-   <div id="runnerArea" class="fixed top-[-1px] left-0 w-full h-[220px] z-[100] pointer-events-none overflow-hidden">
+   <div id="runnerArea" class="fixed top-[-1px] left-0 w-full h-[220px] z-[100] pointer-events-none overflow-visible">
         <div id="runnerTrack" class="absolute top-0 w-[250px] h-full pointer-events-none z-20" style="right: 0px; transform: translateX(0); opacity: 0;">
             <div style="width: 100%; height: 100%; transform: scale(0.75); transform-origin: center;">
                 <div id="topRunnerContainer" class="w-full h-full relative pointer-events-none"></div>
             </div>
         </div>
         
-        <div id="bossTrack" class="absolute top-[-1px] w-[400px] h-full pointer-events-none z-10" style="right: -300px; transform: translateX(0); opacity: 0; overflow: visible;">
+        <div id="bossTrack" class="absolute top-[-1px] w-[1000px] h-full pointer-events-none z-30" style="right: -300px; transform: translateX(0); opacity: 0; overflow: visible;">
             <div style="width: 100%; height: 100%; transform: scale(0.85); transform-origin: center;">
                 <div id="bossRunnerContainer" class="w-full h-full relative"></div>
             </div>
@@ -549,11 +550,16 @@
             const track = document.getElementById('runnerTrack');
             const bossContainer = document.getElementById('bossRunnerContainer');
             const bossTrack = document.getElementById('bossTrack');
+            // --- 替換從這裡開始 ---
             const isMobile = window.innerWidth <= 768;
             
-            const startRightOffset = isMobile ? '-140px' : '-110px'; 
-            track.style.right = startRightOffset; 
-            bossTrack.style.right = startRightOffset; 
+            // 獨立設定軌道起點，補償剛剛增加的 600px 畫布寬度，讓 Boss 視覺中心維持不變
+            const trackRightOffset = isMobile ? '-140px' : '-110px'; 
+            const bossRightOffset = isMobile ? '-440px' : '-410px'; 
+            
+            track.style.right = trackRightOffset; 
+            bossTrack.style.right = bossRightOffset; 
+            
             const endLeftPosNum = isMobile ? 35 : 110; 
             const endLeftPos = `${endLeftPosNum}px`; 
 
@@ -582,10 +588,36 @@
             let hasNoticed = false;
             let chasePhase = 1; 
             let isBossKnockedBack = false;
+            let hasReachedEnd = false; // 🚩 新增標記：是否已經抵達終點
 
             const runDuration = isMobile ? 6000 : 14000; 
             let charRunAnimation = null;
             let bossRunAnimation = null;
+
+            // 🏆 新增統整的勝利觸發函式
+            function triggerVictory() {
+                if (isEscaped) return;
+                isEscaped = true;
+                safePlaySpine(currentRunnerPlayer, "Victory", true);
+
+                // 如果 Boss 還沒死，讓他停下來並改為 Idle
+                if (currentBossPlayer && chasePhase !== 0) {
+                    if (bossRunAnimation && bossRunAnimation.playState !== 'finished') {
+                        bossRunAnimation.pause();
+                    }
+                    safePlaySpine(currentBossPlayer, "Idle", true);
+                }
+
+                setTimeout(() => {
+                    track.style.transition = 'opacity 0.6s ease-out';
+                    track.style.opacity = '0';
+                    if (bossTrack) {
+                        bossTrack.style.transition = 'opacity 0.6s ease-out';
+                        bossTrack.style.opacity = '0';
+                    }
+                    setTimeout(initTopRunner, 600); 
+                }, 3000); 
+            }
 
             const loader = document.createElement('div');
             loader.className = 'spine-loader-crayon';
@@ -628,27 +660,12 @@
                                 { transform: `translateX(calc(-100vw + ${endLeftPos})) scaleX(1)` } 
                             ], { duration: runDuration, fill: 'forwards' });
 
-                            charRunAnimation.onfinish = () => {
-                                isEscaped = true;
+                           charRunAnimation.onfinish = () => {
+                                hasReachedEnd = true; // 標記已到達終點
                                 if (!isCaught) {
-                                    safePlaySpine(player, "Victory", true);
-
-                                    // 如果成功逃到終點，Boss也跟著停下來發呆
-                                    if (bossRunAnimation && bossRunAnimation.playState !== 'finished' && chasePhase !== 0 && currentBossPlayer) {
-                                        bossRunAnimation.pause();
-                                        safePlaySpine(currentBossPlayer, "Idle", true);
-                                    }
-
-                                    setTimeout(() => {
-                                        track.style.transition = 'opacity 0.6s ease-out';
-                                        track.style.opacity = '0';
-                                        if (bossTrack) {
-                                            bossTrack.style.transition = 'opacity 0.6s ease-out';
-                                            bossTrack.style.opacity = '0';
-                                        }
-                                        setTimeout(initTopRunner, 600);
-                                    }, 3000); 
-                                }
+                                    triggerVictory(); // 沒被抓到，順利通關！
+                                } 
+                                // 如果 isCaught 是 true，代表正在戰鬥中，交給戰鬥結束後的邏輯接手處理
                             };
 
                             if (isBossEvent) {
@@ -815,8 +832,17 @@
                         }, Math.max(0, atkDur - 500));
 
                         setTimeout(() => {
-                            // 攻擊結束，坨坨轉回來繼續逃跑
+                            // 攻擊結束，坨坨轉回來
                             container.style.transform = 'translateX(0px) scaleX(1)'; 
+                            
+                            // 🚩 檢查：如果剛剛打架時不小心走到終點了，直接獲勝！
+                            if (hasReachedEnd) {
+                                isCaught = false;
+                                chasePhase = 0;
+                                triggerVictory();
+                                return; // 終止後續的追逐
+                            }
+
                             safePlaySpine(runnerPlayer, "Move", true);
                             charRunAnimation.play();
 
@@ -903,9 +929,16 @@
                         setTimeout(() => {
                             console.log("💀 BOSS 倒地身亡！");
                             safePlaySpine(bossPlayer, "Die", false);
-                            container.style.transform = 'translateX(0px) scaleX(1)'; // 坨坨轉回左邊
-                            safePlaySpine(runnerPlayer, "Move", true);
+                            container.style.transform = 'translateX(0px) scaleX(1)'; 
                             
+                            // 🚩 檢查：如果在處決 Boss 的期間走到終點了，直接觸發勝利動畫
+                            if (hasReachedEnd) {
+                                isCaught = false;
+                                triggerVictory();
+                                return; // 終止後續邏輯
+                            }
+
+                            safePlaySpine(runnerPlayer, "Move", true);
                             isCaught = false; 
                             charRunAnimation.play(); 
 
@@ -914,7 +947,6 @@
                                 bossTrack.style.opacity = '0';
                             }, 3000); 
                         }, totalSkillDurationMs);
-
                     } else {
                         console.log("💀 二階：極限逃生失敗，被處決");
                         bossExecuteKill(runnerPlayer, bossPlayer);
