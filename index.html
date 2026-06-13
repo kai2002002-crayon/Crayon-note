@@ -496,52 +496,51 @@
         }
 
         // 🎇 處理攻擊的金蠟筆特效 (彈道與打擊)
-        function triggerCrayonAttack(isRanged, attackDurationMs, bossContainer, runnerContainer, isCombo = false) {
+        function triggerCrayonAttack(isRanged, attackDurationMs, bossContainer, runnerContainer, offsetPx = 0) {
             const area = document.getElementById('runnerArea');
-    const rRect = runnerContainer.getBoundingClientRect();
-    const bRect = bossContainer.getBoundingClientRect();
-    
-    const startX = rRect.left + rRect.width * 0.5;
-    const startY = rRect.top + rRect.height * 0.5;
-    const endX = bRect.left + bRect.width * 0.5 - 30;
-    const endY = bRect.top + bRect.height * 0.5;
-
-    // 規定：動作開始 0.5 秒後射出
-    const launchDelay = 500; 
-    // 規定：動作結束前 0.5 秒爆裂 (確保不會超過總長度)
-    const burstTime = Math.max(launchDelay + 100, attackDurationMs - 500);
-
-    if (isRanged) {
-        // 等待 0.5 秒後射出
-        setTimeout(() => {
-            const proj = document.createElement('div');
-            proj.className = 'projectile-crayon';
-            proj.style.left = `${startX}px`;
-            proj.style.top = `${startY}px`;
-            area.appendChild(proj);
+            const rRect = runnerContainer.getBoundingClientRect();
+            const bRect = bossContainer.getBoundingClientRect();
             
-            // 飛行時間 = 從射出到爆裂的時間差
-            const flightTime = burstTime - launchDelay;
+            // 修正射出點：原本的中心 + 當前的位移修正 (offsetPx)
+            // 因為我們是往左位移，所以 startX 要減去該位移量
+            const startX = (rRect.left + rRect.width * 0.5) + offsetPx;
+            const startY = rRect.top + rRect.height * 0.5;
             
-            setTimeout(() => {
-                proj.style.transition = `all ${flightTime}ms cubic-bezier(0.25, 0.1, 0.25, 1)`;
-                proj.style.left = `${endX}px`;
-                proj.style.top = `${endY}px`;
-                proj.style.transform = `rotate(720deg)`;
-            }, 50);
+            // Boss 的命中點 (保持不變)
+            const endX = bRect.left + bRect.width * 0.5 - 30;
+            const endY = bRect.top + bRect.height * 0.5;
 
-            setTimeout(() => {
-                if(proj && proj.parentNode) proj.remove();
-                createCrayonBurst(endX, endY, area);
-            }, flightTime);
-        }, launchDelay);
-    } else {
-        // 近戰則在結算點爆裂
-        setTimeout(() => {
-            createCrayonBurst(endX, endY, area);
-        }, burstTime);
-    }
-}
+            const launchDelay = 500; 
+            const burstTime = Math.max(launchDelay + 100, attackDurationMs - 500);
+
+            if (isRanged) {
+                setTimeout(() => {
+                    const proj = document.createElement('div');
+                    proj.className = 'projectile-crayon';
+                    proj.style.left = `${startX}px`;
+                    proj.style.top = `${startY}px`;
+                    area.appendChild(proj);
+                    
+                    const flightTime = burstTime - launchDelay;
+                    
+                    setTimeout(() => {
+                        proj.style.transition = `all ${flightTime}ms cubic-bezier(0.25, 0.1, 0.25, 1)`;
+                        proj.style.left = `${endX}px`;
+                        proj.style.top = `${endY}px`;
+                        proj.style.transform = `rotate(720deg)`;
+                    }, 50);
+
+                    setTimeout(() => {
+                        if(proj && proj.parentNode) proj.remove();
+                        createCrayonBurst(endX, endY, area);
+                    }, flightTime);
+                }, launchDelay);
+            } else {
+                setTimeout(() => {
+                    createCrayonBurst(endX, endY, area);
+                }, burstTime);
+            }
+        }
 
         function initTopRunner() {
             if (typeof INITIAL_DATA === 'undefined' || INITIAL_DATA.length === 0) return;
