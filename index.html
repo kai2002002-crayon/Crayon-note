@@ -41,12 +41,41 @@
             50% { transform: translateY(-10px) scale(1.05); filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.9)); }
         }
 
-        #topRunnerContainer canvas {
+        #topRunnerContainer {
+            width: 100% !important;
+            height: 100% !important;
+            position: relative;
+            z-index: 110 !important;
+            transition: transform 0.1s ease; /* 翻轉用 */
+        }
+
+        #bossRunnerContainer {
+            width: 100% !important;
+            height: 100% !important;
+            display: block !important;
+            z-index: 105 !important; 
+            pointer-events: none;
+        }
+
+        /* 💥 受擊震動特效 */
+        @keyframes shakeEffect {
+            0% { transform: translateX(0); filter: brightness(1); }
+            20% { transform: translateX(-15px) rotate(-2deg); filter: brightness(1.2) drop-shadow(0 0 10px rgba(255,0,0,0.6)); }
+            40% { transform: translateX(15px) rotate(2deg); filter: brightness(1.2); }
+            60% { transform: translateX(-15px) rotate(-2deg); filter: brightness(1.2) drop-shadow(0 0 10px rgba(255,0,0,0.6)); }
+            80% { transform: translateX(15px) rotate(2deg); filter: brightness(1); }
+            100% { transform: translateX(0); filter: brightness(1); }
+        }
+        .shake-anim {
+            animation: shakeEffect 0.35s ease-in-out;
+        }
+
+        #topRunnerContainer canvas, #bossRunnerContainer canvas {
             width: 100% !important;
             height: 100% !important;
             display: block !important;
         }
-        #topRunnerContainer .spine-player-canvas {
+        #topRunnerContainer .spine-player-canvas, #bossRunnerContainer .spine-player-canvas {
             background-color: transparent !important;
         }
 
@@ -87,9 +116,6 @@
         .google-login-btn:hover { box-shadow: 0 3px 6px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.12); background-color: #fcfcfc; }
         .unowned-avatar { opacity: 0.35; filter: grayscale(100%); }
 
-        /* ==============================================================
-            🌟 角色圖片外層容器與自動輪播、放大特效
-            ============================================================== */
         .char-avatar-container { 
             transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); 
             cursor: pointer; 
@@ -122,14 +148,8 @@
             object-fit: cover;
         }
 
-        .avatar-alt {
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
-        }
-
-        .swap-avatars .avatar-alt {
-            opacity: 1;
-        }
+        .avatar-alt { opacity: 0; transition: opacity 0.3s ease-in-out; }
+        .swap-avatars .avatar-alt { opacity: 1; }
         
         .hover-scale {
             transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -145,18 +165,12 @@
             }
         }
         
-        /* ==============================================================
-            💡 跑馬燈特效 (針對過長名稱優化)
-            ============================================================== */
         .marquee-box {
             display: block; width: 120px; overflow: hidden;
             white-space: nowrap; text-overflow: ellipsis;
         }
         .char-card-wrapper:hover .marquee-box { text-overflow: clip; }
-        .char-card-wrapper:hover .marquee-content {
-            display: inline-block;
-            
-        }
+        .char-card-wrapper:hover .marquee-content { display: inline-block; }
         @keyframes text-marquee {
             0%, 20% { transform: translateX(0); }
             80%, 100% { transform: translateX(-35px); }
@@ -166,9 +180,6 @@
         .social-menu { display: none; margin-bottom: 8px; flex-direction: column; gap: 8px; }
         .social-fixed:hover .social-menu { display: flex; }
         
-        /* ==============================================================
-            🌟 看板娘 Rim 專屬容器
-            ============================================================== */
         #rim-live-container {
             position: fixed !important;
             bottom: 15px !important; 
@@ -181,33 +192,26 @@
 
         @media (min-width: 768px) {
             #rim-live-container {
-                bottom: 20px !important;
-                left: 20px !important;
-                width: 150px !important; 
-                height: 150px !important;
+                bottom: 20px !important; left: 20px !important;
+                width: 150px !important; height: 150px !important;
             }
         }
         
         #rim-live-container canvas {
-            width: 100% !important;
-            height: 100% !important;
-            display: block !important;
+            width: 100% !important; height: 100% !important; display: block !important;
         }
         #rim-live-container .spine-player-canvas {
             background-color: transparent !important;
         }
-        /* ==============================================================
-            🖍️ 跑道金蠟筆特效
-           ============================================================== */
+
         .track-crayon {
             position: absolute;
-            width: 23px; 
-            height: 18px;
+            width: 23px; height: 18px;
             background-image: url('https://i.postimg.cc/qvjNxZzg/golden-crayon.png');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
-            bottom: 35px; /* 貼齊跑道底部 */
+            bottom: 45px; 
             z-index: 50;
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
             animation: crayonIdle 2s ease-in-out infinite;
@@ -215,9 +219,7 @@
             opacity: 0;
         }
 
-        /* 蠟筆被吃掉時的特效（放大、往上飄、變透明、發光） */
         .crayon-collected {
-            /* 🌟 關鍵修復：強制停止原地浮動，讓手機版能順利往上飄 */
             animation: none !important; 
             transform: scale(1.8) translateY(-40px) !important;
             opacity: 0 !important;
@@ -231,20 +233,25 @@
 </head>
 <body class="p-3 sm:p-6 md:p-8 text-gray-800 dark:text-gray-100">
     
-    <div id="runnerArea" class="fixed top-0 left-0 w-full h-[150px] z-[100] pointer-events-none overflow-hidden">
-        <div id="runnerTrack" class="absolute top-0 w-[250px] h-[150px] pointer-events-auto cursor-pointer" style="right: 0px; transform: translateX(0); opacity: 0;">
+   <div id="runnerArea" class="fixed top-[-1px] left-0 w-full h-[220px] z-[100] pointer-events-none overflow-hidden">
+        <div id="runnerTrack" class="absolute top-0 w-[250px] h-full pointer-events-auto cursor-pointer z-20" style="right: 0px; transform: translateX(0); opacity: 0;">
             <div style="width: 100%; height: 100%; transform: scale(0.75); transform-origin: center;">
                 <div id="topRunnerContainer" class="w-full h-full relative"></div>
+            </div>
+        </div>
+        <div id="bossTrack" class="absolute top-[-1px] w-[400px] h-full pointer-events-none z-10" style="right: -300px; transform: translateX(0); opacity: 0; overflow: visible;">
+            <div style="width: 100%; height: 100%; transform: scale(0.85); transform-origin: center;">
+                <div id="bossRunnerContainer" class="w-full h-full relative"></div>
             </div>
         </div>
     </div>
     <div id="loader" class="fixed inset-0 bg-[#fcf8f2] dark:bg-slate-900 z-[9999] flex items-center justify-center">
         <img src="https://i.postimg.cc/qvjNxZzg/golden-crayon.png" class="animate-bounce h-10 w-auto object-contain drop-shadow-md" alt="Loading...">
     </div>
+    
     <div class="max-w-7xl mx-auto">
-        
+        <!-- Header -->
         <header class="bg-gradient-to-r from-amber-100/90 via-yellow-100/90 to-orange-100/90 dark:from-gray-800/90 dark:via-gray-700/90 dark:to-gray-800/90 rounded-2xl p-4 sm:p-6 shadow-md mb-6 border-4 border-amber-400 dark:border-gray-600 flex flex-col transition-colors backdrop-blur-sm relative z-10">
-            
             <div class="w-full flex justify-start mb-3">
                 <div class="flex items-center gap-1.5 text-[10px] sm:text-xs font-bold text-amber-900/70 dark:text-gray-300 bg-white/60 dark:bg-gray-800/60 px-2.5 py-1 rounded-md backdrop-blur-sm border border-amber-200/80 dark:border-gray-600/80 shadow-sm">
                     👥 <span data-lang-key="visit_count_prefix">累計利用回数</span>: <span id="top_visit_counter" class="text-amber-700 dark:text-amber-400 tracking-wider">讀取中...</span>
@@ -298,6 +305,7 @@
 
         <div id="errorBanner" class="hidden bg-red-100 border-2 border-red-500 text-red-800 px-4 py-3 rounded-xl mb-6 text-sm font-bold shadow-sm flex flex-col gap-1"></div>
 
+        <!-- Filters Section -->
         <section class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-2xl p-4 shadow border-2 border-amber-200/80 dark:border-gray-700 mb-6 transition-colors">
             <div class="flex justify-between items-center border-b border-gray-100 dark:border-gray-700 pb-2 cursor-pointer" onclick="toggleFilterPanel()">
                 <h3 class="font-bold text-amber-955 dark:text-amber-400 text-sm flex items-center gap-1 shrink-0"><span data-lang-key="filter_title">🔍 篩選器</span> <span id="filterToggleIcon" class="text-xs opacity-70 ml-1">▼</span></h3>
@@ -351,6 +359,7 @@
             </div>
         </section>
 
+        <!-- Stats Toggle -->
         <div class="flex justify-between items-center mb-2 px-1 cursor-pointer select-none" onclick="toggleStatsPanel()">
             <h3 class="font-bold text-amber-955 dark:text-amber-400 text-sm flex items-center gap-1 drop-shadow-md">
                 <span data-lang-key="stats_title">📊 統計與加成資訊</span> <span id="statsToggleIcon" class="text-xs opacity-70 ml-1">▼</span>
@@ -360,6 +369,7 @@
             </span>
         </div>
 
+        <!-- Stats Panel -->
         <section id="statsPanelBody" class="grid grid-cols-1 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 transition-all">
             <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-xl p-3 sm:p-4 shadow border-2 border-amber-200 dark:border-amber-900 flex flex-col justify-between h-full">
                 <div class="border-b border-amber-100 dark:border-gray-700 pb-1.5 mb-2">
@@ -401,8 +411,10 @@
             </div>
         </section>
 
+        <!-- Matrix Body -->
         <main id="matrixContainer" class="space-y-6 sm:space-y-8"></main>
 
+        <!-- Footer -->
         <footer class="mt-12 mb-6 text-center border-t border-gray-200 dark:border-gray-700 pt-6">
             <div class="flex flex-col gap-1 text-[11px] text-gray-500 dark:text-gray-400 opacity-80">
                 <p data-lang-key="footer_author">📝 記事本製作者: 冷笑話幽靈</p>
@@ -413,266 +425,461 @@
         
     </div>
 
+    <!-- Runner Core Scripts -->
     <script>
-        // 🌟 初始化頂部跑酷小人 (雙平台獨立微調版)
         let currentRunnerPlayer = null; 
+        let currentBossPlayer = null;
+        let chaseLoopId = null;
+
+        function safePlaySpine(playerObj, animName, loop) {
+            if (!playerObj || !playerObj.animationState) return null;
+            try {
+                const anims = playerObj.skeleton.data.animations.map(a => a.name);
+                let targetAnim = animName;
+
+                if (!anims.includes(animName)) {
+                    if (animName === "Move") targetAnim = anims.includes("Run") ? "Run" : (anims.includes("Walk") ? "Walk" : anims[0]);
+                    else if (animName === "Attack3_1") targetAnim = anims.includes("Attack_3_1") ? "Attack_3_1" : (anims.includes("Attack_1") ? "Attack_1" : anims[0]);
+                    else if (animName === "Attack1_1") targetAnim = anims.includes("Attack_1_1") ? "Attack_1_1" : (anims.includes("Attack_1") ? "Attack_1" : anims[0]);
+                    else if (animName === "Groggy") targetAnim = anims.includes("Hit") ? "Hit" : anims[0];
+                    else if (animName === "Die") targetAnim = anims.includes("Dead") ? "Dead" : anims[0];
+                }
+                return playerObj.animationState.setAnimation(0, targetAnim, loop);
+            } catch (e) {
+                console.error(`❌ 播放動畫 [${animName}] 發生錯誤:`, e);
+                return null;
+            }
+        }
 
         function initTopRunner() {
             if (typeof INITIAL_DATA === 'undefined' || INITIAL_DATA.length === 0) return;
 
             const container = document.getElementById('topRunnerContainer');
             const track = document.getElementById('runnerTrack');
-
-            // 📱 偵測是否為手機螢幕 (小於等於 768px)
+            const bossContainer = document.getElementById('bossRunnerContainer');
+            const bossTrack = document.getElementById('bossTrack');
             const isMobile = window.innerWidth <= 768;
-
-            // =======================================================
-            // ✨ 關鍵微調 1：出生位置 (右側)
-            // =======================================================
+            
             const startRightOffset = isMobile ? '-140px' : '-110px'; 
-            track.style.right = startRightOffset;
+            track.style.right = startRightOffset; 
+            bossTrack.style.right = startRightOffset; 
+            const endLeftPosNum = isMobile ? 35 : 110; 
+            const endLeftPos = `${endLeftPosNum}px`; 
 
-            // =======================================================
-            // ✨ 關鍵微調 2：死亡位置 (左側)
-            // =======================================================
-            const endLeftPos = isMobile ? '35px' : '110px'; 
-
-            // 在載入新角色前，徹底清除上一輪的動畫殘留與強制隱藏
+            cancelAnimationFrame(chaseLoopId);
             track.style.opacity = '0';
             track.style.transition = 'none';
             track.getAnimations().forEach(anim => anim.cancel()); 
-            track.style.transform = 'translateX(0)';              
+            track.style.transform = 'translateX(0) scaleX(1)';              
+            container.style.transform = 'scaleX(1)'; // 確保預設不翻轉
 
-            // 清理上一輪的角色 (💡 優化3: 強化 DOM 動態記憶體清理防呆)
-            if (currentRunnerPlayer) {
-                try { 
-                    currentRunnerPlayer.dispose(); 
-                } catch(e) {
-                    console.warn("Spine 清理異常:", e);
-                } finally {
-                    currentRunnerPlayer = null;
-                }
-            }
-            container.innerHTML = ''; 
-            track.onclick = null;     
+            bossTrack.style.opacity = '0';
+            bossTrack.style.transition = 'none';
+            bossTrack.style.pointerEvents = 'none'; 
+            bossTrack.getAnimations().forEach(anim => anim.cancel());
+            bossTrack.style.transform = 'translateX(0) scaleX(1)';
 
-            // 🌟 加入金蠟筆 Loader 代替原廠轉圈圈
+            if (currentRunnerPlayer) { try { currentRunnerPlayer.dispose(); } catch(e){} currentRunnerPlayer = null; }
+            if (currentBossPlayer) { try { currentBossPlayer.dispose(); } catch(e){} currentBossPlayer = null; }
+            container.innerHTML = ''; bossContainer.innerHTML = '';
+            track.onclick = null; bossTrack.onclick = null;
+
+            const isBossEvent = Math.random() < 0.7; 
+            
+            let isCaught = false;
+            let isEscaped = false;
+            let hasNoticed = false;
+            let chasePhase = 1; 
+            let isBossKnockedBack = false;
+
+            const runDuration = isMobile ? 6000 : 14000; 
+            let charRunAnimation = null;
+            let bossRunAnimation = null;
+
             const loader = document.createElement('div');
             loader.className = 'spine-loader-crayon';
             container.appendChild(loader);
 
-            // 重新隨機選擇一位角色
             const randomCharData = INITIAL_DATA[Math.floor(Math.random() * INITIAL_DATA.length)];
             const charName = randomCharData.name;
             const folderKey = typeof SPINE_MAP !== 'undefined' ? SPINE_MAP[charName] : charName;
 
-            const sdSkelUrl = `./spine_sd_assets/${folderKey}.skel.bytes`;
-            const sdAtlasUrl = `./spine_sd_assets/${folderKey}.atlas.txt`;
-
             currentRunnerPlayer = new spine.SpinePlayer("topRunnerContainer", {
-                skelUrl: sdSkelUrl,
-                atlasUrl: sdAtlasUrl,
-                animation: "Spawn",
-                skin: "Normal",
-                backgroundColor: "#00000000",
-                alpha: true,
-                premultipliedAlpha: false,
-                showControls: false,
-                showLoading: false, // 🚫 關閉原廠圖案
-                
-                // 這裡保持你上一輪設定好的寬廣攝影機視角
-                viewport: { 
-                    x: -800,        
-                    y: -250,        
-                    width: 2500,    
-                    height: 1500,   
-                    padLeft: "0%", padRight: "0%", padTop: "0%", padBottom: "0%",
-                    transitionTime: 0 
-                },
-
+                skelUrl: `./spine_sd_assets/${folderKey}.skel.bytes`,
+                atlasUrl: `./spine_sd_assets/${folderKey}.atlas.txt`,
+                animation: "Spawn", skin: "Normal", backgroundColor: "#00000000",
+                alpha: true, premultipliedAlpha: false, showControls: false, showLoading: false,
+                viewport: { x: -800, y: 100, width: 2500, height: 1500, transitionTime: 0 },
                 success: function (player) {
-                    loader.remove(); // 🌟 載入完成移除金蠟筆
-                    console.log(`🏃 跑酷小人進場：${charName}`);
+                    loader.remove(); 
+                    console.log(`🏃 坨坨進場：${charName}${isBossEvent ? " (💀 雷內瓦潛伏中...)" : ""}`);
                     
                     try {
                         const skins = player.skeleton.data.skins;
-                        if (skins && skins.length > 0) {
-                            const targetSkin = skins.find(s => s.name === 'Normal') || skins.find(s => s.name === 'default') || skins[0];
-                            if (targetSkin) {
-                                player.skeleton.setSkinByName(targetSkin.name);
-                                player.skeleton.setSlotsToSetupPose();
-                            }
+                        const targetSkin = skins.find(s => s.name === 'Normal') || skins.find(s => s.name === 'default') || skins[0];
+                        if (targetSkin) {
+                            player.skeleton.setSkinByName(targetSkin.name);
+                            player.skeleton.setSlotsToSetupPose();
                         }
-                    } catch (e) {
-                        console.warn("Skin 切換失敗", e);
-                    }
+                    } catch (e) {}
 
-                    let currentPhase = "init"; 
-                    let runAnimation = null;   
-                    let groggyTimeout = null;  
-
-                    // 點擊暈眩事件
-                    track.onclick = () => {
-                        if (currentPhase === "move") {
-                            currentPhase = "groggy"; 
-                            if (runAnimation) runAnimation.pause();
-                            try { player.animationState.setAnimation(0, "Groggy", true); } catch(e){}
-
-                            groggyTimeout = setTimeout(() => {
-                                currentPhase = "move"; 
-                                try { player.animationState.setAnimation(0, "Move", true); } catch(e){}
-                                if (runAnimation) runAnimation.play(); 
-                            }, 5000);
-                        }
-                    };
-
-                    // 開始劇本演出
                     setTimeout(() => {
                         track.style.transition = 'opacity 0.3s ease-in';
                         track.style.opacity = '1';
-                        
-                        currentPhase = "spawn";
-                        let spawnTrack = null;
-                        try { spawnTrack = player.animationState.setAnimation(0, "Spawn", false); } catch(e){}
+                        let spawnTrack = safePlaySpine(player, "Spawn", false);
                         let spawnDuration = (spawnTrack && spawnTrack.animation ? spawnTrack.animation.duration : 1.5) * 1000;
 
                         setTimeout(() => {
-                            currentPhase = "move";
-                            try { player.animationState.setAnimation(0, "Move", true); } catch(e){}
-                            
-                            const runDuration = isMobile ? 6000 : 14000; 
+                            player.timeScale = 1.0; 
+                            safePlaySpine(player, "Move", true);
+                            charRunAnimation = track.animate([
+                                { transform: 'translateX(0) scaleX(1)' },
+                                { transform: `translateX(calc(-100vw + ${endLeftPos})) scaleX(1)` } 
+                            ], { duration: runDuration, fill: 'forwards' });
 
-                            // 應用剛剛設定好的動態終點
-                            runAnimation = track.animate([
-                                { transform: 'translateX(0)' },
-                                { transform: `translateX(calc(-100vw + ${endLeftPos}))` } 
-                            ], {
-                                duration: runDuration, 
-                                fill: 'forwards'
-                            });
+                            charRunAnimation.onfinish = () => {
+                                isEscaped = true;
+                                if (!isCaught) {
+                                    safePlaySpine(player, "Victory", true);
 
-                            runAnimation.onfinish = () => {
-                                currentPhase = "die";
-                                let dieTrack = null;
-                                try { dieTrack = player.animationState.setAnimation(0, "Die", false); } catch(e){}
-                                let dieDuration = (dieTrack && dieTrack.animation ? dieTrack.animation.duration : 2.0) * 1000;
+                                    // 如果成功逃到終點，Boss也跟著停下來發呆
+                                    if (bossRunAnimation && bossRunAnimation.playState !== 'finished' && chasePhase !== 0 && currentBossPlayer) {
+                                        bossRunAnimation.pause();
+                                        safePlaySpine(currentBossPlayer, "Idle", true);
+                                    }
 
-                                setTimeout(() => {
-                                    track.style.transition = 'opacity 0.6s ease-out';
-                                    track.style.opacity = '0';
-                                    
                                     setTimeout(() => {
-                                        initTopRunner();
-                                    }, 600);
-                                    
-                                }, dieDuration + 400); // 倒地後多躺 0.4 秒
+                                        track.style.transition = 'opacity 0.6s ease-out';
+                                        track.style.opacity = '0';
+                                        if (bossTrack) {
+                                            bossTrack.style.transition = 'opacity 0.6s ease-out';
+                                            bossTrack.style.opacity = '0';
+                                        }
+                                        setTimeout(initTopRunner, 600);
+                                    }, 3000); 
+                                }
                             };
 
-                        }, spawnDuration);
+                            if (isBossEvent) {
+                                const bossKey = typeof SPINE_MAP !== 'undefined' && SPINE_MAP['R41雷內瓦'] ? SPINE_MAP['R41雷內瓦'] : 'R41雷內瓦';
+                                
+                                currentBossPlayer = new spine.SpinePlayer("bossRunnerContainer", {
+                                    skelUrl: `./spine_sd_assets/${bossKey}.skel.bytes`,
+                                    atlasUrl: `./spine_sd_assets/${bossKey}.atlas.txt`,
+                                    animation: "Idle", backgroundColor: "#00000000", alpha: true, 
+                                    premultipliedAlpha: false, showControls: false, showLoading: false,
+                                    viewport: { x: -1500, y: -500, width: 3000, height: 3000, transitionTime: 0 },
+                                    success: function (bossPlayer) {
+                                        try {
+                                            const bossSkins = bossPlayer.skeleton.data.skins.map(s => s.name);
+                                            let skinToUse = bossSkins.includes('default') ? 'default' : (bossSkins.includes('Skin_Naive') ? 'Skin_Naive' : bossSkins[0]);
+                                            bossPlayer.skeleton.setSkinByName(skinToUse);
+                                            bossPlayer.skeleton.setSlotsToSetupPose();
+                                        } catch (e) { }
 
+                                        function waitRunner15Percent() {
+                                            if (isEscaped || isCaught) return;
+                                            let currentTime = charRunAnimation ? (charRunAnimation.currentTime || 0) : 0;
+                                            
+                                            if (currentTime >= runDuration * 0.15) {
+                                                console.log("💀 BOSS 70% 登場！");
+                                                bossTrack.style.transition = 'opacity 0.2s ease-in';
+                                                bossTrack.style.opacity = '1';
+                                                
+                                                bossPlayer.timeScale = 3.0; 
+                                                let bossSpawnTrack = safePlaySpine(bossPlayer, "Spawn", false);
+                                                let bossSpawnDuration = (bossSpawnTrack && bossSpawnTrack.animation ? bossSpawnTrack.animation.duration : 1.5) * 1000;
+                                                let actualWaitTime = bossSpawnDuration / 3;
+
+                                                setTimeout(() => {
+                                                    if (isEscaped || isCaught) return;
+                                                    bossPlayer.timeScale = 1.0; 
+                                                    safePlaySpine(bossPlayer, "Move", true);
+                                                    
+                                                    bossRunAnimation = bossTrack.animate([
+                                                        { transform: 'translateX(0)' },
+                                                        { transform: `translateX(calc(-100vw + ${endLeftPos}))` }
+                                                    ], { duration: runDuration * 0.5, fill: 'forwards' });
+
+                                                    setupPlayerKnockback(bossPlayer); 
+                                                    startChaseRadar(player, bossPlayer); 
+                                                    
+                                                }, actualWaitTime);
+                                            } else {
+                                                requestAnimationFrame(waitRunner15Percent);
+                                            }
+                                        }
+                                        requestAnimationFrame(waitRunner15Percent);
+                                    }
+                                });
+                            }
+
+                        }, spawnDuration);
                     }, 50);
-                },
-                error: function (player, reason) {
-                    console.warn(`頂部跑酷載入失敗:`, reason);
-                    setTimeout(initTopRunner, 3000);
                 }
             });
-        }
-        // 📝 建立一個記憶清單，記住哪些角色已經預載過了
-        const preloadedSpines = new Set(); 
 
+            // 👆 玩家點擊擊退機制
+            function setupPlayerKnockback(bossPlayer) {
+                bossTrack.style.pointerEvents = 'auto'; 
+                bossTrack.style.cursor = 'pointer';
+
+                bossTrack.onclick = () => {
+                    if (isCaught || isEscaped || isBossKnockedBack || chasePhase === 0) return;
+                    isBossKnockedBack = true;
+                    console.log("👆 玩家點擊！BOSS 被死命推後！");
+                    
+                    // 注意：這裡不播 Groggy 也不暫停 Spine 動畫，讓 Boss 保持 Move 動作倒退！
+                    bossRunAnimation.pause(); 
+
+                    const knockbackPx = 300; 
+                    const screenWidth = window.innerWidth || 1000;
+                    const totalDuration = bossRunAnimation.effect.getTiming().duration;
+                    const knockbackTime = (knockbackPx / screenWidth) * totalDuration;
+
+                    const startT = bossRunAnimation.currentTime;
+                    const targetT = Math.max(0, startT - knockbackTime); 
+                    const kDuration = 150; 
+                    const kStartTime = performance.now();
+
+                    function tweenKnockback(now) {
+                        let p = (now - kStartTime) / kDuration;
+                        if (p < 1) {
+                            bossRunAnimation.currentTime = startT - (startT - targetT) * p;
+                            requestAnimationFrame(tweenKnockback);
+                        } else {
+                            bossRunAnimation.currentTime = targetT;
+                            bossRunAnimation.play(); // 時間回溯完畢，繼續讓軌道前進
+                            setTimeout(() => { isBossKnockedBack = false; }, 400); 
+                        }
+                    }
+                    requestAnimationFrame(tweenKnockback);
+                };
+            }
+
+            // 📡 追逐雷達
+            function startChaseRadar(runnerPlayer, bossPlayer) {
+                function checkChase() {
+                    if (isEscaped || chasePhase === 0) return;
+
+                    // 💡 察覺機制：坨坨有 25% 機率察覺並獲得隨機速度加成
+                    if (!hasNoticed && !isCaught) {
+                        hasNoticed = true; 
+                        if (Math.random() < 0.3) {
+                            // 產生 0.8 到 2.2 之間的隨機加速倍率
+                            // 0.8: 比 Boss 慢, 1.0: 等速, >1.0: 比 Boss 快
+                            const randomSpeed = (Math.random() * 1.4 + 0.8).toFixed(2);
+                            console.log(`⚡ 坨坨察覺到 BOSS！隨機加速倍率：${randomSpeed}x`);
+                            
+                            runnerPlayer.timeScale = parseFloat(randomSpeed); 
+                            charRunAnimation.playbackRate = parseFloat(randomSpeed); 
+                        }
+                    }
+
+                    const rRect = track.getBoundingClientRect();
+                    const bRect = bossTrack.getBoundingClientRect();
+                    let rCenter = rRect.left + (rRect.width / 2);
+                    let bCenter = bRect.left + (bRect.width / 2);
+
+                    if (bCenter <= rCenter + 60 && !isCaught) {
+                        isCaught = true;
+                        handleCollision(runnerPlayer, bossPlayer);
+                        return;
+                    }
+                    chaseLoopId = requestAnimationFrame(checkChase);
+                }
+                chaseLoopId = requestAnimationFrame(checkChase);
+            }
+
+            // ⚔️ 碰撞劇本處理
+            function handleCollision(runnerPlayer, bossPlayer) {
+                charRunAnimation.pause();
+                bossRunAnimation.pause();
+                bossTrack.style.pointerEvents = 'none'; 
+
+                if (chasePhase === 1) {
+                    if (Math.random() < 0.4) {
+                        console.log("⚔️ 一階：坨坨轉向右方反擊！");
+                        container.style.transform = 'scaleX(-1)'; // 讓坨坨轉身
+                        safePlaySpine(runnerPlayer, "Attack1_1", false);
+                        safePlaySpine(bossPlayer, "Groggy", true);
+                        
+                        // 加入震動與紅光特效
+                        bossContainer.classList.add('shake-anim');
+                        setTimeout(() => bossContainer.classList.remove('shake-anim'), 400);
+
+                        setTimeout(() => {
+                            // 攻擊結束，坨坨轉回來繼續逃跑
+                            container.style.transform = 'scaleX(1)'; 
+                            safePlaySpine(runnerPlayer, "Move", true);
+                            charRunAnimation.play();
+
+                            // 讓坨坨先跑 1.5 秒後，Boss 才恢復 Move (解決連擊判定重疊的 Bug)
+                            setTimeout(() => {
+                                if (chasePhase === 0) return; // 避免已經結束的狀況
+                                console.log("💢 一階：BOSS 從暈眩恢復，暴怒超高速追趕！");
+                                safePlaySpine(bossPlayer, "Move", true);
+                                bossPlayer.timeScale = 1.5; 
+                                bossRunAnimation.playbackRate = 2.0; 
+                                bossRunAnimation.play();
+                                bossTrack.style.pointerEvents = 'auto'; 
+                                
+                                isCaught = false; // 恢復判定
+                                chasePhase = 2; // 進入二階
+                                chaseLoopId = requestAnimationFrame(() => startChaseRadar(runnerPlayer, bossPlayer));
+                            }, 1500); 
+
+                        }, 1000); 
+                    } else {
+                        console.log("💀 一階：反擊失敗，被處決");
+                        bossExecuteKill(runnerPlayer, bossPlayer);
+                    }
+                } 
+                else if (chasePhase === 2) {
+                    if (Math.random() < 0.70) {
+                        console.log("🌟 二階：絕地大反攻，連續技擊殺 BOSS！");
+                        chasePhase = 0; 
+                        container.style.transform = 'scaleX(-1)'; 
+                        safePlaySpine(bossPlayer, "Groggy", true); 
+
+                        bossContainer.classList.add('shake-anim');
+                        setTimeout(() => bossContainer.classList.remove('shake-anim'), 400);
+
+                        const anims = runnerPlayer.skeleton.data.animations.map(a => a.name);
+                        const skillAnims = anims.filter(a => a.startsWith("Skill1_")).sort();
+                        let totalSkillDuration = 0;
+
+                        if (skillAnims.length > 0) {
+                            let firstTrack = safePlaySpine(runnerPlayer, skillAnims[0], false);
+                            totalSkillDuration += (firstTrack && firstTrack.animation ? firstTrack.animation.duration : 1.0);
+                            for (let i = 1; i < skillAnims.length; i++) {
+                                let nextTrack = runnerPlayer.animationState.addAnimation(0, skillAnims[i], false, 0);
+                                totalSkillDuration += (nextTrack && nextTrack.animation ? nextTrack.animation.duration : 1.0);
+                            }
+                        } else {
+                            let fallbackTrack = safePlaySpine(runnerPlayer, "Attack1_1", false);
+                            totalSkillDuration += (fallbackTrack && fallbackTrack.animation ? fallbackTrack.animation.duration : 1.0);
+                        }
+
+                        setTimeout(() => {
+                            console.log("💀 BOSS 倒地身亡！");
+                            safePlaySpine(bossPlayer, "Die", false);
+                            container.style.transform = 'scaleX(1)'; // 坨坨轉回左邊
+                            safePlaySpine(runnerPlayer, "Move", true);
+                            
+                            // 💡 關鍵修復：這裡重置 isCaught，讓抵達終點時能播 Victory
+                            isCaught = false; 
+                            charRunAnimation.play(); 
+
+                            setTimeout(() => {
+                                bossTrack.style.transition = 'opacity 0.6s ease-out';
+                                bossTrack.style.opacity = '0';
+                            }, 3000); 
+                        }, totalSkillDuration * 1000);
+
+                    } else {
+                        console.log("💀 二階：極限逃生失敗，被處決");
+                        bossExecuteKill(runnerPlayer, bossPlayer);
+                    }
+                }
+            }
+
+            // 🔪 處決動畫
+            function bossExecuteKill(runnerPlayer, bossPlayer) {
+                chasePhase = 0;
+                safePlaySpine(runnerPlayer, "Groggy", true);
+                
+                let attackTrack = safePlaySpine(bossPlayer, "Attack3_1", false);
+                let attackDuration = (attackTrack && attackTrack.animation ? attackTrack.animation.duration : 3.0) * 1000;
+                
+                let dieTriggerTime = Math.max(0, attackDuration - 2400); 
+
+                // 觸發死亡與震動特效
+                setTimeout(() => { 
+                    safePlaySpine(runnerPlayer, "Die", false); 
+                    // 觸發坨坨容器震動
+                    container.classList.add('shake-anim');
+                    setTimeout(() => container.classList.remove('shake-anim'), 400);
+                }, dieTriggerTime);
+
+                setTimeout(() => {
+                    safePlaySpine(bossPlayer, "Idle", true); 
+                    track.style.transition = 'opacity 0.6s ease-out';
+                    track.style.opacity = '0';
+                    bossTrack.style.transition = 'opacity 0.6s ease-out';
+                    bossTrack.style.opacity = '0';
+                    setTimeout(initTopRunner, 600); 
+                }, attackDuration + 1000); 
+            }
+        }
+    </script>
+    
+    <!-- Rest Scripts Include UI & DB (Keep completely same as previous logic) -->
+    <script>
+        const preloadedSpines = new Set(); 
         function preloadSpineAssets(charName) {
-            // 💡 檢查機制：如果這個角色已經預載過了，就直接跳過，不浪費效能！
             if (preloadedSpines.has(charName)) return;
-            
             const spineKey = SPINE_MAP[charName]; 
             if (!spineKey) return;
-
-            // 取得該角色預設服裝的路徑
             const basePath = `./spine_assets/${spineKey}/${spineKey}`;
-
-            // 偷偷在背景抓取檔案，寫入瀏覽器快取 (Cache)
             fetch(`${basePath}.png`, { mode: 'no-cors' }); 
             fetch(`${basePath}.skel.bytes`, { mode: 'no-cors' });
             fetch(`${basePath}.atlas.txt`, { mode: 'no-cors' });
-
-            // 幫這個角色打勾，加進記憶清單中
             preloadedSpines.add(charName);
-            // 您可以按 F12 看看滑鼠滑過時，有沒有成功觸發這行字
-            console.log(`🚀 已在背景悄悄預載了 ${charName} 的動畫檔案！`);
         }
         
         window.currentLang = localStorage.getItem('user_lang') || "zh-TW";
         document.getElementById('langSelect').value = currentLang;
 
-        // 💡 強化版翻譯函數：加入 .trim() 去除多餘空白，並防止字典找不到時出錯
         function t(key) {
             if (!key) return key;
             const lang = window.currentLang || 'zh-TW';
-            const cleanKey = String(key).trim(); // 自動清除字尾多餘的空白
-            
-            // 防呆機制：如果選擇了沒有字典的語言（如 en），預設拿 zh-TW 的翻譯來墊檔
+            const cleanKey = String(key).trim(); 
             const safeLang = (typeof LANG_DICT !== 'undefined' && LANG_DICT[lang]) ? lang : 'zh-TW';
-            
             if (typeof LANG_DICT !== 'undefined' && LANG_DICT[safeLang] && LANG_DICT[safeLang][cleanKey]) {
                 return LANG_DICT[safeLang][cleanKey];
             }
             return cleanKey; 
         }
 
-        // 💡 強化版語言切換：防止讀取 official_x_url 時當機
         function changeLanguage(lang) {
             window.currentLang = lang; 
             localStorage.setItem('user_lang', lang);
             document.documentElement.lang = lang === "ja" ? "ja" : "zh-TW"; 
 
-            // 取得安全字典 (避開 en 導致的 undefined 錯誤)
             const safeLang = (typeof LANG_DICT !== 'undefined' && LANG_DICT[lang]) ? lang : 'zh-TW';
             const dict = typeof LANG_DICT !== 'undefined' ? LANG_DICT[safeLang] : {};
             const statusText = document.getElementById('authStatusText');
-            if (statusText) {
-                statusText.innerText = t("auth_online_title");
-            }
+            if (statusText) statusText.innerText = t("auth_online_title");
             document.title = t('app_title') || dict.app_title || "嘟嘟臉金蠟筆記事本";
             
-            // 替換靜態標籤
             document.querySelectorAll('[data-lang-key]').forEach(el => {
                 const key = el.getAttribute('data-lang-key');
-                if (dict[key]) {
-                    el.innerText = dict[key];
-                }
+                if (dict[key]) el.innerText = dict[key];
             });
 
             const searchInput = document.getElementById('searchInput');
             if (searchInput) searchInput.placeholder = t('filter_search_placeholder') || dict.filter_search_placeholder || "搜尋坨坨...";
 
-            // 🌟 修改這裡：如果 dict.official_x_url 找不到，會給預設值，不會再報錯當機！
             const xLink = document.getElementById('dynamicXLink');
             if (xLink) {
                 xLink.href = dict.official_x_url || "https://x.com/trickcal_TW";
                 xLink.innerText = dict.x_label || "台港澳服官方X";
             }
 
-            // 重新繪製動態畫面 (現在它絕對能順利執行到了！)
             if (typeof INITIAL_DATA !== 'undefined') {
-                buildFilterPanel();
-                renderMatrix();
-                calculateStats();
+                buildFilterPanel(); renderMatrix(); calculateStats();
             }
 
             if (typeof updateAuthButtonUI === 'function' && typeof currentUser !== 'undefined') {
                 updateAuthButtonUI(currentUser);
             }
         }
-        // ==========================================
-        // 深色模式初始化與切換邏輯
-        // ==========================================
+
         let isDarkMode = localStorage.getItem('theme') === 'dark';
-        if (isDarkMode) {
-            document.documentElement.classList.add('dark');
-        } else if (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            document.documentElement.classList.add('dark');
-            isDarkMode = true;
+        if (isDarkMode) { document.documentElement.classList.add('dark'); } 
+        else if (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark'); isDarkMode = true;
         }
 
         function toggleDarkMode() {
@@ -684,14 +891,13 @@
         window.onerror = function(message, source, lineno, colno, error) {
             const banner = document.getElementById('errorBanner');
             if (banner) {
-                banner.innerHTML = `<span>⚠️ 系統攔截到致命錯誤！請將這段文字貼給 AI：</span><span class="font-mono text-xs break-all bg-red-200 dark:bg-red-900 p-1 rounded">${message} (行 ${lineno})</span>`;
+                banner.innerHTML = `<span>⚠️ 系統攔截到錯誤：</span><span class="font-mono text-xs break-all bg-red-200 dark:bg-red-900 p-1 rounded">${message} (行 ${lineno})</span>`;
                 banner.classList.remove('hidden');
             }
             return false;
         }
         window.addEventListener('load', () => {
             document.getElementById('loader').style.display = 'none';
-            // 🚀 在畫面載入完成時，順便啟動頂部跑酷小人
             initTopRunner();
         });
     </script>
@@ -720,29 +926,16 @@
 
         const storageKey = 'trickcal_matrix_saved_states_iron_v26';
         let savedStates = {};
-        try {
-            savedStates = JSON.parse(localStorage.getItem(storageKey)) || {};
-        } catch(e) {
-            savedStates = {}; 
-        }
+        try { savedStates = JSON.parse(localStorage.getItem(storageKey)) || {}; } catch(e) { savedStates = {}; }
 
-        // 修改後的 activeFilters (所有類別改為陣列)
-        let activeFilters = { 
-            personality: [], race: [], position: [], job: [], 
-            gridLayer: "all", gridType: [], search: "", displayMode: "all" 
-        };
+        let activeFilters = { personality: [], race: [], position: [], job: [], gridLayer: "all", gridType: [], search: "", displayMode: "all" };
         let isFilterOpen = true;
-
-        // 螢幕大於或等於 768px (平板/電腦) 預設為開啟；小於 768px (手機) 預設為關閉
         let isStatsOpen = window.innerWidth >= 768;
-
         let db = null, auth = null, currentUser = null;
 
         function initStates() {
             INITIAL_DATA.forEach(char => {
-                if (savedStates['owned_' + char.name] === undefined) {
-                    savedStates['owned_' + char.name] = false;
-                }
+                if (savedStates['owned_' + char.name] === undefined) savedStates['owned_' + char.name] = false;
                 [1, 2, 3].forEach(l => {
                     char[`layer${l}`].forEach((attr, idx) => {
                         const key = `${char.name}_l${l}_${attr}_${idx}`;
@@ -756,77 +949,40 @@
             isStatsOpen = !isStatsOpen;
             const body = document.getElementById("statsPanelBody");
             const icon = document.getElementById("statsToggleIcon");
-            if(isStatsOpen) {
-                body.classList.remove("hidden");
-                body.classList.add("grid");
-                icon.innerText = "▼";
-            } else {
-                body.classList.add("hidden");
-                body.classList.remove("grid");
-                icon.innerText = "▶";
-            }
+            if(isStatsOpen) { body.classList.remove("hidden"); body.classList.add("grid"); icon.innerText = "▼"; } 
+            else { body.classList.add("hidden"); body.classList.remove("grid"); icon.innerText = "▶"; }
         }
 
         function toggleOwnership(charName) {
             savedStates['owned_' + charName] = !savedStates['owned_' + charName];
-            updateOwnershipUI(charName);
-            calculateStats();
+            updateOwnershipUI(charName); calculateStats();
         }
 
-        // 修改 OwnershipUI 來對應新的 char-avatar-container
         function updateOwnershipUI(charName) {
             const container = document.getElementById(`avatar_container_${charName}`);
             const fallAvatar = document.getElementById(`fall_av_${charName}`);
             if (container) {
-                if (savedStates['owned_' + charName]) {
-                    container.classList.remove('unowned-avatar');
-                    if (fallAvatar) fallAvatar.classList.remove('unowned-avatar');
-                } else {
-                    container.classList.add('unowned-avatar');
-                    if (fallAvatar) fallAvatar.classList.add('unowned-avatar');
-                }
+                if (savedStates['owned_' + charName]) { container.classList.remove('unowned-avatar'); if (fallAvatar) fallAvatar.classList.remove('unowned-avatar'); } 
+                else { container.classList.add('unowned-avatar'); if (fallAvatar) fallAvatar.classList.add('unowned-avatar'); }
             }
         }
 
         function calculateStats() {
-            let layerTotals = { 1: {}, 2: {}, 3: {} };
-            let layerOpened = { 1: {}, 2: {}, 3: {} };
-            let layerBonus = { 1: {}, 2: {}, 3: {} };
-            let layerMissingCrayons = { 1: 0, 2: 0, 3: 0 };
-            
-            [1, 2, 3].forEach(l => {
-                ATTR_PRIORITY.forEach(a => {
-                    layerTotals[l][a] = 0;
-                    layerOpened[l][a] = 0;
-                    layerBonus[l][a] = 0;
-                });
-            });
-
-            let globalUsedCrayons = 0, globalNeededCrayons = 0;
-            let attrs = { attack: 0, def: 0, hp: 0, crit: 0, crit_res: 0 };
-            let ownedCount = 0;
+            let layerTotals = { 1: {}, 2: {}, 3: {} }, layerOpened = { 1: {}, 2: {}, 3: {} }, layerBonus = { 1: {}, 2: {}, 3: {} }, layerMissingCrayons = { 1: 0, 2: 0, 3: 0 };
+            [1, 2, 3].forEach(l => { ATTR_PRIORITY.forEach(a => { layerTotals[l][a] = 0; layerOpened[l][a] = 0; layerBonus[l][a] = 0; }); });
+            let globalUsedCrayons = 0, globalNeededCrayons = 0, attrs = { attack: 0, def: 0, hp: 0, crit: 0, crit_res: 0 }, ownedCount = 0;
 
             INITIAL_DATA.forEach(char => {
                 if (savedStates['owned_' + char.name]) ownedCount++;
-                
                 [1, 2, 3].forEach(l => {
                     const rule = LAYER_RULES[l];
                     char[`layer${l}`].forEach((attr, idx) => {
                         const key = `${char.name}_l${l}_${attr}_${idx}`;
                         const isOpened = savedStates[key];
                         const attrKey = ATTR_MAP[attr];
-                        
                         layerTotals[l][attr]++;
-
-                        if (isOpened) {
-                            layerOpened[l][attr]++;
-                            layerBonus[l][attr] += rule.bonus;
-                            globalUsedCrayons += rule.crayon;
-                            if (attrKey) attrs[attrKey] += rule.bonus;
-                        } else { 
-                            globalNeededCrayons += rule.crayon; 
-                            layerMissingCrayons[l] += rule.crayon;
-                        }
+                        if (isOpened) { layerOpened[l][attr]++; layerBonus[l][attr] += rule.bonus; globalUsedCrayons += rule.crayon; if (attrKey) attrs[attrKey] += rule.bonus; } 
+                        else { globalNeededCrayons += rule.crayon; layerMissingCrayons[l] += rule.crayon; }
                     });
                 });
             });
@@ -836,263 +992,109 @@
             document.getElementById('total_used_crayon').innerText = globalUsedCrayons;
             document.getElementById('total_needed_crayon').innerText = globalNeededCrayons;
 
-            Object.keys(attrs).forEach(k => {
-                const el = document.getElementById(`attr_${k}`);
-                if (el) el.innerText = `+${attrs[k]}%`;
-            });
+            Object.keys(attrs).forEach(k => { const el = document.getElementById(`attr_${k}`); if (el) el.innerText = `+${attrs[k]}%`; });
             
             [1, 2, 3].forEach(l => {
                 let html = '<div><div class="grid grid-cols-2 gap-x-2 gap-y-1 mt-1">';
                 ATTR_PRIORITY.forEach(attr => {
                     if(layerTotals[l][attr] > 0) {
-                        html += `
-                            <div class="flex justify-between border-b border-gray-100 dark:border-gray-700 pb-0.5">
-                                <span>${t(attr).substring(0,2)}: ${layerOpened[l][attr]}/${layerTotals[l][attr]}</span>
-                                <span class="font-bold text-amber-600 dark:text-amber-400">+${layerBonus[l][attr]}%</span>
-                            </div>
-                        `;
+                        html += `<div class="flex justify-between border-b border-gray-100 dark:border-gray-700 pb-0.5"><span>${t(attr).substring(0,2)}: ${layerOpened[l][attr]}/${layerTotals[l][attr]}</span><span class="font-bold text-amber-600 dark:text-amber-400">+${layerBonus[l][attr]}%</span></div>`;
                     }
                 });
                 html += '</div></div>';
-                
-                html += `
-                    <div class="mt-2 pt-1 border-t border-gray-100 dark:border-gray-700 flex justify-end">
-                        <span class="bg-red-50 dark:bg-gray-700 text-red-600 dark:text-red-400 px-1.5 py-0.5 rounded text-[10px] font-bold border border-red-100 dark:border-gray-600">
-                            ${t('stats_need_more_prefix')}${layerMissingCrayons[l]}${t('stats_need_more_suffix')}
-                        </span>
-                    </div>
-                `;
-                
-                const layerStatBox = document.getElementById(`stat_layer_${l}`);
-                if (layerStatBox) layerStatBox.innerHTML = html;
+                html += `<div class="mt-2 pt-1 border-t border-gray-100 dark:border-gray-700 flex justify-end"><span class="bg-red-50 dark:bg-gray-700 text-red-600 dark:text-red-400 px-1.5 py-0.5 rounded text-[10px] font-bold border border-red-100 dark:border-gray-600">${t('stats_need_more_prefix')}${layerMissingCrayons[l]}${t('stats_need_more_suffix')}</span></div>`;
+                const layerStatBox = document.getElementById(`stat_layer_${l}`); if (layerStatBox) layerStatBox.innerHTML = html;
             });
 
-            // 💡 優化5: 將本機存檔的錯誤捕捉從雲端存檔中分離
-            try {
-                localStorage.setItem(storageKey, JSON.stringify(savedStates));
-            } catch(e) {
-                console.warn("本機存檔失敗 (可能是無痕模式或空間不足):", e);
-            }
-
-            if (currentUser && db) {
-                db.collection("player_boards").doc(currentUser.uid).set({
-                    states: savedStates,
-                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                }).catch(e => console.warn("雲端寫入延遲:", e));
-            }
-
+            try { localStorage.setItem(storageKey, JSON.stringify(savedStates)); } catch(e) {}
+            if (currentUser && db) db.collection("player_boards").doc(currentUser.uid).set({ states: savedStates, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }).catch(e => {});
             applyFilterUI();
         }
 
         function toggleFilterPanel() {
             isFilterOpen = !isFilterOpen;
-            const body = document.getElementById("filterPanelBody");
-            const icon = document.getElementById("filterToggleIcon");
-            if(isFilterOpen) {
-                body.classList.remove("hidden");
-                icon.innerText = "▼";
-            } else {
-                body.classList.add("hidden");
-                icon.innerText = "▶";
-            }
+            const body = document.getElementById("filterPanelBody"); const icon = document.getElementById("filterToggleIcon");
+            if(isFilterOpen) { body.classList.remove("hidden"); icon.innerText = "▼"; } else { body.classList.add("hidden"); icon.innerText = "▶"; }
         }
 
-        function handleSearch() {
-            activeFilters.search = document.getElementById("searchInput").value.trim().toLowerCase();
-            applyFilterUI();
-        }
-
-        function setDisplayMode(mode) {
-            activeFilters.displayMode = mode;
-            ["all", "1", "2", "3"].forEach(m => {
-                const btn = document.getElementById(`btn_disp_${m}`);
-                if(btn) btn.className = (mode === m) ? btnDispActiveStyle : btnInactiveStyle;
-            });
-            applyFilterUI();
-        }
+        function handleSearch() { activeFilters.search = document.getElementById("searchInput").value.trim().toLowerCase(); applyFilterUI(); }
+        function setDisplayMode(mode) { activeFilters.displayMode = mode; ["all", "1", "2", "3"].forEach(m => { const btn = document.getElementById(`btn_disp_${m}`); if(btn) btn.className = (mode === m) ? btnDispActiveStyle : btnInactiveStyle; }); applyFilterUI(); }
 
         function buildFilterPanel() {
-            const keys = { 
-                personality: ["天真", "冷靜", "狂亂", "活潑", "憂鬱"], 
-                race: [], 
-                position: ["前排", "中排", "後排"], 
-                job: [] 
-            };
-            
-            INITIAL_DATA.forEach(c => {
-                if (c.race && !keys.race.includes(c.race)) keys.race.push(c.race);
-                if (c.job && !keys.job.includes(c.job)) keys.job.push(c.job);
-            });
-
+            const keys = { personality: ["天真", "冷靜", "狂亂", "活潑", "憂鬱"], race: [], position: ["前排", "中排", "後排"], job: [] };
+            INITIAL_DATA.forEach(c => { if (c.race && !keys.race.includes(c.race)) keys.race.push(c.race); if (c.job && !keys.job.includes(c.job)) keys.job.push(c.job); });
             Object.keys(keys).forEach(category => {
-                const container = document.getElementById(`filter_${category}`);
-                if(!container) return;
-                container.innerHTML = "";
-                
-                const allBtn = document.createElement("button");
-                allBtn.innerText = t("全部");
-                allBtn.id = `btn_filter_${category}_all`;
-                allBtn.className = btnActiveStyle;
-                allBtn.onclick = () => selectFilter(category, "");
-                container.appendChild(allBtn);
-
+                const container = document.getElementById(`filter_${category}`); if(!container) return; container.innerHTML = "";
+                const allBtn = document.createElement("button"); allBtn.innerText = t("全部"); allBtn.id = `btn_filter_${category}_all`; allBtn.className = btnActiveStyle; allBtn.onclick = () => selectFilter(category, ""); container.appendChild(allBtn);
                 keys[category].forEach(val => {
-                    const btn = document.createElement("button");
-                    btn.id = `btn_filter_${category}_${val}`;
-                    btn.className = btnInactiveStyle;
-                    btn.onclick = () => selectFilter(category, val);
-                    
-                    let keyName = val;
-                    if (category === 'race' && val === '???') keyName = 'unknown';
-                    
-                    const mapKey = `${category}_${keyName}`;
-                    const cloudIconPath = IMAGE_MAP[mapKey] || "";
-                    
-                    if(cloudIconPath) {
-                        btn.innerHTML = `
-                            <img src="${cloudIconPath}" alt="${val}" onerror="this.style.display='none';" class="w-3.5 h-3.5 object-contain shrink-0">
-                            <span>${t(val)}</span>
-                        `;
-                    } else {
-                        btn.innerHTML = `<span>${t(val)}</span>`;
-                    }
+                    const btn = document.createElement("button"); btn.id = `btn_filter_${category}_${val}`; btn.className = btnInactiveStyle; btn.onclick = () => selectFilter(category, val);
+                    let keyName = val; if (category === 'race' && val === '???') keyName = 'unknown';
+                    const mapKey = `${category}_${keyName}`; const cloudIconPath = IMAGE_MAP[mapKey] || "";
+                    if(cloudIconPath) btn.innerHTML = `<img src="${cloudIconPath}" alt="${val}" onerror="this.style.display='none';" class="w-3.5 h-3.5 object-contain shrink-0"><span>${t(val)}</span>`;
+                    else btn.innerHTML = `<span>${t(val)}</span>`;
                     container.appendChild(btn);
                 });
             });
 
             const layerContainer = document.getElementById("filter_gridLayer");
             if(layerContainer){
-                layerContainer.innerHTML = "";
-                const layers = [ {v:"all", n: t("全部")}, {v:"1", n:`🥇 ${t("level_1st")}`}, {v:"2", n:`🥈 ${t("level_2nd")}`}, {v:"3", n:`🥉 ${t("level_3st")}`} ];
-                layers.forEach(ly => {
-                    const btn = document.createElement("button");
-                    btn.innerText = ly.n;
-                    btn.id = `btn_filter_gridLayer_${ly.v}`;
-                    btn.className = ly.v === "all" ? btnActiveStyle : btnInactiveStyle;
-                    btn.onclick = () => selectGridLayerFilter(ly.v);
-                    layerContainer.appendChild(btn);
-                });
+                layerContainer.innerHTML = ""; const layers = [ {v:"all", n: t("全部")}, {v:"1", n:`🥇 ${t("level_1st")}`}, {v:"2", n:`🥈 ${t("level_2nd")}`}, {v:"3", n:`🥉 ${t("level_3st")}`} ];
+                layers.forEach(ly => { const btn = document.createElement("button"); btn.innerText = ly.n; btn.id = `btn_filter_gridLayer_${ly.v}`; btn.className = ly.v === "all" ? btnActiveStyle : btnInactiveStyle; btn.onclick = () => selectGridLayerFilter(ly.v); layerContainer.appendChild(btn); });
             }
 
             const typeContainer = document.getElementById("filter_gridType");
             if(typeContainer){
-                typeContainer.innerHTML = "";
-                const types = ["攻擊", "防禦", "血量", "爆擊", "爆抗"];
-                const allTypeBtn = document.createElement("button");
-                allTypeBtn.innerText = t("全部");
-                allTypeBtn.id = `btn_filter_gridType_all`;
-                allTypeBtn.className = btnActiveStyle;
-                allTypeBtn.onclick = () => selectGridTypeFilter("");
-                typeContainer.appendChild(allTypeBtn);
-
-                types.forEach(tp => {
-                    const btn = document.createElement("button");
-                    btn.innerText = t(tp);
-                    btn.id = `btn_filter_gridType_${tp}`;
-                    btn.className = btnInactiveStyle;
-                    btn.onclick = () => selectGridTypeFilter(tp);
-                    typeContainer.appendChild(btn);
-                });
+                typeContainer.innerHTML = ""; const types = ["攻擊", "防禦", "血量", "爆擊", "爆抗"];
+                const allTypeBtn = document.createElement("button"); allTypeBtn.innerText = t("全部"); allTypeBtn.id = `btn_filter_gridType_all`; allTypeBtn.className = btnActiveStyle; allTypeBtn.onclick = () => selectGridTypeFilter(""); typeContainer.appendChild(allTypeBtn);
+                types.forEach(tp => { const btn = document.createElement("button"); btn.innerText = t(tp); btn.id = `btn_filter_gridType_${tp}`; btn.className = btnInactiveStyle; btn.onclick = () => selectGridTypeFilter(tp); typeContainer.appendChild(btn); });
             }
         }
 
         function selectFilter(category, value) {
             const btnAll = document.getElementById(`btn_filter_${category}_all`);
-    
-            // 如果點擊「全部」
-            if (value === "") {
-                activeFilters[category] = [];
-                btnAll.className = btnActiveStyle;
-                // 把該類別的其他按鈕設為未選
-                document.querySelectorAll(`[id^='btn_filter_${category}_']`).forEach(btn => {
-                    if(btn.id !== btnAll.id) btn.className = btnInactiveStyle;
-                });
-            } else {
-                // 多選邏輯
-                btnAll.className = btnInactiveStyle;
-                const index = activeFilters[category].indexOf(value);
-                const btn = document.getElementById(`btn_filter_${category}_${value}`);
-        
-                if (index > -1) {
-                    activeFilters[category].splice(index, 1); // 已選則移除
-                    btn.className = btnInactiveStyle;
-                } else {
-                    activeFilters[category].push(value); // 未選則加入
-                    btn.className = btnActiveStyle;
-                }
-        
-                // 如果全部取消選取，則自動回到「全部」狀態
-                if (activeFilters[category].length === 0) {
-                    btnAll.className = btnActiveStyle;
-                }
+            if (value === "") { activeFilters[category] = []; btnAll.className = btnActiveStyle; document.querySelectorAll(`[id^='btn_filter_${category}_']`).forEach(btn => { if(btn.id !== btnAll.id) btn.className = btnInactiveStyle; }); } 
+            else {
+                btnAll.className = btnInactiveStyle; const index = activeFilters[category].indexOf(value); const btn = document.getElementById(`btn_filter_${category}_${value}`);
+                if (index > -1) { activeFilters[category].splice(index, 1); btn.className = btnInactiveStyle; } else { activeFilters[category].push(value); btn.className = btnActiveStyle; }
+                if (activeFilters[category].length === 0) btnAll.className = btnActiveStyle;
             }
             applyFilterUI();
         }
 
         function selectGridLayerFilter(layerValue) {
-            activeFilters.gridLayer = layerValue;
-            const buttons = document.getElementById("filter_gridLayer").getElementsByTagName("button");
-            for (let btn of buttons) {
-                if (btn.id.endsWith(`_${layerValue}`)) { btn.className = btnActiveStyle; } 
-                else { btn.className = btnInactiveStyle; }
-            }
-            applyFilterUI();
+            activeFilters.gridLayer = layerValue; const buttons = document.getElementById("filter_gridLayer").getElementsByTagName("button");
+            for (let btn of buttons) { if (btn.id.endsWith(`_${layerValue}`)) btn.className = btnActiveStyle; else btn.className = btnInactiveStyle; } applyFilterUI();
         }
 
         function selectGridTypeFilter(typeValue) {
-            activeFilters.gridType = typeValue;
-            const buttons = document.getElementById("filter_gridType").getElementsByTagName("button");
-            for (let btn of buttons) {
-                if ((typeValue === "" && btn.id.endsWith("_all")) || (typeValue !== "" && btn.id.endsWith(`_${typeValue}`))) { btn.className = btnActiveStyle; } 
-                else { btn.className = btnInactiveStyle; }
-            }
-            applyFilterUI();
+            activeFilters.gridType = typeValue; const buttons = document.getElementById("filter_gridType").getElementsByTagName("button");
+            for (let btn of buttons) { if ((typeValue === "" && btn.id.endsWith("_all")) || (typeValue !== "" && btn.id.endsWith(`_${typeValue}`))) btn.className = btnActiveStyle; else btn.className = btnInactiveStyle; } applyFilterUI();
         }
 
         function resetFilters() {
-            selectFilter("personality", ""); selectFilter("race", ""); selectFilter("position", ""); selectFilter("job", "");
-            selectGridLayerFilter("all"); selectGridTypeFilter("");
-            document.getElementById("searchInput").value = "";
-            activeFilters.search = "";
-            setDisplayMode('all');
+            selectFilter("personality", ""); selectFilter("race", ""); selectFilter("position", ""); selectFilter("job", ""); selectGridLayerFilter("all"); selectGridTypeFilter("");
+            document.getElementById("searchInput").value = ""; activeFilters.search = ""; setDisplayMode('all');
         }
 
         function applyFilterUI() {
             INITIAL_DATA.forEach(char => {
-                // 陣列長度為 0 表示全選，否則檢查是否包含該特徵
                 const matchP = activeFilters.personality.length === 0 || activeFilters.personality.includes(char.personality);
                 const matchR = activeFilters.race.length === 0 || activeFilters.race.includes(char.race);
                 const matchPos = activeFilters.position.length === 0 || activeFilters.position.includes(char.position);
                 const matchJ = activeFilters.job.length === 0 || activeFilters.job.includes(char.job);
-        
-                // gridType 同理也改為陣列檢查 (選多種屬性代表包含其一即可)
                 let matchGrid = true;
                 if (activeFilters.gridType.length > 0) {
                     const layersToSearch = activeFilters.gridLayer === "all" ? [1,2,3] : [parseInt(activeFilters.gridLayer)];
-                    matchGrid = layersToSearch.some(l => 
-                        char[`layer${l}`].some(attr => activeFilters.gridType.includes(attr))
-                    );
+                    matchGrid = layersToSearch.some(l => char[`layer${l}`].some(attr => activeFilters.gridType.includes(attr)));
                 }
-
                 const matchSearch = !activeFilters.search || t(char.name).toLowerCase().includes(activeFilters.search) || char.name.toLowerCase().includes(activeFilters.search);
 
                 const cardElement = document.getElementById(`char_card_${char.name}`);
                 if (cardElement) {
-                    if (matchP && matchR && matchPos && matchJ && matchGrid && matchSearch) { 
-                        cardElement.classList.remove("hidden"); 
-                    } else { 
-                        cardElement.classList.add("hidden"); 
-                    }
-
+                    if (matchP && matchR && matchPos && matchJ && matchGrid && matchSearch) cardElement.classList.remove("hidden"); else cardElement.classList.add("hidden");
                     [1, 2, 3].forEach(l => {
                         const layerWrap = document.getElementById(`layer_wrap_${char.name}_${l}`);
-                        if(layerWrap) {
-                            if(activeFilters.displayMode === 'all' || activeFilters.displayMode === String(l)) {
-                                layerWrap.style.display = 'flex';
-                            } else {
-                                layerWrap.style.display = 'none';
-                            }
-                        }
+                        if(layerWrap) { if(activeFilters.displayMode === 'all' || activeFilters.displayMode === String(l)) layerWrap.style.display = 'flex'; else layerWrap.style.display = 'none'; }
                     });
                 }
             });
@@ -1100,378 +1102,141 @@
             const personalities = ["天真", "冷靜", "狂亂", "活潑", "憂鬱"];
             personalities.forEach(pName => {
                 const pSection = document.getElementById(`section_p_${pName}`);
-                if (pSection) {
-                    const visibleInSec = pSection.querySelectorAll("[id^='char_card_']:not(.hidden)").length;
-                    if (visibleInSec === 0) pSection.classList.add("hidden");
-                    else pSection.classList.remove("hidden");
-                }
+                if (pSection) { const visibleInSec = pSection.querySelectorAll("[id^='char_card_']:not(.hidden)").length; if (visibleInSec === 0) pSection.classList.add("hidden"); else pSection.classList.remove("hidden"); }
             });
         }
 
         function renderMatrix() {
-            const container = document.getElementById('matrixContainer');
-            if(!container) return;
-            container.innerHTML = '';
-            
+            const container = document.getElementById('matrixContainer'); if(!container) return; container.innerHTML = '';
             const personalities = ["天真", "冷靜", "狂亂", "活潑", "憂鬱"];
-
-            const personalityBorderColors = {
-                "天真": "border-green-500",
-                "冷靜": "border-blue-500",
-                "狂亂": "border-red-500",
-                "活潑": "border-yellow-400",
-                "憂鬱": "border-purple-500"
-            };
+            const personalityBorderColors = { "天真": "border-green-500", "冷靜": "border-blue-500", "狂亂": "border-red-500", "活潑": "border-yellow-400", "憂鬱": "border-purple-500" };
 
             personalities.forEach(pName => {
-                const pChars = INITIAL_DATA.filter(c => c.personality === pName);
-                if (pChars.length === 0) return;
-
-                const pSection = document.createElement('section');
-                pSection.id = `section_p_${pName}`;
-                pSection.className = "bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-2xl p-4 sm:p-6 shadow-sm border-2 border-amber-100/70 dark:border-gray-700 mb-6 transition-colors";
-                
-                pSection.innerHTML = `
-                    <div class="border-b-2 border-amber-400 dark:border-gray-600 pb-2.5 mb-4 flex justify-between items-center flex-wrap gap-2">
-                        <h2 class="text-lg sm:text-xl font-extrabold text-amber-955 dark:text-amber-400 flex items-center">📂 ${t(pName)}${t('stats_character')}</h2>
-                    </div>
-                `;
-
-                const charListContainer = document.createElement('div');
-                charListContainer.className = "space-y-4";
+                const pChars = INITIAL_DATA.filter(c => c.personality === pName); if (pChars.length === 0) return;
+                const pSection = document.createElement('section'); pSection.id = `section_p_${pName}`; pSection.className = "bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-2xl p-4 sm:p-6 shadow-sm border-2 border-amber-100/70 dark:border-gray-700 mb-6 transition-colors";
+                pSection.innerHTML = `<div class="border-b-2 border-amber-400 dark:border-gray-600 pb-2.5 mb-4 flex justify-between items-center flex-wrap gap-2"><h2 class="text-lg sm:text-xl font-extrabold text-amber-955 dark:text-amber-400 flex items-center">📂 ${t(pName)}${t('stats_character')}</h2></div>`;
+                const charListContainer = document.createElement('div'); charListContainer.className = "space-y-4";
 
                 pChars.forEach(char => {
-                    const charCard = document.createElement('div');
-                    charCard.id = `char_card_${char.name}`;
-                    charCard.className = "char-card-wrapper bg-white/50 dark:bg-gray-750/50 rounded-xl border border-gray-200/60 dark:border-gray-600 flex flex-row items-stretch transition-all duration-200 overflow-hidden";
-                    charCard.setAttribute('onmouseenter', `checkMarquee(this, true); preloadSpineAssets('${char.name}');`);
-                    charCard.setAttribute('onmouseleave', 'checkMarquee(this, false)');
+                    const charCard = document.createElement('div'); charCard.id = `char_card_${char.name}`; charCard.className = "char-card-wrapper bg-white/50 dark:bg-gray-750/50 rounded-xl border border-gray-200/60 dark:border-gray-600 flex flex-row items-stretch transition-all duration-200 overflow-hidden";
+                    charCard.setAttribute('onmouseenter', `checkMarquee(this, true); preloadSpineAssets('${char.name}');`); charCard.setAttribute('onmouseleave', 'checkMarquee(this, false)');
                     
-                    const avatarPath = IMAGE_MAP[`avatar_${char.name}`] || "";
-                    const hoverPath = IMAGE_MAP[`hover_avatar_${char.name}`] || avatarPath;
-                    const pPath = IMAGE_MAP[`personality_${char.personality}`] || "";
-                    
-                    let raceIconName = char.race;
-                    if (char.race === "???") raceIconName = "unknown";
-                    const racePath = IMAGE_MAP[`race_${raceIconName}`] || "";
-                    const posPath = IMAGE_MAP[`position_${char.position}`] || "";
-                    const jobPath = IMAGE_MAP[`job_${char.job}`] || "";
-
-                    const borderColorClass = personalityBorderColors[char.personality] || "border-gray-300";
-                    const isOwned = savedStates['owned_' + char.name];
-                    const avatarClass = isOwned ? "" : "unowned-avatar";
-
-                    const detailBtn = document.createElement('button');
-                    detailBtn.onclick = () => window.open(`char_detail.html?char=${encodeURIComponent(char.name)}`, '_blank');
-
-                    // 💡 動態隱藏邏輯：如果是英文版 (en)，則加入 hidden 類別
+                    const avatarPath = IMAGE_MAP[`avatar_${char.name}`] || ""; const hoverPath = IMAGE_MAP[`hover_avatar_${char.name}`] || avatarPath;
+                    const pPath = IMAGE_MAP[`personality_${char.personality}`] || ""; let raceIconName = char.race; if (char.race === "???") raceIconName = "unknown";
+                    const racePath = IMAGE_MAP[`race_${raceIconName}`] || ""; const posPath = IMAGE_MAP[`position_${char.position}`] || ""; const jobPath = IMAGE_MAP[`job_${char.job}`] || "";
+                    const borderColorClass = personalityBorderColors[char.personality] || "border-gray-300"; const isOwned = savedStates['owned_' + char.name]; const avatarClass = isOwned ? "" : "unowned-avatar";
+                    const detailBtn = document.createElement('button'); detailBtn.onclick = () => window.open(`char_detail.html?char=${encodeURIComponent(char.name)}`, '_blank');
                     const displayClass = (window.currentLang === 'en') ? 'hidden' : 'flex';
-
                     detailBtn.className = `w-8 sm:w-10 shrink-0 ${displayClass} items-center justify-center bg-amber-500/10 hover:bg-amber-300 dark:bg-gray-700/50 dark:hover:bg-gray-600 border-r border-amber-200/50 dark:border-gray-600 transition-colors cursor-pointer group`;
                     detailBtn.title = (window.currentLang === 'ja') ? `${t(char.name)}の詳細データを見る` : `查看 ${t(char.name)} 的詳細資料`;
-
-                    detailBtn.innerHTML = `
-                        <img src="https://i.postimg.cc/T1Y9CC22/Album-Icon-Info.png" 
-                             alt="Info" 
-                             class="w-5 h-5 sm:w-6 sm:h-6 opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-200">
-                    `;
+                    detailBtn.innerHTML = `<img src="https://i.postimg.cc/T1Y9CC22/Album-Icon-Info.png" alt="Info" class="w-5 h-5 sm:w-6 sm:h-6 opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-200">`;
                     charCard.appendChild(detailBtn);
 
-                    const cardInner = document.createElement('div');
-                    cardInner.className = "flex-1 p-3 sm:p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-4 w-full overflow-hidden";
-
-                    const nameCol = document.createElement('div');
-                    nameCol.className = "flex flex-row items-center justify-start gap-3 min-w-[210px] w-full md:w-auto border-b md:border-b-0 pb-2 md:pb-0 border-gray-200/50 dark:border-gray-700";
-                    
+                    const cardInner = document.createElement('div'); cardInner.className = "flex-1 p-3 sm:p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-4 w-full overflow-hidden";
+                    const nameCol = document.createElement('div'); nameCol.className = "flex flex-row items-center justify-start gap-3 min-w-[210px] w-full md:w-auto border-b md:border-b-0 pb-2 md:pb-0 border-gray-200/50 dark:border-gray-700";
                     nameCol.innerHTML = `
                         <div class="relative shrink-0 w-12 h-12" onclick="toggleOwnership('${char.name}')">
                             <div id="avatar_container_${char.name}" class="char-avatar-container w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-inner bg-white ${avatarClass}">
-                                <img src="${avatarPath}" alt="${t(char.name)}" 
-                                     onerror="this.style.display='none'; document.getElementById('fall_av_${char.name}').classList.remove('hidden');">
-                                <img src="${hoverPath}" class="avatar-alt" alt="${t(char.name)}" 
-                                     onerror="this.style.display='none';">
+                                <img src="${avatarPath}" alt="${t(char.name)}" onerror="this.style.display='none'; document.getElementById('fall_av_${char.name}').classList.remove('hidden');">
+                                <img src="${hoverPath}" class="avatar-alt" alt="${t(char.name)}" onerror="this.style.display='none';">
                             </div>
-                            
-                            <div id="fall_av_${char.name}" class="hidden char-avatar-container w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-sm flex items-center justify-center font-bold text-amber-900 bg-gradient-to-br from-amber-100 to-yellow-200 text-lg ${avatarClass}">
-                                ${t(char.name).charAt(0)}
-                            </div>
+                            <div id="fall_av_${char.name}" class="hidden char-avatar-container w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-sm flex items-center justify-center font-bold text-amber-900 bg-gradient-to-br from-amber-100 to-yellow-200 text-lg ${avatarClass}">${t(char.name).charAt(0)}</div>
                         </div>
-
                         <div class="flex flex-col gap-0.5 w-full overflow-hidden">
-                            <div class="marquee-box text-sm sm:text-base font-bold text-gray-900 dark:text-gray-100" title="${t(char.name)}">
-                                <span class="marquee-content">${t(char.name)}</span>
-                            </div>
-                            
+                            <div class="marquee-box text-sm sm:text-base font-bold text-gray-900 dark:text-gray-100" title="${t(char.name)}"><span class="marquee-content">${t(char.name)}</span></div>
                             <div class="flex items-center gap-1.5 pt-1 border-t border-dashed border-gray-100 dark:border-gray-700">
-                                <div class="flex items-center hover-scale cursor-help">
-                                    <img src="${pPath}" alt="${t(char.personality)}" title="${t('stats_personality')} ${t(char.personality)}"
-                                         onerror="this.style.display='none'; document.getElementById('fall_p_${char.name}').classList.remove('hidden');"
-                                         class="w-4 h-4 object-contain">
-                                    <span id="fall_p_${char.name}" class="hidden text-[9px] px-1 rounded bg-amber-50 dark:bg-gray-700 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-gray-600 whitespace-nowrap">
-                                        ${t(char.personality)}
-                                    </span>
-                                </div>
-                                <div class="flex items-center hover-scale cursor-help">
-                                    <img src="${racePath}" alt="${t(char.race)}" title="${t('stats_race')} ${t(char.race)}"
-                                         onerror="this.style.display='none'; document.getElementById('fall_r_${char.name}').classList.remove('hidden');"
-                                         class="w-4 h-4 object-contain">
-                                    <span id="fall_r_${char.name}" class="hidden bg-gray-100 dark:bg-gray-700 px-1 rounded text-[9px] text-gray-500 dark:text-gray-400 font-medium whitespace-nowrap">
-                                        ${t(char.race)}
-                                    </span>
-                                </div>
-                                <div class="flex items-center hover-scale cursor-help">
-                                    <img src="${posPath}" alt="${t(char.position)}" title="${t('stats_position')} ${t(char.position)}"
-                                         onerror="this.style.display='none'; document.getElementById('fall_pos_${char.name}').classList.remove('hidden');"
-                                         class="w-4 h-4 object-contain opacity-85">
-                                    <span id="fall_pos_${char.name}" class="hidden bg-blue-50 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-1 rounded text-[9px] font-medium whitespace-nowrap">
-                                        ${t(char.position)}
-                                    </span>
-                                </div>
-                                <div class="flex items-center hover-scale cursor-help">
-                                    <img src="${jobPath}" alt="${t(char.job)}" title="${t('stats_job')} ${t(char.job)}"
-                                         onerror="this.style.display='none'; document.getElementById('fall_j_${char.name}').classList.remove('hidden');"
-                                         class="w-4 h-4 object-contain opacity-85">
-                                    <span id="fall_j_${char.name}" class="hidden bg-purple-50 dark:bg-purple-900 text-purple-700 dark:text-purple-300 px-1 rounded text-[9px] font-medium whitespace-nowrap">
-                                        ${t(char.job)}
-                                    </span>
-                                </div>
+                                <div class="flex items-center hover-scale cursor-help"><img src="${pPath}" alt="${t(char.personality)}" title="${t('stats_personality')} ${t(char.personality)}" onerror="this.style.display='none'; document.getElementById('fall_p_${char.name}').classList.remove('hidden');" class="w-4 h-4 object-contain"><span id="fall_p_${char.name}" class="hidden text-[9px] px-1 rounded bg-amber-50 dark:bg-gray-700 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-gray-600 whitespace-nowrap">${t(char.personality)}</span></div>
+                                <div class="flex items-center hover-scale cursor-help"><img src="${racePath}" alt="${t(char.race)}" title="${t('stats_race')} ${t(char.race)}" onerror="this.style.display='none'; document.getElementById('fall_r_${char.name}').classList.remove('hidden');" class="w-4 h-4 object-contain"><span id="fall_r_${char.name}" class="hidden bg-gray-100 dark:bg-gray-700 px-1 rounded text-[9px] text-gray-500 dark:text-gray-400 font-medium whitespace-nowrap">${t(char.race)}</span></div>
+                                <div class="flex items-center hover-scale cursor-help"><img src="${posPath}" alt="${t(char.position)}" title="${t('stats_position')} ${t(char.position)}" onerror="this.style.display='none'; document.getElementById('fall_pos_${char.name}').classList.remove('hidden');" class="w-4 h-4 object-contain opacity-85"><span id="fall_pos_${char.name}" class="hidden bg-blue-50 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-1 rounded text-[9px] font-medium whitespace-nowrap">${t(char.position)}</span></div>
+                                <div class="flex items-center hover-scale cursor-help"><img src="${jobPath}" alt="${t(char.job)}" title="${t('stats_job')} ${t(char.job)}" onerror="this.style.display='none'; document.getElementById('fall_j_${char.name}').classList.remove('hidden');" class="w-4 h-4 object-contain opacity-85"><span id="fall_j_${char.name}" class="hidden bg-purple-50 dark:bg-purple-900 text-purple-700 dark:text-purple-300 px-1 rounded text-[9px] font-medium whitespace-nowrap">${t(char.job)}</span></div>
                             </div>
                         </div>
                     `;
                     cardInner.appendChild(nameCol);
 
-                    const layersContainer = document.createElement('div');
-                    layersContainer.className = "flex flex-col sm:flex-row gap-3 w-full md:flex-1";
-
+                    const layersContainer = document.createElement('div'); layersContainer.className = "flex flex-col sm:flex-row gap-3 w-full md:flex-1";
                     [1, 2, 3].forEach(l => {
-                        const layerBox = document.createElement('div');
-                        layerBox.id = `layer_wrap_${char.name}_${l}`;
+                        const layerBox = document.createElement('div'); layerBox.id = `layer_wrap_${char.name}_${l}`;
                         let bgStyle = "bg-amber-50/40 border-amber-100/60 dark:border-amber-900/40", badgeText = `🥇 ${t("level_1st")}`, gridCols = "grid-cols-2";
                         if (l === 2) { bgStyle = "bg-orange-50/40 border-orange-100/60 dark:border-orange-900/40"; badgeText = `🥈 ${t("level_2nd")}`; gridCols = "grid-cols-3"; }
                         else if (l === 3) { bgStyle = "bg-red-50/40 border-red-100/60 dark:border-red-900/40"; badgeText = `🥉 ${t("level_3st")}`; gridCols = "grid-cols-4"; }
 
-                        layerBox.className = `${bgStyle} flex-1 p-2 rounded-xl border flex-col justify-between backdrop-blur-sm`;
-                        layerBox.innerHTML = `<span class="text-[10px] font-bold mb-1 block opacity-70 whitespace-nowrap">${badgeText}</span>`;
-
-                        const btnGroup = document.createElement('div');
-                        btnGroup.className = `grid ${gridCols} gap-1.5 h-full content-start`;
-
+                        layerBox.className = `${bgStyle} flex-1 p-2 rounded-xl border flex-col justify-between backdrop-blur-sm`; layerBox.innerHTML = `<span class="text-[10px] font-bold mb-1 block opacity-70 whitespace-nowrap">${badgeText}</span>`;
+                        const btnGroup = document.createElement('div'); btnGroup.className = `grid ${gridCols} gap-1.5 h-full content-start`;
                         const sortedAttrs = char[`layer${l}`].slice().sort((a, b) => ATTR_PRIORITY.indexOf(a) - ATTR_PRIORITY.indexOf(b));
 
                         sortedAttrs.forEach((attr, idx) => {
-                            const originalIdx = char[`layer${l}`].indexOf(attr);
-                            const stateKey = `${char.name}_l${l}_${attr}_${originalIdx}`;
-                            const isOpened = savedStates[stateKey];
-                            const btnId = `btn_${char.name}_l${l}_${attr}_${originalIdx}`;
-
-                            const btn = document.createElement('button');
-                            btn.id = btnId;
+                            const originalIdx = char[`layer${l}`].indexOf(attr); const stateKey = `${char.name}_l${l}_${attr}_${originalIdx}`;
+                            const isOpened = savedStates[stateKey]; const btnId = `btn_${char.name}_l${l}_${attr}_${originalIdx}`;
+                            const btn = document.createElement('button'); btn.id = btnId;
                             const styleConfig = ATTR_STYLES[attr] || { unopened: "bg-gray-100 text-gray-700 border-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600", opened: "bg-gray-500 text-white font-bold" };
                             btn.className = `char-btn hover-scale px-1 py-1.5 sm:py-2 text-[11px] sm:text-xs text-center border rounded-lg cursor-pointer whitespace-nowrap ${isOpened ? styleConfig.opened : styleConfig.unopened}`;
                             btn.innerText = t(attr);
-                            
                             btn.onclick = () => {
                                 savedStates[stateKey] = !savedStates[stateKey];
-                                if(savedStates[stateKey] && !savedStates['owned_' + char.name]) {
-                                    savedStates['owned_' + char.name] = true;
-                                    updateOwnershipUI(char.name);
-                                }
+                                if(savedStates[stateKey] && !savedStates['owned_' + char.name]) { savedStates['owned_' + char.name] = true; updateOwnershipUI(char.name); }
                                 btn.className = `char-btn hover-scale px-1 py-1.5 sm:py-2 text-[11px] sm:text-xs text-center border rounded-lg cursor-pointer whitespace-nowrap ${savedStates[stateKey] ? styleConfig.opened : styleConfig.unopened}`;
                                 calculateStats();
                             };
                             btnGroup.appendChild(btn);
                         });
-                        layerBox.appendChild(btnGroup);
-                        layersContainer.appendChild(layerBox);
+                        layerBox.appendChild(btnGroup); layersContainer.appendChild(layerBox);
                     });
-
-                    cardInner.appendChild(layersContainer);
-                    charCard.appendChild(cardInner);
-                    charListContainer.appendChild(charCard);
+                    cardInner.appendChild(layersContainer); charCard.appendChild(cardInner); charListContainer.appendChild(charCard);
                 });
-
-                pSection.appendChild(charListContainer);
-                container.appendChild(pSection);
+                pSection.appendChild(charListContainer); container.appendChild(pSection);
             });
             applyFilterUI();
         }
 
-        // ==========================================
-        // 📊 Firebase 總次數更新機制
-        // ==========================================
         function updateVisitCount() {
             if (!db) return;
             const countRef = db.collection("metadata").doc("site_stats");
-            
             db.runTransaction((transaction) => {
-                return transaction.get(countRef).then((doc) => {
-                    const newCount = (doc.exists ? doc.data().total_visits : 0) + 1;
-                    transaction.set(countRef, { total_visits: newCount });
-                    return newCount;
-                });
-            }).then((newCount) => {
-                const counterEl = document.getElementById('top_visit_counter');
-                if (counterEl) counterEl.innerText = newCount.toLocaleString();
-            }).catch((err) => {
-                console.warn("統計更新失敗:", err);
-                const counterEl = document.getElementById('top_visit_counter');
-                if (counterEl) counterEl.innerText = "N/A";
-            });
+                return transaction.get(countRef).then((doc) => { const newCount = (doc.exists ? doc.data().total_visits : 0) + 1; transaction.set(countRef, { total_visits: newCount }); return newCount; });
+            }).then((newCount) => { const counterEl = document.getElementById('top_visit_counter'); if (counterEl) counterEl.innerText = newCount.toLocaleString(); }).catch((err) => { });
         }
 
         document.addEventListener('DOMContentLoaded', () => {
             try {
-                // 1. 防呆檢查：確認核心資料是否有成功載入
-                if (typeof INITIAL_DATA === 'undefined') {
-                    throw new Error("找不到 INITIAL_DATA，請確認 data_core.js 是否載入成功！");
-                }
-
-                // 2. 初始化存檔狀態
-                initStates();
-                
-                // 3. 啟動翻譯 (這行會自動觸發 renderMatrix, buildFilterPanel 等畫面渲染，不用再寫第二次)
-                changeLanguage(currentLang);
-                
-                // 4. 處理統計面板預設的收起/展開狀態
-                if (!isStatsOpen) {
-                    const body = document.getElementById("statsPanelBody");
-                    const icon = document.getElementById("statsToggleIcon");
-                    if(body) {
-                        body.classList.add("hidden");
-                        body.classList.remove("grid");
-                        icon.innerText = "▶";
-                    }
-                }
-            } catch (e) {
-                const errBanner = document.getElementById('errorBanner');
-                if(errBanner) {
-                    errBanner.innerHTML = `⚠️ 畫面繪製失敗: ${e.message}`;
-                    errBanner.classList.remove('hidden');
-                }
-            }
+                if (typeof INITIAL_DATA === 'undefined') throw new Error("找不到 INITIAL_DATA，請確認 data_core.js 是否載入成功！");
+                initStates(); changeLanguage(currentLang);
+                if (!isStatsOpen) { const body = document.getElementById("statsPanelBody"); const icon = document.getElementById("statsToggleIcon"); if(body) { body.classList.add("hidden"); body.classList.remove("grid"); icon.innerText = "▶"; } }
+            } catch (e) { const errBanner = document.getElementById('errorBanner'); if(errBanner) { errBanner.innerHTML = `⚠️ 畫面繪製失敗: ${e.message}`; errBanner.classList.remove('hidden'); } }
         });
 
         function handleAuth() {
-            if (!auth) {
-                alert("目前處於斷線單機模式（可能被擴充功能阻擋），無法登入雲端。");
-                return;
-            }
-            if (currentUser) {
-                auth.signOut().then(() => {
-                    localStorage.removeItem(storageKey);
-                    location.reload();
-                }).catch(err => alert("登出失敗: " + err.message));
-            } else {
-                const provider = new firebase.auth.GoogleAuthProvider();
-                setTimeout(() => {
-                    auth.signInWithPopup(provider).catch(err => {
-                        console.error("彈出阻擋:", err);
-                        alert("登入被中斷，請確認是否允許跳出視窗。(" + err.code + ")");
-                    });
-                }, 50);
-            }
+            if (!auth) { alert("目前處於斷線單機模式（可能被擴充功能阻擋），無法登入雲端。"); return; }
+            if (currentUser) { auth.signOut().then(() => { localStorage.removeItem(storageKey); location.reload(); }).catch(err => alert("登出失敗: " + err.message)); } 
+            else { const provider = new firebase.auth.GoogleAuthProvider(); setTimeout(() => { auth.signInWithPopup(provider).catch(err => alert("登入被中斷，請確認是否允許跳出視窗。(" + err.code + ")")); }, 50); }
         }
 
         function updateAuthButtonUI(user) {
-            const btn = document.getElementById('authBtn');
-            const svgLogo = document.getElementById('googleLogoSvg');
-            const logoutText = document.getElementById('logoutText');
-            if (!btn) return;
-
-            if (user) {
-                if (svgLogo) svgLogo.classList.add('hidden');
-                if (logoutText) logoutText.classList.remove('hidden');
-                btn.className = "px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-bold rounded-lg shadow-sm transition shrink-0 whitespace-nowrap";
-            } else {
-                if (svgLogo) svgLogo.classList.remove('hidden');
-                if (logoutText) logoutText.classList.add('hidden');
-                btn.className = "google-login-btn bg-white dark:bg-gray-700 rounded-lg p-2 flex items-center justify-center transition border border-gray-200 dark:border-gray-600 shrink-0";
-            }
+            const btn = document.getElementById('authBtn'); const svgLogo = document.getElementById('googleLogoSvg'); const logoutText = document.getElementById('logoutText'); if (!btn) return;
+            if (user) { if (svgLogo) svgLogo.classList.add('hidden'); if (logoutText) logoutText.classList.remove('hidden'); btn.className = "px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-bold rounded-lg shadow-sm transition shrink-0 whitespace-nowrap"; } 
+            else { if (svgLogo) svgLogo.classList.remove('hidden'); if (logoutText) logoutText.classList.add('hidden'); btn.className = "google-login-btn bg-white dark:bg-gray-700 rounded-lg p-2 flex items-center justify-center transition border border-gray-200 dark:border-gray-600 shrink-0"; }
         }
 
         try {
             if (typeof firebase !== 'undefined') {
-                const firebaseConfig = {
-                    /* 💡 資安小提醒：請至 Google Cloud / Firebase 後台，將這組 API Key 設定 HTTP 網域限制，避免他人盜用配額 */
-                    apiKey: "AIzaSyDhv8D2pY_0M56UJrDTQw0RGPHA-BkXU8Y",
-                    authDomain: "crayon-note.firebaseapp.com",
-                    projectId: "crayon-note",
-                    storageBucket: "crayon-note.firebasestorage.app",
-                    messagingSenderId: "210614088940",
-                    appId: "1:210614088940:web:7addbdc7c466eeb05421c9",
-                    measurementId: "G-M1EJPE12TE"
-                };
-                
-                // 💡 優化2: 檢查是否已經初始化過，避免重複初始化導致報錯
-                if (!firebase.apps.length) {
-                    firebase.initializeApp(firebaseConfig);
-                } else {
-                    firebase.app(); // 如果已存在，直接取用
-                }
-
-                db = firebase.firestore();
-                auth = firebase.auth();
-
-                // 呼叫更新人次
-                updateVisitCount();
-
+                const firebaseConfig = { apiKey: "AIzaSyDhv8D2pY_0M56UJrDTQw0RGPHA-BkXU8Y", authDomain: "crayon-note.firebaseapp.com", projectId: "crayon-note", storageBucket: "crayon-note.firebasestorage.app", messagingSenderId: "210614088940", appId: "1:210614088940:web:7addbdc7c466eeb05421c9", measurementId: "G-M1EJPE12TE" };
+                if (!firebase.apps.length) firebase.initializeApp(firebaseConfig); else firebase.app(); 
+                db = firebase.firestore(); auth = firebase.auth(); updateVisitCount();
                 auth.onAuthStateChanged(user => {
                     updateAuthButtonUI(user); 
                     if (user) {
                         currentUser = user;
-                        // 修改後的 JavaScript 渲染邏輯
-                        document.getElementById('userStatus').innerHTML = `
-                            <span id="authStatusText" class="block font-bold text-green-700 dark:text-green-500 whitespace-nowrap" data-i18n="auth_online_title">
-                                ${t('auth_online_title')}
-                            </span>
-                            <span class="text-[10px] sm:text-[11px] text-gray-500 dark:text-gray-400 truncate max-w-[120px]">
-                                ${user.displayName || '教主'}
-                            </span>
-                        `;
-                        db.collection("player_boards").doc(user.uid).get().then(doc => {
-                            if (doc.exists && doc.data().states) {
-                                savedStates = doc.data().states;
-                                initStates(); renderMatrix(); calculateStats();
-                            }
-                        }).catch(err => {
-                            console.error("雲端讀取失敗:", err);
-                        });
+                        document.getElementById('userStatus').innerHTML = `<span id="authStatusText" class="block font-bold text-green-700 dark:text-green-500 whitespace-nowrap" data-i18n="auth_online_title">${t('auth_online_title')}</span><span class="text-[10px] sm:text-[11px] text-gray-500 dark:text-gray-400 truncate max-w-[120px]">${user.displayName || '教主'}</span>`;
+                        db.collection("player_boards").doc(user.uid).get().then(doc => { if (doc.exists && doc.data().states) { savedStates = doc.data().states; initStates(); renderMatrix(); calculateStats(); } }).catch(err => {});
                     } else {
-                        currentUser = null;
-                        document.getElementById('userStatus').innerHTML = `
-                            <span class="block font-bold text-amber-800 dark:text-amber-500 whitespace-nowrap" data-lang-key="auth_offline_title">${t('auth_offline_title')}</span>
-                            <span class="whitespace-nowrap" data-lang-key="auth_offline_desc">${t('auth_offline_desc')}</span>
-                        `;
+                        currentUser = null; document.getElementById('userStatus').innerHTML = `<span class="block font-bold text-amber-800 dark:text-amber-500 whitespace-nowrap" data-lang-key="auth_offline_title">${t('auth_offline_title')}</span><span class="whitespace-nowrap" data-lang-key="auth_offline_desc">${t('auth_offline_desc')}</span>`;
                     }
                 });
-            } else {
-                console.warn("Firebase 未載入，維持單機模式");
             }
-        } catch (e) {
-            console.error("Firebase 初始化被阻擋:", e);
-        }
+        } catch (e) { }
 
-        // ==========================================
-        // 🌟 自動輪播定時器 (每 3 秒漸變切換)
-        // ==========================================
-        setInterval(() => {
-            document.body.classList.toggle('swap-avatars');
-        }, 3000);
-        // ==========================================
-        // 🌟 跑馬燈智慧判斷 (字數過長才滾動)
-        // ==========================================
-        function checkMarquee(card, isHover) {
-            const box = card.querySelector('.marquee-box');
-            const content = card.querySelector('.marquee-content');
-            if (box && content) {
-                // 如果是滑鼠移入，且「文字實際寬度 (scrollWidth)」大於「容器寬度 (clientWidth)」，才掛上動畫
-                if (isHover && box.scrollWidth > box.clientWidth) {
-                    content.style.animation = 'text-marquee 3.5s linear infinite alternate';
-                } else {
-                    content.style.animation = 'none';
-                }
-            }
-        }
+        setInterval(() => { document.body.classList.toggle('swap-avatars'); }, 3000);
+        function checkMarquee(card, isHover) { const box = card.querySelector('.marquee-box'); const content = card.querySelector('.marquee-content'); if (box && content) { if (isHover && box.scrollWidth > box.clientWidth) content.style.animation = 'text-marquee 3.5s linear infinite alternate'; else content.style.animation = 'none'; } }
     </script>
 
     <div class="social-fixed group">
@@ -1482,141 +1247,39 @@
     </div>
     <div id="rim-live-container"></div>
 
-<script>
+    <script>
         window.addEventListener('load', function() {
-            if (typeof spine === 'undefined') {
-                console.error("Spine library 未載入");
-                return;
-            }
-
-            // 🌟 插入金蠟筆
-            const rimContainer = document.getElementById("rim-live-container");
-            const loader = document.createElement('div');
-            loader.className = 'spine-loader-crayon';
-            rimContainer.appendChild(loader);
-
-            new spine.SpinePlayer("rim-live-container", {
-                skelUrl: "Rim.skel.bytes",
-                atlasUrl: "Rim.atlas.txt",
-                alpha: true,                 // 允許背景透明
-                backgroundColor: "#00000000",
-                showControls: false,         // 隱藏下方控制列
-                premultipliedAlpha: false,
-                skin: "Normal",
-                animation: "Happy_4",        // 初始預設動畫
-                showLoading: false,          // 🚫 關閉原廠圖案
-                viewport: { 
-                    transitionTime: 0        // 關閉相機過渡，防止切換動畫時畫面亂跳
-                },
-        
+            if (typeof spine === 'undefined') return;
+            const rimContainer = document.getElementById("rim-live-container"); const loader = document.createElement('div'); loader.className = 'spine-loader-crayon'; rimContainer.appendChild(loader);
+            new spine.SpinePlayer("rim-live-container", { skelUrl: "Rim.skel.bytes", atlasUrl: "Rim.atlas.txt", alpha: true, backgroundColor: "#00000000", showControls: false, premultipliedAlpha: false, skin: "Normal", animation: "Happy_4", showLoading: false, viewport: { transitionTime: 0 },
                 success: function (player) {
-                    loader.remove(); // 🌟 載入成功後移除金蠟筆
-                    console.log("Spine 載入成功，準備輪播動畫！");
-                    
-                    const animations = ["Happy_4", "Pat_End", "Tickle_Idle_2"];
-                    let currentIndex = 1; // 因為初始化已經播了第一個，從第二個開始輪替
-
-                    function playNextAnimation() {
-                        const nextAnim = animations[currentIndex % animations.length];
-                        
-                        // 1. 先將骨架強制歸零回到原點，防止帶有「位移」的動畫讓角色默默走出畫面外
-                        player.skeleton.setToSetupPose(); 
-                        
-                        // 2. 單純下達切換動畫的指令，剩下的更新與渲染交給 Player 內部引擎自己處理
-                        player.animationState.setAnimation(0, nextAnim, true);
-                        
-                        currentIndex++;
-                    }
-            
-                   // 每 5 秒無縫切換一次動畫
+                    loader.remove(); const animations = ["Happy_4", "Pat_End", "Tickle_Idle_2"]; let currentIndex = 1; 
+                    function playNextAnimation() { const nextAnim = animations[currentIndex % animations.length]; player.skeleton.setToSetupPose(); player.animationState.setAnimation(0, nextAnim, true); currentIndex++; }
                    setInterval(playNextAnimation, 5000);
-                }, 
-        
-                error: function (player, reason) {
-                    console.error("Spine 渲染錯誤:", reason);
                 } 
             }); 
         });
     </script>
     <script>
-        // ==========================================
-        // 🖍️ 金蠟筆收集系統 (跑道互動)
-        // ==========================================
-        const runnerAreaId = 'runnerArea'; // 我們在步驟1加的外層容器
-        const chibiId = 'runnerTrack';     // 你原本會移動的小人容器
-
-        let activeCrayons = [];
-
+        const runnerAreaId = 'runnerArea'; const chibiId = 'runnerTrack'; let activeCrayons = [];
         function spawnCrayonOnTrack() {
-            const area = document.getElementById(runnerAreaId);
-            if (!area) return;
-
-            const crayon = document.createElement('div');
-            crayon.className = 'track-crayon';
-            
-            // 隨機生成在畫面的 X 軸位置 (15% 到 85% 之間，避免太靠邊緣)
-            const randomX = Math.floor(Math.random() * 70) + 15;
-            crayon.style.left = `${randomX}%`;
-            
-            area.appendChild(crayon);
-            activeCrayons.push(crayon);
-
-            // 稍微延遲後淡入 (產生平滑出現的感覺)
-            requestAnimationFrame(() => {
-                crayon.style.opacity = '1';
-            });
-
-            // 隨機 5 到 12 秒生成下一支蠟筆
-            const nextSpawnTime = Math.random() * 7000 + 5000;
-            setTimeout(spawnCrayonOnTrack, nextSpawnTime);
+            const area = document.getElementById(runnerAreaId); if (!area) return;
+            const crayon = document.createElement('div'); crayon.className = 'track-crayon'; const randomX = Math.floor(Math.random() * 70) + 15; crayon.style.left = `${randomX}%`;
+            area.appendChild(crayon); activeCrayons.push(crayon); requestAnimationFrame(() => { crayon.style.opacity = '1'; });
+            setTimeout(spawnCrayonOnTrack, Math.random() * 7000 + 5000);
         }
-
         function checkCrayonCollision() {
-            const chibi = document.getElementById(chibiId);
-            
-            // 💡 優化1：移除耗能的 getComputedStyle，直接讀取 inline style 判斷顯示狀態
-            const isChibiVisible = chibi && chibi.style.opacity === '1';
-
+            const chibi = document.getElementById(chibiId); const isChibiVisible = chibi && chibi.style.opacity === '1';
             if (isChibiVisible && activeCrayons.length > 0) {
-                // 取得小人當下在畫面中的精準座標
-                const chibiRect = chibi.getBoundingClientRect();
-                // 抓取小人的中心點 (可以稍微往左偏移一點點，對齊小人的臉)
-                const chibiCenterX = chibiRect.left + (chibiRect.width / 2) - 20;
-
+                const chibiRect = chibi.getBoundingClientRect(); const chibiCenterX = chibiRect.left + (chibiRect.width / 2) - 20;
                 activeCrayons.forEach((crayon, index) => {
-                    const crayonRect = crayon.getBoundingClientRect();
-                    const crayonCenterX = crayonRect.left + (crayonRect.width / 2);
-
-                    // 計算 X 軸距離
-                    const distance = Math.abs(chibiCenterX - crayonCenterX);
-
-                    // 碰撞判定：距離小於 45px 視為吃到蠟筆
-                    if (distance < 45) {
-                        // 播放吃掉的特效
-                        crayon.classList.add('crayon-collected');
-                        
-                        // 從陣列中移除，不再判定碰撞
-                        activeCrayons.splice(index, 1);
-
-                        // 特效播完後徹底移除 DOM 元素
-                        setTimeout(() => {
-                            crayon.remove();
-                        }, 600);
-                    }
+                    const crayonRect = crayon.getBoundingClientRect(); const crayonCenterX = crayonRect.left + (crayonRect.width / 2);
+                    if (Math.abs(chibiCenterX - crayonCenterX) < 45) { crayon.classList.add('crayon-collected'); activeCrayons.splice(index, 1); setTimeout(() => { crayon.remove(); }, 600); }
                 });
             }
-
-            // 無限循環持續偵測
             requestAnimationFrame(checkCrayonCollision);
         }
-
-        // 啟動系統
-        window.addEventListener('load', () => {
-            // 延遲 4 秒後生成第一支蠟筆，配合小人進場
-            setTimeout(spawnCrayonOnTrack, 4000);
-            requestAnimationFrame(checkCrayonCollision);
-        });
+        window.addEventListener('load', () => { setTimeout(spawnCrayonOnTrack, 4000); requestAnimationFrame(checkCrayonCollision); });
     </script>
-    
 </body>
 </html>
