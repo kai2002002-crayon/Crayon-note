@@ -18,7 +18,7 @@ const LANG_DICT = {
         personality_naive: "天真", personality_calm: "冷靜", personality_mad: "狂亂", personality_vivid: "活潑", personality_gloomy: "憂鬱",
         race_witch: "魔女", race_beast: "獸人", race_dragon: "龍族", race_spirit: "魔靈", race_fairy: "妖精", race_elf: "精靈", race_ghost: "幽靈", race_unknown: "???",
         position_front: "前排", position_middle: "中排", position_back: "後排", job_attacker: "輸出", job_defender: "肉盾", job_supporter: "輔助",
-        visit_count_prefix: "累計利用回数",
+        visit_count_prefix: "累計利用回數",
         auth_offline_title: "當前狀態：單機模式", auth_offline_desc: "紀錄保存在此裝置", auth_online_title: "🟢 已連線雲端", auth_logout: "登出",
         filter_title: "🔍 篩選器", filter_search_placeholder: "搜尋坨坨...", filter_reset: "重置全部篩選", filter_display_mode: "👁️ 版面顯示：",
         filter_btn_all: "全部", filter_btn_show_all: "顯示全部", filter_btn_show_1: "僅第一層", filter_btn_show_2: "僅第二層", filter_btn_show_3: "僅第三層",
