@@ -870,7 +870,9 @@
 
                 // 依據小人站位判斷：中排、後排為遠距離，前排為近距離
                 const isRanged = ["中排", "後排"].includes(randomCharData.position);
-                const attackOffset = isRanged ? "translateX(-240px)" : "translateX(0px)"; // 遠程向左後退拉開距離
+                // 📱 動態調整後退距離：手機版退 120px，電腦版退 240px
+                const rangedOffsetPx = (window.innerWidth <= 768) ? -120 : -240; 
+                const attackOffset = isRanged ? `translateX(${rangedOffsetPx}px)` : "translateX(0px)"; 
 
                 if (chasePhase === 1) {
                     if (Math.random() < 0.4) {
@@ -887,7 +889,7 @@
                         setTimeout(() => bossContainer.classList.remove('shake-anim'), 400);
 
                         // 2. 觸發專屬金蠟筆特效
-                        triggerCrayonAttack(isRanged, atkDur, bossContainer, container, isRanged ? -240 : 0);
+                        triggerCrayonAttack(isRanged, atkDur, bossContainer, container, isRanged ? rangedOffsetPx : 0);
 
                         // 3. 動作結束前 0.5 秒：更強烈的震動爆破
                         setTimeout(() => {
@@ -923,16 +925,24 @@
 
                             if (isRanged) {
                                 // 留在原地，只做翻轉轉向
-                                container.style.transform = 'translateX(-240px) scaleX(1)';
+                                container.style.transform = `translateX(${rangedOffsetPx}px) scaleX(1)`;
                                 
                                 setTimeout(() => {
                                     if (chasePhase === 0 || hasReachedEnd) return; 
                                     
                                     const screenWidth = window.innerWidth || 1000;
-                                    const skipTime = (240 / screenWidth) * runDuration;
+                                    const skipTime = (Math.abs(rangedOffsetPx) / screenWidth) * runDuration;
                                     
                                     if (charRunAnimation && charRunAnimation.playState !== 'finished') {
                                         charRunAnimation.currentTime = (charRunAnimation.currentTime || 0) + skipTime;
+                                    }
+                                    
+                                    // 🏁 核心修復：如果位移時間補償後已經達到或超過終點，直接觸發勝利
+                                    if (charRunAnimation && charRunAnimation.currentTime >= runDuration) {
+                                        isCaught = false;
+                                        chasePhase = 0;
+                                        triggerVictory();
+                                        return;
                                     }
                                     
                                     container.style.transition = 'none';
@@ -978,7 +988,7 @@
                                     bossContainer.classList.add('shake-anim');
                                     setTimeout(() => bossContainer.classList.remove('shake-anim'), 400);
                                     
-                                    triggerCrayonAttack(isRanged, currentAnimDurMs, bossContainer, container, isRanged ? -240 : 0);
+                                    triggerCrayonAttack(isRanged, currentAnimDurMs, bossContainer, container, isRanged ? rangedOffsetPx : 0);
                                 }, totalSkillDurationMs);
 
                                 setTimeout(() => {
@@ -995,7 +1005,7 @@
                             bossContainer.classList.add('shake-anim');
                             setTimeout(() => bossContainer.classList.remove('shake-anim'), 400);
                             
-                            triggerCrayonAttack(isRanged, totalSkillDurationMs, bossContainer, container, isRanged ? -240 : 0);
+                            triggerCrayonAttack(isRanged, totalSkillDurationMs, bossContainer, container, isRanged ? rangedOffsetPx : 0);
 
                             setTimeout(() => {
                                 bossContainer.classList.add('shake-strong-anim');
@@ -1024,15 +1034,22 @@
                             };
 
                             if (isRanged) {
-                                container.style.transform = 'translateX(-240px) scaleX(1)';
+                                container.style.transform = `translateX(${rangedOffsetPx}px) scaleX(1)`;
                                 setTimeout(() => {
                                     if (hasReachedEnd) return; 
                                     
                                     const screenWidth = window.innerWidth || 1000;
-                                    const skipTime = (240 / screenWidth) * runDuration;
+                                    const skipTime = (Math.abs(rangedOffsetPx) / screenWidth) * runDuration;
                                     
                                     if (charRunAnimation && charRunAnimation.playState !== 'finished') {
                                         charRunAnimation.currentTime = (charRunAnimation.currentTime || 0) + skipTime;
+                                    }
+                                    
+                                    // 🏁 核心修復：二階擊殺後，如果補償時間到達終點，直接迎接勝利！
+                                    if (charRunAnimation && charRunAnimation.currentTime >= runDuration) {
+                                        isCaught = false; 
+                                        triggerVictory(); 
+                                        return;
                                     }
                                     
                                     container.style.transition = 'none';
