@@ -95,7 +95,7 @@
 
         /* 🖍️ 爆裂小蠟筆特效 */
         .burst-crayon {
-            position: absolute; width: 16px; height: 16px;
+            position: absolute; width: 20px; height: 20px;
             background: url('https://i.postimg.cc/qvjNxZzg/golden-crayon.png') no-repeat center center; 
             background-size: contain; z-index: 200; pointer-events: none;
         }
@@ -506,11 +506,11 @@
             const area = document.getElementById('runnerArea');
             const rRect = runnerContainer.getBoundingClientRect();
             const bRect = bossContainer.getBoundingClientRect();
-            
-            // 修正射出點：原本的中心 + 當前的位移修正 (offsetPx)
-            // 因為我們是往左位移，所以 startX 要減去該位移量
-            const startX = (rRect.left + rRect.width * 0.5) + offsetPx;
-            const startY = rRect.top + rRect.height * 0.5;
+
+            // 🌟 修正射出點：從容器最左邊緣 (rRect.left)，向右推算小人實際站在畫布裡的距離
+            // 例如推 150px (教主可以根據視覺慢慢調整這個數字，太大就減小，太小就加大)
+            const startX = rRect.left -80; 
+            const startY = rRect.top + (rRect.height * 0.5) + 1; // Y軸通常在中間，可以微調
             
             // Boss 的命中點 (保持不變)
             const endX = bRect.left + bRect.width * 0.5 - 30;
@@ -527,10 +527,12 @@
                     proj.style.top = `${startY}px`;
                     area.appendChild(proj);
                     
-                    const flightTime = burstTime - launchDelay;
+                    // 🌟 修正：給定固定的慢速飛行時間 (數值越大飛越慢，800 = 1.5秒)
+                    const flightTime = 800; 
                     
                     setTimeout(() => {
-                        proj.style.transition = `all ${flightTime}ms cubic-bezier(0.25, 0.1, 0.25, 1)`;
+                        // 💡 順便將曲線改為 linear (等速直飛)，飛行視覺會更平滑自然
+                        proj.style.transition = `all ${flightTime}ms linear`;
                         proj.style.left = `${endX}px`;
                         proj.style.top = `${endY}px`;
                         proj.style.transform = `rotate(720deg)`;
@@ -891,12 +893,16 @@
                         // 2. 觸發專屬金蠟筆特效
                         triggerCrayonAttack(isRanged, atkDur, bossContainer, container, isRanged ? rangedOffsetPx : 0);
 
-                        // 3. 動作結束前 0.5 秒：更強烈的震動爆破
+                       // 🌟 定義蠟筆命中時間：發射延遲(500) + 飛行時間(800) = 1300ms
+                        const hitTimeMs = 1300; 
+
+                        // 3. 同步強烈震動：確保在蠟筆命中前一刻才爆發紅光
                         setTimeout(() => {
                             bossContainer.classList.add('shake-strong-anim');
                             setTimeout(() => bossContainer.classList.remove('shake-strong-anim'), 500);
-                        }, Math.max(0, atkDur - 500));
+                        }, Math.max(atkDur - 500, hitTimeMs - 200));
 
+                        // 4. 🌟 確保等待時間至少大於蠟筆命中的時間 (1400ms)，再讓 BOSS 恢復行動
                         setTimeout(() => {
                             // 🚩 檢查：如果剛剛打架時不小心走到終點了，直接獲勝！
                             if (hasReachedEnd) {
@@ -958,11 +964,12 @@
                                     
                                     resumeRunning();
                                 }, 200);
+                            // ... (中間省略) ...
                             } else {
                                 container.style.transform = 'translateX(0px) scaleX(1)'; 
                                 resumeRunning();
                             }
-                        }, atkDur); 
+                        }, Math.max(atkDur, hitTimeMs + 100)); // 🌟 取動作時間或命中時間的較大值
                     } else {
                         console.log("💀 一階：反擊失敗，被處決");
                         bossExecuteKill(runnerPlayer, bossPlayer);
@@ -997,10 +1004,15 @@
                                     triggerCrayonAttack(isRanged, currentAnimDurMs, bossContainer, container, isRanged ? rangedOffsetPx : 0);
                                 }, totalSkillDurationMs);
 
+                                // 🌟 核心修改：判斷是否為最後一段技能
+                                const isLastSkill = (index === skillAnims.length - 1);
+                                // 最後一段提早 1000ms (1秒)，其他維持 500ms (0.5秒)
+                                const shakeStrongOffset = isLastSkill ? 1000 : 500; 
+
                                 setTimeout(() => {
                                     bossContainer.classList.add('shake-strong-anim');
                                     setTimeout(() => bossContainer.classList.remove('shake-strong-anim'), 500);
-                                }, totalSkillDurationMs + Math.max(0, currentAnimDurMs - 500));
+                                }, totalSkillDurationMs + Math.max(0, currentAnimDurMs - shakeStrongOffset));
 
                                 totalSkillDurationMs += currentAnimDurMs;
                             });
@@ -1013,10 +1025,11 @@
                             
                             triggerCrayonAttack(isRanged, totalSkillDurationMs, bossContainer, container, isRanged ? rangedOffsetPx : 0);
 
+                            // 🌟 Fallback (沒有多段技能時) 也一併改成提早 1000ms (1秒)
                             setTimeout(() => {
                                 bossContainer.classList.add('shake-strong-anim');
                                 setTimeout(() => bossContainer.classList.remove('shake-strong-anim'), 500);
-                            }, Math.max(0, totalSkillDurationMs - 500));
+                            }, Math.max(0, totalSkillDurationMs - 1000));
                         }
 
                         // 整段連續技播完後的結算
@@ -1075,7 +1088,7 @@
                                 container.style.transform = 'translateX(0px) scaleX(1)'; 
                                 resumeRunning();
                             }
-                        }, totalSkillDurationMs);
+                        }, totalSkillDurationMs + 800); // 🌟 核心修正：加上 800ms 的緩衝，等最後一顆蠟筆確實砸在臉上再倒地！
 
                     } else {
                         console.log("💀 二階：極限逃生失敗，被處決");
@@ -1523,7 +1536,6 @@
                 console.error("計數器更新失敗:", err); 
             });
         }
-
         document.addEventListener('DOMContentLoaded', () => {
             try {
                 if (typeof INITIAL_DATA === 'undefined') throw new Error("找不到 INITIAL_DATA，請確認 data_core.js 是否載入成功！");
