@@ -9,7 +9,7 @@
     <script src="data_collectibles.js"></script>
     <script src="data_intro.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="icon" href="https://i.postimg.cc/mkfSTq5k/Favicon.png" type="image/png">
+    <link id="dynamicFavicon" rel="icon" href="https://i.postimg.cc/mkfSTq5k/Favicon.png" type="image/png">
     <link rel="preconnect" href="https://firebasestorage.googleapis.com">
     <link rel="preconnect" href="https://i.postimg.cc">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -1451,6 +1451,25 @@
             renderExtraInfo(currentTargetName);
 
             const spineKey = typeof SPINE_MAP !== 'undefined' ? SPINE_MAP[currentCharData.name] : currentCharData.name;
+
+            // 🌟 動態替換專屬 Favicon
+            // 🌟 動態替換專屬 Favicon (含防呆機制)
+            const faviconEl = document.getElementById('dynamicFavicon');
+            const defaultFaviconUrl = 'https://i.postimg.cc/mkfSTq5k/Favicon.png';
+            
+            if (faviconEl && spineKey) {
+                const testImg = new Image();
+                testImg.onload = function() {
+                    // ✅ 測試成功：確實有這張圖，正式替換 Favicon
+                    faviconEl.href = this.src;
+                };
+                testImg.onerror = function() {
+                    // ❌ 測試失敗：找不到該角色的圖，退回預設金蠟筆
+                    faviconEl.href = defaultFaviconUrl;
+                };
+                // 啟動測試載入
+                testImg.src = `./favicon/${spineKey}.png`;
+            }
 
             if (spineKey) {
                 const presentLeft = document.getElementById('presentLeft');
