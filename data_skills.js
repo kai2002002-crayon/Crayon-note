@@ -4802,5 +4802,75 @@ const characterSkills = [
         ]}
         }
       }
-    }
+    },
+	{
+      name: "雷內瓦", // プログラムの検索用キー（絶対に元の名前と一致させる）
+      attribute: "物理", // 物理・魔法は全言語共通のステータスなので外側に出す
+      skills: {
+        "zh-TW": {
+          normalAttack: {
+            basic: " []",
+            enhanced: "[]"
+          },
+          normalSkill: {
+            name: "",
+            desc: "",
+            stats: [""]
+          },
+          ultimateSkill: {
+            name: "",
+            desc: "",
+            stats: [""],
+            cooldown: "秒"
+          },
+          passiveSkill: {
+            desc: "",
+            stats: [""]
+          }
+        },
+        "ja": {
+          normalAttack: {
+            basic: "[]",
+            enhanced: "[]"
+          },
+          normalSkill: {
+            name: "",
+            desc: "",
+            stats: []
+          },
+          ultimateSkill: {
+            name: "",
+            desc: "",
+            stats: [""],
+            cooldown: "秒"
+          },
+          passiveSkill: {
+            desc: "",
+            stats: [""]
+          }
+        },
+        "en": {
+          // 将来のためのプレースホルダー（準備枠）
+          normalAttack: { 
+			  basic: "Unimplemented",
+			  enhanced: "Unimplemented"
+		  },
+          normalSkill: {
+			  name: "Unimplemented",
+			  desc: "Unimplemented",
+			  stats: []
+		  },
+          ultimateSkill: {
+			  name: "Unimplemented",
+			  desc: "Unimplemented",
+			  stats: [],
+			  cooldown: "s"
+		  },
+          passiveSkill: {
+			  desc: "Unimplemented",
+			  stats: []
+		  }
+        }
+      }
+    },
 ];
