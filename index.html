@@ -1490,10 +1490,38 @@
 
         function updateVisitCount() {
             if (!db) return;
-            const countRef = db.collection("metadata").doc("site_stats");
+
+            // 🔍 1. 取得當前網址
+            const hostname = window.location.hostname;
+            
+            // 🌟 2. 設定您的「正式版網址白名單」(用引號包起來，中間用逗號隔開)
+            // 將您的「公開網名」和「專案專屬網名」都放進去
+            const officialDomains = [
+                'crayon-note.vercel.app', 
+                'project-v53aw.vercel.app',
+            ]; 
+
+            // 3. 判斷：只要當前的網址有包含在上面的白名單名單內，就是正式版
+            const isProduction = officialDomains.includes(hostname);
+            
+            // 如果是正式版，寫入 "site_stats"；如果是 Vercel 亂數產生的預覽網址或 localhost，寫入 "site_stats_test"
+            const targetDocName = isProduction ? "site_stats" : "site_stats_test";
+
+            // 執行資料庫更新...
+            const countRef = db.collection("metadata").doc(targetDocName);
+            
             db.runTransaction((transaction) => {
-                return transaction.get(countRef).then((doc) => { const newCount = (doc.exists ? doc.data().total_visits : 0) + 1; transaction.set(countRef, { total_visits: newCount }); return newCount; });
-            }).then((newCount) => { const counterEl = document.getElementById('top_visit_counter'); if (counterEl) counterEl.innerText = newCount.toLocaleString(); }).catch((err) => { });
+                return transaction.get(countRef).then((doc) => { 
+                    const newCount = (doc.exists ? doc.data().total_visits : 0) + 1; 
+                    transaction.set(countRef, { total_visits: newCount }); 
+                    return newCount; 
+                });
+            }).then((newCount) => { 
+                const counterEl = document.getElementById('top_visit_counter'); 
+                if (counterEl) counterEl.innerText = newCount.toLocaleString(); 
+            }).catch((err) => { 
+                console.error("計數器更新失敗:", err); 
+            });
         }
 
         document.addEventListener('DOMContentLoaded', () => {
