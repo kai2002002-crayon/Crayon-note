@@ -958,7 +958,7 @@ const characterSkills = [
 	skills: {
         "zh-TW": {
     normalAttack: {
-      basic: "對敵人投擲喝完的罐子,造成物理傷害。 [物理傷害:80%] [物理傷害：100%]",
+      basic: "對敵人投擲喝完的罐子,造成物理傷害。 [物理傷害:80%]",
       enhanced: "每四次攻擊會服駭入敵人,對敵人造成絕對爆擊的物理傷害。 [物理傷害:120%]"
     },
     normalSkill: {
