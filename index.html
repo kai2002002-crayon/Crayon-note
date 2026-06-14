@@ -900,6 +900,9 @@
                         setTimeout(() => {
                             // 🚩 檢查：如果剛剛打架時不小心走到終點了，直接獲勝！
                             if (hasReachedEnd) {
+                                // 🌟 確保小人轉回原向並歸位，滑回畫面上
+                                container.style.transition = 'transform 0.3s ease';
+                                container.style.transform = 'translateX(0px) scaleX(1)';
                                 isCaught = false; chasePhase = 0; triggerVictory(); return;
                             }
 
@@ -939,6 +942,9 @@
                                     
                                     // 🏁 核心修復：如果位移時間補償後已經達到或超過終點，直接觸發勝利
                                     if (charRunAnimation && charRunAnimation.currentTime >= runDuration) {
+                                        // 🌟 確保小人轉回原向並歸位，滑回畫面上
+                                        container.style.transition = 'transform 0.3s ease';
+                                        container.style.transform = 'translateX(0px) scaleX(1)';
                                         isCaught = false;
                                         chasePhase = 0;
                                         triggerVictory();
@@ -1019,6 +1025,9 @@
                             safePlaySpine(bossPlayer, "Die", false);
                             
                             if (hasReachedEnd) {
+                                // 🌟 確保小人轉回原向並歸位，滑回畫面上
+                                container.style.transition = 'transform 0.3s ease';
+                                container.style.transform = 'translateX(0px) scaleX(1)';
                                 isCaught = false; triggerVictory(); return;
                             }
 
@@ -1047,6 +1056,9 @@
                                     
                                     // 🏁 核心修復：二階擊殺後，如果補償時間到達終點，直接迎接勝利！
                                     if (charRunAnimation && charRunAnimation.currentTime >= runDuration) {
+                                        // 🌟 確保小人轉回原向並歸位，滑回畫面上
+                                        container.style.transition = 'transform 0.3s ease';
+                                        container.style.transform = 'translateX(0px) scaleX(1)';
                                         isCaught = false; 
                                         triggerVictory(); 
                                         return;
