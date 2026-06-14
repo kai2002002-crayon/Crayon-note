@@ -233,6 +233,7 @@ const INITIAL_DATA = [
     { name: "喬菲", personality: "憂鬱", race: "獸人", position: "中排", job: "輸出", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
     { name: "寧琉", personality: "狂亂", race: "妖精", position: "前排", job: "輔助", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
     { name: "莉絲蒂", personality: "憂鬱", race: "精靈", position: "後排", job: "輸出", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] }
+    //{ name: "雷內瓦", personality: "狂亂", race: "精靈", position: "中排", job: "輸出", layer1: ["", ""], layer2: ["", "", ""], layer3: ["", "", "", ""] }
 ];
 
 const CV_MAP = {
