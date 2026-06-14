@@ -460,15 +460,18 @@
         let noticeIconTimeout = null;
         
         // 🌟 讀取動畫事件時間，並在 Console 印出所有可用事件！
-        // 🌟 讀取動畫事件時間 (智慧過濾起手假動作版)
-        function getLaunchTime(player, animName, defaultMs = 500) {
-            if (!player || !player.skeleton.data) return defaultMs;
+        // 🌟 讀取動畫事件時間 (終極防呆多段連擊版)
+       // 🌟 讀取動畫事件時間 (結合 data_skill.js 文本交叉驗證版)
+        function getLaunchTimes(player, animName, charName, defaultMs = 500) {
+            if (!player || !player.skeleton.data) return [defaultMs];
             const anim = player.skeleton.data.animations.find(a => a.name === animName);
-            if (!anim) return defaultMs;
+            if (!anim) return [defaultMs];
 
-            let foundEvents = []; 
-            let validEventTimes = []; // 專門用來收集大於 0 的 Event 時間
+            const totalDurMs = anim.duration * 1000; 
+            let validEventTimes = [];
+            let foundEvents = [];
 
+            // 1. 蒐集所有事件
             for (let i = 0; i < anim.timelines.length; i++) {
                 const timeline = anim.timelines[i];
                 if (timeline.events) { 
@@ -478,40 +481,74 @@
                         const eventTimeMs = evt.time * 1000;
                         
                         foundEvents.push(`[${eventName}: ${Math.round(eventTimeMs)}ms]`);
-
-                        // 收集所有潛在的發射標籤
-                        if (eventName === "Event" || eventName === "launch" || eventName === "fire") {
-                            if (eventTimeMs > 0) {
-                                validEventTimes.push(eventTimeMs);
-                            }
+                        if (eventName === "Event" || eventName === "launch" || eventName === "fire" || eventName === "attack") {
+                            if (eventTimeMs > 0) validEventTimes.push(eventTimeMs);
                         }
                     }
                 }
             }
 
-            // 確保時間從小到大排序 (Spine預設通常有排，但保險起見自己排一次)
             validEventTimes.sort((a, b) => a - b);
 
-            let targetTimeMs = null;
-            
-            if (validEventTimes.length > 0) {
-                // 💡 核心智慧邏輯：尋找第一個「大於 200ms」的事件
-                // 這樣可以完美跳過 100ms 的「舉手/發光」前置動作
-                const realHit = validEventTimes.find(t => t > 200);
-                
-                // 如果有找到 > 200ms 的，就用它；
-                // 如果動作真的超快（所有事件都在 200ms 內），只好退而求其次用最後一個事件
-                targetTimeMs = realHit !== undefined ? realHit : validEventTimes[validEventTimes.length - 1];
+            // 2. 時長防呆過濾
+            let realHits = validEventTimes.filter(t => t > 200 && t < totalDurMs - 50);
+
+            // 3. 攻擊冷卻合併 (間隔 > 150ms 才算獨立攻擊)
+            let finalHits = [];
+            realHits.forEach(t => {
+                if (finalHits.length === 0) {
+                    finalHits.push(t);
+                } else {
+                    let lastHit = finalHits[finalHits.length - 1];
+                    if (t - lastHit > 150) finalHits.push(t);
+                }
+            });
+
+            // ==========================================
+            // 🌟 4. 文本交叉驗證邏輯 (教主的妙計)
+            // ==========================================
+            let isMultiHitDesc = false;
+            try {
+                // 確保 characterSkills 存在
+                if (typeof characterSkills !== 'undefined' && characterSkills[charName]) {
+                    const skillData = characterSkills[charName];
+                    let descText = "";
+
+                    // 根據目前播的動畫名稱，去抓對應的技能敘述
+                    if (animName.startsWith("Attack")) {
+                        descText = skillData.normalAttack?.basic || "";
+                    } else if (animName.startsWith("Skill")) {
+                        // 有些屬性可能是陣列，將其轉為字串方便比對
+                        descText = (skillData.normalSkill?.stats || []).join("") + (skillData.normalSkill?.desc || "");
+                    }
+                    
+                    // 檢查敘述中是否包含「總」字
+                    isMultiHitDesc = descText.includes("總");
+                }
+            } catch(e) {
+                console.warn(`⚠️ 讀取 ${charName} 的技能文本失敗，將使用預設判斷。`);
             }
+
+            // 🎯 最終決策：如果不是多段傷害，且事件多於 1 個，強制只取第一發！
+            if (!isMultiHitDesc && finalHits.length > 1) {
+                console.log(`📖 文本判定：${charName} 的 [${animName}] 無「總」字，強制轉為單發判定。`);
+                finalHits = [finalHits[0]]; 
+            }
+            // ==========================================
 
             if (foundEvents.length > 0) {
                 console.log(`🔍 動畫 [${animName}] 解析 ->`, foundEvents.join(", "));
-                if (targetTimeMs !== null) {
-                    console.log(`🎯 智慧過濾後，鎖定真實發射時間：${Math.round(targetTimeMs)}ms`);
-                }
             }
 
-            return targetTimeMs !== null ? targetTimeMs : defaultMs;
+            if (finalHits.length > 0) {
+                console.log(`🎯 鎖定發射時間：`, finalHits.map(t => Math.round(t) + "ms"));
+                return finalHits; 
+            } else if (validEventTimes.length > 0) {
+                let fallback = [validEventTimes[validEventTimes.length - 1]];
+                return fallback;
+            }
+
+            return [defaultMs];
         }
         function safePlaySpine(playerObj, animName, loop) {
             // ... (函式內容不變)
@@ -914,7 +951,6 @@
             }
             // ⚔️ 碰撞劇本處理
             function handleCollision(runnerPlayer, bossPlayer) {
-                // 🚩 直接使用外層變數即可
                 if (noticeIconEl) {
                     noticeIconEl.remove();
                     noticeIconEl = null;
@@ -939,28 +975,31 @@
                         let attackTrack = safePlaySpine(runnerPlayer, "Attack1_1", false);
                         let atkDur = (attackTrack && attackTrack.animation ? attackTrack.animation.duration : 1.0) * 1000;
 
-                        // 🌟🌟🌟 新增：讀取 Attack1_1 的真實前搖時間
-                        let launchDelayMs = getLaunchTime(runnerPlayer, "Attack1_1", 500);
-                        
+                        // 🌟【核心修改 1】：讀取智慧連擊時間陣列（傳入 charName 進行文本驗證）
+                        let launchTimes = getLaunchTimes(runnerPlayer, "Attack1_1", charName, 500);
+
                         safePlaySpine(bossPlayer, "Groggy", true);
                         
                         // 1. 動作起始：普通震動與紅光
                         bossContainer.classList.add('shake-anim');
                         setTimeout(() => bossContainer.classList.remove('shake-anim'), 400);
 
-                        // 🌟 觸發金蠟筆時，把 launchDelayMs 傳進去
-                        triggerCrayonAttack(isRanged, atkDur, bossContainer, container, isRanged ? rangedOffsetPx : 0, launchDelayMs);
+                        // 🌟【核心修改 2】：利用迴圈，有幾段有效攻擊就噴幾顆蠟筆！
+                        launchTimes.forEach(delayMs => {
+                            triggerCrayonAttack(isRanged, atkDur, bossContainer, container, isRanged ? rangedOffsetPx : 0, delayMs);
+                        });
 
-                        // 🌟 動態計算命中時間：真實前搖 + 固定飛行時間(800)
-                        const hitTimeMs = launchDelayMs + 800;
+                        // 🌟【核心修改 3】：改以「最後一顆蠟筆」的命中時間作為後續強烈震動與結算的時間點
+                        const lastLaunchDelay = launchTimes[launchTimes.length - 1];
+                        const lastHitTimeMs = lastLaunchDelay + 800; 
 
-                        // 3. 同步強烈震動：確保在蠟筆命中前一刻才爆發紅光
+                        // 3. 同步強烈震動：確保在最後一顆蠟筆命中前一刻才爆發紅光
                         setTimeout(() => {
                             bossContainer.classList.add('shake-strong-anim');
                             setTimeout(() => bossContainer.classList.remove('shake-strong-anim'), 500);
-                        }, Math.max(atkDur - 500, hitTimeMs - 200));
+                        }, Math.max(atkDur - 500, lastHitTimeMs - 200));
 
-                        // 4. 🌟 確保等待時間至少大於蠟筆命中的時間 (1400ms)，再讓 BOSS 恢復行動
+                        // 4. 確保等待時間大於最後一發蠟筆命中的時間，再讓 BOSS 恢復行動
                         setTimeout(() => {
                             // 🚩 檢查：如果剛剛打架時不小心走到終點了，直接獲勝！
                             if (hasReachedEnd) {
@@ -1004,15 +1043,11 @@
                                         charRunAnimation.currentTime = (charRunAnimation.currentTime || 0) + skipTime;
                                     }
                                     
-                                    // 🏁 核心修復：如果位移時間補償後已經達到或超過終點，直接觸發勝利
+                                    // 🚩 核心修復：如果位移時間補償後已經達到或超過終點，直接觸發勝利
                                     if (charRunAnimation && charRunAnimation.currentTime >= runDuration) {
-                                        // 🌟 確保小人轉回原向並歸位，滑回畫面上
                                         container.style.transition = 'transform 0.3s ease';
                                         container.style.transform = 'translateX(0px) scaleX(1)';
-                                        isCaught = false;
-                                        chasePhase = 0;
-                                        triggerVictory();
-                                        return;
+                                        isCaught = false; chasePhase = 0; triggerVictory(); return;
                                     }
                                     
                                     container.style.transition = 'none';
@@ -1022,12 +1057,11 @@
                                     
                                     resumeRunning();
                                 }, 200);
-                            // ... (中間省略) ...
                             } else {
                                 container.style.transform = 'translateX(0px) scaleX(1)'; 
                                 resumeRunning();
                             }
-                        }, Math.max(atkDur, hitTimeMs + 100)); // 🌟 取動作時間或命中時間的較大值
+                        }, Math.max(atkDur, lastHitTimeMs + 100)); // 🌟 結算等待時間也對齊最後發射時間
                     } else {
                         console.log("💀 一階：反擊失敗，被處決");
                         bossExecuteKill(runnerPlayer, bossPlayer);
@@ -1055,20 +1089,21 @@
                                 
                                 let currentAnimDurMs = (track && track.animation ? track.animation.duration : 1.0) * 1000;
 
-                                // 🌟🌟🌟 新增：讀取這一段連續技 (animName) 的真實前搖時間
-                                let launchDelayMs = getLaunchTime(runnerPlayer, animName, 500);
+                                // 🌟【核心修改 4】：大招多段動畫讀取智慧連擊時間陣列（傳入 charName）
+                                let launchTimes = getLaunchTimes(runnerPlayer, animName, charName, 500);
 
                                 setTimeout(() => {
                                     bossContainer.classList.add('shake-anim');
                                     setTimeout(() => bossContainer.classList.remove('shake-anim'), 400);
                                     
-                                    // 🌟 傳入 launchDelayMs
-                                    triggerCrayonAttack(isRanged, currentAnimDurMs, bossContainer, container, isRanged ? rangedOffsetPx : 0, launchDelayMs);
+                                    // 🌟【核心修改 5】：迴圈連發大招的蠟筆
+                                    launchTimes.forEach(delayMs => {
+                                        triggerCrayonAttack(isRanged, currentAnimDurMs, bossContainer, container, isRanged ? rangedOffsetPx : 0, delayMs);
+                                    });
                                 }, totalSkillDurationMs);
-                                
-                                // 🌟 核心修改：判斷是否為最後一段技能
+
+                                // 判斷是否為最後一段技能，並同步大震動
                                 const isLastSkill = (index === skillAnims.length - 1);
-                                // 最後一段提早 1000ms (1秒)，其他維持 500ms (0.5秒)
                                 const shakeStrongOffset = isLastSkill ? 1000 : 500; 
 
                                 setTimeout(() => {
@@ -1079,19 +1114,20 @@
                                 totalSkillDurationMs += currentAnimDurMs;
                             });
                         } else {
-                           let fallbackTrack = safePlaySpine(runnerPlayer, "Attack1_1", false);
+                            let fallbackTrack = safePlaySpine(runnerPlayer, "Attack1_1", false);
                             totalSkillDurationMs = (fallbackTrack && fallbackTrack.animation ? fallbackTrack.animation.duration : 1.0) * 1000;
                             
-                            // 🌟🌟🌟 新增讀取
-                            let launchDelayMs = getLaunchTime(runnerPlayer, "Attack1_1", 500);
+                            // 🌟【核心修改 6】：Fallback（普攻頂替）時也讀取智慧連擊時間陣列（傳入 charName）
+                            let launchTimes = getLaunchTimes(runnerPlayer, "Attack1_1", charName, 500);
                             
                             bossContainer.classList.add('shake-anim');
                             setTimeout(() => bossContainer.classList.remove('shake-anim'), 400);
                             
-                            // 🌟 傳入 launchDelayMs
-                            triggerCrayonAttack(isRanged, totalSkillDurationMs, bossContainer, container, isRanged ? rangedOffsetPx : 0, launchDelayMs);
-                            
-                            // 🌟 Fallback (沒有多段技能時) 也一併改成提早 1000ms (1秒)
+                            // 🌟【核心修改 7】：迴圈連發
+                            launchTimes.forEach(delayMs => {
+                                triggerCrayonAttack(isRanged, totalSkillDurationMs, bossContainer, container, isRanged ? rangedOffsetPx : 0, delayMs);
+                            });
+
                             setTimeout(() => {
                                 bossContainer.classList.add('shake-strong-anim');
                                 setTimeout(() => bossContainer.classList.remove('shake-strong-anim'), 500);
@@ -1104,7 +1140,6 @@
                             safePlaySpine(bossPlayer, "Die", false);
                             
                             if (hasReachedEnd) {
-                                // 🌟 確保小人轉回原向並歸位，滑回畫面上
                                 container.style.transition = 'transform 0.3s ease';
                                 container.style.transform = 'translateX(0px) scaleX(1)';
                                 isCaught = false; triggerVictory(); return;
@@ -1133,14 +1168,10 @@
                                         charRunAnimation.currentTime = (charRunAnimation.currentTime || 0) + skipTime;
                                     }
                                     
-                                    // 🏁 核心修復：二階擊殺後，如果補償時間到達終點，直接迎接勝利！
                                     if (charRunAnimation && charRunAnimation.currentTime >= runDuration) {
-                                        // 🌟 確保小人轉回原向並歸位，滑回畫面上
                                         container.style.transition = 'transform 0.3s ease';
                                         container.style.transform = 'translateX(0px) scaleX(1)';
-                                        isCaught = false; 
-                                        triggerVictory(); 
-                                        return;
+                                        isCaught = false; triggerVictory(); return;
                                     }
                                     
                                     container.style.transition = 'none';
@@ -1154,7 +1185,7 @@
                                 container.style.transform = 'translateX(0px) scaleX(1)'; 
                                 resumeRunning();
                             }
-                        }, totalSkillDurationMs + 800); // 🌟 核心修正：加上 800ms 的緩衝，等最後一顆蠟筆確實砸在臉上再倒地！
+                        }, totalSkillDurationMs + 800); 
 
                     } else {
                         console.log("💀 二階：極限逃生失敗，被處決");
