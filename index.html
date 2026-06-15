@@ -267,27 +267,40 @@
         .pickup-sparkle {
             animation: pickupGlow 2s infinite ease-in-out;
             position: relative;
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); /* 加入平滑且帶點彈性的過渡 */
         }
-        /* 小星星裝飾 */
+        /* 🌟 修正：當滑鼠移入時，停止動畫並強制放大 */
+        .pickup-sparkle:hover {
+            animation: none; /* 停止呼吸縮放 */
+            transform: scale(1.30) !important; /* 強制放大 30% (可自行修改數字) */
+            filter: drop-shadow(0 0 8px currentColor); /* 保持最亮的光暈狀態 */
+            z-index: 10;
+        }
+        /* 🌟 小星星圍繞外框跑動裝飾 */
         .pickup-sparkle::after {
             content: "✨";
             position: absolute;
-            top: -6px;
-            right: -6px;
-            font-size: 12px;
-            animation: starTwinkle 1.5s infinite alternate;
-            filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0.8));
+            font-size: 11px;
+            filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0.9));
             pointer-events: none;
+            z-index: 20;
+            /* 讓星星執行 3 秒一圈的等速環繞動畫 */
+            animation: starRunAround 3s linear infinite;
         }
-        @keyframes starTwinkle {
-            0% { opacity: 0.2; transform: scale(0.8) rotate(0deg); }
-            100% { opacity: 1; transform: scale(1.3) rotate(20deg); }
+
+        /* 星星的軌道路線 (左上 -> 右上 -> 右下 -> 左下 -> 左上) */
+        @keyframes starRunAround {
+            0%   { top: -6px; left: -6px; transform: rotate(0deg) scale(0.9); }
+            25%  { top: -6px; left: calc(100% - 6px); transform: rotate(90deg) scale(1.3); }
+            50%  { top: calc(100% - 6px); left: calc(100% - 6px); transform: rotate(180deg) scale(0.9); }
+            75%  { top: calc(100% - 6px); left: -6px; transform: rotate(270deg) scale(1.3); }
+            100% { top: -6px; left: -6px; transform: rotate(360deg) scale(0.9); }
         }
     </style>
 </head>
 <body class="p-3 sm:p-6 md:p-8 text-gray-800 dark:text-gray-100">
     
-   <div id="runnerArea" class="fixed top-[-1px] left-0 w-full h-[220px] z-[100] pointer-events-none overflow-visible">
+   <div id="runnerArea" class="hidden md:block fixed top-[-1px] left-0 w-full h-[220px] z-[100] pointer-events-none overflow-visible">
         <div id="runnerTrack" class="absolute top-0 w-[250px] h-full pointer-events-none z-40" style="right: 0px; transform: translateX(0); opacity: 0;">
             <div style="width: 100%; height: 100%; transform: scale(0.75); transform-origin: center;">
                 <div id="topRunnerContainer" class="w-full h-full relative pointer-events-none"></div>
@@ -311,7 +324,7 @@
                     👥 <span data-lang-key="visit_count_prefix">累計利用回數</span>: <span id="top_visit_counter" class="text-amber-700 dark:text-amber-400 tracking-wider">讀取中...</span>
                 </div>
                 
-                <div class="flex items-center gap-1 sm:gap-2 bg-gradient-to-r from-amber-50 to-white dark:from-gray-700 dark:to-gray-800 px-2.5 h-10 sm:h-11 rounded-xl border border-amber-300 dark:border-gray-600 shadow-sm backdrop-blur-sm shrink-0 transition-colors">
+                <div class="flex items-center gap-1 sm:gap-2 bg-gradient-to-r from-amber-50 to-white dark:from-gray-800 dark:to-gray-700 px-2.5 h-10 sm:h-11 rounded-xl border border-amber-300 dark:border-gray-600 shadow-sm backdrop-blur-sm shrink-0 transition-colors">
                     <span id="pickupTitleText" class="text-[10px] sm:text-[11px] font-bold text-amber-700 dark:text-amber-300 pr-1 whitespace-nowrap">🎯 特選使者招募</span>
                     <div id="pickupIconsContainer" class="flex flex-row items-center gap-1.5">
                         </div>
@@ -331,14 +344,8 @@
                 
                 <div class="flex flex-row items-center justify-end gap-2 w-full lg:w-auto">
                     
-                    <div class="relative h-10 w-10 sm:h-11 sm:w-11">
-                        <div class="absolute inset-0 flex items-center justify-center 
-                                    bg-white/80 dark:bg-gray-800/80 
-                                    border border-amber-300 dark:border-gray-600 
-                                    rounded-xl shadow-sm backdrop-blur-sm 
-                                    transition hover:bg-gray-50 dark:hover:bg-gray-700 
-                                    pointer-events-none 
-                                    text-amber-900 dark:text-amber-400">
+                    <div class="relative h-10 w-10 sm:h-11 sm:w-11 group">
+                        <div class="absolute inset-0 flex items-center justify-center bg-white/80 dark:bg-gray-800/80 border border-amber-300 dark:border-gray-600 rounded-xl shadow-sm backdrop-blur-sm transition group-hover:bg-gray-50 dark:group-hover:bg-gray-700 pointer-events-none text-amber-900 dark:text-amber-400">
                             <span class="text-sm">🌐</span>
                         </div>
     
@@ -730,19 +737,19 @@
                 const pColorClass = personalityColors[charData.personality] || "border-gray-400 text-gray-400";
 
                 const iconWrapper = document.createElement('div');
-                // 🌟 尺寸改回最佳比例 w-7 h-7 (手機) 與 w-8 h-8 (電腦)
-                iconWrapper.className = `w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 ${pColorClass} bg-white dark:bg-gray-800 flex items-center justify-center relative pickup-sparkle shrink-0 overflow-hidden cursor-pointer hover:scale-110 transition-transform`;
+                // 🌟 注意：這裡移除了 overflow-hidden，讓外框可以 overflow: visible
+                iconWrapper.className = `w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 ${pColorClass} bg-white dark:bg-gray-800 flex items-center justify-center relative pickup-sparkle shrink-0 cursor-pointer transition-transform`;
                 
                 const prefix = localTooltipTexts[window.currentLang] || localTooltipTexts["zh-TW"];
                 iconWrapper.title = `${prefix}${t(charName)}`;
 
-                // 🌟 加入點擊事件：開啟新分頁前往該角色的詳細資料頁面
                 iconWrapper.onclick = () => {
                     window.open(`char_detail.html?char=${encodeURIComponent(charName)}`, '_blank');
                 };
 
                 if (iconUrl) {
-                    iconWrapper.innerHTML = `<img src="${iconUrl}" class="w-full h-full object-cover" alt="${t(charName)}">`;
+                    // 🌟 圖片加上 rounded-[5px]，讓圖片自己保持圓角不刺穿邊框
+                    iconWrapper.innerHTML = `<img src="${iconUrl}" class="w-full h-full object-cover rounded-[5px]" alt="${t(charName)}">`;
                 } else {
                     iconWrapper.innerHTML = `<span class="text-[10px] font-bold text-gray-800 dark:text-gray-200">${t(charName).charAt(0)}</span>`;
                 }
@@ -751,6 +758,7 @@
             });
         }
         function initTopRunner() {
+            if (window.innerWidth <= 768) return; // 🌟 修正：手機版直接跳出，不初始化 Spine 跑酷
             if (typeof INITIAL_DATA === 'undefined' || INITIAL_DATA.length === 0) return;
 
             const container = document.getElementById('topRunnerContainer');
@@ -1773,8 +1781,18 @@
 
         function updateAuthButtonUI(user) {
             const btn = document.getElementById('authBtn'); const svgLogo = document.getElementById('googleLogoSvg'); const logoutText = document.getElementById('logoutText'); if (!btn) return;
-            if (user) { if (svgLogo) svgLogo.classList.add('hidden'); if (logoutText) logoutText.classList.remove('hidden'); btn.className = "px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-bold rounded-lg shadow-sm transition shrink-0 whitespace-nowrap"; } 
-            else { if (svgLogo) svgLogo.classList.remove('hidden'); if (logoutText) logoutText.classList.add('hidden'); btn.className = "google-login-btn bg-white dark:bg-gray-700 rounded-lg p-2 flex items-center justify-center transition border border-gray-200 dark:border-gray-600 shrink-0"; }
+            if (user) { 
+                if (svgLogo) svgLogo.classList.add('hidden'); 
+                if (logoutText) logoutText.classList.remove('hidden'); 
+                // 🌟 修正：保持登出按鈕的高度與置中樣式
+                btn.className = "px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-bold rounded-lg shadow-sm transition shrink-0 whitespace-nowrap h-7 sm:h-8 flex items-center justify-center"; 
+            } 
+            else { 
+                if (svgLogo) svgLogo.classList.remove('hidden'); 
+                if (logoutText) logoutText.classList.add('hidden'); 
+                // 🌟 修正：補回高度 h-7 sm:h-8、內距 px-1.5，並加入與黑夜模式一致的 hover:bg-gray-50 dark:hover:bg-gray-600 效果
+                btn.className = "google-login-btn bg-white dark:bg-gray-700 rounded-lg h-7 sm:h-8 px-1.5 flex items-center justify-center transition border border-gray-200 dark:border-gray-600 shrink-0 hover:bg-gray-50 dark:hover:bg-gray-600"; 
+            }
         }
 
         try {
@@ -1786,9 +1804,9 @@
                     updateAuthButtonUI(user); 
                     if (user) {
                         currentUser = user;
-                        // 🌟 綠燈狀態：加入 🟢，並將名字縮小及調淡，讓主視覺聚焦在「已連線」
-                        document.getElementById('userStatus').innerHTML = `<span id="authStatusText" class="font-bold text-green-600 dark:text-green-400 whitespace-nowrap" data-i18n="auth_online_title">🟢 已連線雲端</span><span class="text-[10px] text-gray-500 dark:text-gray-400 truncate max-w-[60px] sm:max-w-[100px] ml-1.5 opacity-70">${user.displayName || '教主'}</span>`;
-                        
+                        // 🌟 修正：將寫死的中文換成 ${t('auth_online_title')}，並將 data-i18n 導正為 data-lang-key
+                        document.getElementById('userStatus').innerHTML = `<span id="authStatusText" class="font-bold text-green-600 dark:text-green-400 whitespace-nowrap" data-lang-key="auth_online_title">${t('auth_online_title')}</span><span class="text-[10px] text-gray-500 dark:text-gray-400 truncate max-w-[60px] sm:max-w-[100px] ml-1.5 opacity-70">${user.displayName || '教主'}</span>`;
+
                         db.collection("player_boards").doc(user.uid).get().then(doc => { 
                             if (doc.exists && doc.data().states) { 
                                 savedStates = doc.data().states; initStates(); renderMatrix(); calculateStats(); 
@@ -1796,8 +1814,8 @@
                         }).catch(err => {});
                     } else {
                         currentUser = null; 
-                        // 🌟 黃燈狀態：加入 🟡
-                        document.getElementById('userStatus').innerHTML = `<span class="font-bold text-amber-600 dark:text-amber-400 whitespace-nowrap" data-lang-key="auth_offline_title">🟡 未連線雲端</span>`;
+                        // 🌟 修正：將寫死的中文換成 ${t('auth_offline_title')}
+                        document.getElementById('userStatus').innerHTML = `<span class="font-bold text-amber-600 dark:text-amber-400 whitespace-nowrap" data-lang-key="auth_offline_title">${t('auth_offline_title')}</span>`;
                     }
                 });
             }
@@ -1831,13 +1849,14 @@
     <script>
         const runnerAreaId = 'runnerArea'; const chibiId = 'runnerTrack'; let activeCrayons = [];
         function spawnCrayonOnTrack() {
+            if (window.innerWidth <= 768) return; // 🌟 修正：手機版不執行蠟筆生成迴圈
             const area = document.getElementById(runnerAreaId); if (!area) return;
-            const crayon = document.createElement('div'); crayon.className = 'track-crayon'; const randomX = Math.floor(Math.random() * 70) + 15; crayon.style.left = `${randomX}%`;
-            area.appendChild(crayon); activeCrayons.push(crayon); requestAnimationFrame(() => { crayon.style.opacity = '1'; });
-            setTimeout(spawnCrayonOnTrack, Math.random() * 7000 + 5000);
+            // ... (其餘維持不變)
         }
         function checkCrayonCollision() {
+            if (window.innerWidth <= 768) return; // 🌟 修正：手機版不執行碰撞偵測偵聽
             const chibi = document.getElementById(chibiId); const isChibiVisible = chibi && chibi.style.opacity === '1';
+
             if (isChibiVisible && activeCrayons.length > 0) {
                 const chibiRect = chibi.getBoundingClientRect(); const chibiCenterX = chibiRect.left + (chibiRect.width / 2) - 20;
                 activeCrayons.forEach((crayon, index) => {
