@@ -515,9 +515,24 @@
         // ------------------------------------------------------------
         // 面板與矩陣渲染邏輯
         // ------------------------------------------------------------
-        const CURRENT_PICKUP_CHARS = ["莉絲蒂", "海莉", "盧波"]; 
+        function getActivePickupChars() {
+            const now = new Date();
+            // 找出符合現在時間的所有檔期
+            const active = PICKUP_SCHEDULE.find(s => {
+                const startDate = new Date(s.start);
+                const endDate = new Date(s.end);
+                return now.getTime() >= startDate.getTime() && now.getTime() <= endDate.getTime();
+            });
+
+            return active ? active.chars : []; // 若沒排程則回傳空陣列
+        }
+
         function renderPickupBanner() {
-            const container = document.getElementById('pickupIconsContainer'); if (!container || !CURRENT_PICKUP_CHARS.length) return;
+            const container = document.getElementById('pickupIconsContainer');
+            const activeChars = getActivePickupChars(); // 自動獲取當前角色
+    
+            if (!container || activeChars.length === 0) return;
+    
             container.innerHTML = '';
             const localRecruitTexts = { "zh-TW": "🎯 特選使者招募", "ja": "🎯 ピックアップ使徒ガチャ", "en": "🎯 Pick Up Apostles" };
             const localTooltipTexts = { "zh-TW": "特選招募中：", "ja": "ピックアップ中：", "en": "Pickup Rate Up: " };
@@ -526,12 +541,12 @@
 
             const personalityColors = { "天真": "border-green-400 text-green-400", "冷靜": "border-blue-400 text-blue-400", "狂亂": "border-red-400 text-red-400", "活潑": "border-yellow-400 text-yellow-400", "憂鬱": "border-purple-400 text-purple-400" };
 
-            CURRENT_PICKUP_CHARS.forEach(charName => {
+            activeChars.forEach(charName => {
                 const charData = INITIAL_DATA.find(c => c.name === charName); if (!charData) return;
                 const iconUrl = SKILL_ICONS['skill_passive_' + charName]; const pColorClass = personalityColors[charData.personality] || "border-gray-400 text-gray-400";
                 const iconWrapper = document.createElement('div');
                 iconWrapper.className = `w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 ${pColorClass} bg-white dark:bg-gray-800 flex items-center justify-center relative pickup-sparkle shrink-0 cursor-pointer transition-transform`;
-                
+        
                 const prefix = localTooltipTexts[window.currentLang] || localTooltipTexts["zh-TW"]; iconWrapper.title = `${prefix}${t(charName)}`;
                 iconWrapper.onclick = () => window.open(`char_detail.html?char=${encodeURIComponent(charName)}`, '_blank');
                 if (iconUrl) { iconWrapper.innerHTML = `<img src="${iconUrl}" class="w-full h-full object-cover rounded-[5px]" alt="${t(charName)}">`; } 
