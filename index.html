@@ -6,7 +6,7 @@
     <meta name="referrer" content="no-referrer-when-downgrade">
     
     <title>嘟嘟臉金蠟筆記事本</title>
-    <meta name="description" content="《Trickcal: Chibi Go》各位教主，歡迎來到嘟嘟臉金蠟筆記事本！這裡提供最新的《嘟嘟臉惡作劇》角色圖鑑、金蠟筆分佈與技能資料。亦收錄了坨坨們的珍藏品與情信，馬上來查詢最實用的攻略情報吧！">
+    <meta name="description" content="《Trickcal: Chibi Go》嘟嘟臉金蠟筆記事本！提供最新的《嘟嘟臉惡作劇》(Trickcal Revive / トリカル) 角色圖鑑、金蠟筆與技能資料。The best Trickcal Revive Crayon Planner & Character Database. トリカル 最強キャラ・クレヨン攻略データベース。">
     <link rel="icon" href="https://i.postimg.cc/mkfSTq5k/Favicon.png" type="image/png">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -430,8 +430,26 @@
             preloadedSpines.add(charName);
         }
         
-        window.currentLang = localStorage.getItem('user_lang') || "zh-TW";
-        document.getElementById('langSelect').value = currentLang;
+        // 🌟 國際化智慧語系偵測
+        function detectDefaultLanguage() {
+            // 1. 如果玩家之前已經手動切換過語言，永遠以玩家的選擇為最優先
+            const savedLang = localStorage.getItem('user_lang');
+            if (savedLang) return savedLang;
+
+            // 2. 如果是第一次來，讀取他們瀏覽器的系統語言
+            const browserLang = (navigator.language || navigator.userLanguage).toLowerCase();
+
+            // 3. 判斷邏輯：
+            // 若為日文系統 -> 日文
+            if (browserLang.includes('ja')) return 'ja';
+            // 若為中文系統 (zh-TW, zh-HK, zh-MO, zh-CN 等) -> 繁體中文
+            if (browserLang.includes('zh')) return 'zh-TW';
+            // 其餘外國語系 (歐美、韓文、東南亞等) -> 預設顯示英文，避免他們看不懂中文介面
+            return 'en';
+        }
+
+        window.currentLang = detectDefaultLanguage();
+        document.getElementById('langSelect').value = window.currentLang;
 
         function t(key) {
             if (!key) return key;
