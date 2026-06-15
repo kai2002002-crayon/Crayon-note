@@ -8,6 +8,14 @@
     <title>嘟嘟臉金蠟筆記事本</title>
     <meta name="description" content="《Trickcal: Chibi Go》各位教主，歡迎來到嘟嘟臉金蠟筆記事本！這裡提供最新的《嘟嘟臉惡作劇》角色圖鑑、金蠟筆分佈與技能資料。亦收錄了坨坨們的珍藏品與情信，馬上來查詢最實用的攻略情報吧！">
     <link rel="icon" href="https://i.postimg.cc/mkfSTq5k/Favicon.png" type="image/png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://www.gstatic.com">
+    <link rel="preconnect" href="https://unpkg.com">
+    
+    <link rel="preload" as="image" href="https://i.postimg.cc/qvjNxZzg/golden-crayon.png">
+
     <script src="data_core.js"></script>
     <script src="data_skills.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -18,11 +26,12 @@
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
     
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/@esotericsoftware/spine-player@4.1/dist/spine-player.css">
-    <script src="https://unpkg.com/@esotericsoftware/spine-player@4.1/dist/iife/spine-player.js"></script>
+    <script defer src="https://unpkg.com/@esotericsoftware/spine-player@4.1/dist/iife/spine-player.js"></script>
+    
     <style>
         /* 🌟 統一的金蠟筆載入圖案 */
         .spine-loader-crayon {
@@ -42,95 +51,67 @@
         }
 
         #topRunnerContainer {
-            width: 100% !important;
-            height: 100% !important;
-            position: relative;
-            z-index: 120 !important;
-            transition: transform 0.2s ease; /* 翻轉與位移用 */
+            width: 100% !important; height: 100% !important;
+            position: relative; z-index: 120 !important;
+            transition: transform 0.2s ease;
         }
 
         #bossRunnerContainer {
-            width: 100% !important;
-            height: 100% !important;
-            display: block !important;
-            z-index: 105 !important; 
-            pointer-events: none;
-            overflow: visible !important; /* 👈 這是關鍵，確保超出容器的翅膀也能顯示 */
+            width: 100% !important; height: 100% !important;
+            display: block !important; z-index: 105 !important; 
+            pointer-events: none; overflow: visible !important; 
         }
 
-        /* 💥 起始受擊震動特效 */
+        /* 💥 受擊震動特效 */
         @keyframes shakeEffect {
-            0% { transform: translateX(0); filter: brightness(1); }
-            20% { transform: translateX(-15px) rotate(-2deg); filter: brightness(1.2) drop-shadow(0 0 10px rgba(255,0,0,0.6)); }
-            40% { transform: translateX(15px) rotate(2deg); filter: brightness(1.2); }
-            60% { transform: translateX(-15px) rotate(-2deg); filter: brightness(1.2) drop-shadow(0 0 10px rgba(255,0,0,0.6)); }
-            80% { transform: translateX(15px) rotate(2deg); filter: brightness(1); }
-            100% { transform: translateX(0); filter: brightness(1); }
+            0%, 100% { transform: translateX(0); filter: brightness(1); }
+            20%, 60% { transform: translateX(-15px) rotate(-2deg); filter: brightness(1.2) drop-shadow(0 0 10px rgba(255,0,0,0.6)); }
+            40%, 80% { transform: translateX(15px) rotate(2deg); filter: brightness(1.2); }
         }
-        .shake-anim {
-            animation: shakeEffect 0.35s ease-in-out;
-        }
+        .shake-anim { animation: shakeEffect 0.35s ease-in-out; }
 
-        /* 💥 結束強烈受擊震動特效 */
         @keyframes shakeStrongEffect {
-            0% { transform: translateX(0); filter: brightness(1); }
-            20% { transform: translateX(-25px) rotate(-4deg) scale(1.05); filter: brightness(1.5) drop-shadow(0 0 25px rgba(255,0,0,0.9)); }
-            40% { transform: translateX(25px) rotate(4deg) scale(1.05); filter: brightness(1.5); }
-            60% { transform: translateX(-25px) rotate(-4deg) scale(1.05); filter: brightness(1.5) drop-shadow(0 0 25px rgba(255,0,0,0.9)); }
-            80% { transform: translateX(25px) rotate(4deg) scale(1.05); filter: brightness(1); }
-            100% { transform: translateX(0); filter: brightness(1); }
+            0%, 100% { transform: translateX(0); filter: brightness(1); }
+            20%, 60% { transform: translateX(-25px) rotate(-4deg) scale(1.05); filter: brightness(1.5) drop-shadow(0 0 25px rgba(255,0,0,0.9)); }
+            40%, 80% { transform: translateX(25px) rotate(4deg) scale(1.05); filter: brightness(1.5); }
         }
-        .shake-strong-anim {
-            animation: shakeStrongEffect 0.5s ease-in-out;
-        }
+        .shake-strong-anim { animation: shakeStrongEffect 0.5s ease-in-out; }
 
-        /* 🖍️ 攻擊用投擲蠟筆特效 */
-        .projectile-crayon {
-            position: absolute; width: 25px; height: 25px;
+        /* 🚀 效能優化 4：合併投擲物與爆破特效的共用 CSS 屬性 */
+        .projectile-crayon, .burst-crayon {
+            position: absolute;
             background: url('https://i.postimg.cc/qvjNxZzg/golden-crayon.png') no-repeat center center; 
             background-size: contain; z-index: 200; pointer-events: none;
+        }
+        .projectile-crayon {
+            width: 25px; height: 25px;
             filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.8));
             transform-origin: center;
         }
-
-        /* 🖍️ 爆裂小蠟筆特效 */
         .burst-crayon {
-            position: absolute; width: 20px; height: 20px;
-            background: url('https://i.postimg.cc/qvjNxZzg/golden-crayon.png') no-repeat center center; 
-            background-size: contain; z-index: 200; pointer-events: none;
+            width: 20px; height: 20px;
         }
 
         #topRunnerContainer canvas, #bossRunnerContainer canvas {
-            width: 100% !important;
-            height: 100% !important;
-            display: block !important;
+            width: 100% !important; height: 100% !important; display: block !important;
         }
-        #topRunnerContainer .spine-player-canvas, #bossRunnerContainer .spine-player-canvas {
-            background-color: transparent !important;
-        }
+        #topRunnerContainer .spine-player-canvas, #bossRunnerContainer .spine-player-canvas { background-color: transparent !important; }
 
-        :root {
-            --user-bg-image: url('https://i.postimg.cc/fTJ36ZFT/CG-Schedule-Rim.png'); 
-        }
+        :root { --user-bg-image: url('https://i.postimg.cc/fTJ36ZFT/CG-Schedule-Rim.png'); }
 
         body { 
-            font-family: 'Noto Sans TC', sans-serif; 
-            background-color: #fcf8f2; 
-            -webkit-tap-highlight-color: transparent;
-            transition: color 0.3s ease;
+            font-family: 'Noto Sans TC', sans-serif; background-color: #fcf8f2; 
+            -webkit-tap-highlight-color: transparent; transition: color 0.3s ease;
         }
-
         body::before {
             content: ""; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             z-index: -2; background-image: var(--user-bg-image); background-size: cover;
             background-position: center; background-repeat: no-repeat;
         }
-
         body::after {
             content: ""; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             z-index: -1; background-color: rgba(252, 248, 242, 0.75); transition: background-color 0.3s ease;
         }
-
         .dark body { color: #e2e8f0; }
         .dark body::after { background-color: rgba(26, 32, 44, 0.85); }
 
@@ -148,147 +129,72 @@
 
         .char-avatar-container { 
             transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); 
-            cursor: pointer; 
-            position: relative; 
-            z-index: 1; 
-            transform-origin: center; 
-            overflow: hidden; 
-            -webkit-touch-callout: none; 
-            -webkit-user-select: none; 
-            user-select: none; 
-            transform: translateZ(0);
-            backface-visibility: hidden;
-            will-change: transform;
+            cursor: pointer; position: relative; z-index: 1; transform-origin: center; 
+            overflow: hidden; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; 
+            transform: translateZ(0); backface-visibility: hidden; will-change: transform;
         }
 
         @media (hover: hover) and (pointer: fine) {
             .char-avatar-container:hover { 
-                transform: scale(1.5) translateZ(0); 
-                z-index: 50; 
-                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3); 
+                transform: scale(1.5) translateZ(0); z-index: 50; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3); 
             }
+            .hover-scale:hover { transform: scale(1.15) translateZ(0); z-index: 10; }
         }
 
-        .char-avatar-container img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
+        .char-avatar-container img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
         .avatar-alt { opacity: 0; transition: opacity 0.3s ease-in-out; }
         .swap-avatars .avatar-alt { opacity: 1; }
         
-        .hover-scale {
-            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-            position: relative;
-            z-index: 1;
-            transform: translateZ(0);
-            backface-visibility: hidden;
-        }
-        @media (hover: hover) and (pointer: fine) {
-            .hover-scale:hover {
-                transform: scale(1.15) translateZ(0); 
-                z-index: 10; 
-            }
-        }
+        .hover-scale { transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); position: relative; z-index: 1; transform: translateZ(0); backface-visibility: hidden; }
         
-        .marquee-box {
-            display: block; width: 120px; overflow: hidden;
-            white-space: nowrap; text-overflow: ellipsis;
-        }
+        .marquee-box { display: block; width: 120px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
         .char-card-wrapper:hover .marquee-box { text-overflow: clip; }
         .char-card-wrapper:hover .marquee-content { display: inline-block; }
-        @keyframes text-marquee {
-            0%, 20% { transform: translateX(0); }
-            80%, 100% { transform: translateX(-35px); }
-        }
+        @keyframes text-marquee { 0%, 20% { transform: translateX(0); } 80%, 100% { transform: translateX(-35px); } }
 
         .social-fixed { position: fixed; bottom: 20px; right: 20px; z-index: 100; }
         .social-menu { display: none; margin-bottom: 8px; flex-direction: column; gap: 8px; }
         .social-fixed:hover .social-menu { display: flex; }
         
         #rim-live-container {
-            position: fixed !important;
-            bottom: 15px !important; 
-            left: 15px !important;
-            width: 112px !important;   
-            height: 112px !important;  
-            z-index: 2147483647 !important;
-            pointer-events: none;
+            position: fixed !important; bottom: 15px !important; left: 15px !important;
+            width: 112px !important; height: 112px !important; z-index: 2147483647 !important; pointer-events: none;
         }
-
         @media (min-width: 768px) {
-            #rim-live-container {
-                bottom: 20px !important; left: 20px !important;
-                width: 150px !important; height: 150px !important;
-            }
+            #rim-live-container { bottom: 20px !important; left: 20px !important; width: 150px !important; height: 150px !important; }
         }
-        
-        #rim-live-container canvas {
-            width: 100% !important; height: 100% !important; display: block !important;
-        }
-        #rim-live-container .spine-player-canvas {
-            background-color: transparent !important;
-        }
+        #rim-live-container canvas { width: 100% !important; height: 100% !important; display: block !important; }
+        #rim-live-container .spine-player-canvas { background-color: transparent !important; }
 
         .track-crayon {
-            position: absolute;
-            width: 23px; height: 18px;
+            position: absolute; width: 23px; height: 18px;
             background-image: url('https://i.postimg.cc/qvjNxZzg/golden-crayon.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            bottom: 55px; 
-            z-index: 50;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
-            animation: crayonIdle 2s ease-in-out infinite;
-            transition: transform 0.6s ease-out, opacity 0.5s ease-out, filter 0.6s ease-out;
-            opacity: 0;
+            background-size: contain; background-repeat: no-repeat; background-position: center;
+            bottom: 55px; z-index: 50; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+            animation: crayonIdle 2s ease-in-out infinite; transition: transform 0.6s ease-out, opacity 0.5s ease-out, filter 0.6s ease-out; opacity: 0;
         }
 
         .crayon-collected {
-            animation: none !important; 
-            transform: scale(1.8) translateY(-40px) !important;
-            opacity: 0 !important;
-            filter: drop-shadow(0 0 15px rgba(251, 191, 36, 1));
+            animation: none !important; transform: scale(1.8) translateY(-40px) !important;
+            opacity: 0 !important; filter: drop-shadow(0 0 15px rgba(251, 191, 36, 1));
         }
-        @keyframes crayonIdle {
-            0%, 100% { transform: translateY(0) rotate(-5deg); }
-            50% { transform: translateY(-10px) rotate(5deg); filter: drop-shadow(0 8px 6px rgba(0,0,0,0.2)); }
-        }
+        @keyframes crayonIdle { 0%, 100% { transform: translateY(0) rotate(-5deg); } 50% { transform: translateY(-10px) rotate(5deg); filter: drop-shadow(0 8px 6px rgba(0,0,0,0.2)); } }
+        
         /* 🌟 Pickup 閃閃發光特效 */
         @keyframes pickupGlow {
             0%, 100% { filter: drop-shadow(0 0 3px currentColor); transform: scale(1); }
             50% { filter: drop-shadow(0 0 8px currentColor); transform: scale(1.05); }
         }
         .pickup-sparkle {
-            animation: pickupGlow 2s infinite ease-in-out;
-            position: relative;
-            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); /* 加入平滑且帶點彈性的過渡 */
+            animation: pickupGlow 2s infinite ease-in-out; position: relative; transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); 
         }
-        /* 🌟 修正：當滑鼠移入時，停止動畫並強制放大 */
         .pickup-sparkle:hover {
-            animation: none; /* 停止呼吸縮放 */
-            transform: scale(1.30) !important; /* 強制放大 30% (可自行修改數字) */
-            filter: drop-shadow(0 0 8px currentColor); /* 保持最亮的光暈狀態 */
-            z-index: 10;
+            animation: none; transform: scale(1.30) !important; filter: drop-shadow(0 0 8px currentColor); z-index: 10;
         }
-        /* 🌟 小星星圍繞外框跑動裝飾 */
         .pickup-sparkle::after {
-            content: "✨";
-            position: absolute;
-            font-size: 11px;
-            filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0.9));
-            pointer-events: none;
-            z-index: 20;
-            /* 讓星星執行 3 秒一圈的等速環繞動畫 */
-            animation: starRunAround 3s linear infinite;
+            content: "✨"; position: absolute; font-size: 11px; filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0.9));
+            pointer-events: none; z-index: 20; animation: starRunAround 3s linear infinite;
         }
-
-        /* 星星的軌道路線 (左上 -> 右上 -> 右下 -> 左下 -> 左上) */
         @keyframes starRunAround {
             0%   { top: -6px; left: -6px; transform: rotate(0deg) scale(0.9); }
             25%  { top: -6px; left: calc(100% - 6px); transform: rotate(90deg) scale(1.3); }
@@ -313,6 +219,7 @@
             </div>
         </div>
     </div>
+    
     <div id="loader" class="fixed inset-0 bg-[#fcf8f2] dark:bg-slate-900 z-[9999] flex items-center justify-center">
         <img src="https://i.postimg.cc/qvjNxZzg/golden-crayon.png" class="animate-bounce h-10 w-auto object-contain drop-shadow-md" alt="Loading...">
     </div>
@@ -326,8 +233,7 @@
                 
                 <div class="flex items-center gap-1 sm:gap-2 bg-gradient-to-r from-amber-50 to-white dark:from-gray-800 dark:to-gray-700 px-2.5 h-10 sm:h-11 rounded-xl border border-amber-300 dark:border-gray-600 shadow-sm backdrop-blur-sm shrink-0 transition-colors">
                     <span id="pickupTitleText" class="text-[10px] sm:text-[11px] font-bold text-amber-700 dark:text-amber-300 pr-1 whitespace-nowrap">🎯 特選使者招募</span>
-                    <div id="pickupIconsContainer" class="flex flex-row items-center gap-1.5">
-                        </div>
+                    <div id="pickupIconsContainer" class="flex flex-row items-center gap-1.5"></div>
                 </div>
             </div>
 
@@ -348,7 +254,6 @@
                         <div class="absolute inset-0 flex items-center justify-center bg-white/80 dark:bg-gray-800/80 border border-amber-300 dark:border-gray-600 rounded-xl shadow-sm backdrop-blur-sm transition group-hover:bg-gray-50 dark:group-hover:bg-gray-700 pointer-events-none text-amber-900 dark:text-amber-400">
                             <span class="text-sm">🌐</span>
                         </div>
-    
                         <select id="langSelect" onchange="changeLanguage(this.value)" 
                                 class="absolute inset-0 w-full h-full opacity-0 cursor-pointer text-[11px] text-amber-900 dark:text-amber-400">
                             <option value="zh-TW">中</option>
@@ -363,20 +268,17 @@
                     </button>
 
                     <div id="authPanel" class="bg-white/90 dark:bg-gray-800/90 px-2.5 h-10 sm:h-11 rounded-xl border border-amber-300 dark:border-gray-600 shadow-sm flex flex-row items-center justify-end gap-2 sm:gap-3 backdrop-blur-sm">
-    
                         <div id="userStatus" class="flex flex-row items-center text-left text-[11px] sm:text-xs text-gray-600 dark:text-gray-300">
                             <span class="font-bold text-amber-600 dark:text-amber-400 whitespace-nowrap" data-lang-key="auth_offline_title">🟡 未連線雲端</span></div>
                         
                         <div id="authBtnContainer" class="shrink-0 flex items-center">
                             <button id="authBtn" onclick="handleAuth()" class="google-login-btn bg-white dark:bg-gray-700 rounded-lg h-7 sm:h-8 px-1.5 flex items-center justify-center transition border border-gray-200 dark:border-gray-600 shrink-0">
-        
                                 <svg id="googleLogoSvg" class="w-4 h-4" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                                     <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
                                     <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
                                     <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"/>
                                 </svg>
-        
                                 <span id="logoutText" class="hidden text-white font-bold text-[10px] sm:text-xs px-1" data-lang-key="auth_logout">登出</span>
                             </button>
                         </div>
@@ -396,46 +298,28 @@
             </div>
             
             <div id="filterPanelBody" class="space-y-3 text-xs mt-3">
-                <div class="flex items-start gap-2 w-full">
-                    <span class="font-bold text-gray-500 dark:text-gray-400 shrink-0 pt-1 whitespace-nowrap" data-lang-key="stats_personality">🔮 性格：</span>
-                   <div id="filter_personality" class="flex flex-wrap gap-1.5 flex-1"></div>
-               </div>
-               <div class="flex items-start gap-2 w-full">
-                   <span class="font-bold text-gray-500 dark:text-gray-400 shrink-0 pt-1 whitespace-nowrap" data-lang-key="stats_race">🧬 種族：</span>
-                   <div id="filter_race" class="flex flex-wrap gap-1.5 flex-1"></div>
-               </div>
-               <div class="flex items-start gap-2 w-full">
-                   <span class="font-bold text-gray-500 dark:text-gray-400 shrink-0 pt-1 whitespace-nowrap" data-lang-key="stats_position">🗺️ 站位：</span>
-                   <div id="filter_position" class="flex flex-wrap gap-1.5 flex-1"></div>
-               </div>
-               <div class="flex items-start gap-2 w-full">
-                   <span class="font-bold text-gray-500 dark:text-gray-400 shrink-0 pt-1 whitespace-nowrap" data-lang-key="stats_job">⚔️ 職業：</span>
-                   <div id="filter_job" class="flex flex-wrap gap-1.5 flex-1"></div>
-               </div>
+                <div class="flex items-start gap-2 w-full"><span class="font-bold text-gray-500 dark:text-gray-400 shrink-0 pt-1 whitespace-nowrap" data-lang-key="stats_personality">🔮 性格：</span><div id="filter_personality" class="flex flex-wrap gap-1.5 flex-1"></div></div>
+                <div class="flex items-start gap-2 w-full"><span class="font-bold text-gray-500 dark:text-gray-400 shrink-0 pt-1 whitespace-nowrap" data-lang-key="stats_race">🧬 種族：</span><div id="filter_race" class="flex flex-wrap gap-1.5 flex-1"></div></div>
+                <div class="flex items-start gap-2 w-full"><span class="font-bold text-gray-500 dark:text-gray-400 shrink-0 pt-1 whitespace-nowrap" data-lang-key="stats_position">🗺️ 站位：</span><div id="filter_position" class="flex flex-wrap gap-1.5 flex-1"></div></div>
+                <div class="flex items-start gap-2 w-full"><span class="font-bold text-gray-500 dark:text-gray-400 shrink-0 pt-1 whitespace-nowrap" data-lang-key="stats_job">⚔️ 職業：</span><div id="filter_job" class="flex flex-wrap gap-1.5 flex-1"></div></div>
     
-               <div class="flex flex-col sm:flex-row items-start gap-2 border-t border-dashed border-gray-100 dark:border-gray-700 pt-2 w-full">
-                   <span class="font-bold text-amber-800 dark:text-amber-500 shrink-0 pt-1 flex items-center gap-0.5 whitespace-nowrap" data-lang-key="stats_cell">🖍️ 金蠟筆格：</span>
-                   <div class="flex flex-col gap-2 flex-1 w-full">
-                       <div class="flex items-center sm:items-start gap-1.5 w-full">
-                           <span class="text-[11px] text-gray-400 dark:text-gray-500 font-medium bg-gray-50 dark:bg-gray-700 px-1 rounded whitespace-nowrap mt-0.5" data-lang-key="stats_level">指定層數:</span>
-                           <div id="filter_gridLayer" class="flex flex-wrap gap-1.5 flex-1"></div>
-                       </div>
-                       <div class="flex items-center sm:items-start gap-1.5 w-full">
-                           <span class="text-[11px] text-gray-400 dark:text-gray-500 font-medium bg-gray-50 dark:bg-gray-700 px-1 rounded whitespace-nowrap mt-0.5" data-lang-key="cell_kind">格子種類:</span>
-                           <div id="filter_gridType" class="flex flex-wrap gap-1.5 flex-1"></div>
-                       </div>
-                   </div>
-               </div>
+                <div class="flex flex-col sm:flex-row items-start gap-2 border-t border-dashed border-gray-100 dark:border-gray-700 pt-2 w-full">
+                    <span class="font-bold text-amber-800 dark:text-amber-500 shrink-0 pt-1 flex items-center gap-0.5 whitespace-nowrap" data-lang-key="stats_cell">🖍️ 金蠟筆格：</span>
+                    <div class="flex flex-col gap-2 flex-1 w-full">
+                        <div class="flex items-center sm:items-start gap-1.5 w-full"><span class="text-[11px] text-gray-400 dark:text-gray-500 font-medium bg-gray-50 dark:bg-gray-700 px-1 rounded whitespace-nowrap mt-0.5" data-lang-key="stats_level">指定層數:</span><div id="filter_gridLayer" class="flex flex-wrap gap-1.5 flex-1"></div></div>
+                        <div class="flex items-center sm:items-start gap-1.5 w-full"><span class="text-[11px] text-gray-400 dark:text-gray-500 font-medium bg-gray-50 dark:bg-gray-700 px-1 rounded whitespace-nowrap mt-0.5" data-lang-key="cell_kind">格子種類:</span><div id="filter_gridType" class="flex flex-wrap gap-1.5 flex-1"></div></div>
+                    </div>
+                </div>
     
-               <div class="flex flex-col sm:flex-row items-start gap-2 border-t border-dashed border-gray-100 dark:border-gray-700 pt-2 w-full">
-                   <span class="font-bold text-blue-700 dark:text-blue-400 shrink-0 pt-1 flex items-center gap-0.5 whitespace-nowrap" data-lang-key="filter_display_mode">👁️ 版面顯示：</span>
-                   <div id="filter_displayMode" class="flex flex-wrap gap-1.5 flex-1 w-full">
-                       <button id="btn_disp_all" onclick="setDisplayMode('all')" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-bold transition bg-blue-500 text-white border-blue-600 shadow-sm" data-lang-key="filter_btn_show_all">顯示全部</button>
-                       <button id="btn_disp_1" onclick="setDisplayMode('1')" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-medium transition bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600" data-lang-key="filter_btn_show_1">僅第一層</button>
-                       <button id="btn_disp_2" onclick="setDisplayMode('2')" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-medium transition bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600" data-lang-key="filter_btn_show_2">僅第二層</button>
-                       <button id="btn_disp_3" onclick="setDisplayMode('3')" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-medium transition bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600" data-lang-key="filter_btn_show_3">僅第三層</button>
-                   </div>
-               </div>
+                <div class="flex flex-col sm:flex-row items-start gap-2 border-t border-dashed border-gray-100 dark:border-gray-700 pt-2 w-full">
+                    <span class="font-bold text-blue-700 dark:text-blue-400 shrink-0 pt-1 flex items-center gap-0.5 whitespace-nowrap" data-lang-key="filter_display_mode">👁️ 版面顯示：</span>
+                    <div id="filter_displayMode" class="flex flex-wrap gap-1.5 flex-1 w-full">
+                        <button id="btn_disp_all" onclick="setDisplayMode('all')" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-bold transition bg-blue-500 text-white border-blue-600 shadow-sm" data-lang-key="filter_btn_show_all">顯示全部</button>
+                        <button id="btn_disp_1" onclick="setDisplayMode('1')" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-medium transition bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600" data-lang-key="filter_btn_show_1">僅第一層</button>
+                        <button id="btn_disp_2" onclick="setDisplayMode('2')" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-medium transition bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600" data-lang-key="filter_btn_show_2">僅第二層</button>
+                        <button id="btn_disp_3" onclick="setDisplayMode('3')" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-medium transition bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600" data-lang-key="filter_btn_show_3">僅第三層</button>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -450,26 +334,17 @@
 
         <section id="statsPanelBody" class="grid grid-cols-1 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 transition-all">
             <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-xl p-3 sm:p-4 shadow border-2 border-amber-200 dark:border-amber-900 flex flex-col justify-between h-full">
-                <div class="border-b border-amber-100 dark:border-gray-700 pb-1.5 mb-2">
-                    <h3 class="font-bold text-amber-900 dark:text-amber-500 flex items-center text-xs sm:text-sm whitespace-nowrap"><span data-lang-key="stats_layer_1_title">🥇 第一層統計</span> <span class="text-[10px] ml-1 font-normal opacity-80" data-lang-key="stats_layer_1_rule">(每格+3%, 蠟筆×2)</span></h3>
-                </div>
+                <div class="border-b border-amber-100 dark:border-gray-700 pb-1.5 mb-2"><h3 class="font-bold text-amber-900 dark:text-amber-500 flex items-center text-xs sm:text-sm whitespace-nowrap"><span data-lang-key="stats_layer_1_title">🥇 第一層統計</span> <span class="text-[10px] ml-1 font-normal opacity-80" data-lang-key="stats_layer_1_rule">(每格+3%, 蠟筆×2)</span></h3></div>
                 <div id="stat_layer_1" class="text-[10px] sm:text-[11px] text-gray-700 dark:text-gray-300 space-y-1 flex flex-col h-full justify-between"></div>
             </div>
-
             <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-xl p-3 sm:p-4 shadow border-2 border-orange-200 dark:border-orange-900 flex flex-col justify-between h-full">
-                <div class="border-b border-orange-100 dark:border-gray-700 pb-1.5 mb-2">
-                    <h3 class="font-bold text-orange-900 dark:text-orange-500 flex items-center text-xs sm:text-sm whitespace-nowrap"><span data-lang-key="stats_layer_2_title">🥈 第二層統計</span> <span class="text-[10px] ml-1 font-normal opacity-80" data-lang-key="stats_layer_2_rule">(每格+4%, 蠟筆×4)</span></h3>
-                </div>
+                <div class="border-b border-orange-100 dark:border-gray-700 pb-1.5 mb-2"><h3 class="font-bold text-orange-900 dark:text-orange-500 flex items-center text-xs sm:text-sm whitespace-nowrap"><span data-lang-key="stats_layer_2_title">🥈 第二層統計</span> <span class="text-[10px] ml-1 font-normal opacity-80" data-lang-key="stats_layer_2_rule">(每格+4%, 蠟筆×4)</span></h3></div>
                 <div id="stat_layer_2" class="text-[10px] sm:text-[11px] text-gray-700 dark:text-gray-300 space-y-1 flex flex-col h-full justify-between"></div>
             </div>
-
             <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-xl p-3 sm:p-4 shadow border-2 border-red-200 dark:border-red-900 flex flex-col justify-between h-full">
-                <div class="border-b border-red-100 dark:border-gray-700 pb-1.5 mb-2">
-                    <h3 class="font-bold text-red-900 dark:text-red-500 flex items-center text-xs sm:text-sm whitespace-nowrap"><span data-lang-key="stats_layer_3_title">🥉 第三層統計</span> <span class="text-[10px] ml-1 font-normal opacity-80" data-lang-key="stats_layer_3_rule">(每格+5%, 蠟筆×6)</span></h3>
-                </div>
+                <div class="border-b border-red-100 dark:border-gray-700 pb-1.5 mb-2"><h3 class="font-bold text-red-900 dark:text-red-500 flex items-center text-xs sm:text-sm whitespace-nowrap"><span data-lang-key="stats_layer_3_title">🥉 第三層統計</span> <span class="text-[10px] ml-1 font-normal opacity-80" data-lang-key="stats_layer_3_rule">(每格+5%, 蠟筆×6)</span></h3></div>
                 <div id="stat_layer_3" class="text-[10px] sm:text-[11px] text-gray-700 dark:text-gray-300 space-y-1 flex flex-col h-full justify-between"></div>
             </div>
-
             <div class="bg-gradient-to-br from-yellow-50/90 to-amber-100/90 dark:from-gray-800/90 dark:to-gray-800/90 backdrop-blur-md rounded-xl p-3 sm:p-4 shadow border-2 border-yellow-300 dark:border-gray-600 flex flex-col justify-between h-full">
                 <div>
                     <h3 class="font-bold text-amber-955 dark:text-amber-400 text-xs sm:text-sm mb-1 whitespace-nowrap border-b border-amber-200 dark:border-gray-700 pb-1.5" data-lang-key="stats_global_bonus">📊 全體屬性加成</h3>
@@ -498,849 +373,51 @@
                 <p data-lang-key="footer_lastupdate">最後更新日期：06/06/2026</p>
             </div>
         </footer>
-        
     </div>
 
-    <script>
-        let currentRunnerPlayer = null; 
-        let currentBossPlayer = null;
-        let chaseLoopId = null;
-        
-        // 🚩 感嘆號專用變數（統一在此處宣告）
-        let noticeIconEl = null;
-        let noticeIconTimeout = null;
-        
-        // 🌟 讀取動畫事件時間，並在 Console 印出所有可用事件！
-        // 🌟 讀取動畫事件時間 (終極防呆多段連擊版)
-       // 🌟 讀取動畫事件時間 (結合 data_skill.js 文本交叉驗證版)
-        function getLaunchTimes(player, animName, charName, defaultMs = 500) {
-            if (!player || !player.skeleton.data) return [defaultMs];
-            const anim = player.skeleton.data.animations.find(a => a.name === animName);
-            if (!anim) return [defaultMs];
-
-            const totalDurMs = anim.duration * 1000; 
-            let validEventTimes = [];
-            let foundEvents = [];
-
-            // 1. 蒐集所有事件
-            for (let i = 0; i < anim.timelines.length; i++) {
-                const timeline = anim.timelines[i];
-                if (timeline.events) { 
-                    for (let j = 0; j < timeline.events.length; j++) {
-                        const evt = timeline.events[j];
-                        const eventName = evt.data.name;
-                        const eventTimeMs = evt.time * 1000;
-                        
-                        foundEvents.push(`[${eventName}: ${Math.round(eventTimeMs)}ms]`);
-                        if (eventName === "Event" || eventName === "launch" || eventName === "fire" || eventName === "attack") {
-                            if (eventTimeMs > 0) validEventTimes.push(eventTimeMs);
-                        }
-                    }
-                }
-            }
-
-            validEventTimes.sort((a, b) => a - b);
-
-            // 2. 時長防呆過濾
-            let realHits = validEventTimes.filter(t => t > 200 && t < totalDurMs - 50);
-
-            // 3. 攻擊冷卻合併 (間隔 > 150ms 才算獨立攻擊)
-            let finalHits = [];
-            realHits.forEach(t => {
-                if (finalHits.length === 0) {
-                    finalHits.push(t);
-                } else {
-                    let lastHit = finalHits[finalHits.length - 1];
-                    if (t - lastHit > 150) finalHits.push(t);
-                }
-            });
-
-            // ==========================================
-            // 🌟 4. 文本交叉驗證邏輯 (教主的妙計)
-            // ==========================================
-            let isMultiHitDesc = false;
-            try {
-                // 確保 characterSkills 存在
-                if (typeof characterSkills !== 'undefined' && characterSkills[charName]) {
-                    const skillData = characterSkills[charName];
-                    let descText = "";
-
-                    // 根據目前播的動畫名稱，去抓對應的技能敘述
-                    if (animName.startsWith("Attack")) {
-                        descText = skillData.normalAttack?.basic || "";
-                    } else if (animName.startsWith("Skill")) {
-                        // 有些屬性可能是陣列，將其轉為字串方便比對
-                        descText = (skillData.normalSkill?.stats || []).join("") + (skillData.normalSkill?.desc || "");
-                    }
-                    
-                    // 檢查敘述中是否包含「總」字
-                    isMultiHitDesc = descText.includes("總");
-                }
-            } catch(e) {
-                console.warn(`⚠️ 讀取 ${charName} 的技能文本失敗，將使用預設判斷。`);
-            }
-
-            // 🎯 最終決策：如果不是多段傷害，且事件多於 1 個，強制只取第一發！
-            if (!isMultiHitDesc && finalHits.length > 1) {
-                console.log(`📖 文本判定：${charName} 的 [${animName}] 無「總」字，強制轉為單發判定。`);
-                finalHits = [finalHits[0]]; 
-            }
-            // ==========================================
-
-            if (foundEvents.length > 0) {
-                console.log(`🔍 動畫 [${animName}] 解析 ->`, foundEvents.join(", "));
-            }
-
-            if (finalHits.length > 0) {
-                console.log(`🎯 鎖定發射時間：`, finalHits.map(t => Math.round(t) + "ms"));
-                return finalHits; 
-            } else if (validEventTimes.length > 0) {
-                let fallback = [validEventTimes[validEventTimes.length - 1]];
-                return fallback;
-            }
-
-            return [defaultMs];
-        }
-        function safePlaySpine(playerObj, animName, loop) {
-            // ... (函式內容不變)
-            if (!playerObj || !playerObj.animationState) return null;
-            try {
-                const anims = playerObj.skeleton.data.animations.map(a => a.name);
-                let targetAnim = animName;
-
-                if (!anims.includes(animName)) {
-                    if (animName === "Move") targetAnim = anims.includes("Run") ? "Run" : (anims.includes("Walk") ? "Walk" : anims[0]);
-                    else if (animName === "Attack3_1") targetAnim = anims.includes("Attack_3_1") ? "Attack_3_1" : (anims.includes("Attack_1") ? "Attack_1" : anims[0]);
-                    else if (animName === "Attack1_1") targetAnim = anims.includes("Attack_1_1") ? "Attack_1_1" : (anims.includes("Attack_1") ? "Attack_1" : anims[0]);
-                    else if (animName === "Groggy") targetAnim = anims.includes("Hit") ? "Hit" : anims[0];
-                    else if (animName === "Die") targetAnim = anims.includes("Dead") ? "Dead" : anims[0];
-                }
-                return playerObj.animationState.setAnimation(0, targetAnim, loop);
-            } catch (e) {
-                console.error(`❌ 播放動畫 [${animName}] 發生錯誤:`, e);
-                return null;
-            }
-        }
-
-        // 🎇 觸發金蠟筆爆裂特效
-        function createCrayonBurst(x, y, area) {
-            for(let i=0; i<8; i++) {
-                const burst = document.createElement('div');
-                burst.className = 'burst-crayon';
-                burst.style.left = `${x}px`;
-                burst.style.top = `${y}px`;
-                area.appendChild(burst);
-                
-                const angle = (Math.PI * 2 / 8) * i;
-                const distance = 80 + Math.random() * 40;
-                const tx = Math.cos(angle) * distance;
-                const ty = Math.sin(angle) * distance;
-                
-                burst.animate([
-                    { transform: 'translate(-50%, -50%) scale(1) rotate(0deg)', opacity: 1 },
-                    { transform: `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(0) rotate(${360 + Math.random()*360}deg)`, opacity: 0 }
-                ], { duration: 600 + Math.random()*300, easing: 'ease-out', fill: 'forwards' }).onfinish = () => burst.remove();
-            }
-        }
-
-        // 🎇 處理攻擊的金蠟筆特效 (彈道與打擊)
-        function triggerCrayonAttack(isRanged, attackDurationMs, bossContainer, runnerContainer, offsetPx = 0, customLaunchDelay = 500) {
-            const area = document.getElementById('runnerArea');
-            const rRect = runnerContainer.getBoundingClientRect();
-            const bRect = bossContainer.getBoundingClientRect();
-
-            // 🌟 修正射出點：從容器最左邊緣 (rRect.left)，向右推算小人實際站在畫布裡的距離
-            // 例如推 150px (教主可以根據視覺慢慢調整這個數字，太大就減小，太小就加大)
-            const startX = rRect.left -80; 
-            const startY = rRect.top + (rRect.height * 0.5) + 1; // Y軸通常在中間，可以微調
-            
-            // Boss 的命中點 (保持不變)
-            const endX = bRect.left + bRect.width * 0.5 - 30;
-            const endY = bRect.top + bRect.height * 0.5;
-
-            // 🌟 這裡不再寫死 500，而是使用傳進來的動態時間！
-            const launchDelay = customLaunchDelay;
-            const burstTime = Math.max(launchDelay + 100, attackDurationMs - 800);
-
-            if (isRanged) {
-                setTimeout(() => {
-                    const proj = document.createElement('div');
-                    proj.className = 'projectile-crayon';
-                    proj.style.left = `${startX}px`;
-                    proj.style.top = `${startY}px`;
-                    area.appendChild(proj);
-                    
-                    // 🌟 修正：給定固定的慢速飛行時間 (數值越大飛越慢，800 = 1.5秒)
-                    const flightTime = 800; 
-                    
-                    setTimeout(() => {
-                        // 💡 順便將曲線改為 linear (等速直飛)，飛行視覺會更平滑自然
-                        proj.style.transition = `all ${flightTime}ms linear`;
-                        proj.style.left = `${endX}px`;
-                        proj.style.top = `${endY}px`;
-                        proj.style.transform = `rotate(720deg)`;
-                    }, 50);
-
-                    setTimeout(() => {
-                        if(proj && proj.parentNode) proj.remove();
-                        createCrayonBurst(endX, endY, area);
-                    }, flightTime);
-                }, launchDelay);
-            } else {
-                setTimeout(() => {
-                    createCrayonBurst(endX, endY, area);
-                }, burstTime);
-            }
-        }
-        // ==========================================
-        // 🎯 這裡更改當期 Pickup 角色名稱 (支援多個)
-        // ==========================================
-        const CURRENT_PICKUP_CHARS = ["莉絲蒂", "海莉", "盧波"]; 
-
-        function renderPickupBanner() {
-            const container = document.getElementById('pickupIconsContainer');
-            if (!container || !CURRENT_PICKUP_CHARS.length) return;
-            
-            container.innerHTML = '';
-
-            // 🌟 內建 Pickup 專用中、日、英翻譯字典
-            const localRecruitTexts = { 
-                "zh-TW": "🎯 特選使者招募", 
-                "ja": "🎯 ピックアップ使徒ガチャ", 
-                "en": "🎯 Pick Up Apostles" 
-            };
-            const localTooltipTexts = { 
-                "zh-TW": "特選招募中：", 
-                "ja": "ピックアップ中：", 
-                "en": "Pickup Rate Up: " 
-            };
-
-            // 🌟 1. 自動切換主標題語系 (如果找不到就預設繁中)
-            const titleEl = document.getElementById('pickupTitleText');
-            if (titleEl) {
-                titleEl.innerText = localRecruitTexts[window.currentLang] || localRecruitTexts["zh-TW"];
-            }
-
-            const personalityColors = {
-                "天真": "border-green-400 text-green-400",
-                "冷靜": "border-blue-400 text-blue-400",
-                "狂亂": "border-red-400 text-red-400",
-                "活潑": "border-yellow-400 text-yellow-400",
-                "憂鬱": "border-purple-400 text-purple-400"
-            };
-
-            CURRENT_PICKUP_CHARS.forEach(charName => {
-                const charData = INITIAL_DATA.find(c => c.name === charName);
-                if (!charData) return;
-
-                const iconUrl = SKILL_ICONS['skill_passive_' + charName];
-                const pColorClass = personalityColors[charData.personality] || "border-gray-400 text-gray-400";
-
-                const iconWrapper = document.createElement('div');
-                // 🌟 注意：這裡移除了 overflow-hidden，讓外框可以 overflow: visible
-                iconWrapper.className = `w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 ${pColorClass} bg-white dark:bg-gray-800 flex items-center justify-center relative pickup-sparkle shrink-0 cursor-pointer transition-transform`;
-                
-                const prefix = localTooltipTexts[window.currentLang] || localTooltipTexts["zh-TW"];
-                iconWrapper.title = `${prefix}${t(charName)}`;
-
-                iconWrapper.onclick = () => {
-                    window.open(`char_detail.html?char=${encodeURIComponent(charName)}`, '_blank');
-                };
-
-                if (iconUrl) {
-                    // 🌟 圖片加上 rounded-[5px]，讓圖片自己保持圓角不刺穿邊框
-                    iconWrapper.innerHTML = `<img src="${iconUrl}" class="w-full h-full object-cover rounded-[5px]" alt="${t(charName)}">`;
-                } else {
-                    iconWrapper.innerHTML = `<span class="text-[10px] font-bold text-gray-800 dark:text-gray-200">${t(charName).charAt(0)}</span>`;
-                }
-
-                container.appendChild(iconWrapper);
-            });
-        }
-        function initTopRunner() {
-            if (window.innerWidth <= 768) return; // 🌟 修正：手機版直接跳出，不初始化 Spine 跑酷
-            if (typeof INITIAL_DATA === 'undefined' || INITIAL_DATA.length === 0) return;
-
-            const container = document.getElementById('topRunnerContainer');
-            const track = document.getElementById('runnerTrack');
-            const bossContainer = document.getElementById('bossRunnerContainer');
-            const bossTrack = document.getElementById('bossTrack');
-            // --- 替換從這裡開始 ---
-            const isMobile = window.innerWidth <= 768;
-            
-            // 獨立設定軌道起點，補償剛剛增加的 600px 畫布寬度，讓 Boss 視覺中心維持不變
-            const trackRightOffset = isMobile ? '-140px' : '-110px'; 
-            const bossRightOffset = isMobile ? '-440px' : '-410px'; 
-            
-            track.style.right = trackRightOffset; 
-            bossTrack.style.right = bossRightOffset; 
-            
-            const endLeftPosNum = isMobile ? 35 : 110; 
-            const endLeftPos = `${endLeftPosNum}px`; 
-
-            cancelAnimationFrame(chaseLoopId);
-            track.style.opacity = '0';
-            track.style.transition = 'none';
-            track.getAnimations().forEach(anim => anim.cancel()); 
-            track.style.transform = 'translateX(0) scaleX(1)';              
-            container.style.transform = 'scaleX(1) translateX(0)'; 
-
-            bossTrack.style.opacity = '0';
-            bossTrack.style.transition = 'none';
-            bossTrack.style.pointerEvents = 'none'; 
-            bossTrack.getAnimations().forEach(anim => anim.cancel());
-            bossTrack.style.transform = 'translateX(0) scaleX(1)';
-
-            if (currentRunnerPlayer) { try { currentRunnerPlayer.dispose(); } catch(e){} currentRunnerPlayer = null; }
-            if (currentBossPlayer) { try { currentBossPlayer.dispose(); } catch(e){} currentBossPlayer = null; }
-            container.innerHTML = ''; bossContainer.innerHTML = '';
-            track.onclick = null; bossTrack.onclick = null;
-            
-            // 🚩 確保每次重新開始時，感嘆號都被徹底清理乾淨
-            if (noticeIconEl) { noticeIconEl.remove(); noticeIconEl = null; }
-            clearTimeout(noticeIconTimeout); 
-
-            const isBossEvent = Math.random() < 0.7; 
-            
-            let isCaught = false;
-            let isEscaped = false;
-            let hasNoticed = false;
-            let chasePhase = 1; 
-            let isBossKnockedBack = false;
-            let hasReachedEnd = false; 
-            // ❌ 這裡原本的 let noticeIconEl 與 noticeIconTimeout 已徹底刪除！
-
-            const runDuration = isMobile ? 6000 : 14000; 
-            let charRunAnimation = null;
-            let bossRunAnimation = null;
-
-            // 🏆 新增統整的勝利觸發函式
-            function triggerVictory() {
-                if (isEscaped) return;
-                isEscaped = true;
-                safePlaySpine(currentRunnerPlayer, "Victory", true);
-
-                // 如果 Boss 還沒死，讓他停下來並改為 Idle
-                if (currentBossPlayer && chasePhase !== 0) {
-                    if (bossRunAnimation && bossRunAnimation.playState !== 'finished') {
-                        bossRunAnimation.pause();
-                    }
-                    safePlaySpine(currentBossPlayer, "Idle", true);
-                }
-
-                setTimeout(() => {
-                    track.style.transition = 'opacity 0.6s ease-out';
-                    track.style.opacity = '0';
-                    if (bossTrack) {
-                        bossTrack.style.transition = 'opacity 0.6s ease-out';
-                        bossTrack.style.opacity = '0';
-                    }
-                    setTimeout(initTopRunner, 600); 
-                }, 3000); 
-            }
-
-            const loader = document.createElement('div');
-            loader.className = 'spine-loader-crayon';
-            container.appendChild(loader);
-
-            const randomCharData = INITIAL_DATA[Math.floor(Math.random() * INITIAL_DATA.length)];
-            const charName = randomCharData.name;
-            const folderKey = typeof SPINE_MAP !== 'undefined' ? SPINE_MAP[charName] : charName;
-
-            currentRunnerPlayer = new spine.SpinePlayer("topRunnerContainer", {
-                skelUrl: `./spine_sd_assets/${folderKey}.skel.bytes`,
-                atlasUrl: `./spine_sd_assets/${folderKey}.atlas.txt`,
-                animation: "Spawn", skin: "Normal", backgroundColor: "#00000000",
-                alpha: true, premultipliedAlpha: false, showControls: false, showLoading: false,
-                viewport: { x: -800, y: 100, width: 2500, height: 1500, transitionTime: 0 },
-                success: function (player) {
-                    loader.remove(); 
-                    console.log(`🏃 坨坨進場：${charName}${isBossEvent ? " (💀 R41雷內瓦潛伏中...)" : ""}`);
-                    
-                    try {
-                        const skins = player.skeleton.data.skins;
-                        const targetSkin = skins.find(s => s.name === 'Normal') || skins.find(s => s.name === 'default') || skins[0];
-                        if (targetSkin) {
-                            player.skeleton.setSkinByName(targetSkin.name);
-                            player.skeleton.setSlotsToSetupPose();
-                        }
-                    } catch (e) {}
-
-                    setTimeout(() => {
-                        track.style.transition = 'opacity 0.3s ease-in';
-                        track.style.opacity = '1';
-                        let spawnTrack = safePlaySpine(player, "Spawn", false);
-                        let spawnDuration = (spawnTrack && spawnTrack.animation ? spawnTrack.animation.duration : 1.5) * 1000;
-
-                        setTimeout(() => {
-                            player.timeScale = 1.0; 
-                            safePlaySpine(player, "Move", true);
-                            charRunAnimation = track.animate([
-                                { transform: 'translateX(0) scaleX(1)' },
-                                { transform: `translateX(calc(-100vw + ${endLeftPos})) scaleX(1)` } 
-                            ], { duration: runDuration, fill: 'forwards' });
-
-                           charRunAnimation.onfinish = () => {
-                                hasReachedEnd = true; // 標記已到達終點
-                                if (!isCaught) {
-                                    triggerVictory(); // 沒被抓到，順利通關！
-                                } 
-                                // 如果 isCaught 是 true，代表正在戰鬥中，交給戰鬥結束後的邏輯接手處理
-                            };
-
-                            if (isBossEvent) {
-                                const bossKey = typeof SPINE_MAP !== 'undefined' && SPINE_MAP['R41雷內瓦'] ? SPINE_MAP['R41雷內瓦'] : 'R41雷內瓦';
-                                
-                                currentBossPlayer = new spine.SpinePlayer("bossRunnerContainer", {
-                                    skelUrl: `./spine_sd_assets/${bossKey}.skel.bytes`,
-                                    atlasUrl: `./spine_sd_assets/${bossKey}.atlas.txt`,
-                                    animation: "Idle", backgroundColor: "#00000000", alpha: true, 
-                                    premultipliedAlpha: false, showControls: false, showLoading: false,
-                                    viewport: { x: -1500, y: -450, width: 3000, height: 3000, transitionTime: 0 },
-                                    success: function (bossPlayer) {
-                                        try {
-                                            const bossSkins = bossPlayer.skeleton.data.skins.map(s => s.name);
-                                            let skinToUse = bossSkins.includes('default') ? 'default' : (bossSkins.includes('Skin_Naive') ? 'Skin_Naive' : bossSkins[0]);
-                                            bossPlayer.skeleton.setSkinByName(skinToUse);
-                                            bossPlayer.skeleton.setSlotsToSetupPose();
-                                        } catch (e) { }
-
-                                        function waitRunner15Percent() {
-                                            if (isEscaped || isCaught) return;
-                                            let currentTime = charRunAnimation ? (charRunAnimation.currentTime || 0) : 0;
-                                            
-                                            if (currentTime >= runDuration * 0.15) {
-                                                console.log("💀 BOSS 70% 登場！");
-                                                bossTrack.style.transition = 'opacity 0.2s ease-in';
-                                                bossTrack.style.opacity = '1';
-                                                
-                                                bossPlayer.timeScale = 3.0; 
-                                                let bossSpawnTrack = safePlaySpine(bossPlayer, "Spawn", false);
-                                                let bossSpawnDuration = (bossSpawnTrack && bossSpawnTrack.animation ? bossSpawnTrack.animation.duration : 1.5) * 1000;
-                                                let actualWaitTime = bossSpawnDuration / 3;
-
-                                                setTimeout(() => {
-                                                    if (isEscaped || isCaught) return;
-                                                    bossPlayer.timeScale = 1.0; 
-                                                    safePlaySpine(bossPlayer, "Move", true);
-                                                    
-                                                    bossRunAnimation = bossTrack.animate([
-                                                        { transform: 'translateX(0)' },
-                                                        { transform: `translateX(calc(-100vw + ${endLeftPos}))` }
-                                                    ], { duration: runDuration * 0.5, fill: 'forwards' });
-
-                                                    setupPlayerKnockback(bossPlayer); 
-                                                    startChaseRadar(player, bossPlayer); 
-                                                    
-                                                }, actualWaitTime);
-                                            } else {
-                                                requestAnimationFrame(waitRunner15Percent);
-                                            }
-                                        }
-                                        requestAnimationFrame(waitRunner15Percent);
-                                    }
-                                });
-                            }
-
-                        }, spawnDuration);
-                    }, 50);
-                }
-            });
-
-            // 👆 玩家點擊擊退機制
-            function setupPlayerKnockback(bossPlayer) {
-                bossTrack.style.pointerEvents = 'auto'; 
-                bossTrack.style.cursor = 'pointer';
-
-                bossTrack.onclick = () => {
-                    if (isCaught || isEscaped || isBossKnockedBack || chasePhase === 0) return;
-                    isBossKnockedBack = true;
-                    console.log("👆 玩家點擊！BOSS 被死命推後！");
-                    
-                    // 注意：這裡不播 Groggy 也不暫停 Spine 動畫，讓 Boss 保持 Move 動作倒退！
-                    bossRunAnimation.pause(); 
-
-                    const knockbackPx = 300; 
-                    const screenWidth = window.innerWidth || 1000;
-                    const totalDuration = bossRunAnimation.effect.getTiming().duration;
-                    const knockbackTime = (knockbackPx / screenWidth) * totalDuration;
-
-                    const startT = bossRunAnimation.currentTime;
-                    const targetT = Math.max(0, startT - knockbackTime); 
-                    const kDuration = 150; 
-                    const kStartTime = performance.now();
-
-                    function tweenKnockback(now) {
-                        let p = (now - kStartTime) / kDuration;
-                        if (p < 1) {
-                            bossRunAnimation.currentTime = startT - (startT - targetT) * p;
-                            requestAnimationFrame(tweenKnockback);
-                        } else {
-                            bossRunAnimation.currentTime = targetT;
-                            bossRunAnimation.play(); // 時間回溯完畢，繼續讓軌道前進
-                            setTimeout(() => { isBossKnockedBack = false; }, 400); 
-                        }
-                    }
-                    requestAnimationFrame(tweenKnockback);
-                };
-            }
-
-            // 📡 追逐雷達
-            function startChaseRadar(runnerPlayer, bossPlayer) {
-                function checkChase() {
-                    if (isEscaped || chasePhase === 0) return;
-
-                    // 🚩 1. 先計算雙方的真實距離
-                    const rRect = track.getBoundingClientRect();
-                    const bRect = bossTrack.getBoundingClientRect();
-                    let rCenter = rRect.left + (rRect.width / 2);
-                    let bCenter = bRect.left + (bRect.width / 2);
-                    let distance = bCenter - rCenter; // 因為 Boss 在右邊追，所以用 bCenter 減 rCenter
-
-                    // 💡 2. 察覺機制：當 BOSS 靠近到 450px (快追上) 時，才觸發驚嚇！
-                    // 💡 2. 察覺機制：當 BOSS 靠近到 450px 時判定
-                    if (distance <= 450 && !hasNoticed && !isCaught) {
-                        hasNoticed = true; // 確保這個判定只會執行一次
-                        
-                        // 只有 30% 機率真正「察覺並加速逃跑」
-                        if (Math.random() < 0.3) {
-                            
-                            // 🌟 動態計算高度與左右偏移 (只有觸發逃跑時才計算並顯示)
-                            let iconTopPx = 50; 
-                            let iconOffsetX = -30; // ⬅️ X軸微調：負數往左移，正數往右移
-                            
-                            try {
-                                const headBone = runnerPlayer.skeleton.bones.find(b => {
-                                    const n = b.data.name.toLowerCase();
-                                    return n.includes('head') || n.includes('face') || n.includes('hair_top');
-                                });
-                                
-                                if (headBone) {
-                                    iconTopPx = 160 - (headBone.worldY * 0.15); // ⬇️ 160越大越往下掉
-                                    iconTopPx = Math.max(0, Math.min(iconTopPx, 150));
-                                }
-                            } catch (e) { }
-
-                            // 🌟 產生驚嚇感嘆號 icon
-                            if (noticeIconEl) { noticeIconEl.remove(); clearTimeout(noticeIconTimeout); }
-                            noticeIconEl = document.createElement('img');
-                            noticeIconEl.src = 'https://i.postimg.cc/ft7Yt8RD/Chaos-Arena-Matching-Icon-02.png';
-                            noticeIconEl.className = 'absolute w-[25px] h-[25px] object-contain pointer-events-none transition-all duration-200';
-                            noticeIconEl.style.top = `${iconTopPx}px`; 
-                            noticeIconEl.style.left = '50%';
-                            noticeIconEl.style.transform = `translateX(calc(-50% + ${iconOffsetX}px)) scale(0)`;
-                            noticeIconEl.style.zIndex = '150';
-                            container.appendChild(noticeIconEl);
-                            
-                            requestAnimationFrame(() => { 
-                                if(noticeIconEl) noticeIconEl.style.transform = `translateX(calc(-50% + ${iconOffsetX}px)) scale(1.2)`; 
-                            });
-                            
-                            noticeIconTimeout = setTimeout(() => {
-                                if (noticeIconEl) {
-                                    noticeIconEl.style.transform = `translateX(calc(-50% + ${iconOffsetX}px)) scale(0)`;
-                                    noticeIconEl.style.opacity = '0';
-                                    setTimeout(() => { if (noticeIconEl) { noticeIconEl.remove(); noticeIconEl = null; } }, 200);
-                                }
-                            }, 2000);
-
-                            // 🏃‍♂️ 執行加速
-                            const randomSpeed = (Math.random() * 1.4 + 0.8).toFixed(2);
-                            console.log(`⚡ 坨坨在距離 ${Math.round(distance)}px 時察覺到 BOSS！加速倍率：${randomSpeed}x`);
-                            runnerPlayer.timeScale = parseFloat(randomSpeed); 
-                            charRunAnimation.playbackRate = parseFloat(randomSpeed); 
-                        } else {
-                            console.log("🙈 坨坨沒察覺到背後的危機，繼續用原速奔跑...");
-                        }
-                    }
-
-                    // ⚔️ 3. 碰撞機制：距離小於等於 60 時觸發戰鬥
-                    if (distance <= 60 && !isCaught) {
-                        isCaught = true;
-                        handleCollision(runnerPlayer, bossPlayer);
-                        return;
-                    }
-                    
-                    chaseLoopId = requestAnimationFrame(checkChase);
-                }
-                chaseLoopId = requestAnimationFrame(checkChase);
-            }
-            // ⚔️ 碰撞劇本處理
-            function handleCollision(runnerPlayer, bossPlayer) {
-                if (noticeIconEl) {
-                    noticeIconEl.remove();
-                    noticeIconEl = null;
-                    clearTimeout(noticeIconTimeout);
-                }
-
-                charRunAnimation.pause();
-                bossRunAnimation.pause();
-                bossTrack.style.pointerEvents = 'none'; 
-
-                // 依據小人站位判斷：中排、後排為遠距離，前排為近距離
-                const isRanged = ["中排", "後排"].includes(randomCharData.position);
-                // 📱 動態調整後退距離：手機版退 120px，電腦版退 240px
-                const rangedOffsetPx = (window.innerWidth <= 768) ? -120 : -240; 
-                const attackOffset = isRanged ? `translateX(${rangedOffsetPx}px)` : "translateX(0px)"; 
-
-                if (chasePhase === 1) {
-                    if (Math.random() < 0.4) {
-                        console.log("⚔️ 一階：坨坨轉向右方反擊！");
-                        container.style.transform = `${attackOffset} scaleX(-1)`; 
-                        
-                        let attackTrack = safePlaySpine(runnerPlayer, "Attack1_1", false);
-                        let atkDur = (attackTrack && attackTrack.animation ? attackTrack.animation.duration : 1.0) * 1000;
-
-                        // 🌟【核心修改 1】：讀取智慧連擊時間陣列（傳入 charName 進行文本驗證）
-                        let launchTimes = getLaunchTimes(runnerPlayer, "Attack1_1", charName, 500);
-
-                        safePlaySpine(bossPlayer, "Groggy", true);
-                        
-                        // 1. 動作起始：普通震動與紅光
-                        bossContainer.classList.add('shake-anim');
-                        setTimeout(() => bossContainer.classList.remove('shake-anim'), 400);
-
-                        // 🌟【核心修改 2】：利用迴圈，有幾段有效攻擊就噴幾顆蠟筆！
-                        launchTimes.forEach(delayMs => {
-                            triggerCrayonAttack(isRanged, atkDur, bossContainer, container, isRanged ? rangedOffsetPx : 0, delayMs);
-                        });
-
-                        // 🌟【核心修改 3】：改以「最後一顆蠟筆」的命中時間作為後續強烈震動與結算的時間點
-                        const lastLaunchDelay = launchTimes[launchTimes.length - 1];
-                        const lastHitTimeMs = lastLaunchDelay + 800; 
-
-                        // 3. 同步強烈震動：確保在最後一顆蠟筆命中前一刻才爆發紅光
-                        setTimeout(() => {
-                            bossContainer.classList.add('shake-strong-anim');
-                            setTimeout(() => bossContainer.classList.remove('shake-strong-anim'), 500);
-                        }, Math.max(atkDur - 500, lastHitTimeMs - 200));
-
-                        // 4. 確保等待時間大於最後一發蠟筆命中的時間，再讓 BOSS 恢復行動
-                        setTimeout(() => {
-                            // 🚩 檢查：如果剛剛打架時不小心走到終點了，直接獲勝！
-                            if (hasReachedEnd) {
-                                // 🌟 確保小人轉回原向並歸位，滑回畫面上
-                                container.style.transition = 'transform 0.3s ease';
-                                container.style.transform = 'translateX(0px) scaleX(1)';
-                                isCaught = false; chasePhase = 0; triggerVictory(); return;
-                            }
-
-                            // 將起跑與 Boss 追趕的邏輯包裝起來
-                            const resumeRunning = () => {
-                                safePlaySpine(runnerPlayer, "Move", true);
-                                charRunAnimation.play();
-
-                                setTimeout(() => {
-                                    if (chasePhase === 0) return; 
-                                    console.log("💢 一階：BOSS 從暈眩恢復，暴怒超高速追趕！");
-                                    safePlaySpine(bossPlayer, "Move", true);
-                                    bossPlayer.timeScale = 1.5; 
-                                    bossRunAnimation.playbackRate = 2.0; 
-                                    bossRunAnimation.play();
-                                    bossTrack.style.pointerEvents = 'auto'; 
-                                    
-                                    isCaught = false; 
-                                    chasePhase = 2; 
-                                    chaseLoopId = requestAnimationFrame(() => startChaseRadar(runnerPlayer, bossPlayer));
-                                }, 1500); 
-                            };
-
-                            if (isRanged) {
-                                // 留在原地，只做翻轉轉向
-                                container.style.transform = `translateX(${rangedOffsetPx}px) scaleX(1)`;
-                                
-                                setTimeout(() => {
-                                    if (chasePhase === 0 || hasReachedEnd) return; 
-                                    
-                                    const screenWidth = window.innerWidth || 1000;
-                                    const skipTime = (Math.abs(rangedOffsetPx) / screenWidth) * runDuration;
-                                    
-                                    if (charRunAnimation && charRunAnimation.playState !== 'finished') {
-                                        charRunAnimation.currentTime = (charRunAnimation.currentTime || 0) + skipTime;
-                                    }
-                                    
-                                    // 🚩 核心修復：如果位移時間補償後已經達到或超過終點，直接觸發勝利
-                                    if (charRunAnimation && charRunAnimation.currentTime >= runDuration) {
-                                        container.style.transition = 'transform 0.3s ease';
-                                        container.style.transform = 'translateX(0px) scaleX(1)';
-                                        isCaught = false; chasePhase = 0; triggerVictory(); return;
-                                    }
-                                    
-                                    container.style.transition = 'none';
-                                    container.style.transform = 'translateX(0px) scaleX(1)';
-                                    void container.offsetWidth; 
-                                    container.style.transition = 'transform 0.2s ease';
-                                    
-                                    resumeRunning();
-                                }, 200);
-                            } else {
-                                container.style.transform = 'translateX(0px) scaleX(1)'; 
-                                resumeRunning();
-                            }
-                        }, Math.max(atkDur, lastHitTimeMs + 100)); // 🌟 結算等待時間也對齊最後發射時間
-                    } else {
-                        console.log("💀 一階：反擊失敗，被處決");
-                        bossExecuteKill(runnerPlayer, bossPlayer);
-                    }
-                } 
-                else if (chasePhase === 2) {
-                    if (Math.random() < 0.70) {
-                        console.log("🌟 二階：絕地大反攻，連續技擊殺 BOSS！");
-                        chasePhase = 0; 
-                        container.style.transform = `${attackOffset} scaleX(-1)`; 
-                        safePlaySpine(bossPlayer, "Groggy", true); 
-
-                        const anims = runnerPlayer.skeleton.data.animations.map(a => a.name);
-                        const skillAnims = anims.filter(a => a.startsWith("Skill1_")).sort();
-                        let totalSkillDurationMs = 0;
-
-                        if (skillAnims.length > 0) {
-                            skillAnims.forEach((animName, index) => {
-                                let track;
-                                if (index === 0) {
-                                    track = safePlaySpine(runnerPlayer, animName, false);
-                                } else {
-                                    track = runnerPlayer.animationState.addAnimation(0, animName, false, 0);
-                                }
-                                
-                                let currentAnimDurMs = (track && track.animation ? track.animation.duration : 1.0) * 1000;
-
-                                // 🌟【核心修改 4】：大招多段動畫讀取智慧連擊時間陣列（傳入 charName）
-                                let launchTimes = getLaunchTimes(runnerPlayer, animName, charName, 500);
-
-                                setTimeout(() => {
-                                    bossContainer.classList.add('shake-anim');
-                                    setTimeout(() => bossContainer.classList.remove('shake-anim'), 400);
-                                    
-                                    // 🌟【核心修改 5】：迴圈連發大招的蠟筆
-                                    launchTimes.forEach(delayMs => {
-                                        triggerCrayonAttack(isRanged, currentAnimDurMs, bossContainer, container, isRanged ? rangedOffsetPx : 0, delayMs);
-                                    });
-                                }, totalSkillDurationMs);
-
-                                // 判斷是否為最後一段技能，並同步大震動
-                                const isLastSkill = (index === skillAnims.length - 1);
-                                const shakeStrongOffset = isLastSkill ? 1000 : 500; 
-
-                                setTimeout(() => {
-                                    bossContainer.classList.add('shake-strong-anim');
-                                    setTimeout(() => bossContainer.classList.remove('shake-strong-anim'), 500);
-                                }, totalSkillDurationMs + Math.max(0, currentAnimDurMs - shakeStrongOffset));
-
-                                totalSkillDurationMs += currentAnimDurMs;
-                            });
-                        } else {
-                            let fallbackTrack = safePlaySpine(runnerPlayer, "Attack1_1", false);
-                            totalSkillDurationMs = (fallbackTrack && fallbackTrack.animation ? fallbackTrack.animation.duration : 1.0) * 1000;
-                            
-                            // 🌟【核心修改 6】：Fallback（普攻頂替）時也讀取智慧連擊時間陣列（傳入 charName）
-                            let launchTimes = getLaunchTimes(runnerPlayer, "Attack1_1", charName, 500);
-                            
-                            bossContainer.classList.add('shake-anim');
-                            setTimeout(() => bossContainer.classList.remove('shake-anim'), 400);
-                            
-                            // 🌟【核心修改 7】：迴圈連發
-                            launchTimes.forEach(delayMs => {
-                                triggerCrayonAttack(isRanged, totalSkillDurationMs, bossContainer, container, isRanged ? rangedOffsetPx : 0, delayMs);
-                            });
-
-                            setTimeout(() => {
-                                bossContainer.classList.add('shake-strong-anim');
-                                setTimeout(() => bossContainer.classList.remove('shake-strong-anim'), 500);
-                            }, Math.max(0, totalSkillDurationMs - 1000));
-                        }
-
-                        // 整段連續技播完後的結算
-                        setTimeout(() => {
-                            console.log("💀 BOSS 倒地身亡！");
-                            safePlaySpine(bossPlayer, "Die", false);
-                            
-                            if (hasReachedEnd) {
-                                container.style.transition = 'transform 0.3s ease';
-                                container.style.transform = 'translateX(0px) scaleX(1)';
-                                isCaught = false; triggerVictory(); return;
-                            }
-
-                            const resumeRunning = () => {
-                                safePlaySpine(runnerPlayer, "Move", true);
-                                isCaught = false; 
-                                charRunAnimation.play(); 
-
-                                setTimeout(() => {
-                                    bossTrack.style.transition = 'opacity 0.6s ease-out';
-                                    bossTrack.style.opacity = '0';
-                                }, 3000); 
-                            };
-
-                            if (isRanged) {
-                                container.style.transform = `translateX(${rangedOffsetPx}px) scaleX(1)`;
-                                setTimeout(() => {
-                                    if (hasReachedEnd) return; 
-                                    
-                                    const screenWidth = window.innerWidth || 1000;
-                                    const skipTime = (Math.abs(rangedOffsetPx) / screenWidth) * runDuration;
-                                    
-                                    if (charRunAnimation && charRunAnimation.playState !== 'finished') {
-                                        charRunAnimation.currentTime = (charRunAnimation.currentTime || 0) + skipTime;
-                                    }
-                                    
-                                    if (charRunAnimation && charRunAnimation.currentTime >= runDuration) {
-                                        container.style.transition = 'transform 0.3s ease';
-                                        container.style.transform = 'translateX(0px) scaleX(1)';
-                                        isCaught = false; triggerVictory(); return;
-                                    }
-                                    
-                                    container.style.transition = 'none';
-                                    container.style.transform = 'translateX(0px) scaleX(1)';
-                                    void container.offsetWidth;
-                                    container.style.transition = 'transform 0.2s ease';
-                                    
-                                    resumeRunning();
-                                }, 200);
-                            } else {
-                                container.style.transform = 'translateX(0px) scaleX(1)'; 
-                                resumeRunning();
-                            }
-                        }, totalSkillDurationMs + 800); 
-
-                    } else {
-                        console.log("💀 二階：極限逃生失敗，被處決");
-                        bossExecuteKill(runnerPlayer, bossPlayer);
-                    }
-                }
-            }
-
-            // 🔪 處決動畫
-            function bossExecuteKill(runnerPlayer, bossPlayer) {
-                chasePhase = 0;
-                safePlaySpine(runnerPlayer, "Groggy", true);
-                
-                let attackTrack = safePlaySpine(bossPlayer, "Attack3_1", false);
-                let attackDuration = (attackTrack && attackTrack.animation ? attackTrack.animation.duration : 3.0) * 1000;
-                
-                let dieTriggerTime = Math.max(0, attackDuration - 2450); 
-
-                // 觸發死亡與震動特效
-                setTimeout(() => { 
-                    safePlaySpine(runnerPlayer, "Die", false); 
-                    // 觸發坨坨容器震動
-                    container.classList.add('shake-anim');
-                    setTimeout(() => container.classList.remove('shake-anim'), 400);
-                }, dieTriggerTime);
-
-                setTimeout(() => {
-                    safePlaySpine(bossPlayer, "Idle", true); 
-                    track.style.transition = 'opacity 0.6s ease-out';
-                    track.style.opacity = '0';
-                    bossTrack.style.transition = 'opacity 0.6s ease-out';
-                    bossTrack.style.opacity = '0';
-                    setTimeout(initTopRunner, 600); 
-                }, attackDuration + 1000); 
-            }
-        }
-    </script>
+    <div class="social-fixed group">
+        <div id="socialMenu" class="social-menu group-hover:flex">
+            <a id="dynamicXLink" href="https://x.com/trickcal_TW" target="_blank" class="bg-sky-500 text-white px-3 py-1 rounded-lg text-[10px] font-bold shadow-lg hover:bg-sky-600 transition" data-lang-key="x_label">台港澳服官方X</a>
+        </div>
+        <button class="bg-black text-white w-10 h-10 rounded-full shadow-xl flex items-center justify-center font-bold text-sm">X</button>
+    </div>
     
+    <div id="rim-live-container"></div>
+
     <script>
+        // ------------------------------------------------------------
+        // 全域變數與常數宣告
+        // ------------------------------------------------------------
+        let currentRunnerPlayer = null, currentBossPlayer = null, chaseLoopId = null;
+        let noticeIconEl = null, noticeIconTimeout = null;
+        let db = null, auth = null, currentUser = null;
+        let activeCrayons = [];
+        
+        const storageKey = 'trickcal_matrix_saved_states_iron_v26';
+        let savedStates = {};
+        try { savedStates = JSON.parse(localStorage.getItem(storageKey)) || {}; } catch(e) { savedStates = {}; }
+
+        let activeFilters = { personality: [], race: [], position: [], job: [], gridLayer: "all", gridType: [], search: "", displayMode: "all" };
+        let isFilterOpen = true;
+        let isStatsOpen = window.innerWidth >= 768;
+
+        const LAYER_RULES = { 1: { name: "🥇 第一層", crayon: 2, bonus: 3 }, 2: { name: "🥈 第二層", crayon: 4, bonus: 4 }, 3: { name: "🥉 第三層", crayon: 6, bonus: 5 } };
+        const ATTR_PRIORITY = ["攻擊", "防禦", "血量", "爆擊", "爆抗"];
+        const ATTR_MAP = { "攻擊": "attack", "防禦": "def", "血量": "hp", "爆擊": "crit", "爆抗": "crit_res" };
+        const ATTR_STYLES = {
+            "攻擊": { unopened: "bg-orange-50/70 text-orange-800 border-orange-200 hover:bg-orange-100/60 dark:bg-gray-700 dark:text-orange-400 dark:border-gray-600 dark:hover:bg-gray-600", opened: "bg-orange-500 text-white font-bold shadow-sm hover:bg-orange-600 border-orange-600 dark:border-orange-500" },
+            "血量": { unopened: "bg-green-50/70 text-green-800 border-green-200 hover:bg-green-100/60 dark:bg-gray-700 dark:text-green-400 dark:border-gray-600 dark:hover:bg-gray-600", opened: "bg-green-500 text-white font-bold shadow-sm hover:bg-green-600 border-green-600 dark:border-green-500" },
+            "防禦": { unopened: "bg-blue-50/70 text-blue-800 border-blue-200 hover:bg-blue-100/60 dark:bg-gray-700 dark:text-blue-400 dark:border-gray-600 dark:hover:bg-gray-600", opened: "bg-blue-500 text-white font-bold shadow-sm hover:bg-blue-600 border-blue-600 dark:border-blue-500" },
+            "爆擊": { unopened: "bg-red-50/70 text-red-800 border-red-200 hover:bg-red-100/60 dark:bg-gray-700 dark:text-red-400 dark:border-gray-600 dark:hover:bg-gray-600", opened: "bg-red-500 text-white font-bold shadow-sm hover:bg-red-600 border-red-600 dark:border-red-500" },
+            "爆抗": { unopened: "bg-purple-50/70 text-purple-800 border-purple-200 hover:bg-purple-100/60 dark:bg-gray-700 dark:text-purple-400 dark:border-gray-600 dark:hover:bg-gray-600", opened: "bg-purple-500 text-white font-bold shadow-sm hover:bg-purple-600 border-purple-600 dark:border-purple-500" }
+        };
+        const btnActiveStyle = "whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-bold transition bg-amber-500 text-white border-amber-600 shadow-sm";
+        const btnInactiveStyle = "whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-medium transition bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600";
+        const btnDispActiveStyle = "whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-bold transition bg-blue-500 text-white border-blue-600 shadow-sm";
+
+        // ------------------------------------------------------------
+        // 基本工具函式 (翻譯、主題、資料預載)
+        // ------------------------------------------------------------
         const preloadedSpines = new Set(); 
         function preloadSpineAssets(charName) {
             if (preloadedSpines.has(charName)) return;
@@ -1361,25 +438,17 @@
             const lang = window.currentLang || 'zh-TW';
             const cleanKey = String(key).trim(); 
             const safeLang = (typeof LANG_DICT !== 'undefined' && LANG_DICT[lang]) ? lang : 'zh-TW';
-            if (typeof LANG_DICT !== 'undefined' && LANG_DICT[safeLang] && LANG_DICT[safeLang][cleanKey]) {
-                return LANG_DICT[safeLang][cleanKey];
-            }
+            if (typeof LANG_DICT !== 'undefined' && LANG_DICT[safeLang] && LANG_DICT[safeLang][cleanKey]) return LANG_DICT[safeLang][cleanKey];
             return cleanKey; 
         }
 
         function changeLanguage(lang) {
-            window.currentLang = lang; 
-            localStorage.setItem('user_lang', lang);
-            
-            // 🌟 1. 同步 HTML 標籤
+            window.currentLang = lang; localStorage.setItem('user_lang', lang);
             document.documentElement.lang = lang === "ja" ? "ja" : "zh-TW"; 
-
-            // 🌟 2. 【關鍵】同步隱藏的 Select 選項值，確保下次點開時它是正確選中的
-            const selectEl = document.getElementById('langSelect');
-            if (selectEl) selectEl.value = lang;
-
+            const selectEl = document.getElementById('langSelect'); if (selectEl) selectEl.value = lang;
             const safeLang = (typeof LANG_DICT !== 'undefined' && LANG_DICT[lang]) ? lang : 'zh-TW';
             const dict = typeof LANG_DICT !== 'undefined' ? LANG_DICT[safeLang] : {};
+            
             const statusText = document.getElementById('authStatusText');
             if (statusText) statusText.innerText = t("auth_online_title");
             document.title = t('app_title') || dict.app_title || "嘟嘟臉金蠟筆記事本";
@@ -1393,27 +462,12 @@
             if (searchInput) searchInput.placeholder = t('filter_search_placeholder') || dict.filter_search_placeholder || "搜尋坨坨...";
 
             const xLink = document.getElementById('dynamicXLink');
-            if (xLink) {
-                xLink.href = dict.official_x_url || "https://x.com/trickcal_TW";
-                xLink.innerText = dict.x_label || "台港澳服官方X";
-            }
+            if (xLink) { xLink.href = dict.official_x_url || "https://x.com/trickcal_TW"; xLink.innerText = dict.x_label || "台港澳服官方X"; }
 
-            if (typeof INITIAL_DATA !== 'undefined') {
-                buildFilterPanel(); renderMatrix(); calculateStats();
-            }
-
-            if (typeof updateAuthButtonUI === 'function' && typeof currentUser !== 'undefined') {
-                updateAuthButtonUI(currentUser);
-            }
-        if (typeof updateAuthButtonUI === 'function' && typeof currentUser !== 'undefined') {
-                updateAuthButtonUI(currentUser);
-            }
-
-            // 🌟 加上這段：確保切換語言時，Pickup 區塊也會立刻更新文字與語系
-            if (typeof renderPickupBanner === 'function') {
-                renderPickupBanner();
-            }
-        } // 這是 changeLanguage 的結束大括號
+            if (typeof INITIAL_DATA !== 'undefined') { buildFilterPanel(); renderMatrix(); calculateStats(); }
+            if (typeof updateAuthButtonUI === 'function' && typeof currentUser !== 'undefined') updateAuthButtonUI(currentUser);
+            if (typeof renderPickupBanner === 'function') renderPickupBanner();
+        }
 
         let isDarkMode = localStorage.getItem('theme') === 'dark';
         if (isDarkMode) { document.documentElement.classList.add('dark'); } 
@@ -1435,42 +489,34 @@
             }
             return false;
         }
-        window.addEventListener('load', () => {
-            document.getElementById('loader').style.display = 'none';
-            initTopRunner();
-        });
-    </script>
 
-    <script>     
-        const LAYER_RULES = {
-            1: { name: "🥇 第一層", crayon: 2, bonus: 3 },
-            2: { name: "🥈 第二層", crayon: 4, bonus: 4 },
-            3: { name: "🥉 第三層", crayon: 6, bonus: 5 }
-        };
+        // ------------------------------------------------------------
+        // 面板與矩陣渲染邏輯
+        // ------------------------------------------------------------
+        const CURRENT_PICKUP_CHARS = ["莉絲蒂", "海莉", "盧波"]; 
+        function renderPickupBanner() {
+            const container = document.getElementById('pickupIconsContainer'); if (!container || !CURRENT_PICKUP_CHARS.length) return;
+            container.innerHTML = '';
+            const localRecruitTexts = { "zh-TW": "🎯 特選使者招募", "ja": "🎯 ピックアップ使徒ガチャ", "en": "🎯 Pick Up Apostles" };
+            const localTooltipTexts = { "zh-TW": "特選招募中：", "ja": "ピックアップ中：", "en": "Pickup Rate Up: " };
+            const titleEl = document.getElementById('pickupTitleText');
+            if (titleEl) titleEl.innerText = localRecruitTexts[window.currentLang] || localRecruitTexts["zh-TW"];
 
-        const ATTR_PRIORITY = ["攻擊", "防禦", "血量", "爆擊", "爆抗"];
-        const ATTR_MAP = { "攻擊": "attack", "防禦": "def", "血量": "hp", "爆擊": "crit", "爆抗": "crit_res" };
+            const personalityColors = { "天真": "border-green-400 text-green-400", "冷靜": "border-blue-400 text-blue-400", "狂亂": "border-red-400 text-red-400", "活潑": "border-yellow-400 text-yellow-400", "憂鬱": "border-purple-400 text-purple-400" };
 
-        const ATTR_STYLES = {
-            "攻擊": { unopened: "bg-orange-50/70 text-orange-800 border-orange-200 hover:bg-orange-100/60 dark:bg-gray-700 dark:text-orange-400 dark:border-gray-600 dark:hover:bg-gray-600", opened: "bg-orange-500 text-white font-bold shadow-sm hover:bg-orange-600 border-orange-600 dark:border-orange-500" },
-            "血量": { unopened: "bg-green-50/70 text-green-800 border-green-200 hover:bg-green-100/60 dark:bg-gray-700 dark:text-green-400 dark:border-gray-600 dark:hover:bg-gray-600", opened: "bg-green-500 text-white font-bold shadow-sm hover:bg-green-600 border-green-600 dark:border-green-500" },
-            "防禦": { unopened: "bg-blue-50/70 text-blue-800 border-blue-200 hover:bg-blue-100/60 dark:bg-gray-700 dark:text-blue-400 dark:border-gray-600 dark:hover:bg-gray-600", opened: "bg-blue-500 text-white font-bold shadow-sm hover:bg-blue-600 border-blue-600 dark:border-blue-500" },
-            "爆擊": { unopened: "bg-red-50/70 text-red-800 border-red-200 hover:bg-red-100/60 dark:bg-gray-700 dark:text-red-400 dark:border-gray-600 dark:hover:bg-gray-600", opened: "bg-red-500 text-white font-bold shadow-sm hover:bg-red-600 border-red-600 dark:border-red-500" },
-            "爆抗": { unopened: "bg-purple-50/70 text-purple-800 border-purple-200 hover:bg-purple-100/60 dark:bg-gray-700 dark:text-purple-400 dark:border-gray-600 dark:hover:bg-gray-600", opened: "bg-purple-500 text-white font-bold shadow-sm hover:bg-purple-600 border-purple-600 dark:border-purple-500" }
-        };
-
-       const btnActiveStyle = "whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-bold transition bg-amber-500 text-white border-amber-600 shadow-sm";
-       const btnInactiveStyle = "whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-medium transition bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600";
-       const btnDispActiveStyle = "whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-bold transition bg-blue-500 text-white border-blue-600 shadow-sm";
-
-        const storageKey = 'trickcal_matrix_saved_states_iron_v26';
-        let savedStates = {};
-        try { savedStates = JSON.parse(localStorage.getItem(storageKey)) || {}; } catch(e) { savedStates = {}; }
-
-        let activeFilters = { personality: [], race: [], position: [], job: [], gridLayer: "all", gridType: [], search: "", displayMode: "all" };
-        let isFilterOpen = true;
-        let isStatsOpen = window.innerWidth >= 768;
-        let db = null, auth = null, currentUser = null;
+            CURRENT_PICKUP_CHARS.forEach(charName => {
+                const charData = INITIAL_DATA.find(c => c.name === charName); if (!charData) return;
+                const iconUrl = SKILL_ICONS['skill_passive_' + charName]; const pColorClass = personalityColors[charData.personality] || "border-gray-400 text-gray-400";
+                const iconWrapper = document.createElement('div');
+                iconWrapper.className = `w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 ${pColorClass} bg-white dark:bg-gray-800 flex items-center justify-center relative pickup-sparkle shrink-0 cursor-pointer transition-transform`;
+                
+                const prefix = localTooltipTexts[window.currentLang] || localTooltipTexts["zh-TW"]; iconWrapper.title = `${prefix}${t(charName)}`;
+                iconWrapper.onclick = () => window.open(`char_detail.html?char=${encodeURIComponent(charName)}`, '_blank');
+                if (iconUrl) { iconWrapper.innerHTML = `<img src="${iconUrl}" class="w-full h-full object-cover rounded-[5px]" alt="${t(charName)}">`; } 
+                else { iconWrapper.innerHTML = `<span class="text-[10px] font-bold text-gray-800 dark:text-gray-200">${t(charName).charAt(0)}</span>`; }
+                container.appendChild(iconWrapper);
+            });
+        }
 
         function initStates() {
             INITIAL_DATA.forEach(char => {
@@ -1485,21 +531,14 @@
         }
 
         function toggleStatsPanel() {
-            isStatsOpen = !isStatsOpen;
-            const body = document.getElementById("statsPanelBody");
-            const icon = document.getElementById("statsToggleIcon");
+            isStatsOpen = !isStatsOpen; const body = document.getElementById("statsPanelBody"); const icon = document.getElementById("statsToggleIcon");
             if(isStatsOpen) { body.classList.remove("hidden"); body.classList.add("grid"); icon.innerText = "▼"; } 
             else { body.classList.add("hidden"); body.classList.remove("grid"); icon.innerText = "▶"; }
         }
 
-        function toggleOwnership(charName) {
-            savedStates['owned_' + charName] = !savedStates['owned_' + charName];
-            updateOwnershipUI(charName); calculateStats();
-        }
-
+        function toggleOwnership(charName) { savedStates['owned_' + charName] = !savedStates['owned_' + charName]; updateOwnershipUI(charName); calculateStats(); }
         function updateOwnershipUI(charName) {
-            const container = document.getElementById(`avatar_container_${charName}`);
-            const fallAvatar = document.getElementById(`fall_av_${charName}`);
+            const container = document.getElementById(`avatar_container_${charName}`); const fallAvatar = document.getElementById(`fall_av_${charName}`);
             if (container) {
                 if (savedStates['owned_' + charName]) { container.classList.remove('unowned-avatar'); if (fallAvatar) fallAvatar.classList.remove('unowned-avatar'); } 
                 else { container.classList.add('unowned-avatar'); if (fallAvatar) fallAvatar.classList.add('unowned-avatar'); }
@@ -1516,9 +555,7 @@
                 [1, 2, 3].forEach(l => {
                     const rule = LAYER_RULES[l];
                     char[`layer${l}`].forEach((attr, idx) => {
-                        const key = `${char.name}_l${l}_${attr}_${idx}`;
-                        const isOpened = savedStates[key];
-                        const attrKey = ATTR_MAP[attr];
+                        const key = `${char.name}_l${l}_${attr}_${idx}`; const isOpened = savedStates[key]; const attrKey = ATTR_MAP[attr];
                         layerTotals[l][attr]++;
                         if (isOpened) { layerOpened[l][attr]++; layerBonus[l][attr] += rule.bonus; globalUsedCrayons += rule.crayon; if (attrKey) attrs[attrKey] += rule.bonus; } 
                         else { globalNeededCrayons += rule.crayon; layerMissingCrayons[l] += rule.crayon; }
@@ -1535,11 +572,7 @@
             
             [1, 2, 3].forEach(l => {
                 let html = '<div><div class="grid grid-cols-2 gap-x-2 gap-y-1 mt-1">';
-                ATTR_PRIORITY.forEach(attr => {
-                    if(layerTotals[l][attr] > 0) {
-                        html += `<div class="flex justify-between border-b border-gray-100 dark:border-gray-700 pb-0.5"><span>${t(attr).substring(0,2)}: ${layerOpened[l][attr]}/${layerTotals[l][attr]}</span><span class="font-bold text-amber-600 dark:text-amber-400">+${layerBonus[l][attr]}%</span></div>`;
-                    }
-                });
+                ATTR_PRIORITY.forEach(attr => { if(layerTotals[l][attr] > 0) html += `<div class="flex justify-between border-b border-gray-100 dark:border-gray-700 pb-0.5"><span>${t(attr).substring(0,2)}: ${layerOpened[l][attr]}/${layerTotals[l][attr]}</span><span class="font-bold text-amber-600 dark:text-amber-400">+${layerBonus[l][attr]}%</span></div>`; });
                 html += '</div></div>';
                 html += `<div class="mt-2 pt-1 border-t border-gray-100 dark:border-gray-700 flex justify-end"><span class="bg-red-50 dark:bg-gray-700 text-red-600 dark:text-red-400 px-1.5 py-0.5 rounded text-[10px] font-bold border border-red-100 dark:border-gray-600">${t('stats_need_more_prefix')}${layerMissingCrayons[l]}${t('stats_need_more_suffix')}</span></div>`;
                 const layerStatBox = document.getElementById(`stat_layer_${l}`); if (layerStatBox) layerStatBox.innerHTML = html;
@@ -1551,8 +584,7 @@
         }
 
         function toggleFilterPanel() {
-            isFilterOpen = !isFilterOpen;
-            const body = document.getElementById("filterPanelBody"); const icon = document.getElementById("filterToggleIcon");
+            isFilterOpen = !isFilterOpen; const body = document.getElementById("filterPanelBody"); const icon = document.getElementById("filterToggleIcon");
             if(isFilterOpen) { body.classList.remove("hidden"); icon.innerText = "▼"; } else { body.classList.add("hidden"); icon.innerText = "▶"; }
         }
 
@@ -1664,6 +696,7 @@
                     const pPath = IMAGE_MAP[`personality_${char.personality}`] || ""; let raceIconName = char.race; if (char.race === "???") raceIconName = "unknown";
                     const racePath = IMAGE_MAP[`race_${raceIconName}`] || ""; const posPath = IMAGE_MAP[`position_${char.position}`] || ""; const jobPath = IMAGE_MAP[`job_${char.job}`] || "";
                     const borderColorClass = personalityBorderColors[char.personality] || "border-gray-300"; const isOwned = savedStates['owned_' + char.name]; const avatarClass = isOwned ? "" : "unowned-avatar";
+                    
                     const detailBtn = document.createElement('button'); detailBtn.onclick = () => window.open(`char_detail.html?char=${encodeURIComponent(char.name)}`, '_blank');
                     const displayClass = (window.currentLang === 'en') ? 'hidden' : 'flex';
                     detailBtn.className = `w-8 sm:w-10 shrink-0 ${displayClass} items-center justify-center bg-amber-500/10 hover:bg-amber-300 dark:bg-gray-700/50 dark:hover:bg-gray-600 border-r border-amber-200/50 dark:border-gray-600 transition-colors cursor-pointer group`;
@@ -1676,18 +709,18 @@
                     nameCol.innerHTML = `
                         <div class="relative shrink-0 w-12 h-12" onclick="toggleOwnership('${char.name}')">
                             <div id="avatar_container_${char.name}" class="char-avatar-container w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-inner bg-white ${avatarClass}">
-                                <img src="${avatarPath}" alt="${t(char.name)}" onerror="this.style.display='none'; document.getElementById('fall_av_${char.name}').classList.remove('hidden');">
-                                <img src="${hoverPath}" class="avatar-alt" alt="${t(char.name)}" onerror="this.style.display='none';">
+                                <img src="${avatarPath}" alt="${t(char.name)}" onerror="this.style.display='none'; document.getElementById('fall_av_${char.name}').classList.remove('hidden');" loading="lazy">
+                                <img src="${hoverPath}" class="avatar-alt" alt="${t(char.name)}" onerror="this.style.display='none';" loading="lazy">
                             </div>
                             <div id="fall_av_${char.name}" class="hidden char-avatar-container w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-sm flex items-center justify-center font-bold text-amber-900 bg-gradient-to-br from-amber-100 to-yellow-200 text-lg ${avatarClass}">${t(char.name).charAt(0)}</div>
                         </div>
                         <div class="flex flex-col gap-0.5 w-full overflow-hidden">
                             <div class="marquee-box text-sm sm:text-base font-bold text-gray-900 dark:text-gray-100" title="${t(char.name)}"><span class="marquee-content">${t(char.name)}</span></div>
                             <div class="flex items-center gap-1.5 pt-1 border-t border-dashed border-gray-100 dark:border-gray-700">
-                                <div class="flex items-center hover-scale cursor-help"><img src="${pPath}" alt="${t(char.personality)}" title="${t('stats_personality')} ${t(char.personality)}" onerror="this.style.display='none'; document.getElementById('fall_p_${char.name}').classList.remove('hidden');" class="w-4 h-4 object-contain"><span id="fall_p_${char.name}" class="hidden text-[9px] px-1 rounded bg-amber-50 dark:bg-gray-700 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-gray-600 whitespace-nowrap">${t(char.personality)}</span></div>
-                                <div class="flex items-center hover-scale cursor-help"><img src="${racePath}" alt="${t(char.race)}" title="${t('stats_race')} ${t(char.race)}" onerror="this.style.display='none'; document.getElementById('fall_r_${char.name}').classList.remove('hidden');" class="w-4 h-4 object-contain"><span id="fall_r_${char.name}" class="hidden bg-gray-100 dark:bg-gray-700 px-1 rounded text-[9px] text-gray-500 dark:text-gray-400 font-medium whitespace-nowrap">${t(char.race)}</span></div>
-                                <div class="flex items-center hover-scale cursor-help"><img src="${posPath}" alt="${t(char.position)}" title="${t('stats_position')} ${t(char.position)}" onerror="this.style.display='none'; document.getElementById('fall_pos_${char.name}').classList.remove('hidden');" class="w-4 h-4 object-contain opacity-85"><span id="fall_pos_${char.name}" class="hidden bg-blue-50 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-1 rounded text-[9px] font-medium whitespace-nowrap">${t(char.position)}</span></div>
-                                <div class="flex items-center hover-scale cursor-help"><img src="${jobPath}" alt="${t(char.job)}" title="${t('stats_job')} ${t(char.job)}" onerror="this.style.display='none'; document.getElementById('fall_j_${char.name}').classList.remove('hidden');" class="w-4 h-4 object-contain opacity-85"><span id="fall_j_${char.name}" class="hidden bg-purple-50 dark:bg-purple-900 text-purple-700 dark:text-purple-300 px-1 rounded text-[9px] font-medium whitespace-nowrap">${t(char.job)}</span></div>
+                                <div class="flex items-center hover-scale cursor-help"><img src="${pPath}" alt="${t(char.personality)}" title="${t('stats_personality')} ${t(char.personality)}" onerror="this.style.display='none'; document.getElementById('fall_p_${char.name}').classList.remove('hidden');" class="w-4 h-4 object-contain" loading="lazy"><span id="fall_p_${char.name}" class="hidden text-[9px] px-1 rounded bg-amber-50 dark:bg-gray-700 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-gray-600 whitespace-nowrap">${t(char.personality)}</span></div>
+                                <div class="flex items-center hover-scale cursor-help"><img src="${racePath}" alt="${t(char.race)}" title="${t('stats_race')} ${t(char.race)}" onerror="this.style.display='none'; document.getElementById('fall_r_${char.name}').classList.remove('hidden');" class="w-4 h-4 object-contain" loading="lazy"><span id="fall_r_${char.name}" class="hidden bg-gray-100 dark:bg-gray-700 px-1 rounded text-[9px] text-gray-500 dark:text-gray-400 font-medium whitespace-nowrap">${t(char.race)}</span></div>
+                                <div class="flex items-center hover-scale cursor-help"><img src="${posPath}" alt="${t(char.position)}" title="${t('stats_position')} ${t(char.position)}" onerror="this.style.display='none'; document.getElementById('fall_pos_${char.name}').classList.remove('hidden');" class="w-4 h-4 object-contain opacity-85" loading="lazy"><span id="fall_pos_${char.name}" class="hidden bg-blue-50 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-1 rounded text-[9px] font-medium whitespace-nowrap">${t(char.position)}</span></div>
+                                <div class="flex items-center hover-scale cursor-help"><img src="${jobPath}" alt="${t(char.job)}" title="${t('stats_job')} ${t(char.job)}" onerror="this.style.display='none'; document.getElementById('fall_j_${char.name}').classList.remove('hidden');" class="w-4 h-4 object-contain opacity-85" loading="lazy"><span id="fall_j_${char.name}" class="hidden bg-purple-50 dark:bg-purple-900 text-purple-700 dark:text-purple-300 px-1 rounded text-[9px] font-medium whitespace-nowrap">${t(char.job)}</span></div>
                             </div>
                         </div>
                     `;
@@ -1728,50 +761,339 @@
             applyFilterUI();
         }
 
+        setInterval(() => { document.body.classList.toggle('swap-avatars'); }, 3000);
+        function checkMarquee(card, isHover) { const box = card.querySelector('.marquee-box'); const content = card.querySelector('.marquee-content'); if (box && content) { if (isHover && box.scrollWidth > box.clientWidth) content.style.animation = 'text-marquee 3.5s linear infinite alternate'; else content.style.animation = 'none'; } }
+
+        // ------------------------------------------------------------
+        // Spine 動畫與小遊戲邏輯
+        // ------------------------------------------------------------
+        function getLaunchTimes(player, animName, charName, defaultMs = 500) {
+            if (!player || !player.skeleton.data) return [defaultMs];
+            const anim = player.skeleton.data.animations.find(a => a.name === animName);
+            if (!anim) return [defaultMs];
+
+            const totalDurMs = anim.duration * 1000; let validEventTimes = []; let foundEvents = [];
+
+            for (let i = 0; i < anim.timelines.length; i++) {
+                const timeline = anim.timelines[i];
+                if (timeline.events) { 
+                    for (let j = 0; j < timeline.events.length; j++) {
+                        const evt = timeline.events[j]; const eventName = evt.data.name; const eventTimeMs = evt.time * 1000;
+                        foundEvents.push(`[${eventName}: ${Math.round(eventTimeMs)}ms]`);
+                        if (eventName === "Event" || eventName === "launch" || eventName === "fire" || eventName === "attack") {
+                            if (eventTimeMs > 0) validEventTimes.push(eventTimeMs);
+                        }
+                    }
+                }
+            }
+            validEventTimes.sort((a, b) => a - b);
+            let realHits = validEventTimes.filter(t => t > 200 && t < totalDurMs - 50);
+
+            let finalHits = [];
+            realHits.forEach(t => {
+                if (finalHits.length === 0) finalHits.push(t);
+                else { let lastHit = finalHits[finalHits.length - 1]; if (t - lastHit > 150) finalHits.push(t); }
+            });
+
+            let isMultiHitDesc = false;
+            try {
+                if (typeof characterSkills !== 'undefined' && characterSkills[charName]) {
+                    const skillData = characterSkills[charName]; let descText = "";
+                    if (animName.startsWith("Attack")) descText = skillData.normalAttack?.basic || "";
+                    else if (animName.startsWith("Skill")) descText = (skillData.normalSkill?.stats || []).join("") + (skillData.normalSkill?.desc || "");
+                    isMultiHitDesc = descText.includes("總");
+                }
+            } catch(e) { console.warn(`⚠️ 讀取 ${charName} 的技能文本失敗，將使用預設判斷。`); }
+
+            if (!isMultiHitDesc && finalHits.length > 1) {
+                console.log(`📖 文本判定：${charName} 的 [${animName}] 無「總」字，強制轉為單發判定。`);
+                finalHits = [finalHits[0]]; 
+            }
+
+            if (finalHits.length > 0) return finalHits; 
+            else if (validEventTimes.length > 0) return [validEventTimes[validEventTimes.length - 1]];
+            return [defaultMs];
+        }
+
+        function safePlaySpine(playerObj, animName, loop) {
+            if (!playerObj || !playerObj.animationState) return null;
+            try {
+                const anims = playerObj.skeleton.data.animations.map(a => a.name); let targetAnim = animName;
+                if (!anims.includes(animName)) {
+                    if (animName === "Move") targetAnim = anims.includes("Run") ? "Run" : (anims.includes("Walk") ? "Walk" : anims[0]);
+                    else if (animName === "Attack3_1") targetAnim = anims.includes("Attack_3_1") ? "Attack_3_1" : (anims.includes("Attack_1") ? "Attack_1" : anims[0]);
+                    else if (animName === "Attack1_1") targetAnim = anims.includes("Attack_1_1") ? "Attack_1_1" : (anims.includes("Attack_1") ? "Attack_1" : anims[0]);
+                    else if (animName === "Groggy") targetAnim = anims.includes("Hit") ? "Hit" : anims[0];
+                    else if (animName === "Die") targetAnim = anims.includes("Dead") ? "Dead" : anims[0];
+                }
+                return playerObj.animationState.setAnimation(0, targetAnim, loop);
+            } catch (e) { console.error(`❌ 播放動畫發生錯誤:`, e); return null; }
+        }
+
+        function createCrayonBurst(x, y, area) {
+            for(let i=0; i<8; i++) {
+                const burst = document.createElement('div'); burst.className = 'burst-crayon'; burst.style.left = `${x}px`; burst.style.top = `${y}px`;
+                area.appendChild(burst);
+                const angle = (Math.PI * 2 / 8) * i; const distance = 80 + Math.random() * 40;
+                const tx = Math.cos(angle) * distance; const ty = Math.sin(angle) * distance;
+                burst.animate([ { transform: 'translate(-50%, -50%) scale(1) rotate(0deg)', opacity: 1 }, { transform: `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(0) rotate(${360 + Math.random()*360}deg)`, opacity: 0 } ], { duration: 600 + Math.random()*300, easing: 'ease-out', fill: 'forwards' }).onfinish = () => burst.remove();
+            }
+        }
+
+        function triggerCrayonAttack(isRanged, attackDurationMs, bossContainer, runnerContainer, offsetPx = 0, customLaunchDelay = 500) {
+            const area = document.getElementById('runnerArea');
+            const rRect = runnerContainer.getBoundingClientRect(); const bRect = bossContainer.getBoundingClientRect();
+            const startX = rRect.left -80; const startY = rRect.top + (rRect.height * 0.5) + 1; 
+            const endX = bRect.left + bRect.width * 0.5 - 30; const endY = bRect.top + bRect.height * 0.5;
+            const burstTime = Math.max(customLaunchDelay + 100, attackDurationMs - 800);
+
+            if (isRanged) {
+                setTimeout(() => {
+                    const proj = document.createElement('div'); proj.className = 'projectile-crayon'; proj.style.left = `${startX}px`; proj.style.top = `${startY}px`;
+                    area.appendChild(proj);
+                    const flightTime = 800; 
+                    setTimeout(() => { proj.style.transition = `all ${flightTime}ms linear`; proj.style.left = `${endX}px`; proj.style.top = `${endY}px`; proj.style.transform = `rotate(720deg)`; }, 50);
+                    setTimeout(() => { if(proj && proj.parentNode) proj.remove(); createCrayonBurst(endX, endY, area); }, flightTime);
+                }, customLaunchDelay);
+            } else setTimeout(() => { createCrayonBurst(endX, endY, area); }, burstTime);
+        }
+
+        function initTopRunner() {
+            if (window.innerWidth <= 768) return; 
+            if (typeof INITIAL_DATA === 'undefined' || INITIAL_DATA.length === 0) return;
+
+            const container = document.getElementById('topRunnerContainer'); const track = document.getElementById('runnerTrack');
+            const bossContainer = document.getElementById('bossRunnerContainer'); const bossTrack = document.getElementById('bossTrack');
+            const isMobile = false; // 已被阻擋，這裡必定是 false
+            
+            const trackRightOffset = '-110px'; const bossRightOffset = '-410px'; 
+            track.style.right = trackRightOffset; bossTrack.style.right = bossRightOffset; 
+            const endLeftPosNum = 110; const endLeftPos = `${endLeftPosNum}px`; 
+
+            cancelAnimationFrame(chaseLoopId);
+            track.style.opacity = '0'; track.style.transition = 'none'; track.getAnimations().forEach(anim => anim.cancel()); track.style.transform = 'translateX(0) scaleX(1)';              
+            container.style.transform = 'scaleX(1) translateX(0)'; 
+            bossTrack.style.opacity = '0'; bossTrack.style.transition = 'none'; bossTrack.style.pointerEvents = 'none'; bossTrack.getAnimations().forEach(anim => anim.cancel()); bossTrack.style.transform = 'translateX(0) scaleX(1)';
+
+            if (currentRunnerPlayer) { try { currentRunnerPlayer.dispose(); } catch(e){} currentRunnerPlayer = null; }
+            if (currentBossPlayer) { try { currentBossPlayer.dispose(); } catch(e){} currentBossPlayer = null; }
+            container.innerHTML = ''; bossContainer.innerHTML = ''; track.onclick = null; bossTrack.onclick = null;
+            
+            if (noticeIconEl) { noticeIconEl.remove(); noticeIconEl = null; } clearTimeout(noticeIconTimeout); 
+
+            const isBossEvent = Math.random() < 0.7; 
+            let isCaught = false, isEscaped = false, hasNoticed = false, chasePhase = 1, isBossKnockedBack = false, hasReachedEnd = false; 
+            const runDuration = 14000; let charRunAnimation = null, bossRunAnimation = null;
+
+            function triggerVictory() {
+                if (isEscaped) return; isEscaped = true;
+                safePlaySpine(currentRunnerPlayer, "Victory", true);
+                if (currentBossPlayer && chasePhase !== 0) { if (bossRunAnimation && bossRunAnimation.playState !== 'finished') bossRunAnimation.pause(); safePlaySpine(currentBossPlayer, "Idle", true); }
+                setTimeout(() => {
+                    track.style.transition = 'opacity 0.6s ease-out'; track.style.opacity = '0';
+                    if (bossTrack) { bossTrack.style.transition = 'opacity 0.6s ease-out'; bossTrack.style.opacity = '0'; }
+                    setTimeout(initTopRunner, 600); 
+                }, 3000); 
+            }
+
+            const loader = document.createElement('div'); loader.className = 'spine-loader-crayon'; container.appendChild(loader);
+            const randomCharData = INITIAL_DATA[Math.floor(Math.random() * INITIAL_DATA.length)];
+            const charName = randomCharData.name; const folderKey = typeof SPINE_MAP !== 'undefined' ? SPINE_MAP[charName] : charName;
+
+            currentRunnerPlayer = new spine.SpinePlayer("topRunnerContainer", {
+                skelUrl: `./spine_sd_assets/${folderKey}.skel.bytes`, atlasUrl: `./spine_sd_assets/${folderKey}.atlas.txt`,
+                animation: "Spawn", skin: "Normal", backgroundColor: "#00000000", alpha: true, premultipliedAlpha: false, showControls: false, showLoading: false,
+                viewport: { x: -800, y: 100, width: 2500, height: 1500, transitionTime: 0 },
+                success: function (player) {
+                    loader.remove(); 
+                    try { const skins = player.skeleton.data.skins; const targetSkin = skins.find(s => s.name === 'Normal') || skins.find(s => s.name === 'default') || skins[0]; if (targetSkin) { player.skeleton.setSkinByName(targetSkin.name); player.skeleton.setSlotsToSetupPose(); } } catch (e) {}
+                    setTimeout(() => {
+                        track.style.transition = 'opacity 0.3s ease-in'; track.style.opacity = '1';
+                        let spawnTrack = safePlaySpine(player, "Spawn", false); let spawnDuration = (spawnTrack && spawnTrack.animation ? spawnTrack.animation.duration : 1.5) * 1000;
+                        setTimeout(() => {
+                            player.timeScale = 1.0; safePlaySpine(player, "Move", true);
+                            charRunAnimation = track.animate([ { transform: 'translateX(0) scaleX(1)' }, { transform: `translateX(calc(-100vw + ${endLeftPos})) scaleX(1)` } ], { duration: runDuration, fill: 'forwards' });
+                           charRunAnimation.onfinish = () => { hasReachedEnd = true; if (!isCaught) triggerVictory(); };
+
+                            if (isBossEvent) {
+                                const bossKey = typeof SPINE_MAP !== 'undefined' && SPINE_MAP['R41雷內瓦'] ? SPINE_MAP['R41雷內瓦'] : 'R41雷內瓦';
+                                currentBossPlayer = new spine.SpinePlayer("bossRunnerContainer", {
+                                    skelUrl: `./spine_sd_assets/${bossKey}.skel.bytes`, atlasUrl: `./spine_sd_assets/${bossKey}.atlas.txt`,
+                                    animation: "Idle", backgroundColor: "#00000000", alpha: true, premultipliedAlpha: false, showControls: false, showLoading: false,
+                                    viewport: { x: -1500, y: -450, width: 3000, height: 3000, transitionTime: 0 },
+                                    success: function (bossPlayer) {
+                                        try { const bossSkins = bossPlayer.skeleton.data.skins.map(s => s.name); let skinToUse = bossSkins.includes('default') ? 'default' : (bossSkins.includes('Skin_Naive') ? 'Skin_Naive' : bossSkins[0]); bossPlayer.skeleton.setSkinByName(skinToUse); bossPlayer.skeleton.setSlotsToSetupPose(); } catch (e) { }
+                                        function waitRunner15Percent() {
+                                            if (isEscaped || isCaught) return;
+                                            let currentTime = charRunAnimation ? (charRunAnimation.currentTime || 0) : 0;
+                                            if (currentTime >= runDuration * 0.15) {
+                                                bossTrack.style.transition = 'opacity 0.2s ease-in'; bossTrack.style.opacity = '1'; bossPlayer.timeScale = 3.0; 
+                                                let bossSpawnTrack = safePlaySpine(bossPlayer, "Spawn", false); let bossSpawnDuration = (bossSpawnTrack && bossSpawnTrack.animation ? bossSpawnTrack.animation.duration : 1.5) * 1000; let actualWaitTime = bossSpawnDuration / 3;
+                                                setTimeout(() => {
+                                                    if (isEscaped || isCaught) return; bossPlayer.timeScale = 1.0; safePlaySpine(bossPlayer, "Move", true);
+                                                    bossRunAnimation = bossTrack.animate([ { transform: 'translateX(0)' }, { transform: `translateX(calc(-100vw + ${endLeftPos}))` } ], { duration: runDuration * 0.5, fill: 'forwards' });
+                                                    setupPlayerKnockback(bossPlayer); startChaseRadar(player, bossPlayer); 
+                                                }, actualWaitTime);
+                                            } else requestAnimationFrame(waitRunner15Percent);
+                                        }
+                                        requestAnimationFrame(waitRunner15Percent);
+                                    }
+                                });
+                            }
+                        }, spawnDuration);
+                    }, 50);
+                }
+            });
+
+            function setupPlayerKnockback(bossPlayer) {
+                bossTrack.style.pointerEvents = 'auto'; bossTrack.style.cursor = 'pointer';
+                bossTrack.onclick = () => {
+                    if (isCaught || isEscaped || isBossKnockedBack || chasePhase === 0) return;
+                    isBossKnockedBack = true; bossRunAnimation.pause(); 
+                    const knockbackPx = 300; const screenWidth = window.innerWidth || 1000; const totalDuration = bossRunAnimation.effect.getTiming().duration; const knockbackTime = (knockbackPx / screenWidth) * totalDuration;
+                    const startT = bossRunAnimation.currentTime; const targetT = Math.max(0, startT - knockbackTime); const kDuration = 150; const kStartTime = performance.now();
+                    function tweenKnockback(now) {
+                        let p = (now - kStartTime) / kDuration;
+                        if (p < 1) { bossRunAnimation.currentTime = startT - (startT - targetT) * p; requestAnimationFrame(tweenKnockback); } 
+                        else { bossRunAnimation.currentTime = targetT; bossRunAnimation.play(); setTimeout(() => { isBossKnockedBack = false; }, 400); }
+                    }
+                    requestAnimationFrame(tweenKnockback);
+                };
+            }
+
+            function startChaseRadar(runnerPlayer, bossPlayer) {
+                function checkChase() {
+                    if (isEscaped || chasePhase === 0) return;
+                    const rRect = track.getBoundingClientRect(); const bRect = bossTrack.getBoundingClientRect();
+                    let distance = (bRect.left + (bRect.width / 2)) - (rRect.left + (rRect.width / 2));
+                    if (distance <= 450 && !hasNoticed && !isCaught) {
+                        hasNoticed = true; 
+                        if (Math.random() < 0.3) {
+                            let iconTopPx = 50; let iconOffsetX = -30; 
+                            try { const headBone = runnerPlayer.skeleton.bones.find(b => { const n = b.data.name.toLowerCase(); return n.includes('head') || n.includes('face') || n.includes('hair_top'); }); if (headBone) { iconTopPx = 160 - (headBone.worldY * 0.15); iconTopPx = Math.max(0, Math.min(iconTopPx, 150)); } } catch (e) { }
+                            if (noticeIconEl) { noticeIconEl.remove(); clearTimeout(noticeIconTimeout); }
+                            noticeIconEl = document.createElement('img'); noticeIconEl.src = 'https://i.postimg.cc/ft7Yt8RD/Chaos-Arena-Matching-Icon-02.png'; noticeIconEl.className = 'absolute w-[25px] h-[25px] object-contain pointer-events-none transition-all duration-200';
+                            noticeIconEl.style.top = `${iconTopPx}px`; noticeIconEl.style.left = '50%'; noticeIconEl.style.transform = `translateX(calc(-50% + ${iconOffsetX}px)) scale(0)`; noticeIconEl.style.zIndex = '150'; container.appendChild(noticeIconEl);
+                            requestAnimationFrame(() => { if(noticeIconEl) noticeIconEl.style.transform = `translateX(calc(-50% + ${iconOffsetX}px)) scale(1.2)`; });
+                            noticeIconTimeout = setTimeout(() => { if (noticeIconEl) { noticeIconEl.style.transform = `translateX(calc(-50% + ${iconOffsetX}px)) scale(0)`; noticeIconEl.style.opacity = '0'; setTimeout(() => { if (noticeIconEl) { noticeIconEl.remove(); noticeIconEl = null; } }, 200); } }, 2000);
+                            const randomSpeed = (Math.random() * 1.4 + 0.8).toFixed(2); runnerPlayer.timeScale = parseFloat(randomSpeed); charRunAnimation.playbackRate = parseFloat(randomSpeed); 
+                        }
+                    }
+                    if (distance <= 60 && !isCaught) { isCaught = true; handleCollision(runnerPlayer, bossPlayer); return; }
+                    chaseLoopId = requestAnimationFrame(checkChase);
+                }
+                chaseLoopId = requestAnimationFrame(checkChase);
+            }
+
+            function handleCollision(runnerPlayer, bossPlayer) {
+                if (noticeIconEl) { noticeIconEl.remove(); noticeIconEl = null; clearTimeout(noticeIconTimeout); }
+                charRunAnimation.pause(); bossRunAnimation.pause(); bossTrack.style.pointerEvents = 'none'; 
+                const isRanged = ["中排", "後排"].includes(randomCharData.position);
+                const rangedOffsetPx = -240; const attackOffset = isRanged ? `translateX(${rangedOffsetPx}px)` : "translateX(0px)"; 
+
+                if (chasePhase === 1) {
+                    if (Math.random() < 0.4) {
+                        container.style.transform = `${attackOffset} scaleX(-1)`; 
+                        let attackTrack = safePlaySpine(runnerPlayer, "Attack1_1", false); let atkDur = (attackTrack && attackTrack.animation ? attackTrack.animation.duration : 1.0) * 1000;
+                        let launchTimes = getLaunchTimes(runnerPlayer, "Attack1_1", charName, 500);
+                        safePlaySpine(bossPlayer, "Groggy", true);
+                        bossContainer.classList.add('shake-anim'); setTimeout(() => bossContainer.classList.remove('shake-anim'), 400);
+                        launchTimes.forEach(delayMs => { triggerCrayonAttack(isRanged, atkDur, bossContainer, container, isRanged ? rangedOffsetPx : 0, delayMs); });
+                        const lastLaunchDelay = launchTimes[launchTimes.length - 1]; const lastHitTimeMs = lastLaunchDelay + 800; 
+                        setTimeout(() => { bossContainer.classList.add('shake-strong-anim'); setTimeout(() => bossContainer.classList.remove('shake-strong-anim'), 500); }, Math.max(atkDur - 500, lastHitTimeMs - 200));
+
+                        setTimeout(() => {
+                            if (hasReachedEnd) { container.style.transition = 'transform 0.3s ease'; container.style.transform = 'translateX(0px) scaleX(1)'; isCaught = false; chasePhase = 0; triggerVictory(); return; }
+                            const resumeRunning = () => {
+                                safePlaySpine(runnerPlayer, "Move", true); charRunAnimation.play();
+                                setTimeout(() => {
+                                    if (chasePhase === 0) return; 
+                                    safePlaySpine(bossPlayer, "Move", true); bossPlayer.timeScale = 1.5; bossRunAnimation.playbackRate = 2.0; bossRunAnimation.play(); bossTrack.style.pointerEvents = 'auto'; 
+                                    isCaught = false; chasePhase = 2; chaseLoopId = requestAnimationFrame(() => startChaseRadar(runnerPlayer, bossPlayer));
+                                }, 1500); 
+                            };
+                            if (isRanged) {
+                                container.style.transform = `translateX(${rangedOffsetPx}px) scaleX(1)`;
+                                setTimeout(() => {
+                                    if (chasePhase === 0 || hasReachedEnd) return; 
+                                    const skipTime = (Math.abs(rangedOffsetPx) / window.innerWidth) * runDuration;
+                                    if (charRunAnimation && charRunAnimation.playState !== 'finished') charRunAnimation.currentTime = (charRunAnimation.currentTime || 0) + skipTime;
+                                    if (charRunAnimation && charRunAnimation.currentTime >= runDuration) { container.style.transition = 'transform 0.3s ease'; container.style.transform = 'translateX(0px) scaleX(1)'; isCaught = false; chasePhase = 0; triggerVictory(); return; }
+                                    container.style.transition = 'none'; container.style.transform = 'translateX(0px) scaleX(1)'; void container.offsetWidth; container.style.transition = 'transform 0.2s ease';
+                                    resumeRunning();
+                                }, 200);
+                            } else { container.style.transform = 'translateX(0px) scaleX(1)'; resumeRunning(); }
+                        }, Math.max(atkDur, lastHitTimeMs + 100));
+                    } else bossExecuteKill(runnerPlayer, bossPlayer);
+                } 
+                else if (chasePhase === 2) {
+                    if (Math.random() < 0.70) {
+                        chasePhase = 0; container.style.transform = `${attackOffset} scaleX(-1)`; safePlaySpine(bossPlayer, "Groggy", true); 
+                        const anims = runnerPlayer.skeleton.data.animations.map(a => a.name); const skillAnims = anims.filter(a => a.startsWith("Skill1_")).sort(); let totalSkillDurationMs = 0;
+                        if (skillAnims.length > 0) {
+                            skillAnims.forEach((animName, index) => {
+                                let track = (index === 0) ? safePlaySpine(runnerPlayer, animName, false) : runnerPlayer.animationState.addAnimation(0, animName, false, 0);
+                                let currentAnimDurMs = (track && track.animation ? track.animation.duration : 1.0) * 1000;
+                                let launchTimes = getLaunchTimes(runnerPlayer, animName, charName, 500);
+                                setTimeout(() => {
+                                    bossContainer.classList.add('shake-anim'); setTimeout(() => bossContainer.classList.remove('shake-anim'), 400);
+                                    launchTimes.forEach(delayMs => { triggerCrayonAttack(isRanged, currentAnimDurMs, bossContainer, container, isRanged ? rangedOffsetPx : 0, delayMs); });
+                                }, totalSkillDurationMs);
+                                const shakeStrongOffset = (index === skillAnims.length - 1) ? 1000 : 500; 
+                                setTimeout(() => { bossContainer.classList.add('shake-strong-anim'); setTimeout(() => bossContainer.classList.remove('shake-strong-anim'), 500); }, totalSkillDurationMs + Math.max(0, currentAnimDurMs - shakeStrongOffset));
+                                totalSkillDurationMs += currentAnimDurMs;
+                            });
+                        } else {
+                            let fallbackTrack = safePlaySpine(runnerPlayer, "Attack1_1", false); totalSkillDurationMs = (fallbackTrack && fallbackTrack.animation ? fallbackTrack.animation.duration : 1.0) * 1000;
+                            let launchTimes = getLaunchTimes(runnerPlayer, "Attack1_1", charName, 500);
+                            bossContainer.classList.add('shake-anim'); setTimeout(() => bossContainer.classList.remove('shake-anim'), 400);
+                            launchTimes.forEach(delayMs => { triggerCrayonAttack(isRanged, totalSkillDurationMs, bossContainer, container, isRanged ? rangedOffsetPx : 0, delayMs); });
+                            setTimeout(() => { bossContainer.classList.add('shake-strong-anim'); setTimeout(() => bossContainer.classList.remove('shake-strong-anim'), 500); }, Math.max(0, totalSkillDurationMs - 1000));
+                        }
+                        setTimeout(() => {
+                            safePlaySpine(bossPlayer, "Die", false);
+                            if (hasReachedEnd) { container.style.transition = 'transform 0.3s ease'; container.style.transform = 'translateX(0px) scaleX(1)'; isCaught = false; triggerVictory(); return; }
+                            const resumeRunning = () => { safePlaySpine(runnerPlayer, "Move", true); isCaught = false; charRunAnimation.play(); setTimeout(() => { bossTrack.style.transition = 'opacity 0.6s ease-out'; bossTrack.style.opacity = '0'; }, 3000); };
+                            if (isRanged) {
+                                container.style.transform = `translateX(${rangedOffsetPx}px) scaleX(1)`;
+                                setTimeout(() => {
+                                    if (hasReachedEnd) return; 
+                                    const skipTime = (Math.abs(rangedOffsetPx) / window.innerWidth) * runDuration;
+                                    if (charRunAnimation && charRunAnimation.playState !== 'finished') charRunAnimation.currentTime = (charRunAnimation.currentTime || 0) + skipTime;
+                                    if (charRunAnimation && charRunAnimation.currentTime >= runDuration) { container.style.transition = 'transform 0.3s ease'; container.style.transform = 'translateX(0px) scaleX(1)'; isCaught = false; triggerVictory(); return; }
+                                    container.style.transition = 'none'; container.style.transform = 'translateX(0px) scaleX(1)'; void container.offsetWidth; container.style.transition = 'transform 0.2s ease'; resumeRunning();
+                                }, 200);
+                            } else { container.style.transform = 'translateX(0px) scaleX(1)'; resumeRunning(); }
+                        }, totalSkillDurationMs + 800); 
+                    } else bossExecuteKill(runnerPlayer, bossPlayer);
+                }
+            }
+
+            function bossExecuteKill(runnerPlayer, bossPlayer) {
+                chasePhase = 0; safePlaySpine(runnerPlayer, "Groggy", true);
+                let attackTrack = safePlaySpine(bossPlayer, "Attack3_1", false); let attackDuration = (attackTrack && attackTrack.animation ? attackTrack.animation.duration : 3.0) * 1000;
+                let dieTriggerTime = Math.max(0, attackDuration - 2450); 
+                setTimeout(() => { safePlaySpine(runnerPlayer, "Die", false); container.classList.add('shake-anim'); setTimeout(() => container.classList.remove('shake-anim'), 400); }, dieTriggerTime);
+                setTimeout(() => { safePlaySpine(bossPlayer, "Idle", true); track.style.transition = 'opacity 0.6s ease-out'; track.style.opacity = '0'; bossTrack.style.transition = 'opacity 0.6s ease-out'; bossTrack.style.opacity = '0'; setTimeout(initTopRunner, 600); }, attackDuration + 1000); 
+            }
+        }
+
+        // ------------------------------------------------------------
+        // Firebase 與全域系統初始化
+        // ------------------------------------------------------------
         function updateVisitCount() {
             if (!db) return;
-
-            // 🔍 1. 取得當前網址
             const hostname = window.location.hostname;
-            
-            // 🌟 2. 設定您的「正式版網址白名單」(用引號包起來，中間用逗號隔開)
-            // 將您的「公開網名」和「專案專屬網名」都放進去
-            const officialDomains = [
-                'crayon-note.vercel.app', 
-                'project-v53aw.vercel.app',
-            ]; 
-
-            // 3. 判斷：只要當前的網址有包含在上面的白名單名單內，就是正式版
+            const officialDomains = [ 'crayon-note.vercel.app', 'project-v53aw.vercel.app' ]; 
             const isProduction = officialDomains.includes(hostname);
-            
-            // 如果是正式版，寫入 "site_stats"；如果是 Vercel 亂數產生的預覽網址或 localhost，寫入 "site_stats_test"
             const targetDocName = isProduction ? "site_stats" : "site_stats_test";
-
-            // 執行資料庫更新...
             const countRef = db.collection("metadata").doc(targetDocName);
-            
             db.runTransaction((transaction) => {
                 return transaction.get(countRef).then((doc) => { 
-                    const newCount = (doc.exists ? doc.data().total_visits : 0) + 1; 
-                    transaction.set(countRef, { total_visits: newCount }); 
-                    return newCount; 
+                    const newCount = (doc.exists ? doc.data().total_visits : 0) + 1; transaction.set(countRef, { total_visits: newCount }); return newCount; 
                 });
-            }).then((newCount) => { 
-                const counterEl = document.getElementById('top_visit_counter'); 
-                if (counterEl) counterEl.innerText = newCount.toLocaleString(); 
-            }).catch((err) => { 
-                console.error("計數器更新失敗:", err); 
-            });
+            }).then((newCount) => { const counterEl = document.getElementById('top_visit_counter'); if (counterEl) counterEl.innerText = newCount.toLocaleString(); }).catch((err) => { console.error("計數器更新失敗:", err); });
         }
-        document.addEventListener('DOMContentLoaded', () => {
-            try {
-                if (typeof INITIAL_DATA === 'undefined') throw new Error("找不到 INITIAL_DATA，請確認 data_core.js 是否載入成功！");
-                // 🌟 加在這裡！
-                renderPickupBanner(); 
-                initStates(); changeLanguage(currentLang);
-                if (!isStatsOpen) { const body = document.getElementById("statsPanelBody"); const icon = document.getElementById("statsToggleIcon"); if(body) { body.classList.add("hidden"); body.classList.remove("grid"); icon.innerText = "▶"; } }
-            } catch (e) { const errBanner = document.getElementById('errorBanner'); if(errBanner) { errBanner.innerHTML = `⚠️ 畫面繪製失敗: ${e.message}`; errBanner.classList.remove('hidden'); } }
-        });
 
         function handleAuth() {
             if (!auth) { alert("目前處於斷線單機模式（可能被擴充功能阻擋），無法登入雲端。"); return; }
@@ -1782,81 +1104,30 @@
         function updateAuthButtonUI(user) {
             const btn = document.getElementById('authBtn'); const svgLogo = document.getElementById('googleLogoSvg'); const logoutText = document.getElementById('logoutText'); if (!btn) return;
             if (user) { 
-                if (svgLogo) svgLogo.classList.add('hidden'); 
-                if (logoutText) logoutText.classList.remove('hidden'); 
-                // 🌟 修正：保持登出按鈕的高度與置中樣式
+                if (svgLogo) svgLogo.classList.add('hidden'); if (logoutText) logoutText.classList.remove('hidden'); 
                 btn.className = "px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-bold rounded-lg shadow-sm transition shrink-0 whitespace-nowrap h-7 sm:h-8 flex items-center justify-center"; 
-            } 
-            else { 
-                if (svgLogo) svgLogo.classList.remove('hidden'); 
-                if (logoutText) logoutText.classList.add('hidden'); 
-                // 🌟 修正：補回高度 h-7 sm:h-8、內距 px-1.5，並加入與黑夜模式一致的 hover:bg-gray-50 dark:hover:bg-gray-600 效果
+            } else { 
+                if (svgLogo) svgLogo.classList.remove('hidden'); if (logoutText) logoutText.classList.add('hidden'); 
                 btn.className = "google-login-btn bg-white dark:bg-gray-700 rounded-lg h-7 sm:h-8 px-1.5 flex items-center justify-center transition border border-gray-200 dark:border-gray-600 shrink-0 hover:bg-gray-50 dark:hover:bg-gray-600"; 
             }
         }
 
-        try {
-            if (typeof firebase !== 'undefined') {
-                const firebaseConfig = { apiKey: "AIzaSyDhv8D2pY_0M56UJrDTQw0RGPHA-BkXU8Y", authDomain: "crayon-note.firebaseapp.com", projectId: "crayon-note", storageBucket: "crayon-note.firebasestorage.app", messagingSenderId: "210614088940", appId: "1:210614088940:web:7addbdc7c466eeb05421c9", measurementId: "G-M1EJPE12TE" };
-                if (!firebase.apps.length) firebase.initializeApp(firebaseConfig); else firebase.app(); 
-                db = firebase.firestore(); auth = firebase.auth(); updateVisitCount();
-                auth.onAuthStateChanged(user => {
-                    updateAuthButtonUI(user); 
-                    if (user) {
-                        currentUser = user;
-                        // 🌟 修正：將寫死的中文換成 ${t('auth_online_title')}，並將 data-i18n 導正為 data-lang-key
-                        document.getElementById('userStatus').innerHTML = `<span id="authStatusText" class="font-bold text-green-600 dark:text-green-400 whitespace-nowrap" data-lang-key="auth_online_title">${t('auth_online_title')}</span><span class="text-[10px] text-gray-500 dark:text-gray-400 truncate max-w-[60px] sm:max-w-[100px] ml-1.5 opacity-70">${user.displayName || '教主'}</span>`;
-
-                        db.collection("player_boards").doc(user.uid).get().then(doc => { 
-                            if (doc.exists && doc.data().states) { 
-                                savedStates = doc.data().states; initStates(); renderMatrix(); calculateStats(); 
-                            } 
-                        }).catch(err => {});
-                    } else {
-                        currentUser = null; 
-                        // 🌟 修正：將寫死的中文換成 ${t('auth_offline_title')}
-                        document.getElementById('userStatus').innerHTML = `<span class="font-bold text-amber-600 dark:text-amber-400 whitespace-nowrap" data-lang-key="auth_offline_title">${t('auth_offline_title')}</span>`;
-                    }
-                });
-            }
-        } catch (e) { }
-
-        setInterval(() => { document.body.classList.toggle('swap-avatars'); }, 3000);
-        function checkMarquee(card, isHover) { const box = card.querySelector('.marquee-box'); const content = card.querySelector('.marquee-content'); if (box && content) { if (isHover && box.scrollWidth > box.clientWidth) content.style.animation = 'text-marquee 3.5s linear infinite alternate'; else content.style.animation = 'none'; } }
-    </script>
-
-    <div class="social-fixed group">
-        <div id="socialMenu" class="social-menu group-hover:flex">
-            <a id="dynamicXLink" href="https://x.com/trickcal_TW" target="_blank" class="bg-sky-500 text-white px-3 py-1 rounded-lg text-[10px] font-bold shadow-lg hover:bg-sky-600 transition" data-lang-key="x_label">台港澳服官方X</a>
-        </div>
-        <button class="bg-black text-white w-10 h-10 rounded-full shadow-xl flex items-center justify-center font-bold text-sm">X</button>
-    </div>
-    <div id="rim-live-container"></div>
-
-    <script>
-        window.addEventListener('load', function() {
-            if (typeof spine === 'undefined') return;
-            const rimContainer = document.getElementById("rim-live-container"); const loader = document.createElement('div'); loader.className = 'spine-loader-crayon'; rimContainer.appendChild(loader);
-            new spine.SpinePlayer("rim-live-container", { skelUrl: "Rim.skel.bytes", atlasUrl: "Rim.atlas.txt", alpha: true, backgroundColor: "#00000000", showControls: false, premultipliedAlpha: false, skin: "Normal", animation: "Happy_4", showLoading: false, viewport: { transitionTime: 0 },
-                success: function (player) {
-                    loader.remove(); const animations = ["Happy_4", "Pat_End", "Tickle_Idle_2"]; let currentIndex = 1; 
-                    function playNextAnimation() { const nextAnim = animations[currentIndex % animations.length]; player.skeleton.setToSetupPose(); player.animationState.setAnimation(0, nextAnim, true); currentIndex++; }
-                   setInterval(playNextAnimation, 5000);
-                } 
-            }); 
-        });
-    </script>
-    <script>
-        const runnerAreaId = 'runnerArea'; const chibiId = 'runnerTrack'; let activeCrayons = [];
+        // 🌟 修復遺失的軌道蠟筆生成邏輯
         function spawnCrayonOnTrack() {
-            if (window.innerWidth <= 768) return; // 🌟 修正：手機版不執行蠟筆生成迴圈
-            const area = document.getElementById(runnerAreaId); if (!area) return;
-            // ... (其餘維持不變)
+            if (window.innerWidth <= 768) return; 
+            const area = document.getElementById('runnerArea'); if (!area) return;
+            
+            // 重新補回這段核心代碼
+            const crayon = document.createElement('div'); crayon.className = 'track-crayon'; 
+            const randomX = Math.floor(Math.random() * 70) + 15; crayon.style.left = `${randomX}%`;
+            area.appendChild(crayon); activeCrayons.push(crayon); 
+            requestAnimationFrame(() => { crayon.style.opacity = '1'; });
+            setTimeout(spawnCrayonOnTrack, Math.random() * 7000 + 5000);
         }
-        function checkCrayonCollision() {
-            if (window.innerWidth <= 768) return; // 🌟 修正：手機版不執行碰撞偵測偵聽
-            const chibi = document.getElementById(chibiId); const isChibiVisible = chibi && chibi.style.opacity === '1';
 
+        function checkCrayonCollision() {
+            if (window.innerWidth <= 768) return; 
+            const chibi = document.getElementById('runnerTrack'); const isChibiVisible = chibi && chibi.style.opacity === '1';
             if (isChibiVisible && activeCrayons.length > 0) {
                 const chibiRect = chibi.getBoundingClientRect(); const chibiCenterX = chibiRect.left + (chibiRect.width / 2) - 20;
                 activeCrayons.forEach((crayon, index) => {
@@ -1866,7 +1137,61 @@
             }
             requestAnimationFrame(checkCrayonCollision);
         }
-        window.addEventListener('load', () => { setTimeout(spawnCrayonOnTrack, 4000); requestAnimationFrame(checkCrayonCollision); });
+
+        function initRimLive2D() {
+            if (typeof spine === 'undefined') return;
+            const rimContainer = document.getElementById("rim-live-container"); const loader = document.createElement('div'); loader.className = 'spine-loader-crayon'; rimContainer.appendChild(loader);
+            new spine.SpinePlayer("rim-live-container", { skelUrl: "Rim.skel.bytes", atlasUrl: "Rim.atlas.txt", alpha: true, backgroundColor: "#00000000", showControls: false, premultipliedAlpha: false, skin: "Normal", animation: "Happy_4", showLoading: false, viewport: { transitionTime: 0 },
+                success: function (player) {
+                    loader.remove(); const animations = ["Happy_4", "Pat_End", "Tickle_Idle_2"]; let currentIndex = 1; 
+                    function playNextAnimation() { const nextAnim = animations[currentIndex % animations.length]; player.skeleton.setToSetupPose(); player.animationState.setAnimation(0, nextAnim, true); currentIndex++; }
+                   setInterval(playNextAnimation, 5000);
+                } 
+            }); 
+        }
+
+        // 🌟 合併所有 Load 事件，交錯延遲載入 (Staggered Loading) 大幅提升體感速度
+        window.addEventListener('load', () => {
+            document.getElementById('loader').style.display = 'none';
+
+            try {
+                if (typeof INITIAL_DATA === 'undefined') throw new Error("找不到 INITIAL_DATA，請確認 data_core.js 是否載入成功！");
+                renderPickupBanner(); initStates(); changeLanguage(currentLang);
+                if (!isStatsOpen) { const body = document.getElementById("statsPanelBody"); const icon = document.getElementById("statsToggleIcon"); if(body) { body.classList.add("hidden"); body.classList.remove("grid"); icon.innerText = "▶"; } }
+            } catch (e) { const errBanner = document.getElementById('errorBanner'); if(errBanner) { errBanner.innerHTML = `⚠️ 畫面繪製失敗: ${e.message}`; errBanner.classList.remove('hidden'); } }
+
+            // 啟動 Firebase
+            try {
+                if (typeof firebase !== 'undefined') {
+                    const firebaseConfig = { apiKey: "AIzaSyDhv8D2pY_0M56UJrDTQw0RGPHA-BkXU8Y", authDomain: "crayon-note.firebaseapp.com", projectId: "crayon-note", storageBucket: "crayon-note.firebasestorage.app", messagingSenderId: "210614088940", appId: "1:210614088940:web:7addbdc7c466eeb05421c9", measurementId: "G-M1EJPE12TE" };
+                    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig); else firebase.app(); 
+                    db = firebase.firestore(); auth = firebase.auth(); updateVisitCount();
+                    auth.onAuthStateChanged(user => {
+                        updateAuthButtonUI(user); 
+                        if (user) {
+                            currentUser = user;
+                            document.getElementById('userStatus').innerHTML = `<span id="authStatusText" class="font-bold text-green-600 dark:text-green-400 whitespace-nowrap" data-lang-key="auth_online_title">${t('auth_online_title')}</span><span class="text-[10px] text-gray-500 dark:text-gray-400 truncate max-w-[60px] sm:max-w-[100px] ml-1.5 opacity-70">${user.displayName || '教主'}</span>`;
+                            db.collection("player_boards").doc(user.uid).get().then(doc => { 
+                                if (doc.exists && doc.data().states) { savedStates = doc.data().states; initStates(); renderMatrix(); calculateStats(); } 
+                            }).catch(err => {});
+                        } else {
+                            currentUser = null; document.getElementById('userStatus').innerHTML = `<span class="font-bold text-amber-600 dark:text-amber-400 whitespace-nowrap" data-lang-key="auth_offline_title">${t('auth_offline_title')}</span>`;
+                        }
+                    });
+                }
+            } catch (e) { }
+
+            // 錯開重度渲染，讓主畫面先出現，不會白畫面卡死
+            setTimeout(() => {
+                initTopRunner();
+                setTimeout(() => {
+                    initRimLive2D();
+                    setTimeout(spawnCrayonOnTrack, 4000);
+                    requestAnimationFrame(checkCrayonCollision);
+                }, 300);
+            }, 100);
+        });
+
     </script>
 </body>
 </html>
