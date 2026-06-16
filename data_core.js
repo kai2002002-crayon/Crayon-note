@@ -580,4 +580,36 @@ const COSTUME_MAP = {
     "艾爾芬": ["Erpin", "ErpinSkin1", "ErpinSkin2", "ErpinSkin3", "ErpinSkin4"], "莉絲蒂": ["Risty", "RistySkin1", "RistySkin2"], "雷內瓦": ["RenewaAwaken", "RenewaAwakenSkin1", "RenewaAwakenSkin2"]
 };
 
+// ------------------------------------------
+// 5. 特選使者招募schedule
+// ------------------------------------------
+
+const PICKUP_SCHEDULE = [
+    {
+        start: "2026-06-04T18:00:00+09:00", // ISO 格式時間
+        end: "2026-06-18T10:59:59+09:00",
+        chars: ["莉絲蒂", "海莉", "盧波"],
+        note: "現在這一期"
+    },
+    {
+        start: "2026-06-18T18:00:00+09:000",
+        end: "2026-07-02T10:59:59+09:00",
+        chars: ["雷內瓦"],
+        note: "牛蛙"
+    }
+];
+
+// 🎪 遊戲內活動排程表
+const EVENT_SCHEDULE = [
+    {
+        start: "2026-06-04T18:00:00+09:00",
+        end: "2026-06-18T10:59:59+09:00",
+        eventId: "Theme015"  // 會對應尋找 Theme015_ZH.png, Theme015_JA.png 等
+    },
+    {
+        start: "2026-06-18T18:00:00+09:000",
+        end: "2026-07-02T10:59:59+09:00",
+        eventId: "Theme0017" 
+    }
+];
 console.log("LANG_DICT 內容:", LANG_DICT);
