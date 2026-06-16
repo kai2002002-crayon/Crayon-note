@@ -4,7 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="referrer" content="no-referrer-when-downgrade">
-    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2Z87YT118P"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-2Z87YT118P');
+    </script>
     <title>嘟嘟臉金蠟筆記事本</title>
     <meta name="description" content="《Trickcal: Chibi Go》嘟嘟臉金蠟筆記事本！提供最新的《嘟嘟臉惡作劇》(Trickcal Revive / トリカル) 角色圖鑑、金蠟筆與技能資料。The best Trickcal Revive Crayon Planner & Character Database. トリカル 最強キャラ・クレヨン攻略データベース。">
     <link rel="icon" href="https://i.postimg.cc/mkfSTq5k/Favicon.png" type="image/png">
@@ -127,6 +135,13 @@
         .google-login-btn:hover { box-shadow: 0 3px 6px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.12); background-color: #fcfcfc; }
         .unowned-avatar { opacity: 0.35; filter: grayscale(100%); }
 
+        /* 🌟 神秘剪影專用特效 */
+        .silhouette-mode {
+            filter: brightness(0) contrast(0) drop-shadow(0 0 3px rgba(0,0,0,0.4)) !important;
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
         .char-avatar-container { 
             transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); 
             cursor: pointer; position: relative; z-index: 1; transform-origin: center; 
@@ -135,7 +150,7 @@
         }
 
         @media (hover: hover) and (pointer: fine) {
-            .char-avatar-container:hover { 
+            .char-avatar-container:not(.pointer-events-none):hover { 
                 transform: scale(1.5) translateZ(0); z-index: 50; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3); 
             }
             .hover-scale:hover { transform: scale(1.15) translateZ(0); z-index: 10; }
@@ -209,40 +224,40 @@
         }
         .animate-banner-fade { animation: fadeInBanner 0.4s ease-out forwards; }
 
-       /* 🌈 外層：彩虹流動邊框容器 */
-.rainbow-wrapper {
-    position: relative;
-    padding: 2px; /* 這裡控制邊框的厚度 */
-    border-radius: 9px; /* 這裡控制圓角大小 */
-    background: linear-gradient(45deg, #ff0000, #ff7300, #ffeb00, #47e247, #00bbff, #0055ff, #8800ff, #ff0000);
-    background-size: 400%;
-    animation: rainbowMove 5s linear infinite;
-    display: inline-block;
-    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
-    transition: transform 0.3s ease;
-}
+        /* 🌈 外層：彩虹流動邊框容器 */
+        .rainbow-wrapper {
+            position: relative;
+            padding: 2px; /* 這裡控制邊框的厚度 */
+            border-radius: 9px; /* 這裡控制圓角大小 */
+            background: linear-gradient(45deg, #ff0000, #ff7300, #ffeb00, #47e247, #00bbff, #0055ff, #8800ff, #ff0000);
+            background-size: 400%;
+            animation: rainbowMove 5s linear infinite;
+            display: inline-block;
+            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+            transition: transform 0.3s ease;
+        }
 
-/* 內層：處理圖片的圓角，並遮住背景色 */
-.rainbow-content {
-    display: block;
-    height: 100%;       /* 強制高度填滿外框 */
-    width: auto;        /* 寬度隨高度自動縮放 */
-    aspect-ratio: auto; /* 保持圖片原始比例 */
-    object-fit: contain; /* 確保圖片內容完整顯示，不會被裁切 */
-    border-radius: 7px; /* 內圓角要比外圓角稍微小一點點，視覺才協調 */
-    overflow: hidden;
-}
+        /* 內層：處理圖片的圓角，並遮住背景色 */
+        .rainbow-content {
+            display: block;
+            height: 100%;       /* 強制高度填滿外框 */
+            width: auto;        /* 寬度隨高度自動縮放 */
+            aspect-ratio: auto; /* 保持圖片原始比例 */
+            object-fit: contain; /* 確保圖片內容完整顯示，不會被裁切 */
+            border-radius: 7px; /* 內圓角要比外圓角稍微小一點點，視覺才協調 */
+            overflow: hidden;
+        }
 
-/* 讓彩虹流動 */
-@keyframes rainbowMove {
-    0% { background-position: 0 0; }
-    100% { background-position: 400% 0; }
-}
+        /* 讓彩虹流動 */
+        @keyframes rainbowMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 400% 0; }
+        }
 
-.rainbow-wrapper:hover {
-    transform: scale(1.05);
-    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
-}
+        .rainbow-wrapper:hover {
+            transform: scale(1.05);
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+        }
     </style>
 </head>
 <body class="p-3 sm:p-6 md:p-8 text-gray-800 dark:text-gray-100">
@@ -274,13 +289,11 @@
                 
                 <div id="bannerDisplayArea" class="grid items-center bg-gradient-to-r from-amber-50 to-white dark:from-gray-800 dark:to-gray-700 px-2.5 h-10 sm:h-11 rounded-xl border border-amber-300 dark:border-gray-600 shadow-sm backdrop-blur-sm shrink-0 overflow-hidden">
                     
-                    <!-- 面板 A：特選招募 -->
                     <div id="pickupPanel" class="col-start-1 row-start-1 flex items-center justify-between w-full gap-3 transition-opacity duration-500 opacity-100 z-10">
                         <span id="pickupTitleText" class="text-[10px] sm:text-[11px] font-bold text-amber-700 dark:text-amber-300 whitespace-nowrap shrink-0">🎯 特選使者招募</span>
                         <div id="pickupIconsContainer" class="flex flex-row items-center justify-end gap-1.5"></div>
                     </div>
 
-                    <!-- 面板 B：今期活動 -->
                     <div id="eventPanel" class="col-start-1 row-start-1 flex items-center justify-between w-full gap-3 transition-opacity duration-500 opacity-0 pointer-events-none z-0">
                         <span id="eventTitleText" class="text-[10px] sm:text-[11px] font-bold text-sky-700 dark:text-sky-400 whitespace-nowrap shrink-0">🎪 今期活動</span>
                         <div id="eventBannersContainer" class="flex flex-row items-center justify-end gap-1.5 h-full"></div>
@@ -476,7 +489,7 @@
         const preloadedSpines = new Set(); 
         function preloadSpineAssets(charName) {
             if (preloadedSpines.has(charName)) return;
-            const spineKey = SPINE_MAP[charName]; 
+            const spineKey = typeof SPINE_MAP !== 'undefined' ? SPINE_MAP[charName] : null; 
             if (!spineKey) return;
             const basePath = `./spine_assets/${spineKey}/${spineKey}`;
             fetch(`${basePath}.png`, { mode: 'no-cors' }); 
@@ -568,6 +581,7 @@
         // 面板與矩陣渲染邏輯
         // ------------------------------------------------------------
         function getActivePickupChars() {
+            if (typeof PICKUP_SCHEDULE === 'undefined') return [];
             const now = new Date();
             // 找出符合現在時間的所有檔期
             const active = PICKUP_SCHEDULE.find(s => {
@@ -595,7 +609,7 @@
 
             activeChars.forEach(charName => {
                 const charData = INITIAL_DATA.find(c => c.name === charName); if (!charData) return;
-                const iconUrl = SKILL_ICONS['skill_passive_' + charName]; const pColorClass = personalityColors[charData.personality] || "border-gray-400 text-gray-400";
+                const iconUrl = typeof SKILL_ICONS !== 'undefined' ? SKILL_ICONS['skill_passive_' + charName] : null; const pColorClass = personalityColors[charData.personality] || "border-gray-400 text-gray-400";
                 const iconWrapper = document.createElement('div');
                 iconWrapper.className = `w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 ${pColorClass} bg-white dark:bg-gray-800 flex items-center justify-center relative pickup-sparkle shrink-0 cursor-pointer transition-transform`;
         
@@ -625,13 +639,25 @@
         function updateEventBanner() {
             const container = document.getElementById('eventBannersContainer');
             const activeEvents = getActiveEvents();
-            if (!container || activeEvents.length === 0) return;
+            if (!container) return;
+            
+            // 初始化或更新標題
+            const titleEl = document.getElementById('eventTitleText');
+            if (titleEl) titleEl.innerText = t("event_title") || "🎪 今期活動";
 
-            // 循環索引 (如果只有4個活動，index 會在 0-3 之間循環)
+            // 如果沒有活動，清空容器並返回
+            if (activeEvents.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+
+            // 確保索引在範圍內 (防止活動數量減少時溢出)
+            if (currentEventIndex >= activeEvents.length) currentEventIndex = 0;
+
             const evt = activeEvents[currentEventIndex];
             const langSuffix = { "zh-TW": "ZH", "ja": "JA", "en": "EN" }[window.currentLang] || "ZH";
     
-            // 清空並只放入一張
+            // 只清空並只渲染一張
             container.innerHTML = '';
     
             const wrapper = document.createElement('div');
@@ -640,6 +666,7 @@
     
             const imgEl = document.createElement('img');
             imgEl.src = `event/${evt.eventId}_${langSuffix}.png`;
+            imgEl.alt = evt.eventId;
             imgEl.className = "rainbow-content";
     
             wrapper.appendChild(imgEl);
@@ -666,7 +693,8 @@
             // 🌟 新增邏輯：如果兩者都沒東西，顯示維護中
             if (!hasPickup && !hasEvent) {
                 displayArea.style.display = 'grid';
-                pickupPanel.innerHTML = `<span class="text-[11px] font-bold text-gray-500 w-full text-center">${t("maintenance_msg")}</span>`;
+                const maintenanceMsg = t('maintenance_msg') !== 'maintenance_msg' ? t('maintenance_msg') : '🔧 維護更新中...';
+                pickupPanel.innerHTML = `<span class="text-[11px] font-bold text-gray-500 w-full text-center">${maintenanceMsg}</span>`;
                 pickupPanel.classList.remove('opacity-0', 'pointer-events-none');
                 pickupPanel.classList.add('opacity-100');
                 eventPanel.classList.add('hidden'); // 隱藏活動面板
@@ -713,6 +741,7 @@
                 }
             }, 5000);
         }
+        
         function initStates() {
             INITIAL_DATA.forEach(char => {
                 if (savedStates['owned_' + char.name] === undefined) savedStates['owned_' + char.name] = false;
@@ -744,8 +773,15 @@
             let layerTotals = { 1: {}, 2: {}, 3: {} }, layerOpened = { 1: {}, 2: {}, 3: {} }, layerBonus = { 1: {}, 2: {}, 3: {} }, layerMissingCrayons = { 1: 0, 2: 0, 3: 0 };
             [1, 2, 3].forEach(l => { ATTR_PRIORITY.forEach(a => { layerTotals[l][a] = 0; layerOpened[l][a] = 0; layerBonus[l][a] = 0; }); });
             let globalUsedCrayons = 0, globalNeededCrayons = 0, attrs = { attack: 0, def: 0, hp: 0, crit: 0, crit_res: 0 }, ownedCount = 0;
+            let validCharCount = 0;
+
+            const nowTime = Date.now();
 
             INITIAL_DATA.forEach(char => {
+                // 🌟 統計過濾：不計算未發布的角色
+                if (char.releaseDate && new Date(char.releaseDate).getTime() > nowTime) return;
+
+                validCharCount++;
                 if (savedStates['owned_' + char.name]) ownedCount++;
                 [1, 2, 3].forEach(l => {
                     const rule = LAYER_RULES[l];
@@ -758,7 +794,8 @@
                 });
             });
 
-            document.getElementById('total_char_count').innerText = INITIAL_DATA.length;
+            // 更新實際可用的角色數量
+            document.getElementById('total_char_count').innerText = validCharCount;
             document.getElementById('owned_char_count').innerText = ownedCount;
             document.getElementById('total_used_crayon').innerText = globalUsedCrayons;
             document.getElementById('total_needed_crayon').innerText = globalNeededCrayons;
@@ -795,7 +832,7 @@
                 keys[category].forEach(val => {
                     const btn = document.createElement("button"); btn.id = `btn_filter_${category}_${val}`; btn.className = btnInactiveStyle; btn.onclick = () => selectFilter(category, val);
                     let keyName = val; if (category === 'race' && val === '???') keyName = 'unknown';
-                    const mapKey = `${category}_${keyName}`; const cloudIconPath = IMAGE_MAP[mapKey] || "";
+                    const mapKey = `${category}_${keyName}`; const cloudIconPath = typeof IMAGE_MAP !== 'undefined' ? IMAGE_MAP[mapKey] : "";
                     if(cloudIconPath) btn.innerHTML = `<img src="${cloudIconPath}" alt="${val}" onerror="this.style.display='none';" class="w-3.5 h-3.5 object-contain shrink-0"><span>${t(val)}</span>`;
                     else btn.innerHTML = `<span>${t(val)}</span>`;
                     container.appendChild(btn);
@@ -877,6 +914,8 @@
             const personalities = ["天真", "冷靜", "狂亂", "活潑", "憂鬱"];
             const personalityBorderColors = { "天真": "border-green-500", "冷靜": "border-blue-500", "狂亂": "border-red-500", "活潑": "border-yellow-400", "憂鬱": "border-purple-500" };
 
+            const nowTime = Date.now();
+
             personalities.forEach(pName => {
                 const pChars = INITIAL_DATA.filter(c => c.personality === pName); if (pChars.length === 0) return;
                 const pSection = document.createElement('section'); pSection.id = `section_p_${pName}`; pSection.className = "bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-2xl p-4 sm:p-6 shadow-sm border-2 border-amber-100/70 dark:border-gray-700 mb-6 transition-colors";
@@ -884,16 +923,34 @@
                 const charListContainer = document.createElement('div'); charListContainer.className = "space-y-4";
 
                 pChars.forEach(char => {
+                    // 🌟 判定角色是否尚未公開
+                    const isUnreleased = char.releaseDate && new Date(char.releaseDate).getTime() > nowTime;
+                    
                     const charCard = document.createElement('div'); charCard.id = `char_card_${char.name}`; charCard.className = "char-card-wrapper bg-white/50 dark:bg-gray-750/50 rounded-xl border border-gray-200/60 dark:border-gray-600 flex flex-row items-stretch transition-all duration-200 overflow-hidden";
-                    charCard.setAttribute('onmouseenter', `checkMarquee(this, true); preloadSpineAssets('${char.name}');`); charCard.setAttribute('onmouseleave', 'checkMarquee(this, false)');
                     
-                    const avatarPath = IMAGE_MAP[`avatar_${char.name}`] || ""; const hoverPath = IMAGE_MAP[`hover_avatar_${char.name}`] || avatarPath;
-                    const pPath = IMAGE_MAP[`personality_${char.personality}`] || ""; let raceIconName = char.race; if (char.race === "???") raceIconName = "unknown";
-                    const racePath = IMAGE_MAP[`race_${raceIconName}`] || ""; const posPath = IMAGE_MAP[`position_${char.position}`] || ""; const jobPath = IMAGE_MAP[`job_${char.job}`] || "";
-                    const borderColorClass = personalityBorderColors[char.personality] || "border-gray-300"; const isOwned = savedStates['owned_' + char.name]; const avatarClass = isOwned ? "" : "unowned-avatar";
+                    if (!isUnreleased) {
+                        charCard.setAttribute('onmouseenter', `checkMarquee(this, true); preloadSpineAssets('${char.name}');`); 
+                        charCard.setAttribute('onmouseleave', 'checkMarquee(this, false)');
+                    }
                     
-                    const detailBtn = document.createElement('button'); detailBtn.onclick = () => window.open(`char_detail.html?char=${encodeURIComponent(char.name)}`, '_blank');
-                    const displayClass = (window.currentLang === 'en') ? 'hidden' : 'flex';
+                    const avatarPath = typeof IMAGE_MAP !== 'undefined' ? (IMAGE_MAP[`avatar_${char.name}`] || "") : ""; 
+                    const hoverPath = typeof IMAGE_MAP !== 'undefined' ? (IMAGE_MAP[`hover_avatar_${char.name}`] || avatarPath) : avatarPath;
+                    const pPath = typeof IMAGE_MAP !== 'undefined' ? (IMAGE_MAP[`personality_${char.personality}`] || "") : ""; 
+                    let raceIconName = char.race; if (char.race === "???") raceIconName = "unknown";
+                    const racePath = typeof IMAGE_MAP !== 'undefined' ? (IMAGE_MAP[`race_${raceIconName}`] || "") : ""; 
+                    const posPath = typeof IMAGE_MAP !== 'undefined' ? (IMAGE_MAP[`position_${char.position}`] || "") : ""; 
+                    const jobPath = typeof IMAGE_MAP !== 'undefined' ? (IMAGE_MAP[`job_${char.job}`] || "") : "";
+                    const borderColorClass = personalityBorderColors[char.personality] || "border-gray-300"; 
+                    const isOwned = savedStates['owned_' + char.name]; 
+                    
+                    // 根據狀態設定頭像與名稱
+                    const avatarClass = isOwned && !isUnreleased ? "" : "unowned-avatar";
+                    const displayName = isUnreleased ? "???" : t(char.name);
+                    const hoverImgHtml = isUnreleased ? "" : `<img src="${hoverPath}" class="avatar-alt" alt="${displayName}" onerror="this.style.display='none';" loading="lazy">`;
+                    
+                    const detailBtn = document.createElement('button'); 
+                    detailBtn.onclick = () => window.open(`char_detail.html?char=${encodeURIComponent(char.name)}`, '_blank');
+                    const displayClass = (window.currentLang === 'en' || isUnreleased) ? 'hidden' : 'flex';
                     detailBtn.className = `w-8 sm:w-10 shrink-0 ${displayClass} items-center justify-center bg-amber-500/10 hover:bg-amber-300 dark:bg-gray-700/50 dark:hover:bg-gray-600 border-r border-amber-200/50 dark:border-gray-600 transition-colors cursor-pointer group`;
                     detailBtn.title = (window.currentLang === 'ja') ? `${t(char.name)}の詳細データを見る` : `查看 ${t(char.name)} 的詳細資料`;
                     detailBtn.innerHTML = `<img src="https://i.postimg.cc/T1Y9CC22/Album-Icon-Info.png" alt="Info" class="w-5 h-5 sm:w-6 sm:h-6 opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-200">`;
@@ -901,54 +958,76 @@
 
                     const cardInner = document.createElement('div'); cardInner.className = "flex-1 p-3 sm:p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-4 w-full overflow-hidden";
                     const nameCol = document.createElement('div'); nameCol.className = "flex flex-row items-center justify-start gap-3 min-w-[210px] w-full md:w-auto border-b md:border-b-0 pb-2 md:pb-0 border-gray-200/50 dark:border-gray-700";
+                    
+                    const traitsHtml = isUnreleased ? 
+                        `<div class="flex items-center gap-1.5 pt-1 border-t border-dashed border-gray-100 dark:border-gray-700 text-gray-400 dark:text-gray-500 text-[10px] font-bold tracking-widest">DATA CLASSIFIED</div>` :
+                        `<div class="flex items-center gap-1.5 pt-1 border-t border-dashed border-gray-100 dark:border-gray-700">
+                            <div class="flex items-center hover-scale cursor-help"><img src="${pPath}" alt="${t(char.personality)}" title="${t('stats_personality')} ${t(char.personality)}" onerror="this.style.display='none'; document.getElementById('fall_p_${char.name}').classList.remove('hidden');" class="w-4 h-4 object-contain" loading="lazy"><span id="fall_p_${char.name}" class="hidden text-[9px] px-1 rounded bg-amber-50 dark:bg-gray-700 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-gray-600 whitespace-nowrap">${t(char.personality)}</span></div>
+                            <div class="flex items-center hover-scale cursor-help"><img src="${racePath}" alt="${t(char.race)}" title="${t('stats_race')} ${t(char.race)}" onerror="this.style.display='none'; document.getElementById('fall_r_${char.name}').classList.remove('hidden');" class="w-4 h-4 object-contain" loading="lazy"><span id="fall_r_${char.name}" class="hidden bg-gray-100 dark:bg-gray-700 px-1 rounded text-[9px] text-gray-500 dark:text-gray-400 font-medium whitespace-nowrap">${t(char.race)}</span></div>
+                            <div class="flex items-center hover-scale cursor-help"><img src="${posPath}" alt="${t(char.position)}" title="${t('stats_position')} ${t(char.position)}" onerror="this.style.display='none'; document.getElementById('fall_pos_${char.name}').classList.remove('hidden');" class="w-4 h-4 object-contain opacity-85" loading="lazy"><span id="fall_pos_${char.name}" class="hidden bg-blue-50 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-1 rounded text-[9px] font-medium whitespace-nowrap">${t(char.position)}</span></div>
+                            <div class="flex items-center hover-scale cursor-help"><img src="${jobPath}" alt="${t(char.job)}" title="${t('stats_job')} ${t(char.job)}" onerror="this.style.display='none'; document.getElementById('fall_j_${char.name}').classList.remove('hidden');" class="w-4 h-4 object-contain opacity-85" loading="lazy"><span id="fall_j_${char.name}" class="hidden bg-purple-50 dark:bg-purple-900 text-purple-700 dark:text-purple-300 px-1 rounded text-[9px] font-medium whitespace-nowrap">${t(char.job)}</span></div>
+                        </div>`;
+
                     nameCol.innerHTML = `
-                        <div class="relative shrink-0 w-12 h-12" onclick="toggleOwnership('${char.name}')">
-                            <div id="avatar_container_${char.name}" class="char-avatar-container w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-inner bg-white ${avatarClass}">
-                                <img src="${avatarPath}" alt="${t(char.name)}" onerror="this.style.display='none'; document.getElementById('fall_av_${char.name}').classList.remove('hidden');" loading="lazy">
-                                <img src="${hoverPath}" class="avatar-alt" alt="${t(char.name)}" onerror="this.style.display='none';" loading="lazy">
+                        <div class="relative shrink-0 w-12 h-12" ${isUnreleased ? '' : `onclick="toggleOwnership('${char.name}')"`}>
+                            <div id="avatar_container_${char.name}" class="char-avatar-container w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-inner bg-white ${avatarClass} ${isUnreleased ? 'pointer-events-none' : ''}">
+                                <img src="${avatarPath}" alt="${displayName}" class="${isUnreleased ? 'silhouette-mode' : ''}" onerror="this.style.display='none'; document.getElementById('fall_av_${char.name}').classList.remove('hidden');" loading="lazy">
+                                ${hoverImgHtml}
                             </div>
-                            <div id="fall_av_${char.name}" class="hidden char-avatar-container w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-sm flex items-center justify-center font-bold text-amber-900 bg-gradient-to-br from-amber-100 to-yellow-200 text-lg ${avatarClass}">${t(char.name).charAt(0)}</div>
+                            <div id="fall_av_${char.name}" class="hidden char-avatar-container w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-sm flex items-center justify-center font-bold text-amber-900 bg-gradient-to-br from-amber-100 to-yellow-200 text-lg ${avatarClass} ${isUnreleased ? 'silhouette-mode' : ''}">${isUnreleased ? '?' : t(char.name).charAt(0)}</div>
                         </div>
                         <div class="flex flex-col gap-0.5 w-full overflow-hidden">
-                            <div class="marquee-box text-sm sm:text-base font-bold text-gray-900 dark:text-gray-100" title="${t(char.name)}"><span class="marquee-content">${t(char.name)}</span></div>
-                            <div class="flex items-center gap-1.5 pt-1 border-t border-dashed border-gray-100 dark:border-gray-700">
-                                <div class="flex items-center hover-scale cursor-help"><img src="${pPath}" alt="${t(char.personality)}" title="${t('stats_personality')} ${t(char.personality)}" onerror="this.style.display='none'; document.getElementById('fall_p_${char.name}').classList.remove('hidden');" class="w-4 h-4 object-contain" loading="lazy"><span id="fall_p_${char.name}" class="hidden text-[9px] px-1 rounded bg-amber-50 dark:bg-gray-700 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-gray-600 whitespace-nowrap">${t(char.personality)}</span></div>
-                                <div class="flex items-center hover-scale cursor-help"><img src="${racePath}" alt="${t(char.race)}" title="${t('stats_race')} ${t(char.race)}" onerror="this.style.display='none'; document.getElementById('fall_r_${char.name}').classList.remove('hidden');" class="w-4 h-4 object-contain" loading="lazy"><span id="fall_r_${char.name}" class="hidden bg-gray-100 dark:bg-gray-700 px-1 rounded text-[9px] text-gray-500 dark:text-gray-400 font-medium whitespace-nowrap">${t(char.race)}</span></div>
-                                <div class="flex items-center hover-scale cursor-help"><img src="${posPath}" alt="${t(char.position)}" title="${t('stats_position')} ${t(char.position)}" onerror="this.style.display='none'; document.getElementById('fall_pos_${char.name}').classList.remove('hidden');" class="w-4 h-4 object-contain opacity-85" loading="lazy"><span id="fall_pos_${char.name}" class="hidden bg-blue-50 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-1 rounded text-[9px] font-medium whitespace-nowrap">${t(char.position)}</span></div>
-                                <div class="flex items-center hover-scale cursor-help"><img src="${jobPath}" alt="${t(char.job)}" title="${t('stats_job')} ${t(char.job)}" onerror="this.style.display='none'; document.getElementById('fall_j_${char.name}').classList.remove('hidden');" class="w-4 h-4 object-contain opacity-85" loading="lazy"><span id="fall_j_${char.name}" class="hidden bg-purple-50 dark:bg-purple-900 text-purple-700 dark:text-purple-300 px-1 rounded text-[9px] font-medium whitespace-nowrap">${t(char.job)}</span></div>
-                            </div>
+                            <div class="marquee-box text-sm sm:text-base font-bold text-gray-900 dark:text-gray-100" title="${displayName}"><span class="marquee-content">${displayName}</span></div>
+                            ${traitsHtml}
                         </div>
                     `;
                     cardInner.appendChild(nameCol);
 
-                    const layersContainer = document.createElement('div'); layersContainer.className = "flex flex-col sm:flex-row gap-3 w-full md:flex-1";
-                    [1, 2, 3].forEach(l => {
-                        const layerBox = document.createElement('div'); layerBox.id = `layer_wrap_${char.name}_${l}`;
-                        let bgStyle = "bg-amber-50/40 border-amber-100/60 dark:border-amber-900/40", badgeText = `🥇 ${t("level_1st")}`, gridCols = "grid-cols-2";
-                        if (l === 2) { bgStyle = "bg-orange-50/40 border-orange-100/60 dark:border-orange-900/40"; badgeText = `🥈 ${t("level_2nd")}`; gridCols = "grid-cols-3"; }
-                        else if (l === 3) { bgStyle = "bg-red-50/40 border-red-100/60 dark:border-red-900/40"; badgeText = `🥉 ${t("level_3st")}`; gridCols = "grid-cols-4"; }
+                    const layersContainer = document.createElement('div'); layersContainer.className = "flex flex-col sm:flex-row gap-3 w-full md:flex-1 relative";
+                    
+                    // 🌟 如果未公開，直接蓋上鎖定畫面
+                    if (isUnreleased) {
+                        const releaseDateObj = new Date(char.releaseDate);
+                        const dateStr = releaseDateObj.toLocaleString(window.currentLang === 'en' ? 'en-US' : 'zh-TW', { month: 'numeric', day: 'numeric', hour: '2-digit', minute:'2-digit' });
+                        const comingSoonStr = t('coming_soon') !== 'coming_soon' ? t('coming_soon') : '即將登場';
+                        
+                        layersContainer.innerHTML = `
+                            <div class="absolute inset-0 bg-gray-100/80 dark:bg-gray-800/80 backdrop-blur-[2px] rounded-xl flex flex-col items-center justify-center z-10 border border-dashed border-gray-300 dark:border-gray-600 shadow-sm">
+                                <span class="text-2xl mb-1 drop-shadow-md">🔒</span>
+                                <span class="font-bold text-gray-700 dark:text-gray-200 text-sm tracking-widest">${comingSoonStr}</span>
+                                <span class="text-[11px] text-gray-500 dark:text-gray-400 mt-1 font-mono bg-white/50 dark:bg-black/30 px-2 py-0.5 rounded-full">${dateStr} 解禁</span>
+                            </div>
+                            <div class="flex-1 p-2 rounded-xl border bg-gray-50/20 dark:bg-gray-800/20 border-gray-200/50 dark:border-gray-700/50 min-h-[80px]"></div>
+                        `;
+                    } else {
+                        [1, 2, 3].forEach(l => {
+                            const layerBox = document.createElement('div'); layerBox.id = `layer_wrap_${char.name}_${l}`;
+                            let bgStyle = "bg-amber-50/40 border-amber-100/60 dark:border-amber-900/40", badgeText = `🥇 ${t("level_1st")}`, gridCols = "grid-cols-2";
+                            if (l === 2) { bgStyle = "bg-orange-50/40 border-orange-100/60 dark:border-orange-900/40"; badgeText = `🥈 ${t("level_2nd")}`; gridCols = "grid-cols-3"; }
+                            else if (l === 3) { bgStyle = "bg-red-50/40 border-red-100/60 dark:border-red-900/40"; badgeText = `🥉 ${t("level_3st")}`; gridCols = "grid-cols-4"; }
 
-                        layerBox.className = `${bgStyle} flex-1 p-2 rounded-xl border flex-col justify-between backdrop-blur-sm`; layerBox.innerHTML = `<span class="text-[10px] font-bold mb-1 block opacity-70 whitespace-nowrap">${badgeText}</span>`;
-                        const btnGroup = document.createElement('div'); btnGroup.className = `grid ${gridCols} gap-1.5 h-full content-start`;
-                        const sortedAttrs = char[`layer${l}`].slice().sort((a, b) => ATTR_PRIORITY.indexOf(a) - ATTR_PRIORITY.indexOf(b));
+                            layerBox.className = `${bgStyle} flex-1 p-2 rounded-xl border flex-col justify-between backdrop-blur-sm`; layerBox.innerHTML = `<span class="text-[10px] font-bold mb-1 block opacity-70 whitespace-nowrap">${badgeText}</span>`;
+                            const btnGroup = document.createElement('div'); btnGroup.className = `grid ${gridCols} gap-1.5 h-full content-start`;
+                            const sortedAttrs = char[`layer${l}`].slice().sort((a, b) => ATTR_PRIORITY.indexOf(a) - ATTR_PRIORITY.indexOf(b));
 
-                        sortedAttrs.forEach((attr, idx) => {
-                            const originalIdx = char[`layer${l}`].indexOf(attr); const stateKey = `${char.name}_l${l}_${attr}_${originalIdx}`;
-                            const isOpened = savedStates[stateKey]; const btnId = `btn_${char.name}_l${l}_${attr}_${originalIdx}`;
-                            const btn = document.createElement('button'); btn.id = btnId;
-                            const styleConfig = ATTR_STYLES[attr] || { unopened: "bg-gray-100 text-gray-700 border-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600", opened: "bg-gray-500 text-white font-bold" };
-                            btn.className = `char-btn hover-scale px-1 py-1.5 sm:py-2 text-[11px] sm:text-xs text-center border rounded-lg cursor-pointer whitespace-nowrap ${isOpened ? styleConfig.opened : styleConfig.unopened}`;
-                            btn.innerText = t(attr);
-                            btn.onclick = () => {
-                                savedStates[stateKey] = !savedStates[stateKey];
-                                if(savedStates[stateKey] && !savedStates['owned_' + char.name]) { savedStates['owned_' + char.name] = true; updateOwnershipUI(char.name); }
-                                btn.className = `char-btn hover-scale px-1 py-1.5 sm:py-2 text-[11px] sm:text-xs text-center border rounded-lg cursor-pointer whitespace-nowrap ${savedStates[stateKey] ? styleConfig.opened : styleConfig.unopened}`;
-                                calculateStats();
-                            };
-                            btnGroup.appendChild(btn);
+                            sortedAttrs.forEach((attr, idx) => {
+                                const originalIdx = char[`layer${l}`].indexOf(attr); const stateKey = `${char.name}_l${l}_${attr}_${originalIdx}`;
+                                const isOpened = savedStates[stateKey]; const btnId = `btn_${char.name}_l${l}_${attr}_${originalIdx}`;
+                                const btn = document.createElement('button'); btn.id = btnId;
+                                const styleConfig = ATTR_STYLES[attr] || { unopened: "bg-gray-100 text-gray-700 border-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600", opened: "bg-gray-500 text-white font-bold" };
+                                btn.className = `char-btn hover-scale px-1 py-1.5 sm:py-2 text-[11px] sm:text-xs text-center border rounded-lg cursor-pointer whitespace-nowrap ${isOpened ? styleConfig.opened : styleConfig.unopened}`;
+                                btn.innerText = t(attr);
+                                btn.onclick = () => {
+                                    savedStates[stateKey] = !savedStates[stateKey];
+                                    if(savedStates[stateKey] && !savedStates['owned_' + char.name]) { savedStates['owned_' + char.name] = true; updateOwnershipUI(char.name); }
+                                    btn.className = `char-btn hover-scale px-1 py-1.5 sm:py-2 text-[11px] sm:text-xs text-center border rounded-lg cursor-pointer whitespace-nowrap ${savedStates[stateKey] ? styleConfig.opened : styleConfig.unopened}`;
+                                    calculateStats();
+                                };
+                                btnGroup.appendChild(btn);
+                            });
+                            layerBox.appendChild(btnGroup); layersContainer.appendChild(layerBox);
                         });
-                        layerBox.appendChild(btnGroup); layersContainer.appendChild(layerBox);
-                    });
+                    }
                     cardInner.appendChild(layersContainer); charCard.appendChild(cardInner); charListContainer.appendChild(charCard);
                 });
                 pSection.appendChild(charListContainer); container.appendChild(pSection);
@@ -1307,12 +1386,10 @@
             }
         }
 
-        // 🌟 修復遺失的軌道蠟筆生成邏輯
         function spawnCrayonOnTrack() {
             if (window.innerWidth <= 768) return; 
             const area = document.getElementById('runnerArea'); if (!area) return;
             
-            // 重新補回這段核心代碼
             const crayon = document.createElement('div'); crayon.className = 'track-crayon'; 
             const randomX = Math.floor(Math.random() * 70) + 15; crayon.style.left = `${randomX}%`;
             area.appendChild(crayon); activeCrayons.push(crayon); 
