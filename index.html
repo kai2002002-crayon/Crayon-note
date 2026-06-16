@@ -4,7 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="referrer" content="no-referrer-when-downgrade">
-    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2Z87YT118P"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-2Z87YT118P');
+    </script>
     <title>嘟嘟臉金蠟筆記事本</title>
     <meta name="description" content="《Trickcal: Chibi Go》嘟嘟臉金蠟筆記事本！提供最新的《嘟嘟臉惡作劇》(Trickcal Revive / トリカル) 角色圖鑑、金蠟筆與技能資料。The best Trickcal Revive Crayon Planner & Character Database. トリカル 最強キャラ・クレヨン攻略データベース。">
     <link rel="icon" href="https://i.postimg.cc/mkfSTq5k/Favicon.png" type="image/png">
@@ -540,7 +548,7 @@
             if (typeof INITIAL_DATA !== 'undefined') { buildFilterPanel(); renderMatrix(); calculateStats(); }
             if (typeof updateAuthButtonUI === 'function' && typeof currentUser !== 'undefined') updateAuthButtonUI(currentUser);
             if (typeof renderPickupBanner === 'function') renderPickupBanner();
-            if (typeof renderEventBanner === 'function') renderEventBanner();
+            if (typeof updateEventBanner === 'function') updateEventBanner();
         }
 
         let isDarkMode = localStorage.getItem('theme') === 'dark';
@@ -619,33 +627,31 @@
             });
         }
 
-        function renderEventBanner() {
+        // 全域變數追蹤目前是第幾個活動
+        let currentEventIndex = 0;
+
+        function updateEventBanner() {
             const container = document.getElementById('eventBannersContainer');
             const activeEvents = getActiveEvents();
-            if (!container) return;
-            
-            container.innerHTML = '';
-            const titleEl = document.getElementById('eventTitleText');
-            if (titleEl) titleEl.innerText = t("event_title") || "🎪 今期活動";
+            if (!container || activeEvents.length === 0) return;
 
-            // 根據當前語系決定圖片後綴
+            // 循環索引 (如果只有4個活動，index 會在 0-3 之間循環)
+            const evt = activeEvents[currentEventIndex];
             const langSuffix = { "zh-TW": "ZH", "ja": "JA", "en": "EN" }[window.currentLang] || "ZH";
-
-            activeEvents.forEach(evt => {
-                // 1. 建立外框
-                const wrapper = document.createElement('div');
-                wrapper.className = "rainbow-wrapper h-7 sm:h-8 w-auto cursor-pointer shrink-0";
-                wrapper.onclick = () => window.open(`event_detail.html?event=${evt.eventId}`, '_blank');
-                
-                const imgEl = document.createElement('img');
-                imgEl.src = `event/${evt.eventId}_${langSuffix}.png`;
-                imgEl.alt = evt.eventId;
-                imgEl.className = "rainbow-content";
-                
-                // 組合起來
-                wrapper.appendChild(imgEl);
-                container.appendChild(wrapper);
-            });
+    
+            // 清空並只放入一張
+            container.innerHTML = '';
+    
+            const wrapper = document.createElement('div');
+            wrapper.className = "rainbow-wrapper h-7 sm:h-8 w-auto cursor-pointer shrink-0";
+            wrapper.onclick = () => window.open(`event_detail.html?event=${evt.eventId}`, '_blank');
+    
+            const imgEl = document.createElement('img');
+            imgEl.src = `event/${evt.eventId}_${langSuffix}.png`;
+            imgEl.className = "rainbow-content";
+    
+            wrapper.appendChild(imgEl);
+            container.appendChild(wrapper);
         }
 
         let bannerRotationTimer = null;
@@ -690,6 +696,13 @@
                     hidePanel(pickupPanel);
                     showPanel(eventPanel);
                     currentBannerDisplay = 'event';
+                    
+                    // 🌟 核心：每次切換到活動面板時，更新成下一張
+                    const activeEvents = getActiveEvents();
+                    if (activeEvents.length > 0) {
+                        currentEventIndex = (currentEventIndex + 1) % activeEvents.length;
+                        updateEventBanner(); 
+                    }
                 } else {
                     hidePanel(eventPanel);
                     showPanel(pickupPanel);
@@ -1335,7 +1348,7 @@
 
             try {
                 if (typeof INITIAL_DATA === 'undefined') throw new Error("找不到 INITIAL_DATA，請確認 data_core.js 是否載入成功！");
-                renderPickupBanner(); renderEventBanner(); startBannerRotation(); initStates(); changeLanguage(currentLang);
+                renderPickupBanner(); updateEventBanner(); startBannerRotation(); initStates(); changeLanguage(currentLang);
                 if (!isStatsOpen) { const body = document.getElementById("statsPanelBody"); const icon = document.getElementById("statsToggleIcon"); if(body) { body.classList.add("hidden"); body.classList.remove("grid"); icon.innerText = "▶"; } }
             } catch (e) { const errBanner = document.getElementById('errorBanner'); if(errBanner) { errBanner.innerHTML = `⚠️ 畫面繪製失敗: ${e.message}`; errBanner.classList.remove('hidden'); } }
 
