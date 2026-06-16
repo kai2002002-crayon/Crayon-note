@@ -188,7 +188,7 @@ const PRESENT_MAP = {
     },
     "Risty": { 
         url: "https://i.postimg.cc/bNNKKxNc/Present-List-Risty.png",
-        name: { "zh-TW": "", "ja": "" }
+        name: { "zh-TW": "經典遊戲大集合", "ja": "レトロなゲームパッケージ" }
     },
     "Rohne": { 
         url: "https://i.postimg.cc/fTT66cTs/Present-List-Rohne.png",
