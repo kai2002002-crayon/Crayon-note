@@ -610,6 +610,11 @@ const EVENT_SCHEDULE = [
         start: "2026-06-18T18:00:00+09:000",
         end: "2026-07-02T10:59:59+09:00",
         eventId: "Theme017" 
+    },
+    {
+        start: "2026-06-18T18:00:00+09:000",
+        end: "2026-07-16T10:59:59+09:00",
+        eventId: "SelectPickPersonality" 
     }
 ];
 console.log("LANG_DICT 內容:", LANG_DICT);
