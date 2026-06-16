@@ -208,6 +208,37 @@
             100% { opacity: 1; transform: translateY(0); } 
         }
         .animate-banner-fade { animation: fadeInBanner 0.4s ease-out forwards; }
+
+       /* 🌈 外層：彩虹流動邊框容器 */
+.rainbow-wrapper {
+    position: relative;
+    padding: 2px; /* 這裡控制邊框的厚度 */
+    border-radius: 9px; /* 這裡控制圓角大小 */
+    background: linear-gradient(45deg, #ff0000, #ff7300, #ffeb00, #47e247, #00bbff, #0055ff, #8800ff, #ff0000);
+    background-size: 400%;
+    animation: rainbowMove 5s linear infinite;
+    display: inline-block;
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+    transition: transform 0.3s ease;
+}
+
+/* 內層：處理圖片的圓角，並遮住背景色 */
+.rainbow-content {
+    display: block;
+    border-radius: 7px; /* 內圓角要比外圓角稍微小一點點，視覺才協調 */
+    overflow: hidden;
+}
+
+/* 讓彩虹流動 */
+@keyframes rainbowMove {
+    0% { background-position: 0 0; }
+    100% { background-position: 400% 0; }
+}
+
+.rainbow-wrapper:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+}
     </style>
 </head>
 <body class="p-3 sm:p-6 md:p-8 text-gray-800 dark:text-gray-100">
@@ -239,14 +270,16 @@
                 
                 <div id="bannerDisplayArea" class="grid items-center bg-gradient-to-r from-amber-50 to-white dark:from-gray-800 dark:to-gray-700 px-2.5 h-10 sm:h-11 rounded-xl border border-amber-300 dark:border-gray-600 shadow-sm backdrop-blur-sm shrink-0 overflow-hidden">
                     
-                    <div id="pickupPanel" class="col-start-1 row-start-1 flex items-center gap-1 sm:gap-2 transition-opacity duration-500 opacity-100 z-10">
-                        <span id="pickupTitleText" class="text-[10px] sm:text-[11px] font-bold text-amber-700 dark:text-amber-300 pr-1 whitespace-nowrap">🎯 特選使者招募</span>
-                        <div id="pickupIconsContainer" class="flex flex-row items-center gap-1.5"></div>
+                    <!-- 面板 A：特選招募 -->
+                    <div id="pickupPanel" class="col-start-1 row-start-1 flex items-center justify-between w-full gap-3 transition-opacity duration-500 opacity-100 z-10">
+                        <span id="pickupTitleText" class="text-[10px] sm:text-[11px] font-bold text-amber-700 dark:text-amber-300 whitespace-nowrap shrink-0">🎯 特選使者招募</span>
+                        <div id="pickupIconsContainer" class="flex flex-row items-center justify-end gap-1.5"></div>
                     </div>
 
-                    <div id="eventPanel" class="col-start-1 row-start-1 flex items-center gap-1 sm:gap-2 transition-opacity duration-500 opacity-0 pointer-events-none z-0">
-                        <span id="eventTitleText" class="text-[10px] sm:text-[11px] font-bold text-sky-700 dark:text-sky-400 pr-1 whitespace-nowrap">🎪 今期活動</span>
-                        <div id="eventBannersContainer" class="flex flex-row items-center gap-1.5 h-full"></div>
+                    <!-- 面板 B：今期活動 -->
+                    <div id="eventPanel" class="col-start-1 row-start-1 flex items-center justify-between w-full gap-3 transition-opacity duration-500 opacity-0 pointer-events-none z-0">
+                        <span id="eventTitleText" class="text-[10px] sm:text-[11px] font-bold text-sky-700 dark:text-sky-400 whitespace-nowrap shrink-0">🎪 今期活動</span>
+                        <div id="eventBannersContainer" class="flex flex-row items-center justify-end gap-1.5 h-full"></div>
                     </div>
                 </div>
             </div>
@@ -595,14 +628,20 @@
             const langSuffix = { "zh-TW": "ZH", "ja": "JA", "en": "EN" }[window.currentLang] || "ZH";
 
             activeEvents.forEach(evt => {
+                // 1. 建立外框
+                const wrapper = document.createElement('div');
+                wrapper.className = "rainbow-wrapper h-7 sm:h-8 w-auto cursor-pointer";
+                wrapper.onclick = () => window.open(`event_detail.html?event=${evt.eventId}`, '_blank');
+                
+                // 2. 建立圖片內容
                 const imgEl = document.createElement('img');
-                
-                // 🌟 修改：在路徑前面加上 event/ 資料夾
-                imgEl.src = `event/${evt.eventId}_${langSuffix}.png`; 
-                
+                imgEl.src = `event/${evt.eventId}_${langSuffix}.png`;
                 imgEl.alt = evt.eventId;
-                imgEl.className = "h-7 sm:h-8 w-auto object-contain rounded border border-gray-200 dark:border-gray-600 shadow-sm hover:scale-105 transition-transform";
-                container.appendChild(imgEl);
+                imgEl.className = "rainbow-content h-full w-full object-cover";
+                
+                // 組合起來
+                wrapper.appendChild(imgEl);
+                container.appendChild(wrapper);
             });
         }
 
