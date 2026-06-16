@@ -202,6 +202,12 @@
             75%  { top: calc(100% - 6px); left: -6px; transform: rotate(270deg) scale(1.3); }
             100% { top: -6px; left: -6px; transform: rotate(360deg) scale(0.9); }
         }
+        /* 🌟 Banner 輪播淡入特效 */
+        @keyframes fadeInBanner { 
+            0% { opacity: 0; transform: translateY(3px); } 
+            100% { opacity: 1; transform: translateY(0); } 
+        }
+        .animate-banner-fade { animation: fadeInBanner 0.4s ease-out forwards; }
     </style>
 </head>
 <body class="p-3 sm:p-6 md:p-8 text-gray-800 dark:text-gray-100">
@@ -231,9 +237,17 @@
                     👥 <span data-lang-key="visit_count_prefix">累計利用回數</span>: <span id="top_visit_counter" class="text-amber-700 dark:text-amber-400 tracking-wider">讀取中...</span>
                 </div>
                 
-                <div class="flex items-center gap-1 sm:gap-2 bg-gradient-to-r from-amber-50 to-white dark:from-gray-800 dark:to-gray-700 px-2.5 h-10 sm:h-11 rounded-xl border border-amber-300 dark:border-gray-600 shadow-sm backdrop-blur-sm shrink-0 transition-colors">
-                    <span id="pickupTitleText" class="text-[10px] sm:text-[11px] font-bold text-amber-700 dark:text-amber-300 pr-1 whitespace-nowrap">🎯 特選使者招募</span>
-                    <div id="pickupIconsContainer" class="flex flex-row items-center gap-1.5"></div>
+                <div id="bannerDisplayArea" class="grid items-center bg-gradient-to-r from-amber-50 to-white dark:from-gray-800 dark:to-gray-700 px-2.5 h-10 sm:h-11 rounded-xl border border-amber-300 dark:border-gray-600 shadow-sm backdrop-blur-sm shrink-0 overflow-hidden">
+                    
+                    <div id="pickupPanel" class="col-start-1 row-start-1 flex items-center gap-1 sm:gap-2 transition-opacity duration-500 opacity-100 z-10">
+                        <span id="pickupTitleText" class="text-[10px] sm:text-[11px] font-bold text-amber-700 dark:text-amber-300 pr-1 whitespace-nowrap">🎯 特選使者招募</span>
+                        <div id="pickupIconsContainer" class="flex flex-row items-center gap-1.5"></div>
+                    </div>
+
+                    <div id="eventPanel" class="col-start-1 row-start-1 flex items-center gap-1 sm:gap-2 transition-opacity duration-500 opacity-0 pointer-events-none z-0">
+                        <span id="eventTitleText" class="text-[10px] sm:text-[11px] font-bold text-sky-700 dark:text-sky-400 pr-1 whitespace-nowrap">🎪 今期活動</span>
+                        <div id="eventBannersContainer" class="flex flex-row items-center gap-1.5 h-full"></div>
+                    </div>
                 </div>
             </div>
 
@@ -489,6 +503,7 @@
             if (typeof INITIAL_DATA !== 'undefined') { buildFilterPanel(); renderMatrix(); calculateStats(); }
             if (typeof updateAuthButtonUI === 'function' && typeof currentUser !== 'undefined') updateAuthButtonUI(currentUser);
             if (typeof renderPickupBanner === 'function') renderPickupBanner();
+            if (typeof renderEventBanner === 'function') renderEventBanner();
         }
 
         let isDarkMode = localStorage.getItem('theme') === 'dark';
@@ -554,7 +569,92 @@
                 container.appendChild(iconWrapper);
             });
         }
+        // ------------------------------------------------------------
+        // 🌟 今期活動與 Banner 輪播邏輯
+        // ------------------------------------------------------------
+        function getActiveEvents() {
+            if (typeof EVENT_SCHEDULE === 'undefined') return [];
+            const now = new Date();
+            return EVENT_SCHEDULE.filter(s => {
+                const startDate = new Date(s.start);
+                const endDate = new Date(s.end);
+                return now.getTime() >= startDate.getTime() && now.getTime() <= endDate.getTime();
+            });
+        }
 
+        function renderEventBanner() {
+            const container = document.getElementById('eventBannersContainer');
+            const activeEvents = getActiveEvents();
+            if (!container) return;
+            
+            container.innerHTML = '';
+            const titleEl = document.getElementById('eventTitleText');
+            if (titleEl) titleEl.innerText = t("event_title") || "🎪 今期活動";
+
+            // 根據當前語系決定圖片後綴
+            const langSuffix = { "zh-TW": "ZH", "ja": "JA", "en": "EN" }[window.currentLang] || "ZH";
+
+            activeEvents.forEach(evt => {
+                const imgEl = document.createElement('img');
+                
+                // 🌟 修改：在路徑前面加上 event/ 資料夾
+                imgEl.src = `event/${evt.eventId}_${langSuffix}.png`; 
+                
+                imgEl.alt = evt.eventId;
+                imgEl.className = "h-7 sm:h-8 w-auto object-contain rounded border border-gray-200 dark:border-gray-600 shadow-sm hover:scale-105 transition-transform";
+                container.appendChild(imgEl);
+            });
+        }
+
+        let bannerRotationTimer = null;
+        let currentBannerDisplay = 'pickup';
+
+        function startBannerRotation() {
+            if (bannerRotationTimer) clearInterval(bannerRotationTimer);
+            
+            const hasPickup = getActivePickupChars().length > 0;
+            const hasEvent = getActiveEvents().length > 0;
+            const displayArea = document.getElementById('bannerDisplayArea');
+            const pickupPanel = document.getElementById('pickupPanel');
+            const eventPanel = document.getElementById('eventPanel');
+
+            if (!displayArea || !pickupPanel || !eventPanel) return;
+
+            // 如果都沒有，隱藏整個大框
+            if (!hasPickup && !hasEvent) { displayArea.style.display = 'none'; return; } 
+            else { displayArea.style.display = 'grid'; } // 🌟 這裡改成 grid
+
+            // 輔助函式：淡入/淡出切換
+            const showPanel = (panel) => {
+                panel.classList.remove('opacity-0', 'pointer-events-none', 'z-0');
+                panel.classList.add('opacity-100', 'pointer-events-auto', 'z-10');
+            };
+            const hidePanel = (panel) => {
+                panel.classList.remove('opacity-100', 'pointer-events-auto', 'z-10');
+                panel.classList.add('opacity-0', 'pointer-events-none', 'z-0');
+            };
+
+            // 若只有其中一種，固定顯示該面板
+            if (hasPickup && !hasEvent) { showPanel(pickupPanel); hidePanel(eventPanel); return; }
+            if (!hasPickup && hasEvent) { showPanel(eventPanel); hidePanel(pickupPanel); return; }
+
+            // 兩者皆有，啟動 5 秒輪播
+            showPanel(pickupPanel);
+            hidePanel(eventPanel);
+            currentBannerDisplay = 'pickup';
+
+            bannerRotationTimer = setInterval(() => {
+                if (currentBannerDisplay === 'pickup') {
+                    hidePanel(pickupPanel);
+                    showPanel(eventPanel);
+                    currentBannerDisplay = 'event';
+                } else {
+                    hidePanel(eventPanel);
+                    showPanel(pickupPanel);
+                    currentBannerDisplay = 'pickup';
+                }
+            }, 5000);
+        }
         function initStates() {
             INITIAL_DATA.forEach(char => {
                 if (savedStates['owned_' + char.name] === undefined) savedStates['owned_' + char.name] = false;
@@ -1193,7 +1293,7 @@
 
             try {
                 if (typeof INITIAL_DATA === 'undefined') throw new Error("找不到 INITIAL_DATA，請確認 data_core.js 是否載入成功！");
-                renderPickupBanner(); initStates(); changeLanguage(currentLang);
+                renderPickupBanner(); renderEventBanner(); startBannerRotation(); initStates(); changeLanguage(currentLang);
                 if (!isStatsOpen) { const body = document.getElementById("statsPanelBody"); const icon = document.getElementById("statsToggleIcon"); if(body) { body.classList.add("hidden"); body.classList.remove("grid"); icon.innerText = "▶"; } }
             } catch (e) { const errBanner = document.getElementById('errorBanner'); if(errBanner) { errBanner.innerHTML = `⚠️ 畫面繪製失敗: ${e.message}`; errBanner.classList.remove('hidden'); } }
 
