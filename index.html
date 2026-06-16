@@ -4,15 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="referrer" content="no-referrer-when-downgrade">
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2Z87YT118P"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-2Z87YT118P');
-    </script>
+    
     <title>嘟嘟臉金蠟筆記事本</title>
     <meta name="description" content="《Trickcal: Chibi Go》嘟嘟臉金蠟筆記事本！提供最新的《嘟嘟臉惡作劇》(Trickcal Revive / トリカル) 角色圖鑑、金蠟筆與技能資料。The best Trickcal Revive Crayon Planner & Character Database. トリカル 最強キャラ・クレヨン攻略データベース。">
     <link rel="icon" href="https://i.postimg.cc/mkfSTq5k/Favicon.png" type="image/png">
@@ -659,18 +651,29 @@
 
         function startBannerRotation() {
             if (bannerRotationTimer) clearInterval(bannerRotationTimer);
-            
-            const hasPickup = getActivePickupChars().length > 0;
-            const hasEvent = getActiveEvents().length > 0;
+    
+            const activeChars = getActivePickupChars();
+            const activeEvents = getActiveEvents();
+            const hasPickup = activeChars.length > 0;
+            const hasEvent = activeEvents.length > 0;
+    
             const displayArea = document.getElementById('bannerDisplayArea');
             const pickupPanel = document.getElementById('pickupPanel');
             const eventPanel = document.getElementById('eventPanel');
 
             if (!displayArea || !pickupPanel || !eventPanel) return;
 
-            // 如果都沒有，隱藏整個大框
-            if (!hasPickup && !hasEvent) { displayArea.style.display = 'none'; return; } 
-            else { displayArea.style.display = 'grid'; } // 🌟 這裡改成 grid
+            // 🌟 新增邏輯：如果兩者都沒東西，顯示維護中
+            if (!hasPickup && !hasEvent) {
+                displayArea.style.display = 'grid';
+                pickupPanel.innerHTML = '<span class="text-[11px] font-bold text-gray-500 w-full text-center">🔧 維護更新中...</span>';
+                pickupPanel.classList.remove('opacity-0', 'pointer-events-none');
+                pickupPanel.classList.add('opacity-100');
+                eventPanel.classList.add('hidden'); // 隱藏活動面板
+                return;
+            } else {
+                eventPanel.classList.remove('hidden');
+            }
 
             // 輔助函式：淡入/淡出切換
             const showPanel = (panel) => {
