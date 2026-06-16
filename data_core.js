@@ -623,4 +623,20 @@ const EVENT_SCHEDULE = [
         eventId: "SelectPickPersonality" 
     }
 ];
+
+// 🃏 特選卡片排程表
+const CARD_SCHEDULE = [
+    {
+        start: "2026-06-04T18:00:00+09:00",
+        end: "2026-06-18T10:59:59+09:00",
+        id: "Artifact15",
+        type: "Artifact"  // 類別：Artifact (神器) 或 Rune (符文)
+    },
+    {
+        start: "2026-06-18T18:00:00+09:00",
+        end: "2026-07-02T10:59:59+09:00",
+        id: "Rune17",
+        type: "Rune"
+    }
+];
 console.log("LANG_DICT 內容:", LANG_DICT);
