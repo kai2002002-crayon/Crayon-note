@@ -204,11 +204,22 @@
             animation: pickupGlow 2s infinite ease-in-out; position: relative; transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); 
         }
         .pickup-sparkle:hover {
-            animation: none; transform: scale(1.30) !important; filter: drop-shadow(0 0 8px currentColor); z-index: 10;
+            animation: none; transform: scale(1.15) !important; filter: drop-shadow(0 0 8px currentColor); z-index: 10;
         }
         .pickup-sparkle::after {
             content: "✨"; position: absolute; font-size: 11px; filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0.9));
             pointer-events: none; z-index: 20; animation: starRunAround 3s linear infinite;
+        }
+
+        .card-artifact {
+            border-color: #00f0ff !important; /* 螢光藍 */
+            color: #00f0ff !important;
+            filter: drop-shadow(0 0 4px rgba(0, 240, 255, 0.8));
+        }
+        .card-rune {
+            border-color: #ff00ff !important; /* 螢光粉紅 */
+            color: #ff00ff !important;
+            filter: drop-shadow(0 0 4px rgba(255, 0, 255, 0.8));
         }
         @keyframes starRunAround {
             0%   { top: -6px; left: -6px; transform: rotate(0deg) scale(0.9); }
@@ -255,7 +266,7 @@
         }
 
         .rainbow-wrapper:hover {
-            transform: scale(1.05);
+            transform: scale(1.30);
             filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
         }
     </style>
@@ -297,6 +308,11 @@
                     <div id="eventPanel" class="col-start-1 row-start-1 flex items-center justify-between w-full gap-3 transition-opacity duration-500 opacity-0 pointer-events-none z-0">
                         <span id="eventTitleText" class="text-[10px] sm:text-[11px] font-bold text-sky-700 dark:text-sky-400 whitespace-nowrap shrink-0">🎪 今期活動</span>
                         <div id="eventBannersContainer" class="flex flex-row items-center justify-end gap-1.5 h-full"></div>
+                    </div>
+                    <!-- 面板 C：特選卡片 -->
+                    <div id="cardPanel" class="col-start-1 row-start-1 flex items-center justify-between w-full gap-3 transition-opacity duration-500 opacity-0 pointer-events-none z-0">
+                        <span id="cardTitleText" class="text-[10px] sm:text-[11px] font-bold text-indigo-700 dark:text-indigo-300 whitespace-nowrap shrink-0">🃏 特選卡片抽取</span>
+                        <div id="cardIconsContainer" class="flex flex-row items-center justify-end gap-1.5"></div>
                     </div>
                 </div>
             </div>
@@ -553,6 +569,7 @@
             if (typeof INITIAL_DATA !== 'undefined') { buildFilterPanel(); renderMatrix(); calculateStats(); }
             if (typeof updateAuthButtonUI === 'function' && typeof currentUser !== 'undefined') updateAuthButtonUI(currentUser);
             if (typeof renderPickupBanner === 'function') renderPickupBanner();
+            if (typeof renderCardBanner === 'function') renderCardBanner();
             if (typeof updateEventBanner === 'function') updateEventBanner();
         }
 
@@ -673,71 +690,126 @@
             container.appendChild(wrapper);
         }
 
+        // ------------------------------------------------------------
+        // 🃏 特選卡片渲染邏輯
+        // ------------------------------------------------------------
+        function getActiveCards() {
+            if (typeof CARD_SCHEDULE === 'undefined') return [];
+            const now = new Date();
+            return CARD_SCHEDULE.filter(s => {
+                const startDate = new Date(s.start);
+                const endDate = new Date(s.end);
+                return now.getTime() >= startDate.getTime() && now.getTime() <= endDate.getTime();
+            });
+        }
+
+        function renderCardBanner() {
+            const container = document.getElementById('cardIconsContainer');
+            const activeCards = getActiveCards();
+            if (!container || activeCards.length === 0) return;
+
+            container.innerHTML = '';
+            const localTexts = { "zh-TW": "🃏 特選卡片抽取", "ja": "🃏 ピックガチャ", "en": "🃏 Pick Up Card" };
+            const titleEl = document.getElementById('cardTitleText');
+            if (titleEl) titleEl.innerText = localTexts[window.currentLang] || localTexts["zh-TW"];
+
+            activeCards.forEach(card => {
+                const borderClass = card.type === "Artifact" ? "card-artifact" : "card-rune";
+                const iconWrapper = document.createElement('div');
+                // 帶入 pickup-sparkle 共用星星特效，並套用專屬螢光色
+                iconWrapper.className = `w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 bg-white dark:bg-gray-800 flex items-center justify-center relative pickup-sparkle shrink-0 transition-transform ${borderClass}`;
+                
+                const iconUrl = `event/${card.id}.png`;
+                iconWrapper.innerHTML = `<img src="${iconUrl}" class="w-full h-full object-cover rounded-[5px]" alt="${card.id}" onerror="this.style.display='none'">`;
+                container.appendChild(iconWrapper);
+            });
+        }
+
+        // ------------------------------------------------------------
+        // 🌟 核心輪播邏輯 (特選 > 活動 > 卡片 > 活動)
+        // ------------------------------------------------------------
         let bannerRotationTimer = null;
-        let currentBannerDisplay = 'pickup';
+        let rotationSequence = [];
+        let currentSequenceIndex = 0;
 
         function startBannerRotation() {
             if (bannerRotationTimer) clearInterval(bannerRotationTimer);
     
-            const activeChars = getActivePickupChars();
-            const activeEvents = getActiveEvents();
-            const hasPickup = activeChars.length > 0;
-            const hasEvent = activeEvents.length > 0;
+            const hasPickup = getActivePickupChars().length > 0;
+            const hasEvent = getActiveEvents().length > 0;
+            const hasCard = getActiveCards().length > 0; // 偵測卡片
     
             const displayArea = document.getElementById('bannerDisplayArea');
             const pickupPanel = document.getElementById('pickupPanel');
             const eventPanel = document.getElementById('eventPanel');
+            const cardPanel = document.getElementById('cardPanel'); // 卡片面板
 
-            if (!displayArea || !pickupPanel || !eventPanel) return;
+            if (!displayArea || !pickupPanel || !eventPanel || !cardPanel) return;
 
-            // 🌟 新增邏輯：如果兩者都沒東西，顯示維護中
-            if (!hasPickup && !hasEvent) {
+            // 如果三者都沒東西，顯示維護中
+            if (!hasPickup && !hasEvent && !hasCard) {
                 displayArea.style.display = 'grid';
                 const maintenanceMsg = t('maintenance_msg') !== 'maintenance_msg' ? t('maintenance_msg') : '🔧 維護更新中...';
                 pickupPanel.innerHTML = `<span class="text-[11px] font-bold text-gray-500 w-full text-center">${maintenanceMsg}</span>`;
                 pickupPanel.classList.remove('opacity-0', 'pointer-events-none');
                 pickupPanel.classList.add('opacity-100');
-                eventPanel.classList.add('hidden'); // 隱藏活動面板
+                eventPanel.classList.add('hidden'); 
+                cardPanel.classList.add('hidden'); 
                 return;
             } else {
                 eventPanel.classList.remove('hidden');
+                cardPanel.classList.remove('hidden');
             }
 
-            // 輔助函式：淡入/淡出切換
-            const showPanel = (panel) => {
-                panel.classList.remove('opacity-0', 'pointer-events-none', 'z-0');
-                panel.classList.add('opacity-100', 'pointer-events-auto', 'z-10');
+            // 建立您的「夾心」輪播序列
+            rotationSequence = [];
+            if (hasPickup && hasEvent && hasCard) {
+                rotationSequence = ['pickup', 'event', 'card', 'event'];
+            } else if (hasPickup && hasEvent && !hasCard) {
+                rotationSequence = ['pickup', 'event'];
+            } else if (hasPickup && !hasEvent && hasCard) {
+                rotationSequence = ['pickup', 'card'];
+            } else if (!hasPickup && hasEvent && hasCard) {
+                rotationSequence = ['event', 'card'];
+            } else if (hasPickup) { rotationSequence = ['pickup']; } 
+              else if (hasEvent)  { rotationSequence = ['event']; } 
+              else if (hasCard)   { rotationSequence = ['card']; }
+
+            const panels = { 'pickup': pickupPanel, 'event': eventPanel, 'card': cardPanel };
+
+            const showPanel = (panelId) => {
+                panels[panelId].classList.remove('opacity-0', 'pointer-events-none', 'z-0');
+                panels[panelId].classList.add('opacity-100', 'pointer-events-auto', 'z-10');
             };
-            const hidePanel = (panel) => {
-                panel.classList.remove('opacity-100', 'pointer-events-auto', 'z-10');
-                panel.classList.add('opacity-0', 'pointer-events-none', 'z-0');
+            const hideAllPanels = () => {
+                Object.values(panels).forEach(panel => {
+                    panel.classList.remove('opacity-100', 'pointer-events-auto', 'z-10');
+                    panel.classList.add('opacity-0', 'pointer-events-none', 'z-0');
+                });
             };
 
-            // 若只有其中一種，固定顯示該面板
-            if (hasPickup && !hasEvent) { showPanel(pickupPanel); hidePanel(eventPanel); return; }
-            if (!hasPickup && hasEvent) { showPanel(eventPanel); hidePanel(pickupPanel); return; }
+            // 初始化第一幀
+            currentSequenceIndex = 0;
+            hideAllPanels();
+            showPanel(rotationSequence[0]);
 
-            // 兩者皆有，啟動 5 秒輪播
-            showPanel(pickupPanel);
-            hidePanel(eventPanel);
-            currentBannerDisplay = 'pickup';
+            // 若只有單一項目不需輪播
+            if (rotationSequence.length <= 1) return;
 
             bannerRotationTimer = setInterval(() => {
-                if (currentBannerDisplay === 'pickup') {
-                    hidePanel(pickupPanel);
-                    showPanel(eventPanel);
-                    currentBannerDisplay = 'event';
-                    
-                    // 🌟 核心：每次切換到活動面板時，更新成下一張
+                hideAllPanels();
+                currentSequenceIndex = (currentSequenceIndex + 1) % rotationSequence.length;
+                const nextPanelId = rotationSequence[currentSequenceIndex];
+                
+                showPanel(nextPanelId);
+
+                // 當切換到「活動」時，推動內部活動圖片的索引
+                if (nextPanelId === 'event') {
                     const activeEvents = getActiveEvents();
                     if (activeEvents.length > 0) {
                         currentEventIndex = (currentEventIndex + 1) % activeEvents.length;
                         updateEventBanner(); 
                     }
-                } else {
-                    hidePanel(eventPanel);
-                    showPanel(pickupPanel);
-                    currentBannerDisplay = 'pickup';
                 }
             }, 5000);
         }
@@ -1428,7 +1500,7 @@
 
             try {
                 if (typeof INITIAL_DATA === 'undefined') throw new Error("找不到 INITIAL_DATA，請確認 data_core.js 是否載入成功！");
-                renderPickupBanner(); updateEventBanner(); startBannerRotation(); initStates(); changeLanguage(currentLang);
+                renderPickupBanner(); renderCardBanner(); updateEventBanner(); startBannerRotation(); initStates(); changeLanguage(currentLang);
                 if (!isStatsOpen) { const body = document.getElementById("statsPanelBody"); const icon = document.getElementById("statsToggleIcon"); if(body) { body.classList.add("hidden"); body.classList.remove("grid"); icon.innerText = "▶"; } }
             } catch (e) { const errBanner = document.getElementById('errorBanner'); if(errBanner) { errBanner.innerHTML = `⚠️ 畫面繪製失敗: ${e.message}`; errBanner.classList.remove('hidden'); } }
 
