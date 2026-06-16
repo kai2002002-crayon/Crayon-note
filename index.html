@@ -4,15 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="referrer" content="no-referrer-when-downgrade">
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2Z87YT118P"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-2Z87YT118P');
-    </script>
+    
     <title>嘟嘟臉金蠟筆記事本</title>
     <meta name="description" content="《Trickcal: Chibi Go》嘟嘟臉金蠟筆記事本！提供最新的《嘟嘟臉惡作劇》(Trickcal Revive / トリカル) 角色圖鑑、金蠟筆與技能資料。The best Trickcal Revive Crayon Planner & Character Database. トリカル 最強キャラ・クレヨン攻略データベース。">
     <link rel="icon" href="https://i.postimg.cc/mkfSTq5k/Favicon.png" type="image/png">
@@ -233,6 +225,10 @@
 /* 內層：處理圖片的圓角，並遮住背景色 */
 .rainbow-content {
     display: block;
+    height: 100%;       /* 強制高度填滿外框 */
+    width: auto;        /* 寬度隨高度自動縮放 */
+    aspect-ratio: auto; /* 保持圖片原始比例 */
+    object-fit: contain; /* 確保圖片內容完整顯示，不會被裁切 */
     border-radius: 7px; /* 內圓角要比外圓角稍微小一點點，視覺才協調 */
     overflow: hidden;
 }
@@ -638,14 +634,13 @@
             activeEvents.forEach(evt => {
                 // 1. 建立外框
                 const wrapper = document.createElement('div');
-                wrapper.className = "rainbow-wrapper h-7 sm:h-8 w-auto cursor-pointer";
+                wrapper.className = "rainbow-wrapper h-7 sm:h-8 w-auto cursor-pointer shrink-0";
                 wrapper.onclick = () => window.open(`event_detail.html?event=${evt.eventId}`, '_blank');
                 
-                // 2. 建立圖片內容
                 const imgEl = document.createElement('img');
                 imgEl.src = `event/${evt.eventId}_${langSuffix}.png`;
                 imgEl.alt = evt.eventId;
-                imgEl.className = "rainbow-content h-full w-full object-cover";
+                imgEl.className = "rainbow-content";
                 
                 // 組合起來
                 wrapper.appendChild(imgEl);
