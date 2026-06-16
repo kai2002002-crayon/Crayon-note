@@ -666,7 +666,7 @@
             // 🌟 新增邏輯：如果兩者都沒東西，顯示維護中
             if (!hasPickup && !hasEvent) {
                 displayArea.style.display = 'grid';
-                pickupPanel.innerHTML = '<span class="text-[11px] font-bold text-gray-500 w-full text-center">🔧 維護更新中...</span>';
+                pickupPanel.innerHTML = `<span class="text-[11px] font-bold text-gray-500 w-full text-center">${t("maintenance_msg")}</span>`;
                 pickupPanel.classList.remove('opacity-0', 'pointer-events-none');
                 pickupPanel.classList.add('opacity-100');
                 eventPanel.classList.add('hidden'); // 隱藏活動面板
