@@ -1060,14 +1060,20 @@
                     // 🌟 如果未公開，直接蓋上鎖定畫面
                     if (isUnreleased) {
                         const releaseDateObj = new Date(char.releaseDate);
-                        const dateStr = releaseDateObj.toLocaleString(window.currentLang === 'en' ? 'en-US' : 'zh-TW', { month: 'numeric', day: 'numeric', hour: '2-digit', minute:'2-digit' });
-                        const comingSoonStr = t('coming_soon') !== 'coming_soon' ? t('coming_soon') : '即將登場';
+                        
+                        // 根據語系調整時間格式
+                        const localeFormat = window.currentLang === 'en' ? 'en-US' : (window.currentLang === 'ja' ? 'ja-JP' : 'zh-TW');
+                        const dateStr = releaseDateObj.toLocaleString(localeFormat, { month: 'numeric', day: 'numeric', hour: '2-digit', minute:'2-digit' });
+                        
+                        // 多國語系翻譯字典
+                        const localComingSoon = { "zh-TW": "即將登場", "ja": "近日登場", "en": "Coming Soon" }[window.currentLang] || "即將登場";
+                        const localUnlock = { "zh-TW": "解禁", "ja": "解禁", "en": "Unlocks" }[window.currentLang] || "解禁";
                         
                         layersContainer.innerHTML = `
                             <div class="absolute inset-0 bg-gray-100/80 dark:bg-gray-800/80 backdrop-blur-[2px] rounded-xl flex flex-col items-center justify-center z-10 border border-dashed border-gray-300 dark:border-gray-600 shadow-sm">
                                 <span class="text-2xl mb-1 drop-shadow-md">🔒</span>
-                                <span class="font-bold text-gray-700 dark:text-gray-200 text-sm tracking-widest">${comingSoonStr}</span>
-                                <span class="text-[11px] text-gray-500 dark:text-gray-400 mt-1 font-mono bg-white/50 dark:bg-black/30 px-2 py-0.5 rounded-full">${dateStr} 解禁</span>
+                                <span class="font-bold text-gray-700 dark:text-gray-200 text-sm tracking-widest">${localComingSoon}</span>
+                                <span class="text-[11px] text-gray-500 dark:text-gray-400 mt-1 font-mono bg-white/50 dark:bg-black/30 px-2 py-0.5 rounded-full">${dateStr} ${localUnlock}</span>
                             </div>
                             <div class="flex-1 p-2 rounded-xl border bg-gray-50/20 dark:bg-gray-800/20 border-gray-200/50 dark:border-gray-700/50 min-h-[80px]"></div>
                         `;
