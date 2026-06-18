@@ -586,13 +586,13 @@ const COSTUME_MAP = {
 
 const PICKUP_SCHEDULE = [
     {
-        start: "2026-06-04T18:00:00+09:00", // ISO 格式時間
+        start: "2026-06-04T17:00:00+09:00", // ISO 格式時間
         end: "2026-06-18T10:59:59+09:00",
         chars: ["莉絲蒂", "海莉", "盧波"],
         note: "現在這一期"
     },
     {
-        start: "2026-06-18T18:00:00+09:00",
+        start: "2026-06-18T17:00:00+09:00",
         end: "2026-06-25T04:00:00+09:00",
         chars: ["雷內瓦"],
         note: "牛蛙"
@@ -608,17 +608,17 @@ const PICKUP_SCHEDULE = [
 // 🎪 遊戲內活動排程表
 const EVENT_SCHEDULE = [
     {
-        start: "2026-06-04T18:00:00+09:00",
+        start: "2026-06-04T17:00:00+09:00",
         end: "2026-06-18T10:59:59+09:00",
         eventId: "Theme015"  // 會對應尋找 Theme015_ZH.png, Theme015_JA.png 等
     },
     {
-        start: "2026-06-18T18:00:00+09:00",
+        start: "2026-06-18T17:00:00+09:00",
         end: "2026-07-02T10:59:59+09:00",
         eventId: "Theme017" 
     },
     {
-        start: "2026-06-18T18:00:00+09:00",
+        start: "2026-06-18T17:00:00+09:00",
         end: "2026-07-16T10:59:59+09:00",
         eventId: "SelectPickPersonality" 
     }
@@ -627,13 +627,13 @@ const EVENT_SCHEDULE = [
 // 🃏 特選卡片排程表
 const CARD_SCHEDULE = [
     {
-        start: "2026-06-04T18:00:00+09:00",
+        start: "2026-06-04T17:00:00+09:00",
         end: "2026-06-18T10:59:59+09:00",
         id: "Artifact15",
         type: "Artifact"  // 類別：Artifact (神器) 或 Rune (符文)
     },
     {
-        start: "2026-06-18T18:00:00+09:00",
+        start: "2026-06-18T17:00:00+09:00",
         end: "2026-07-02T10:59:59+09:00",
         id: "Rune17",
         type: "Rune"
