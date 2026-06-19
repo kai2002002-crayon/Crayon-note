@@ -653,11 +653,11 @@
         // 全域變數追蹤目前是第幾個活動
         let currentEventIndex = 0;
 
-        function updateEventBanner() {
+                function updateEventBanner() {
             const container = document.getElementById('eventBannersContainer');
             const activeEvents = getActiveEvents();
             if (!container) return;
-            
+
             // 初始化或更新標題
             const titleEl = document.getElementById('eventTitleText');
             if (titleEl) titleEl.innerText = t("event_title") || "🎪 今期活動";
@@ -672,9 +672,11 @@
             if (currentEventIndex >= activeEvents.length) currentEventIndex = 0;
 
             const evt = activeEvents[currentEventIndex];
+            
+            // 🛡️ 防呆 1：如果該檔期異常沒有 eventId，直接跳過
+            if (!evt || !evt.eventId) return; 
+
             const langSuffix = { "zh-TW": "ZH", "ja": "JA", "en": "EN" }[window.currentLang] || "ZH";
-    
-            // 只清空並只渲染一張
             container.innerHTML = '';
     
             const wrapper = document.createElement('div');
@@ -685,10 +687,16 @@
             imgEl.src = `event/${evt.eventId}_${langSuffix}.png`;
             imgEl.alt = evt.eventId;
             imgEl.className = "rainbow-content";
+            
+            // 🛡️ 防呆 2 (防破圖)：一旦圖片載入失敗，直接把整個彩虹框藏起來，不准出現問號！
+            imgEl.onerror = function() {
+                wrapper.style.display = 'none';
+            };
     
             wrapper.appendChild(imgEl);
             container.appendChild(wrapper);
         }
+
 
         // ------------------------------------------------------------
         // 🃏 特選卡片渲染邏輯
@@ -804,13 +812,15 @@
                 showPanel(nextPanelId);
 
                 // 當切換到「活動」時，推動內部活動圖片的索引
+                                // 當切換到「活動」時，推動內部活動圖片的索引
                 if (nextPanelId === 'event') {
                     const activeEvents = getActiveEvents();
                     if (activeEvents.length > 0) {
-                        currentEventIndex = (currentEventIndex + 1) % activeEvents.length;
-                        updateEventBanner(); 
+                        updateEventBanner(); // 👈 先渲染目前的活動，保證不跳號
+                        currentEventIndex = (currentEventIndex + 1) % activeEvents.length; // 👈 渲染完再推進索引留給下次用
                     }
                 }
+
             }, 5000);
         }
         
