@@ -1097,31 +1097,7 @@
                     let txtBasic = getI18n('skill_basic'); if(txtBasic === 'skill_basic') txtBasic = '【基本】';
                     let txtEnhanced = getI18n('skill_enhanced'); if(txtEnhanced === 'skill_enhanced') txtEnhanced = '【強化】';
 
-                    // 🌟 技能區塊加上 overflow-hidden 避免特效穿模，並且加入小人容器的 HTML
                     let html = `
-                        <div class="relative bg-slate-50 dark:bg-slate-700/40 border-2 border-slate-300 dark:border-slate-600 rounded-xl p-4 shadow-sm overflow-visible">
-                            <div class="flex justify-between items-center border-b border-slate-200 dark:border-slate-600 pb-2 mb-3 relative z-10">
-                                <div class="flex items-center gap-2">
-                                    ${normalAttackIcon ? `<img src="${normalAttackIcon}" class="w-8 h-8 rounded-lg shadow-sm border border-slate-300 dark:border-slate-600">` : `<span>🎯</span>`}
-                                    <span class="font-extrabold text-slate-800 dark:text-slate-200 text-base">${txtNormalAtk}</span>
-                                </div>
-                            </div>
-                            <div class="space-y-4 pr-16 sm:pr-24 relative z-10">
-                                <div>
-                                    ${hasEnhanced ? `<p class="text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">${txtBasic}</p>` : ''}
-                                    ${renderUnifiedSkill(charSkillData.normalAttack.basic)}
-                                </div>
-                                ${hasEnhanced ? `
-                                <div>
-                                    <p class="text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">${txtEnhanced}</p>
-                                    ${renderUnifiedSkill(charSkillData.normalAttack.enhanced)}
-                                </div>` : ''}
-                            </div>
-                            <div id="spine-attack" class="absolute bottom-2 right-2 pointer-events-none z-0 opacity-90 drop-shadow-md"></div>
-                        </div>
-                    `;
-
-                    html += `
                         <div class="relative bg-emerald-50/80 dark:bg-emerald-900/20 border-2 border-emerald-300 dark:border-emerald-700 rounded-xl p-4 shadow-sm overflow-visible">
                             <div class="flex justify-between items-center border-b border-emerald-200 dark:border-emerald-800 pb-2 mb-3 relative z-10">
                                 <div class="flex items-center gap-2">
@@ -1167,6 +1143,29 @@
                                 <p class="text-xs text-gray-600 dark:text-gray-300 font-medium leading-relaxed whitespace-pre-wrap">${charSkillData.passiveSkill.desc}</p>
                                 ${makeStatChips(charSkillData.passiveSkill.stats)}
                             </div>
+                        </div>
+                    `;
+                    
+                    html += `
+                        <div class="relative bg-slate-50 dark:bg-slate-700/40 border-2 border-slate-300 dark:border-slate-600 rounded-xl p-4 shadow-sm overflow-visible">
+                            <div class="flex justify-between items-center border-b border-slate-200 dark:border-slate-600 pb-2 mb-3 relative z-10">
+                                <div class="flex items-center gap-2">
+                                    ${normalAttackIcon ? `<img src="${normalAttackIcon}" class="w-8 h-8 rounded-lg shadow-sm border border-slate-300 dark:border-slate-600">` : `<span>🎯</span>`}
+                                    <span class="font-extrabold text-slate-800 dark:text-slate-200 text-base">${txtNormalAtk}</span>
+                                </div>
+                            </div>
+                            <div class="space-y-4 pr-16 sm:pr-24 relative z-10">
+                                <div>
+                                    ${hasEnhanced ? `<p class="text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">${txtBasic}</p>` : ''}
+                                    ${renderUnifiedSkill(charSkillData.normalAttack.basic)}
+                                </div>
+                                ${hasEnhanced ? `
+                                <div>
+                                    <p class="text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">${txtEnhanced}</p>
+                                    ${renderUnifiedSkill(charSkillData.normalAttack.enhanced)}
+                                </div>` : ''}
+                            </div>
+                            <div id="spine-attack" class="absolute bottom-2 right-2 pointer-events-none z-0 opacity-90 drop-shadow-md"></div>
                         </div>
                     `;
                     
