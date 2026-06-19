@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="referrer" content="no-referrer-when-downgrade">
+    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-2Z87YT118P"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -23,8 +24,8 @@
     
     <link rel="preload" as="image" href="https://i.postimg.cc/qvjNxZzg/golden-crayon.png">
 
-    <script src="data_core.js?v=3"></script>
-    <script src="data_skills.js?v=3"></script>
+    <script src="data_core.js"></script>
+    <script src="data_skills.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -308,6 +309,7 @@
                         <span id="eventTitleText" class="text-[10px] sm:text-[11px] font-bold text-sky-700 dark:text-sky-400 whitespace-nowrap shrink-0">🎪 今期活動</span>
                         <div id="eventBannersContainer" class="flex flex-row items-center justify-end gap-1.5 h-full"></div>
                     </div>
+                    <!-- 面板 C：特選卡片 -->
                     <div id="cardPanel" class="col-start-1 row-start-1 flex items-center justify-between w-full gap-3 transition-opacity duration-500 opacity-0 pointer-events-none z-0">
                         <span id="cardTitleText" class="text-[10px] sm:text-[11px] font-bold text-indigo-700 dark:text-indigo-300 whitespace-nowrap shrink-0">🃏 特選卡片抽取</span>
                         <div id="cardIconsContainer" class="flex flex-row items-center justify-end gap-1.5"></div>
@@ -655,7 +657,7 @@
             const container = document.getElementById('eventBannersContainer');
             const activeEvents = getActiveEvents();
             if (!container) return;
-
+            
             // 初始化或更新標題
             const titleEl = document.getElementById('eventTitleText');
             if (titleEl) titleEl.innerText = t("event_title") || "🎪 今期活動";
@@ -670,11 +672,9 @@
             if (currentEventIndex >= activeEvents.length) currentEventIndex = 0;
 
             const evt = activeEvents[currentEventIndex];
-            
-            // 🛡️ 防呆 1：如果該檔期異常沒有 eventId，直接跳過
-            if (!evt || !evt.eventId) return; 
-
             const langSuffix = { "zh-TW": "ZH", "ja": "JA", "en": "EN" }[window.currentLang] || "ZH";
+    
+            // 只清空並只渲染一張
             container.innerHTML = '';
     
             const wrapper = document.createElement('div');
@@ -682,23 +682,9 @@
             wrapper.onclick = () => window.open(`event_detail.html?event=${evt.eventId}`, '_blank');
     
             const imgEl = document.createElement('img');
-            imgEl.className = "rainbow-content";
-            imgEl.alt = evt.eventId;
-            
-            // 🌟 雙重尋找機制 (Fallback)：先找帶語系的，找不到再找通用的
             imgEl.src = `event/${evt.eventId}_${langSuffix}.png`;
-            
-            let retryCount = 0;
-            imgEl.onerror = function() {
-                if (retryCount === 0) {
-                    retryCount++;
-                    // 第一階段：試著找沒有 _ZH 這種後綴的純檔名 (例如 Theme017.png)
-                    imgEl.src = `event/${evt.eventId}.png`;
-                } else {
-                    // 第二階段：真的連通用圖片都沒有，才啟動防破圖機制隱藏框框
-                    wrapper.style.display = 'none';
-                }
-            };
+            imgEl.alt = evt.eventId;
+            imgEl.className = "rainbow-content";
     
             wrapper.appendChild(imgEl);
             container.appendChild(wrapper);
@@ -821,11 +807,10 @@
                 if (nextPanelId === 'event') {
                     const activeEvents = getActiveEvents();
                     if (activeEvents.length > 0) {
-                        updateEventBanner(); // 👈 先渲染目前的活動，保證不跳號
-                        currentEventIndex = (currentEventIndex + 1) % activeEvents.length; // 👈 渲染完再推進索引留給下次用
+                        currentEventIndex = (currentEventIndex + 1) % activeEvents.length;
+                        updateEventBanner(); 
                     }
                 }
-
             }, 5000);
         }
         
