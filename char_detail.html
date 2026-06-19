@@ -416,8 +416,6 @@
             document.getElementById('charIntro').innerHTML = introText;
 
             // --- 處理喜好料理 ---
-            // --- 修正後的料理資料讀取 ---
-           // --- 處理喜好料理 ---
             const foodContainer = document.getElementById('charFoodIcon');
             foodContainer.innerHTML = '';
 
@@ -1110,7 +1108,7 @@
                             </div>
                             <div class="space-y-4 pr-16 sm:pr-24 relative z-10">
                                 <div>
-                                    <p class="text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">${txtBasic}</p>
+                                    ${hasEnhanced ? `<p class="text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">${txtBasic}</p>` : ''}
                                     ${renderUnifiedSkill(charSkillData.normalAttack.basic)}
                                 </div>
                                 ${hasEnhanced ? `
