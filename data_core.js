@@ -309,7 +309,7 @@ const FOOD_MAP = {
     "Patula": "無",
     "Picora": { super: "白金糖葫蘆", special: ["金糖葫蘆", "溫熱的冰美式咖啡", "滾燙的冰美式咖啡"] },
     "Posher": { super: "椰子萬能青汁", special: ["椰子松針粥", "太空食品", "ANSA太空食品"] },
-    "RenewaAwaken": "無",
+    "RenewaAwaken": { super: "有機檸檬茶", special: ["檸檬茶", "太空食品", "ANSA太空食品"] },
     "Rim": { super: "燉南瓜", special: ["南瓜濃湯", "祕密葡萄汁", "一級祕密葡萄汁"] },
     "Risty": { super: "石榴甜茶", special: ["石榴果實", "溫熱的冰美式咖啡", "滾燙的冰美式咖啡"] },
     "Rohne": { super: "白金糖葫蘆", special: ["金糖葫蘆", "巧克力冰淇淋", "深黑巧克力冰淇淋"] },
