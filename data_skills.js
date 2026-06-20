@@ -3,14 +3,14 @@
 // 役割: 使徒の全言語（中・日・英）のスキルデータを一元管理
 // ==========================================
 const CHAR_BACKGROUNDS = {
-"龍族":"https://i.postimg.cc/Nj8XZBYR/Gacha-Pattern-Bg-Dragon.png",
-"精靈":"https://i.postimg.cc/T3jbBfGr/Gacha-Pattern-Bg-Elf.png",
-"妖精":"https://i.postimg.cc/vZ7nCbMr/Gacha-Pattern-Bg-Fairy.png",
-"獸人":"https://i.postimg.cc/Qdg7vhsg/Gacha-Pattern-Bg-Furry.png",
-"幽靈":"https://i.postimg.cc/fR7d1DZj/Gacha-Pattern-Bg-Ghost.png",
-"???":"https://i.postimg.cc/525zDb1g/Gacha-Pattern-Bg-Mystic.png",
-"魔靈":"https://i.postimg.cc/sgPWbsyw/Gacha-Pattern-Bg-Spirit.png",
-"魔女":"https://i.postimg.cc/130FbsPv/Gacha-Pattern-Bg-Witch.png"
+"龍族":"https://i.postimg.cc/FdJxQDZ7/Gacha-Pattern-Bg-Dragon.png",
+"精靈":"https://i.postimg.cc/xJbPStRN/Gacha-Pattern-Bg-Elf.png",
+"妖精":"https://i.postimg.cc/G8sj1qQ4/Gacha-Pattern-Bg-Fairy.png",
+"獸人":"https://i.postimg.cc/S2zGpDrz/Gacha-Pattern-Bg-Furry.png",
+"幽靈":"https://i.postimg.cc/ygSTzvP0/Gacha-Pattern-Bg-Ghost.png",
+"???":"https://i.postimg.cc/kR3vMK1D/Gacha-Pattern-Bg-Mystic.png",
+"魔靈":"https://i.postimg.cc/BP9BZHYb/Gacha-Pattern-Bg-Spirit.png",
+"魔女":"https://i.postimg.cc/zHZFDKtL/Gacha-Pattern-Bg-Witch.png"
 }; 
 
 
