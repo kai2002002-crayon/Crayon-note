@@ -679,7 +679,8 @@
     
             const wrapper = document.createElement('div');
             wrapper.className = "rainbow-wrapper h-7 sm:h-8 w-auto cursor-pointer shrink-0";
-            wrapper.onclick = () => window.open(`event_detail.html?event=${evt.eventId}`, '_blank');
+            wrapper.onclick = null;
+            wrapper.style.cursor = "default";
     
             const imgEl = document.createElement('img');
             imgEl.src = `event/${evt.eventId}_${langSuffix}.png`;
