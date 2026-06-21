@@ -238,8 +238,8 @@
         /* 🌈 外層：彩虹流動邊框容器 */
         .rainbow-wrapper {
             position: relative;
-            padding: 2px; /* 這裡控制邊框的厚度 */
-            border-radius: 9px; /* 這裡控制圓角大小 */
+            padding: 2px;
+            border-radius: 9px;
             background: linear-gradient(45deg, #ff0000, #ff7300, #ffeb00, #47e247, #00bbff, #0055ff, #8800ff, #ff0000);
             background-size: 400%;
             animation: rainbowMove 5s linear infinite;
@@ -248,18 +248,16 @@
             transition: transform 0.3s ease;
         }
 
-        /* 內層：處理圖片的圓角，並遮住背景色 */
         .rainbow-content {
             display: block;
-            height: 100%;       /* 強制高度填滿外框 */
-            width: auto;        /* 寬度隨高度自動縮放 */
-            aspect-ratio: auto; /* 保持圖片原始比例 */
-            object-fit: contain; /* 確保圖片內容完整顯示，不會被裁切 */
-            border-radius: 7px; /* 內圓角要比外圓角稍微小一點點，視覺才協調 */
+            height: 100%;
+            width: auto;
+            aspect-ratio: auto;
+            object-fit: contain;
+            border-radius: 7px;
             overflow: hidden;
         }
 
-        /* 讓彩虹流動 */
         @keyframes rainbowMove {
             0% { background-position: 0 0; }
             100% { background-position: 400% 0; }
@@ -268,6 +266,69 @@
         .rainbow-wrapper:hover {
             transform: scale(1.30);
             filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+        }
+
+        /* ------------------------------------------------------------
+        /* 🌟 Banner 滑鼠移入自動展開特製 CSS (縱向展開版)
+        /* ------------------------------------------------------------ */
+        #bannerDisplayArea {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            width: max-content; /* 確保內容決定寬度，手機版不會撐滿 */
+            max-width: 100%;
+        }
+
+        #bannerDisplayArea.banner-expanded {
+            height: auto !important;
+            min-height: 44px;
+            display: flex !important; /* 展開時改用 Flex 以實現堆疊 */
+            flex-direction: column !important;
+            align-items: stretch !important;
+            overflow: visible !important;
+            padding: 10px !important;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.95);
+            border-color: #fbbf24;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            z-index: 50;
+        }
+        
+        .dark #bannerDisplayArea.banner-expanded {
+            background: rgba(31, 41, 55, 0.95);
+            border-color: #4b5563;
+        }
+
+        #bannerDisplayArea.banner-expanded > .banner-panel-item {
+            opacity: 1 !important;
+            pointer-events: auto !important;
+            width: 100%;
+            border-bottom: 1px dashed rgba(217, 119, 6, 0.2);
+            padding-bottom: 8px;
+        }
+        .dark #bannerDisplayArea.banner-expanded > .banner-panel-item {
+            border-bottom-color: rgba(156, 163, 175, 0.2);
+        }
+
+        #bannerDisplayArea.banner-expanded > .banner-panel-item:last-child {
+            border-bottom: none !important;
+            padding-bottom: 0px !important;
+        }
+
+        #bannerDisplayArea.banner-expanded > .banner-panel-item.panel-empty-hide {
+            display: none !important;
+        }
+        /* 🌟 強制活動 Banner 在展開時縱向排列，且鎖定寬高不影響總寬度 */
+        #bannerDisplayArea.banner-expanded #eventBannersContainer {
+            flex-direction: column !important;
+            align-items: flex-end !important;
+            height: auto !important;
+            width: max-content !important;
+            margin-left: auto;
+        }
+
+        #bannerDisplayArea.banner-expanded #eventBannersContainer .rainbow-wrapper {
+            display: flex !important; 
+            height: 32px !important; /* 鎖定與單行時相同的高度，避免撐爆 */
+            width: auto !important;
         }
     </style>
 </head>
@@ -293,27 +354,35 @@
     
     <div class="max-w-7xl mx-auto">
         <header class="bg-gradient-to-r from-amber-100/90 via-yellow-100/90 to-orange-100/90 dark:from-gray-800/90 dark:via-gray-700/90 dark:to-gray-800/90 rounded-2xl p-4 sm:p-6 shadow-md mb-6 border-4 border-amber-400 dark:border-gray-600 flex flex-col transition-colors backdrop-blur-sm relative z-10">
-            <div class="w-full flex flex-row justify-between items-start mb-3 gap-2">
+            <div class="w-full flex flex-row justify-between items-start mb-3 gap-2 relative">
                 <div class="flex items-center gap-1.5 text-[10px] sm:text-xs font-bold text-amber-900/70 dark:text-gray-300 bg-white/60 dark:bg-gray-800/60 px-2.5 py-1 rounded-md backdrop-blur-sm border border-amber-200/80 dark:border-gray-600/80 shadow-sm shrink-0">
                     👥 <span data-lang-key="visit_count_prefix">累計利用回數</span>: <span id="top_visit_counter" class="text-amber-700 dark:text-amber-400 tracking-wider">讀取中...</span>
                 </div>
                 
-                <div id="bannerDisplayArea" class="grid items-center bg-gradient-to-r from-amber-50 to-white dark:from-gray-800 dark:to-gray-700 px-2.5 h-10 sm:h-11 rounded-xl border border-amber-300 dark:border-gray-600 shadow-sm backdrop-blur-sm shrink-0 overflow-hidden">
+                <div class="flex flex-row items-start justify-end gap-2 ml-auto shrink-0 z-20">
                     
-                    <div id="pickupPanel" class="col-start-1 row-start-1 flex items-center justify-between w-full gap-3 transition-opacity duration-500 opacity-100 z-10">
-                        <span id="pickupTitleText" class="text-[10px] sm:text-[11px] font-bold text-amber-700 dark:text-amber-300 whitespace-nowrap shrink-0">🎯 特選使者招募</span>
-                        <div id="pickupIconsContainer" class="flex flex-row items-center justify-end gap-1.5"></div>
+                    <a href="gacha.html" target="_blank" title="前往招募模擬器" class="h-10 w-10 sm:h-11 sm:w-11 flex items-center justify-center bg-white/80 dark:bg-gray-800/80 border border-amber-300 dark:border-gray-600 rounded-xl shadow-sm transition hover:bg-amber-100 dark:hover:bg-gray-700 shrink-0 backdrop-blur-sm overflow-hidden group">
+                        <img src="https://i.postimg.cc/9wG2WRPg/Gacha-Button.png" alt="Gacha Simulator" class="w-[85%] h-[85%] object-contain drop-shadow-sm group-hover:scale-110 transition-transform">
+                    </a>
+
+                    <div id="bannerDisplayArea" onmouseenter="handleBannerHover(true)" onmouseleave="handleBannerHover(false)" class="grid items-center bg-gradient-to-r from-amber-50 to-white dark:from-gray-800 dark:to-gray-700 px-2.5 h-10 sm:h-11 rounded-xl border border-amber-300 dark:border-gray-600 shadow-sm backdrop-blur-sm shrink-0 overflow-hidden">
+                        
+                        <div id="pickupPanel" class="banner-panel-item col-start-1 row-start-1 flex items-center justify-between w-full gap-3 transition-opacity duration-500 opacity-100 z-10">
+                            <span id="pickupTitleText" class="text-[10px] sm:text-[11px] font-bold text-amber-700 dark:text-amber-300 whitespace-nowrap shrink-0">🎯 特選使者招募</span>
+                            <div id="pickupIconsContainer" class="flex flex-row items-center justify-end gap-1.5"></div>
+                        </div>
+
+                        <div id="eventPanel" class="banner-panel-item col-start-1 row-start-1 flex items-start justify-between w-full gap-3 transition-opacity duration-500 opacity-0 pointer-events-none z-0">
+                            <span id="eventTitleText" class="text-[10px] sm:text-[11px] font-bold text-sky-700 dark:text-sky-400 whitespace-nowrap shrink-0 pt-1">🎪 今期活動</span>
+                            <div id="eventBannersContainer" class="flex flex-row flex-wrap items-end justify-end gap-1.5"></div>
+                        </div>
+                        
+                        <div id="cardPanel" class="banner-panel-item col-start-1 row-start-1 flex items-center justify-between w-full gap-3 transition-opacity duration-500 opacity-0 pointer-events-none z-0">
+                            <span id="cardTitleText" class="text-[10px] sm:text-[11px] font-bold text-indigo-700 dark:text-indigo-300 whitespace-nowrap shrink-0">🃏 特選卡片抽取</span>
+                            <div id="cardIconsContainer" class="flex flex-row items-center justify-end gap-1.5"></div>
+                        </div>
                     </div>
 
-                    <div id="eventPanel" class="col-start-1 row-start-1 flex items-center justify-between w-full gap-3 transition-opacity duration-500 opacity-0 pointer-events-none z-0">
-                        <span id="eventTitleText" class="text-[10px] sm:text-[11px] font-bold text-sky-700 dark:text-sky-400 whitespace-nowrap shrink-0">🎪 今期活動</span>
-                        <div id="eventBannersContainer" class="flex flex-row items-center justify-end gap-1.5 h-full"></div>
-                    </div>
-                    <!-- 面板 C：特選卡片 -->
-                    <div id="cardPanel" class="col-start-1 row-start-1 flex items-center justify-between w-full gap-3 transition-opacity duration-500 opacity-0 pointer-events-none z-0">
-                        <span id="cardTitleText" class="text-[10px] sm:text-[11px] font-bold text-indigo-700 dark:text-indigo-300 whitespace-nowrap shrink-0">🃏 特選卡片抽取</span>
-                        <div id="cardIconsContainer" class="flex flex-row items-center justify-end gap-1.5"></div>
-                    </div>
                 </div>
             </div>
 
@@ -477,6 +546,9 @@
         let db = null, auth = null, currentUser = null;
         let activeCrayons = [];
         
+        // 🌟 新增：Banner 滑鼠偵測變數
+        let isBannerHovered = false; 
+        
         const storageKey = 'trickcal_matrix_saved_states_iron_v26';
         let savedStates = {};
         try { savedStates = JSON.parse(localStorage.getItem(storageKey)) || {}; } catch(e) { savedStates = {}; }
@@ -516,19 +588,11 @@
         
         // 🌟 國際化智慧語系偵測
         function detectDefaultLanguage() {
-            // 1. 如果玩家之前已經手動切換過語言，永遠以玩家的選擇為最優先
             const savedLang = localStorage.getItem('user_lang');
             if (savedLang) return savedLang;
-
-            // 2. 如果是第一次來，讀取他們瀏覽器的系統語言
             const browserLang = (navigator.language || navigator.userLanguage).toLowerCase();
-
-            // 3. 判斷邏輯：
-            // 若為日文系統 -> 日文
             if (browserLang.includes('ja')) return 'ja';
-            // 若為中文系統 (zh-TW, zh-HK, zh-MO, zh-CN 等) -> 繁體中文
             if (browserLang.includes('zh')) return 'zh-TW';
-            // 其餘外國語系 (歐美、韓文、東南亞等) -> 預設顯示英文，避免他們看不懂中文介面
             return 'en';
         }
 
@@ -600,19 +664,17 @@
         function getActivePickupChars() {
             if (typeof PICKUP_SCHEDULE === 'undefined') return [];
             const now = new Date();
-            // 找出符合現在時間的所有檔期
             const active = PICKUP_SCHEDULE.find(s => {
                 const startDate = new Date(s.start);
                 const endDate = new Date(s.end);
                 return now.getTime() >= startDate.getTime() && now.getTime() <= endDate.getTime();
             });
-
-            return active ? active.chars : []; // 若沒排程則回傳空陣列
+            return active ? active.chars : [];
         }
 
         function renderPickupBanner() {
             const container = document.getElementById('pickupIconsContainer');
-            const activeChars = getActivePickupChars(); // 自動獲取當前角色
+            const activeChars = getActivePickupChars(); 
     
             if (!container || activeChars.length === 0) return;
     
@@ -637,6 +699,7 @@
                 container.appendChild(iconWrapper);
             });
         }
+
         // ------------------------------------------------------------
         // 🌟 今期活動與 Banner 輪播邏輯
         // ------------------------------------------------------------
@@ -650,7 +713,6 @@
             });
         }
 
-        // 全域變數追蹤目前是第幾個活動
         let currentEventIndex = 0;
 
         function updateEventBanner() {
@@ -658,37 +720,40 @@
             const activeEvents = getActiveEvents();
             if (!container) return;
             
-            // 初始化或更新標題
             const titleEl = document.getElementById('eventTitleText');
             if (titleEl) titleEl.innerText = t("event_title") || "🎪 今期活動";
 
-            // 如果沒有活動，清空容器並返回
             if (activeEvents.length === 0) {
                 container.innerHTML = '';
                 return;
             }
 
-            // 確保索引在範圍內 (防止活動數量減少時溢出)
             if (currentEventIndex >= activeEvents.length) currentEventIndex = 0;
 
-            const evt = activeEvents[currentEventIndex];
             const langSuffix = { "zh-TW": "ZH", "ja": "JA", "en": "EN" }[window.currentLang] || "ZH";
     
-            // 只清空並只渲染一張
             container.innerHTML = '';
     
-            const wrapper = document.createElement('div');
-            wrapper.className = "rainbow-wrapper h-7 sm:h-8 w-auto cursor-pointer shrink-0";
-            wrapper.onclick = null;
-            wrapper.style.cursor = "default";
-    
-            const imgEl = document.createElement('img');
-            imgEl.src = `event/${evt.eventId}_${langSuffix}.png`;
-            imgEl.alt = evt.eventId;
-            imgEl.className = "rainbow-content";
-    
-            wrapper.appendChild(imgEl);
-            container.appendChild(wrapper);
+            // 🌟 修正：渲染「所有」當期活動，並根據是否展開 (Hover) 決定顯示與否
+            activeEvents.forEach((evt, idx) => {
+                const wrapper = document.createElement('div');
+                wrapper.className = "rainbow-wrapper h-7 sm:h-8 w-auto cursor-pointer shrink-0 transition-all duration-300";
+                
+                // 如果沒有 Hover，只顯示當前輪播到的；如果有 Hover，顯示全部
+                if (!isBannerHovered && idx !== currentEventIndex) {
+                    wrapper.style.display = 'none';
+                } else {
+                    wrapper.style.display = 'inline-block';
+                }
+        
+                const imgEl = document.createElement('img');
+                imgEl.src = `event/${evt.eventId}_${langSuffix}.png`;
+                imgEl.alt = evt.eventId;
+                imgEl.className = "rainbow-content";
+        
+                wrapper.appendChild(imgEl);
+                container.appendChild(wrapper);
+            });
         }
 
         // ------------------------------------------------------------
@@ -717,7 +782,6 @@
             activeCards.forEach(card => {
                 const borderClass = card.type === "Artifact" ? "card-artifact" : "card-rune";
                 const iconWrapper = document.createElement('div');
-                // 帶入 pickup-sparkle 共用星星特效，並套用專屬螢光色
                 iconWrapper.className = `w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 bg-white dark:bg-gray-800 flex items-center justify-center relative pickup-sparkle shrink-0 transition-transform ${borderClass}`;
                 
                 const iconUrl = `event/${card.id}.png`;
@@ -727,7 +791,7 @@
         }
 
         // ------------------------------------------------------------
-        // 🌟 核心輪播邏輯 (特選 > 活動 > 卡片 > 活動)
+        // 🌟 核心輪播邏輯 與 滑鼠懸停展開控制
         // ------------------------------------------------------------
         let bannerRotationTimer = null;
         let rotationSequence = [];
@@ -738,16 +802,15 @@
     
             const hasPickup = getActivePickupChars().length > 0;
             const hasEvent = getActiveEvents().length > 0;
-            const hasCard = getActiveCards().length > 0; // 偵測卡片
+            const hasCard = getActiveCards().length > 0; 
     
             const displayArea = document.getElementById('bannerDisplayArea');
             const pickupPanel = document.getElementById('pickupPanel');
             const eventPanel = document.getElementById('eventPanel');
-            const cardPanel = document.getElementById('cardPanel'); // 卡片面板
+            const cardPanel = document.getElementById('cardPanel'); 
 
             if (!displayArea || !pickupPanel || !eventPanel || !cardPanel) return;
 
-            // 如果三者都沒東西，顯示維護中
             if (!hasPickup && !hasEvent && !hasCard) {
                 displayArea.style.display = 'grid';
                 const maintenanceMsg = t('maintenance_msg') !== 'maintenance_msg' ? t('maintenance_msg') : '🔧 維護更新中...';
@@ -762,19 +825,14 @@
                 cardPanel.classList.remove('hidden');
             }
 
-            // 建立您的「夾心」輪播序列
             rotationSequence = [];
-            if (hasPickup && hasEvent && hasCard) {
-                rotationSequence = ['pickup', 'event', 'card', 'event'];
-            } else if (hasPickup && hasEvent && !hasCard) {
-                rotationSequence = ['pickup', 'event'];
-            } else if (hasPickup && !hasEvent && hasCard) {
-                rotationSequence = ['pickup', 'card'];
-            } else if (!hasPickup && hasEvent && hasCard) {
-                rotationSequence = ['event', 'card'];
-            } else if (hasPickup) { rotationSequence = ['pickup']; } 
-              else if (hasEvent)  { rotationSequence = ['event']; } 
-              else if (hasCard)   { rotationSequence = ['card']; }
+            if (hasPickup && hasEvent && hasCard) { rotationSequence = ['pickup', 'event', 'card', 'event']; } 
+            else if (hasPickup && hasEvent && !hasCard) { rotationSequence = ['pickup', 'event']; } 
+            else if (hasPickup && !hasEvent && hasCard) { rotationSequence = ['pickup', 'card']; } 
+            else if (!hasPickup && hasEvent && hasCard) { rotationSequence = ['event', 'card']; } 
+            else if (hasPickup) { rotationSequence = ['pickup']; } 
+            else if (hasEvent)  { rotationSequence = ['event']; } 
+            else if (hasCard)   { rotationSequence = ['card']; }
 
             const panels = { 'pickup': pickupPanel, 'event': eventPanel, 'card': cardPanel };
 
@@ -789,12 +847,10 @@
                 });
             };
 
-            // 初始化第一幀
             currentSequenceIndex = 0;
             hideAllPanels();
             showPanel(rotationSequence[0]);
 
-            // 若只有單一項目不需輪播
             if (rotationSequence.length <= 1) return;
 
             bannerRotationTimer = setInterval(() => {
@@ -804,7 +860,6 @@
                 
                 showPanel(nextPanelId);
 
-                // 當切換到「活動」時，推動內部活動圖片的索引
                 if (nextPanelId === 'event') {
                     const activeEvents = getActiveEvents();
                     if (activeEvents.length > 0) {
@@ -813,6 +868,26 @@
                     }
                 }
             }, 5000);
+        }
+
+        // 🌟 滑鼠控制展開 (加入將所有 Panel 強制現形的機制)
+        function handleBannerHover(isHover) {
+            isBannerHovered = isHover;
+            const displayArea = document.getElementById('bannerDisplayArea');
+            
+            if (getActivePickupChars().length === 0 && getActiveEvents().length === 0 && getActiveCards().length === 0) return;
+
+            if (isHover) {
+                if (bannerRotationTimer) clearInterval(bannerRotationTimer);
+                displayArea.classList.add('banner-expanded');
+                
+                // 強制所有有資料的面板在此刻顯示
+                updateEventBanner(); 
+            } else {
+                displayArea.classList.remove('banner-expanded');
+                startBannerRotation();
+                updateEventBanner(); // 恢復隱藏非當前活動
+            }
         }
         
         function initStates() {
@@ -851,7 +926,6 @@
             const nowTime = Date.now();
 
             INITIAL_DATA.forEach(char => {
-                // 🌟 統計過濾：不計算未發布的角色
                 if (char.releaseDate && new Date(char.releaseDate).getTime() > nowTime) return;
 
                 validCharCount++;
@@ -867,7 +941,6 @@
                 });
             });
 
-            // 更新實際可用的角色數量
             document.getElementById('total_char_count').innerText = validCharCount;
             document.getElementById('owned_char_count').innerText = ownedCount;
             document.getElementById('total_used_crayon').innerText = globalUsedCrayons;
@@ -996,7 +1069,6 @@
                 const charListContainer = document.createElement('div'); charListContainer.className = "space-y-4";
 
                 pChars.forEach(char => {
-                    // 🌟 判定角色是否尚未公開
                     const isUnreleased = char.releaseDate && new Date(char.releaseDate).getTime() > nowTime;
                     
                     const charCard = document.createElement('div'); charCard.id = `char_card_${char.name}`; charCard.className = "char-card-wrapper bg-white/50 dark:bg-gray-750/50 rounded-xl border border-gray-200/60 dark:border-gray-600 flex flex-row items-stretch transition-all duration-200 overflow-hidden";
@@ -1016,12 +1088,9 @@
                     const borderColorClass = personalityBorderColors[char.personality] || "border-gray-300"; 
                     const isOwned = savedStates['owned_' + char.name]; 
 
-                    // 🌟 新增：讀取 data_skills.js 中的 CHAR_BACKGROUNDS，並轉為行內樣式 (Inline Style)
                     const bgUrl = (typeof CHAR_BACKGROUNDS !== 'undefined' && CHAR_BACKGROUNDS[char.race]) ? CHAR_BACKGROUNDS[char.race] : "";
-                    // 使用 background-size: cover 讓花紋自適應縮放填滿整個頭像框
                     const bgInlineStyle = bgUrl ? `background-image: url('${bgUrl}'); background-size: cover; background-position: center;` : "background-color: #fef3c7;";
                     
-                    // 根據狀態設定頭像與名稱
                     const avatarClass = isOwned && !isUnreleased ? "" : "unowned-avatar";
                     const displayName = isUnreleased ? "???" : t(char.name);
                     const hoverImgHtml = isUnreleased ? "" : `<img src="${hoverPath}" class="avatar-alt" alt="${displayName}" onerror="this.style.display='none';" loading="lazy">`;
@@ -1046,7 +1115,6 @@
                             <div class="flex items-center hover-scale cursor-help"><img src="${jobPath}" alt="${t(char.job)}" title="${t('stats_job')} ${t(char.job)}" onerror="this.style.display='none'; document.getElementById('fall_j_${char.name}').classList.remove('hidden');" class="w-4 h-4 object-contain opacity-85" loading="lazy"><span id="fall_j_${char.name}" class="hidden bg-purple-50 dark:bg-purple-900 text-purple-700 dark:text-purple-300 px-1 rounded text-[9px] font-medium whitespace-nowrap">${t(char.job)}</span></div>
                         </div>`;
 
-                    // 🌟 修改：為容器加入 style="${bgInlineStyle}"，同時把先前的背景色 class 拿掉
                     nameCol.innerHTML = `
                         <div class="relative shrink-0 w-12 h-12" ${isUnreleased ? '' : `onclick="toggleOwnership('${char.name}')"`}>
                             <div id="avatar_container_${char.name}" class="char-avatar-container w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-inner ${avatarClass} ${isUnreleased ? 'pointer-events-none' : ''}" style="${bgInlineStyle}">
@@ -1064,15 +1132,12 @@
 
                     const layersContainer = document.createElement('div'); layersContainer.className = "flex flex-col sm:flex-row gap-3 w-full md:flex-1 relative";
                     
-                    // 🌟 如果未公開，直接蓋上鎖定畫面
                     if (isUnreleased) {
                         const releaseDateObj = new Date(char.releaseDate);
                         
-                        // 根據語系調整時間格式
                         const localeFormat = window.currentLang === 'en' ? 'en-US' : (window.currentLang === 'ja' ? 'ja-JP' : 'zh-TW');
                         const dateStr = releaseDateObj.toLocaleString(localeFormat, { month: 'numeric', day: 'numeric', hour: '2-digit', minute:'2-digit' });
                         
-                        // 多國語系翻譯字典
                         const localComingSoon = { "zh-TW": "即將登場", "ja": "近日登場", "en": "Coming Soon" }[window.currentLang] || "即將登場";
                         const localUnlock = { "zh-TW": "解禁", "ja": "解禁", "en": "Unlocks" }[window.currentLang] || "解禁";
                         
@@ -1223,7 +1288,7 @@
 
             const container = document.getElementById('topRunnerContainer'); const track = document.getElementById('runnerTrack');
             const bossContainer = document.getElementById('bossRunnerContainer'); const bossTrack = document.getElementById('bossTrack');
-            const isMobile = false; // 已被阻擋，這裡必定是 false
+            const isMobile = false; 
             
             const trackRightOffset = '-110px'; const bossRightOffset = '-410px'; 
             track.style.right = trackRightOffset; bossTrack.style.right = bossRightOffset; 
