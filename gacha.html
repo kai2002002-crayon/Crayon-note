@@ -62,6 +62,29 @@
         }
         .flash-gold { animation: flashGold 0.5s ease-out forwards; }
 
+        /* 基礎彈出動畫 */
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .animate-pop { 
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
+            opacity: 0; 
+        }
+
+        /* 特選角色：誇張彈出動畫 (旋轉 + 縮放) */
+        @keyframes popInExaggerated {
+            0% { transform: scale(0) rotate(-15deg); opacity: 0; }
+            50% { transform: scale(1.25) rotate(10deg); opacity: 1; filter: brightness(1.2); }
+            75% { transform: scale(0.9) rotate(-5deg); opacity: 1; }
+            100% { transform: scale(1.05) rotate(0deg); opacity: 1; }
+        }
+        .animate-pop-exaggerated { 
+            animation: popInExaggerated 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
+            opacity: 0; 
+        }
+
         /* 按鈕樣式 */
         .btn-gacha { transition: transform 0.1s; }
         .btn-gacha:active { transform: scale(0.95); }
@@ -84,13 +107,11 @@
 
         <section class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-2xl p-4 shadow border-2 border-amber-200/80 dark:border-gray-700">
             <h2 class="text-sm font-bold text-gray-500 dark:text-gray-400 mb-3">📍 選擇招募池</h2>
-            <div id="poolButtons" class="flex flex-wrap gap-2 mb-3">
-                </div>
+            <div id="poolButtons" class="flex flex-wrap gap-2 mb-3"></div>
             
             <div id="personalitySubMenu" class="hidden border-t border-dashed border-gray-300 dark:border-gray-600 pt-3 mt-1">
                 <span class="text-xs font-bold text-gray-500 dark:text-gray-400 mr-2">🔮 指定性格：</span>
-                <div class="inline-flex flex-wrap gap-2" id="personalityButtons">
-                    </div>
+                <div class="inline-flex flex-wrap gap-2" id="personalityButtons"></div>
             </div>
         </section>
 
@@ -109,144 +130,118 @@
 
         <section class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-2xl p-4 shadow border-2 border-gray-200/80 dark:border-gray-700">
             <h3 class="text-sm font-bold text-gray-500 dark:text-gray-400 mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">📜 招募紀錄</h3>
-            <div id="historyArea" class="space-y-4 max-h-[500px] overflow-y-auto pr-2">
-                </div>
+            <div id="historyArea" class="space-y-4 max-h-[500px] overflow-y-auto pr-2"></div>
         </section>
 
     </div>
 
     <script>
+        // ==========================
+        // 系統與 Firebase 初始化
+        // ==========================
+        const firebaseConfig = { apiKey: "AIzaSyDhv8D2pY_0M56UJrDTQw0RGPHA-BkXU8Y", authDomain: "crayon-note.firebaseapp.com", projectId: "crayon-note", storageBucket: "crayon-note.firebasestorage.app", messagingSenderId: "210614088940", appId: "1:210614088940:web:7addbdc7c466eeb05421c9", measurementId: "G-M1EJPE12TE" };
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
 
-// 初始化 Firebase (請確保使用與 index.html 相同的設定)
-const firebaseConfig = { apiKey: "AIzaSyDhv8D2pY_0M56UJrDTQw0RGPHA-BkXU8Y", authDomain: "crayon-note.firebaseapp.com", projectId: "crayon-note", storageBucket: "crayon-note.firebasestorage.app", messagingSenderId: "210614088940", appId: "1:210614088940:web:7addbdc7c466eeb05421c9", measurementId: "G-M1EJPE12TE" };
-if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-const auth = firebase.auth();
+        let currentUser = null;
 
-let currentUser = null;
-
-// 監聽登入狀態
-auth.onAuthStateChanged(user => {
-    currentUser = user;
-    if (user) {
-        loadHistoryFromCloud(); // 登入後自動讀取歷史紀錄
-    }
-});
-
-// 保存紀錄到 Firebase
-function saveHistoryToCloud(record) {
-    if (!currentUser) return; // 未登入則不存雲端
-    db.collection("gacha_history").doc(currentUser.uid).update({
-        logs: firebase.firestore.FieldValue.arrayUnion(record)
-    }).catch(() => {
-        // 如果該用戶還沒有紀錄檔，改用 set 建立
-        db.collection("gacha_history").doc(currentUser.uid).set({
-            logs: [record]
+        auth.onAuthStateChanged(user => {
+            currentUser = user;
+            if (user) { loadHistoryFromCloud(); }
         });
-    });
-}
 
-// 讀取紀錄 (請在頁面載入時呼叫)
-function loadHistoryFromCloud() {
-    if (!currentUser) return;
-    db.collection("gacha_history").doc(currentUser.uid).get().then(doc => {
-        if (doc.exists) {
-            const history = doc.data().logs;
-            // 這裡將歷史紀錄 render 到畫面上
-            renderHistory(history);
+        function saveHistoryToCloud(record) {
+            if (!currentUser) return;
+            db.collection("gacha_history").doc(currentUser.uid).update({
+                logs: firebase.firestore.FieldValue.arrayUnion(record)
+            }).catch(() => {
+                db.collection("gacha_history").doc(currentUser.uid).set({ logs: [record] });
+            });
         }
-    });
-}
-        // 變數設定
+
+        function loadHistoryFromCloud() {
+            if (!currentUser) return;
+            db.collection("gacha_history").doc(currentUser.uid).get().then(doc => {
+                if (doc.exists && doc.data().logs) {
+                    renderHistory(doc.data().logs);
+                }
+            }).catch(err => console.error("讀取歷史紀錄失敗:", err));
+        }
+
+        // ==========================
+        // 資料設定與 UI 初始化
+        // ==========================
         let currentPool = { type: 'normal', rateUpChars: [], personality: null, name: '普通招募' };
         const personalities = ["天真", "冷靜", "狂亂", "活潑", "憂鬱"];
         
-        // 解析遊戲資料，精準讀取 data_core.js 內的星數與艾爾丁設定
+        const personalityBorderColors = { "天真": "border-green-500", "冷靜": "border-blue-500", "狂亂": "border-red-500", "活潑": "border-yellow-400", "憂鬱": "border-purple-500" };
+        const personalityShadows = { 
+            "天真": "shadow-[0_0_15px_rgba(34,197,94,0.85)]", 
+            "冷靜": "shadow-[0_0_15px_rgba(59,130,246,0.85)]", 
+            "狂亂": "shadow-[0_0_15px_rgba(239,68,68,0.85)]", 
+            "活潑": "shadow-[0_0_15px_rgba(250,204,21,0.85)]", 
+            "憂鬱": "shadow-[0_0_15px_rgba(168,85,247,0.85)]" 
+        };
+
         const validChars = INITIAL_DATA.filter(c => !c.releaseDate || new Date(c.releaseDate).getTime() < Date.now()).map(c => {
-            
-            // 讀取星數：如果是數字字串就轉換，如果是特殊字眼(如 Beni) 或沒設定，先預設當作 1 星防呆
             let starNum = 1;
             if (typeof GRADE_MAP !== 'undefined' && GRADE_MAP[c.name]) {
                 const parsedStar = parseInt(GRADE_MAP[c.name]);
                 if (!isNaN(parsedStar)) starNum = parsedStar;
             }
-
-            // 判斷艾爾丁：直接檢查名字是否在 ELDAIN_LIST 內
-            // (稍微做個容錯：名單裡寫 '羽依'，GRADE_MAP 裡寫 '羽伊'，幫您兩邊都判定進去)
             let isEldainChar = false;
             if (typeof ELDAIN_LIST !== 'undefined') {
                 isEldainChar = ELDAIN_LIST.includes(c.name) || (c.name === '羽伊' && ELDAIN_LIST.includes('羽依'));
             }
-
-            return {
-                ...c,
-                star: starNum,
-                isEldain: isEldainChar
-            }
+            return { ...c, star: starNum, isEldain: isEldainChar };
         });
 
-        const personalityBorderColors = { "天真": "border-green-500", "冷靜": "border-blue-500", "狂亂": "border-red-500", "活潑": "border-yellow-400", "憂鬱": "border-purple-500" };
-
-        // 1. 初始化按鈕介面
         function initUI() {
             const poolBtnContainer = document.getElementById('poolButtons');
             const pBtnContainer = document.getElementById('personalityButtons');
             poolBtnContainer.innerHTML = '';
             pBtnContainer.innerHTML = '';
 
-            // 尋找目前所有的 Rate UP 角色 (過濾當下時間符合的檔期)
             let currentRateUps = [];
             if (typeof PICKUP_SCHEDULE !== 'undefined') {
                 const now = new Date().getTime();
                 PICKUP_SCHEDULE.forEach(s => {
-                    const startTime = new Date(s.start).getTime();
-                    const endTime = new Date(s.end).getTime();
-                    // 只要現在時間落在 start 與 end 之間，就把角色加入名單
-                    if (now >= startTime && now <= endTime) {
+                    if (now >= new Date(s.start).getTime() && now <= new Date(s.end).getTime()) {
                         currentRateUps.push(...s.chars);
                     }
                 });
-                // 去除重複的角色 (防呆機制)
                 currentRateUps = [...new Set(currentRateUps)];
             }
 
             let firstBtn = null;
 
-            // 動態生成特選按鈕 (每個角色獨立一個池子)
             currentRateUps.forEach(charName => {
                 const btn = document.createElement('button');
                 btn.className = 'pool-btn px-3 py-1.5 rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 font-bold text-sm text-gray-700 dark:text-gray-200';
                 btn.innerText = `🎯 特選招募 - ${charName}`;
                 btn.onclick = () => setPool('rateup', [charName], null, btn.innerText, btn);
                 poolBtnContainer.appendChild(btn);
-                
-                // 記錄第一個建立的按鈕，用來當作預設選項
                 if (!firstBtn) firstBtn = { btn, type: 'rateup', args: [[charName], null, btn.innerText] };
             });
 
-            // 普通招募按鈕 (常設)
             const normalBtn = document.createElement('button');
             normalBtn.className = 'pool-btn px-3 py-1.5 rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 font-bold text-sm text-gray-700 dark:text-gray-200';
             normalBtn.innerText = `🌟 普通招募`;
             normalBtn.onclick = () => setPool('normal', [], null, normalBtn.innerText, normalBtn);
             poolBtnContainer.appendChild(normalBtn);
-            
-            // 如果沒有特選池，就把普通招募當作預設選項
             if (!firstBtn) firstBtn = { btn: normalBtn, type: 'normal', args: [[], null, normalBtn.innerText] };
 
-            // 性格選擇招募按鈕 (常設)
             const pPoolBtn = document.createElement('button');
             pPoolBtn.className = 'pool-btn px-3 py-1.5 rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 font-bold text-sm text-gray-700 dark:text-gray-200';
             pPoolBtn.innerText = `🔮 性格選擇招募`;
             pPoolBtn.onclick = () => {
                 document.getElementById('personalitySubMenu').classList.remove('hidden');
-                // 點擊主按鈕時，預設選中第一個性格
                 setPool('personality', [], personalities[0], `🔮 性格選擇招募 - ${personalities[0]}`, pPoolBtn);
                 updatePersonalityBtns(personalities[0]);
             };
             poolBtnContainer.appendChild(pPoolBtn);
 
-            // 性格細項按鈕
             personalities.forEach(p => {
                 const btn = document.createElement('button');
                 btn.className = 'p-sub-btn px-2 py-1 rounded border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-xs font-bold';
@@ -258,23 +253,14 @@ function loadHistoryFromCloud() {
                 pBtnContainer.appendChild(btn);
             });
 
-            // 進入網頁時，預設自動點擊選中「當期第一個特選池」或「普通招募」
-            if (firstBtn) {
-                setPool(firstBtn.type, firstBtn.args[0], firstBtn.args[1], firstBtn.args[2], firstBtn.btn);
-            }
+            if (firstBtn) { setPool(firstBtn.type, firstBtn.args[0], firstBtn.args[1], firstBtn.args[2], firstBtn.btn); }
         }
 
-        // 2. 切換招募池
         function setPool(type, rateUpChars, personality, poolName, activeElement) {
             currentPool = { type, rateUpChars, personality, name: poolName };
-            
-            // 更新 UI 狀態
             document.querySelectorAll('.pool-btn').forEach(b => b.classList.remove('active'));
             if (activeElement) activeElement.classList.add('active');
-
-            if (type !== 'personality') {
-                document.getElementById('personalitySubMenu').classList.add('hidden');
-            }
+            if (type !== 'personality') document.getElementById('personalitySubMenu').classList.add('hidden');
         }
 
         function updatePersonalityBtns(selectedP) {
@@ -289,14 +275,15 @@ function loadHistoryFromCloud() {
             });
         }
 
-        // 3. 核心機率計算引擎
+        // ==========================
+        // 核心機率計算引擎
+        // ==========================
         function getGachaPool(isGuaranteed) {
             let p1 = isGuaranteed ? 0 : 0.76;
             let p2 = isGuaranteed ? 0.97 : 0.21;
             let p3 = 0.03;
             let eldainBase = 0.00036;
 
-            // 依照性格過濾名單
             let availableChars = validChars;
             if (currentPool.type === 'personality') {
                 availableChars = validChars.filter(c => c.personality === currentPool.personality);
@@ -308,58 +295,68 @@ function loadHistoryFromCloud() {
 
             let weightedPool = [];
 
-            // 分配 1 星機率
             if (stars1.length > 0) {
                 let w = p1 / stars1.length;
                 stars1.forEach(c => weightedPool.push({ char: c, weight: w, isRateUp: false }));
             }
-            // 分配 2 星機率
             if (stars2.length > 0) {
                 let w = p2 / stars2.length;
                 stars2.forEach(c => weightedPool.push({ char: c, weight: w, isRateUp: false }));
             }
-            // 分配 3 星機率 (含艾爾丁邏輯)
+
             if (stars3.length > 0) {
                 let allEldains = stars3.filter(c => c.isEldain);
                 let normal3s = stars3.filter(c => !c.isEldain);
                 
-                let rateUpEldains = allEldains.filter(c => currentPool.rateUpChars.includes(c.name));
-                let rateUpNormals = normal3s.filter(c => currentPool.rateUpChars.includes(c.name));
+                // 獨立處理「性格選擇招募」的三星機率
+                if (currentPool.type === 'personality') {
+                    let eldainTotalWeight = 0;
+                    if (allEldains.length > 0) {
+                        eldainTotalWeight = 0.00032; // 該性格內的所有艾爾丁平分 0.032%
+                        let w = eldainTotalWeight / allEldains.length;
+                        allEldains.forEach(c => weightedPool.push({ char: c, weight: w, isRateUp: false }));
+                    }
 
-                // 處理艾爾丁
-                if (rateUpEldains.length > 0) {
-                    // 所有艾爾丁機率集中給 RateUp 艾爾丁，並加倍
-                    let totalEldainProb = allEldains.length * eldainBase;
-                    let targetWeight = (totalEldainProb * 2) / rateUpEldains.length;
-                    rateUpEldains.forEach(c => weightedPool.push({ char: c, weight: targetWeight, isRateUp: true }));
-                    // 其他非 Rate Up 艾爾丁機率為 0，不加入池中
-                } else {
-                    // 正常給予艾爾丁基礎機率
-                    allEldains.forEach(c => weightedPool.push({ char: c, weight: eldainBase, isRateUp: false }));
-                }
-
-                // 處理一般三星
-                let currentTotal3Weight = weightedPool.filter(p => p.char.star === 3).reduce((sum, p) => sum + p.weight, 0);
-                let remaining3Prob = p3 - currentTotal3Weight;
-
-                if (normal3s.length > 0) {
-                    if (rateUpNormals.length > 0) {
-                        let baseNormalWeight = remaining3Prob / normal3s.length;
-                        let targetRateUpWeight = baseNormalWeight * 2;
-                        
-                        let totalRateUpWeight = targetRateUpWeight * rateUpNormals.length;
-                        let otherNormalWeight = Math.max(0, (remaining3Prob - totalRateUpWeight) / (normal3s.length - rateUpNormals.length));
-
-                        normal3s.forEach(c => {
-                            if (currentPool.rateUpChars.includes(c.name)) {
-                                weightedPool.push({ char: c, weight: targetRateUpWeight, isRateUp: true });
-                            } else {
-                                weightedPool.push({ char: c, weight: otherNormalWeight, isRateUp: false });
-                            }
-                        });
-                    } else {
+                    let remaining3Prob = p3 - eldainTotalWeight;
+                    if (normal3s.length > 0) {
                         let w = remaining3Prob / normal3s.length;
                         normal3s.forEach(c => weightedPool.push({ char: c, weight: w, isRateUp: false }));
+                    }
+                } 
+                // 處理「特選池」與「普通池」
+                else {
+                    let rateUpEldains = allEldains.filter(c => currentPool.rateUpChars.includes(c.name));
+                    let rateUpNormals = normal3s.filter(c => currentPool.rateUpChars.includes(c.name));
+
+                    if (rateUpEldains.length > 0) {
+                        let totalEldainProb = allEldains.length * eldainBase;
+                        let targetWeight = (totalEldainProb * 2) / rateUpEldains.length;
+                        rateUpEldains.forEach(c => weightedPool.push({ char: c, weight: targetWeight, isRateUp: true }));
+                    } else {
+                        allEldains.forEach(c => weightedPool.push({ char: c, weight: eldainBase, isRateUp: false }));
+                    }
+
+                    let currentTotal3Weight = weightedPool.filter(p => p.char.star === 3).reduce((sum, p) => sum + p.weight, 0);
+                    let remaining3Prob = p3 - currentTotal3Weight;
+
+                    if (normal3s.length > 0) {
+                        if (rateUpNormals.length > 0) {
+                            let baseNormalWeight = remaining3Prob / normal3s.length;
+                            let targetRateUpWeight = baseNormalWeight * 2;
+                            let totalRateUpWeight = targetRateUpWeight * rateUpNormals.length;
+                            let otherNormalWeight = Math.max(0, (remaining3Prob - totalRateUpWeight) / (normal3s.length - rateUpNormals.length));
+
+                            normal3s.forEach(c => {
+                                if (currentPool.rateUpChars.includes(c.name)) {
+                                    weightedPool.push({ char: c, weight: targetRateUpWeight, isRateUp: true });
+                                } else {
+                                    weightedPool.push({ char: c, weight: otherNormalWeight, isRateUp: false });
+                                }
+                            });
+                        } else {
+                            let w = remaining3Prob / normal3s.length;
+                            normal3s.forEach(c => weightedPool.push({ char: c, weight: w, isRateUp: false }));
+                        }
                     }
                 }
             }
@@ -374,15 +371,12 @@ function loadHistoryFromCloud() {
                 accum += pool[i].weight;
                 if (rand <= accum) return pool[i];
             }
-            // 容錯防呆，回傳最後一隻
             return pool[pool.length - 1];
         }
 
-        // 4. 執行招募
         function performGacha(times) {
             let results = [];
             for (let i = 0; i < times; i++) {
-                // 第10抽必中2星以上
                 let isGuaranteed = (times === 10 && i === 9);
                 results.push(pullOne(isGuaranteed));
             }
@@ -390,21 +384,30 @@ function loadHistoryFromCloud() {
             addToHistory(results, currentPool.name);
         }
 
-        // 5. 渲染頭像 DOM
-        function createAvatarDOM(resultObj) {
+        // ==========================
+        // UI 渲染與動畫
+        // ==========================
+        function createAvatarDOM(resultObj, index = 0, isHistory = false) {
             const char = resultObj.char;
             const isRateUp = resultObj.isRateUp;
+            const is3StarNormal = (char.star === 3 && !isRateUp);
             
             const avatarPath = typeof IMAGE_MAP !== 'undefined' && IMAGE_MAP[`avatar_${char.name}`] ? IMAGE_MAP[`avatar_${char.name}`] : ""; 
             const bgUrl = (typeof CHAR_BACKGROUNDS !== 'undefined' && CHAR_BACKGROUNDS[char.race]) ? CHAR_BACKGROUNDS[char.race] : "";
             const bgInlineStyle = bgUrl ? `background-image: url('${bgUrl}'); background-size: cover; background-position: center;` : "background-color: #fef3c7;";
             const borderColorClass = personalityBorderColors[char.personality] || "border-gray-300";
             
-            const sizeClass = "w-16 h-16 sm:w-20 sm:h-20"; // 比 index.html 的略大
+            // 非特選三星性格發光
+            const glowClass = (is3StarNormal && !isHistory) ? (personalityShadows[char.personality] || "shadow-[0_0_15px_rgba(255,255,255,0.8)]") : "shadow-inner";
+            
+            // 動畫設定
+            const animClass = isHistory ? "" : (isRateUp ? "animate-pop-exaggerated" : "animate-pop");
+            const animStyle = isHistory ? "" : `animation-delay: ${index * 0.12}s;`;
+            const sizeClass = isHistory ? "w-10 h-10" : "w-16 h-16 sm:w-20 sm:h-20"; 
 
             let avatarHTML = `
                 <div class="relative shrink-0 ${sizeClass}">
-                    <div class="char-avatar-container ${sizeClass} rounded-lg border-[3px] ${borderColorClass} shadow-inner bg-white" style="${bgInlineStyle}">
+                    <div class="char-avatar-container ${sizeClass} rounded-lg border-[3px] ${borderColorClass} ${glowClass} bg-white transition-all" style="${bgInlineStyle}">
                         <img src="${avatarPath}" alt="${char.name}" onerror="this.style.display='none';">
                     </div>
                     <div class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 flex gap-[1px]">
@@ -414,10 +417,9 @@ function loadHistoryFromCloud() {
             `;
 
             if (isRateUp) {
-                // 如果是 Rate Up，包裝彩虹外框
                 return `
-                    <div class="flex flex-col items-center gap-2">
-                        <div class="rainbow-wrapper p-[3px] rounded-xl">
+                    <div class="flex flex-col items-center gap-2 ${animClass}" style="${animStyle}">
+                        <div class="rainbow-wrapper p-[3px] rounded-xl transform scale-110">
                             <div class="rainbow-content bg-white">
                                 ${avatarHTML}
                             </div>
@@ -428,86 +430,75 @@ function loadHistoryFromCloud() {
             }
 
             return `
-                <div class="flex flex-col items-center gap-2 pt-[3px]">
+                <div class="flex flex-col items-center gap-2 pt-[3px] ${animClass}" style="${animStyle}">
                     ${avatarHTML}
                     <span class="text-[10px] font-bold text-gray-500 bg-gray-100 dark:bg-gray-800 px-1 rounded">${char.name}</span>
                 </div>
             `;
         }
 
-        // 6. 渲染結果區塊
         function renderResultArea(results) {
             const area = document.getElementById('resultArea');
             area.innerHTML = '';
-
             const container = document.createElement('div');
             
-            // 是否有抽中 3 星，決定閃光特效
             const has3Star = results.some(r => r.char.star === 3);
             if (has3Star) area.classList.add('flash-gold');
             else area.classList.remove('flash-gold');
 
-            if (results.length === 1) {
-                container.className = 'flex justify-center items-center w-full';
-            } else {
-                container.className = 'grid grid-cols-5 gap-4 sm:gap-6 justify-items-center w-full max-w-2xl';
-            }
+            container.className = results.length === 1 ? 'flex justify-center items-center w-full min-h-[120px]' : 'grid grid-cols-5 gap-4 sm:gap-6 justify-items-center w-full max-w-2xl min-h-[220px]';
 
-            results.forEach(r => {
+            results.forEach((r, idx) => {
                 const domWrapper = document.createElement('div');
-                domWrapper.innerHTML = createAvatarDOM(r);
+                domWrapper.innerHTML = createAvatarDOM(r, idx, false);
                 container.appendChild(domWrapper);
             });
 
             area.appendChild(container);
         }
 
-        // 7. 新增至歷史紀錄
         function addToHistory(results, poolName) {
-    	    const record = {
-        	poolName: poolName,
-        	results: results.map(r => ({ name: r.char.name, star: r.char.star })),
-        	timestamp: new Date().toISOString()
-    	    };
+            const record = {
+                poolName: poolName,
+                results: results.map(r => ({ name: r.char.name, star: r.char.star })),
+                timestamp: new Date().toISOString()
+            };
+            renderSingleHistoryEntry(record); 
+            saveHistoryToCloud(record);
+        }
 
-    	// 1. 顯示在畫面上
-    	renderSingleHistoryEntry(record); 
+        function renderHistory(historyArray) {
+            const historyArea = document.getElementById('historyArea');
+            historyArea.innerHTML = '';
+            historyArray.forEach(record => {
+                renderSingleHistoryEntry(record);
+            });
+        }
+
+        function renderSingleHistoryEntry(record) {
+            const historyArea = document.getElementById('historyArea');
+            const logEntry = document.createElement('div');
+            logEntry.className = 'relative p-3 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex flex-col gap-2';
     
-    	// 2. 上傳雲端
-    	saveHistoryToCloud(record);
-    }
+            const poolBadge = document.createElement('div');
+            poolBadge.className = 'text-[10px] font-bold text-white bg-gray-500 rounded px-1.5 py-0.5 self-start shadow-sm';
+            poolBadge.innerText = record.poolName;
 
-	function renderSingleHistoryEntry(record) {
-    	    const historyArea = document.getElementById('historyArea');
-    
-    	    const logEntry = document.createElement('div');
-    	    logEntry.className = 'relative p-3 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex flex-col gap-2';
-    
-    	    const poolBadge = document.createElement('div');
-    	    poolBadge.className = 'text-[10px] font-bold text-white bg-gray-500 rounded px-1.5 py-0.5 self-start shadow-sm';
-    	    poolBadge.innerText = record.poolName;
+            const iconRow = document.createElement('div');
+            iconRow.className = 'flex flex-wrap gap-2';
 
-    	    const iconRow = document.createElement('div');
-    	    iconRow.className = 'flex flex-wrap gap-2';
+            record.results.forEach(res => {
+                const domWrapper = document.createElement('div');
+                const mockResult = { char: { ...validChars.find(c => c.name === res.name), star: res.star }, isRateUp: false };
+                domWrapper.innerHTML = createAvatarDOM(mockResult, 0, true);
+                iconRow.appendChild(domWrapper);
+            });
 
-    	    // 這裡要注意：如果 record 是從雲端讀回來的，results 裡可能只有 name 和 star，
-    	    // 沒有完整的 char 物件，所以這裡可能需要簡單調整一下 createAvatarDOM 的讀取方式，
-    	    // 或者我們在 render 時重新匹配一下 INITIAL_DATA。
-    	    record.results.forEach(res => {
-        	    const domWrapper = document.createElement('div');
-        	    // 如果是雲端紀錄，res 只有 {name, star}
-        	    // 我們這裡模擬一個完整的 result 物件給 createAvatarDOM
-        	    const mockResult = { char: { ...validChars.find(c => c.name === res.name), star: res.star }, isRateUp: false };
-        	    domWrapper.innerHTML = createAvatarDOM(mockResult).replace(/w-16 h-16 sm:w-20 sm:h-20/g, 'w-10 h-10');
-        	    iconRow.appendChild(domWrapper);
-    	    });
+            logEntry.appendChild(poolBadge);
+            logEntry.appendChild(iconRow);
+            historyArea.prepend(logEntry);
+        }
 
-    	    logEntry.appendChild(poolBadge);
-    	    logEntry.appendChild(iconRow);
-    	    historyArea.prepend(logEntry);
-	}
-
-        // 啟動初始化
         window.addEventListener('load', () => {
             initUI();
         });
