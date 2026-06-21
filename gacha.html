@@ -98,9 +98,10 @@
         
         <header class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-2xl p-4 sm:p-6 shadow border-2 border-amber-200/80 dark:border-gray-700 flex flex-col sm:flex-row justify-between items-center gap-4">
             <h1 class="text-2xl sm:text-3xl font-bold text-amber-900 dark:text-amber-400 flex items-center gap-2">
-                ✨ 嘟嘟臉角色招募模擬器
+                <img src="https://i.postimg.cc/sDstHDN1/Aside-Skill-Rim-3.png" alt="RimIcon" class="h-8 sm:h-10 w-auto object-contain drop-shadow-sm">
+                嘟嘟臉角色招募模擬器
             </h1>
-            <button onclick="window.close()" class="px-4 py-1.5 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg text-sm font-bold transition-colors">
+            <button onclick="window.close()" class="px-4 py-1.5 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg text-sm font-bold transition-colors shrink-0">
                 返回記事本
             </button>
         </header>
@@ -115,12 +116,14 @@
             </div>
         </section>
 
-        <section class="flex justify-center gap-4 py-4">
-            <button onclick="performGacha(1)" class="btn-gacha px-8 py-3 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-xl shadow-lg border-b-4 border-blue-700 text-lg flex items-center gap-2">
-                🎟️ 1次招募
+        <section class="flex flex-wrap justify-center gap-4 py-4">
+            <button onclick="performGacha(1)" class="btn-gacha px-6 sm:px-8 py-3 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-xl shadow-lg border-b-4 border-blue-700 text-base sm:text-lg flex items-center gap-2">
+                <img id="iconGacha1" src="https://i.postimg.cc/q68rkhcZ/Icon-Gacha-Ticket-Hero.png" alt="Ticket" class="w-6 h-6 sm:w-7 sm:h-7 object-contain drop-shadow-md">
+                1次招募
             </button>
-            <button onclick="performGacha(10)" class="btn-gacha px-8 py-3 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl shadow-lg border-b-4 border-amber-700 text-lg flex items-center gap-2">
-                🎫 10次招募
+            <button onclick="performGacha(10)" class="btn-gacha px-6 sm:px-8 py-3 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl shadow-lg border-b-4 border-amber-700 text-base sm:text-lg flex items-center gap-2">
+                <img id="iconGacha10" src="https://i.postimg.cc/QKpDX9g4/Icon-Gacha-Ticket-Hero-10.png" alt="Ticket 10" class="w-6 h-6 sm:w-7 sm:h-7 object-contain drop-shadow-md">
+                10次招募
             </button>
         </section>
 
@@ -261,6 +264,19 @@
             document.querySelectorAll('.pool-btn').forEach(b => b.classList.remove('active'));
             if (activeElement) activeElement.classList.add('active');
             if (type !== 'personality') document.getElementById('personalitySubMenu').classList.add('hidden');
+
+            // 🌟 更新招募按鈕的 Icon
+            const icon1 = document.getElementById('iconGacha1');
+            const icon10 = document.getElementById('iconGacha10');
+            if (icon1 && icon10) {
+                if (type === 'personality') {
+                    icon1.src = 'https://i.postimg.cc/7Jg4xG1B/Icon-Gacha-Personality.png';
+                    icon10.src = 'https://i.postimg.cc/nsGjRr96/Icon-Gacha-Personality-10.png';
+                } else {
+                    icon1.src = 'https://i.postimg.cc/q68rkhcZ/Icon-Gacha-Ticket-Hero.png';
+                    icon10.src = 'https://i.postimg.cc/QKpDX9g4/Icon-Gacha-Ticket-Hero-10.png';
+                }
+            }
         }
 
         function updatePersonalityBtns(selectedP) {
