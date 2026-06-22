@@ -1645,7 +1645,7 @@
             // 啟動 Firebase
             try {
                 if (typeof firebase !== 'undefined') {
-                    const firebaseConfig = { apiKey: "AIzaSyDhv8D2pY_0M56UJrDTQw0RGPHA-BkXU8Y", authDomain: "crayon-note.firebaseapp.com", projectId: "crayon-note", storageBucket: "crayon-note.firebasestorage.app", messagingSenderId: "210614088940", appId: "1:210614088940:web:7addbdc7c466eeb05421c9", measurementId: "G-M1EJPE12TE" };
+                    const firebaseConfig = { apiKey: "AIzaSyDqJ1MpoyIBB0YJZu5P7nHt81nOyRlojfM", authDomain: "crayon-note.firebaseapp.com", projectId: "crayon-note", storageBucket: "crayon-note.firebasestorage.app", messagingSenderId: "210614088940", appId: "1:210614088940:web:7addbdc7c466eeb05421c9", measurementId: "G-M1EJPE12TE" };
                     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig); else firebase.app(); 
                     db = firebase.firestore(); auth = firebase.auth(); updateVisitCount();
                     auth.onAuthStateChanged(user => {
