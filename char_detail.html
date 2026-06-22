@@ -1340,11 +1340,11 @@
             const container = document.getElementById('topMiniSpineContainer');
             if (!container) return;
 
-            // 設定容器樣式 (穿透且固定尺寸)
+            // 🌟 調整點 1：將尺寸從 120px 改為 90px (原本的 75%)
             container.style.pointerEvents = "none";
             container.style.display = 'block';
-            container.style.height = '120px'; 
-            container.style.width = '120px';  
+            container.style.height = '90px'; 
+            container.style.width = '90px';  
             container.style.position = "relative";
             container.style.zIndex = "99999"; 
 
@@ -1366,26 +1366,18 @@
                 skelUrl: "./Minimi.skel.bytes", 
                 atlasUrl: "./Minimi.atlas.txt",
                 
-                // 🌟 破案關鍵 1：像技能小人一樣，直接在初始設定就綁定 Skin
-                // 這樣 Spine 算第一幀大小時才不會抓到 0x0 的空骨架
                 skin: skinName, 
-                
-                // 🌟 破案關鍵 2：直接在初始設定告訴它要播什麼動畫
                 animation: "Idle",
-
                 showControls: false, 
                 showLoading: false, 
                 backgroundColor: "#00000000",
                 alpha: true,
                 premultipliedAlpha: false,
-                
-                // 🌟 破案關鍵 3：給予安全的鏡頭範圍
                 viewport: { x: -250, y: 0, width: 500, height: 500 },
 
                 success: (player) => {
-                    console.log("✅ 超迷你 Spine 載入成功！");
+                    console.log("✅ 超迷你 Spine 載入成功！已套用 0.5 倍速與縮小比例");
                     
-                    // 🌟 破案關鍵 4：完美複製你寫技能小人的 Canvas 強制展延寫法
                     const canvas = container.querySelector('canvas');
                     if (canvas) {
                         canvas.style.width = '100%';
@@ -1394,7 +1386,6 @@
                         canvas.style.zIndex = '99999';
                     }
 
-                    // 防呆機制：萬一這個角色的待機動作不叫大寫的 Idle，我們在這邊修正
                     const anims = player.skeleton.data.animations.map(a => a.name);
                     if (!anims.includes("Idle")) {
                         let targetAnim = anims.includes("idle") ? "idle" : anims[0];
@@ -1403,7 +1394,10 @@
                         }
                     }
 
-                    // 取代點擊控制器的動作，強迫開跑
+                    // 🌟 調整點 2：修改動畫播放時間軸的速度為 0.5 倍 (慢動作)
+                    // 如果未來想加快，設為 1.5 或 2.0 即可
+                    player.animationState.timeScale = 0.5;
+
                     player.play();
                 },
                 error: (player, reason) => {
