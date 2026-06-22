@@ -10,7 +10,6 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-2Z87YT118P');
     </script>
     <title>嘟嘟臉金蠟筆記事本</title>
@@ -269,18 +268,18 @@
         }
 
         /* ------------------------------------------------------------
-        /* 🌟 Banner 滑鼠移入自動展開特製 CSS (縱向展開版)
-        /* ------------------------------------------------------------ */
+           🌟 Banner 滑鼠移入自動展開特製 CSS (縱向展開版)
+        ------------------------------------------------------------ */
         #bannerDisplayArea {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            width: max-content; /* 確保內容決定寬度，手機版不會撐滿 */
+            width: max-content; 
             max-width: 100%;
         }
 
         #bannerDisplayArea.banner-expanded {
             height: auto !important;
             min-height: 44px;
-            display: flex !important; /* 展開時改用 Flex 以實現堆疊 */
+            display: flex !important; 
             flex-direction: column !important;
             align-items: stretch !important;
             overflow: visible !important;
@@ -316,7 +315,7 @@
         #bannerDisplayArea.banner-expanded > .banner-panel-item.panel-empty-hide {
             display: none !important;
         }
-        /* 🌟 強制活動 Banner 在展開時縱向排列，且鎖定寬高不影響總寬度 */
+        
         #bannerDisplayArea.banner-expanded #eventBannersContainer {
             flex-direction: column !important;
             align-items: flex-end !important;
@@ -327,7 +326,7 @@
 
         #bannerDisplayArea.banner-expanded #eventBannersContainer .rainbow-wrapper {
             display: flex !important; 
-            height: 32px !important; /* 鎖定與單行時相同的高度，避免撐爆 */
+            height: 32px !important; 
             width: auto !important;
         }
     </style>
@@ -399,6 +398,11 @@
                 
                 <div class="flex flex-row items-center justify-end gap-2 w-full lg:w-auto">
                     
+                    <!-- 🌟 動畫開關按鈕 -->
+                    <button onclick="toggleAnimation()" class="h-10 w-10 sm:h-11 sm:w-11 flex items-center justify-center bg-white/80 dark:bg-gray-800/80 border border-amber-300 dark:border-gray-600 rounded-xl shadow-sm transition hover:bg-gray-50 dark:hover:bg-gray-700 shrink-0 backdrop-blur-sm overflow-hidden" title="開關跑酷動畫">
+                        <img id="rimAnimIcon" src="https://i.postimg.cc/dhW04Kw2/minirim.png" alt="Rim Animation Toggle" class="w-[80%] h-[80%] object-contain transition-all duration-200">
+                    </button>
+
                     <div class="relative h-10 w-10 sm:h-11 sm:w-11 group">
                         <div class="absolute inset-0 flex items-center justify-center bg-white/80 dark:bg-gray-800/80 border border-amber-300 dark:border-gray-600 rounded-xl shadow-sm backdrop-blur-sm transition group-hover:bg-gray-50 dark:group-hover:bg-gray-700 pointer-events-none text-amber-900 dark:text-amber-400">
                             <span class="text-sm">
@@ -437,6 +441,7 @@
                         </div>
                     </div>
                 </div>
+            </div>
         </header>
 
         <div id="errorBanner" class="hidden bg-red-100 border-2 border-red-500 text-red-800 px-4 py-3 rounded-xl mb-6 text-sm font-bold shadow-sm flex flex-col gap-1"></div>
@@ -545,9 +550,13 @@
         let noticeIconEl = null, noticeIconTimeout = null;
         let db = null, auth = null, currentUser = null;
         let activeCrayons = [];
+        let crayonCollisionLoopId = null; 
         
-        // 🌟 新增：Banner 滑鼠偵測變數
         let isBannerHovered = false; 
+        
+        // 🌟 新增：動畫開關設定
+        let isAnimationEnabled = localStorage.getItem('trickcal_anim_enabled') !== 'false';
+        let spawnCrayonTimer = null;
         
         const storageKey = 'trickcal_matrix_saved_states_iron_v26';
         let savedStates = {};
@@ -572,8 +581,52 @@
         const btnDispActiveStyle = "whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-bold transition bg-blue-500 text-white border-blue-600 shadow-sm";
 
         // ------------------------------------------------------------
-        // 基本工具函式 (翻譯、主題、資料預載)
+        // 基本工具函式 (開關動畫、翻譯、主題、資料預載)
         // ------------------------------------------------------------
+        
+        // 🌟 新增：動畫開關邏輯
+        // 🌟 更新：控制 Rim 迷你圖案的灰階與透明度狀態
+        function updateAnimToggleUI() {
+            const rimIcon = document.getElementById('rimAnimIcon');
+            if (rimIcon) {
+                if (isAnimationEnabled) {
+                    // 開啟狀態：恢復色彩
+                    rimIcon.classList.remove('grayscale', 'opacity-50');
+                } else {
+                    // 關閉狀態：變成灰階並微調透明度
+                    rimIcon.classList.add('grayscale', 'opacity-50');
+                }
+            }
+        }
+
+        function toggleAnimation() {
+            isAnimationEnabled = !isAnimationEnabled;
+            localStorage.setItem('trickcal_anim_enabled', isAnimationEnabled);
+            updateAnimToggleUI();
+
+            const area = document.getElementById('runnerArea');
+            if (isAnimationEnabled) {
+                area.style.display = ''; // 恢復 CSS 控制 (hidden md:block)
+                initTopRunner();
+                checkCrayonCollision();
+                spawnCrayonOnTrack();
+            } else {
+                area.style.display = 'none'; // 強制隱藏
+                
+                if (chaseLoopId) cancelAnimationFrame(chaseLoopId);
+                if (crayonCollisionLoopId) cancelAnimationFrame(crayonCollisionLoopId);
+                if (spawnCrayonTimer) clearTimeout(spawnCrayonTimer);
+                
+                activeCrayons.forEach(c => c.remove());
+                activeCrayons = [];
+                
+                if (currentRunnerPlayer) { try { currentRunnerPlayer.dispose(); } catch(e){} currentRunnerPlayer = null; }
+                if (currentBossPlayer) { try { currentBossPlayer.dispose(); } catch(e){} currentBossPlayer = null; }
+                document.getElementById('topRunnerContainer').innerHTML = '';
+                document.getElementById('bossRunnerContainer').innerHTML = '';
+            }
+        }
+
         const preloadedSpines = new Set(); 
         function preloadSpineAssets(charName) {
             if (preloadedSpines.has(charName)) return;
@@ -586,7 +639,6 @@
             preloadedSpines.add(charName);
         }
         
-        // 🌟 國際化智慧語系偵測
         function detectDefaultLanguage() {
             const savedLang = localStorage.getItem('user_lang');
             if (savedLang) return savedLang;
@@ -675,9 +727,9 @@
         function renderPickupBanner() {
             const container = document.getElementById('pickupIconsContainer');
             const activeChars = getActivePickupChars(); 
-    
+        
             if (!container || activeChars.length === 0) return;
-    
+        
             container.innerHTML = '';
             const localRecruitTexts = { "zh-TW": "🎯 特選使者招募", "ja": "🎯 ピックアップ使徒ガチャ", "en": "🎯 Pick Up Apostles" };
             const localTooltipTexts = { "zh-TW": "特選招募中：", "ja": "ピックアップ中：", "en": "Pickup Rate Up: " };
@@ -691,7 +743,7 @@
                 const iconUrl = typeof SKILL_ICONS !== 'undefined' ? SKILL_ICONS['skill_passive_' + charName] : null; const pColorClass = personalityColors[charData.personality] || "border-gray-400 text-gray-400";
                 const iconWrapper = document.createElement('div');
                 iconWrapper.className = `w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 ${pColorClass} bg-white dark:bg-gray-800 flex items-center justify-center relative pickup-sparkle shrink-0 cursor-pointer transition-transform`;
-        
+            
                 const prefix = localTooltipTexts[window.currentLang] || localTooltipTexts["zh-TW"]; iconWrapper.title = `${prefix}${t(charName)}`;
                 iconWrapper.onclick = () => window.open(`char_detail.html?char=${encodeURIComponent(charName)}`, '_blank');
                 if (iconUrl) { iconWrapper.innerHTML = `<img src="${iconUrl}" class="w-full h-full object-cover rounded-[5px]" alt="${t(charName)}">`; } 
@@ -700,9 +752,6 @@
             });
         }
 
-        // ------------------------------------------------------------
-        // 🌟 今期活動與 Banner 輪播邏輯
-        // ------------------------------------------------------------
         function getActiveEvents() {
             if (typeof EVENT_SCHEDULE === 'undefined') return [];
             const now = new Date();
@@ -731,34 +780,29 @@
             if (currentEventIndex >= activeEvents.length) currentEventIndex = 0;
 
             const langSuffix = { "zh-TW": "ZH", "ja": "JA", "en": "EN" }[window.currentLang] || "ZH";
-    
+        
             container.innerHTML = '';
-    
-            // 🌟 修正：渲染「所有」當期活動，並根據是否展開 (Hover) 決定顯示與否
+        
             activeEvents.forEach((evt, idx) => {
                 const wrapper = document.createElement('div');
                 wrapper.className = "rainbow-wrapper h-7 sm:h-8 w-auto cursor-pointer shrink-0 transition-all duration-300";
                 
-                // 如果沒有 Hover，只顯示當前輪播到的；如果有 Hover，顯示全部
                 if (!isBannerHovered && idx !== currentEventIndex) {
                     wrapper.style.display = 'none';
                 } else {
                     wrapper.style.display = 'inline-block';
                 }
-        
+            
                 const imgEl = document.createElement('img');
                 imgEl.src = `event/${evt.eventId}_${langSuffix}.png`;
                 imgEl.alt = evt.eventId;
                 imgEl.className = "rainbow-content";
-        
+            
                 wrapper.appendChild(imgEl);
                 container.appendChild(wrapper);
             });
         }
 
-        // ------------------------------------------------------------
-        // 🃏 特選卡片渲染邏輯
-        // ------------------------------------------------------------
         function getActiveCards() {
             if (typeof CARD_SCHEDULE === 'undefined') return [];
             const now = new Date();
@@ -790,20 +834,17 @@
             });
         }
 
-        // ------------------------------------------------------------
-        // 🌟 核心輪播邏輯 與 滑鼠懸停展開控制
-        // ------------------------------------------------------------
         let bannerRotationTimer = null;
         let rotationSequence = [];
         let currentSequenceIndex = 0;
 
         function startBannerRotation() {
             if (bannerRotationTimer) clearInterval(bannerRotationTimer);
-    
+        
             const hasPickup = getActivePickupChars().length > 0;
             const hasEvent = getActiveEvents().length > 0;
             const hasCard = getActiveCards().length > 0; 
-    
+        
             const displayArea = document.getElementById('bannerDisplayArea');
             const pickupPanel = document.getElementById('pickupPanel');
             const eventPanel = document.getElementById('eventPanel');
@@ -870,7 +911,6 @@
             }, 5000);
         }
 
-        // 🌟 滑鼠控制展開 (加入將所有 Panel 強制現形的機制)
         function handleBannerHover(isHover) {
             isBannerHovered = isHover;
             const displayArea = document.getElementById('bannerDisplayArea');
@@ -880,13 +920,11 @@
             if (isHover) {
                 if (bannerRotationTimer) clearInterval(bannerRotationTimer);
                 displayArea.classList.add('banner-expanded');
-                
-                // 強制所有有資料的面板在此刻顯示
                 updateEventBanner(); 
             } else {
                 displayArea.classList.remove('banner-expanded');
                 startBannerRotation();
-                updateEventBanner(); // 恢復隱藏非當前活動
+                updateEventBanner(); 
             }
         }
         
@@ -987,7 +1025,7 @@
 
             const layerContainer = document.getElementById("filter_gridLayer");
             if(layerContainer){
-                layerContainer.innerHTML = ""; const layers = [ {v:"all", n: t("全部")}, {v:"1", n:`🥇 ${t("level_1st")}`}, {v:"2", n:`🥈 ${t("level_2nd")}`}, {v:"3", n:`🥉 ${t("level_3st")}`} ];
+                layerContainer.innerHTML = ""; const layers = [ {v:"all", n: t("全部")}, {v:"1", n:`🥇 ${t("level_1st")}`}, {v:"2", n:`🥈 ${t("level_2nd")}`}, {v:"3", n:`🥉 ${t("level_3rd")}`} ];
                 layers.forEach(ly => { const btn = document.createElement("button"); btn.innerText = ly.n; btn.id = `btn_filter_gridLayer_${ly.v}`; btn.className = ly.v === "all" ? btnActiveStyle : btnInactiveStyle; btn.onclick = () => selectGridLayerFilter(ly.v); layerContainer.appendChild(btn); });
             }
 
@@ -1154,7 +1192,7 @@
                             const layerBox = document.createElement('div'); layerBox.id = `layer_wrap_${char.name}_${l}`;
                             let bgStyle = "bg-amber-50/40 border-amber-100/60 dark:border-amber-900/40", badgeText = `🥇 ${t("level_1st")}`, gridCols = "grid-cols-2";
                             if (l === 2) { bgStyle = "bg-orange-50/40 border-orange-100/60 dark:border-orange-900/40"; badgeText = `🥈 ${t("level_2nd")}`; gridCols = "grid-cols-3"; }
-                            else if (l === 3) { bgStyle = "bg-red-50/40 border-red-100/60 dark:border-red-900/40"; badgeText = `🥉 ${t("level_3st")}`; gridCols = "grid-cols-4"; }
+                            else if (l === 3) { bgStyle = "bg-red-50/40 border-red-100/60 dark:border-red-900/40"; badgeText = `🥉 ${t("level_3rd")}`; gridCols = "grid-cols-4"; }
 
                             layerBox.className = `${bgStyle} flex-1 p-2 rounded-xl border flex-col justify-between backdrop-blur-sm`; layerBox.innerHTML = `<span class="text-[10px] font-bold mb-1 block opacity-70 whitespace-nowrap">${badgeText}</span>`;
                             const btnGroup = document.createElement('div'); btnGroup.className = `grid ${gridCols} gap-1.5 h-full content-start`;
@@ -1283,12 +1321,12 @@
         }
 
         function initTopRunner() {
+            if (!isAnimationEnabled) return;
             if (window.innerWidth <= 768) return; 
             if (typeof INITIAL_DATA === 'undefined' || INITIAL_DATA.length === 0) return;
 
             const container = document.getElementById('topRunnerContainer'); const track = document.getElementById('runnerTrack');
             const bossContainer = document.getElementById('bossRunnerContainer'); const bossTrack = document.getElementById('bossTrack');
-            const isMobile = false; 
             
             const trackRightOffset = '-110px'; const bossRightOffset = '-410px'; 
             track.style.right = trackRightOffset; bossTrack.style.right = bossRightOffset; 
@@ -1310,10 +1348,11 @@
             const runDuration = 14000; let charRunAnimation = null, bossRunAnimation = null;
 
             function triggerVictory() {
-                if (isEscaped) return; isEscaped = true;
+                if (isEscaped || !isAnimationEnabled) return; isEscaped = true;
                 safePlaySpine(currentRunnerPlayer, "Victory", true);
                 if (currentBossPlayer && chasePhase !== 0) { if (bossRunAnimation && bossRunAnimation.playState !== 'finished') bossRunAnimation.pause(); safePlaySpine(currentBossPlayer, "Idle", true); }
                 setTimeout(() => {
+                    if(!isAnimationEnabled) return;
                     track.style.transition = 'opacity 0.6s ease-out'; track.style.opacity = '0';
                     if (bossTrack) { bossTrack.style.transition = 'opacity 0.6s ease-out'; bossTrack.style.opacity = '0'; }
                     setTimeout(initTopRunner, 600); 
@@ -1330,14 +1369,17 @@
                 viewport: { x: -800, y: 100, width: 2500, height: 1500, transitionTime: 0 },
                 success: function (player) {
                     loader.remove(); 
+                    if(!isAnimationEnabled) { player.dispose(); return; }
                     try { const skins = player.skeleton.data.skins; const targetSkin = skins.find(s => s.name === 'Normal') || skins.find(s => s.name === 'default') || skins[0]; if (targetSkin) { player.skeleton.setSkinByName(targetSkin.name); player.skeleton.setSlotsToSetupPose(); } } catch (e) {}
                     setTimeout(() => {
+                        if(!isAnimationEnabled) return;
                         track.style.transition = 'opacity 0.3s ease-in'; track.style.opacity = '1';
                         let spawnTrack = safePlaySpine(player, "Spawn", false); let spawnDuration = (spawnTrack && spawnTrack.animation ? spawnTrack.animation.duration : 1.5) * 1000;
                         setTimeout(() => {
+                            if(!isAnimationEnabled) return;
                             player.timeScale = 1.0; safePlaySpine(player, "Move", true);
                             charRunAnimation = track.animate([ { transform: 'translateX(0) scaleX(1)' }, { transform: `translateX(calc(-100vw + ${endLeftPos})) scaleX(1)` } ], { duration: runDuration, fill: 'forwards' });
-                           charRunAnimation.onfinish = () => { hasReachedEnd = true; if (!isCaught) triggerVictory(); };
+                            charRunAnimation.onfinish = () => { hasReachedEnd = true; if (!isCaught) triggerVictory(); };
 
                             if (isBossEvent) {
                                 const bossKey = typeof SPINE_MAP !== 'undefined' && SPINE_MAP['R41雷內瓦'] ? SPINE_MAP['R41雷內瓦'] : 'R41雷內瓦';
@@ -1346,15 +1388,16 @@
                                     animation: "Idle", backgroundColor: "#00000000", alpha: true, premultipliedAlpha: false, showControls: false, showLoading: false,
                                     viewport: { x: -1500, y: -450, width: 3000, height: 3000, transitionTime: 0 },
                                     success: function (bossPlayer) {
+                                        if(!isAnimationEnabled) { bossPlayer.dispose(); return; }
                                         try { const bossSkins = bossPlayer.skeleton.data.skins.map(s => s.name); let skinToUse = bossSkins.includes('default') ? 'default' : (bossSkins.includes('Skin_Naive') ? 'Skin_Naive' : bossSkins[0]); bossPlayer.skeleton.setSkinByName(skinToUse); bossPlayer.skeleton.setSlotsToSetupPose(); } catch (e) { }
                                         function waitRunner15Percent() {
-                                            if (isEscaped || isCaught) return;
+                                            if (isEscaped || isCaught || !isAnimationEnabled) return;
                                             let currentTime = charRunAnimation ? (charRunAnimation.currentTime || 0) : 0;
                                             if (currentTime >= runDuration * 0.15) {
                                                 bossTrack.style.transition = 'opacity 0.2s ease-in'; bossTrack.style.opacity = '1'; bossPlayer.timeScale = 3.0; 
                                                 let bossSpawnTrack = safePlaySpine(bossPlayer, "Spawn", false); let bossSpawnDuration = (bossSpawnTrack && bossSpawnTrack.animation ? bossSpawnTrack.animation.duration : 1.5) * 1000; let actualWaitTime = bossSpawnDuration / 3;
                                                 setTimeout(() => {
-                                                    if (isEscaped || isCaught) return; bossPlayer.timeScale = 1.0; safePlaySpine(bossPlayer, "Move", true);
+                                                    if (isEscaped || isCaught || !isAnimationEnabled) return; bossPlayer.timeScale = 1.0; safePlaySpine(bossPlayer, "Move", true);
                                                     bossRunAnimation = bossTrack.animate([ { transform: 'translateX(0)' }, { transform: `translateX(calc(-100vw + ${endLeftPos}))` } ], { duration: runDuration * 0.5, fill: 'forwards' });
                                                     setupPlayerKnockback(bossPlayer); startChaseRadar(player, bossPlayer); 
                                                 }, actualWaitTime);
@@ -1372,11 +1415,12 @@
             function setupPlayerKnockback(bossPlayer) {
                 bossTrack.style.pointerEvents = 'auto'; bossTrack.style.cursor = 'pointer';
                 bossTrack.onclick = () => {
-                    if (isCaught || isEscaped || isBossKnockedBack || chasePhase === 0) return;
+                    if (isCaught || isEscaped || isBossKnockedBack || chasePhase === 0 || !isAnimationEnabled) return;
                     isBossKnockedBack = true; bossRunAnimation.pause(); 
                     const knockbackPx = 300; const screenWidth = window.innerWidth || 1000; const totalDuration = bossRunAnimation.effect.getTiming().duration; const knockbackTime = (knockbackPx / screenWidth) * totalDuration;
                     const startT = bossRunAnimation.currentTime; const targetT = Math.max(0, startT - knockbackTime); const kDuration = 150; const kStartTime = performance.now();
                     function tweenKnockback(now) {
+                        if(!isAnimationEnabled) return;
                         let p = (now - kStartTime) / kDuration;
                         if (p < 1) { bossRunAnimation.currentTime = startT - (startT - targetT) * p; requestAnimationFrame(tweenKnockback); } 
                         else { bossRunAnimation.currentTime = targetT; bossRunAnimation.play(); setTimeout(() => { isBossKnockedBack = false; }, 400); }
@@ -1387,7 +1431,7 @@
 
             function startChaseRadar(runnerPlayer, bossPlayer) {
                 function checkChase() {
-                    if (isEscaped || chasePhase === 0) return;
+                    if (isEscaped || chasePhase === 0 || !isAnimationEnabled) return;
                     const rRect = track.getBoundingClientRect(); const bRect = bossTrack.getBoundingClientRect();
                     let distance = (bRect.left + (bRect.width / 2)) - (rRect.left + (rRect.width / 2));
                     if (distance <= 450 && !hasNoticed && !isCaught) {
@@ -1427,11 +1471,12 @@
                         setTimeout(() => { bossContainer.classList.add('shake-strong-anim'); setTimeout(() => bossContainer.classList.remove('shake-strong-anim'), 500); }, Math.max(atkDur - 500, lastHitTimeMs - 200));
 
                         setTimeout(() => {
+                            if (!isAnimationEnabled) return;
                             if (hasReachedEnd) { container.style.transition = 'transform 0.3s ease'; container.style.transform = 'translateX(0px) scaleX(1)'; isCaught = false; chasePhase = 0; triggerVictory(); return; }
                             const resumeRunning = () => {
                                 safePlaySpine(runnerPlayer, "Move", true); charRunAnimation.play();
                                 setTimeout(() => {
-                                    if (chasePhase === 0) return; 
+                                    if (chasePhase === 0 || !isAnimationEnabled) return; 
                                     safePlaySpine(bossPlayer, "Move", true); bossPlayer.timeScale = 1.5; bossRunAnimation.playbackRate = 2.0; bossRunAnimation.play(); bossTrack.style.pointerEvents = 'auto'; 
                                     isCaught = false; chasePhase = 2; chaseLoopId = requestAnimationFrame(() => startChaseRadar(runnerPlayer, bossPlayer));
                                 }, 1500); 
@@ -1439,7 +1484,7 @@
                             if (isRanged) {
                                 container.style.transform = `translateX(${rangedOffsetPx}px) scaleX(1)`;
                                 setTimeout(() => {
-                                    if (chasePhase === 0 || hasReachedEnd) return; 
+                                    if (chasePhase === 0 || hasReachedEnd || !isAnimationEnabled) return; 
                                     const skipTime = (Math.abs(rangedOffsetPx) / window.innerWidth) * runDuration;
                                     if (charRunAnimation && charRunAnimation.playState !== 'finished') charRunAnimation.currentTime = (charRunAnimation.currentTime || 0) + skipTime;
                                     if (charRunAnimation && charRunAnimation.currentTime >= runDuration) { container.style.transition = 'transform 0.3s ease'; container.style.transform = 'translateX(0px) scaleX(1)'; isCaught = false; chasePhase = 0; triggerVictory(); return; }
@@ -1475,13 +1520,14 @@
                             setTimeout(() => { bossContainer.classList.add('shake-strong-anim'); setTimeout(() => bossContainer.classList.remove('shake-strong-anim'), 500); }, Math.max(0, totalSkillDurationMs - 1000));
                         }
                         setTimeout(() => {
+                            if(!isAnimationEnabled) return;
                             safePlaySpine(bossPlayer, "Die", false);
                             if (hasReachedEnd) { container.style.transition = 'transform 0.3s ease'; container.style.transform = 'translateX(0px) scaleX(1)'; isCaught = false; triggerVictory(); return; }
                             const resumeRunning = () => { safePlaySpine(runnerPlayer, "Move", true); isCaught = false; charRunAnimation.play(); setTimeout(() => { bossTrack.style.transition = 'opacity 0.6s ease-out'; bossTrack.style.opacity = '0'; }, 3000); };
                             if (isRanged) {
                                 container.style.transform = `translateX(${rangedOffsetPx}px) scaleX(1)`;
                                 setTimeout(() => {
-                                    if (hasReachedEnd) return; 
+                                    if (hasReachedEnd || !isAnimationEnabled) return; 
                                     const skipTime = (Math.abs(rangedOffsetPx) / window.innerWidth) * runDuration;
                                     if (charRunAnimation && charRunAnimation.playState !== 'finished') charRunAnimation.currentTime = (charRunAnimation.currentTime || 0) + skipTime;
                                     if (charRunAnimation && charRunAnimation.currentTime >= runDuration) { container.style.transition = 'transform 0.3s ease'; container.style.transform = 'translateX(0px) scaleX(1)'; isCaught = false; triggerVictory(); return; }
@@ -1497,8 +1543,8 @@
                 chasePhase = 0; safePlaySpine(runnerPlayer, "Groggy", true);
                 let attackTrack = safePlaySpine(bossPlayer, "Attack3_1", false); let attackDuration = (attackTrack && attackTrack.animation ? attackTrack.animation.duration : 3.0) * 1000;
                 let dieTriggerTime = Math.max(0, attackDuration - 2450); 
-                setTimeout(() => { safePlaySpine(runnerPlayer, "Die", false); container.classList.add('shake-anim'); setTimeout(() => container.classList.remove('shake-anim'), 400); }, dieTriggerTime);
-                setTimeout(() => { safePlaySpine(bossPlayer, "Idle", true); track.style.transition = 'opacity 0.6s ease-out'; track.style.opacity = '0'; bossTrack.style.transition = 'opacity 0.6s ease-out'; bossTrack.style.opacity = '0'; setTimeout(initTopRunner, 600); }, attackDuration + 1000); 
+                setTimeout(() => { if(!isAnimationEnabled) return; safePlaySpine(runnerPlayer, "Die", false); container.classList.add('shake-anim'); setTimeout(() => container.classList.remove('shake-anim'), 400); }, dieTriggerTime);
+                setTimeout(() => { if(!isAnimationEnabled) return; safePlaySpine(bossPlayer, "Idle", true); track.style.transition = 'opacity 0.6s ease-out'; track.style.opacity = '0'; bossTrack.style.transition = 'opacity 0.6s ease-out'; bossTrack.style.opacity = '0'; setTimeout(initTopRunner, 600); }, attackDuration + 1000); 
             }
         }
 
@@ -1537,18 +1583,30 @@
         }
 
         function spawnCrayonOnTrack() {
+            if (!isAnimationEnabled) return;
             if (window.innerWidth <= 768) return; 
+            
+            // 🌟 防掛機：如果網頁被切換到背景，或是畫面上累積超過 5 支蠟筆，就暫停生成，保護記憶體
+            if (document.hidden || activeCrayons.length >= 5) {
+                spawnCrayonTimer = setTimeout(spawnCrayonOnTrack, 5000);
+                return;
+            }
+
             const area = document.getElementById('runnerArea'); if (!area) return;
             
             const crayon = document.createElement('div'); crayon.className = 'track-crayon'; 
             const randomX = Math.floor(Math.random() * 70) + 15; crayon.style.left = `${randomX}%`;
             area.appendChild(crayon); activeCrayons.push(crayon); 
             requestAnimationFrame(() => { crayon.style.opacity = '1'; });
-            setTimeout(spawnCrayonOnTrack, Math.random() * 7000 + 5000);
+            
+            spawnCrayonTimer = setTimeout(spawnCrayonOnTrack, Math.random() * 7000 + 5000);
         }
 
         function checkCrayonCollision() {
+            if (!isAnimationEnabled) return;
             if (window.innerWidth <= 768) return; 
+            if (crayonCollisionLoopId) cancelAnimationFrame(crayonCollisionLoopId); 
+            
             const chibi = document.getElementById('runnerTrack'); const isChibiVisible = chibi && chibi.style.opacity === '1';
             if (isChibiVisible && activeCrayons.length > 0) {
                 const chibiRect = chibi.getBoundingClientRect(); const chibiCenterX = chibiRect.left + (chibiRect.width / 2) - 20;
@@ -1557,7 +1615,7 @@
                     if (Math.abs(chibiCenterX - crayonCenterX) < 45) { crayon.classList.add('crayon-collected'); activeCrayons.splice(index, 1); setTimeout(() => { crayon.remove(); }, 600); }
                 });
             }
-            requestAnimationFrame(checkCrayonCollision);
+            crayonCollisionLoopId = requestAnimationFrame(checkCrayonCollision);
         }
 
         function initRimLive2D() {
@@ -1567,7 +1625,9 @@
                 success: function (player) {
                     loader.remove(); const animations = ["Happy_4", "Pat_End", "Tickle_Idle_2"]; let currentIndex = 1; 
                     function playNextAnimation() { const nextAnim = animations[currentIndex % animations.length]; player.skeleton.setToSetupPose(); player.animationState.setAnimation(0, nextAnim, true); currentIndex++; }
-                   setInterval(playNextAnimation, 5000);
+                    
+                    if (window.rimInterval) clearInterval(window.rimInterval); 
+                    window.rimInterval = setInterval(playNextAnimation, 5000);
                 } 
             }); 
         }
@@ -1578,7 +1638,7 @@
 
             try {
                 if (typeof INITIAL_DATA === 'undefined') throw new Error("找不到 INITIAL_DATA，請確認 data_core.js 是否載入成功！");
-                renderPickupBanner(); renderCardBanner(); updateEventBanner(); startBannerRotation(); initStates(); changeLanguage(currentLang);
+                renderPickupBanner(); renderCardBanner(); updateEventBanner(); startBannerRotation(); initStates(); changeLanguage(currentLang); updateAnimToggleUI();
                 if (!isStatsOpen) { const body = document.getElementById("statsPanelBody"); const icon = document.getElementById("statsToggleIcon"); if(body) { body.classList.add("hidden"); body.classList.remove("grid"); icon.innerText = "▶"; } }
             } catch (e) { const errBanner = document.getElementById('errorBanner'); if(errBanner) { errBanner.innerHTML = `⚠️ 畫面繪製失敗: ${e.message}`; errBanner.classList.remove('hidden'); } }
 
@@ -1605,11 +1665,17 @@
 
             // 錯開重度渲染，讓主畫面先出現，不會白畫面卡死
             setTimeout(() => {
-                initTopRunner();
+                if (isAnimationEnabled) {
+                    initTopRunner();
+                } else {
+                    document.getElementById('runnerArea').style.display = 'none';
+                }
                 setTimeout(() => {
                     initRimLive2D();
-                    setTimeout(spawnCrayonOnTrack, 4000);
-                    requestAnimationFrame(checkCrayonCollision);
+                    if (isAnimationEnabled) {
+                        setTimeout(spawnCrayonOnTrack, 4000);
+                        checkCrayonCollision();
+                    }
                 }, 300);
             }, 100);
         });
