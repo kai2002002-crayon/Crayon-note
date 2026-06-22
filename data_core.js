@@ -574,6 +574,19 @@ const SPINE_MAP = {
     "阿萊特": "Allet", "雷吉": "Lazy", "馬爾": "Mago", "泰達": "Taida", "寧琉": "Ner", "莉絲蒂": "Risty", "R41雷內瓦": "R41_Renewa", "雷內瓦": "RenewaAwaken"
 };
 
+//迷你坨坨SPINE NAME
+const MINI_SPINE = {
+    "洛涅": "Mini_Rohne", "薇薇": "Mini_Vivi", "艾爾芬": "Mini_Erpin", "錫安": "Mini_xXionx", "伊弗利特": "Mini_Ifrit", "伊德": "Mini_Ed", "佩佩": "Mini_Velvet", "佩斯塔": "Mini_Festa",
+    "修帕": "Mini_Shoupan", "傑德": "Mini_Jade", "優米": "Mini_Yomi", "劉美美": "Mini_Yumimi", "加薇雅": "Mini_Gabia", "卡洛特": "Mini_Kyarot", "卡蓮": "Mini_Carren", "喬菲": "Mini_Chopi",
+    "基狄恩": "Mini_Kidian", "大師2號": "Mini_MaestroMK2", "大木頭": "Mini_BigWood", "奈雅": "Mini_Naia", "奶油": "Mini_Butter", "布蘭切": "Mini_Blanchet", "希拉": "Mini_Sylla", "希爾德": "Mini_Hilde",
+    "希瑟圖": "Mini_Sist", "希菲爾": "Mini_Silphir", "帕特拉": "Mini_Patula", "庫洛艾": "Mini_Chloe", "康娜": "Mini_Canna", "愛麗絲": "Mini_Alice", "斑尼": "Mini_Beni", "斯皮奇": "Mini_Speaki",
+    "斯諾奇": "Mini_Snorky", "柯米": "Mini_Kommy", "桃桃": "Mini_Momo", "梅森": "Mini_Maison", "梅露娜": "Mini_Meluna", "海莉": "Mini_Haley", "珀榭": "Mini_Posher", "琳": "Mini_Rim",
+    "瑟琳娜": "Mini_Selline", "瑪約": "Mini_Mayo", "瑪麗": "Mini_Marie", "皮可菈": "Mini_Picora", "盧波": "Mini_Rufo", "米雪": "Mini_Mynx", "綾": "Mini_Aya", "羽伊": "Mini_Ui",
+    "艾斯皮": "Mini_Espi", "艾琳娜": "Mini_Elena", "艾皮卡": "Mini_Epica", "艾舒爾": "Mini_Ashur", "艾蜜莉雅": "Mini_Amelia", "芙莉可": "Mini_Fricle", "茱蜜": "Mini_Jubee", "莉茲": "Mini_Leets",
+    "莎莉": "Mini_Sari", "萊薇": "Mini_Levi", "蒂亞娜": "Mini_Diana", "謝蒂": "Mini_Shady", "貝魯": "Mini_Veroo", "貝麗塔": "Mini_Belita", "路德": "Mini_Rude", "路易": "Mini_Cuee",
+    "阿萊特": "Mini_Allet", "雷吉": "Mini_Lazy", "馬爾": "Mini_Mago", "泰達": "Mini_Taida", "寧琉": "Mini_Ner", "莉絲蒂": "Mini_Risty",  "雷內瓦": "Mini_RenewaAwaken"
+};
+
 const COSTUME_MAP = {
     "劉美美": ["Yumimi"], "卡蓮": ["Carren"], "喬菲": ["Chopi"], "帕特拉": ["Patula"], "梅森": ["Maison"], "瑪麗": ["Marie"], "米雪": ["Mynx"], "茱蜜": ["Jubee"], "莎莉": ["Sari"], "貝魯": ["Veroo"], "路易": ["Cuee"], "阿萊特": ["Allet"], "雷吉": ["Lazy"], "泰達": ["Taida"],
     "艾舒爾": ["Ashur", "AshurSkin1"], "貝麗塔": ["Belita", "BelitaSkin1"], "斑尼": ["Beni", "BeniSkin1"], "大木頭": ["BigWood", "BigWoodSkin1"], "艾斯皮": ["Espi", "EspiSkin1"], "佩斯塔": ["Festa", "FestaSkin1"], "伊弗利特": ["Ifrit", "IfritSkin1"], "傑德": ["Jade", "JadeSkin1"], "莉茲": ["Leets", "LeetsSkin1"], "萊薇": ["Levi", "LeviSkin1"], "大師2號": ["MaestroMK2", "MaestroMK2Skin1"], "馬爾": ["Mago", "MagoSkin1"], "瑪約": ["Mayo", "MayoSkin1"], "梅露娜": ["Meluna", "MelunaSkin1"], "路德": ["Rude", "RudeSkin1"], "盧波": ["Rufo", "RufoSkin1"], "修帕": ["Shoupan", "ShoupanSkin1"], "希菲爾": ["Silphir", "SilphirSkin1"], "斯諾奇": ["Snorky", "SnorkySkin1"], "斯皮奇": ["Speaki", "SpeakiSkin1"], "佩佩": ["Velvet", "VelvetSkin1"],
