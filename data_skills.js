@@ -4602,7 +4602,7 @@ const characterSkills = [
       }
     },
     {
-      name: "錫安",
+      name: "x乂錫安乂x",
       attribute: "物理",
 	skills: {
         "zh-TW": {
