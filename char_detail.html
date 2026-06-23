@@ -1006,26 +1006,23 @@
 
         function renderCollectibles(charName) {
             const lang = window.currentLang || 'zh-TW';
-    
-            const safeLang = (typeof THOUGHT_MAP !== 'undefined' && THOUGHT_MAP[lang]) ? lang : 'zh-TW';
+            // 🌟 1. 取得對應的英文鍵值 (例如將 "愛麗絲" 轉為 "Alice")
+            const spineKey = typeof SPINE_MAP !== 'undefined' && SPINE_MAP[charName] ? SPINE_MAP[charName] : charName;
 
-            if (typeof PRESENT_MAP !== 'undefined' && PRESENT_MAP[charName]) {
-                const presentData = PRESENT_MAP[charName];
-                const presentImg = document.getElementById('present_image');
-                const presentName = document.getElementById('present_name');
+            // 🌟 2. 安全更新珍藏品名稱
+            if (typeof PRESENT_MAP !== 'undefined' && PRESENT_MAP[spineKey]) {
+                const presentData = PRESENT_MAP[spineKey];
+                // 👉 修正 HTML 的正確 ID: presentName
+                const presentNameBox = document.getElementById('presentName');
         
-                if (presentImg) presentImg.src = presentData.url;
-                if (presentName) presentName.innerText = presentData.name[safeLang] || presentData.name['zh-TW'];
-            }
-
-            if (typeof THOUGHT_MAP !== 'undefined' && THOUGHT_MAP[safeLang] && THOUGHT_MAP[safeLang][charName]) {
-                const thoughtText = document.getElementById('thought_text');
-                if (thoughtText) thoughtText.innerText = THOUGHT_MAP[safeLang][charName];
-            }
-
-            if (typeof LETTER_MAP !== 'undefined' && LETTER_MAP[safeLang] && LETTER_MAP[safeLang][charName]) {
-                const letterText = document.getElementById('letter_text');
-                if (letterText) letterText.innerText = LETTER_MAP[safeLang][charName];
+                if (presentNameBox) {
+                    if (typeof presentData.name === 'object') {
+                        // 依照語系切換，若找不到則退回中文
+                        presentNameBox.innerText = presentData.name[lang] || presentData.name['zh-TW'] || presentData.name['zh'] || "未知珍藏品";
+                    } else {
+                        presentNameBox.innerText = presentData.name;
+                    }
+                }
             }
         }
         
