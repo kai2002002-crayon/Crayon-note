@@ -4,179 +4,179 @@
 const PRESENT_MAP = {
     "Alice": { 
         url: "https://i.postimg.cc/NMq3VZL4/Present-List-Alice.png",
-        name: { "zh-TW": "愛麗絲的卡片冊", "ja": "アリスのカードブック" }
+        name: { "zh-TW": "愛麗絲的卡片冊", "ja": "アリスのカードブック", "en": "Alice's Card Deck" }
     },
     "Allet": { 
         url: "https://i.postimg.cc/B69ryRtC/Present-List-Allet.png",
-        name: { "zh-TW": "無限保存拌飯醬", "ja": "永久保存可能ソース" }
+        name: { "zh-TW": "無限保存拌飯醬", "ja": "永久保存可能ソース", "en": "Everlasting Mixing Sauce" }
     },
     "Amelia": { 
         url: "https://i.postimg.cc/cHypjP6h/Present-List-Amelia.png",
-        name: { "zh-TW": "莫納蒂姆的待審文件堆", "ja": "決裁待ち書類の山" }
+        name: { "zh-TW": "莫納蒂姆的待審文件堆", "ja": "決裁待ち書類の山", "en": "Stack of Monatium Paperwork" }
     },
     "Ashur": { 
         url: "https://i.postimg.cc/3R5s6zWL/Present-List-Ashur.png",
-        name: { "zh-TW": "艾心堂全年免費自由使用劵", "ja": "エーカリー年間無料パス" }
+        name: { "zh-TW": "艾心堂全年免費自由使用劵", "ja": "エーカリー年間無料パス", "en": "Free Pass for Ashurin\'" }
     },
     "Aya": { 
         url: "https://i.postimg.cc/JnVfgStg/Present-List-Aya.png",
-        name: { "zh-TW": "雪花雕像", "ja": "雪花の彫像" }
+        name: { "zh-TW": "雪花雕像", "ja": "雪花の彫像", "en": "Snowflake Statue" }
     },
     "Belita": { 
         url: "https://i.postimg.cc/DZk9DR8h/Present-List-Belita.png",
-        name: { "zh-TW": "老舊的木雕玩偶", "ja": "古びた木彫り人形" }
+        name: { "zh-TW": "老舊的木雕玩偶", "ja": "古びた木彫り人形", "en": "Old Wooden Doll" }
     },
     "Beni": { 
         url: "https://i.postimg.cc/ZR8GhjyQ/Present-List-Beni.png",
-        name: { "zh-TW": "高級釣魚包", "ja": "高級釣り具カバン" }
+        name: { "zh-TW": "高級釣魚包", "ja": "高級釣り具カバン", "en": "High-End Fishing Rod Bag" }
     },
     "BigWood": { 
         url: "https://i.postimg.cc/RF7kzGny/Present-List-Big-Wood.png",
-        name: { "zh-TW": "大木頭的種子", "ja": "ビッグウッドの種" }
+        name: { "zh-TW": "大木頭的種子", "ja": "ビッグウッドの種", "en": "BigWood Seed" }
     },
     "Blanchet": { 
         url: "https://i.postimg.cc/50BhMpFZ/Present-List-Blanchet.png",
-        name: { "zh-TW": "藍玫瑰花束", "ja": "青い薔薇の花束" }
+        name: { "zh-TW": "藍玫瑰花束", "ja": "青い薔薇の花束", "en": "Bouquet of Blue Roses" }
     },
     "Butter": { 
         url: "https://i.postimg.cc/fLcGh59Q/Present-List-Butter.png",
-        name: { "zh-TW": "花草花冠", "ja": "草花の花冠" }
+        name: { "zh-TW": "花草花冠", "ja": "草花の花冠", "en": "Grass Flower Crown" }
     },
     "Canna": { 
         url: "https://i.postimg.cc/wvXCdFmz/Present-List-Canna.png",
-        name: { "zh-TW": "客製化遊戲機", "ja": "カスタムゲーム機" }
+        name: { "zh-TW": "客製化遊戲機", "ja": "カスタムゲーム機", "en": "Custom Game Console" }
     },
     "Carren": { 
         url: "https://i.postimg.cc/V6qxc4C1/Present-List-Carren.png",
-        name: { "zh-TW": "胡蘿蔔幼苗種子包", "ja": "ニンジンの苗の種袋" }
+        name: { "zh-TW": "胡蘿蔔幼苗種子包", "ja": "ニンジンの苗の種袋", "en": "Carrot Seed Package" }
     },
     "Chloe": { 
         url: "https://i.postimg.cc/ZR8GhjdY/Present-List-Chloe.png",
-        name: { "zh-TW": "王國風景掛毯", "ja": "王国風景のタペストリー" }
+        name: { "zh-TW": "王國風景掛毯", "ja": "王国風景のタペストリー", "en": "Kingdom Landscape Tapestry" }
     },
     "Chopi": { 
         url: "https://i.postimg.cc/vBrJdXVm/Present-List-Chopi.png",
-        name: { "zh-TW": "教主簽名簿", "ja": "教主のサインブック" }
+        name: { "zh-TW": "教主簽名簿", "ja": "教主のサインブック", "en": "The Master's Autograph Book" }
     },
     "Diana": { 
         url: "https://i.postimg.cc/RF7kzGH6/Present-List-Diana.png",
-        name: { "zh-TW": "橡樹實木搖椅", "ja": "オーク無垢材のロッキングチェア" }
+        name: { "zh-TW": "橡樹實木搖椅", "ja": "オーク無垢材のロッキングチェア", "en": "Oak Wood Rocking Chair" }
     },
     "Ed": { 
         url: "https://i.postimg.cc/d3JzQd2V/Present-List-Ed.png",
-        name: { "zh-TW": "夢中的姐妹畫作", "ja": "夢の中の姉妹たちの絵" }
+        name: { "zh-TW": "夢中的姐妹畫作", "ja": "夢の中の姉妹たちの絵", "en": "Dreaming Sisters Portrait" }
     },
     "Elena": { 
         url: "https://i.postimg.cc/mkT0ZMYt/Present-List-Elena.png",
-        name: { "zh-TW": "精靈製最新型筆記型電腦", "ja": "エルフ製最新型ノートパソコン" }
+        name: { "zh-TW": "精靈製最新型筆記型電腦", "ja": "エルフ製最新型ノートパソコン", "en": "Latest Elven Laptop" }
     },
     "Epica": { 
         url: "https://i.postimg.cc/tJ9LRP3x/Present-List-Epica.png",
-        name: { "zh-TW": "教主史詩抄本", "ja": "教主叙事詩の写本" }
+        name: { "zh-TW": "教主史詩抄本", "ja": "教主叙事詩の写本", "en": "Master's Epic Draft" }
     },
     "Erpin": { 
         url: "https://i.postimg.cc/Kks9J1sx/Present-List-Erpin.png",
-        name: { "zh-TW": "昨晚的蠟筆", "ja": "昨晩のクレヨン" }
+        name: { "zh-TW": "昨晚的蠟筆", "ja": "昨晩のクレヨン", "en": "Last Night's Pastels" }
     },
     "Espi": { 
         url: "https://i.postimg.cc/mkT0ZMYF/Present-List-Espi.png",
-        name: { "zh-TW": "夢境筆記", "ja": "ドリームノート" }
+        name: { "zh-TW": "夢境筆記", "ja": "ドリームノート", "en": "Dream Diary" }
     },
     "Festa": { 
         url: "https://i.postimg.cc/GtbZ3YFF/Present-List-Festa.png",
-        name: { "zh-TW": "全盛時期簽名專輯", "ja": "全盛期のサイン入りアルバム" }
+        name: { "zh-TW": "全盛時期簽名專輯", "ja": "全盛期のサイン入りアルバム", "en": "Signed Album from her Glory Days" }
     },
     "Fricle": { 
         url: "https://i.postimg.cc/wM9SxJXV/Present-List-Fricle.png",
-        name: { "zh-TW": "友情荊棘戒指", "ja": "友情の茨の指輪" }
+        name: { "zh-TW": "友情荊棘戒指", "ja": "友情の茨の指輪", "en": "Thorny Friendship Ring" }
     },
     "Gabia": { 
         url: "https://i.postimg.cc/Y0tJ2g6x/Present-List-Gabia.png",
-        name: { "zh-TW": "高級奇石套裝", "ja": "高級奇石セット" }
+        name: { "zh-TW": "高級奇石套裝", "ja": "高級奇石セット", "en": "High-End Ornamental Rock Set" }
     },
     "Haley": { 
         url: "https://i.postimg.cc/5yfZ9vB7/Present-List-Haley.png",
-        name: { "zh-TW": "莫納蒂姆戰略圖", "ja": "モナティアム戦略地図" }
+        name: { "zh-TW": "莫納蒂姆戰略圖", "ja": "モナティアム戦略地図", "en": "Tactical Map of Monatium" }
     },
     "Hilde": { 
         url: "https://i.postimg.cc/d3ngh16R/Present-List-Hilde.png",
-        name: { "zh-TW": "專業學位證書", "ja": "専門学位証書" }
+        name: { "zh-TW": "專業學位證書", "ja": "専門学位証書", "en": "Medical Specialist Diploma" }
     },
     "Ifrit": { 
         url: "https://i.postimg.cc/wM9SxJXb/Present-List-Ifrit.png",
-        name: { "zh-TW": "銀箔套裝", "ja": "銀箔のスーツ" }
+        name: { "zh-TW": "銀箔套裝", "ja": "銀箔のスーツ", "en": "Silver-foil Suit" }
     },
     "Jade": { 
         url: "https://i.postimg.cc/rsg7Dmj1/Present-List-Jade.png",
-        name: { "zh-TW": "高級玉石地板", "ja": "高級翡翠マット" }
+        name: { "zh-TW": "高級玉石地板", "ja": "高級翡翠マット", "en": "Premium Jade Electric Blanket" }
     },
     "Jubee": { 
         url: "https://i.postimg.cc/901sDMbL/Present-List-Jubee.png",
-        name: { "zh-TW": "皇家蜂蜜", "ja": "ロイヤルハニー" }
+        name: { "zh-TW": "皇家蜂蜜", "ja": "ロイヤルハニー", "en": "Royal Honey" }
     },
     "Kidian": { 
         url: "https://i.postimg.cc/zvp4yB70/Present-List-Kidian.png",
-        name: { "zh-TW": "黑曜石短劍", "ja": "黒曜石の短剣" }
+        name: { "zh-TW": "黑曜石短劍", "ja": "黒曜石の短剣", "en": "Obsidian Dagger" }
     },
     "Kommy": { 
         url: "https://i.postimg.cc/XqxtrJLt/Present-List-Kommy.png",
-        name: { "zh-TW": "名牌枕頭", "ja": "高級ブランド枕" }
+        name: { "zh-TW": "名牌枕頭", "ja": "高級ブランド枕", "en": "Luxury Pillow" }
     },
     "Kyarot": { 
         url: "https://i.postimg.cc/RhG2WFdy/Present-List-Kyarot.png",
-        name: { "zh-TW": "優良農業獎盃", "ja": "優良農業トロフィー" }
+        name: { "zh-TW": "優良農業獎盃", "ja": "優良農業トロフィー", "en": "Outstanding Harvest Trophy" }
     },
     "Lazy": { 
         url: "https://i.postimg.cc/Gtz642zn/Present-List-Lazy.png",
-        name: { "zh-TW": "最先進工具組", "ja": "最先端の工具セット" }
+        name: { "zh-TW": "最先進工具組", "ja": "最先端の工具セット", "en": "High-tech Toolset" }
     },
     "Leets": { 
         url: "https://i.postimg.cc/vTXC4BXb/Present-List-Leets.png",
-        name: { "zh-TW": "超重鋼鐵盔甲", "ja": "超重量級の鋼鉄アーマー" }
+        name: { "zh-TW": "超重鋼鐵盔甲", "ja": "超重量級の鋼鉄アーマー", "en": "Utterly Heavy Steel Armor" }
     },
     "Levi": { 
         url: "https://i.postimg.cc/QCSvFtSj/Present-List-Levi.png",
-        name: { "zh-TW": "超大尺寸保暖內衣", "ja": "特大サイズの保温インナー" }
+        name: { "zh-TW": "超大尺寸保暖內衣", "ja": "特大サイズの保温インナー", "en": "Extra Large Pajama" }
     },
     "MaestroMK2": { 
         url: "https://i.postimg.cc/mZSvXX4z/Present-List-Maestro-MK2.png",
-        name: { "zh-TW": "充滿回憶的硬碟", "ja": "思い出のハードディスク" }
+        name: { "zh-TW": "充滿回憶的硬碟", "ja": "思い出のハードディスク", "en": "Hard Drive of Memories" }
     },
     "Mago": { 
         url: "https://i.postimg.cc/kMy011Ct/Present-List-Mago.png",
-        name: { "zh-TW": "羊毛大衣", "ja": "羊毛のコート" }
+        name: { "zh-TW": "羊毛大衣", "ja": "羊毛のコート", "en": "Wool Parka" }
     },
     "Marie": { 
         url: "https://i.postimg.cc/7PNFss47/Present-List-Marie.png",
-        name: { "zh-TW": "反物質中子炸彈", "ja": "反物質中性子爆弾" }
+        name: { "zh-TW": "反物質中子炸彈", "ja": "反物質中性子爆弾", "en": "Antimatter Neutron Bomb" }
     },
     "Mayo": { 
         url: "https://i.postimg.cc/zDksttN7/Present-List-Mayo.png",
-        name: { "zh-TW": "奇怪的石膏像", "ja": "奇妙な石膏像" }
+        name: { "zh-TW": "奇怪的石膏像", "ja": "奇妙な石膏像", "en": "Strange Plaster Statue" }
     },
     "Meluna": { 
         url: "https://i.postimg.cc/ry9BnnTC/Present-List-Meluna.png",
-        name: { "zh-TW": "遊艇啟動匙", "ja": "ヨットのエンジンキー" }
+        name: { "zh-TW": "遊艇啟動匙", "ja": "ヨットのエンジンキー", "en": "Yacht Ignition Key" }
     },
     "Momo": { 
         url: "https://i.postimg.cc/zDksttNF/Present-List-Momo.png",
-        name: { "zh-TW": "忍術替身木", "ja": "忍術の変わり身の丸太" }
+        name: { "zh-TW": "忍術替身木", "ja": "忍術の変わり身の丸太", "en": "Ninjutsu Log" }
     },
     "Naia": { 
         url: "https://i.postimg.cc/sfJk66zw/Present-List-Naia.png",
-        name: { "zh-TW": "海豚大砲", "ja": "イルカ大砲" }
+        name: { "zh-TW": "海豚大砲", "ja": "イルカ大砲", "en": "Dolphin Cannon" }
     },
     "Ner": { 
         url: "https://i.postimg.cc/8PPqqRkZ/Present-List-Ner.png",
-        name: { "zh-TW": "女王育兒日記", "ja": "女王の育児日記" }
+        name: { "zh-TW": "女王育兒日記", "ja": "女王の育児日記", "en": "Queen-Parenting Diary" }
     },
     "Picora": { 
         url: "https://i.postimg.cc/dQ9bHHFz/Present-List-Picora.png",
-        name: { "zh-TW": "精緻的時尚貼紙簿", "ja": "おしゃれなステッカーブック" }
+        name: { "zh-TW": "精緻的時尚貼紙簿", "ja": "おしゃれなステッカーブック", "en": "Cool and Chic Sticker Book" }
     },
     "Posher": { 
         url: "https://i.postimg.cc/7YYpp3Pt/Present-List-Posher.png",
-        name: { "zh-TW": "健康防禦葡萄汁", "ja": "健康防御ブドウジュース" }
+        name: { "zh-TW": "健康防禦葡萄汁", "ja": "健康防御ブドウジュース", "en": "Health Defense Grape Juice" }
     },
 	"RenewaAwaken": { 
         url: "https://i.postimg.cc/7YYpp3PR/Present-List-Renewa-Awaken.png",
@@ -184,87 +184,87 @@ const PRESENT_MAP = {
     },
     "Rim": { 
         url: "https://i.postimg.cc/hPPHHL4k/Present-List-Rim.png",
-        name: { "zh-TW": "高級茶杯套裝", "ja": "高級ティーカップセット" }
+        name: { "zh-TW": "高級茶杯套裝", "ja": "高級ティーカップセット", "en": "High-End Teacup Set" }
     },
     "Risty": { 
         url: "https://i.postimg.cc/bNNKKxNc/Present-List-Risty.png",
-        name: { "zh-TW": "經典遊戲大集合", "ja": "レトロなゲームパッケージ" }
+        name: { "zh-TW": "經典遊戲大集合", "ja": "レトロなゲームパッケージ", "en": "Classic Game Bundle" }
     },
     "Rohne": { 
         url: "https://i.postimg.cc/fTT66cTs/Present-List-Rohne.png",
-        name: { "zh-TW": "教主觀察日記", "ja": "教主観察日誌" }
+        name: { "zh-TW": "教主觀察日記", "ja": "教主観察日誌", "en": "Master Observation Journal" }
     },
     "Rude": { 
         url: "https://i.postimg.cc/yYYwwmY6/Present-List-Rude.png",
-        name: { "zh-TW": "莫納蒂姆健身房高級會員卡", "ja": "モナティアムジムのプレミアム会員券" }
+        name: { "zh-TW": "莫納蒂姆健身房高級會員卡", "ja": "モナティアムジムのプレミアム会員券", "en": "Monatium Gym Premium Membership" }
     },
     "Rufo": { 
         url: "https://i.postimg.cc/SNNww6Nx/Present-List-Rufo.png",
-        name: { "zh-TW": "作弊骰子", "ja": "イカサマダイス" }
+        name: { "zh-TW": "作弊骰子", "ja": "イカサマダイス", "en": "Manipulated Dice" }
     },
     "Sari": { 
         url: "https://i.postimg.cc/4NNrr6Nd/Present-List-Sari.png",
-        name: { "zh-TW": "反應卡片", "ja": "リアクションカード" }
+        name: { "zh-TW": "反應卡片", "ja": "リアクションカード", "en": "Reaction Card" }
     },
     "Selline": { 
         url: "https://i.postimg.cc/fTT66cTJ/Present-List-Selline.png",
-        name: { "zh-TW": "挑釁用的比賽服", "ja": "挑発用の勝負服" }
+        name: { "zh-TW": "挑釁用的比賽服", "ja": "挑発用の勝負服", "en": "Combat Outfit for Taunting" }
     },
     "Shady": { 
         url: "https://i.postimg.cc/DyjtFS8F/Present-List-Shady.png",
-        name: { "zh-TW": "魔法水晶珠", "ja": "魔法の水晶玉" }
+        name: { "zh-TW": "魔法水晶珠", "ja": "魔法の水晶玉", "en": "Magical Crystal Orb" }
     },
     "Shoupan": { 
         url: "https://i.postimg.cc/J469msG4/Present-List-Shoupan.png",
-        name: { "zh-TW": "艾利亞斯英雄勳章", "ja": "エリアス英雄勲章" }
+        name: { "zh-TW": "艾利亞斯英雄勳章", "ja": "エリアス英雄勲章", "en": "Elias Hero Medal" }
     },
     "Silphir": { 
         url: "https://i.postimg.cc/4NLrZYmy/Present-List-Silphir.png",
-        name: { "zh-TW": "對練用稻草人", "ja": "訓練用のカカシ" }
+        name: { "zh-TW": "對練用稻草人", "ja": "訓練用のカカシ", "en": "Training Scarecrow" }
     },
     "Sist": { 
         url: "https://i.postimg.cc/hPyHgXfh/Present-List-Sist.png",
-        name: { "zh-TW": "紫水晶存錢筒", "ja": "アメジストの貯金箱" }
+        name: { "zh-TW": "紫水晶存錢筒", "ja": "アメジストの貯金箱", "en": "Amethyst Coin Bank" }
     },
     "Snorky": { 
         url: "https://i.postimg.cc/TY7ZGKpW/Present-List-Snorky.png",
-        name: { "zh-TW": "手工豆漿48包", "ja": "手作り豆乳48パック" }
+        name: { "zh-TW": "手工豆漿48包", "ja": "手作り豆乳48パック", "en": "Craft Soymilk (48 Packs)" }
     },
     "Speaki": { 
         url: "https://i.postimg.cc/xTxWYXcK/Present-List-Speaki.png",
-        name: { "zh-TW": "南瓜南瓜套裝", "ja": "かぼちゃかぼちゃセット" }
+        name: { "zh-TW": "南瓜南瓜套裝", "ja": "かぼちゃかぼちゃセット", "en": "Pumpkin Pumpkin Set" }
     },
     "Sylla": { 
         url: "https://i.postimg.cc/nhXNLnD7/Present-List-Sylla.png",
-        name: { "zh-TW": "攜帶型電風扇", "ja": "携帯用扇風機" }
+        name: { "zh-TW": "攜帶型電風扇", "ja": "携帯用扇風機", "en": "Portable Fan" }
     },
     "Taida": { 
         url: "https://i.postimg.cc/tCSLysY2/Present-List-Taida.png",
-        name: { "zh-TW": "偷懶專用睡袋", "ja": "サボり用の寝袋" }
+        name: { "zh-TW": "偷懶專用睡袋", "ja": "サボり用の寝袋", "en": "Sleeping Bag for Skipping Work" }
     },
     "Ui": { 
         url: "https://i.postimg.cc/y8D2N7ZT/Present-List-Ui.png",
-        name: { "zh-TW": "魔靈池塘的蓮花", "ja": "精霊蓮池の蓮の花" }
+        name: { "zh-TW": "魔靈池塘的蓮花", "ja": "精霊蓮池の蓮の花", "en": "Elemental Pond Lotus" }
     },
     "Velvet": { 
         url: "https://i.postimg.cc/T3KBPTDk/Present-List-Velvet.png",
-        name: { "zh-TW": "黃金荊棘王冠", "ja": "黄金の茨の王冠" }
+        name: { "zh-TW": "黃金荊棘王冠", "ja": "黄金の茨の王冠", "en": "Golden Crown of Thorns" }
     },
     "Vivi": { 
         url: "https://i.postimg.cc/9QDsfc7K/Present-List-Vivi.png",
-        name: { "zh-TW": "銀製高腳杯", "ja": "銀のゴブレット" }
+        name: { "zh-TW": "銀製高腳杯", "ja": "銀のゴブレット", "en": "Silver Goblet" }
     },
     "xXionx": { 
         url: "https://i.postimg.cc/MpngGzQF/Present-List-x-Xionx.png",
-        name: { "zh-TW": "網絡小說單行本", "ja": "ネット小説の単行本" }
+        name: { "zh-TW": "網絡小說單行本", "ja": "ネット小説の単行本", "en": "Web Novel Monography" }
     },
     "Yomi": { 
         url: "https://i.postimg.cc/T3KBPTbv/Present-List-Yomi.png",
-        name: { "zh-TW": "向月花花環", "ja": "向月花の花冠" }
+        name: { "zh-TW": "向月花花環", "ja": "向月花の花冠", "en": "Moonflower Wreath" }
     },
     "Yumimi": { 
         url: "https://i.postimg.cc/mgPKrT9f/Present-List-Yumimi.png",
-        name: { "zh-TW": "偽裝用木製面具", "ja": "変装用の木製仮面" }
+        name: { "zh-TW": "偽裝用木製面具", "ja": "変装用の木製仮面", "en": "Camouflage Wooden Mask" }
     }
 };
 
@@ -405,6 +405,74 @@ const THOUGHT_MAP = {
             "xXionx": "自分がダークネットで書いていた小説を自費で出版するらしい。エーリアスに50部しかない貴重なものだという。",
             "Yomi": "ヨミが向月葵を編んで作った花輪。いつも身につけてほしいという言葉と共に渡してくれた。",
             "Yumimi": "木でできたこの仮面をつけると野生の獣に攻撃されないらしい？森を歩く時におすすめだそう。"
+        },
+	"en": {
+            "Alice": "A card deck that roughly tells you this day's fortune by drawing a card once daily. It seems that its magic automatically shuffles the cards.",
+            "Allet": "A sauce she says to pour on meals, when it doesn't taste as good. Can it really be stored forever?",
+            "Amelia": "A pile of paperwork that once overwhelmed me, thinking that I had to handle them. But a small note of gratitude was tucked between the documents.",
+            "Ashur": "A coupon that she secretly handed to me, telling me to come find her whenever I'm hungry. She also said never to show it to Erpin.",
+            "Aya": "A beautiful ice sculpture of a snowflake that Aya made. It never melts, even in summer, perhaps due to her magic.",
+            "Belita": "A doll that her and Erpin used to play with. It seems she entrusted it to me, since it's precious to her.",
+            "Beni": "A fishing rod set gifted to me by Beni. She diligently saved up money to buy it to go fishing together.",
+            "BigWood": "Seeds that she gave me to plant everywhere, asking not to forget her.",
+            "Blanchet": "Blue roses that Blanche grew in her garden and gifted to me. I'll take good care of them, putting them in a vase.",
+            "Butter": "A flower crown that Butter made from grass flowers. She said that she searched her favorite flowers for a week. It's also enchanted with Ashur's permanent preservation magic.",
+            "Canna": "A custom game console that shows Canna's preferences. It seems she gifted it to me, since she has no time to go home and usually visits arcades while on patrol.",
+            "Carren": "A seed package that seems to have been stolen from Kyarot's garden. There was a note asking me to plant them in the Order garden, but I couldn't do it under Ner's watchful eyes.",
+            "Chloe": "A large tapestry embroidered with the Sprite Kingdom where Chloe lives. The Yggdrasil Order is also depicted.",
+            "Chopi": "An autograph book of Chopi. Acting shy, she came to get my autograph earlier, but panicked and ran away, leaving it behind.",
+            "Diana": "A rocking chair that Diana worked on for me whenever she had free time. She told me to sit here and relax when I'm tired.",
+            "Ed": "A picture capturing a beautiful scene from ED's dream that Nata printed for her. It leaves me with a bittersweet feeling for some reason.",
+            "Elena": "A laptop that she gifted to me, saying I probably miss modern products and culture... I hope it hasn't been bugged.",
+            "Epica": "An epic novel written by Epica, based on my adventures. It's slightly exaggerated, but still fun to read.",
+            "Erpin": "A pastel set that Erpin gifted me hesitantly, apologizing for secretly taking pastels from my storage.",
+            "Espi": "A diary that Espi keeps about the dreams of others she has peeked into. She gathered particularly interesting ones.",
+            "Festa": "An album Festa recorded when she was in the music scene under another name. It's even signed by her.",
+            "Fricle": "A ring with rubber thorns that won't hurt. It seems she slyly slipped it into my pocket with a letter when I wasn't looking.",
+            "Gabia": "Beautiful stones that Gabia painstakingly collected near the Elemental Mountain's cave and pond. They look no different from gems.",
+            "Haley": "Haley gave this to me, saying that it's a classified map of Monatium, but it looks more like a tourist pamphlet. There are some circles that she marked as important strategic points.",
+            "Hilde": "A diploma plaque with 'Doctor Hilde' written in big letters. It seems she secretly hid it in her drawer from Elena.",
+            "Ifrit": "A suit that Ifrit asks me to wear whenever I come to see her, as she is always burning.",
+            "Jade": "An electronic blanket with jade stone, said to emit anions and protect your health. Does it work in Elias?",
+            "Jubee": "A little honey jar, but apparently Jubee refills it every morning without me noticing. It's sweeter and tastier than I expected.",
+            "Kidian": "A dagger that Kidian put a lot of effort into welding. The finishing is a bit rough, but I can feel her heart.",
+            "Kommy": "A luxury pillow that makes you fall asleep easily. She bought the same pillow as the one she uses.",
+            "Kyarot": "The 1st-place trophy that Kyarot won in the largest crop contest.",
+            "Lazy": "A toolset with various tools, including a spanner and a torch. I can feel Layze's taste perfectly in this.",
+            "Leets": "Armor Leets made for me to wear for protection. But unfortunately, it's incredibly heavy since it's designed based on a dragon's strength. I think I'll just use it for decoration.",
+            "Levi": "A human-sized pajama that Levi bought with the money she earned from her part-time job. For some reason, I feel warm and proud.",
+            "MaestroMK2": "A drive filled with videos, photos, and audio recordings, saving every moment from the first time we met until now.",
+            "Mago": "A warm coat made by Mago. It's not made from her own wool, is it?",
+            "Marie": "A bomb that Marie put a lot of effort into making after learning something strange about the Elves. In the end, she had to remove the explosive materials herself though, after being scolded by Ner.",
+            "Mayo": "A sculpture of me that Mayo has diligently made. But her artistic skills aren't great, so it looks a bit bizarre.",
+            "Meluna": "An ignition key for Meluna's yacht, which is now anchored at the Elemental Lake. Unfortunately it's currently under seizure and can't be used...",
+            "Momo": "This is a gift from Momo, who came up with the clever idea that if I use Ninjutsu to swap places, I could be at my place in the blink of an eye.",
+            "Naia": "A giant water gun shaped like a dolphin cannon. It reflects Naia's wish to play with water cannons.",
+            "Ner": "A diary of the old days when Ner was taking care of and educating Erpin and Belita. As expected of Ner, it is written meticulously.",
+            "Picora": "A sticker book that Picora made by herself. It's full of stickers showing various emotions and emojis.",
+            "Posher": "Grape juice that Posher sent me, as she worries about my health. She sends it too often, so that I can't finish it all.",
+            "RenewaAwaken": "",
+            "Rim": "A teacup set that Rim gifted to me shyly. She said she wants to drink tea together every time she visits my room.",
+            "Risty": "Risty gave it to me, saying that she's all grown up now and doesn't need it anymore. But now she comes over to play with her game console every day.",
+            "Rohne": "A journal that Rohne passed to me, saying she once wondered about handing it to Elena. The only thing written in it are requests for real cutlet.",
+            "Rude": "Premium membership access that Rudd sent me, saying that she needs a training buddy. Should I go?",
+            "Rufo": "A cheating dice that always shows the number she wants. She probably entrusted it to me, not to be caught and hit by Tig.",
+            "Sari": "A reaction card crafted by Sari herself. When I hold up the card with both hands, she reacts according to the card.",
+            "Selline": "It's not a weird outfit at all, definitely NOT! It's literally a combat outfit that Selene made to taunt me.",
+            "Shady": "A decorative ornament, but if I operate it in a certain way, I can see Shaydi's face watching over me. This is just a painting, right?",
+            "Shoupan": "A clumsy medal that Shoupan made herself just for me, but it was crafted with love. She gave it to me, reminiscing about how happy she was when she received her own medal.",
+            "Silphir": "A strange scarecrow that uncannily resembles Rudd. It seems that she wants to train martial arts together with me.",
+            "Sist": "A coin bank in which Sist had collected coins one by one since she first started her business.",
+            "Snorky": "Craft soymilk that Snorky sent me, worrying about my health due to my heavy workload. She said she'd make it for me every month.",
+            "Speaki": "A box filled with various pumpkin-related items, such as pumpkins, pumpkin soup, pumpkin spice, and pumpkin bread.",
+            "Sylla": "She spent a fortune on a fan in Monatium that she had heard was a wind-related item, but it turns out she was cheated. It's the thought that counts!",
+            "Taida": "A sleeping bag with an urban camouflage pattern. Rumor has it that if she crawls inside near the Order, she can sneak in a nap and avoid work.",
+            "Ui": "A pretty lotus flower that blooms in Ui's pond from time to time. It seems to never wither, perhaps due to her wish.",
+            "Velvet": "A witch-style crown that she made in preparation, as she believed she would become a queen sometime in the future. She asked me to take care of it until she becomes a queen.",
+            "Vivi": "Vivi's favorite elegant cup for drinking beverages. She said that she made it while thinking of me.",
+            "xXionx": "A self-published bound book of a web novel that Xion released on the Darknet. She said it's a rarity with only 50 copies circulating in Elias.",
+            "Yomi": "A wreath made by Yomi weaving moonflowers together. She gave it to me with the request to always wear it.",
+            "Yumimi": "A wooden mask said to prevent attacks from wild beasts. But really? However, she recommended me to wear it while wandering in the forest."
         }
 };
 
@@ -444,7 +512,7 @@ const LETTER_MAP = {
             "Lazy": "啊，教主大人，您好！我是雷吉。這是我第一次寫信給您。雖然直接見面打招呼會更好，但每次遠遠看到您時，您總是看起來很忙碌的樣子。我自己呢，總是會莫名其妙地被捲進一些事情裡而忙得團團轉，但教主大人您看起來是那種會主動去找事做的類型。啊，不過這絕對不是批評的意思！只是想說，從您身上真的感覺到，您為了艾利亞斯付出了許多努力，也帶來了不少幫助。真的非常感謝您，教主大人。那下次我們就別用信件了，直接見面吧！",
             "Leets": "嗨，教主！您過的好嗎？我今天也完成了一天的鍛鍊，然後努力地四處尋找下一個對手！我絕對不是窩在家裡被路德訓斥才被趕出來的！……所以說啊，教團裡會不會有什麼值得一戰的事情啊？啊，我並不是希望有那種事情才這麼說的！只是覺得突然有點事情發生也不錯……呵呵，總之，有什麼事情一定要找我唷，教主！",
             "Levi": "以前我做過「幸運信」寫作的工讀生……但要說給誰寫信，這還是第一次，或者說真的很久沒寫過了。啊，我之前寫過一封魔女升級審核用的請願書……那麼，這應該是我第一次懷著愉快心情寫的信了吧！多虧教主大人設置了宴會廳，讓我能嘗到各式各樣的料理。也因為這樣，我充滿了力量，甚至多接了兩份兼職呢！\n心懷感謝，萊薇敬上。",
-            "MaestroMK2": "#include<stdio.h>\nint main(){\n    printf(\"\\x54\\x68\\x61\\x6E\\x6B\\x20\\x79\\x6F\\x75\\x2E\\x20\\x48\\x75\\x6D\\x61\\x6E\\x2E\");\n    return 0;\}",
+            "MaestroMK2": "#include &lt;stdio.h&gt;int\n main(){printf(\"\\x54\\x68\\x61\\x6E\\x6B\\x20\\x79\\\nx6F\\x75\\x2E\\x20\\x48\\x75\\x6D\\x61\\x6E\\x2E\");\nreturn 0;}",
             "Mago": "教主大人，您那裡還好嗎？我的牧場最近天氣非常好，大樹下總是有涼爽的樹蔭，柔和的微風還帶著花香撲鼻而來。坐在樹蔭下，真的能感受到一種前所未有的平靜。和朋友們一起躺著休息時，我想到了教主大人。大家都說很想見您，我也是。所以寫下這封信，希望能早日見到您。",
             "Marie": "教主大人。我們的回憶總是少不了炸彈呢。我突然想到了一個全新的炸彈點子。我要先去把它做出來，然後再繼續寫。做好了。這顆炸彈被我設計成在教主大人收到並讀完這封信後會爆炸。至於我打算把它裝在哪裡……那是秘密！下次一定要告訴我對這顆炸彈的感想哦？那麼，祝您爆彈愉快！",
             "Mayo": "致教主：最近聽說您到處忙個不停。我可不喜歡我的收藏品有任何刮痕，也不喜歡被其他人染上指紋。包裝損壞更是不行。所以，教主最好乖乖待在教團裡。這也是因為收藏品也需要有社會地位和體面，才特地把你視作教團的一部分。記住，不要到處亂跑，只能待在教團裡。別忘了，教主是我的收藏品。",
@@ -512,7 +580,7 @@ const LETTER_MAP = {
             "Lazy": "教主様、こんにちは。レイジーです。こうして教主様に手紙を書くのは初めてですね。直接お会いしてご挨拶するべきとも思いましたが、いつもお忙しそうなので、手紙で失礼します。私は自分の意思にかかわらず、色々なことに巻き込まれて忙しくなってしまうのですが、教主様は自分から仕事を見つけて忙しくされているようですね。あ、いえ、それが悪いと言っているわけではありません。教主様はエーリアスのために尽くしてくださっているんだな、という話です。いつもありがとうございます。次は手紙ではなく、直接お会いしましょう。",
             "Leets": "こんにちは、教主様！お元気ですか？僕は今日も鍛錬のため、次の相手を捜し回りました！決してゴロゴロしてたところをルード様に叱られて、竜の巣から追い出された訳ではありません！……ところで、教団では戦えるような機会ってありませんか？あっ、別にそういうことが起きてほしいという訳じゃないんです！ただ、起きてくれたら嬉しいっていうか……へへ！とにかく何かあったら絶対に連絡してくださいね！",
             "Levi": "以前「幸運の手紙」書きのアルバイトをやったことはありますが……個人的な手紙を書くのは初めてか、あっても久しぶりな気がします。あっ……魔女昇級審査の嘆願書を書いたことがありましたね……じゃあ、楽しい気持ちで書くのは本当に初めてです。教主様が宴会場に誘ってくれたおかげで、色んな食べ物をバランスよく食べられるようになりました。おかげで、アルバイトを2つも増やせたんですよ！感謝の気持ちを込めて、レヴィより",
-            "MaestroMK2": "#include<stdio.h>\nint main(){\n    printf(\"\\x54\\x68\\x61\\x6E\\x6B\\x20\\x79\\x6F\\x75\\x2E\\x20\\x48\\x75\\x6D\\x61\\x6E\\x2E\");\n    return 0;\}",
+            "MaestroMK2": "#include &lt;stdio.h&gt;int\n main(){printf(\"\\x54\\x68\\x61\\x6E\\x6B\\x20\\x79\\\nx6F\\x75\\x2E\\x20\\x48\\x75\\x6D\\x61\\x6E\\x2E\");\nreturn 0;}",
             "Mago": "教主様、そちらはどう？私の牧場は最近とてもいい天気だよ。大きな木は涼しい木陰を、優しい風は花の香りを運んでくれるの。木陰にいると本当に穏やかな気持ちになるなぁ。友達と一緒に寝転んでいたら、教主様のことを思い出したんだ。みんな教主様に会いたがってる。もちろん私も……だからこうして手紙を書いてるの。教主様に会いたいな。",
             "Marie": "教主様。あたしたちの思い出には爆弾が欠かせませんね。急に新しい爆弾のアイデアが頭に浮かんだので、続きはそれを作ってから書きますね。できました！教主様がこの手紙を読み終えたら爆発するように作りました。どこに仕掛けるかって……それは秘密です！今度、ぜひ爆弾の感想を聞かせてくださいね？それじゃ、いい爆弾を〜！",
             "Mayo": "教主に告ぐ。最近、あちこち奔走しているという噂を聞くっす。私はコレクションに傷がついたり、他のやつらの手垢がついたり、外装に傷がついたりするのは嫌っす。だから、教主は教団の中限定。コレクションにも社会的地位や体面があるから教団保管が最適。分かったらウロウロしないで教団内に滞在してるっす。忘れちゃダメっす。教主は私のコレクション。",
@@ -544,5 +612,73 @@ const LETTER_MAP = {
             "xXionx": "この手紙を読んでいるということは、既に我と精神世界を共有するほど親密な関係になったということだろう。現在時刻は午前2時。月すら寂寞を覚え、エーリアスの全生命体が最も孤独になるこの時間にペンを取ったのは、他でもない教主、そなたが原因だ。宴会場で我が話を聞いて「シオンらしい」と言ったのはどういう意味だ？至急返事求む。p.s おかしくないよな？精神世界っていう表現、かっこいいよな？",
             "Yomi": "月様へ。お手紙を書いていると、胸が弾んで落ち着きません。文字で伝えるのは言葉とは違う趣きがありますから。半日悩み、感謝の気持ちを詩に表すのはどうかと思い、一篇、詠ませていただきます。\n月見草一輪、頭を上げて月を見る。\n照らさるるのみで、その恩恵計り知れぬというに顔を向けて見つめてくださる、この上何をや望まん。",
             "Yumimi": "ふ〜ん、最近、誰も私の離れを訪ねて来ないと思ったら、教主様が気を遣ってくれてたのね？ありがとう！今度、森で貴重な薬草とかキノコとかを見つけたら送るね！これからもよろしく。それから、自然の中で過ごしたくなったら、いつでも遊びに来てね！その代わり、一人で来てね。離れが人でガヤガヤするのは嫌だから。"
+        },
+	"en": {
+            "Alice": "Master, remember when I asked if you'd like to live with my sister in the mirror? Yeah, let's forget about that. Disappointed? Well, tough luck, I've realized that you're just way too fun to let go of. You should feel honored... It's not easy to win me over like this. Stop by for a tarot reading soon. I'll make sure it's the best fortune... just don't ask whose it'll be.",
+            "Allet": "Master, good day! Allet here from the Monatium Suppression Unit. It feels odd writing you for personal reasons, given that I usually only communicate for official matters. The purpose of my letter is to express my gratitude. Your leadership and willingness to take charge in every situation are qualities I hold in the highest regard. Oh, of course, Chief Canna also is someone I hold in the highest regard... Oh, this is tough! In any case, should anything troublesome occur in Monatium, please let me know. I'll do my best to help, as always! With loyalty, Allet",
+            "Amelia": "Geez... Me, writing to a human? Never thought I'd see the day. I'll get straight to the point. Thank you, Master. I've spent a lot of time thinking, and I've realized I can't overlook the kindness you've shown me. Despite my rudeness, you've always looked out for me. I can't fully grasp it as an elf, but I recognize it must take incredible strength. This letter is a small token of gratitude from me. Just don't let the Mayor find out, okay?",
+            "Ashur": "Greetings, Master. Well, this is awkward... writing to you. Thank you for putting up with all my nagging up until now. I did it for you, though, you get that, right? You're not Her Majesty, so I think you understand. Hmm... Actually, this is not why I'm writing. I've baked something new, and it turned out pretty tasty. Please give it a taste and let me know what you think.",
+            "Aya": "Elemental Mountain's icy peaks can be tranquil, but it can also feel isolating sometimes. Master, I'm always thankful for how seriously you listen to my stories about my search for my siblings and for the genuine care you show. I truly hope we can one day tear down the walls between us and share a true bond. I'll wait for the day your feelings align with mine.",
+            "Belita": "Master, thank you for always being there for Erpin. She's upright and kind-hearted, but her gentle nature has always been a concern for me. Knowing that Ner and you are by her side brings me comfort. I'll admit, I sometimes find myself envious of Erpin. As the Witch Queen, I rely on Fricle's support, but as Belita the Witch, I often find myself feeling lonely. Please don't feel pressured, but a visit to the underground now and then would bring me happiness. I'll end this here, as you must have a lot on your plate.",
+            "Beni": "Hello there, Master! I hope I'm doing this right, hehe! When I said I wanted to thank you, Chief Diana suggested writing a letter. She's actually helping me write it right now! Uh... now she's telling me not to mention that. Anyway, thank you so much for always giving me delicious things to eat at the Banquet Hall and chatting with me. Next time you visit Werebeast Forest, I'll make something really delicious for you, okay?!",
+            "BigWood": "BigWood has concern lately. No, BigWood had concern. Not now, thanks to Master. Sprite Kingdom hard place for BigWood to live alone. But now, BigWood feels like BigWood belongs. Roots are strong here now. All because of Master. BigWood want to show thanks. BigWood make gift for precious friend, Master. BigWood hope you care for it well.",
+            "Blanchet": "Thanks to you, Master, I have been able to find so many friends within the Order. I have become accustomed to smiling while having fun with others. I still get a bit flustered when you pull my cheeks sometimes... however, I believe such playful behavior is part of your inherent gentle nature. I was reminded of a letter I received from an audience member when I was still an unknown actress. I wasn't used to expressing emotions back then, but I know for certain I was smiling. I wanted to share that feeling with you, Master.",
+            "Butter": "Hi, Master! It's me, Butter! Butter had so much fun today! Butter even went for a walk! But Butter was sad because you weren't there. When can you go for a walk, Master? Kommy said you've been busy lately. But Butter still wants to spend time with you. Next time, please go for a walk with Butter, okay? Promise!",
+            "Canna": "Hello, Master! This is Chief Canna of the Monatium Strike Force. I happened to get a rare day off and decided to use the time to write you this letter. Usually, handwritten letters are discouraged for security reasons, but since there's no sensitive information here, it should be fine. Probably. I wanted to take this chance to thank you for all the help and kindness you've... whoops, looks like I'm being summoned again. So much for my time off... If I ever get another day off, I'll be sure to write again! Let's hope that happens sooner rather than later.",
+            "Carren": "Hello, Master. This is Carren, the former radical raw foodist. I'm sorry for behaving disgracefully in front of you last time, Master. These days, I'm no longer obsessed with ElfTube and have been living an ordinary life as a sprite. So, no need to worry about me anymore. Let's visit Kyarot's garden for some coffee next time. I'll treat you to those vegetables I promised last time, too. Until we meet again... Yours carrotly, Carren",
+            "Chloe": "Master, when do you plan on visiting my tailor shop again? Oh, it's nothing serious... I just thought maybe you could give the animal costume gig another go. Or, actually, forget the animal costume thing! It'd be amazing if you could lend a hand here, no matter the task. Also, Sebastian misses you very much, Master! You did spend all that time with her, after all. Let's make plans to hang out somewhere fun after work! I always enjoy spending time with you!",
+            "Chopi": "Hello, Master! As always, thank you for your efforts to keep our village peaceful! As a full-fledged teacher of Werebeast Village, I will work hard to train the best warriors. Also... If you happen to meet the one and only Super-General-King-God-Emperor-Majesty-Fierce-Gaze-Number One-Legendary-Werebeast Blade Master Tig, could you please let her know that I'm becoming a great warrior? I'd really appreciate it! Please keep watching over me as I grow. See you soon!",
+            "Diana": "I've prepared plenty of delicious food. I focused on making dishes that were low in sugar, so the selection might be a bit modest. Still, having an abundance should make up for the lack of variety, don't you think? Even though it'll last longer thanks to being low-sugar, it's still best eaten fresh, which is why I'm writing to you now. This should reach you soon, I hope. I have desserts ready, too, so make sure to come in comfortable clothes.",
+            "Ed": "I'm not sure if writing a few words like this will make a difference... but Nata says that dreams may carry great meaning and insisted I write this letter to you. Master... I found myself wishing that the time I spent with you wasn't just a dream. At first, I thought only Nata would understand me, but not anymore. I wish that your presence could continue forever within this dream. Please continue to dream with Nata and with me. Always.",
+            "Elena": "Hey, human. We meet again, huh? Honestly, considering what we have done, I didn't expect you to take such good care of us. Does that mean we can go even wilder now? Just kidding. I do have some sense, you know? Well, I will try to rein it in a little from now on. I can't promise I will be able to keep all the Monatium Denizens in check, but I will do my best to keep things from getting too chaotic. Thanks. Yeah, that's all.",
+            "Epica": "Master, today I wanted to express my gratitude. You already know that I have traveled far and wide, calling myself a storyteller. I have encountered countless stories and countless protagonists. For the longest time, I believed my role was only to make those protagonists shine. But you were different. You saw me, just a mere storyteller. You allowed me to be part of your story, to write it together with you. Thank you, Master. I will stay by your side until the very last page of your story.",
+            "Erpin": "Hello, Master! You must have wanted to flee because of all my foolishness, right? Ner said you wouldn't... but I thought you might. Turns out I was wrong. Thank you for not taking off. Thanks for buying me baked goods and sharing your food with me. If it weren't for you, I wouldn't be Queen right now. I'd probably still be without baked goods, sleepless, hungry, and cold. From, Erpin",
+            "Espi": "This letter started in Monatium and brings good fortune every year as it does its rounds to those who receive it. Now that it's with you, you must pass it on within FOUR days. Send SEVEN copies, including this one, to those who need some luck. Feel free to make copies. Think it's a superstition? Well, if you don't follow through, prepare for nightmares... or worse, I'll show up in your dreams! Heeheehee.",
+            "Festa": "[Hi there! This is the Rockfest Operations Manager. Congratulations! You've won two Rockfest tickets through the \"Like Rockfest ElfTube and Join the Fun!\" event.] Boom! My luck's pretty rockin', right? Since I'm performing, I don't need these tickets, but you'll want them! You're coming to see me bring the house down, right?! Catch ya there!",
+            "Fricle": "I can already picture you handling a mountain of paperwork with that stupid look on your face again. You do realize how crucial sorting is before diving into working on those documents, right? Start by grouping similar items together, then prioritize by importance to get through it more quickly. I'm not saying this because I'm worried about you being overwhelmed. I'm sure you've already thought of this, Master. Anyway, keep up the good work today.",
+            "Gabia": "Playing only with earth elementals in the cave was starting to feel dull, but the meals you provided me and the conversations you had with me at the Banquet Hall brightened up my days. Being with you brings back memories of when Sylla, Naia, and Ifrit used to get along so well. Your cooking? It's hit and miss, but I always eat every last bite. Sometimes I sneak some back to the earth elementals, and they love it too. Let's spend time together again soon.",
+            "Haley": "Dear Master, how are you doing? Thanks to you, Eliash is peaceful today as well. It may sound obvious, but you're quite a capable human. Back when I was on Earth, if there had been humans like you, I could have carried out my missions much more smoothly. To be frank, I wasn't too fond of my Earth friends. Even when I protested our treatment, they didn't take it seriously. That's why I can't help but hold you in high regard. I pay my respects to your hard work. Come visit Monatium sometime and I'll treat you well.",
+            "Hilde": "Hello, Master. The results from your recent checkup were not ideal. I trust you're not under the impression that being in Elias gives you the luxury of neglecting your health. It seems we'll need a follow-up exam. Please come by at your earliest convenience. Haha, just kidding. Your health results were excellent. You must be taking great care of yourself! Still, it's about time for another checkup, so please visit soon. Sincerely, Hilde",
+            "Ifrit": "Hey, Master! Ifrit here! Writing letters is harder than I thought. The paper keeps catching fire, so this is already my fourth try. Anyway, it's nothing big, but I just wanted to say thanks for listening to me whine and putting up with me all this time. Oh, and I heard from the lesser fire elementals in the Banquet Hall that you've been nice to them, too. Honestly, you seem like someone I can trust. Let's keep this good thing we have going!",
+            "Jade": "Master, consider it an honor! A letter penned by me, Jade, will soon be treated as a treasured relic of Elias! ... Well, that's not exactly what I meant to say. I wanted to thank you. Watching you nag every day, I wondered why you do that... But then I read in a book once: nagging... it's just another form of caring. So please continue to take care of me. From Jade.",
+            "Jubee": "You are invited to the Jubee Party, Master, bee. This exclusive event is only for Jubees, bee. It will feature fun activities like the Jubee Triathlon, Honey Collection Contest, and Spot the Different Jubee, bee. A variety of fun activities and a luxurious honey buffet will be available, so you're in for a treat, bee! It would be fantastic if you could be the special guest speaker to start the party, bee. There's no entry fee or preparation needed, bee. It feels like I've forgotten to write something, but I can't remember it, so I'll leave it at that, bee.",
+            "Kidian": "I was over being friends with anyone after my fight with Daya. I guess I was scared about being lonely again after getting into another argument. So when you reached out to me first, I was really shocked. I wasn't sure if I was capable of making friends again, either. But you kept coming back to me and putting in the effort. Now, I want to put in the effort, too. Can I call you my friend?",
+            "Kommy": "You really come in handy, Master. You feed Kommy and play with Kommy. At this rate, you're sure to climb to the top of Kommy's best friends list! Do you want to know why Kommy decided to write you a letter? I read in a book that \"the limits of language are the limits of one's world.\" Master, you have now entered Kommy's world. Welcome. Writing is such a pain, though. Kommy's hand hurts. Kommy is going to sleep now. Bye, for now, Master.",
+            "Kyarot": "Hello, Master! We talk all the time at the Banquet Hall, but this is the first time writing you a letter, right? I'm so happy to have made a friend as tall as my plants! When I heard your world also has eggplants, carrots, and pumpkins, I couldn't stop dreaming about going there. You'll take me there someday, right? I'll be looking forward to it! Until then, make sure you drop by my garden lots!",
+            "Lazy": "Oh, hello, Master. This is Layze. This is the first time I've written a letter to you. I'd rather greet you face to face, but you always seem so busy whenever I see you. I tend to get dragged into things, even when I don't want to, but you always seem to be actively looking for things to do. Oh, I didn't mean that in a negative way! I just wanted to express that I can truly feel the impact you've had in Elias, and I'm grateful for all that you do. Thank you once again. Next time, let's meet face to face.",
+            "Leets": "Hello, Master! Have you been doing well? I finished my daily training as usual and have been wandering around in search of my next opponent! It's absolutely not because Rudd kicked me out of my Roost after nagging at me! So... do you think something worth fighting for will happen in the Order soon? Not that I want anything bad to happen! Just, you know, it would be nice if something exciting came up... Hehe! Anyway, if anything does happen, you have to let me know, Master!",
+            "Levi": "I once had a part-time job writing chain letters, but writing something like this feels like a first... or maybe it's just been ages since the last one. Oh, I did write that petition for the witch promotion exam, but writing for fun like this? That's definitely new. Thanks to you opening up the Banquet Hall, I've been able to have a balanced diet. It gave me the energy to pick up two new part-time jobs! Thank you! From, Levi",
+            "MaestroMK2": "#include &lt;stdio.h&gt;int\n main(){printf(\"\\x54\\x68\\x61\\x6E\\x6B\\x20\\x79\\\nx6F\\x75\\x2E\\x20\\x48\\x75\\x6D\\x61\\x6E\\x2E\");\nreturn 0;}",
+            "Mago": "How are things with you, Master? The weather at my ranch has been lovely lately. The big trees provide cool shade, and the gentle breeze carries the scent of flowers. Resting under the shade feels so peaceful. While relaxing with my friends, I couldn't help but think of you. Everyone here misses you, and so do I. That's why I'm writing this letter. I'd love to see you soon.",
+            "Marie": "Master. Our memories just wouldn't be complete without bombs, huh? Out of nowhere, I got this brilliant idea for a brand-new one. Just had to make it real before I could keep writing. All done. I rigged it so it'll go off right after you open and read this letter. As for where I plan to install it... that's a secret! You will tell me what you thought of this one later, right? Well then, enjoy the bomb!",
+            "Mayo": "To the Master. Heard you've been busy running around lately. Don't like my collectibles getting scratched or touched by others. The packaging must stay intact. So, stay within the Order. This is a courtesy, considering you have social standing and deserve respect. Understood? So, stop wandering about and stay within the confines of the Order. Never forget. You are my precious.",
+            "Meluna": "Sending personal letters is rare for me due to my position. But you're special. You're the company's advisor, my friend, and well... I'm not sure how to say it... you're just you. Things move quickly in Monatium, and sometimes it gets tiring. So, please just remain as the special person you are. Please burn this letter after you read it. I'm worried about what might happen if my handwriting gets out.",
+            "Momo": "Master! I hereby make a formal proposal: become my disciple! You clearly have the talent of a ninja! You're not... doubting my skills, are you?! I'm a werebeast who trained as a member of the Chow Rebels. My abilities are backed by that proud experience, I assure you! Even if my offer doesn't quite appeal to you, I'd be honored if you'd at least join me for training from time to time. Joint training is always fun! Well then, farewell!",
+            "Naia": "Master! This is my first time writing a letter, you know? Consider it an honor to receive my first letter! I was thinking about who to write to, but Silphir probably wouldn't read it even if I sent one, so I'm writing to you, Master! Um... I'm really sorry for being too rough last time! Actually, I'm writing this letter because I wanted to say sorry. You're not too mad, right? If you're not, let's hang out again! Playing with you is super fun, Master!",
+            "Ner": "Hello, Master.\nThis may sound a little out of nowhere, but lately I often find myself thinking how fortunate it is that you, and no one else, are the Master of our Yggdrasil Order. I hope you will continue to remain by my side and by Her Majesty's as well. Oh, and before I forget, I did not receive your diary yesterday. You are still working on it, I assume? I shall be waiting.\nSincerely, Ner.",
+            "Picora": "Master! Hello! Your eternal disciple, Picora, is writing you a letter! Every single day with you feels like a dream come true. Your teachings don't just become stickers and hairpins for thought, sharing little everyday stories together, and eating delicious food, it brings such great happiness to me! I'll work even harder to become a wonderful disciple who won't be a burden to you, Master!",
+            "Posher": "Hey, Master, I've made a new potion. How about you come and give it a try? I've told you before, just like my potions, things that taste bitter are actually good for you, right? For you, though, I'll try making one that actually tastes pleasant. Don't get your hopes up, though... taste is all relative, after all. Hehe. Drop by when you have time. I'll be waiting.",
+            "RenewaAwaken": "",
+            "Rim": "I used to live alone in a secluded house on a hill, but coming to the banquet hall has allowed me to make many friends. I'm tickled pink that there seem to be some who like my jokes. Are there more who are about that lemon tea life? I can't wait for my friends to come by my house someday. I'm grateful that the Master allowed me to meet many Apostles at the banquet hall.",
+            "Risty": "O/ 07! Sup, Master! I would've just sent you a message through the in-game chat, but you don't hop into my games very often, so I'm writing this as a letter instead. It's nothing big. Just wanted to say thanks for cleaning my room that one time and taking care of me at the Banquet Hall. But going all the way to see you for real is way too far and too much of a hassle, so a letter it is. That's okay, right? Come online more often from now on. Let's get into a match together. I'll carry you! Promise! Got it? That's a promise!",
+            "Rohne": "It's me, Rohne, the kind, capable spy who never wastes a crumb! I'm so glad I can de-stress from work by talking about all kinds of things with you. I hope you feel the same even though I worry I might be blurting out classified secrets all the time! All I want is for you to have a great time, Master! Oh, and one more thing, my frequent trips to the Banquet Hall? Let's keep that a secret from Amelia, okay?",
+            "Rude": "Hey there, Master. I'm not very used to communicating through letters, so this feels strange. I just wanted to express my thanks for all the healthy meals you've made for me at the Banquet Hall. Have you been keeping up with your training lately? I know I always bring it up, but it's just my way of showing I care. Next time, let's meet in the training room in my roost. I've got a new workout course ready for you.",
+            "Rufo": "It's me, Rufo, the brains of the Chow Rebels. I am most eager to believe that this written word finds you amidst circumstances of the most exquisite health and unparalleled joy. Master, I'm not exactly sure how to write this. Captain Tig told me to include hers as well, but I'm busy! Master, where exactly do you manage to get your ingredients? Make sure Beni doesn't find out. I would like to play board games with you. I will lend you a special elven device to help you make good rolls. Just don't tell Captain Tig.",
+            "Sari": "Hi there, Master! What a pleasure! Writing letters is so difficult when I can't see your reactions to what I'm saying. But right now, I'm imagining a conversation with you while I write! Oh, now you're talking about that crème brûlée you had yesterday. Wow, amazing! That must have been SO good! You're so good at explaining things. Hmm, still... it is a bit awkward having a conversation with the imaginary version of you. I would much prefer to meet you face to face as usual! Come back soon and share some fun stories, okay?",
+            "Selline": "Hey there. I was tidying up my photo album and found a picture where you came out really nicely, Master. It would be a waste to keep to myself, so I'm sending it to you. Don't worry, it's not a weird photo or anything. It suddenly reminded me of the time we played chess together. I don't mind playing by myself, but it's definitely best with someone else. I'd like to do that again with you next time. You will join me, right? I won't laugh at you for being bad at it. Hehe, I promise.",
+            "Shady": "Uh... what am I doing here? I just have to write whatever? The others seemed to be doing this, so I thought I should write one too. This feels weird, though. Strange... I was never like this before. Why the heck am I even doing something like this?! Turning my inner thoughts into words? What? Hey, what have you done to me?! Geez... it's strange... this is definitely unsettling, but it's not completely terrible, either. Well, I'll keep dropping by the Banquet Hall to play pranks, so stay on your toes!",
+            "Shoupan": "Shou-shou-shou-shou! Pa-pa-pa-pa-pang! Shoupan! Ma-ma-ma-master! He-he-he-hello! Writing is so annoying! My hand won't move as fast as I'm thinking! Anyway, let's go for a drive next time! You can totally ride in my back seat! Where do you wanna go? What about the big outside world we talked about last time? I'm gonna ask you out of the blue, so think about it carefully! Buh-bye",
+            "Silphir": "Rudd's been bugging me lately, telling me I should work out more. Hmph. As if just lifting weights is the answer for everything. That's why I want you to help with my training, Master. N-Not because I want to see you or anything, okay? It's just that you're the best fit for this. Seriously! I'll let you know my training schedule, so make sure you're on time.",
+            "Sist": "Hello, Master. I wonder if you've been well. I've been promoting a new product lately. So I'm holding an event where you can try it for a small trial fee. Since you're the Master, I'll only charge about 2000 Gold for the trial fee. I'm enclosing the product, so please use it for a week and send me a very positive review. Well then, I'll be waiting for a good review!",
+            "Snorky": "Don, it's your eternal right hand, Snorky. I used to be good for nothing but throwing punches, but now I help with your work, plant beans, and I've even written you this letter! Thanks for teaching me how to live a peaceful life. If only I had the honor of serving you earlier... The time I spent not knowing you... That's the part I regret the most. From now on, I will always be by your side, wherever, whenever. Please watch over me, too, Don.",
+            "Speaki": "Master! Not sure if it was yesterday or the day before, but an Apostle called Speaki asked Ner to pass along her regards to you! Ner is delivering this message word for word! Master, I am always grateful for how you've taken care of me and my pumpkin friends! If you ever visit Phantom Marsh, my pumpkin friends will look out for you and keep you safe. They'll even make sure Espi and Alice don't mess with you! You're always invited to my home anytime!",
+            "Sylla": "Master, I hope you got this letter okay. I entrusted it to the wind, so I trust it found its way safely. I'm always grateful to you, Master. I've often seen how considerate you are toward me and the other elementals. It's clear that your efforts have also helped foster better harmony between elementals and other races. As the noble wind elemental, and a representative of our kind, I wanted to extend my gratitude. May a soothing wind grace you today.",
+            "Taida": "Hello, Master! I'm writing this to you during a brief break at work. And no, I'm definitely not avoiding my responsibilities or slacking off, okay? I appreciate how you always greet me and ask about my well-being whenever we run into each other in Monatium. But outside of work, I'd like you to see me as Taida, the one who wants to rest and enjoy some time off, not Taida the civil servant. Basically... ask someone else to take care of your busy work... ahem. See you soon.",
+            "Ui": "Master, thank you for always staying by my side! Before I met you, Croakie was my only friend. But now, because of you, I've made so many new friends! I like you so much, Master! You're the best friend I could ever ask for! Will you promise that this will never change and you will always be my friend? We'll be friends forever! Your good friend, Ui✩",
+            "Velvet": "Hey, Master! I've cooked up a genius plan to start my kingdom. Wanna join me? If it works, I'll make you my most trusted underling. You seem like someone I can count on. This time, I promise I won't betray you. I swear! Don't waste time replying: it's a pain to read. Catch you face-to-face soon.",
+            "Vivi": "Dear Master, How are you? I've mustered the courage to send this letter in an attempt to convey my feelings. How swiftly the time has passed! I must offer my sincerest apologies for my coldness at the beginning. However, noble souls are bound to recognize each other and as such, I soon came to grasp thy true worth, just as thou hast seen mine. Please continue to watch over me, and I shall do my utmost for thee and this world. Yours, Viviana Argentum.",
+            "xXionx": "If this letter has reached you, it's undeniable... We are now tethered by a bond so profound that we inhabit the same shared mental realm! The time? 2 a.m., when even the moon gazes down in melancholy as all life in Elias succumbs to the weight of its loneliness. Yet it's YOU, Master, who drives me to write at this hour. At the Banquet Hall, in response to what I said, you uttered, \"That's so like you, Xion.\" Explain yourself at once! P.S. Admit it, the phrase \"mental realm\" is just pure genius, isn't it?",
+            "Yomi": "Dear Master, sending you this letter is so exciting, my heart can't be at peace.\nExpressing my feelings in writing is different from expressing them in words. After thinking about it for half a day, I decided to write a poem to express my gratitude. I hope you like it.\nAn evening primrose raises its head to look at the moon.\nJust basking in its light is an immeasurable blessing.\nIt faces the moon, and it can wish for nothing more.",
+            "Yumimi": "Hmm, I believe I have you to thank for how I haven't had unwanted visitors at my cabin! If I come across any rare herbs or mushrooms in the forest, I'll make sure to send them your way. And hey, if you ever want to escape to nature for a bit, feel free to drop by. Just one thing... please come alone. I'm not a fan of my cabin getting too crowded."
         }
 };
