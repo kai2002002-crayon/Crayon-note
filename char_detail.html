@@ -8,6 +8,7 @@
     <script src="data_skills.js"></script>
     <script src="data_collectibles.js"></script>
     <script src="data_intro.js"></script>
+    <script src="data_aside.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link id="dynamicFavicon" rel="icon" href="https://i.postimg.cc/mkfSTq5k/Favicon.png" type="image/png">
     <link rel="preconnect" href="https://firebasestorage.googleapis.com">
@@ -174,12 +175,12 @@
                         </div>
     
                         <div class="flex flex-col gap-2">
-                            <span class="font-black text-amber-800 dark:text-amber-400 shrink-0" data-i18n="info_food">🍲 喜好料理：</span>
+                            <span class="font-black text-amber-800 dark:text-amber-400 shrink-0" data-i18n="info_food">🍲 喜好料理</span>
                             <div id="charFoodIcon" class="flex flex-wrap gap-2 justify-start"></div>
                         </div>
     
                         <div class="pt-2 border-t border-gray-100 dark:border-slate-700">
-                            <span class="font-black text-amber-800 dark:text-amber-400 shrink-0" data-i18n="info_job_reward">💰 打工獎勵：</span>
+                            <span class="font-black text-amber-800 dark:text-amber-400 shrink-0" data-i18n="info_job_reward">💰 打工獎勵</span>
                             <div id="charRewardIcon" class="flex flex-wrap gap-2 justify-start"></div>
                         </div>
                     </div>
@@ -242,6 +243,12 @@
             <h2 data-i18n="skill_detail_title" class="text-xl font-black text-amber-950 dark:text-amber-400 mb-4 flex items-center gap-1.5">⚔️ 技能詳細資料</h2>
             <div id="skillsContainer" class="space-y-5">
                 <div data-i18n="skill_loading" class="text-sm text-gray-500">技能載入中...</div>
+            </div>
+        </div>
+        <div id="asideSection" class="mt-8 pt-8 border-t-4 border-dashed border-amber-200 dark:border-slate-700 hidden transition-all duration-500">
+            <h2 class="text-xl font-black text-fuchsia-900 dark:text-fuchsia-400 mb-4 flex items-center gap-1.5">🔮 願像</h2>
+            <div id="asideContainer" class="space-y-4">
+                <div class="text-sm text-gray-500">願像資料載入中...</div>
             </div>
         </div>
 
@@ -1051,14 +1058,21 @@
                     const makeStatChips = (statsArray) => {
                         if (!statsArray || statsArray.length === 0) return '';
                         let processedStats = [];
+    
                         statsArray.forEach(stat => {
                             if (typeof stat === 'string') {
-                                processedStats.push(...stat.split(/[、,，]/).map(s => s.trim()).filter(Boolean));
+                                // 【修改重點】直接推入字串並去除頭尾空白，不要再用 split 切割了！
+                                processedStats.push(stat.trim());
                             } else {
                                 processedStats.push(stat);
                             }
                         });
+    
+                        // 過濾掉可能是空字串的元素
+                        processedStats = processedStats.filter(Boolean);
+    
                         if (processedStats.length === 0) return '';
+    
                         return `<div class="flex flex-wrap gap-1.5 mt-2 relative z-10">` + 
                             processedStats.map(stat => `<span class="px-2 py-0.5 bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 text-gray-700 dark:text-gray-300 text-[11px] font-bold rounded-md shadow-sm">${stat}</span>`).join('') + 
                             `</div>`;
@@ -1180,7 +1194,126 @@
                 }
             }
         }
+        function renderAside(charName) {
+            const asideSection = document.getElementById('asideSection');
+            const asideContainer = document.getElementById('asideContainer');
+            const spineKey = typeof SPINE_MAP !== 'undefined' && SPINE_MAP[charName] ? SPINE_MAP[charName] : charName;
+            const data = ASIDE_DATA[spineKey] || ASIDE_DATA[charName];
 
+            // 🌟 1. 取得當前語言 (請確認你的系統是用哪個變數儲存語言，這裡以 currentLang 為例)
+            // 🌟 1. 取得當前語言 (對應你的 window.currentLang)
+            let lang = window.currentLang || 'zh-TW';
+            // 如果你的資料庫是寫 'zh'，但系統抓到的是 'zh-TW'，我們在這裡做個轉換對應
+            if (lang === 'zh-TW') lang = 'zh'; 
+
+            // 🌟 2. 建立安全讀取多語系資料的輔助函數
+            const getLocText = (obj) => {
+                if (!obj) return '';
+                if (typeof obj === 'string') return obj; 
+                return obj[lang] || obj['zh'] || '';     
+            };
+            const getLocArray = (arrObj) => {
+                if (!arrObj) return [];
+                if (Array.isArray(arrObj)) return arrObj; 
+                return arrObj[lang] || arrObj['zh'] || []; 
+            };
+
+            const isUpcoming = ['Rim', 'xXionx'].includes(charName) || ['Rim', 'xXionx'].includes(spineKey);
+            const releaseTime = new Date('2026-06-25T04:00:00+09:00').getTime(); 
+            const now = new Date().getTime();
+
+            if (!data) {
+                asideSection.classList.add('hidden');
+                return;
+            }
+
+            asideSection.classList.remove('hidden');
+
+            // 🌟 3. 處理「即將實裝」的提示多語系
+            if (isUpcoming && now < releaseTime) {
+                const upcomingMsg = {
+                    zh: "此角色的願像系統將於 2026/06/25 04:00 (JST) 實裝解鎖",
+                    ja: "このキャラクターのアサイドシステムは 2026/06/25 04:00 (JST) に実装されます",
+                    en: "This character's Yearning system will be unlocked on 2026/06/25 04:00 (JST)"
+                };
+                
+                asideContainer.innerHTML = `
+                    <div class="p-5 bg-fuchsia-50/80 dark:bg-slate-800/80 text-fuchsia-700 dark:text-fuchsia-400 font-bold border border-fuchsia-200 dark:border-slate-600 rounded-xl text-center shadow-sm flex items-center justify-center gap-2">
+                        <span>⏳</span> ${upcomingMsg[lang] || upcomingMsg['zh']}
+                    </div>`;
+                return;
+            }
+
+            const makeEffectChips = (effectsObj) => {
+                const effects = getLocArray(effectsObj);
+                if (effects.length === 0) return '';
+                return `<div class="flex flex-wrap gap-1.5 mt-2">` + 
+                       effects.map(eff => `<span class="px-2 py-0.5 bg-white dark:bg-slate-700 border border-fuchsia-200 dark:border-fuchsia-900/50 text-fuchsia-800 dark:text-fuchsia-300 text-[11px] font-bold rounded-md shadow-sm">${eff}</span>`).join('') + 
+                       `</div>`;
+            };
+
+            let html = `
+                <div class="mb-4 text-center sm:text-left">
+                    <span class="inline-flex items-center justify-center gap-2 px-4 py-1.5 bg-gradient-to-r from-fuchsia-100 to-purple-100 dark:from-fuchsia-900/50 dark:to-purple-900/50 text-fuchsia-900 dark:text-fuchsia-200 text-sm font-black rounded-lg border border-fuchsia-300 dark:border-fuchsia-700 shadow-sm drop-shadow-sm tracking-wide">
+                        ${data.asideIcon ? `<img src="${data.asideIcon}" class="w-12 h-12 object-contain drop-shadow-sm" alt="Aside Icon">` : ''}
+                        ${getLocText(data.totalName)}
+                    </span>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            `;
+
+            for (let i = 1; i <= 3; i++) {
+                const starData = data.stars[i];
+                if (!starData) continue;
+
+                const starIcons = {
+                    1: "https://i.postimg.cc/yJmwZkSz/ASIDE-1STAR.png",
+                    2: "https://i.postimg.cc/VSq3Cdb1/ASIDE-2STAR.png",
+                    3: "https://i.postimg.cc/JyN9kGB8/ASIDE-3STAR.png"
+                };
+
+                html += `
+                    <div class="relative bg-white dark:bg-slate-800/80 border-2 border-fuchsia-200 dark:border-fuchsia-800/60 rounded-xl p-4 shadow-sm flex flex-col h-full hover:shadow-md transition-shadow">
+                        <div class="flex items-center gap-3 border-b border-fuchsia-100 dark:border-fuchsia-800/50 pb-3 mb-3">
+                            <img src="${starData.icon}" class="w-8 h-8 rounded-lg shadow-sm border border-fuchsia-300 dark:border-fuchsia-600 bg-fuchsia-50 dark:bg-slate-700 object-contain">
+                            <div>
+                                <div class="mb-0.5 flex items-center">
+                                    <img src="${starIcons[i]}" alt="Star" class="h-3.5 object-contain drop-shadow-sm">
+                                </div>
+                                <div class="font-extrabold text-gray-800 dark:text-gray-200 text-sm">${getLocText(starData.name)}</div>
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-xs text-gray-600 dark:text-gray-300 font-medium leading-relaxed mb-1 whitespace-pre-wrap">${getLocText(starData.desc)}</p>
+                            ${makeEffectChips(starData.effects)}
+                        </div>
+                `;
+
+                if (i === 3 && starData.globalEffects) {
+                    const globalEffectsArr = getLocArray(starData.globalEffects);
+                    if (globalEffectsArr.length > 0) {
+                        const globalTitle = {
+                            zh: "🌟 坨坨全體能力值加成",
+                            ja: "🌟 使者全体ステータスボーナス",
+                            en: "🌟 Apostle Global Stat Bonus"
+                        };
+                        html += `
+                            <div class="mt-4 pt-3 border-t border-dashed border-fuchsia-300 dark:border-fuchsia-800/80">
+                                <div class="text-[11px] font-black text-amber-600 dark:text-amber-400 mb-1.5 flex items-center gap-1">
+                                    ${globalTitle[lang] || globalTitle['zh']}
+                                </div>
+                                ${makeEffectChips(starData.globalEffects)}
+                            </div>
+                        `;
+                    }
+                }
+
+                html += `</div>`;
+            }
+
+            html += `</div>`;
+            asideContainer.innerHTML = html;
+        }
         // 🌟 跨平台自適應終極版：完美修正螢幕旋轉飄移問題
         function loadSkillSpines(charName) {
             if (window.skillSpinePlayers && window.skillSpinePlayers.length > 0) {
@@ -1426,49 +1559,48 @@
             }, 300); 
         });
         window.changeLanguage = function(lang) {
-            window.currentLang = lang;
-            document.documentElement.lang = lang === "ja" ? "ja" : "zh-TW";
-            
-            if (!currentCharData) return;
+    window.currentLang = lang;
+    document.documentElement.lang = lang === "ja" ? "ja" : "zh-TW";
+    
+    if (!currentCharData) return;
 
-            applyI18n();
-            
-            const displayName = getI18n(currentCharData.name);
-            
-            const isEldain = ELDAIN_LIST.includes(currentCharData.name);
-            const identityIconUrl = isEldain ? ICON_ELDAIN : ICON_NORMAL;
-            document.getElementById('charName').innerHTML = `${displayName} <img src="${identityIconUrl}" class="inline-block h-[1.5em] align-middle ml-1 -mt-1 drop-shadow-sm" alt="Identity">`;
-            
-            document.title = `${displayName} - ${getI18n('page_title_char_detail') || '詳細資料'}`;
+    applyI18n();
+    
+    const displayName = getI18n(currentCharData.name);
+    
+    const isEldain = ELDAIN_LIST.includes(currentCharData.name);
+    const identityIconUrl = isEldain ? ICON_ELDAIN : ICON_NORMAL;
+    document.getElementById('charName').innerHTML = `${displayName} <img src="${identityIconUrl}" class="inline-block h-[1.5em] align-middle ml-1 -mt-1 drop-shadow-sm" alt="Identity">`;
+    
+    document.title = `${displayName} - ${getI18n('page_title_char_detail') || '詳細資料'}`;
 
-            let pLabel = getI18n('stats_personality'); if(pLabel === 'stats_personality') pLabel = '性格';
-            let rLabel = getI18n('stats_race'); if(rLabel === 'stats_race') rLabel = '種族';
-            let posLabel = getI18n('stats_position'); if(posLabel === 'stats_position') posLabel = '站位';
-            let jLabel = getI18n('stats_job'); if(jLabel === 'stats_job') jLabel = '職業';
+    let pLabel = getI18n('stats_personality'); if(pLabel === 'stats_personality') pLabel = '性格';
+    let rLabel = getI18n('stats_race'); if(rLabel === 'stats_race') rLabel = '種族';
+    let posLabel = getI18n('stats_position'); if(posLabel === 'stats_position') posLabel = '站位';
+    let jLabel = getI18n('stats_job'); if(jLabel === 'stats_job') jLabel = '職業';
 
-            updateTag('charPersonality', pLabel, currentCharData.personality, 'personality');
-            updateTag('charRace', rLabel, currentCharData.race, 'race');
-            updateTag('charPosition', posLabel, currentCharData.position, 'position');
-            updateTag('charJob', jLabel, currentCharData.job, 'job');
-            updateRaceBackground(currentCharData.race);
-            
-            renderStars(currentTargetName);
-            renderExtraInfo(currentTargetName);
+    updateTag('charPersonality', pLabel, currentCharData.personality, 'personality');
+    updateTag('charRace', rLabel, currentCharData.race, 'race');
+    updateTag('charPosition', posLabel, currentCharData.position, 'position');
+    updateTag('charJob', jLabel, currentCharData.job, 'job');
+    updateRaceBackground(currentCharData.race);
+    
+    renderStars(currentTargetName);
+    renderExtraInfo(currentTargetName);
 
-            const renderCrayonList = (elementId, array) => {
-                const ul = document.getElementById(elementId);
-                ul.innerHTML = array.map(attr => `<li>${t(attr)}</li>`).join('');
-            };
-            renderCrayonList('layer1List', currentCharData.layer1);
-            renderCrayonList('layer2List', currentCharData.layer2);
-            renderCrayonList('layer3List', currentCharData.layer3);
+    const renderCrayonList = (elementId, array) => {
+        const ul = document.getElementById(elementId);
+        ul.innerHTML = array.map(attr => `<li>${t(attr)}</li>`).join('');
+    };
+    renderCrayonList('layer1List', currentCharData.layer1);
+    renderCrayonList('layer2List', currentCharData.layer2);
+    renderCrayonList('layer3List', currentCharData.layer3);
 
-            renderSkills(currentTargetName);
-
-            renderCollectibles(currentTargetName);
-            switchPresentTab(currentTab);
-        };
-
+    renderSkills(currentTargetName);
+    renderCollectibles(currentTargetName);
+    renderAside(currentTargetName); 
+    switchPresentTab(currentTab);
+};
         window.addEventListener('storage', (e) => {
             if (e.key === 'user_lang' && e.newValue && e.newValue !== window.currentLang) {
                 console.log(`📡 偵測到主頁將語言切換至 ${e.newValue}，自動同步更新！`);
@@ -1641,7 +1773,8 @@
             document.title = `${displayName} - ${getI18n('page_title_char_detail')}`;
 
             renderSkills(currentTargetName);
-
+            renderAside(currentTargetName);
+            
             loadComments(currentTargetName);
             switchPresentTab('thought'); 
             // 👇 在這裡補上這行，觸發小人載入！
