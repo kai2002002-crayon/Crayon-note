@@ -650,6 +650,12 @@ const CARD_SCHEDULE = [
         end: "2026-07-02T10:59:59+09:00",
         id: "Rune17",
         type: "Rune"
+    },
+		{
+        start: "2026-06-25T04:00:00+09:00",
+        end: "2026-07-02T10:59:59+09:00",
+        id: "Actifact90",
+        type: "Actifact"
     }
 ];
 console.log("LANG_DICT 內容:", LANG_DICT);
