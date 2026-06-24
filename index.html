@@ -1151,9 +1151,9 @@
                     
                     const detailBtn = document.createElement('button'); 
                     detailBtn.onclick = () => window.open(`char_detail.html?char=${encodeURIComponent(char.name)}`, '_blank');
-                    const displayClass = (window.currentLang === 'en' || isUnreleased) ? 'hidden' : 'flex';
+                    const displayClass = isUnreleased ? 'hidden' : 'flex';
                     detailBtn.className = `w-8 sm:w-10 shrink-0 ${displayClass} items-center justify-center bg-amber-500/10 hover:bg-amber-300 dark:bg-gray-700/50 dark:hover:bg-gray-600 border-r border-amber-200/50 dark:border-gray-600 transition-colors cursor-pointer group`;
-                    detailBtn.title = (window.currentLang === 'ja') ? `${t(char.name)}の詳細データを見る` : `查看 ${t(char.name)} 的詳細資料`;
+                    detailBtn.title = (window.currentLang === 'en') ? `View details for ${t(char.name)}` : ((window.currentLang === 'ja') ? `${t(char.name)}の詳細データを見る` : `查看 ${t(char.name)} 的詳細資料`);
                     detailBtn.innerHTML = `<img src="https://i.postimg.cc/T1Y9CC22/Album-Icon-Info.png" alt="Info" class="w-5 h-5 sm:w-6 sm:h-6 opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-200">`;
                     charCard.appendChild(detailBtn);
 
