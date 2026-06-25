@@ -999,7 +999,7 @@
             
             [1, 2, 3].forEach(l => {
                 let html = '<div><div class="grid grid-cols-2 gap-x-2 gap-y-1 mt-1">';
-                ATTR_PRIORITY.forEach(attr => { if(layerTotals[l][attr] > 0) html += `<div class="flex justify-between border-b border-gray-100 dark:border-gray-700 pb-0.5"><span>${t(attr).substring(0,2)}: ${layerOpened[l][attr]}/${layerTotals[l][attr]}</span><span class="font-bold text-amber-600 dark:text-amber-400">+${layerBonus[l][attr]}%</span></div>`; });
+                ATTR_PRIORITY.forEach(attr => { if(layerTotals[l][attr] > 0) html += `<div class="flex justify-between border-b border-gray-100 dark:border-gray-700 pb-0.5"><span>${t(attr)}: ${layerOpened[l][attr]}/${layerTotals[l][attr]}</span><span class="font-bold text-amber-600 dark:text-amber-400">+${layerBonus[l][attr]}%</span></div>`; });
                 html += '</div></div>';
                 html += `<div class="mt-2 pt-1 border-t border-gray-100 dark:border-gray-700 flex justify-end"><span class="bg-red-50 dark:bg-gray-700 text-red-600 dark:text-red-400 px-1.5 py-0.5 rounded text-[10px] font-bold border border-red-100 dark:border-gray-600">${t('stats_need_more_prefix')}${layerMissingCrayons[l]}${t('stats_need_more_suffix')}</span></div>`;
                 const layerStatBox = document.getElementById(`stat_layer_${l}`); if (layerStatBox) layerStatBox.innerHTML = html;
