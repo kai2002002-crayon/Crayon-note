@@ -789,6 +789,19 @@
             canvas.addEventListener('pointerout', handlePointerUp);
             canvas.addEventListener('pointercancel', handlePointerUp);
         }
+        function applyRaceBackground(charName) {
+            // 從 INITIAL_DATA 找到該角色種族
+            const char = INITIAL_DATA.find(c => c.name === charName);
+            const container = document.getElementById('spineCanvasContainer');
+    
+            if (char && typeof CHAR_BACKGROUNDS !== 'undefined' && CHAR_BACKGROUNDS[char.race]) {
+                container.style.backgroundImage = `url('${CHAR_BACKGROUNDS[char.race]}')`;
+                container.classList.add('animated-bg');
+            } else {
+                container.style.backgroundImage = 'none';
+                container.classList.remove('animated-bg');
+            }
+        }
 
         // 初始化
         window.onload = function() {
