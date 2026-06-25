@@ -561,8 +561,51 @@
         
         const storageKey = 'trickcal_matrix_saved_states_iron_v26';
         let savedStates = {};
-        try { savedStates = JSON.parse(localStorage.getItem(storageKey)) || {}; } catch(e) { savedStates = {}; }
+        try { 
+            savedStates = JSON.parse(localStorage.getItem(storageKey)) || {}; 
+            // 檢查並更新本地舊資料
+            if (migrateLegacyData(savedStates)) {
+                localStorage.setItem(storageKey, JSON.stringify(savedStates));
+            }
+        } catch(e) { savedStates = {}; }
+        // 🌟 舊名稱對應新名稱的字典
+        // 🌟 舊名稱對應新名稱的字典
+        const nameMigrationMap = {
+            "斑尼": "班尼",
+            "錫安": "x乂錫安乂x"
+        };
 
+        // 🌟 自動遷移舊資料的函數（改良版：無痛合併）
+        function migrateLegacyData(states) {
+            let hasMigrated = false;
+            const keys = Object.keys(states);
+    
+            for (let i = 0; i < keys.length; i++) {
+                let oldKey = keys[i];
+                let newKey = oldKey;
+
+                // 檢查 Key 中是否包含需要更換的舊名字
+                for (const [oldName, newName] of Object.entries(nameMigrationMap)) {
+                    if (newKey.includes(oldName)) {
+                        newKey = newKey.replace(oldName, newName);
+                    }
+                }
+
+                // 如果名字有被替換，進行資料合併
+                if (oldKey !== newKey) {
+                    // 【核心修正】使用 || (OR) 合併資料
+                    // 情況 A：舊版有打勾 (true)，新版沒點 (false/undefined) -> 結果保留 true
+                    // 情況 B：舊版沒打勾 (false)，玩家在新版點了 (true) -> 結果保留 true
+                    // 情況 C：玩家舊版跟新版都點了 (true) -> 結果保留 true
+                    states[newKey] = states[newKey] || states[oldKey];
+            
+                    // 刪除不再使用的舊名字資料，避免雲端資料庫越來越肥大
+                    delete states[oldKey];
+                    hasMigrated = true;
+                }
+            }
+            return hasMigrated;
+        }
         let activeFilters = { personality: [], race: [], position: [], job: [], gridLayer: "all", gridType: [], search: "", displayMode: "all" };
         let isFilterOpen = true;
         let isStatsOpen = window.innerWidth >= 768;
@@ -1671,7 +1714,25 @@
                             currentUser = user;
                             document.getElementById('userStatus').innerHTML = `<span id="authStatusText" class="font-bold text-green-600 dark:text-green-400 whitespace-nowrap" data-lang-key="auth_online_title">${t('auth_online_title')}</span><span class="text-[10px] text-gray-500 dark:text-gray-400 truncate max-w-[60px] sm:max-w-[100px] ml-1.5 opacity-70">${user.displayName || '教主'}</span>`;
                             db.collection("player_boards").doc(user.uid).get().then(doc => { 
-                                if (doc.exists && doc.data().states) { savedStates = doc.data().states; initStates(); renderMatrix(); calculateStats(); } 
+                                if (doc.exists && doc.data().states) { 
+                                    savedStates = doc.data().states; 
+        
+                                    // 檢查雲端資料是否有舊名字
+                                    const needsCloudUpdate = migrateLegacyData(savedStates);
+
+                                    initStates(); 
+                                    renderMatrix(); 
+                                    calculateStats(); 
+
+                                    // 如果有發生替換，立刻將新版本同步回 Firebase 與本地
+                                    if (needsCloudUpdate) {
+                                        db.collection("player_boards").doc(user.uid).set({ 
+                                            states: savedStates, 
+                                            updatedAt: firebase.firestore.FieldValue.serverTimestamp() 
+                                        }, { merge: true }).catch(e => console.error("更新雲端舊資料失敗:", e));
+                                        localStorage.setItem(storageKey, JSON.stringify(savedStates));
+                                    }
+                                } 
                             }).catch(err => {});
                         } else {
                             currentUser = null; document.getElementById('userStatus').innerHTML = `<span class="font-bold text-amber-600 dark:text-amber-400 whitespace-nowrap" data-lang-key="auth_offline_title">${t('auth_offline_title')}</span>`;
