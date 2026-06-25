@@ -1710,35 +1710,49 @@
                     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig); else firebase.app(); 
                     db = firebase.firestore(); auth = firebase.auth(); updateVisitCount();
                     auth.onAuthStateChanged(user => {
-                        updateAuthButtonUI(user); 
-                        if (user) {
-                            currentUser = user;
-                            document.getElementById('userStatus').innerHTML = `<span id="authStatusText" class="font-bold text-green-600 dark:text-green-400 whitespace-nowrap" data-lang-key="auth_online_title">${t('auth_online_title')}</span><span class="text-[10px] text-gray-500 dark:text-gray-400 truncate max-w-[60px] sm:max-w-[100px] ml-1.5 opacity-70">${user.displayName || '教主'}</span>`;
-                            db.collection("player_boards").doc(user.uid).get().then(doc => { 
-                                if (doc.exists && doc.data().states) { 
-                                    savedStates = doc.data().states; 
+    updateAuthButtonUI(user); 
+    if (user) {
+        currentUser = user;
+        document.getElementById('userStatus').innerHTML = `<span id="authStatusText" class="font-bold text-green-600 dark:text-green-400 whitespace-nowrap" data-lang-key="auth_online_title">${t('auth_online_title')}</span><span class="text-[10px] text-gray-500 dark:text-gray-400 truncate max-w-[60px] sm:max-w-[100px] ml-1.5 opacity-70">${user.displayName || '教主'}</span>`;
         
-                                    // 檢查雲端資料是否有舊名字
-                                    const needsCloudUpdate = migrateLegacyData(savedStates);
+        db.collection("player_boards").doc(user.uid).get().then(doc => { 
+            if (doc.exists && doc.data().states) {
+                const cloudStates = doc.data().states;
+                
+                // 🌟 【關鍵修正：雙向合併資料】
+                // 迴圈走訪雲端資料，如果本地有更新的記錄（為 true），就以本地為主；否則採用雲端
+                Object.keys(cloudStates).forEach(key => {
+                    savedStates[key] = savedStates[key] || cloudStates[key];
+                });
+                
+                // 執行遷移檢查（對應改名機制）
+                const needsUpdate = migrateLegacyData(savedStates);
 
-                                    initStates(); 
-                                    renderMatrix(); 
-                                    calculateStats(); 
+                initStates(); 
+                renderMatrix(); 
+                calculateStats(); 
 
-                                    // 如果有發生替換，立刻將新版本同步回 Firebase 與本地
-                                    if (needsCloudUpdate) {
-                                        db.collection("player_boards").doc(user.uid).set({ 
-                                            states: savedStates, 
-                                            updatedAt: firebase.firestore.FieldValue.serverTimestamp() 
-                                        }, { merge: true }).catch(e => console.error("更新雲端舊資料失敗:", e));
-                                        localStorage.setItem(storageKey, JSON.stringify(savedStates));
-                                    }
-                                } 
-                            }).catch(err => {});
-                        } else {
-                            currentUser = null; document.getElementById('userStatus').innerHTML = `<span class="font-bold text-amber-600 dark:text-amber-400 whitespace-nowrap" data-lang-key="auth_offline_title">${t('auth_offline_title')}</span>`;
-                        }
-                    });
+                // 如果有遷移舊名稱，或合併後有產生變更，強制回寫資料庫
+                if (needsUpdate) {
+                    db.collection("player_boards").doc(user.uid).set({ 
+                        states: savedStates, 
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp() 
+                    }, { merge: true }).catch(e => console.error("同步合併資料失敗:", e));
+                    localStorage.setItem(storageKey, JSON.stringify(savedStates));
+                }
+            } else {
+                // 雲端無資料，將本地資料上傳建立新檔
+                db.collection("player_boards").doc(user.uid).set({ 
+                    states: savedStates, 
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp() 
+                }).catch(e => {});
+            }
+        }).catch(err => {});
+    } else {
+        currentUser = null; 
+        document.getElementById('userStatus').innerHTML = `<span class="font-bold text-amber-600 dark:text-amber-400 whitespace-nowrap" data-lang-key="auth_offline_title">${t('auth_offline_title')}</span>`;
+    }
+});
                 }
             } catch (e) { }
 
