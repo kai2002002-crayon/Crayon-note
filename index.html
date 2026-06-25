@@ -1014,8 +1014,8 @@
                 else { container.classList.add('unowned-avatar'); if (fallAvatar) fallAvatar.classList.add('unowned-avatar'); }
             }
         }
-
-        function calculateStats() {
+        let syncTimer = null; // 放在全域變數區
+        async function calculateStats() {
             let layerTotals = { 1: {}, 2: {}, 3: {} }, layerOpened = { 1: {}, 2: {}, 3: {} }, layerBonus = { 1: {}, 2: {}, 3: {} }, layerMissingCrayons = { 1: 0, 2: 0, 3: 0 };
             [1, 2, 3].forEach(l => { ATTR_PRIORITY.forEach(a => { layerTotals[l][a] = 0; layerOpened[l][a] = 0; layerBonus[l][a] = 0; }); });
             let globalUsedCrayons = 0, globalNeededCrayons = 0, attrs = { attack: 0, def: 0, hp: 0, crit: 0, crit_res: 0 }, ownedCount = 0;
@@ -1055,10 +1055,27 @@
             });
 
             try { localStorage.setItem(storageKey, JSON.stringify(savedStates)); } catch(e) {}
-            if (currentUser && db) db.collection("player_boards").doc(currentUser.uid).set({ states: savedStates, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }).catch(e => {});
-            applyFilterUI();
-        }
 
+    // 2. 防抖機制：將 Firebase 同步延遲 1 秒執行
+    if (syncTimer) clearTimeout(syncTimer);
+    
+    syncTimer = setTimeout(async () => {
+        if (currentUser && db) {
+            try {
+                await db.collection("player_boards").doc(currentUser.uid).set({ 
+                    states: savedStates, 
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp() 
+                }, { merge: true });
+                console.log("資料同步雲端成功");
+            } catch (e) {
+                console.error("Firebase 同步失敗:", e);
+            }
+        }
+    }, 1000); // 1秒後才送出請求
+    
+    // 3. UI 渲染照常執行，保證玩家看到最新結果
+    applyFilterUI();
+}
         function toggleFilterPanel() {
             isFilterOpen = !isFilterOpen; const body = document.getElementById("filterPanelBody"); const icon = document.getElementById("filterToggleIcon");
             if(isFilterOpen) { body.classList.remove("hidden"); icon.innerText = "▼"; } else { body.classList.add("hidden"); icon.innerText = "▶"; }
@@ -1709,48 +1726,52 @@
                     const firebaseConfig = { apiKey: "AIzaSyDhv8D2pY_0M56UJrDTQw0RGPHA-BkXU8Y", authDomain: "crayon-note.firebaseapp.com", projectId: "crayon-note", storageBucket: "crayon-note.firebasestorage.app", messagingSenderId: "210614088940", appId: "1:210614088940:web:7addbdc7c466eeb05421c9", measurementId: "G-M1EJPE12TE" };
                     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig); else firebase.app(); 
                     db = firebase.firestore(); auth = firebase.auth(); updateVisitCount();
-                    auth.onAuthStateChanged(user => {
-    updateAuthButtonUI(user); 
+                    auth.onAuthStateChanged(async user => {
+    updateAuthButtonUI(user);
+    
     if (user) {
         currentUser = user;
         document.getElementById('userStatus').innerHTML = `<span id="authStatusText" class="font-bold text-green-600 dark:text-green-400 whitespace-nowrap" data-lang-key="auth_online_title">${t('auth_online_title')}</span><span class="text-[10px] text-gray-500 dark:text-gray-400 truncate max-w-[60px] sm:max-w-[100px] ml-1.5 opacity-70">${user.displayName || '教主'}</span>`;
         
-        db.collection("player_boards").doc(user.uid).get().then(doc => { 
-            if (doc.exists && doc.data().states) {
-                const cloudStates = doc.data().states;
-                
-                // 🌟 【關鍵修正：雙向合併資料】
-                // 迴圈走訪雲端資料，如果本地有更新的記錄（為 true），就以本地為主；否則採用雲端
+        try {
+            // 1. 先從 Firebase 讀取雲端資料
+            const doc = await db.collection("player_boards").doc(user.uid).get();
+            const cloudStates = doc.exists ? doc.data().states : null;
+
+            // 2. 如果雲端有資料，進行合併
+            if (cloudStates) {
+                // 將雲端資料與本地 savedStates 合併 (以雲端為基準，本地為輔)
                 Object.keys(cloudStates).forEach(key => {
                     savedStates[key] = savedStates[key] || cloudStates[key];
                 });
-                
-                // 執行遷移檢查（對應改名機制）
-                const needsUpdate = migrateLegacyData(savedStates);
+            }
 
-                initStates(); 
-                renderMatrix(); 
-                calculateStats(); 
+            // 3. 執行改名遷移 (這是自動化核心)
+            const needsUpdate = migrateLegacyData(savedStates);
 
-                // 如果有遷移舊名稱，或合併後有產生變更，強制回寫資料庫
-                if (needsUpdate) {
-                    db.collection("player_boards").doc(user.uid).set({ 
-                        states: savedStates, 
-                        updatedAt: firebase.firestore.FieldValue.serverTimestamp() 
-                    }, { merge: true }).catch(e => console.error("同步合併資料失敗:", e));
-                    localStorage.setItem(storageKey, JSON.stringify(savedStates));
-                }
-            } else {
-                // 雲端無資料，將本地資料上傳建立新檔
-                db.collection("player_boards").doc(user.uid).set({ 
+            // 4. 初始化與渲染 (確保資料載入完才顯示)
+            initStates(); 
+            renderMatrix(); 
+            calculateStats(); 
+
+            // 5. 如果發生遷移，或雲端無資料，強制同步回雲端
+            if (needsUpdate || !cloudStates) {
+                await db.collection("player_boards").doc(user.uid).set({ 
                     states: savedStates, 
                     updatedAt: firebase.firestore.FieldValue.serverTimestamp() 
-                }).catch(e => {});
+                }, { merge: true });
+                localStorage.setItem(storageKey, JSON.stringify(savedStates));
             }
-        }).catch(err => {});
+        } catch (e) {
+            console.error("雲端同步處理失敗:", e);
+        }
     } else {
         currentUser = null; 
         document.getElementById('userStatus').innerHTML = `<span class="font-bold text-amber-600 dark:text-amber-400 whitespace-nowrap" data-lang-key="auth_offline_title">${t('auth_offline_title')}</span>`;
+        // 未登入時直接載入本地資料
+        initStates();
+        renderMatrix();
+        calculateStats();
     }
 });
                 }
