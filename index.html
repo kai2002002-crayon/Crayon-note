@@ -1632,7 +1632,7 @@
         function initRimLive2D() {
             if (typeof spine === 'undefined') return;
             const rimContainer = document.getElementById("rim-live-container"); const loader = document.createElement('div'); loader.className = 'spine-loader-crayon'; rimContainer.appendChild(loader);
-            new spine.SpinePlayer("rim-live-container", { skelUrl: "Rim.skel.bytes", atlasUrl: "Rim.atlas.txt", alpha: true, backgroundColor: "#00000000", showControls: false, premultipliedAlpha: false, skin: "Normal", animation: "Happy_4", showLoading: false, viewport: { transitionTime: 0 },
+            new spine.SpinePlayer("rim-live-container", { skelUrl: "RimSkin2.skel.bytes", atlasUrl: "RimSkin2.atlas.txt", alpha: true, backgroundColor: "#00000000", showControls: false, premultipliedAlpha: false, skin: "Normal", animation: "Happy_4", showLoading: false, viewport: { transitionTime: 0 },
                 success: function (player) {
                     loader.remove(); const animations = ["Happy_4", "Pat_End", "Tickle_Idle_2"]; let currentIndex = 1; 
                     function playNextAnimation() { const nextAnim = animations[currentIndex % animations.length]; player.skeleton.setToSetupPose(); player.animationState.setAnimation(0, nextAnim, true); currentIndex++; }
