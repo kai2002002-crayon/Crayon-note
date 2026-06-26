@@ -101,6 +101,7 @@
                 </div>
             </div>
 
+            <!-- 展示畫布與控制器區塊 -->
             <div class="flex flex-col gap-3 min-w-0 relative z-10 w-full lg:w-3/4 mx-auto">
                 
                 <div id="spineCanvasContainer" class="w-full h-[60vh] sm:h-[600px] rounded-xl border-2 border-dashed border-amber-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50 relative overflow-hidden flex items-center justify-center">
@@ -109,6 +110,7 @@
 
                 <div id="playerControls" class="bg-amber-50 dark:bg-slate-700/50 p-3 rounded-xl border border-amber-200 dark:border-slate-600 flex flex-col gap-3 opacity-50 pointer-events-none transition-opacity">
                     
+                    <!-- 第一排：播放、速度、模式切換、服裝 -->
                     <div class="flex items-center justify-between gap-2 w-full">
                         <div class="flex items-center gap-2 shrink-0">
                             <button id="btnPlayPause" onclick="togglePlay()" class="w-9 h-9 flex items-center justify-center bg-amber-500 text-white rounded-lg shadow hover:bg-amber-600 transition shrink-0" title="播放/暫停">⏸️</button>
@@ -119,6 +121,7 @@
                             </div>
                         </div>
                         
+                        <!-- 右側：大廳/戰鬥切換 與 服裝選單 -->
                         <div class="flex items-center gap-2 flex-1 justify-end min-w-0">
                             <button id="modeToggleBtn" onclick="toggleMode()" class="bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-[11px] sm:text-sm font-bold rounded-lg px-2 py-1.5 shadow-sm hover:bg-amber-50 dark:hover:bg-slate-700 flex items-center gap-1 transition-colors text-amber-900 dark:text-amber-100 shrink-0">
                                 <span id="modeIcon">🍵</span> <span id="modeText">大廳</span>
@@ -129,17 +132,21 @@
                         </div>
                     </div>
 
+                    <!-- 第二排：動作選單 (50%) 與 插槽選單 (50%) -->
                     <div class="flex gap-2 w-full relative z-[100]">
                         
+                        <!-- 動作懸浮選單 -->
                         <div class="relative w-1/2" id="animDropdownWrapper">
                             <button onclick="toggleCustomSelect('animList')" class="custom-select-btn w-full bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-[11px] sm:text-xs font-bold rounded-lg px-2 py-2 flex justify-between items-center text-left shadow-sm">
                                 <span id="animSelectText" class="truncate text-amber-900 dark:text-gray-200">選擇動作</span>
                                 <span class="ml-1 text-gray-400 shrink-0 text-[10px]">▼</span>
                             </button>
                             <div id="animList" class="hidden absolute bottom-[calc(100%+6px)] left-0 w-full bg-white dark:bg-slate-800 border border-amber-300 dark:border-slate-600 rounded-lg shadow-2xl max-h-[160px] overflow-y-auto flex-col z-[110]">
-                                </div>
+                                <!-- JS 生成動作列表 -->
+                            </div>
                         </div>
 
+                        <!-- 插槽懸浮選單 -->
                         <div class="relative w-1/2" id="slotDropdownWrapper">
                             <button onclick="toggleCustomSelect('slotList')" class="custom-select-btn w-full bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-[11px] sm:text-xs font-bold rounded-lg px-2 py-2 flex justify-between items-center text-left shadow-sm">
                                 <span class="truncate text-amber-900 dark:text-gray-200">🧩 顯示/隱藏插槽</span>
@@ -177,13 +184,11 @@
         let tickleTimer = null;
         let slotVisibilityMap = {};
         
-        // 戰鬥/大廳 狀態記錄
         let isCombatMode = false;
         let currentCharName = '';
         let currentBaseFolderKey = '';
         let currentCostumeKey = '';
 
-        // 點擊空白處關閉懸浮名單
         document.addEventListener('click', (e) => {
             if (!e.target.closest('#animDropdownWrapper')) {
                 document.getElementById('animList').classList.add('hidden');
@@ -213,7 +218,6 @@
             }
         }
 
-        // 🌟 切換 大廳/戰鬥模式
         function toggleMode() {
             isCombatMode = !isCombatMode;
             const icon = document.getElementById('modeIcon');
@@ -227,14 +231,12 @@
                 text.innerText = '大廳';
             }
             
-            // 如果已選角色，立刻更新服裝列表並重新載入
             if (currentCharName && currentBaseFolderKey) {
                 const firstCostume = updateCostumeDropdown();
                 loadSpine(currentBaseFolderKey, firstCostume);
             }
         }
 
-        // 🌟 更新服裝下拉選單 (根據大廳/戰鬥對應 COSTUME_MAP 或 SD_COSTUME)
         function updateCostumeDropdown() {
             const costumeSelect = document.getElementById('costumeSelect');
             costumeSelect.innerHTML = '';
@@ -355,7 +357,6 @@
             }
         }
 
-        // 🌟 選擇角色
         function selectCharacter(charName, spineName, iconUrl) {
             document.getElementById('spineViewerSection').classList.remove('hidden');
             
@@ -377,9 +378,7 @@
             currentCharName = charName;
             currentBaseFolderKey = spineName;
 
-            // 取得第一套對應模式的服裝
             const firstCostume = updateCostumeDropdown();
-
             applyRaceBackground(charName);
             document.getElementById('spineViewerSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
@@ -402,7 +401,6 @@
             document.getElementById('slotsContainerInner').innerHTML = '<div class="p-3 text-center text-[10px] sm:text-xs font-bold text-gray-400">讀取資料中...</div>';
             document.getElementById('animSelectText').innerText = '讀取中...';
 
-            // 🌟 修正路徑：大廳對應子資料夾，戰鬥對應單一根目錄檔案
             let skelUrl = isCombatMode 
                 ? `./spine_sd_assets/${baseFolderKey}.skel.bytes` 
                 : `./spine_assets/${baseFolderKey}/${costumeKey}.skel.bytes`;
@@ -410,17 +408,20 @@
             let atlasUrl = isCombatMode 
                 ? `./spine_sd_assets/${baseFolderKey}.atlas.txt` 
                 : `./spine_assets/${baseFolderKey}/${costumeKey}.atlas.txt`;
+            
+            // 🌟 核心修復：一定要給一個初始設定的動作！
+            let initAnim = isCombatMode ? "Idle" : "Idle_1";
 
             globalPlayer = new spine.SpinePlayer(container, {
                 skelUrl: skelUrl,
                 atlasUrl: atlasUrl,
+                animation: initAnim, // 填補這個洞，讓播放器可以計算初始範圍！
                 premultipliedAlpha: true,
                 backgroundColor: "#00000000", 
                 alpha: true,
                 showControls: false,
                 showLoading: false, 
                 viewport: { x: -400, y: 0, width: 800, height: 1000 },
-                // 移除了寫死 animation: "Idle_1"，改由下方 success 動態安全賦予
 
                 success: function (player) {
                     const loader = container.querySelector('.spine-player-loading-custom');
@@ -429,10 +430,16 @@
                     document.getElementById('playerControls').classList.remove('opacity-50', 'pointer-events-none');
                     setSpeed(1);
 
-                    // 🌟 Skin 設定邏輯 (戰鬥圖切換對應服裝名稱的Skin)
+                    // 🌟 Skin 設定防呆機制
                     if (isCombatMode) {
                         const hasSkin = player.skeleton.data.skins.some(s => s.name === costumeKey);
-                        if (hasSkin) player.skeleton.setSkinByName(costumeKey);
+                        if (hasSkin) {
+                            player.skeleton.setSkinByName(costumeKey);
+                        } else {
+                            // 如果沒實裝這個戰鬥服裝，就抓 Normal 或非預設的第一個 Skin，避免白畫面
+                            const fallbackSkin = player.skeleton.data.skins.find(s => s.name === 'Normal') || player.skeleton.data.skins.find(s => s.name !== 'default');
+                            if (fallbackSkin) player.skeleton.setSkinByName(fallbackSkin.name);
+                        }
                     } else {
                         const skins = player.skeleton.data.skins;
                         if (skins && skins.length > 1) {
@@ -446,12 +453,22 @@
                     buildSlotsPanel(player);
                     setupComplexInteractions(player, container);
 
-                    // 🌟 安全強制播放預設動作 (保證必定現身)
+                    // 🌟 強制播放並更新文字：檢查真實存在的動作
                     const anims = player.skeleton.data.animations.map(a => a.name);
-                    const defaultAnim = anims.includes('Idle_1') ? 'Idle_1' : (anims.includes('Idle') ? 'Idle' : anims[0]);
-                    if (defaultAnim) {
-                        player.animationState.setAnimation(0, defaultAnim, true);
-                        document.getElementById('animSelectText').innerText = defaultAnim;
+                    let animToPlay = "";
+                    if (anims.includes(initAnim)) {
+                        animToPlay = initAnim;
+                    } else if (anims.includes("Idle")) {
+                        animToPlay = "Idle";
+                    } else if (anims.includes("Idle_1")) {
+                        animToPlay = "Idle_1";
+                    } else {
+                        animToPlay = anims[0] || "";
+                    }
+
+                    if (animToPlay) {
+                        player.animationState.setAnimation(0, animToPlay, true);
+                        document.getElementById('animSelectText').innerText = animToPlay;
                     } else {
                         document.getElementById('animSelectText').innerText = '無動作';
                     }
@@ -463,7 +480,6 @@
             });
         }
 
-        // 🌟 構建動作名單 (確保加上 flex-shrink-0)
         function buildAnimationDropdown(player) {
             const animList = document.getElementById('animList');
             animList.innerHTML = '';
@@ -512,7 +528,6 @@
             });
         }
 
-        // 🌟 構建插槽名單 (確保加上 flex-shrink-0)
         function buildSlotsPanel(player) {
             const container = document.getElementById('slotsContainerInner');
             container.innerHTML = '';
@@ -631,7 +646,6 @@
                 }, 5000);
             }
 
-            // 戰鬥模式不觸發隨機動作
             if (!isCombatMode) {
                 startRandomAnimationLoop();
             } else {
@@ -662,7 +676,6 @@
             });
 
             function getHitZone(mouseX, mouseY) {
-                // 🌟 戰鬥模式無互動部位
                 if (isCombatMode) return null;
 
                 const rect = canvas.getBoundingClientRect();
@@ -848,6 +861,7 @@
 
                 if (pointerKeys.length === 0 && isPointerDown) {
                     isPointerDown = false;
+                    if (!player.skeleton) return;
                     const allAnimNames = player.skeleton.data.animations.map(a => a.name);
 
                     if (activeFaceBone) {
@@ -901,7 +915,6 @@
                         document.getElementById('animSelectText').innerText = "Idle_1";
                         if (!isCombatMode) startRandomAnimationLoop();
                     } else if (!hitZoneOnDown && dragDistance < 10) {
-                        // 🌟 戰鬥模式屏蔽點擊切換動作
                         if (!isCombatMode) {
                             const safeAnims = allAnimNames.filter(name => !EXCLUDED_RANDOM_ANIMS.includes(name));
                             if (safeAnims.length > 0) {
