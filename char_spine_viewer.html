@@ -399,9 +399,8 @@
             container.innerHTML = '<div class="spine-player-loading-custom"></div>';
             document.getElementById('playerControls').classList.add('opacity-50', 'pointer-events-none');
             
-            // 🐛 修正：這裡的 ID 必須是 slotsContainerInner
-            document.getElementById('slotsContainerInner').innerHTML = '<div class="p-3 text-center text-[10px] sm:text-xs font-bold text-gray-400">讀取資料中...</div>';
-            document.getElementById('animSelectText').innerText = '讀取中...';
+            // 修正 DOM ID: 使用你的 HTML 中正確的 slotsContainer
+            document.getElementById('slotsContainer').innerHTML = '<div class="absolute inset-0 flex items-center justify-center text-xs font-bold text-gray-400 pointer-events-none">讀取資料中...</div>';
 
             let skelUrl = isCombatMode 
                 ? `./spine_sd_assets/${baseFolderKey}.skel.bytes` 
@@ -411,13 +410,14 @@
                 ? `./spine_sd_assets/${baseFolderKey}.atlas.txt` 
                 : `./spine_assets/${baseFolderKey}/${costumeKey}.atlas.txt`;
             
+            // 🌟 核心修復：根據模式強制賦予初始動作
             let initAnim = isCombatMode ? "Idle" : "Idle_1";
 
             globalPlayer = new spine.SpinePlayer(container, {
                 skelUrl: skelUrl,
                 atlasUrl: atlasUrl,
                 animation: initAnim, 
-                skin: isCombatMode ? costumeKey : undefined, 
+                skin: isCombatMode ? costumeKey : undefined, // 戰鬥圖必須在初始化設定 Skin 算出範圍
                 premultipliedAlpha: true,
                 backgroundColor: "#00000000", 
                 alpha: true,
@@ -432,6 +432,7 @@
                     document.getElementById('playerControls').classList.remove('opacity-50', 'pointer-events-none');
                     setSpeed(1);
 
+                    // 大廳模式的安全 Skin 賦值
                     if (!isCombatMode) {
                         const skins = player.skeleton.data.skins;
                         if (skins && skins.length > 1) {
@@ -447,14 +448,14 @@
                     buildSlotsPanel(player);
                     setupComplexInteractions(player, container);
 
+                    // 確保動作存在並同步你的下拉選單
                     const anims = player.skeleton.data.animations.map(a => a.name);
                     let animToPlay = anims.includes(initAnim) ? initAnim : (anims.includes("Idle") ? "Idle" : (anims.includes("Idle_1") ? "Idle_1" : (anims[0] || "")));
 
                     if (animToPlay) {
                         player.animationState.setAnimation(0, animToPlay, true);
-                        // 🐛 修正：這裡的 ID 必須是 animSelectText，並且用 innerText 更新
-                        const animSelectText = document.getElementById('animSelectText');
-                        if (animSelectText) animSelectText.innerText = animToPlay;
+                        const animSelect = document.getElementById('animSelect');
+                        if (animSelect) animSelect.value = animToPlay;
                     }
                 },
                 error: function (player, reason) {
@@ -513,8 +514,8 @@
         }
 
         function buildSlotsPanel(player) {
-            // 🐛 修正：這裡的 ID 必須是 slotsContainerInner
-            const slotsContainer = document.getElementById('slotsContainerInner');
+            // 修正 DOM ID
+            const slotsContainer = document.getElementById('slotsContainer');
             slotsContainer.innerHTML = '';
             
             const slots = player.skeleton.slots;
@@ -526,15 +527,15 @@
                 const slotName = slotData.name;
                 slotVisibilityMap[slotName] = true;
 
-                const item = document.createElement('label');
-                item.className = "flex items-center gap-2 px-3 py-2.5 hover:bg-amber-50 dark:hover:bg-slate-700 cursor-pointer transition-colors border-b border-gray-50 dark:border-slate-700/50 flex-shrink-0";
+                const item = document.createElement('div');
+                item.className = "slot-item flex items-center justify-between p-1.5 lg:p-1 rounded hover:bg-amber-50 dark:hover:bg-slate-700 border-b border-gray-100 dark:border-slate-700 cursor-crosshair transition-colors";
                 
                 item.innerHTML = `
-                    <input type="checkbox" checked class="w-3.5 h-3.5 text-amber-500 rounded focus:ring-amber-500" onchange="toggleSlot('${slotName}', this.checked)">
-                    <span class="text-[11px] sm:text-xs font-medium text-gray-700 dark:text-gray-300 truncate">${slotName}</span>
+                    <label class="flex items-center gap-2 lg:gap-1.5 cursor-pointer truncate flex-1" title="${slotName}">
+                        <input type="checkbox" checked class="w-4 h-4 lg:w-3 lg:h-3 text-amber-500 rounded focus:ring-amber-500" onchange="toggleSlot('${slotName}', this.checked)">
+                        <span class="text-xs font-medium text-gray-600 dark:text-gray-300 truncate">${slotName}</span>
+                    </label>
                 `;
-
-                item.addEventListener('click', (e) => e.stopPropagation());
 
                 item.addEventListener('mouseenter', () => {
                     const s = player.skeleton.findSlot(slotName);
@@ -617,7 +618,7 @@
             let initialBoneX = 0, initialBoneY = 0;
 
             const EXCLUDED_RANDOM_ANIMS = ["Smash_End_1", "Idle_1", "Touch_Idle", "Tickle_Idle_1", "Tickle_Idle_2"];
-
+            
             function startRandomAnimationLoop() {
                 clearTimeout(globalIdleTimer);
                 globalIdleTimer = setTimeout(() => {
@@ -628,9 +629,9 @@
                         const randomAnim = safeAnims[Math.floor(Math.random() * safeAnims.length)];
                         player.animationState.setAnimation(0, randomAnim, true);
                         
-                        // 🐛 修正：更新選單文字
-                        const animSelectText = document.getElementById('animSelectText');
-                        if(animSelectText) animSelectText.innerText = randomAnim;
+                        // 修正 DOM ID
+                        const animSelect = document.getElementById('animSelect');
+                        if(animSelect) animSelect.value = randomAnim;
 
                         startRandomAnimationLoop();
                     }
@@ -667,7 +668,7 @@
             });
 
             function getHitZone(mouseX, mouseY) {
-                if (isCombatMode) return null; 
+                if (isCombatMode) return null; // 戰鬥圖無互動，避免報錯
 
                 const rect = canvas.getBoundingClientRect();
                 let clickedPart = null;
@@ -787,20 +788,20 @@
                             clearTimeout(globalIdleTimer);
                             clearTimeout(tickleTimer);
                             
-                            // 🐛 修正：抓取顯示文字用的 Span
-                            const animSelectText = document.getElementById('animSelectText');
+                            // 修正 DOM ID
+                            const animSelect = document.getElementById('animSelect');
 
                             if (hitZoneOnDown.name === "頭部") {
                                 player.animationState.setAnimation(0, "Touch_Idle", true);
-                                if (animSelectText) animSelectText.innerText = "Touch_Idle";
+                                if (animSelect) animSelect.value = "Touch_Idle";
                             } else if (hitZoneOnDown.name === "身體") {
                                 player.animationState.setAnimation(0, "Tickle_Idle_1", true);
-                                if (animSelectText) animSelectText.innerText = "Tickle_Idle_1";
+                                if (animSelect) animSelect.value = "Tickle_Idle_1";
                                 tickleTimer = setTimeout(() => {
                                     const animNames = player.skeleton.data.animations.map(a => a.name);
                                     if (animNames.includes("Tickle_Idle_2")) {
                                         player.animationState.setAnimation(0, "Tickle_Idle_2", true);
-                                        if (animSelectText) animSelectText.innerText = "Tickle_Idle_2";
+                                        if (animSelect) animSelect.value = "Tickle_Idle_2";
                                     }
                                 }, 5000);
                             }
@@ -857,7 +858,7 @@
                     isPointerDown = false;
                     if (!player.skeleton) return;
                     const allAnimNames = player.skeleton.data.animations.map(a => a.name);
-                    const animSelectText = document.getElementById('animSelectText');
+                    const animSelect = document.getElementById('animSelect');
 
                     if (activeFaceBone) {
                         let targetX = initialBoneX;
@@ -907,7 +908,7 @@
                             }
                         }
                         player.animationState.addAnimation(0, "Idle_1", true, 0);
-                        if (animSelectText) animSelectText.innerText = "Idle_1";
+                        if (animSelect) animSelect.value = "Idle_1";
                         if (!isCombatMode) startRandomAnimationLoop();
                     } else if (!hitZoneOnDown && dragDistance < 10) {
                         if (!isCombatMode) {
@@ -915,11 +916,11 @@
                             if (safeAnims.length > 0) {
                                 const randomAnim = safeAnims[Math.floor(Math.random() * safeAnims.length)];
                                 player.animationState.setAnimation(0, randomAnim, true);
-                                if (animSelectText) animSelectText.innerText = randomAnim;
+                                if (animSelect) animSelect.value = randomAnim;
                                 
                                 globalIdleTimer = setTimeout(() => {
                                     player.animationState.setAnimation(0, "Idle_1", true);
-                                    if (animSelectText) animSelectText.innerText = "Idle_1";
+                                    if (animSelect) animSelect.value = "Idle_1";
                                     startRandomAnimationLoop();
                                 }, 5000);
                             }
@@ -931,10 +932,10 @@
                                 player.animationState.addAnimation(0, "Smash_End_2", false, 0);
                             }
                             player.animationState.addAnimation(0, "Idle_1", true, 0);
-                            if (animSelectText) animSelectText.innerText = "Smash_End_1";
+                            if (animSelect) animSelect.value = "Smash_End_1";
                         } else {
                             player.animationState.setAnimation(0, "Idle_1", true);
-                            if (animSelectText) animSelectText.innerText = "Idle_1";
+                            if (animSelect) animSelect.value = "Idle_1";
                         }
                         if (!isCombatMode) startRandomAnimationLoop();
                     }
