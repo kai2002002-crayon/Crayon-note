@@ -107,7 +107,7 @@
             <div class="flex flex-col lg:flex-row gap-4">
                 
                 <div class="flex-[4] flex flex-col gap-3 min-w-0">
-                    <div id="spineCanvasContainer" class="w-full h-[450px] sm:h-[500px] lg:h-[600px] rounded-xl border-2 border-dashed border-amber-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50 relative overflow-hidden flex items-center justify-center">
+                    <div id="spineCanvasContainer" class="w-full h-[55vh] sm:h-[500px] lg:h-[600px] rounded-xl border-2 border-dashed border-amber-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50 relative overflow-hidden flex items-center justify-center">
                         <div class="text-gray-400 font-bold tracking-widest">等待載入...</div>
                     </div>
 
@@ -132,18 +132,25 @@
                     </div>
                 </div>
 
-                <div class="flex-[1] flex flex-col w-full lg:min-w-[220px] h-[350px] lg:h-[600px]">
-                    <div class="bg-amber-100 dark:bg-slate-700 p-2.5 rounded-t-xl border border-amber-300 dark:border-slate-600 shadow-sm flex justify-between items-center shrink-0">
-                        <span class="font-bold text-amber-900 dark:text-amber-100 text-xs sm:text-sm flex items-center gap-1">🧩 顯示/隱藏插槽</span>
+                <div class="w-full lg:flex-[1] lg:min-w-[220px] flex flex-col bg-white dark:bg-slate-800 rounded-xl border border-amber-300 dark:border-slate-600 shadow-sm lg:h-[600px]">
+                    
+                    <div onclick="toggleMobileSlots()" class="bg-amber-100 dark:bg-slate-700 p-2.5 rounded-t-xl lg:rounded-xl border-b lg:border-b-0 border-amber-300 dark:border-slate-600 flex justify-between items-center cursor-pointer lg:cursor-default shrink-0">
+                        <span class="font-bold text-amber-900 dark:text-amber-100 text-xs sm:text-sm flex items-center gap-1">
+                            🧩 顯示/隱藏插槽 <span id="mobileSlotArrow" class="lg:hidden ml-2 text-[10px] font-bold text-amber-700 dark:text-amber-300">🔽 (點擊展開)</span>
+                        </span>
                         <span id="slotCount" class="text-[10px] sm:text-xs font-black bg-amber-500 text-white px-2 py-0.5 rounded-md shadow-inner">0</span>
                     </div>
-                    <div class="flex gap-1 border-x border-amber-300 dark:border-slate-600 bg-white dark:bg-slate-800 p-1 shrink-0">
-                        <button onclick="toggleAllSlots(true)" class="flex-1 py-1 text-[10px] sm:text-xs font-bold bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 rounded transition border border-gray-200 dark:border-slate-600">全顯</button>
-                        <button onclick="toggleAllSlots(false)" class="flex-1 py-1 text-[10px] sm:text-xs font-bold bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 rounded transition border border-gray-200 dark:border-slate-600">全隱</button>
+                    
+                    <div id="slotMenuContent" class="hidden lg:flex flex-col flex-1 h-[35vh] sm:h-[350px] lg:h-auto min-h-0">
+                        <div class="flex gap-1 bg-gray-50 dark:bg-slate-800 p-1 shrink-0 border-b border-gray-200 dark:border-slate-700">
+                            <button onclick="toggleAllSlots(true)" class="flex-1 py-1 text-[10px] sm:text-xs font-bold bg-gray-200 dark:bg-slate-700 hover:bg-gray-300 dark:hover:bg-slate-600 rounded transition border border-gray-300 dark:border-slate-600">全顯</button>
+                            <button onclick="toggleAllSlots(false)" class="flex-1 py-1 text-[10px] sm:text-xs font-bold bg-gray-200 dark:bg-slate-700 hover:bg-gray-300 dark:hover:bg-slate-600 rounded transition border border-gray-300 dark:border-slate-600">全隱</button>
+                        </div>
+                        <div id="slotsContainer" class="flex-1 min-h-0 overflow-y-auto p-1.5 space-y-0.5 relative rounded-b-xl bg-white dark:bg-slate-800">
+                            <div class="absolute inset-0 flex items-center justify-center text-xs font-bold text-gray-400 pointer-events-none">請載入角色</div>
+                        </div>
                     </div>
-                    <div id="slotsContainer" class="flex-1 min-h-0 overflow-y-auto bg-white dark:bg-slate-800 border-x border-b border-amber-300 dark:border-slate-600 rounded-b-xl p-1.5 space-y-0.5 shadow-inner relative">
-                        <div class="absolute inset-0 flex items-center justify-center text-xs font-bold text-gray-400 pointer-events-none">請載入角色</div>
-                    </div>
+
                 </div>
 
             </div>
@@ -165,6 +172,24 @@
         let globalIdleTimer = null;
         let tickleTimer = null;
         let slotVisibilityMap = {};
+
+        // 🌟 新增：手機版展開/收合插槽選單的邏輯
+        function toggleMobileSlots() {
+            if (window.innerWidth >= 1024) return; // 電腦版不觸發
+            const content = document.getElementById('slotMenuContent');
+            const arrow = document.getElementById('mobileSlotArrow');
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                content.classList.add('flex');
+                arrow.innerText = '🔼 (點擊收合)';
+                // 展開時讓整個區塊滑到頂端，方便同時觀看上方畫布與下方選單
+                document.getElementById('spineViewerSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else {
+                content.classList.add('hidden');
+                content.classList.remove('flex');
+                arrow.innerText = '🔽 (點擊展開)';
+            }
+        }
 
         function toggleAllCharacters() {
             const container = document.getElementById('charGridContainer');
@@ -416,9 +441,17 @@
                     const s = player.skeleton.findSlot(slotName);
                     if(s && slotVisibilityMap[slotName]) s.color.set(1, 0, 0, 0.5); 
                 });
+
+                // 🌟 修正：確保滑鼠離開時，如果部位已經被隱藏，就馬上恢復隱形狀態
                 item.addEventListener('mouseleave', () => {
                     const s = player.skeleton.findSlot(slotName);
-                    if(s && slotVisibilityMap[slotName]) s.color.set(1, 1, 1, 1); 
+                    if(s) {
+                        if(slotVisibilityMap[slotName]) {
+                            s.color.set(1, 1, 1, 1); 
+                        } else {
+                            s.color.a = 0; 
+                        }
+                    }
                 });
 
                 slotsContainer.appendChild(item);
@@ -438,16 +471,30 @@
             }
         }
 
+        // 🌟 修正：修改插槽時即時強制更新 Alpha 透明度，達到無延遲
         function toggleSlot(slotName, isVisible) {
             slotVisibilityMap[slotName] = isVisible;
+            if (globalPlayer && globalPlayer.skeleton) {
+                const s = globalPlayer.skeleton.findSlot(slotName);
+                if (s) {
+                    s.color.a = isVisible ? 1 : 0;
+                }
+            }
         }
 
+        // 🌟 修正：全隱/全顯時，也強制即時更新所有透明度
         function toggleAllSlots(show) {
             const checkboxes = document.querySelectorAll('#slotsContainer input[type="checkbox"]');
             checkboxes.forEach(cb => {
                 cb.checked = show;
                 const slotName = cb.nextElementSibling.innerText;
                 slotVisibilityMap[slotName] = show;
+                if (globalPlayer && globalPlayer.skeleton) {
+                    const s = globalPlayer.skeleton.findSlot(slotName);
+                    if (s) {
+                        s.color.a = show ? 1 : 0;
+                    }
+                }
             });
         }
 
