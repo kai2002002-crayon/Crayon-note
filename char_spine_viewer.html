@@ -52,7 +52,6 @@
         .collapsible-content { transition: max-height 0.3s ease-out, opacity 0.3s ease-out; overflow: hidden; }
         .collapsed { max-height: 0; opacity: 0; margin-top: 0 !important; }
         
-        /* 🌟 修正：對齊 char_detail 的背景平鋪與移動設定 */
         @keyframes raceBgPan {
             0%   { background-position: 0px 0px; }
             25%  { background-position: -200px 200px; }
@@ -66,7 +65,7 @@
             animation: raceBgPan 40s linear infinite;
         }
         .dark .animated-bg {
-            opacity: 0.8; /* 暗黑模式稍微降低背景亮度 */
+            opacity: 0.8;
         }
     </style>
 </head>
@@ -133,16 +132,16 @@
                     </div>
                 </div>
 
-                <div class="flex-[1] flex flex-col min-w-[220px] h-[450px] sm:h-[500px] lg:h-[600px]">
+                <div class="flex-[1] flex flex-col w-full lg:min-w-[220px] h-[350px] lg:h-[600px]">
                     <div class="bg-amber-100 dark:bg-slate-700 p-2.5 rounded-t-xl border border-amber-300 dark:border-slate-600 shadow-sm flex justify-between items-center shrink-0">
                         <span class="font-bold text-amber-900 dark:text-amber-100 text-xs sm:text-sm flex items-center gap-1">🧩 顯示/隱藏插槽</span>
                         <span id="slotCount" class="text-[10px] sm:text-xs font-black bg-amber-500 text-white px-2 py-0.5 rounded-md shadow-inner">0</span>
                     </div>
-                    <div class="flex gap-1 border-x border-amber-300 dark:border-slate-600 bg-white dark:bg-slate-800 p-1">
+                    <div class="flex gap-1 border-x border-amber-300 dark:border-slate-600 bg-white dark:bg-slate-800 p-1 shrink-0">
                         <button onclick="toggleAllSlots(true)" class="flex-1 py-1 text-[10px] sm:text-xs font-bold bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 rounded transition border border-gray-200 dark:border-slate-600">全顯</button>
                         <button onclick="toggleAllSlots(false)" class="flex-1 py-1 text-[10px] sm:text-xs font-bold bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 rounded transition border border-gray-200 dark:border-slate-600">全隱</button>
                     </div>
-                    <div id="slotsContainer" class="flex-1 overflow-y-auto bg-white dark:bg-slate-800 border-x border-b border-amber-300 dark:border-slate-600 rounded-b-xl p-1.5 space-y-0.5 shadow-inner relative">
+                    <div id="slotsContainer" class="flex-1 min-h-0 overflow-y-auto bg-white dark:bg-slate-800 border-x border-b border-amber-300 dark:border-slate-600 rounded-b-xl p-1.5 space-y-0.5 shadow-inner relative">
                         <div class="absolute inset-0 flex items-center justify-center text-xs font-bold text-gray-400 pointer-events-none">請載入角色</div>
                     </div>
                 </div>
@@ -253,7 +252,6 @@
             });
         }
 
-        // 🌟 新增：套用種族專屬的平鋪動畫背景
         function applyRaceBackground(charName) {
             const container = document.getElementById('spineCanvasContainer');
             const char = INITIAL_DATA.find(c => c.name === charName);
@@ -291,7 +289,7 @@
                 costumeSelect.appendChild(opt);
             });
 
-            applyRaceBackground(charName); // 呼叫背景切換
+            applyRaceBackground(charName);
             document.getElementById('spineViewerSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
             loadSpine(spineName, costumes[0]);
@@ -305,7 +303,6 @@
                 globalPlayer = null;
             }
 
-            // 清除可能殘留的行內樣式，避免被縮放影響
             container.innerHTML = '<div class="spine-player-loading-custom"></div>';
             document.getElementById('playerControls').classList.add('opacity-50', 'pointer-events-none');
             document.getElementById('slotsContainer').innerHTML = '<div class="absolute inset-0 flex items-center justify-center text-xs font-bold text-gray-400 pointer-events-none">讀取插槽資料中...</div>';
@@ -622,18 +619,15 @@
                     const dy = e.clientY - lastY;
                     dragDistance += Math.sqrt(dx * dx + dy * dy);
 
-                    // 🌟 修正：拖曳空白處搬動角色 (當沒有點擊到任何頭部或身體互動區)
                     if (!hitZoneOnDown) {
                         const rect = canvas.getBoundingClientRect();
                         const spineScaleX = player.viewport.width / rect.width / currentZoom;
                         const spineScaleY = player.viewport.height / rect.height / currentZoom;
                         
-                        // 隨著滑鼠反向移動 viewport 來達到搬動角色的視覺效果
                         player.viewport.x -= dx * spineScaleX;
                         player.viewport.y += dy * spineScaleY;
                     } 
                     else {
-                        // 如果有點到互動區，執行摸頭/抓癢/拉扯邏輯
                         if (dragDistance > 10 && !hasTriggeredRub) {
                             hasTriggeredRub = true;
                             clearTimeout(globalIdleTimer);
@@ -757,7 +751,6 @@
                         document.getElementById('animSelect').value = "Idle_1";
                         startRandomAnimationLoop();
                     } else if (!hitZoneOnDown && dragDistance < 10) {
-                        // 🌟 修正：只有在「點擊」空白處（沒有拖曳）時，才會隨機切換動作
                         const safeAnims = allAnimNames.filter(name => !EXCLUDED_RANDOM_ANIMS.includes(name));
                         if (safeAnims.length > 0) {
                             const randomAnim = safeAnims[Math.floor(Math.random() * safeAnims.length)];
