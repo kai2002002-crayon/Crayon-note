@@ -41,7 +41,6 @@
             50% { transform: translateY(-10px) scale(1.05); filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.9)); }
         }
 
-        /* 滾動條美化 */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 10px; }
@@ -50,18 +49,24 @@
         .slot-item { transition: all 0.2s; }
         .slot-item:hover { background-color: rgba(251, 191, 36, 0.2); }
         
-        /* 隱藏/顯示過渡效果 */
         .collapsible-content { transition: max-height 0.3s ease-out, opacity 0.3s ease-out; overflow: hidden; }
         .collapsed { max-height: 0; opacity: 0; margin-top: 0 !important; }
-        /* 新增：背景移動動畫 */
+        
+        /* 🌟 修正：對齊 char_detail 的背景平鋪與移動設定 */
         @keyframes raceBgPan {
-            0% { background-position: 0% 0%; }
-            50% { background-position: 100% 100%; }
-            100% { background-position: 0% 0%; }
+            0%   { background-position: 0px 0px; }
+            25%  { background-position: -200px 200px; }
+            50%  { background-position: 0px 400px; }
+            75%  { background-position: 200px 200px; }
+            100% { background-position: 0px 0px; }
         }
         .animated-bg {
-            background-size: cover;
-            animation: raceBgPan 30s linear infinite;
+            background-repeat: repeat !important;
+            background-size: 200px !important; 
+            animation: raceBgPan 40s linear infinite;
+        }
+        .dark .animated-bg {
+            opacity: 0.8; /* 暗黑模式稍微降低背景亮度 */
         }
     </style>
 </head>
@@ -69,7 +74,6 @@
 
     <div class="max-w-[1400px] mx-auto space-y-4">
         
-        <!-- 頂部標題區 -->
         <header class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md p-4 sm:p-5 rounded-2xl shadow-md border-4 border-amber-400 dark:border-slate-600 flex justify-between items-center relative z-10">
             <div>
                 <h1 class="text-xl sm:text-2xl font-black text-amber-950 dark:text-amber-400 mb-0.5">🎭 角色動態展示 (Spine Viewer)</h1>
@@ -80,7 +84,6 @@
             </button>
         </header>
 
-        <!-- 角色選擇區 -->
         <section class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md p-4 sm:p-5 rounded-2xl shadow-md border border-amber-200 dark:border-slate-700 transition-all">
             <div class="flex justify-between items-center mb-3 border-b border-amber-200 dark:border-slate-700 pb-2">
                 <h2 class="text-base sm:text-lg font-bold text-amber-900 dark:text-amber-400">👥 選擇角色</h2>
@@ -89,11 +92,9 @@
                 </button>
             </div>
             <div id="charGridContainer" class="space-y-3 collapsible-content" style="max-height: 2000px; opacity: 1;">
-                <!-- JavaScript 動態生成 -->
             </div>
         </section>
 
-        <!-- Spine 展示與控制區 -->
         <section id="spineViewerSection" class="hidden bg-white/90 dark:bg-slate-800/90 backdrop-blur-md p-4 sm:p-5 rounded-2xl shadow-md border-4 border-amber-400 dark:border-slate-600 transition-all">
             
             <div class="flex items-center gap-3 mb-4 border-b border-amber-100 dark:border-slate-700 pb-3">
@@ -104,18 +105,13 @@
                 </div>
             </div>
 
-            <!-- 主排版：左畫布(4/5) + 右插槽(1/5) -->
             <div class="flex flex-col lg:flex-row gap-4">
                 
-                <!-- 左側：Spine 畫布與控制器 -->
                 <div class="flex-[4] flex flex-col gap-3 min-w-0">
-                    
-                    <!-- Spine 顯示範圍 (固定高度) -->
                     <div id="spineCanvasContainer" class="w-full h-[450px] sm:h-[500px] lg:h-[600px] rounded-xl border-2 border-dashed border-amber-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50 relative overflow-hidden flex items-center justify-center">
                         <div class="text-gray-400 font-bold tracking-widest">等待載入...</div>
                     </div>
 
-                    <!-- 播放器控制器 -->
                     <div id="playerControls" class="bg-amber-50 dark:bg-slate-700/50 p-3 rounded-xl border border-amber-200 dark:border-slate-600 flex flex-wrap gap-3 items-center justify-between opacity-50 pointer-events-none transition-opacity">
                         <div class="flex items-center gap-2">
                             <button id="btnPlayPause" onclick="togglePlay()" class="w-9 h-9 flex items-center justify-center bg-amber-500 text-white rounded-lg shadow hover:bg-amber-600 transition" title="播放/暫停">⏸️</button>
@@ -137,8 +133,7 @@
                     </div>
                 </div>
 
-                <!-- 右側：部位插槽 (Slots) 列表 (1/5) -->
-                <div class="flex-[1] flex flex-col min-w-[220px] min-h-0">
+                <div class="flex-[1] flex flex-col min-w-[220px] h-[450px] sm:h-[500px] lg:h-[600px]">
                     <div class="bg-amber-100 dark:bg-slate-700 p-2.5 rounded-t-xl border border-amber-300 dark:border-slate-600 shadow-sm flex justify-between items-center shrink-0">
                         <span class="font-bold text-amber-900 dark:text-amber-100 text-xs sm:text-sm flex items-center gap-1">🧩 顯示/隱藏插槽</span>
                         <span id="slotCount" class="text-[10px] sm:text-xs font-black bg-amber-500 text-white px-2 py-0.5 rounded-md shadow-inner">0</span>
@@ -147,8 +142,7 @@
                         <button onclick="toggleAllSlots(true)" class="flex-1 py-1 text-[10px] sm:text-xs font-bold bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 rounded transition border border-gray-200 dark:border-slate-600">全顯</button>
                         <button onclick="toggleAllSlots(false)" class="flex-1 py-1 text-[10px] sm:text-xs font-bold bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 rounded transition border border-gray-200 dark:border-slate-600">全隱</button>
                     </div>
-                    <!-- 高度強制與畫布相同並允許滾動 -->
-                    <div id="slotsContainer" class="flex-1 min-h-0 overflow-y-auto bg-white dark:bg-slate-800 border-x border-b border-amber-300 dark:border-slate-600 rounded-b-xl p-1.5 space-y-0.5 shadow-inner">
+                    <div id="slotsContainer" class="flex-1 overflow-y-auto bg-white dark:bg-slate-800 border-x border-b border-amber-300 dark:border-slate-600 rounded-b-xl p-1.5 space-y-0.5 shadow-inner relative">
                         <div class="absolute inset-0 flex items-center justify-center text-xs font-bold text-gray-400 pointer-events-none">請載入角色</div>
                     </div>
                 </div>
@@ -173,7 +167,6 @@
         let tickleTimer = null;
         let slotVisibilityMap = {};
 
-        // === UI 收合邏輯 ===
         function toggleAllCharacters() {
             const container = document.getElementById('charGridContainer');
             const btn = document.getElementById('toggleAllCharBtn');
@@ -206,7 +199,6 @@
             }
         }
 
-        // === 初始化角色選單 (緊湊排版) ===
         function initCharacterGrid() {
             const container = document.getElementById('charGridContainer');
             if (typeof INITIAL_DATA === 'undefined' || !INITIAL_DATA) return;
@@ -223,7 +215,6 @@
                 const row = document.createElement('div');
                 row.className = "flex flex-col bg-amber-50/50 dark:bg-slate-800/50 p-2 rounded-xl border border-dashed border-amber-200 dark:border-slate-700";
                 
-                // 可點擊的標題列
                 const header = document.createElement('div');
                 header.className = "flex justify-between items-center cursor-pointer hover:bg-amber-100/50 dark:hover:bg-slate-700/50 p-1.5 rounded-lg transition";
                 header.onclick = () => togglePersonalityGroup(groupId, btnId);
@@ -232,7 +223,6 @@
                     <span id="${btnId}" class="text-xs text-gray-400">🔼</span>
                 `;
                 
-                // 更緊湊的圖示容器 (gap-1.5)
                 const iconContainer = document.createElement('div');
                 iconContainer.id = groupId;
                 iconContainer.className = "flex flex-wrap gap-1.5 pt-2 pl-1 collapsible-content";
@@ -245,7 +235,6 @@
                     const displayName = getI18n(c.name);
 
                     const btn = document.createElement('button');
-                    // 縮小按鈕與圖示
                     btn.className = "group flex flex-col items-center gap-0.5 transition-transform hover:scale-110 active:scale-95 w-12 sm:w-14";
                     btn.onclick = () => selectCharacter(c.name, spineName, iconUrl);
 
@@ -264,7 +253,20 @@
             });
         }
 
-        // === 選擇角色 ===
+        // 🌟 新增：套用種族專屬的平鋪動畫背景
+        function applyRaceBackground(charName) {
+            const container = document.getElementById('spineCanvasContainer');
+            const char = INITIAL_DATA.find(c => c.name === charName);
+            
+            if (char && typeof CHAR_BACKGROUNDS !== 'undefined' && CHAR_BACKGROUNDS[char.race]) {
+                container.style.backgroundImage = `url('${CHAR_BACKGROUNDS[char.race]}')`;
+                container.classList.add('animated-bg');
+            } else {
+                container.style.backgroundImage = 'none';
+                container.classList.remove('animated-bg');
+            }
+        }
+
         function selectCharacter(charName, spineName, iconUrl) {
             document.getElementById('spineViewerSection').classList.remove('hidden');
             
@@ -289,13 +291,12 @@
                 costumeSelect.appendChild(opt);
             });
 
-            // 畫面自動往下滾動到展示區
+            applyRaceBackground(charName); // 呼叫背景切換
             document.getElementById('spineViewerSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
             loadSpine(spineName, costumes[0]);
         }
 
-        // === 核心載入 Spine ===
         function loadSpine(baseFolderKey, costumeKey) {
             const container = document.getElementById('spineCanvasContainer');
             
@@ -304,6 +305,7 @@
                 globalPlayer = null;
             }
 
+            // 清除可能殘留的行內樣式，避免被縮放影響
             container.innerHTML = '<div class="spine-player-loading-custom"></div>';
             document.getElementById('playerControls').classList.add('opacity-50', 'pointer-events-none');
             document.getElementById('slotsContainer').innerHTML = '<div class="absolute inset-0 flex items-center justify-center text-xs font-bold text-gray-400 pointer-events-none">讀取插槽資料中...</div>';
@@ -346,7 +348,6 @@
             });
         }
 
-        // === 控制器功能 ===
         function buildAnimationDropdown(player) {
             const animSelect = document.getElementById('animSelect');
             animSelect.innerHTML = '';
@@ -391,7 +392,6 @@
             });
         }
 
-        // === 插槽 (Slots) 面板 ===
         function buildSlotsPanel(player) {
             const slotsContainer = document.getElementById('slotsContainer');
             slotsContainer.innerHTML = '';
@@ -415,7 +415,6 @@
                     </label>
                 `;
 
-                // MouseEnter 半透明紅
                 item.addEventListener('mouseenter', () => {
                     const s = player.skeleton.findSlot(slotName);
                     if(s && slotVisibilityMap[slotName]) s.color.set(1, 0, 0, 0.5); 
@@ -428,7 +427,6 @@
                 slotsContainer.appendChild(item);
             });
 
-            // 強制渲染隱藏的插槽
             if(!globalPlayer.config.injectedUpdate) {
                 const origUpdate = player.skeleton.updateWorldTransform;
                 player.skeleton.updateWorldTransform = function() {
@@ -456,7 +454,6 @@
             });
         }
 
-        // === 複雜互動 (還原 char_detail 邏輯) ===
         function setupComplexInteractions(player, container) {
             const canvas = container.querySelector('canvas');
             if (!canvas) return;
@@ -489,7 +486,6 @@
                         const randomAnim = safeAnims[Math.floor(Math.random() * safeAnims.length)];
                         player.animationState.setAnimation(0, randomAnim, true);
                         
-                        // 動畫改變時，同步下拉選單 (非必須，但體驗較好)
                         const selectEl = document.getElementById('animSelect');
                         if(selectEl.querySelector(`option[value="${randomAnim}"]`)) selectEl.value = randomAnim;
 
@@ -499,7 +495,6 @@
             }
             startRandomAnimationLoop();
 
-            // 滾輪縮放
             canvas.addEventListener('wheel', function(event) {
                 event.preventDefault();
                 currentZoom = event.deltaY < 0 ? Math.min(currentZoom + 0.1, 4.0) : Math.max(currentZoom - 0.1, 0.5);
@@ -507,7 +502,6 @@
                     player.skeleton.scaleX = currentZoom;
                     player.skeleton.scaleY = currentZoom;
                     player.skeleton.y = ZOOM_ANCHOR_Y * (1 - currentZoom);
-                    player.skeleton.x = 0;
                 }
             }, { passive: false });
 
@@ -518,6 +512,8 @@
                     player.skeleton.scaleY = 1.0;
                     player.skeleton.y = 0;
                     player.skeleton.x = 0;
+                    player.viewport.x = -400; // 恢復置中
+                    player.viewport.y = 0;
                 }
             });
 
@@ -536,12 +532,12 @@
                         if (targetBone) break;
                     }
                     if (targetBone) {
-                        const boneCanvasX = ((targetBone.worldX - baseViewport.x) / baseViewport.width) * rect.width;
-                        const boneCanvasY = rect.height - ((targetBone.worldY - baseViewport.y) / baseViewport.height) * rect.height;
+                        const boneCanvasX = ((targetBone.worldX - player.viewport.x) / player.viewport.width) * rect.width;
+                        const boneCanvasY = rect.height - ((targetBone.worldY - player.viewport.y) / player.viewport.height) * rect.height;
                         const dx = mouseX - boneCanvasX;
                         const dy = mouseY - boneCanvasY;
                         const distance = Math.sqrt(dx * dx + dy * dy);
-                        const scaledRadius = (zone.radius * currentZoom) * (rect.height / baseViewport.height);
+                        const scaledRadius = (zone.radius * currentZoom) * (rect.height / player.viewport.height);
 
                         if (distance < scaledRadius && distance < minDistance) {
                             minDistance = distance;
@@ -584,13 +580,13 @@
                             }
                         }
                         if (bone) {
-                            const boneCanvasX = ((bone.worldX - baseViewport.x) / baseViewport.width) * rect.width;
-                            const boneCanvasY = rect.height - ((bone.worldY - baseViewport.y) / baseViewport.height) * rect.height;
+                            const boneCanvasX = ((bone.worldX - player.viewport.x) / player.viewport.width) * rect.width;
+                            const boneCanvasY = rect.height - ((bone.worldY - player.viewport.y) / player.viewport.height) * rect.height;
                             minBoneDist = Math.hypot((e.clientX - rect.left) - boneCanvasX, (e.clientY - rect.top) - boneCanvasY);
                             activeFaceBone = bone;
                         }
 
-                        const maxPullRadius = 280 * currentZoom * (rect.height / baseViewport.height);
+                        const maxPullRadius = 280 * currentZoom * (rect.height / player.viewport.height);
                         if (minBoneDist <= maxPullRadius && activeFaceBone) {
                             initialBoneX = activeFaceBone.x;
                             initialBoneY = activeFaceBone.y;
@@ -618,7 +614,6 @@
                         player.skeleton.scaleX = currentZoom;
                         player.skeleton.scaleY = currentZoom;
                         player.skeleton.y = ZOOM_ANCHOR_Y * (1 - currentZoom);
-                        player.skeleton.x = 0;
                     }
                     initialPinchDistance = currentDistance;
 
@@ -627,57 +622,70 @@
                     const dy = e.clientY - lastY;
                     dragDistance += Math.sqrt(dx * dx + dy * dy);
 
-                    if (dragDistance > 10 && !hasTriggeredRub && hitZoneOnDown) {
-                        hasTriggeredRub = true;
-                        clearTimeout(globalIdleTimer);
-                        clearTimeout(tickleTimer);
-                        
-                        if (hitZoneOnDown.name === "頭部") {
-                            player.animationState.setAnimation(0, "Touch_Idle", true);
-                            document.getElementById('animSelect').value = "Touch_Idle";
-                        } else if (hitZoneOnDown.name === "身體") {
-                            player.animationState.setAnimation(0, "Tickle_Idle_1", true);
-                            document.getElementById('animSelect').value = "Tickle_Idle_1";
-                            tickleTimer = setTimeout(() => {
-                                const animNames = player.skeleton.data.animations.map(a => a.name);
-                                if (animNames.includes("Tickle_Idle_2")) {
-                                    player.animationState.setAnimation(0, "Tickle_Idle_2", true);
-                                    document.getElementById('animSelect').value = "Tickle_Idle_2";
-                                }
-                            }, 5000);
-                        }
-                    }
-
-                    if (hasTriggeredRub && hitZoneOnDown && hitZoneOnDown.name === "頭部" && activeFaceBone) {
+                    // 🌟 修正：拖曳空白處搬動角色 (當沒有點擊到任何頭部或身體互動區)
+                    if (!hitZoneOnDown) {
                         const rect = canvas.getBoundingClientRect();
-                        const spineScaleX = baseViewport.width / rect.width / currentZoom;
-                        const spineScaleY = baseViewport.height / rect.height / currentZoom;
+                        const spineScaleX = player.viewport.width / rect.width / currentZoom;
+                        const spineScaleY = player.viewport.height / rect.height / currentZoom;
                         
-                        const stretchIntensity = 1.3; 
-                        let worldDx = (e.clientX - startX) * spineScaleX * stretchIntensity;
-                        let worldDy = -(e.clientY - startY) * spineScaleY * stretchIntensity;
-
-                        if (worldDx > 0) worldDx = 0; 
-                        let targetWorld = { x: activeFaceBone.worldX + worldDx, y: activeFaceBone.worldY + worldDy };
-
-                        if (activeFaceBone.parent) {
-                            activeFaceBone.parent.worldToLocal(targetWorld);
+                        // 隨著滑鼠反向移動 viewport 來達到搬動角色的視覺效果
+                        player.viewport.x -= dx * spineScaleX;
+                        player.viewport.y += dy * spineScaleY;
+                    } 
+                    else {
+                        // 如果有點到互動區，執行摸頭/抓癢/拉扯邏輯
+                        if (dragDistance > 10 && !hasTriggeredRub) {
+                            hasTriggeredRub = true;
+                            clearTimeout(globalIdleTimer);
+                            clearTimeout(tickleTimer);
+                            
+                            if (hitZoneOnDown.name === "頭部") {
+                                player.animationState.setAnimation(0, "Touch_Idle", true);
+                                document.getElementById('animSelect').value = "Touch_Idle";
+                            } else if (hitZoneOnDown.name === "身體") {
+                                player.animationState.setAnimation(0, "Tickle_Idle_1", true);
+                                document.getElementById('animSelect').value = "Tickle_Idle_1";
+                                tickleTimer = setTimeout(() => {
+                                    const animNames = player.skeleton.data.animations.map(a => a.name);
+                                    if (animNames.includes("Tickle_Idle_2")) {
+                                        player.animationState.setAnimation(0, "Tickle_Idle_2", true);
+                                        document.getElementById('animSelect').value = "Tickle_Idle_2";
+                                    }
+                                }, 5000);
+                            }
                         }
 
-                        let localDx = targetWorld.x - initialBoneX;
-                        let localDy = targetWorld.y - initialBoneY;
-                        let rawDistance = Math.hypot(localDx, localDy);
+                        if (hasTriggeredRub && hitZoneOnDown.name === "頭部" && activeFaceBone) {
+                            const rect = canvas.getBoundingClientRect();
+                            const spineScaleX = player.viewport.width / rect.width / currentZoom;
+                            const spineScaleY = player.viewport.height / rect.height / currentZoom;
+                            
+                            const stretchIntensity = 1.3; 
+                            let worldDx = (e.clientX - startX) * spineScaleX * stretchIntensity;
+                            let worldDy = -(e.clientY - startY) * spineScaleY * stretchIntensity;
 
-                        const MAX_RADIUS = 55; 
+                            if (worldDx > 0) worldDx = 0; 
+                            let targetWorld = { x: activeFaceBone.worldX + worldDx, y: activeFaceBone.worldY + worldDy };
 
-                        if (rawDistance > 0) {
-                            let elasticDist = MAX_RADIUS * (1 - Math.exp(-rawDistance / (MAX_RADIUS * 1.2)));
-                            localDx = (localDx / rawDistance) * elasticDist;
-                            localDy = (localDy / rawDistance) * elasticDist;
+                            if (activeFaceBone.parent) {
+                                activeFaceBone.parent.worldToLocal(targetWorld);
+                            }
+
+                            let localDx = targetWorld.x - initialBoneX;
+                            let localDy = targetWorld.y - initialBoneY;
+                            let rawDistance = Math.hypot(localDx, localDy);
+
+                            const MAX_RADIUS = 55; 
+
+                            if (rawDistance > 0) {
+                                let elasticDist = MAX_RADIUS * (1 - Math.exp(-rawDistance / (MAX_RADIUS * 1.2)));
+                                localDx = (localDx / rawDistance) * elasticDist;
+                                localDy = (localDy / rawDistance) * elasticDist;
+                            }
+
+                            activeFaceBone.x = initialBoneX + localDx;
+                            activeFaceBone.y = initialBoneY + localDy;
                         }
-
-                        activeFaceBone.x = initialBoneX + localDx;
-                        activeFaceBone.y = initialBoneY + localDy;
                     }
 
                     lastX = e.clientX;
@@ -748,40 +756,33 @@
                         player.animationState.addAnimation(0, "Idle_1", true, 0);
                         document.getElementById('animSelect').value = "Idle_1";
                         startRandomAnimationLoop();
-                    } else {
-                        // 點擊事件 (非拖曳)
-                        if (hitZoneOnDown && hitZoneOnDown.name === "頭部") {
-                            if (allAnimNames.includes("Smash_End_1")) {
-                                player.animationState.setAnimation(0, "Smash_End_1", false);
-                                if (allAnimNames.includes("Smash_End_2")) {
-                                    player.animationState.addAnimation(0, "Smash_End_2", false, 0);
-                                }
-                                player.animationState.addAnimation(0, "Idle_1", true, 0);
-                                document.getElementById('animSelect').value = "Smash_End_1";
-                            } else {
-                                player.animationState.setAnimation(0, "Idle_1", true);
-                                document.getElementById('animSelect').value = "Idle_1";
-                            }
-                            startRandomAnimationLoop();
-                        } else {
-                            // 點擊空白處切換隨機動作
-                            const safeAnims = allAnimNames.filter(name => !EXCLUDED_RANDOM_ANIMS.includes(name));
-                            if (safeAnims.length > 0) {
-                                const randomAnim = safeAnims[Math.floor(Math.random() * safeAnims.length)];
-                                player.animationState.setAnimation(0, randomAnim, true);
-                                document.getElementById('animSelect').value = randomAnim;
-                                
-                                globalIdleTimer = setTimeout(() => {
-                                    player.animationState.setAnimation(0, "Idle_1", true);
-                                    document.getElementById('animSelect').value = "Idle_1";
-                                    startRandomAnimationLoop();
-                                }, 5000);
-                            } else {
+                    } else if (!hitZoneOnDown && dragDistance < 10) {
+                        // 🌟 修正：只有在「點擊」空白處（沒有拖曳）時，才會隨機切換動作
+                        const safeAnims = allAnimNames.filter(name => !EXCLUDED_RANDOM_ANIMS.includes(name));
+                        if (safeAnims.length > 0) {
+                            const randomAnim = safeAnims[Math.floor(Math.random() * safeAnims.length)];
+                            player.animationState.setAnimation(0, randomAnim, true);
+                            document.getElementById('animSelect').value = randomAnim;
+                            
+                            globalIdleTimer = setTimeout(() => {
                                 player.animationState.setAnimation(0, "Idle_1", true);
                                 document.getElementById('animSelect').value = "Idle_1";
                                 startRandomAnimationLoop();
-                            }
+                            }, 5000);
                         }
+                    } else if (hitZoneOnDown && hitZoneOnDown.name === "頭部") {
+                        if (allAnimNames.includes("Smash_End_1")) {
+                            player.animationState.setAnimation(0, "Smash_End_1", false);
+                            if (allAnimNames.includes("Smash_End_2")) {
+                                player.animationState.addAnimation(0, "Smash_End_2", false, 0);
+                            }
+                            player.animationState.addAnimation(0, "Idle_1", true, 0);
+                            document.getElementById('animSelect').value = "Smash_End_1";
+                        } else {
+                            player.animationState.setAnimation(0, "Idle_1", true);
+                            document.getElementById('animSelect').value = "Idle_1";
+                        }
+                        startRandomAnimationLoop();
                     }
                 }
             };
@@ -789,21 +790,7 @@
             canvas.addEventListener('pointerout', handlePointerUp);
             canvas.addEventListener('pointercancel', handlePointerUp);
         }
-        function applyRaceBackground(charName) {
-            // 從 INITIAL_DATA 找到該角色種族
-            const char = INITIAL_DATA.find(c => c.name === charName);
-            const container = document.getElementById('spineCanvasContainer');
-    
-            if (char && typeof CHAR_BACKGROUNDS !== 'undefined' && CHAR_BACKGROUNDS[char.race]) {
-                container.style.backgroundImage = `url('${CHAR_BACKGROUNDS[char.race]}')`;
-                container.classList.add('animated-bg');
-            } else {
-                container.style.backgroundImage = 'none';
-                container.classList.remove('animated-bg');
-            }
-        }
 
-        // 初始化
         window.onload = function() {
             initCharacterGrid();
         };
