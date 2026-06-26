@@ -15,6 +15,75 @@ const CHAR_BACKGROUNDS = {
 
 
 const characterSkills = [
+   {
+    "name": "巴隆",
+    "attribute": "魔法",
+    "skills": {
+      "zh-TW": {
+        "normalAttack": {
+          "basic": " [魔法傷害：]",
+          "enhanced": " []"
+        },
+        "normalSkill": {
+          "name": "",
+          "desc": "",
+          "stats": [""]
+        },
+        "ultimateSkill": {
+          "name": "",
+          "desc": "",
+          "stats": [""],
+          "cooldown": "秒"
+        },
+        "passiveSkill": {
+          "desc": "",
+          "stats": [""]
+        }
+      },
+      "ja": {
+        "normalAttack": {
+          "basic": " [魔法ダメージ：]",
+          "enhanced": " []"
+        },
+        "normalSkill": {
+          "name": "",
+          "desc": "",
+          "stats": [""]
+        },
+        "ultimateSkill": {
+          "name": "",
+          "desc": "",
+          "stats": [""],
+          "cooldown": "秒"
+        },
+        "passiveSkill": {
+          "desc": "",
+          "stats": [""]
+        }
+      },
+      "en": {
+        "normalAttack": {
+          "basic": " [Magical DMG: %]",
+          "enhanced": " []"
+        },
+        "normalSkill": {
+          "name": "",
+          "desc": "",
+          "stats": [""]
+        },
+        "ultimateSkill": {
+          "name": "",
+          "desc": "",
+          "stats": [""],
+          "cooldown": "s"
+        },
+        "passiveSkill": {
+          "desc": "",
+          "stats": [""]
+        }
+      }
+    }
+  },
   {
     "name": "貝麗塔",
     "attribute": "魔法",
