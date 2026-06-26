@@ -404,11 +404,11 @@
             document.getElementById('animSelectText').innerText = '讀取中...';
 
             let skelUrl = isCombatMode 
-                ? `./spine_sd_assets/${baseFolderKey}.skel.bytes` 
+                ? `./spine_sd_assets/${costumeKey}.skel.bytes` 
                 : `./spine_assets/${baseFolderKey}/${costumeKey}.skel.bytes`;
             
             let atlasUrl = isCombatMode 
-                ? `./spine_sd_assets/${baseFolderKey}.atlas.txt` 
+                ? `./spine_sd_assets/${costumeKey}.atlas.txt` 
                 : `./spine_assets/${baseFolderKey}/${costumeKey}.atlas.txt`;
             
             let initAnim = isCombatMode ? "Idle" : "Idle_1";
