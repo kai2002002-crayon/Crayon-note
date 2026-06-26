@@ -513,12 +513,16 @@
         }
 
         function buildSlotsPanel(player) {
-            // 🐛 修正：這裡的 ID 必須是 slotsContainerInner
             const slotsContainer = document.getElementById('slotsContainerInner');
             slotsContainer.innerHTML = '';
             
             const slots = player.skeleton.slots;
-            document.getElementById('slotCount').innerText = slots.length;
+            
+            // 🐛 關鍵修復：因為新版介面沒有 id="slotCount" 的元素，必須加上防呆判斷，否則會造成 SpinePlayer 崩潰！
+            const slotCountEl = document.getElementById('slotCount');
+            if (slotCountEl) {
+                slotCountEl.innerText = slots.length;
+            }
 
             slotVisibilityMap = {};
 
