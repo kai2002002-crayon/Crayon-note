@@ -119,7 +119,7 @@ const LANG_DICT = {
         race_witch: "Witch", race_beast: "Beast", race_dragon: "Dragon", race_spirit: "Spirit", race_fairy: "Fairy", race_elf: "Elf", race_ghost: "Ghost", race_unknown: "???",
         position_front: "Front", position_middle: "Mid", position_back: "Back", job_attacker: "Attacker", job_defender: "Tank", job_supporter: "Support",
         visit_count_prefix: "Total Visits", maintenance_msg: "🔧 Under Maintenance...", event_title: "🎪 Current Event",
-        auth_offline_title: "Status: Offline Mode", auth_offline_desc: "Data saved locally", auth_online_title: "🟢 Connected to Cloud", auth_logout: "Logout",
+        auth_offline_title: "Status: Offline Mode", auth_offline_desc: "Data saved locally", auth_online_title: "🟢 Connected", auth_logout: "Logout",
         filter_title: "🔍 Filter", filter_search_placeholder: "Search Apostle...", filter_reset: "Reset All", filter_display_mode: "👁️ View Mode:",
         filter_btn_all: "All", filter_btn_show_all: "Show All", filter_btn_show_1: "Board 1 Only", filter_btn_show_2: "Board 2 Only", filter_btn_show_3: "Board 3 Only",
         stats_toggle_hint: "Click to Expand / Collapse", stats_layer_1_title: "🥇 Board 1 Stats", stats_layer_2_title: "🥈 Board 2 Stats", stats_layer_3_title: "🥉 Board 3 Stats",
