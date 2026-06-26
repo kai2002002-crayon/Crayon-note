@@ -404,11 +404,11 @@
             document.getElementById('animSelectText').innerText = '讀取中...';
 
             let skelUrl = isCombatMode 
-                ? `./spine_sd_assets/${costumeKey}.skel.bytes` 
+                ? `./spine_sd_assets/${baseFolderKey}.skel.bytes` 
                 : `./spine_assets/${baseFolderKey}/${costumeKey}.skel.bytes`;
             
             let atlasUrl = isCombatMode 
-                ? `./spine_sd_assets/${costumeKey}.atlas.txt` 
+                ? `./spine_sd_assets/${baseFolderKey}.atlas.txt` 
                 : `./spine_assets/${baseFolderKey}/${costumeKey}.atlas.txt`;
             
             let initAnim = isCombatMode ? "Idle" : "Idle_1";
@@ -417,7 +417,6 @@
                 skelUrl: skelUrl,
                 atlasUrl: atlasUrl,
                 animation: initAnim, 
-                skin: isCombatMode ? costumeKey : undefined, 
                 premultipliedAlpha: true,
                 backgroundColor: "#00000000", 
                 alpha: true,
@@ -432,13 +431,15 @@
                     document.getElementById('playerControls').classList.remove('opacity-50', 'pointer-events-none');
                     setSpeed(1);
 
-                    if (!isCombatMode) {
-                        const skins = player.skeleton.data.skins;
-                        if (skins && skins.length > 1) {
-                            const targetSkin = skins.find(s => s.name === 'Normal') || skins.find(s => s.name !== 'default');
-                            if (targetSkin) {
-                                player.skeleton.setSkinByName(targetSkin.name);
-                            }
+                    // ✅ 移除 isCombatMode 判斷，大廳與戰鬥都統一在這裡尋找正確的 Skin
+                    const skins = player.skeleton.data.skins;
+                    if (skins && skins.length > 0) {
+                        // 比照 char_detail.html 的寫法：優先找 Normal，沒有就找 default，再沒有就抓第一個
+                        const targetSkin = skins.find(s => s.name === 'Normal') || skins.find(s => s.name === 'default') || skins[0];
+                        if (targetSkin) {
+                            player.skeleton.setSkinByName(targetSkin.name);
+                            // 同時重置插槽，確保圖層顯示正確
+                            player.skeleton.setSlotsToSetupPose(); 
                         }
                     }
                     player.skeleton.setToSetupPose(); 
