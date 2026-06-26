@@ -348,8 +348,8 @@
             const container = document.getElementById('spineCanvasContainer');
             const char = INITIAL_DATA.find(c => c.name === charName);
             
-            if (char && typeof CHAR_BACKGROUNDS !== 'undefined' && CHAR_BACKGROUNDS[char.race]) {
-                container.style.backgroundImage = `url('${CHAR_BACKGROUNDS[char.race]}')`;
+            if (char && typeof SPINE_BACKGROUNDS !== 'undefined' && SPINE_BACKGROUNDS[char.race]) {
+                container.style.backgroundImage = `url('${SPINE_BACKGROUNDS[char.race]}')`;
                 container.classList.add('animated-bg');
             } else {
                 container.style.backgroundImage = 'none';
