@@ -1,175 +1,4 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>角色戰鬥動態展示 - 嘟嘟臉金蠟筆記事本</title>
-    
-    <script src="data_core.js"></script>
-    <script src="data_intro.js"></script>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link id="dynamicFavicon" rel="icon" href="https://i.postimg.cc/mkfSTq5k/Favicon.png" type="image/png">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@esotericsoftware/spine-player@4.1.23/dist/spine-player.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/@esotericsoftware/spine-player@4.1.23/dist/iife/spine-player.min.js"></script>
-
-    <script>
-        tailwind.config = { darkMode: 'class', }
-        const isDarkMode = localStorage.getItem('theme') === 'dark' || 
-                           (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
-        if (isDarkMode) { document.documentElement.classList.add('dark'); }
-        window.currentLang = localStorage.getItem('user_lang') || "zh-TW";
-    </script>
-
-    <style>
-        body { font-family: 'Noto Sans TC', sans-serif; }
-        
-        .spine-player-controls { display: none !important; }
-        
-        .spine-player-loading-custom {
-            position: absolute; top: 50%; left: 50%;
-            width: 80px; height: 80px; margin: -40px 0 0 -40px;
-            background: url('https://i.postimg.cc/qvjNxZzg/golden-crayon.png') no-repeat center center;
-            background-size: contain;
-            animation: crayonFloat 1.5s ease-in-out infinite;
-            z-index: 10;
-        }
-        #spineCanvasContainer {
-            position: relative;
-            z-index: 1; /* 背景預設是背景層 */
-            /* 確保背景圖完全貼齊容器，且不會撐破容器 */
-            background-size: cover !important;
-            background-position: center !important;
-            /* 讓 Canvas 的層級明確高於背景 */
-            background-blend-mode: normal;
-        }
-        }
-        #spineCanvasContainer canvas {
-            position: relative !important;
-            z-index: 2 !important;
-        }
-        @keyframes crayonFloat {
-            0%, 100% { transform: translateY(0) scale(1); filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.5)); }
-            50% { transform: translateY(-10px) scale(1.05); filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.9)); }
-        }
-
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 10px; }
-        .dark ::-webkit-scrollbar-thumb { background-color: #475569; }
-
-        .collapsible-content { transition: max-height 0.3s ease-out, opacity 0.3s ease-out; overflow: hidden; }
-        .collapsed { max-height: 0; opacity: 0; margin-top: 0 !important; }
-        
-        @keyframes raceBgPan {
-            0%   { background-position: 0px 0px; }
-            25%  { background-position: -200px 200px; }
-            50%  { background-position: 0px 400px; }
-            75%  { background-position: 200px 200px; }
-            100% { background-position: 0px 0px; }
-        }
-        .animated-bg {
-            background-repeat: repeat !important;
-            background-size: 200px !important; 
-            animation: raceBgPan 40s linear infinite;
-        }
-        .dark .animated-bg { opacity: 0.8; }
-        
-        .custom-select-btn { -webkit-tap-highlight-color: transparent; }
-    </style>
-</head>
-<body class="p-2 sm:p-6 bg-[#fcf8f2] dark:bg-slate-900 text-gray-800 dark:text-gray-200 min-h-screen transition-colors duration-300">
-
-    <div class="max-w-[1400px] mx-auto space-y-4">
-        
-        <header class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md p-4 sm:p-5 rounded-2xl shadow-md border-4 border-amber-400 dark:border-slate-600 flex justify-between items-center relative z-10">
-            <div>
-                <h1 class="text-xl sm:text-2xl font-black text-amber-950 dark:text-amber-400 mb-0.5">⚔️ 角色戰鬥動態展示 (SD Viewer)</h1>
-                <p class="text-xs sm:text-sm text-amber-800 dark:text-gray-400">選擇角色載入戰鬥動態小人，支援所有戰鬥技能動作切換。</p>
-            </div>
-            <button onclick="window.close()" class="px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm bg-amber-500 text-white font-bold rounded-xl shadow hover:bg-amber-600 transition shrink-0">
-                ⬅️ 返回
-            </button>
-        </header>
-
-        <section class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md p-4 sm:p-5 rounded-2xl shadow-md border border-amber-200 dark:border-slate-700 transition-all">
-            <div class="flex justify-between items-center mb-3 border-b border-amber-200 dark:border-slate-700 pb-2">
-                <h2 class="text-base sm:text-lg font-bold text-amber-900 dark:text-amber-400">👥 選擇角色</h2>
-                <button id="toggleAllCharBtn" onclick="toggleAllCharacters()" class="px-3 py-1 text-xs font-bold bg-amber-100 dark:bg-slate-700 text-amber-800 dark:text-gray-300 rounded-lg hover:bg-amber-200 dark:hover:bg-slate-600 transition shadow-sm">
-                    隱藏全部 🔼
-                </button>
-            </div>
-            <div id="charGridContainer" class="space-y-3 collapsible-content" style="max-height: 2000px; opacity: 1;">
-            </div>
-        </section>
-
-        <section id="spineViewerSection" class="hidden bg-white/90 dark:bg-slate-800/90 backdrop-blur-md p-4 sm:p-5 rounded-2xl shadow-md border-4 border-amber-400 dark:border-slate-600 transition-all">
-            
-            <div class="flex items-center gap-3 mb-4 border-b border-amber-100 dark:border-slate-700 pb-3">
-                <img id="activeCharIcon" src="" class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg border-2 border-amber-400 shadow-sm object-contain bg-white dark:bg-slate-700 hidden">
-                <div>
-                    <h2 id="activeCharName" class="text-lg sm:text-xl font-black text-amber-900 dark:text-amber-300">請先選擇角色</h2>
-                    <span id="activeCharSpineName" class="text-xs font-bold text-gray-500"></span>
-                </div>
-            </div>
-
-            <div class="flex flex-col gap-3 min-w-0 relative z-10 w-full lg:w-3/4 mx-auto">
-                
-                <div id="spineCanvasContainer" class="w-full h-[60vh] sm:h-[600px] rounded-xl border-2 border-dashed border-amber-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50 relative overflow-hidden flex items-center justify-center cursor-move">
-                    <div class="text-gray-400 font-bold tracking-widest">等待載入...</div>
-                </div>
-
-                <div id="playerControls" class="bg-amber-50 dark:bg-slate-700/50 p-3 rounded-xl border border-amber-200 dark:border-slate-600 flex flex-col gap-3 opacity-50 pointer-events-none transition-opacity">
-                    
-                    <div class="flex items-center justify-between gap-2">
-                        <div class="flex items-center gap-2">
-                            <button id="btnPlayPause" onclick="togglePlay()" class="w-9 h-9 flex items-center justify-center bg-amber-500 text-white rounded-lg shadow hover:bg-amber-600 transition" title="播放/暫停">⏸️</button>
-                            <div class="flex bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-600 p-1 shadow-inner">
-                                <button onclick="setSpeed(0.5)" class="speed-btn px-2 py-1 text-[10px] sm:text-xs font-bold rounded hover:bg-amber-100 dark:hover:bg-slate-600 text-gray-700 dark:text-gray-300">0.5x</button>
-                                <button onclick="setSpeed(1)" class="speed-btn px-2 py-1 text-[10px] sm:text-xs font-bold rounded bg-amber-200 dark:bg-slate-600 text-amber-900 dark:text-white">1.0x</button>
-                                <button onclick="setSpeed(2)" class="speed-btn px-2 py-1 text-[10px] sm:text-xs font-bold rounded hover:bg-amber-100 dark:hover:bg-slate-600 text-gray-700 dark:text-gray-300">2.0x</button>
-                            </div>
-                        </div>
-                        <select id="costumeSelect" onchange="changeSpineCostume(this.value)" class="bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-xs sm:text-sm font-bold rounded-lg px-2 py-1.5 outline-none focus:ring-2 focus:ring-amber-500 min-w-[100px]">
-                            <option value="">戰鬥服</option>
-                        </select>
-                    </div>
-
-                    <div class="flex gap-2 w-full relative z-[100]">
-                        <div class="relative w-1/2" id="animDropdownWrapper">
-                            <button onclick="toggleCustomSelect('animList')" class="custom-select-btn w-full bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-[10px] sm:text-xs font-bold rounded-lg px-2 py-1.5 flex justify-between items-center text-left shadow-sm">
-                                <span id="animSelectText" class="truncate text-amber-900 dark:text-gray-200">選擇動作</span>
-                                <span class="ml-1 text-gray-400 shrink-0 text-[10px]">▼</span>
-                            </button>
-                            <div id="animList" class="hidden absolute bottom-[calc(100%+6px)] left-0 w-full bg-white dark:bg-slate-800 border border-amber-300 dark:border-slate-600 rounded-lg shadow-2xl max-h-[160px] overflow-y-auto flex-col py-1 z-[110]">
-                            </div>
-                        </div>
-
-                        <div class="relative w-1/2" id="slotDropdownWrapper">
-                            <button onclick="toggleCustomSelect('slotList')" class="custom-select-btn w-full bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-[10px] sm:text-xs font-bold rounded-lg px-2 py-1.5 flex justify-between items-center text-left shadow-sm">
-                                <span class="truncate text-amber-900 dark:text-gray-200">🧩 顯示/隱藏插槽</span>
-                                <span class="ml-1 text-gray-400 shrink-0 text-[10px]">▼</span>
-                            </button>
-                            <div id="slotList" class="hidden absolute bottom-[calc(100%+6px)] right-0 w-full sm:w-[150%] bg-white dark:bg-slate-800 border border-amber-300 dark:border-slate-600 rounded-lg shadow-2xl max-h-[160px] overflow-y-auto flex-col z-[110]">
-                                <div class="flex gap-1 p-1.5 border-b border-gray-100 dark:border-slate-700 sticky top-0 bg-gray-50 dark:bg-slate-800 z-20">
-                                    <button onclick="toggleAllSlots(true, event)" class="flex-1 py-1 text-[10px] font-bold bg-white dark:bg-slate-700 hover:bg-amber-100 dark:hover:bg-slate-600 rounded border border-gray-200 dark:border-slate-600 transition shadow-sm text-gray-700 dark:text-gray-200">全顯</button>
-                                    <button onclick="toggleAllSlots(false, event)" class="flex-1 py-1 text-[10px] font-bold bg-white dark:bg-slate-700 hover:bg-amber-100 dark:hover:bg-slate-600 rounded border border-gray-200 dark:border-slate-600 transition shadow-sm text-gray-700 dark:text-gray-200">全隱</button>
-                                </div>
-                                <div id="slotsContainerInner" class="flex flex-col pb-1"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-    </div>
-
-    <script>
-        function getI18n(key) {
+function getI18n(key) {
             if (!key) return key;
             const safeLang = (typeof LANG_DICT !== 'undefined' && LANG_DICT[window.currentLang]) ? window.currentLang : 'zh-TW';
             if (typeof LANG_DICT !== 'undefined' && LANG_DICT[safeLang] && LANG_DICT[safeLang][key]) {
@@ -179,7 +8,14 @@
         }
 
         let globalPlayer = null;
+        let globalIdleTimer = null;
+        let tickleTimer = null;
         let slotVisibilityMap = {};
+        
+        let isCombatMode = false;
+        let currentCharName = '';
+        let currentBaseFolderKey = '';
+        let currentCostumeKey = '';
 
         document.addEventListener('click', (e) => {
             if (!e.target.closest('#animDropdownWrapper')) {
@@ -208,6 +44,46 @@
                 list.classList.add('hidden');
                 list.classList.remove('flex');
             }
+        }
+
+        function toggleMode() {
+            isCombatMode = !isCombatMode;
+            const icon = document.getElementById('modeIcon');
+            const text = document.getElementById('modeText');
+            
+            if (isCombatMode) {
+                icon.innerText = '⚔️';
+                text.innerText = '戰鬥';
+            } else {
+                icon.innerText = '🍵';
+                text.innerText = '大廳';
+            }
+            
+            if (currentCharName && currentBaseFolderKey) {
+                const firstCostume = updateCostumeDropdown();
+                loadSpine(currentBaseFolderKey, firstCostume);
+            }
+        }
+
+        function updateCostumeDropdown() {
+            const costumeSelect = document.getElementById('costumeSelect');
+            costumeSelect.innerHTML = '';
+            
+            let costumes = [];
+            if (isCombatMode) {
+                costumes = (typeof SD_COSTUME !== 'undefined' && SD_COSTUME[currentCharName]) ? SD_COSTUME[currentCharName] : [currentBaseFolderKey];
+            } else {
+                costumes = (typeof COSTUME_MAP !== 'undefined' && COSTUME_MAP[currentCharName]) ? COSTUME_MAP[currentCharName] : [currentBaseFolderKey];
+            }
+
+            costumes.forEach((costume, idx) => {
+                const opt = document.createElement('option');
+                opt.value = costume;
+                opt.text = idx === 0 ? "預設服裝" : `服裝 ${idx}`;
+                costumeSelect.appendChild(opt);
+            });
+            
+            return costumes[0];
         }
 
         function toggleAllCharacters() {
@@ -324,31 +200,23 @@
             document.getElementById('slotList').classList.remove('flex');
 
             slotVisibilityMap = {};
-            
-            // 嘗試載入 SD 戰鬥服裝，如果沒有建立 SD_COSTUME，就 fallback 使用 COSTUME_MAP
-            let costumes = [spineName];
-            if (typeof SD_COSTUME !== 'undefined' && SD_COSTUME[charName]) {
-                costumes = SD_COSTUME[charName];
-            } else if (typeof COSTUME_MAP !== 'undefined' && COSTUME_MAP[charName]) {
-                costumes = COSTUME_MAP[charName];
-            }
-            
-            const costumeSelect = document.getElementById('costumeSelect');
-            costumeSelect.innerHTML = '';
-            costumes.forEach((costume, idx) => {
-                const opt = document.createElement('option');
-                opt.value = costume;
-                opt.text = idx === 0 ? "預設戰鬥服" : `服裝 ${idx}`;
-                costumeSelect.appendChild(opt);
-            });
+            clearTimeout(globalIdleTimer);
+            clearTimeout(tickleTimer);
 
+            currentCharName = charName;
+            currentBaseFolderKey = spineName;
+
+            const firstCostume = updateCostumeDropdown();
             applyRaceBackground(charName);
             document.getElementById('spineViewerSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-            loadSpine(spineName, costumes[0]);
+            loadSpine(spineName, firstCostume);
         }
 
         function loadSpine(baseFolderKey, costumeKey) {
+            currentBaseFolderKey = baseFolderKey;
+            currentCostumeKey = costumeKey;
+
             const container = document.getElementById('spineCanvasContainer');
             
             if (globalPlayer) {
@@ -358,28 +226,30 @@
 
             container.innerHTML = '<div class="spine-player-loading-custom"></div>';
             document.getElementById('playerControls').classList.add('opacity-50', 'pointer-events-none');
-            document.getElementById('slotsContainerInner').innerHTML = '<div class="p-3 text-center text-xs font-bold text-gray-400">讀取資料中...</div>';
-            document.getElementById('animSelectText').innerText = "讀取中...";
+            
+            document.getElementById('slotsContainerInner').innerHTML = '<div class="p-3 text-center text-[10px] sm:text-xs font-bold text-gray-400">讀取資料中...</div>';
+            document.getElementById('animSelectText').innerText = '讀取中...';
 
-            // 確保路徑與 index.html 完全一致（扁平化路徑）
-            const skelUrl = `./spine_sd_assets/${costumeKey}.skel.bytes`;
-            const atlasUrl = `./spine_sd_assets/${costumeKey}.atlas.txt`;
+            let skelUrl = isCombatMode 
+                ? `./spine_sd_assets/${costumeKey}.skel.bytes` 
+                : `./spine_assets/${baseFolderKey}/${costumeKey}.skel.bytes`;
+            
+            let atlasUrl = isCombatMode 
+                ? `./spine_sd_assets/${costumeKey}.atlas.txt` 
+                : `./spine_assets/${baseFolderKey}/${costumeKey}.atlas.txt`;
+            
+            let initAnim = isCombatMode ? "Idle" : "Idle_1";
 
-            globalPlayer = new spine.SpinePlayer(container, {
+            // 建立基礎配置物件
+            const playerConfig = {
                 skelUrl: skelUrl,
                 atlasUrl: atlasUrl,
-                
-                // 🌟 1. 完美還原 index.html 的初始化設定
-                animation: "Spawn",  // 直接從 Spawn 開始播
-                skin: "Normal",      // 預設抓 Normal 皮膚
-                premultipliedAlpha: false, // 🚨 解決黑畫面的最大功臣！
+                // ⚠️ 修正矛盾一：移除初始 animation 屬性，完全由 success 回呼函數動態、安全地播放
+                premultipliedAlpha: true,
                 backgroundColor: "#00000000", 
                 alpha: true,
                 showControls: false,
                 showLoading: false, 
-                
-                // 🌟 2. 完美還原 index.html 的可視範圍，確保小人在正中央
-                viewport: { x: -800, y: 100, width: 2500, height: 1500, transitionTime: 0 },
 
                 success: function (player) {
                     const loader = container.querySelector('.spine-player-loading-custom');
@@ -388,47 +258,44 @@
                     document.getElementById('playerControls').classList.remove('opacity-50', 'pointer-events-none');
                     setSpeed(1);
 
-                    // 🌟 3. 完美還原 index.html 的強制作業：setSlotsToSetupPose
-                    try {
-                        const skins = player.skeleton.data.skins;
+                    const skins = player.skeleton.data.skins;
+                    if (skins && skins.length > 0) {
                         const targetSkin = skins.find(s => s.name === 'Normal') || skins.find(s => s.name === 'default') || skins[0];
                         if (targetSkin) {
                             player.skeleton.setSkinByName(targetSkin.name);
                             player.skeleton.setSlotsToSetupPose(); 
                         }
-                    } catch (e) {
-                        console.warn("Skin 設定發生例外，但不影響運行", e);
                     }
+                    player.skeleton.setToSetupPose(); 
 
                     buildAnimationDropdown(player);
                     buildSlotsPanel(player);
                     setupComplexInteractions(player, container);
 
-                    // 🌟 4. 自動銜接邏輯：Spawn 播完後，自動排隊播 Idle
+                    // 在成功讀取後，安全地執行高容錯動作播放邏輯
                     const anims = player.skeleton.data.animations.map(a => a.name);
-                    const idleAnim = anims.includes("Idle") ? "Idle" : (anims.includes("idle") ? "idle" : (anims[0] || ""));
-                    
-                    if (anims.includes("Spawn") && idleAnim) {
-                        // setAnimation 的第 0 軌已經在設定檔填了 Spawn，這裡只需「加入排程」
-                        player.animationState.addAnimation(0, idleAnim, true, 0);
-                        document.getElementById('animSelectText').innerText = "Spawn";
-                        
-                        // 1.5 秒後 UI 文字轉回 Idle
-                        setTimeout(() => {
-                            document.getElementById('animSelectText').innerText = idleAnim;
-                        }, 1500);
-                    } else if (idleAnim) {
-                        player.animationState.setAnimation(0, idleAnim, true);
-                        document.getElementById('animSelectText').innerText = idleAnim;
+                    let animToPlay = anims.includes(initAnim) ? initAnim : (anims.includes("Idle") ? "Idle" : (anims.includes("Idle_1") ? "Idle_1" : (anims[0] || "")));
+
+                    if (animToPlay) {
+                        player.animationState.setAnimation(0, animToPlay, true);
+                        const animSelectText = document.getElementById('animSelectText');
+                        if (animSelectText) animSelectText.innerText = animToPlay;
                     }
                 },
                 error: function (player, reason) {
                     console.error("❌ Spine Load Error:", reason);
-                    container.innerHTML = `<div class="text-red-500 font-bold text-sm text-center p-4 bg-white/80 rounded-lg">載入失敗：檔案不存在或路徑錯誤<br>${skelUrl}</div>`;
+                    container.innerHTML = `<div class="text-red-500 font-bold text-xs sm:text-sm text-center p-4">載入失敗：檔案可能不存在或未實裝<br>${skelUrl}</div>`;
                 }
-            });
-        }
+            };
 
+            // ⚠️ 修正矛盾二：大廳模式維持手動遮罩視野，戰鬥模式（SD小人）直接不給 viewport，讓系統全自動適配居中與完美縮放
+            if (!isCombatMode) {
+                playerConfig.viewport = { x: -400, y: 0, width: 800, height: 1000 };
+            }
+
+            globalPlayer = new spine.SpinePlayer(container, playerConfig);
+        }
+        
         function buildAnimationDropdown(player) {
             const animList = document.getElementById('animList');
             animList.innerHTML = '';
@@ -439,7 +306,7 @@
                 btn.className = "text-left px-3 py-2.5 text-[11px] sm:text-xs hover:bg-amber-100 dark:hover:bg-slate-700 w-full truncate transition-colors text-gray-700 dark:text-gray-300 flex-shrink-0 border-b border-gray-50 dark:border-slate-700/50";
                 btn.innerText = animName;
                 btn.onclick = (e) => {
-                    e.stopPropagation(); 
+                    e.stopPropagation();
                     playAnimation(animName);
                     animList.classList.add('hidden');
                     animList.classList.remove('flex');
@@ -456,9 +323,7 @@
 
         function changeSpineCostume(costumeKey) {
             if(!costumeKey) return;
-            const spineNameText = document.getElementById('activeCharSpineName').innerText;
-            const baseFolderKey = spineNameText.replace('Spine ID: ', '').trim();
-            loadSpine(baseFolderKey, costumeKey);
+            loadSpine(currentBaseFolderKey, costumeKey);
         }
 
         function togglePlay() {
@@ -480,9 +345,16 @@
         }
 
         function buildSlotsPanel(player) {
-            const container = document.getElementById('slotsContainerInner');
-            container.innerHTML = '';
+            const slotsContainer = document.getElementById('slotsContainerInner');
+            slotsContainer.innerHTML = '';
             
+            const slots = player.skeleton.slots;
+            
+            const slotCountEl = document.getElementById('slotCount');
+            if (slotCountEl) {
+                slotCountEl.innerText = slots.length;
+            }
+
             slotVisibilityMap = {};
 
             player.skeleton.data.slots.forEach((slotData, index) => {
@@ -490,11 +362,11 @@
                 slotVisibilityMap[slotName] = true;
 
                 const item = document.createElement('label');
-                item.className = "flex items-center gap-2 px-3 py-2 lg:py-1.5 hover:bg-amber-50 dark:hover:bg-slate-700 cursor-pointer transition-colors border-b border-gray-50 dark:border-slate-700/50";
+                item.className = "flex items-center gap-2 px-3 py-2.5 hover:bg-amber-50 dark:hover:bg-slate-700 cursor-pointer transition-colors border-b border-gray-50 dark:border-slate-700/50 flex-shrink-0";
                 
                 item.innerHTML = `
                     <input type="checkbox" checked class="w-3.5 h-3.5 text-amber-500 rounded focus:ring-amber-500" onchange="toggleSlot('${slotName}', this.checked)">
-                    <span class="text-[10px] sm:text-xs font-medium text-gray-700 dark:text-gray-300 truncate">${slotName}</span>
+                    <span class="text-[11px] sm:text-xs font-medium text-gray-700 dark:text-gray-300 truncate">${slotName}</span>
                 `;
 
                 item.addEventListener('click', (e) => e.stopPropagation());
@@ -515,10 +387,10 @@
                     }
                 });
 
-                container.appendChild(item);
+                slotsContainer.appendChild(item);
             });
 
-            if(!globalPlayer.config.injectedUpdate) {
+            if(!player.config.injectedUpdate) {
                 const origUpdate = player.skeleton.updateWorldTransform;
                 player.skeleton.updateWorldTransform = function() {
                     origUpdate.call(player.skeleton);
@@ -528,7 +400,7 @@
                         if (slotVisibilityMap[s.data.name] === false) s.color.a = 0;
                     }
                 };
-                globalPlayer.config.injectedUpdate = true;
+                player.config.injectedUpdate = true;
             }
         }
 
@@ -558,7 +430,6 @@
             });
         }
 
-        // 🟢 將所有互動機制拔除，僅保留單純的縮放與平移
         function setupComplexInteractions(player, container) {
             const canvas = container.querySelector('canvas');
             if (!canvas) return;
@@ -570,7 +441,41 @@
             let initialPinchDistance = 0;
             
             let isPointerDown = false;
+            let dragDistance = 0;
             let lastX = 0, lastY = 0;
+            let startX = 0, startY = 0; 
+            
+            let hitZoneOnDown = null;
+            let hasTriggeredRub = false; 
+            let activeFaceBone = null; 
+            let initialBoneX = 0, initialBoneY = 0;
+
+            const EXCLUDED_RANDOM_ANIMS = ["Smash_End_1", "Idle_1", "Touch_Idle", "Tickle_Idle_1", "Tickle_Idle_2"];
+
+            function startRandomAnimationLoop() {
+                clearTimeout(globalIdleTimer);
+                globalIdleTimer = setTimeout(() => {
+                    if (!player.skeleton) return;
+                    const allAnimNames = player.skeleton.data.animations.map(a => a.name);
+                    const safeAnims = allAnimNames.filter(name => !EXCLUDED_RANDOM_ANIMS.includes(name));
+                    if (safeAnims.length > 0) {
+                        const randomAnim = safeAnims[Math.floor(Math.random() * safeAnims.length)];
+                        player.animationState.setAnimation(0, randomAnim, true);
+                        
+                        const animSelectText = document.getElementById('animSelectText');
+                        if(animSelectText) animSelectText.innerText = randomAnim;
+
+                        startRandomAnimationLoop();
+                    }
+                }, 5000);
+            }
+
+            if (!isCombatMode) {
+                startRandomAnimationLoop();
+            } else {
+                clearTimeout(globalIdleTimer);
+                clearTimeout(tickleTimer);
+            }
 
             canvas.addEventListener('wheel', function(event) {
                 event.preventDefault();
@@ -589,10 +494,46 @@
                     player.skeleton.scaleY = 1.0;
                     player.skeleton.y = 0;
                     player.skeleton.x = 0;
-                    player.viewport.x = -400; 
-                    player.viewport.y = 0;
+                    // 如果是大廳模式，則重置手動 viewport 座標
+                    if (!isCombatMode && player.viewport) {
+                        player.viewport.x = -400; 
+                        player.viewport.y = 0;
+                    }
                 }
             });
+
+            function getHitZone(mouseX, mouseY) {
+                if (isCombatMode) return null; 
+
+                const rect = canvas.getBoundingClientRect();
+                let clickedPart = null;
+                let minDistance = Infinity;
+                const hitZones = [
+                    { name: "頭部", bones: ["Character_Pat", "S3_Head", "S1_Head", "Head"], radius: 220 }, 
+                    { name: "身體", bones: ["Character_Tickle", "S3_Body_1", "S1_Body_1", "Body_1"], radius: 150 }
+                ];
+                hitZones.forEach(zone => {
+                    let targetBone = null;
+                    for (let bName of zone.bones) {
+                        targetBone = player.skeleton.findBone(bName);
+                        if (targetBone) break;
+                    }
+                    if (targetBone) {
+                        const boneCanvasX = ((targetBone.worldX - player.viewport.x) / player.viewport.width) * rect.width;
+                        const boneCanvasY = rect.height - ((targetBone.worldY - player.viewport.y) / player.viewport.height) * rect.height;
+                        const dx = mouseX - boneCanvasX;
+                        const dy = mouseY - boneCanvasY;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        const scaledRadius = (zone.radius * currentZoom) * (rect.height / player.viewport.height);
+
+                        if (distance < scaledRadius && distance < minDistance) {
+                            minDistance = distance;
+                            clickedPart = zone;
+                        }
+                    }
+                });
+                return clickedPart;
+            }
 
             canvas.addEventListener('pointerdown', (e) => {
                 pointers[e.pointerId] = { x: e.clientX, y: e.clientY }; 
@@ -600,12 +541,46 @@
 
                 if (pointerKeys.length === 2) {
                     isPointerDown = false; 
+                    clearTimeout(tickleTimer); 
                     const p1 = pointers[pointerKeys[0]];
                     const p2 = pointers[pointerKeys[1]];
                     initialPinchDistance = Math.hypot(p1.x - p2.x, p1.y - p2.y);
                 } else if (pointerKeys.length === 1) {
                     isPointerDown = true;
+                    dragDistance = 0;
+                    startX = e.clientX; startY = e.clientY;
                     lastX = e.clientX; lastY = e.clientY;
+                    activeFaceBone = null;
+                    hasTriggeredRub = false;
+                    
+                    const rect = canvas.getBoundingClientRect();
+                    hitZoneOnDown = getHitZone(e.clientX - rect.left, e.clientY - rect.top);
+
+                    if (hitZoneOnDown && hitZoneOnDown.name === "頭部") {
+                        let minBoneDist = Infinity;
+                        let bone = player.skeleton.findBone("Character_Ball_Move");
+                        if (!bone) {
+                            const fallbackBones = ["S1_Ball_R_CT", "S2_F_Ball_R_CT", "S3_F_Ball_R_CT", "S1_F_Ball_R", "S3_F_Ball_R", "Ball_R_CT"];
+                            for (let bName of fallbackBones) {
+                                bone = player.skeleton.findBone(bName);
+                                if (bone) break;
+                            }
+                        }
+                        if (bone) {
+                            const boneCanvasX = ((bone.worldX - player.viewport.x) / player.viewport.width) * rect.width;
+                            const boneCanvasY = rect.height - ((bone.worldY - player.viewport.y) / player.viewport.height) * rect.height;
+                            minBoneDist = Math.hypot((e.clientX - rect.left) - boneCanvasX, (e.clientY - rect.top) - boneCanvasY);
+                            activeFaceBone = bone;
+                        }
+
+                        const maxPullRadius = 280 * currentZoom * (rect.height / player.viewport.height);
+                        if (minBoneDist <= maxPullRadius && activeFaceBone) {
+                            initialBoneX = activeFaceBone.x;
+                            initialBoneY = activeFaceBone.y;
+                        } else {
+                            activeFaceBone = null; 
+                        }
+                    }
                 }
             });
 
@@ -632,15 +607,71 @@
                 } else if (pointerKeys.length === 1 && isPointerDown) {
                     const dx = e.clientX - lastX;
                     const dy = e.clientY - lastY;
+                    dragDistance += Math.sqrt(dx * dx + dy * dy);
 
-                    // 純粹拖曳平移畫布
-                    if (player.viewport) {
+                    if (!hitZoneOnDown) {
                         const rect = canvas.getBoundingClientRect();
                         const spineScaleX = player.viewport.width / rect.width / currentZoom;
                         const spineScaleY = player.viewport.height / rect.height / currentZoom;
                         
                         player.viewport.x -= dx * spineScaleX;
                         player.viewport.y += dy * spineScaleY;
+                    } 
+                    else {
+                        if (dragDistance > 10 && !hasTriggeredRub) {
+                            hasTriggeredRub = true;
+                            clearTimeout(globalIdleTimer);
+                            clearTimeout(tickleTimer);
+                            
+                            const animSelectText = document.getElementById('animSelectText');
+
+                            if (hitZoneOnDown.name === "頭部") {
+                                player.animationState.setAnimation(0, "Touch_Idle", true);
+                                if (animSelectText) animSelectText.innerText = "Touch_Idle";
+                            } else if (hitZoneOnDown.name === "身體") {
+                                player.animationState.setAnimation(0, "Tickle_Idle_1", true);
+                                if (animSelectText) animSelectText.innerText = "Tickle_Idle_1";
+                                tickleTimer = setTimeout(() => {
+                                    const animNames = player.skeleton.data.animations.map(a => a.name);
+                                    if (animNames.includes("Tickle_Idle_2")) {
+                                        player.animationState.setAnimation(0, "Tickle_Idle_2", true);
+                                        if (animSelectText) animSelectText.innerText = "Tickle_Idle_2";
+                                    }
+                                }, 5000);
+                            }
+                        }
+
+                        if (hasTriggeredRub && hitZoneOnDown.name === "頭部" && activeFaceBone) {
+                            const rect = canvas.getBoundingClientRect();
+                            const spineScaleX = player.viewport.width / rect.width / currentZoom;
+                            const spineScaleY = player.viewport.height / rect.height / currentZoom;
+                            
+                            const stretchIntensity = 1.3; 
+                            let worldDx = (e.clientX - startX) * spineScaleX * stretchIntensity;
+                            let worldDy = -(e.clientY - startY) * spineScaleY * stretchIntensity;
+
+                            if (worldDx > 0) worldDx = 0; 
+                            let targetWorld = { x: activeFaceBone.worldX + worldDx, y: activeFaceBone.worldY + worldDy };
+
+                            if (activeFaceBone.parent) {
+                                activeFaceBone.parent.worldToLocal(targetWorld);
+                            }
+
+                            let localDx = targetWorld.x - initialBoneX;
+                            let localDy = targetWorld.y - initialBoneY;
+                            let rawDistance = Math.hypot(localDx, localDy);
+
+                            const MAX_RADIUS = 55; 
+
+                            if (rawDistance > 0) {
+                                let elasticDist = MAX_RADIUS * (1 - Math.exp(-rawDistance / (MAX_RADIUS * 1.2)));
+                                localDx = (localDx / rawDistance) * elasticDist;
+                                localDy = (localDy / rawDistance) * elasticDist;
+                            }
+
+                            activeFaceBone.x = initialBoneX + localDx;
+                            activeFaceBone.y = initialBoneY + localDy;
+                        }
                     }
 
                     lastX = e.clientX;
@@ -650,8 +681,98 @@
 
             const handlePointerUp = (e) => {
                 delete pointers[e.pointerId];
-                if (Object.keys(pointers).length === 0) {
+                const pointerKeys = Object.keys(pointers);
+
+                if (pointerKeys.length === 1) {
                     isPointerDown = false;
+                    return;
+                }
+
+                if (pointerKeys.length === 0 && isPointerDown) {
+                    isPointerDown = false;
+                    if (!player.skeleton) return;
+                    const allAnimNames = player.skeleton.data.animations.map(a => a.name);
+                    const animSelectText = document.getElementById('animSelectText');
+
+                    if (activeFaceBone) {
+                        let targetX = initialBoneX;
+                        let targetY = initialBoneY;
+                        let bouncingFaceBone = activeFaceBone;
+                        activeFaceBone = null; 
+
+                        const tension = 0.35, friction = 0.65; 
+                        let velX = 0, velY = 0;
+
+                        function applyBounce() {
+                            let dx = targetX - bouncingFaceBone.x;
+                            let dy = targetY - bouncingFaceBone.y;
+                            velX += dx * tension;
+                            velY += dy * tension;
+                            velX *= friction;
+                            velY *= friction;
+
+                            bouncingFaceBone.x += velX;
+                            bouncingFaceBone.y += velY;
+
+                            if (Math.abs(dx) > 0.1 || Math.abs(velX) > 0.1 || Math.abs(dy) > 0.1 || Math.abs(velY) > 0.1) {
+                                requestAnimationFrame(applyBounce);
+                            } else {
+                                bouncingFaceBone.x = targetX;
+                                bouncingFaceBone.y = targetY;
+                            }
+                        }
+                        applyBounce();
+                    }
+        
+                    clearTimeout(tickleTimer); 
+                    clearTimeout(globalIdleTimer); 
+
+                    if (hasTriggeredRub) {
+                        if (hitZoneOnDown && hitZoneOnDown.name === "頭部") {
+                            if (allAnimNames.includes("Touch_End")) {
+                                player.animationState.setAnimation(0, "Touch_End", false);
+                            } else {
+                                player.animationState.setAnimation(0, "Idle_1", true);
+                            }
+                        } else if (hitZoneOnDown && hitZoneOnDown.name === "身體") {
+                            if (allAnimNames.includes("Tickle_End")) {
+                                player.animationState.setAnimation(0, "Tickle_End", false);
+                            } else {
+                                player.animationState.setAnimation(0, "Idle_1", true);
+                            }
+                        }
+                        player.animationState.addAnimation(0, "Idle_1", true, 0);
+                        if (animSelectText) animSelectText.innerText = "Idle_1";
+                        if (!isCombatMode) startRandomAnimationLoop();
+                    } else if (!hitZoneOnDown && dragDistance < 10) {
+                        if (!isCombatMode) {
+                            const safeAnims = allAnimNames.filter(name => !EXCLUDED_RANDOM_ANIMS.includes(name));
+                            if (safeAnims.length > 0) {
+                                const randomAnim = safeAnims[Math.floor(Math.random() * safeAnims.length)];
+                                player.animationState.setAnimation(0, randomAnim, true);
+                                if (animSelectText) animSelectText.innerText = randomAnim;
+                                
+                                globalIdleTimer = setTimeout(() => {
+                                    player.animationState.setAnimation(0, "Idle_1", true);
+                                    if (animSelectText) animSelectText.innerText = "Idle_1";
+                                    startRandomAnimationLoop();
+                                }, 5000);
+                            }
+                        }
+                    } else if (hitZoneOnDown && hitZoneOnDown.name === "頭部") {
+                        if (allAnimNames.includes("Smash_End_1")) {
+                            player.animationState.setAnimation(0, "Smash_End_1", false);
+                            if (allAnimNames.includes("Smash_End_2")) {
+                                player.animationState.addAnimation(0, "Smash_End_2", false, 0);
+                            }
+                            player.animationState.addAnimation(0, "Idle_1", true, 0);
+                            if (animSelectText) animSelectText.innerText = "Smash_End_1";
+                        } else {
+                            player.animationState.setAnimation(0, "Idle_1", true);
+                            if (animSelectText) animSelectText.innerText = "Idle_1";
+                        }
+                        if (!isCombatMode) startRandomAnimationLoop();
+                    }
                 }
             };
             canvas.addEventListener('pointerup', handlePointerUp);
@@ -662,6 +783,3 @@
         window.onload = function() {
             initCharacterGrid();
         };
-    </script>
-</body>
-</html>
