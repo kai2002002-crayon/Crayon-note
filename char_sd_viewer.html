@@ -292,15 +292,8 @@
 
         function applyRaceBackground(charName) {
             const container = document.getElementById('spineCanvasContainer');
-            const char = INITIAL_DATA.find(c => c.name === charName);
-            
-            if (char && typeof SPINE_BACKGROUNDS !== 'undefined' && SPINE_BACKGROUNDS[char.race]) {
-                container.style.backgroundImage = `url('${SPINE_BACKGROUNDS[char.race]}')`;
-                container.classList.add('animated-bg');
-            } else {
-                container.style.backgroundImage = 'none';
-                container.classList.remove('animated-bg');
-            }
+            container.style.backgroundImage = 'none'; 
+            container.classList.remove('animated-bg');
         }
 
         function selectCharacter(charName, spineName, iconUrl) {
