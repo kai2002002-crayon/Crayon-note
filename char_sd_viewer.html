@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SD 戰鬥小人 - 基礎測試版</title>
+    <title>SD 戰鬥小人 - 完整功能版</title>
     
     <script src="data_core.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -14,45 +14,84 @@
     <style>
         body { font-family: sans-serif; }
         
-        /* 🐛 終極防禦：確保 Canvas 絕對不會被壓縮成 0x0 */
+        /* 確保畫布正常伸展 */
         #spineContainer canvas {
             width: 100% !important;
             height: 100% !important;
             display: block !important;
+            touch-action: none; /* 防止手機滑動時畫面跟著捲動 */
         }
 
-        /* 讓 Spine 控制器在亮色背景下也能看清楚 */
-        .spine-player-controls {
-            background-color: rgba(0, 0, 0, 0.7) !important;
-        }
+        /* 隱藏預設的載入動畫，避免干擾 */
+        .spine-player-loading { display: none !important; }
+
+        /* 自訂捲動條美化 (針對下拉選單) */
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
 </head>
 <body class="bg-slate-100 p-4 sm:p-8 min-h-screen">
 
-    <div class="max-w-5xl mx-auto space-y-6">
+    <div class="max-w-5xl mx-auto flex flex-col md:flex-row gap-6">
         
-        <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-amber-500">
-            <h1 class="text-xl font-bold text-gray-800">SD 戰鬥小人 - 基礎測試版</h1>
-            <p class="text-sm text-gray-500 mt-1">只保留最基礎的 Block 排版與控制器，確保 Spine 畫布能成功渲染。</p>
-        </div>
-
-        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <h2 class="text-md font-bold text-gray-700 mb-4">1. 選擇角色</h2>
-            <div id="charButtons" class="flex flex-wrap gap-2 max-h-48 overflow-y-auto p-2 border bg-gray-50 rounded-lg">
-                <span class="text-sm text-gray-400">載入角色清單中...</span>
+        <div class="w-full md:w-1/4 bg-white p-5 rounded-xl shadow-sm border border-gray-200 flex flex-col">
+            <h2 class="text-md font-bold text-gray-700 mb-4 border-b pb-2">1. 選擇角色</h2>
+            <div id="charButtons" class="flex flex-col gap-2 overflow-y-auto max-h-[600px] custom-scrollbar pr-2">
+                <span class="text-sm text-gray-400">載入中...</span>
             </div>
         </div>
 
-        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <div class="flex justify-between items-end mb-4">
-                <h2 class="text-md font-bold text-gray-700">2. 戰鬥動態圖預覽</h2>
-                <span id="currentCharName" class="text-amber-600 font-black text-lg">尚未選擇</span>
+        <div class="w-full md:w-3/4 bg-white p-5 rounded-xl shadow-sm border border-gray-200 flex flex-col">
+            
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3">
+                <h2 class="text-md font-bold text-gray-700">
+                    當前角色：<span id="currentCharName" class="text-amber-600 font-black text-xl">尚未選擇</span>
+                </h2>
+                <div id="costumeButtons" class="flex flex-wrap gap-2 empty:hidden"></div>
             </div>
 
-            <div id="spineContainer" class="w-full h-[600px] bg-slate-800 rounded-lg overflow-hidden block relative shadow-inner">
-                <div class="absolute inset-0 flex items-center justify-center text-gray-500 font-bold pointer-events-none">
-                    請從上方選擇角色
+            <div id="spineContainer" class="w-full h-[500px] bg-slate-800 rounded-t-xl overflow-hidden block relative shadow-inner cursor-move">
+                <div id="loadingOverlay" class="absolute inset-0 flex items-center justify-center bg-slate-800/80 text-white font-bold z-10 hidden">
+                    載入中...
                 </div>
+            </div>
+
+            <div id="customControls" class="bg-slate-900 rounded-b-xl p-3 flex flex-wrap items-center gap-3 opacity-50 pointer-events-none transition-opacity">
+                
+                <button id="btnPlayPause" onclick="togglePlay()" class="w-10 h-10 flex items-center justify-center bg-amber-500 hover:bg-amber-400 text-white rounded-lg font-bold shadow transition-colors">
+                    ⏸️
+                </button>
+
+                <button id="btnSpeed" onclick="cycleSpeed()" class="px-3 h-10 bg-slate-700 hover:bg-slate-600 text-white text-sm font-bold rounded-lg shadow transition-colors whitespace-nowrap">
+                    1.0x
+                </button>
+
+                <div class="relative flex-1 min-w-[120px]">
+                    <button onclick="toggleDropdown('animDropdown')" class="w-full h-10 px-3 bg-slate-700 hover:bg-slate-600 text-white text-sm font-bold rounded-lg shadow transition-colors flex justify-between items-center">
+                        <span id="currentAnimText" class="truncate">選擇動作</span>
+                        <span>🔽</span>
+                    </button>
+                    <div id="animDropdown" class="absolute bottom-full left-0 mb-2 w-full bg-white border border-gray-300 rounded-lg shadow-xl z-50 hidden max-h-[180px] overflow-y-auto custom-scrollbar">
+                        <div id="animList" class="flex flex-col p-1"></div>
+                    </div>
+                </div>
+
+                <div class="relative flex-1 min-w-[120px]">
+                    <button onclick="toggleDropdown('slotDropdown')" class="w-full h-10 px-3 bg-slate-700 hover:bg-slate-600 text-white text-sm font-bold rounded-lg shadow transition-colors flex justify-between items-center">
+                        <span class="truncate">外觀配件 (Slot)</span>
+                        <span>🔽</span>
+                    </button>
+                    <div id="slotDropdown" class="absolute bottom-full right-0 mb-2 w-[200px] bg-white border border-gray-300 rounded-lg shadow-xl z-50 hidden max-h-[200px] overflow-y-auto custom-scrollbar">
+                        <div id="slotList" class="flex flex-col p-2 gap-1 text-sm"></div>
+                    </div>
+                </div>
+
+                <button onclick="resetCamera()" class="px-3 h-10 bg-slate-700 hover:bg-slate-600 text-white text-sm font-bold rounded-lg shadow transition-colors whitespace-nowrap" title="重置位置與縮放">
+                    🔄 鏡頭
+                </button>
+
             </div>
         </div>
 
@@ -60,12 +99,36 @@
 
     <script>
         let globalPlayer = null;
+        let currentSpeedIndex = 1;
+        const speedOptions = [0.5, 1.0, 2.0, 3.0];
+        
+        // 攝影機變數
+        let currentZoom = 1.0;
+        let isDragging = false;
+        let lastMouseX = 0;
+        let lastMouseY = 0;
+        const BASE_VIEWPORT = { x: -500, y: -150, width: 1500, height: 3000 };
 
-        // 初始化頁面：生成按鈕
+        // 點擊空白處關閉下拉選單
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.relative')) {
+                document.getElementById('animDropdown').classList.add('hidden');
+                document.getElementById('slotDropdown').classList.add('hidden');
+            }
+        });
+
+        function toggleDropdown(id) {
+            const el = document.getElementById(id);
+            const isHidden = el.classList.contains('hidden');
+            document.getElementById('animDropdown').classList.add('hidden');
+            document.getElementById('slotDropdown').classList.add('hidden');
+            if (isHidden) el.classList.remove('hidden');
+        }
+
         window.onload = function() {
             const btnContainer = document.getElementById('charButtons');
             if (typeof INITIAL_DATA === 'undefined' || INITIAL_DATA.length === 0) {
-                btnContainer.innerHTML = '<span class="text-red-500">找不到 INITIAL_DATA，請確認 data_core.js 是否正確載入。</span>';
+                btnContainer.innerHTML = '<span class="text-red-500">找不到資料。</span>';
                 return;
             }
 
@@ -73,51 +136,81 @@
             INITIAL_DATA.forEach(char => {
                 const btn = document.createElement('button');
                 btn.innerText = char.name;
-                btn.className = "px-3 py-1.5 bg-white border border-gray-300 text-gray-700 text-sm font-bold rounded shadow-sm hover:bg-amber-100 hover:border-amber-400 hover:text-amber-700 transition-colors";
-                btn.onclick = () => loadSpine(char.name);
+                btn.className = "w-full text-left px-4 py-2 bg-white border border-gray-200 text-gray-700 text-sm font-bold rounded shadow-sm hover:bg-amber-50 hover:border-amber-300 hover:text-amber-700 transition-colors";
+                btn.onclick = () => initCharacterLoad(char.name);
                 btnContainer.appendChild(btn);
             });
         };
 
-        // 載入 Spine 核心函數 (完全參照 SkillSpinePlayer 的成功邏輯)
-        function loadSpine(charName) {
+        // 初始化角色：處理服裝按鈕
+        function initCharacterLoad(charName) {
             document.getElementById('currentCharName').innerText = charName;
-            const container = document.getElementById('spineContainer');
+            const costumeContainer = document.getElementById('costumeButtons');
+            costumeContainer.innerHTML = '';
+
+            // 檢查是否有 SD_COSTUME 資料 (假設您的 data_core 中有此變數，若無則降級為預設)
+            const costumes = typeof SD_COSTUME !== 'undefined' && SD_COSTUME[charName] ? SD_COSTUME[charName] : [];
             
-            // 清理舊的播放器
+            if (costumes.length > 0) {
+                costumes.forEach((costumeKey, idx) => {
+                    const btn = document.createElement('button');
+                    btn.innerText = idx === 0 ? "預設服裝" : `服裝 ${idx}`;
+                    btn.className = `px-3 py-1 text-xs font-bold rounded-lg border transition-colors ${idx === 0 ? 'bg-amber-500 text-white border-amber-600' : 'bg-white text-gray-600 border-gray-300 hover:bg-amber-100'}`;
+                    btn.onclick = (e) => {
+                        // 更新按鈕樣式
+                        Array.from(costumeContainer.children).forEach(c => c.className = "px-3 py-1 text-xs font-bold rounded-lg border transition-colors bg-white text-gray-600 border-gray-300 hover:bg-amber-100");
+                        e.target.className = "px-3 py-1 text-xs font-bold rounded-lg border transition-colors bg-amber-500 text-white border-amber-600";
+                        // 載入選擇的服裝
+                        loadSpine(charName, costumeKey);
+                    };
+                    costumeContainer.appendChild(btn);
+                });
+                // 預設載入第一套
+                loadSpine(charName, costumes[0]);
+            } else {
+                // 如果沒有服裝陣列，直接載入基礎模型
+                const baseFolderKey = typeof SPINE_MAP !== 'undefined' && SPINE_MAP[charName] ? SPINE_MAP[charName] : charName;
+                loadSpine(charName, baseFolderKey);
+            }
+        }
+
+        // 核心載入函數
+        function loadSpine(charName, costumeKey) {
+            const container = document.getElementById('spineContainer');
+            const overlay = document.getElementById('loadingOverlay');
+            const controls = document.getElementById('customControls');
+            
             if (globalPlayer) {
                 globalPlayer.dispose();
                 globalPlayer = null;
             }
-            container.innerHTML = '';
+            
+            // 重置面板與鏡頭
+            controls.classList.add('opacity-50', 'pointer-events-none');
+            overlay.classList.remove('hidden');
+            currentZoom = 1.0;
+            currentSpeedIndex = 1;
+            updateSpeedUI();
 
-            // 取得資料夾名稱
-            const baseFolderKey = typeof SPINE_MAP !== 'undefined' && SPINE_MAP[charName] ? SPINE_MAP[charName] : charName;
-            const skelUrl = `./spine_sd_assets/${baseFolderKey}.skel.bytes`;
-            const atlasUrl = `./spine_sd_assets/${baseFolderKey}.atlas.txt`;
+            const skelUrl = `./spine_sd_assets/${costumeKey}.skel.bytes`;
+            const atlasUrl = `./spine_sd_assets/${costumeKey}.atlas.txt`;
 
-            console.log(`[載入測試] 準備載入 ${charName} 的 SD 檔案:`, skelUrl);
-
-            // 🚀 啟動 Player
             globalPlayer = new spine.SpinePlayer(container, {
                 skelUrl: skelUrl,
                 atlasUrl: atlasUrl,
-                
-                animation: "Idle",        // 預設播 Idle
-                skin: "Normal",           // 預設皮膚 Normal
-                premultipliedAlpha: false, // ⚠️ SD 檔案的救命關鍵：關閉 PMA
+                animation: "Idle", 
+                skin: "Normal",     
+                premultipliedAlpha: false, // SD 小人關鍵設定
                 backgroundColor: "#00000000",
                 alpha: true,
-                showControls: true,       // ⚠️ 開啟原生控制器，讓您可以選動作
-                showLoading: true,
-                
-                // 採用 char_detail.html 中成功的 viewport 比例 (稍微縮小一點適應 600px 高度)
-                viewport: { x: -500, y: -150, width: 1500, height: 3000 },
+                showControls: false, // 關閉原生
+                showLoading: false,
+                viewport: { ...BASE_VIEWPORT }, // 使用複製的 Viewport，避免污染常數
 
                 success: function (player) {
-                    console.log(`✅ [成功] ${charName} Spine 載入完成！`);
+                    overlay.classList.add('hidden');
+                    controls.classList.remove('opacity-50', 'pointer-events-none');
                     
-                    // 🐛 暴力確保 Canvas 撐滿容器
                     const canvas = container.querySelector('canvas');
                     if (canvas) {
                         canvas.style.width = '100%';
@@ -125,10 +218,9 @@
                         canvas.style.display = 'block';
                     }
 
-                    // 嘗試設置 Skin，避免部分角色預設是透明的
+                    // Skin 綁定
                     const skins = player.skeleton.data.skins;
                     if (skins && skins.length > 0) {
-                        // 找 Normal，沒有就找 default，再沒有就拿第一個
                         const targetSkin = skins.find(s => s.name === 'Normal') || skins.find(s => s.name === 'default') || skins[0];
                         if (targetSkin) {
                             player.skeleton.setSkinByName(targetSkin.name);
@@ -136,27 +228,165 @@
                         }
                     }
 
-                    // 檢查動作庫，沒有 Idle 就隨便播第一個
+                    // 動作庫設定
                     const anims = player.skeleton.data.animations.map(a => a.name);
-                    if (!anims.includes("Idle") && !anims.includes("idle")) {
-                        if (anims.length > 0) {
-                            player.animationState.setAnimation(0, anims[0], true);
-                            console.log(`找不到 Idle，改播: ${anims[0]}`);
-                        }
+                    buildAnimMenu(player, anims);
+                    
+                    let startAnim = anims.includes("Idle") ? "Idle" : (anims.includes("idle") ? "idle" : anims[0]);
+                    if (startAnim) {
+                        player.animationState.setAnimation(0, startAnim, true);
+                        document.getElementById('currentAnimText').innerText = startAnim;
+                        document.getElementById('btnPlayPause').innerText = '⏸️';
                     }
+
+                    // 插槽設定
+                    buildSlotMenu(player);
+
+                    // 綁定平移與縮放事件
+                    setupCameraControls(canvas, player);
                 },
                 error: function (player, reason) {
-                    console.error(`❌ [失敗] ${charName} Spine 載入錯誤:`, reason);
-                    container.innerHTML = `
-                        <div class="w-full h-full flex flex-col items-center justify-center text-red-500 bg-red-50 font-bold p-4 text-center">
-                            <span class="text-4xl mb-2">⚠️</span>
-                            載入失敗！請按 F12 查看 Console 確認路徑或檔案是否正確。<br>
-                            檔案路徑: ${skelUrl}
-                        </div>
-                    `;
+                    overlay.innerHTML = `<span class="text-red-400">載入失敗，檔案不存在</span>`;
                 }
             });
         }
+
+        // ================= 播放控制面板邏輯 =================
+
+        function togglePlay() {
+            if (!globalPlayer) return;
+            const btn = document.getElementById('btnPlayPause');
+            if (globalPlayer.paused) {
+                globalPlayer.play();
+                btn.innerText = '⏸️';
+            } else {
+                globalPlayer.pause();
+                btn.innerText = '▶️';
+            }
+        }
+
+        function cycleSpeed() {
+            if (!globalPlayer) return;
+            currentSpeedIndex = (currentSpeedIndex + 1) % speedOptions.length;
+            globalPlayer.speed = speedOptions[currentSpeedIndex];
+            updateSpeedUI();
+        }
+
+        function updateSpeedUI() {
+            document.getElementById('btnSpeed').innerText = `${speedOptions[currentSpeedIndex]}x`;
+        }
+
+        function buildAnimMenu(player, anims) {
+            const list = document.getElementById('animList');
+            list.innerHTML = '';
+            anims.forEach(animName => {
+                const btn = document.createElement('button');
+                btn.className = "text-left px-3 py-2 text-sm text-gray-700 hover:bg-amber-100 hover:text-amber-700 rounded transition-colors";
+                btn.innerText = animName;
+                btn.onclick = () => {
+                    player.animationState.setAnimation(0, animName, true);
+                    document.getElementById('currentAnimText').innerText = animName;
+                    document.getElementById('animDropdown').classList.add('hidden');
+                    // 切換動作時自動恢復播放
+                    player.play();
+                    document.getElementById('btnPlayPause').innerText = '⏸️';
+                };
+                list.appendChild(btn);
+            });
+        }
+
+        function buildSlotMenu(player) {
+            const list = document.getElementById('slotList');
+            list.innerHTML = '';
+            
+            // 抓出所有有掛圖的插槽 (避免列出太多空骨架)
+            const slots = player.skeleton.slots.filter(s => s.attachment != null);
+            
+            slots.forEach(slot => {
+                const label = document.createElement('label');
+                label.className = "flex items-center gap-2 cursor-pointer hover:bg-gray-100 p-1 rounded transition-colors";
+                
+                const checkbox = document.createElement('input');
+                checkbox.type = "checkbox";
+                checkbox.checked = slot.color.a > 0; // 如果透明度大於 0 就是顯示中
+                checkbox.className = "w-4 h-4 text-amber-500 rounded focus:ring-amber-400";
+                
+                checkbox.onchange = (e) => {
+                    // 切換透明度 1 或 0
+                    slot.color.a = e.target.checked ? 1 : 0;
+                };
+
+                const span = document.createElement('span');
+                span.className = "text-gray-700 truncate max-w-[140px]";
+                span.innerText = slot.data.name;
+                span.title = slot.data.name;
+
+                label.appendChild(checkbox);
+                label.appendChild(span);
+                list.appendChild(label);
+            });
+
+            if (slots.length === 0) {
+                list.innerHTML = '<span class="text-gray-400 text-center">無可用插槽</span>';
+            }
+        }
+
+        // ================= 攝影機 (平移/縮放) 邏輯 =================
+
+        function setupCameraControls(canvas, player) {
+            // 滾輪縮放
+            canvas.addEventListener('wheel', (e) => {
+                e.preventDefault(); // 防止網頁滾動
+                // 向上滾放大，向下滾縮小
+                const zoomDelta = e.deltaY < 0 ? 0.1 : -0.1;
+                currentZoom = Math.min(Math.max(currentZoom + zoomDelta, 0.3), 3.0); // 限制 0.3x ~ 3.0x
+                
+                player.skeleton.scaleX = currentZoom;
+                player.skeleton.scaleY = currentZoom;
+            }, { passive: false });
+
+            // 拖曳平移
+            canvas.addEventListener('pointerdown', (e) => {
+                isDragging = true;
+                lastMouseX = e.clientX;
+                lastMouseY = e.clientY;
+                canvas.setPointerCapture(e.pointerId);
+            });
+
+            canvas.addEventListener('pointermove', (e) => {
+                if (!isDragging || !player.skeleton) return;
+                
+                const dx = e.clientX - lastMouseX;
+                const dy = e.clientY - lastMouseY;
+
+                // 將螢幕的像素位移轉換為 Spine 世界觀的位移
+                // 這裡的比例取決於 Viewport 寬度 (1500) 與 Canvas 實際顯示寬度的比值
+                const rect = canvas.getBoundingClientRect();
+                const scaleFactorX = BASE_VIEWPORT.width / rect.width / currentZoom;
+                const scaleFactorY = BASE_VIEWPORT.height / rect.height / currentZoom;
+
+                // Spine 的 Y 軸是朝上的，所以畫面往下滑 (dy 為正)，骨架要往下走 (y 變小)
+                player.skeleton.x += dx * scaleFactorX;
+                player.skeleton.y -= dy * scaleFactorY;
+
+                lastMouseX = e.clientX;
+                lastMouseY = e.clientY;
+            });
+
+            const stopDrag = () => { isDragging = false; };
+            canvas.addEventListener('pointerup', stopDrag);
+            canvas.addEventListener('pointercancel', stopDrag);
+        }
+
+        function resetCamera() {
+            if (!globalPlayer || !globalPlayer.skeleton) return;
+            currentZoom = 1.0;
+            globalPlayer.skeleton.scaleX = 1.0;
+            globalPlayer.skeleton.scaleY = 1.0;
+            globalPlayer.skeleton.x = 0;
+            globalPlayer.skeleton.y = 0;
+        }
+
     </script>
 </body>
 </html>
