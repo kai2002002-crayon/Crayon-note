@@ -36,14 +36,6 @@
             animation: crayonFloat 1.5s ease-in-out infinite;
             z-index: 10;
         }
-        #spineCanvasContainer {
-            position: relative;
-            z-index: 1; /* 背景預設是背景層 */
-        }
-        #spineCanvasContainer canvas {
-            position: relative !important;
-            z-index: 2 !important;
-        }
         @keyframes crayonFloat {
             0%, 100% { transform: translateY(0) scale(1); filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.5)); }
             50% { transform: translateY(-10px) scale(1.05); filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.9)); }
@@ -355,19 +347,16 @@
             document.getElementById('slotsContainerInner').innerHTML = '<div class="p-3 text-center text-xs font-bold text-gray-400">讀取資料中...</div>';
             document.getElementById('animSelectText').innerText = "讀取中...";
 
-            // ✅ 修正：移除 baseFolderKey 資料夾層級，直接讀取檔名
-            const skelUrl = `./spine_sd_assets/${costumeKey}.skel.bytes`;
-            const atlasUrl = `./spine_sd_assets/${costumeKey}.atlas.txt`;
-
+            // ⚠️ 針對戰鬥 SD 路徑，同時將檔案名稱改為 costumeKey
             globalPlayer = new spine.SpinePlayer(container, {
-                skelUrl: skelUrl,
-                atlasUrl: atlasUrl,
+                skelUrl: `./spine_sd_assets/${baseFolderKey}/${costumeKey}.skel.bytes`,
+                atlasUrl: `./spine_sd_assets/${baseFolderKey}/${costumeKey}.atlas.txt`,
                 premultipliedAlpha: true,
                 backgroundColor: "#00000000", 
                 alpha: true,
                 showControls: false,
                 showLoading: false, 
-                // viewport 移除固定參數，讓系統自動適配
+                viewport: { x: -400, y: 0, width: 800, height: 1000 },
 
                 success: function (player) {
                     const loader = container.querySelector('.spine-player-loading-custom');
@@ -378,7 +367,7 @@
 
                     const skins = player.skeleton.data.skins;
                     if (skins && skins.length > 0) {
-                        const targetSkin = skins.find(s => s.name === 'Normal') || skins.find(s => s.name === 'default') || skins[0];
+                        const targetSkin = skins.find(s => s.name === 'Normal') || skins.find(s => s.name !== 'default') || skins[0];
                         if (targetSkin) {
                             player.skeleton.setSkinByName(targetSkin.name);
                             player.skeleton.setToSetupPose(); 
@@ -389,35 +378,18 @@
                     buildSlotsPanel(player);
                     setupComplexInteractions(player, container);
 
+                    // 自動尋找適當的待機動作作為初始動作，避免報錯
                     const anims = player.skeleton.data.animations.map(a => a.name);
-    
-                    // ⭐ 新增：優先尋找出場動作 (Spawn / Entrance / 등장 / 等等)
-                    // 請根據您 Spine 檔案中實際的出場動作名稱調整這組關鍵字
-                    const spawnKeywords = ["Spawn", "Entrance", "Enter", "Deploy", "Start"];
-                    const spawnAnim = anims.find(a => spawnKeywords.some(k => a.includes(k)));
-    
-                    const idleAnim = anims.includes("Idle") ? "Idle" : (anims.includes("idle") ? "idle" : (anims[0] || ""));
-
-                    if (spawnAnim) {
-                        // 先播一次出場，結束後自動銜接 Idle
-                        player.animationState.setAnimation(0, spawnAnim, false);
-                        player.animationState.addAnimation(0, idleAnim, true, 0);
-                        document.getElementById('animSelectText').innerText = spawnAnim;
-        
-                        // 為了讓 UI 選單能即時同步，可以在幾秒後將選單顯示變回 Idle
-                        setTimeout(() => {
-                            document.getElementById('animSelectText').innerText = idleAnim;
-                        }, 1500); 
-                    } else if (idleAnim) {
-                        // 沒有出場動作時，直接播 Idle
-                        player.animationState.setAnimation(0, idleAnim, true);
-                        document.getElementById('animSelectText').innerText = idleAnim;
+                    const defaultAnim = anims.includes('Idle_1') ? 'Idle_1' : (anims.includes('Idle') ? 'Idle' : (anims.includes('idle') ? 'idle' : anims[0]));
+                    
+                    if(defaultAnim) {
+                        player.animationState.setAnimation(0, defaultAnim, true);
+                        document.getElementById('animSelectText').innerText = defaultAnim;
                     }
                 },
-
                 error: function (player, reason) {
                     console.error("❌ Spine Load Error:", reason);
-                    container.innerHTML = `<div class="text-red-500 font-bold text-sm text-center p-4">載入失敗：檔案不存在<br>${skelUrl}</div>`;
+                    container.innerHTML = `<div class="text-red-500 font-bold text-sm text-center p-4">載入失敗：請確認檔案是否存在於<br>./spine_sd_assets/${baseFolderKey}/${costumeKey}.skel.bytes</div>`;
                 }
             });
         }
