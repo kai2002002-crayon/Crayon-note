@@ -97,7 +97,7 @@
             </div>
         </section>
 
-        <section id="spineViewerSection" class="hidden bg-white/90 dark:bg-slate-800/90 backdrop-blur-md p-4 sm:p-5 rounded-2xl shadow-md border-4 border-amber-400 dark:border-slate-600 transition-all">
+        <section id="spineViewerSection" class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md p-4 sm:p-5 rounded-2xl shadow-md border-4 border-amber-400 dark:border-slate-600 transition-all">
             
             <div class="flex items-center gap-3 mb-4 border-b border-amber-100 dark:border-slate-700 pb-3">
                 <img id="activeCharIcon" src="" class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg border-2 border-amber-400 shadow-sm object-cover bg-white dark:bg-slate-700 hidden">
@@ -121,6 +121,7 @@
                                 <button onclick="setSpeed(0.5)" class="speed-btn px-2 py-1 text-[10px] sm:text-xs font-bold rounded hover:bg-amber-100 dark:hover:bg-slate-600 text-gray-700 dark:text-gray-300">0.5x</button>
                                 <button onclick="setSpeed(1)" class="speed-btn px-2 py-1 text-[10px] sm:text-xs font-bold rounded bg-amber-200 dark:bg-slate-600 text-amber-900 dark:text-white">1.0x</button>
                                 <button onclick="setSpeed(2)" class="speed-btn px-2 py-1 text-[10px] sm:text-xs font-bold rounded hover:bg-amber-100 dark:hover:bg-slate-600 text-gray-700 dark:text-gray-300">2.0x</button>
+                                <button onclick="setSpeed(3)" class="speed-btn px-2 py-1 text-[10px] sm:text-xs font-bold rounded hover:bg-amber-100 dark:hover:bg-slate-600 text-gray-700 dark:text-gray-300">3.0x</button>
                             </div>
                         </div>
                         <div class="flex items-center gap-2">
@@ -133,36 +134,37 @@
                         </div>
                     </div>
 
-                    <div class="flex gap-2 w-full relative z-[100] items-center">
+                    <div class="flex justify-between w-full relative z-[100] items-center gap-2">
                         
-                        <div class="relative flex-1" id="animDropdownWrapper">
+                        <div class="relative w-[130px] sm:w-[150px]" id="animDropdownWrapper">
                             <button onclick="toggleCustomSelect('animList')" class="custom-select-btn w-full bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-[10px] sm:text-xs font-bold rounded-lg px-2 py-1.5 flex justify-between items-center text-left shadow-sm">
                                 <span id="animSelectText" class="truncate text-amber-900 dark:text-gray-200">選擇動作</span>
                                 <span class="ml-1 text-gray-400 shrink-0 text-[10px]">▼</span>
                             </button>
-                            <div id="animList" class="hidden absolute bottom-[calc(100%+6px)] left-0 w-full bg-white dark:bg-slate-800 border border-amber-300 dark:border-slate-600 rounded-lg shadow-2xl max-h-[160px] overflow-y-auto flex-col py-1 z-[110]"></div>
+                            <div id="animList" class="hidden absolute bottom-[calc(100%+6px)] left-0 w-[160px] sm:w-[200px] bg-white dark:bg-slate-800 border border-amber-300 dark:border-slate-600 rounded-lg shadow-2xl max-h-[160px] overflow-y-auto flex-col py-1 z-[110]"></div>
                         </div>
 
-                        <div class="relative flex-1" id="slotDropdownWrapper">
-                            <button onclick="toggleCustomSelect('slotList')" class="custom-select-btn w-full bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-[10px] sm:text-xs font-bold rounded-lg px-2 py-1.5 flex justify-between items-center text-left shadow-sm">
-                                <span class="truncate text-amber-900 dark:text-gray-200">🧩 外觀插槽</span>
-                                <span class="ml-1 text-gray-400 shrink-0 text-[10px]">▼</span>
-                            </button>
-                            <div id="slotList" class="hidden absolute bottom-[calc(100%+6px)] right-0 w-[150%] bg-white dark:bg-slate-800 border border-amber-300 dark:border-slate-600 rounded-lg shadow-2xl max-h-[160px] overflow-y-auto flex-col z-[110]">
-                                <div class="flex gap-1 p-1.5 border-b border-gray-100 dark:border-slate-700 sticky top-0 bg-gray-50 dark:bg-slate-800 z-20">
-                                    <button onclick="toggleAllSlots(true, event)" class="flex-1 py-1 text-[10px] font-bold bg-white dark:bg-slate-700 hover:bg-amber-100 dark:hover:bg-slate-600 rounded border transition shadow-sm text-gray-700 dark:text-gray-200">全顯</button>
-                                    <button onclick="toggleAllSlots(false, event)" class="flex-1 py-1 text-[10px] font-bold bg-white dark:bg-slate-700 hover:bg-amber-100 dark:hover:bg-slate-600 rounded border transition shadow-sm text-gray-700 dark:text-gray-200">全隱</button>
+                        <div class="flex items-center gap-2">
+                            <div class="relative w-[130px] sm:w-[150px]" id="slotDropdownWrapper">
+                                <button onclick="toggleCustomSelect('slotList')" class="custom-select-btn w-full bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-[10px] sm:text-xs font-bold rounded-lg px-2 py-1.5 flex justify-between items-center text-left shadow-sm">
+                                    <span class="truncate text-amber-900 dark:text-gray-200">🧩 外觀插槽</span>
+                                    <span class="ml-1 text-gray-400 shrink-0 text-[10px]">▼</span>
+                                </button>
+                                <div id="slotList" class="hidden absolute bottom-[calc(100%+6px)] right-0 w-[180px] sm:w-[220px] bg-white dark:bg-slate-800 border border-amber-300 dark:border-slate-600 rounded-lg shadow-2xl max-h-[160px] overflow-y-auto flex-col z-[110]">
+                                    <div class="flex gap-1 p-1.5 border-b border-gray-100 dark:border-slate-700 sticky top-0 bg-gray-50 dark:bg-slate-800 z-20">
+                                        <button onclick="toggleAllSlots(true, event)" class="flex-1 py-1 text-[10px] font-bold bg-white dark:bg-slate-700 hover:bg-amber-100 dark:hover:bg-slate-600 rounded border transition shadow-sm text-gray-700 dark:text-gray-200">全顯</button>
+                                        <button onclick="toggleAllSlots(false, event)" class="flex-1 py-1 text-[10px] font-bold bg-white dark:bg-slate-700 hover:bg-amber-100 dark:hover:bg-slate-600 rounded border transition shadow-sm text-gray-700 dark:text-gray-200">全隱</button>
+                                    </div>
+                                    <div id="slotsContainerInner" class="flex flex-col pb-1"></div>
                                 </div>
-                                <div id="slotsContainerInner" class="flex flex-col pb-1"></div>
                             </div>
+
+                            <button onclick="resetCamera()" class="px-3 py-1.5 bg-slate-600 hover:bg-slate-700 text-white text-[10px] sm:text-xs font-bold rounded-lg shadow transition-colors whitespace-nowrap shrink-0 h-full">
+                                🔄 鏡頭
+                            </button>
                         </div>
-
-                        <button onclick="resetCamera()" class="px-3 py-1.5 bg-slate-600 hover:bg-slate-700 text-white text-[10px] sm:text-xs font-bold rounded-lg shadow transition-colors whitespace-nowrap shrink-0 h-full">
-                            🔄 鏡頭
-                        </button>
+                        
                     </div>
-                </div>
-
             </div>
         </section>
 
