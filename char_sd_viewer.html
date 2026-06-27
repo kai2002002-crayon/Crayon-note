@@ -39,6 +39,12 @@
         #spineCanvasContainer {
             position: relative;
             z-index: 1; /* 背景預設是背景層 */
+            /* 確保背景圖完全貼齊容器，且不會撐破容器 */
+            background-size: cover !important;
+            background-position: center !important;
+            /* 讓 Canvas 的層級明確高於背景 */
+            background-blend-mode: normal;
+        }
         }
         #spineCanvasContainer canvas {
             position: relative !important;
