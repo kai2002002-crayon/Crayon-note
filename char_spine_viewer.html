@@ -41,6 +41,7 @@
             50% { transform: translateY(-10px) scale(1.05); filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.9)); }
         }
 
+        /* 捲動條美化 */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 10px; }
@@ -63,6 +64,7 @@
         }
         .dark .animated-bg { opacity: 0.8; }
         
+        /* 隱藏原生選單外觀，維持下拉圖示 */
         .custom-select-btn { -webkit-tap-highlight-color: transparent; }
     </style>
 </head>
@@ -73,7 +75,7 @@
         <header class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md p-4 sm:p-5 rounded-2xl shadow-md border-4 border-amber-400 dark:border-slate-600 flex justify-between items-center relative z-10">
             <div>
                 <h1 class="text-xl sm:text-2xl font-black text-amber-950 dark:text-amber-400 mb-0.5">🎭 角色動態展示 (Spine Viewer)</h1>
-                <p class="text-xs sm:text-sm text-amber-800 dark:text-gray-400">選擇角色載入動態，體驗互動與大廳戰鬥模式切換。</p>
+                <p class="text-xs sm:text-sm text-amber-800 dark:text-gray-400">選擇角色載入動態，體驗敲擊、抓癢與臉部拉扯互動。</p>
             </div>
             <button onclick="window.close()" class="px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm bg-amber-500 text-white font-bold rounded-xl shadow hover:bg-amber-600 transition shrink-0">
                 ⬅️ 返回
@@ -104,32 +106,27 @@
             <!-- 展示畫布與控制器區塊 -->
             <div class="flex flex-col gap-3 min-w-0 relative z-10 w-full lg:w-3/4 mx-auto">
                 
+                <!-- Spine 畫布 (因為沒有右側選單，畫面更寬闊) -->
                 <div id="spineCanvasContainer" class="w-full h-[60vh] sm:h-[600px] rounded-xl border-2 border-dashed border-amber-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50 relative overflow-hidden flex items-center justify-center">
                     <div class="text-gray-400 font-bold tracking-widest">等待載入...</div>
                 </div>
 
+                <!-- 播放器與客製化選單控制器 -->
                 <div id="playerControls" class="bg-amber-50 dark:bg-slate-700/50 p-3 rounded-xl border border-amber-200 dark:border-slate-600 flex flex-col gap-3 opacity-50 pointer-events-none transition-opacity">
                     
-                    <!-- 第一排：播放、速度、模式切換、服裝 -->
-                    <div class="flex items-center justify-between gap-2 w-full">
-                        <div class="flex items-center gap-2 shrink-0">
-                            <button id="btnPlayPause" onclick="togglePlay()" class="w-9 h-9 flex items-center justify-center bg-amber-500 text-white rounded-lg shadow hover:bg-amber-600 transition shrink-0" title="播放/暫停">⏸️</button>
-                            <div class="flex bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-600 p-1 shadow-inner hidden sm:flex">
+                    <!-- 第一排：播放、速度、服裝 -->
+                    <div class="flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-2">
+                            <button id="btnPlayPause" onclick="togglePlay()" class="w-9 h-9 flex items-center justify-center bg-amber-500 text-white rounded-lg shadow hover:bg-amber-600 transition" title="播放/暫停">⏸️</button>
+                            <div class="flex bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-600 p-1 shadow-inner">
                                 <button onclick="setSpeed(0.5)" class="speed-btn px-2 py-1 text-[10px] sm:text-xs font-bold rounded hover:bg-amber-100 dark:hover:bg-slate-600 text-gray-700 dark:text-gray-300">0.5x</button>
                                 <button onclick="setSpeed(1)" class="speed-btn px-2 py-1 text-[10px] sm:text-xs font-bold rounded bg-amber-200 dark:bg-slate-600 text-amber-900 dark:text-white">1.0x</button>
                                 <button onclick="setSpeed(2)" class="speed-btn px-2 py-1 text-[10px] sm:text-xs font-bold rounded hover:bg-amber-100 dark:hover:bg-slate-600 text-gray-700 dark:text-gray-300">2.0x</button>
                             </div>
                         </div>
-                        
-                        <!-- 右側：大廳/戰鬥切換 與 服裝選單 -->
-                        <div class="flex items-center gap-2 flex-1 justify-end min-w-0">
-                            <button id="modeToggleBtn" onclick="toggleMode()" class="bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-[11px] sm:text-sm font-bold rounded-lg px-2 py-1.5 shadow-sm hover:bg-amber-50 dark:hover:bg-slate-700 flex items-center gap-1 transition-colors text-amber-900 dark:text-amber-100 shrink-0">
-                                <span id="modeIcon">🍵</span> <span id="modeText">大廳</span>
-                            </button>
-                            <select id="costumeSelect" onchange="changeSpineCostume(this.value)" class="bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-[11px] sm:text-sm font-bold rounded-lg px-2 py-1.5 outline-none focus:ring-2 focus:ring-amber-500 w-24 sm:min-w-[120px] truncate">
-                                <option value="">服裝</option>
-                            </select>
-                        </div>
+                        <select id="costumeSelect" onchange="changeSpineCostume(this.value)" class="bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-xs sm:text-sm font-bold rounded-lg px-2 py-1.5 outline-none focus:ring-2 focus:ring-amber-500 min-w-[100px]">
+                            <option value="">服裝</option>
+                        </select>
                     </div>
 
                     <!-- 第二排：動作選單 (50%) 與 插槽選單 (50%) -->
@@ -137,27 +134,33 @@
                         
                         <!-- 動作懸浮選單 -->
                         <div class="relative w-1/2" id="animDropdownWrapper">
-                            <button onclick="toggleCustomSelect('animList')" class="custom-select-btn w-full bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-[11px] sm:text-xs font-bold rounded-lg px-2 py-2 flex justify-between items-center text-left shadow-sm">
+                            <button onclick="toggleCustomSelect('animList')" class="custom-select-btn w-full bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-[10px] sm:text-xs font-bold rounded-lg px-2 py-1.5 flex justify-between items-center text-left shadow-sm">
                                 <span id="animSelectText" class="truncate text-amber-900 dark:text-gray-200">選擇動作</span>
                                 <span class="ml-1 text-gray-400 shrink-0 text-[10px]">▼</span>
                             </button>
-                            <div id="animList" class="hidden absolute bottom-[calc(100%+6px)] left-0 w-full bg-white dark:bg-slate-800 border border-amber-300 dark:border-slate-600 rounded-lg shadow-2xl max-h-[160px] overflow-y-auto flex-col z-[110]">
+                            <!-- 向上展開的名單，限制高度約5個項目 (160px) -->
+                            <div id="animList" class="hidden absolute bottom-[calc(100%+6px)] left-0 w-full bg-white dark:bg-slate-800 border border-amber-300 dark:border-slate-600 rounded-lg shadow-2xl max-h-[160px] overflow-y-auto flex-col py-1 z-[110]">
                                 <!-- JS 生成動作列表 -->
                             </div>
                         </div>
 
                         <!-- 插槽懸浮選單 -->
                         <div class="relative w-1/2" id="slotDropdownWrapper">
-                            <button onclick="toggleCustomSelect('slotList')" class="custom-select-btn w-full bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-[11px] sm:text-xs font-bold rounded-lg px-2 py-2 flex justify-between items-center text-left shadow-sm">
+                            <button onclick="toggleCustomSelect('slotList')" class="custom-select-btn w-full bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-[10px] sm:text-xs font-bold rounded-lg px-2 py-1.5 flex justify-between items-center text-left shadow-sm">
                                 <span class="truncate text-amber-900 dark:text-gray-200">🧩 顯示/隱藏插槽</span>
                                 <span class="ml-1 text-gray-400 shrink-0 text-[10px]">▼</span>
                             </button>
-                            <div id="slotList" class="hidden absolute bottom-[calc(100%+6px)] right-0 w-full sm:w-[120%] bg-white dark:bg-slate-800 border border-amber-300 dark:border-slate-600 rounded-lg shadow-2xl max-h-[160px] overflow-y-auto flex-col z-[110]">
-                                <div class="flex gap-1 p-1.5 border-b border-gray-100 dark:border-slate-700 sticky top-0 bg-gray-50 dark:bg-slate-800 z-20 shrink-0">
-                                    <button onclick="toggleAllSlots(true, event)" class="flex-1 py-1.5 text-[11px] font-bold bg-white dark:bg-slate-700 hover:bg-amber-100 dark:hover:bg-slate-600 rounded border border-gray-200 dark:border-slate-600 transition shadow-sm text-gray-700 dark:text-gray-200">全顯</button>
-                                    <button onclick="toggleAllSlots(false, event)" class="flex-1 py-1.5 text-[11px] font-bold bg-white dark:bg-slate-700 hover:bg-amber-100 dark:hover:bg-slate-600 rounded border border-gray-200 dark:border-slate-600 transition shadow-sm text-gray-700 dark:text-gray-200">全隱</button>
+                            <!-- 向上展開的名單，限制高度約5個項目 (160px) -->
+                            <div id="slotList" class="hidden absolute bottom-[calc(100%+6px)] right-0 w-full sm:w-[150%] bg-white dark:bg-slate-800 border border-amber-300 dark:border-slate-600 rounded-lg shadow-2xl max-h-[160px] overflow-y-auto flex-col z-[110]">
+                                
+                                <!-- 全顯示 / 全隱藏 按鈕 (固定在頂部) -->
+                                <div class="flex gap-1 p-1.5 border-b border-gray-100 dark:border-slate-700 sticky top-0 bg-gray-50 dark:bg-slate-800 z-20">
+                                    <button onclick="toggleAllSlots(true, event)" class="flex-1 py-1 text-[10px] font-bold bg-white dark:bg-slate-700 hover:bg-amber-100 dark:hover:bg-slate-600 rounded border border-gray-200 dark:border-slate-600 transition shadow-sm text-gray-700 dark:text-gray-200">全顯</button>
+                                    <button onclick="toggleAllSlots(false, event)" class="flex-1 py-1 text-[10px] font-bold bg-white dark:bg-slate-700 hover:bg-amber-100 dark:hover:bg-slate-600 rounded border border-gray-200 dark:border-slate-600 transition shadow-sm text-gray-700 dark:text-gray-200">全隱</button>
                                 </div>
-                                <div id="slotsContainerInner" class="flex flex-col"></div>
+                                
+                                <!-- JS 生成插槽清單 -->
+                                <div id="slotsContainerInner" class="flex flex-col pb-1"></div>
                             </div>
                         </div>
 
@@ -183,12 +186,8 @@
         let globalIdleTimer = null;
         let tickleTimer = null;
         let slotVisibilityMap = {};
-        
-        let isCombatMode = false;
-        let currentCharName = '';
-        let currentBaseFolderKey = '';
-        let currentCostumeKey = '';
 
+        // 🌟 新增：全局點擊監聽器，點擊空白處自動關閉懸浮名單
         document.addEventListener('click', (e) => {
             if (!e.target.closest('#animDropdownWrapper')) {
                 document.getElementById('animList').classList.add('hidden');
@@ -200,9 +199,11 @@
             }
         });
 
+        // 🌟 新增：懸浮選單切換邏輯
         function toggleCustomSelect(listId) {
             const list = document.getElementById(listId);
             if (list.classList.contains('hidden')) {
+                // 關閉另一個
                 if (listId === 'animList') {
                     document.getElementById('slotList').classList.add('hidden');
                     document.getElementById('slotList').classList.remove('flex');
@@ -216,46 +217,6 @@
                 list.classList.add('hidden');
                 list.classList.remove('flex');
             }
-        }
-
-        function toggleMode() {
-            isCombatMode = !isCombatMode;
-            const icon = document.getElementById('modeIcon');
-            const text = document.getElementById('modeText');
-            
-            if (isCombatMode) {
-                icon.innerText = '⚔️';
-                text.innerText = '戰鬥';
-            } else {
-                icon.innerText = '🍵';
-                text.innerText = '大廳';
-            }
-            
-            if (currentCharName && currentBaseFolderKey) {
-                const firstCostume = updateCostumeDropdown();
-                loadSpine(currentBaseFolderKey, firstCostume);
-            }
-        }
-
-        function updateCostumeDropdown() {
-            const costumeSelect = document.getElementById('costumeSelect');
-            costumeSelect.innerHTML = '';
-            
-            let costumes = [];
-            if (isCombatMode) {
-                costumes = (typeof SD_COSTUME !== 'undefined' && SD_COSTUME[currentCharName]) ? SD_COSTUME[currentCharName] : [currentBaseFolderKey];
-            } else {
-                costumes = (typeof COSTUME_MAP !== 'undefined' && COSTUME_MAP[currentCharName]) ? COSTUME_MAP[currentCharName] : [currentBaseFolderKey];
-            }
-
-            costumes.forEach((costume, idx) => {
-                const opt = document.createElement('option');
-                opt.value = costume;
-                opt.text = idx === 0 ? "預設服裝" : `服裝 ${idx}`;
-                costumeSelect.appendChild(opt);
-            });
-            
-            return costumes[0];
         }
 
         function toggleAllCharacters() {
@@ -366,6 +327,7 @@
             document.getElementById('activeCharName').innerText = getI18n(charName);
             document.getElementById('activeCharSpineName').innerText = `Spine ID: ${spineName}`;
 
+            // 重置選單狀態
             document.getElementById('animList').classList.add('hidden');
             document.getElementById('animList').classList.remove('flex');
             document.getElementById('slotList').classList.add('hidden');
@@ -374,21 +336,25 @@
             slotVisibilityMap = {};
             clearTimeout(globalIdleTimer);
             clearTimeout(tickleTimer);
+            
+            const costumes = (typeof COSTUME_MAP !== 'undefined' && COSTUME_MAP[charName]) ? COSTUME_MAP[charName] : [spineName];
+            
+            const costumeSelect = document.getElementById('costumeSelect');
+            costumeSelect.innerHTML = '';
+            costumes.forEach((costume, idx) => {
+                const opt = document.createElement('option');
+                opt.value = costume;
+                opt.text = idx === 0 ? "預設服裝" : `服裝 ${idx}`;
+                costumeSelect.appendChild(opt);
+            });
 
-            currentCharName = charName;
-            currentBaseFolderKey = spineName;
-
-            const firstCostume = updateCostumeDropdown();
             applyRaceBackground(charName);
             document.getElementById('spineViewerSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-            loadSpine(spineName, firstCostume);
+            loadSpine(spineName, costumes[0]);
         }
 
         function loadSpine(baseFolderKey, costumeKey) {
-            currentBaseFolderKey = baseFolderKey;
-            currentCostumeKey = costumeKey;
-
             const container = document.getElementById('spineCanvasContainer');
             
             if (globalPlayer) {
@@ -398,30 +364,18 @@
 
             container.innerHTML = '<div class="spine-player-loading-custom"></div>';
             document.getElementById('playerControls').classList.add('opacity-50', 'pointer-events-none');
-            
-            document.getElementById('slotsContainerInner').innerHTML = '<div class="p-3 text-center text-[10px] sm:text-xs font-bold text-gray-400">讀取資料中...</div>';
-            document.getElementById('animSelectText').innerText = '讀取中...';
+            document.getElementById('slotsContainerInner').innerHTML = '<div class="p-3 text-center text-xs font-bold text-gray-400">讀取資料中...</div>';
 
-            let skelUrl = isCombatMode 
-                ? `./spine_sd_assets/${costumeKey}.skel.bytes` 
-                : `./spine_assets/${baseFolderKey}/${costumeKey}.skel.bytes`;
-            
-            let atlasUrl = isCombatMode 
-                ? `./spine_sd_assets/${costumeKey}.atlas.txt` 
-                : `./spine_assets/${baseFolderKey}/${costumeKey}.atlas.txt`;
-            
-            let initAnim = isCombatMode ? "Idle" : "Idle_1";
-
-            // 建立基礎配置物件
-            const playerConfig = {
-                skelUrl: skelUrl,
-                atlasUrl: atlasUrl,
-                // ⚠️ 修正矛盾一：移除初始 animation 屬性，完全由 success 回呼函數動態、安全地播放
+            globalPlayer = new spine.SpinePlayer(container, {
+                skelUrl: `./spine_assets/${baseFolderKey}/${baseFolderKey}.skel.bytes`,
+                atlasUrl: `./spine_assets/${baseFolderKey}/${baseFolderKey}.atlas.txt`,
+                animation: "Idle_1",     
                 premultipliedAlpha: true,
                 backgroundColor: "#00000000", 
                 alpha: true,
                 showControls: false,
                 showLoading: false, 
+                viewport: { x: -400, y: 0, width: 800, height: 1000 },
 
                 success: function (player) {
                     const loader = container.querySelector('.spine-player-loading-custom');
@@ -431,43 +385,26 @@
                     setSpeed(1);
 
                     const skins = player.skeleton.data.skins;
-                    if (skins && skins.length > 0) {
-                        const targetSkin = skins.find(s => s.name === 'Normal') || skins.find(s => s.name === 'default') || skins[0];
+                    if (skins && skins.length > 1) {
+                        const targetSkin = skins.find(s => s.name === 'Normal') || skins.find(s => s.name !== 'default');
                         if (targetSkin) {
                             player.skeleton.setSkinByName(targetSkin.name);
-                            player.skeleton.setSlotsToSetupPose(); 
+                            player.skeleton.setToSetupPose(); 
                         }
                     }
-                    player.skeleton.setToSetupPose(); 
 
                     buildAnimationDropdown(player);
                     buildSlotsPanel(player);
                     setupComplexInteractions(player, container);
-
-                    // 在成功讀取後，安全地執行高容錯動作播放邏輯
-                    const anims = player.skeleton.data.animations.map(a => a.name);
-                    let animToPlay = anims.includes(initAnim) ? initAnim : (anims.includes("Idle") ? "Idle" : (anims.includes("Idle_1") ? "Idle_1" : (anims[0] || "")));
-
-                    if (animToPlay) {
-                        player.animationState.setAnimation(0, animToPlay, true);
-                        const animSelectText = document.getElementById('animSelectText');
-                        if (animSelectText) animSelectText.innerText = animToPlay;
-                    }
                 },
                 error: function (player, reason) {
                     console.error("❌ Spine Load Error:", reason);
-                    container.innerHTML = `<div class="text-red-500 font-bold text-xs sm:text-sm text-center p-4">載入失敗：檔案可能不存在或未實裝<br>${skelUrl}</div>`;
+                    container.innerHTML = `<div class="text-red-500 font-bold text-sm text-center p-4">載入失敗：檔案可能不存在<br>./spine_assets/${baseFolderKey}/</div>`;
                 }
-            };
-
-            // ⚠️ 修正矛盾二：大廳模式維持手動遮罩視野，戰鬥模式（SD小人）直接不給 viewport，讓系統全自動適配居中與完美縮放
-            if (!isCombatMode) {
-                playerConfig.viewport = { x: -400, y: 0, width: 800, height: 1000 };
-            }
-
-            globalPlayer = new spine.SpinePlayer(container, playerConfig);
+            });
         }
-        
+
+        // 🌟 修改：建構客製化的「動作」懸浮名單
         function buildAnimationDropdown(player) {
             const animList = document.getElementById('animList');
             animList.innerHTML = '';
@@ -478,24 +415,34 @@
                 btn.className = "text-left px-3 py-2.5 text-[11px] sm:text-xs hover:bg-amber-100 dark:hover:bg-slate-700 w-full truncate transition-colors text-gray-700 dark:text-gray-300 flex-shrink-0 border-b border-gray-50 dark:border-slate-700/50";
                 btn.innerText = animName;
                 btn.onclick = (e) => {
-                    e.stopPropagation();
+                    e.stopPropagation(); // 防止觸發外層點擊事件
                     playAnimation(animName);
+                    // 點擊後收起名單
                     animList.classList.add('hidden');
                     animList.classList.remove('flex');
                 };
                 animList.appendChild(btn);
             });
+
+            // 預設顯示的按鈕文字
+            const defaultAnim = anims.includes('Idle_1') ? 'Idle_1' : (anims.includes('Idle') ? 'Idle' : anims[0]);
+            if(defaultAnim) {
+                document.getElementById('animSelectText').innerText = defaultAnim;
+            }
         }
 
         function playAnimation(animName) {
             if (!globalPlayer || !animName) return;
             globalPlayer.animationState.setAnimation(0, animName, true);
+            // 更新按鈕文字
             document.getElementById('animSelectText').innerText = animName;
         }
 
         function changeSpineCostume(costumeKey) {
             if(!costumeKey) return;
-            loadSpine(currentBaseFolderKey, costumeKey);
+            const spineNameText = document.getElementById('activeCharSpineName').innerText;
+            const baseFolderKey = spineNameText.replace('Spine ID: ', '').trim();
+            loadSpine(baseFolderKey, costumeKey);
         }
 
         function togglePlay() {
@@ -516,17 +463,11 @@
             });
         }
 
+        // 🌟 修改：建構客製化的「插槽」懸浮名單
         function buildSlotsPanel(player) {
-            const slotsContainer = document.getElementById('slotsContainerInner');
-            slotsContainer.innerHTML = '';
+            const container = document.getElementById('slotsContainerInner');
+            container.innerHTML = '';
             
-            const slots = player.skeleton.slots;
-            
-            const slotCountEl = document.getElementById('slotCount');
-            if (slotCountEl) {
-                slotCountEl.innerText = slots.length;
-            }
-
             slotVisibilityMap = {};
 
             player.skeleton.data.slots.forEach((slotData, index) => {
@@ -534,13 +475,15 @@
                 slotVisibilityMap[slotName] = true;
 
                 const item = document.createElement('label');
-                item.className = "flex items-center gap-2 px-3 py-2.5 hover:bg-amber-50 dark:hover:bg-slate-700 cursor-pointer transition-colors border-b border-gray-50 dark:border-slate-700/50 flex-shrink-0";
+                // 為了讓點擊容易，加大了 py padding
+                item.className = "flex items-center gap-2 px-3 py-2 lg:py-1.5 hover:bg-amber-50 dark:hover:bg-slate-700 cursor-pointer transition-colors border-b border-gray-50 dark:border-slate-700/50";
                 
                 item.innerHTML = `
                     <input type="checkbox" checked class="w-3.5 h-3.5 text-amber-500 rounded focus:ring-amber-500" onchange="toggleSlot('${slotName}', this.checked)">
-                    <span class="text-[11px] sm:text-xs font-medium text-gray-700 dark:text-gray-300 truncate">${slotName}</span>
+                    <span class="text-[10px] sm:text-xs font-medium text-gray-700 dark:text-gray-300 truncate">${slotName}</span>
                 `;
 
+                // 防止點擊 checkbox 收起整個表單
                 item.addEventListener('click', (e) => e.stopPropagation());
 
                 item.addEventListener('mouseenter', () => {
@@ -559,10 +502,10 @@
                     }
                 });
 
-                slotsContainer.appendChild(item);
+                container.appendChild(item);
             });
 
-            if(!player.config.injectedUpdate) {
+            if(!globalPlayer.config.injectedUpdate) {
                 const origUpdate = player.skeleton.updateWorldTransform;
                 player.skeleton.updateWorldTransform = function() {
                     origUpdate.call(player.skeleton);
@@ -572,7 +515,7 @@
                         if (slotVisibilityMap[s.data.name] === false) s.color.a = 0;
                     }
                 };
-                player.config.injectedUpdate = true;
+                globalPlayer.config.injectedUpdate = true;
             }
         }
 
@@ -587,7 +530,7 @@
         }
 
         function toggleAllSlots(show, event) {
-            if(event) event.stopPropagation(); 
+            if(event) event.stopPropagation(); // 防止點擊按鈕時關閉選單
             const checkboxes = document.querySelectorAll('#slotsContainerInner input[type="checkbox"]');
             checkboxes.forEach(cb => {
                 cb.checked = show;
@@ -609,6 +552,7 @@
 
             let currentZoom = 1.0;
             const ZOOM_ANCHOR_Y = 600; 
+            const baseViewport = { x: -400, y: 0, width: 800, height: 1000 }; 
             const pointers = {}; 
             let initialPinchDistance = 0;
             
@@ -627,27 +571,18 @@
             function startRandomAnimationLoop() {
                 clearTimeout(globalIdleTimer);
                 globalIdleTimer = setTimeout(() => {
-                    if (!player.skeleton) return;
                     const allAnimNames = player.skeleton.data.animations.map(a => a.name);
                     const safeAnims = allAnimNames.filter(name => !EXCLUDED_RANDOM_ANIMS.includes(name));
                     if (safeAnims.length > 0) {
                         const randomAnim = safeAnims[Math.floor(Math.random() * safeAnims.length)];
                         player.animationState.setAnimation(0, randomAnim, true);
                         
-                        const animSelectText = document.getElementById('animSelectText');
-                        if(animSelectText) animSelectText.innerText = randomAnim;
-
+                        document.getElementById('animSelectText').innerText = randomAnim;
                         startRandomAnimationLoop();
                     }
                 }, 5000);
             }
-
-            if (!isCombatMode) {
-                startRandomAnimationLoop();
-            } else {
-                clearTimeout(globalIdleTimer);
-                clearTimeout(tickleTimer);
-            }
+            startRandomAnimationLoop();
 
             canvas.addEventListener('wheel', function(event) {
                 event.preventDefault();
@@ -666,17 +601,12 @@
                     player.skeleton.scaleY = 1.0;
                     player.skeleton.y = 0;
                     player.skeleton.x = 0;
-                    // 如果是大廳模式，則重置手動 viewport 座標
-                    if (!isCombatMode && player.viewport) {
-                        player.viewport.x = -400; 
-                        player.viewport.y = 0;
-                    }
+                    player.viewport.x = -400; 
+                    player.viewport.y = 0;
                 }
             });
 
             function getHitZone(mouseX, mouseY) {
-                if (isCombatMode) return null; 
-
                 const rect = canvas.getBoundingClientRect();
                 let clickedPart = null;
                 let minDistance = Infinity;
@@ -795,19 +725,17 @@
                             clearTimeout(globalIdleTimer);
                             clearTimeout(tickleTimer);
                             
-                            const animSelectText = document.getElementById('animSelectText');
-
                             if (hitZoneOnDown.name === "頭部") {
                                 player.animationState.setAnimation(0, "Touch_Idle", true);
-                                if (animSelectText) animSelectText.innerText = "Touch_Idle";
+                                document.getElementById('animSelectText').innerText = "Touch_Idle";
                             } else if (hitZoneOnDown.name === "身體") {
                                 player.animationState.setAnimation(0, "Tickle_Idle_1", true);
-                                if (animSelectText) animSelectText.innerText = "Tickle_Idle_1";
+                                document.getElementById('animSelectText').innerText = "Tickle_Idle_1";
                                 tickleTimer = setTimeout(() => {
                                     const animNames = player.skeleton.data.animations.map(a => a.name);
                                     if (animNames.includes("Tickle_Idle_2")) {
                                         player.animationState.setAnimation(0, "Tickle_Idle_2", true);
-                                        if (animSelectText) animSelectText.innerText = "Tickle_Idle_2";
+                                        document.getElementById('animSelectText').innerText = "Tickle_Idle_2";
                                     }
                                 }, 5000);
                             }
@@ -862,9 +790,7 @@
 
                 if (pointerKeys.length === 0 && isPointerDown) {
                     isPointerDown = false;
-                    if (!player.skeleton) return;
                     const allAnimNames = player.skeleton.data.animations.map(a => a.name);
-                    const animSelectText = document.getElementById('animSelectText');
 
                     if (activeFaceBone) {
                         let targetX = initialBoneX;
@@ -914,22 +840,20 @@
                             }
                         }
                         player.animationState.addAnimation(0, "Idle_1", true, 0);
-                        if (animSelectText) animSelectText.innerText = "Idle_1";
-                        if (!isCombatMode) startRandomAnimationLoop();
+                        document.getElementById('animSelectText').innerText = "Idle_1";
+                        startRandomAnimationLoop();
                     } else if (!hitZoneOnDown && dragDistance < 10) {
-                        if (!isCombatMode) {
-                            const safeAnims = allAnimNames.filter(name => !EXCLUDED_RANDOM_ANIMS.includes(name));
-                            if (safeAnims.length > 0) {
-                                const randomAnim = safeAnims[Math.floor(Math.random() * safeAnims.length)];
-                                player.animationState.setAnimation(0, randomAnim, true);
-                                if (animSelectText) animSelectText.innerText = randomAnim;
-                                
-                                globalIdleTimer = setTimeout(() => {
-                                    player.animationState.setAnimation(0, "Idle_1", true);
-                                    if (animSelectText) animSelectText.innerText = "Idle_1";
-                                    startRandomAnimationLoop();
-                                }, 5000);
-                            }
+                        const safeAnims = allAnimNames.filter(name => !EXCLUDED_RANDOM_ANIMS.includes(name));
+                        if (safeAnims.length > 0) {
+                            const randomAnim = safeAnims[Math.floor(Math.random() * safeAnims.length)];
+                            player.animationState.setAnimation(0, randomAnim, true);
+                            document.getElementById('animSelectText').innerText = randomAnim;
+                            
+                            globalIdleTimer = setTimeout(() => {
+                                player.animationState.setAnimation(0, "Idle_1", true);
+                                document.getElementById('animSelectText').innerText = "Idle_1";
+                                startRandomAnimationLoop();
+                            }, 5000);
                         }
                     } else if (hitZoneOnDown && hitZoneOnDown.name === "頭部") {
                         if (allAnimNames.includes("Smash_End_1")) {
@@ -938,12 +862,12 @@
                                 player.animationState.addAnimation(0, "Smash_End_2", false, 0);
                             }
                             player.animationState.addAnimation(0, "Idle_1", true, 0);
-                            if (animSelectText) animSelectText.innerText = "Smash_End_1";
+                            document.getElementById('animSelectText').innerText = "Smash_End_1";
                         } else {
                             player.animationState.setAnimation(0, "Idle_1", true);
-                            if (animSelectText) animSelectText.innerText = "Idle_1";
+                            document.getElementById('animSelectText').innerText = "Idle_1";
                         }
-                        if (!isCombatMode) startRandomAnimationLoop();
+                        startRandomAnimationLoop();
                     }
                 }
             };
