@@ -370,75 +370,79 @@
             const skelUrl = `./spine_sd_assets/${costumeKey}.skel.bytes`;
             const atlasUrl = `./spine_sd_assets/${costumeKey}.atlas.txt`;
 
-            globalPlayer = new spine.SpinePlayer(container, {
-                skelUrl: skelUrl,
-                atlasUrl: atlasUrl,
+            // ⭐ 終極解法：強制等待 50 毫秒，讓瀏覽器確保 div 已經有正確的長寬，不再是 0x0
+            setTimeout(() => {
                 
-                animation: "Spawn", 
-                skin: "Normal",     
-                premultipliedAlpha: false, 
-                backgroundColor: "#00000000", 
-                alpha: true,
-                showControls: false,
-                showLoading: false, 
-                
-                viewport: { x: 0, y: 0, width: 2500, height: 1500, transitionTime: 0 },
+                // 確認目前容器大小
+                console.log(`📏 準備渲染的容器大小: ${container.clientWidth} x ${container.clientHeight}`);
 
-                success: function (player) {
-                    const loader = container.querySelector('.spine-player-loading-custom');
-                    if (loader) loader.remove();
-
-                    document.getElementById('playerControls').classList.remove('opacity-50', 'pointer-events-none');
-                    setSpeed(1);
-
-                    // 🐛 核心除錯設定：開啟綠線骨架與區域框
-                    if (player.skeletonRenderer) {
-                        player.skeletonRenderer.debugRendering = true;
-                        player.skeletonRenderer.debugBones = true;   // 顯示綠色骨架線
-                        player.skeletonRenderer.debugRegions = true; // 顯示圖片區塊邊框
-                    }
-
-                    // 🐛 在 Console (F12) 印出關鍵座標，看看小人有沒有飛到畫面外
-                    console.log("==== Spine Debug Info ====");
-                    console.log("Viewport:", player.viewport);
-                    console.log("Skeleton Position (X, Y):", player.skeleton.x, player.skeleton.y);
-                    console.log("Skeleton Scale (X, Y):", player.skeleton.scaleX, player.skeleton.scaleY);
-                    console.log("==========================");
-
-                    try {
-                        const skins = player.skeleton.data.skins;
-                        const targetSkin = skins.find(s => s.name === 'Normal') || skins.find(s => s.name === 'default') || skins[0];
-                        if (targetSkin) {
-                            player.skeleton.setSkinByName(targetSkin.name);
-                            player.skeleton.setSlotsToSetupPose(); 
-                        }
-                    } catch (e) {
-                        console.warn("Skin 設定發生例外", e);
-                    }
-
-                    buildAnimationDropdown(player);
-                    buildSlotsPanel(player);
-                    setupComplexInteractions(player, container);
-
-                    const anims = player.skeleton.data.animations.map(a => a.name);
-                    const idleAnim = anims.includes("Idle") ? "Idle" : (anims.includes("idle") ? "idle" : (anims[0] || ""));
+                globalPlayer = new spine.SpinePlayer(container, {
+                    skelUrl: skelUrl,
+                    atlasUrl: atlasUrl,
                     
-                    if (anims.includes("Spawn") && idleAnim) {
-                        player.animationState.addAnimation(0, idleAnim, true, 0);
-                        document.getElementById('animSelectText').innerText = "Spawn";
-                        setTimeout(() => {
+                    animation: "Spawn", 
+                    skin: "Normal",     
+                    premultipliedAlpha: false, 
+                    backgroundColor: "#00000000", 
+                    alpha: true,
+                    showControls: false,
+                    showLoading: false, 
+                    
+                    // ⚠️ 把原本寫死的 viewport 拿掉！讓 SpinePlayer 自己算出最適合的置中大小
+                    // viewport: { x: -800, y: 100, width: 2500, height: 1500, transitionTime: 0 },
+
+                    success: function (player) {
+                        const loader = container.querySelector('.spine-player-loading-custom');
+                        if (loader) loader.remove();
+
+                        document.getElementById('playerControls').classList.remove('opacity-50', 'pointer-events-none');
+                        setSpeed(1);
+
+                        // 🐛 如果成功出現了，您可以把這幾行註解掉關閉綠線
+                        if (player.skeletonRenderer) {
+                            player.skeletonRenderer.debugRendering = true;
+                            player.skeletonRenderer.debugBones = true;
+                        }
+
+                        console.log("==== Spine 成功啟動 ====");
+                        console.log("Viewport:", player.viewport);
+
+                        try {
+                            const skins = player.skeleton.data.skins;
+                            const targetSkin = skins.find(s => s.name === 'Normal') || skins.find(s => s.name === 'default') || skins[0];
+                            if (targetSkin) {
+                                player.skeleton.setSkinByName(targetSkin.name);
+                                player.skeleton.setSlotsToSetupPose(); 
+                            }
+                        } catch (e) {
+                            console.warn("Skin 設定發生例外", e);
+                        }
+
+                        buildAnimationDropdown(player);
+                        buildSlotsPanel(player);
+                        setupComplexInteractions(player, container);
+
+                        const anims = player.skeleton.data.animations.map(a => a.name);
+                        const idleAnim = anims.includes("Idle") ? "Idle" : (anims.includes("idle") ? "idle" : (anims[0] || ""));
+                        
+                        if (anims.includes("Spawn") && idleAnim) {
+                            player.animationState.addAnimation(0, idleAnim, true, 0);
+                            document.getElementById('animSelectText').innerText = "Spawn";
+                            setTimeout(() => {
+                                document.getElementById('animSelectText').innerText = idleAnim;
+                            }, 1500);
+                        } else if (idleAnim) {
+                            player.animationState.setAnimation(0, idleAnim, true);
                             document.getElementById('animSelectText').innerText = idleAnim;
-                        }, 1500);
-                    } else if (idleAnim) {
-                        player.animationState.setAnimation(0, idleAnim, true);
-                        document.getElementById('animSelectText').innerText = idleAnim;
+                        }
+                    },
+                    error: function (player, reason) {
+                        console.error("❌ Spine Load Error:", reason);
+                        container.innerHTML = `<div class="text-red-500 font-bold text-sm text-center p-4 bg-white/80 rounded-lg">載入失敗：檔案不存在或路徑錯誤<br>${skelUrl}</div>`;
                     }
-                },
-                error: function (player, reason) {
-                    console.error("❌ Spine Load Error:", reason);
-                    container.innerHTML = `<div class="text-red-500 font-bold text-sm text-center p-4 bg-white/80 rounded-lg">載入失敗：檔案不存在或路徑錯誤<br>${skelUrl}</div>`;
-                }
-            });
+                });
+
+            }, 50); // 延遲時間
         }
 
         function buildAnimationDropdown(player) {
