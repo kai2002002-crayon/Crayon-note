@@ -16,7 +16,7 @@ const CHAR_BACKGROUNDS = {
 
 const characterSkills = [
    {
-    "name": "巴隆",
+    "name": "芭瓏",
     "attribute": "魔法",
     "skills": {
       "zh-TW": {
