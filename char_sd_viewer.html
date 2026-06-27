@@ -390,7 +390,25 @@
                     success: function (player) {
                         const loader = container.querySelector('.spine-player-loading-custom');
                         if (loader) loader.remove();
+                        const canvas = container.querySelector('canvas');
+                        if (canvas) {
+                            canvas.style.width = '100%';
+                            canvas.style.height = '100%';
+                            // 強制觸發一次 resize
+                            window.dispatchEvent(new Event('resize'));
+                        }
 
+                        // 🔍 檢查 player.viewport 到底發生什麼事
+                        console.log("Player Viewport Object:", player.viewport);
+                        
+                        // 如果 Viewport 還是空的，我們手動強塞一個進去
+                        if (isNaN(player.viewport.width)) {
+                            console.warn("Viewport 檢測到 NaN，嘗試手動校正...");
+                            player.viewport.x = -800;
+                            player.viewport.y = 100;
+                            player.viewport.width = 2500;
+                            player.viewport.height = 1500;
+                        }
                         document.getElementById('playerControls').classList.remove('opacity-50', 'pointer-events-none');
                         setSpeed(1);
 
