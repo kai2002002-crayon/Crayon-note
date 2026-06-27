@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>角色戰鬥動態展示 - 嘟嘟臉金蠟筆記事本</title>
+    <title>角色動態展示 - 嘟嘟臉金蠟筆記事本</title>
     
     <script src="data_core.js"></script>
     <script src="data_intro.js"></script>
@@ -41,6 +41,7 @@
             50% { transform: translateY(-10px) scale(1.05); filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.9)); }
         }
 
+        /* 捲動條美化 */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 10px; }
@@ -63,6 +64,7 @@
         }
         .dark .animated-bg { opacity: 0.8; }
         
+        /* 隱藏原生選單外觀，維持下拉圖示 */
         .custom-select-btn { -webkit-tap-highlight-color: transparent; }
     </style>
 </head>
@@ -72,8 +74,8 @@
         
         <header class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md p-4 sm:p-5 rounded-2xl shadow-md border-4 border-amber-400 dark:border-slate-600 flex justify-between items-center relative z-10">
             <div>
-                <h1 class="text-xl sm:text-2xl font-black text-amber-950 dark:text-amber-400 mb-0.5">⚔️ 角色戰鬥動態展示 (SD Viewer)</h1>
-                <p class="text-xs sm:text-sm text-amber-800 dark:text-gray-400">選擇角色載入戰鬥動態小人，支援所有戰鬥技能動作切換。</p>
+                <h1 class="text-xl sm:text-2xl font-black text-amber-950 dark:text-amber-400 mb-0.5">🎭 角色動態展示 (Spine Viewer)</h1>
+                <p class="text-xs sm:text-sm text-amber-800 dark:text-gray-400">選擇角色載入動態，體驗敲擊、抓癢與臉部拉扯互動。</p>
             </div>
             <button onclick="window.close()" class="px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm bg-amber-500 text-white font-bold rounded-xl shadow hover:bg-amber-600 transition shrink-0">
                 ⬅️ 返回
@@ -101,14 +103,18 @@
                 </div>
             </div>
 
+            <!-- 展示畫布與控制器區塊 -->
             <div class="flex flex-col gap-3 min-w-0 relative z-10 w-full lg:w-3/4 mx-auto">
                 
-                <div id="spineCanvasContainer" class="w-full h-[60vh] sm:h-[600px] rounded-xl border-2 border-dashed border-amber-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50 relative overflow-hidden flex items-center justify-center cursor-move">
+                <!-- Spine 畫布 (因為沒有右側選單，畫面更寬闊) -->
+                <div id="spineCanvasContainer" class="w-full h-[60vh] sm:h-[600px] rounded-xl border-2 border-dashed border-amber-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50 relative overflow-hidden flex items-center justify-center">
                     <div class="text-gray-400 font-bold tracking-widest">等待載入...</div>
                 </div>
 
+                <!-- 播放器與客製化選單控制器 -->
                 <div id="playerControls" class="bg-amber-50 dark:bg-slate-700/50 p-3 rounded-xl border border-amber-200 dark:border-slate-600 flex flex-col gap-3 opacity-50 pointer-events-none transition-opacity">
                     
+                    <!-- 第一排：播放、速度、服裝 -->
                     <div class="flex items-center justify-between gap-2">
                         <div class="flex items-center gap-2">
                             <button id="btnPlayPause" onclick="togglePlay()" class="w-9 h-9 flex items-center justify-center bg-amber-500 text-white rounded-lg shadow hover:bg-amber-600 transition" title="播放/暫停">⏸️</button>
@@ -119,33 +125,45 @@
                             </div>
                         </div>
                         <select id="costumeSelect" onchange="changeSpineCostume(this.value)" class="bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-xs sm:text-sm font-bold rounded-lg px-2 py-1.5 outline-none focus:ring-2 focus:ring-amber-500 min-w-[100px]">
-                            <option value="">戰鬥服</option>
+                            <option value="">服裝</option>
                         </select>
                     </div>
 
+                    <!-- 第二排：動作選單 (50%) 與 插槽選單 (50%) -->
                     <div class="flex gap-2 w-full relative z-[100]">
+                        
+                        <!-- 動作懸浮選單 -->
                         <div class="relative w-1/2" id="animDropdownWrapper">
                             <button onclick="toggleCustomSelect('animList')" class="custom-select-btn w-full bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-[10px] sm:text-xs font-bold rounded-lg px-2 py-1.5 flex justify-between items-center text-left shadow-sm">
                                 <span id="animSelectText" class="truncate text-amber-900 dark:text-gray-200">選擇動作</span>
                                 <span class="ml-1 text-gray-400 shrink-0 text-[10px]">▼</span>
                             </button>
+                            <!-- 向上展開的名單，限制高度約5個項目 (160px) -->
                             <div id="animList" class="hidden absolute bottom-[calc(100%+6px)] left-0 w-full bg-white dark:bg-slate-800 border border-amber-300 dark:border-slate-600 rounded-lg shadow-2xl max-h-[160px] overflow-y-auto flex-col py-1 z-[110]">
+                                <!-- JS 生成動作列表 -->
                             </div>
                         </div>
 
+                        <!-- 插槽懸浮選單 -->
                         <div class="relative w-1/2" id="slotDropdownWrapper">
                             <button onclick="toggleCustomSelect('slotList')" class="custom-select-btn w-full bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-[10px] sm:text-xs font-bold rounded-lg px-2 py-1.5 flex justify-between items-center text-left shadow-sm">
                                 <span class="truncate text-amber-900 dark:text-gray-200">🧩 顯示/隱藏插槽</span>
                                 <span class="ml-1 text-gray-400 shrink-0 text-[10px]">▼</span>
                             </button>
+                            <!-- 向上展開的名單，限制高度約5個項目 (160px) -->
                             <div id="slotList" class="hidden absolute bottom-[calc(100%+6px)] right-0 w-full sm:w-[150%] bg-white dark:bg-slate-800 border border-amber-300 dark:border-slate-600 rounded-lg shadow-2xl max-h-[160px] overflow-y-auto flex-col z-[110]">
+                                
+                                <!-- 全顯示 / 全隱藏 按鈕 (固定在頂部) -->
                                 <div class="flex gap-1 p-1.5 border-b border-gray-100 dark:border-slate-700 sticky top-0 bg-gray-50 dark:bg-slate-800 z-20">
                                     <button onclick="toggleAllSlots(true, event)" class="flex-1 py-1 text-[10px] font-bold bg-white dark:bg-slate-700 hover:bg-amber-100 dark:hover:bg-slate-600 rounded border border-gray-200 dark:border-slate-600 transition shadow-sm text-gray-700 dark:text-gray-200">全顯</button>
                                     <button onclick="toggleAllSlots(false, event)" class="flex-1 py-1 text-[10px] font-bold bg-white dark:bg-slate-700 hover:bg-amber-100 dark:hover:bg-slate-600 rounded border border-gray-200 dark:border-slate-600 transition shadow-sm text-gray-700 dark:text-gray-200">全隱</button>
                                 </div>
+                                
+                                <!-- JS 生成插槽清單 -->
                                 <div id="slotsContainerInner" class="flex flex-col pb-1"></div>
                             </div>
                         </div>
+
                     </div>
                 </div>
 
@@ -165,8 +183,11 @@
         }
 
         let globalPlayer = null;
+        let globalIdleTimer = null;
+        let tickleTimer = null;
         let slotVisibilityMap = {};
 
+        // 🌟 新增：全局點擊監聽器，點擊空白處自動關閉懸浮名單
         document.addEventListener('click', (e) => {
             if (!e.target.closest('#animDropdownWrapper')) {
                 document.getElementById('animList').classList.add('hidden');
@@ -178,9 +199,11 @@
             }
         });
 
+        // 🌟 新增：懸浮選單切換邏輯
         function toggleCustomSelect(listId) {
             const list = document.getElementById(listId);
             if (list.classList.contains('hidden')) {
+                // 關閉另一個
                 if (listId === 'animList') {
                     document.getElementById('slotList').classList.add('hidden');
                     document.getElementById('slotList').classList.remove('flex');
@@ -304,27 +327,24 @@
             document.getElementById('activeCharName').innerText = getI18n(charName);
             document.getElementById('activeCharSpineName').innerText = `Spine ID: ${spineName}`;
 
+            // 重置選單狀態
             document.getElementById('animList').classList.add('hidden');
             document.getElementById('animList').classList.remove('flex');
             document.getElementById('slotList').classList.add('hidden');
             document.getElementById('slotList').classList.remove('flex');
 
             slotVisibilityMap = {};
+            clearTimeout(globalIdleTimer);
+            clearTimeout(tickleTimer);
             
-            // 嘗試載入 SD 戰鬥服裝，如果沒有建立 SD_COSTUME，就 fallback 使用 COSTUME_MAP
-            let costumes = [spineName];
-            if (typeof SD_COSTUME !== 'undefined' && SD_COSTUME[charName]) {
-                costumes = SD_COSTUME[charName];
-            } else if (typeof COSTUME_MAP !== 'undefined' && COSTUME_MAP[charName]) {
-                costumes = COSTUME_MAP[charName];
-            }
+            const costumes = (typeof COSTUME_MAP !== 'undefined' && COSTUME_MAP[charName]) ? COSTUME_MAP[charName] : [spineName];
             
             const costumeSelect = document.getElementById('costumeSelect');
             costumeSelect.innerHTML = '';
             costumes.forEach((costume, idx) => {
                 const opt = document.createElement('option');
                 opt.value = costume;
-                opt.text = idx === 0 ? "預設戰鬥服" : `服裝 ${idx}`;
+                opt.text = idx === 0 ? "預設服裝" : `服裝 ${idx}`;
                 costumeSelect.appendChild(opt);
             });
 
@@ -345,12 +365,11 @@
             container.innerHTML = '<div class="spine-player-loading-custom"></div>';
             document.getElementById('playerControls').classList.add('opacity-50', 'pointer-events-none');
             document.getElementById('slotsContainerInner').innerHTML = '<div class="p-3 text-center text-xs font-bold text-gray-400">讀取資料中...</div>';
-            document.getElementById('animSelectText').innerText = "讀取中...";
 
-            // ⚠️ 針對戰鬥 SD 路徑，同時將檔案名稱改為 costumeKey
             globalPlayer = new spine.SpinePlayer(container, {
                 skelUrl: `./spine_sd_assets/${baseFolderKey}/${costumeKey}.skel.bytes`,
                 atlasUrl: `./spine_sd_assets/${baseFolderKey}/${costumeKey}.atlas.txt`,
+                animation: "Idle_1",     
                 premultipliedAlpha: true,
                 backgroundColor: "#00000000", 
                 alpha: true,
@@ -366,8 +385,8 @@
                     setSpeed(1);
 
                     const skins = player.skeleton.data.skins;
-                    if (skins && skins.length > 0) {
-                        const targetSkin = skins.find(s => s.name === 'Normal') || skins.find(s => s.name !== 'default') || skins[0];
+                    if (skins && skins.length > 1) {
+                        const targetSkin = skins.find(s => s.name === 'Normal') || skins.find(s => s.name !== 'default');
                         if (targetSkin) {
                             player.skeleton.setSkinByName(targetSkin.name);
                             player.skeleton.setToSetupPose(); 
@@ -377,23 +396,15 @@
                     buildAnimationDropdown(player);
                     buildSlotsPanel(player);
                     setupComplexInteractions(player, container);
-
-                    // 自動尋找適當的待機動作作為初始動作，避免報錯
-                    const anims = player.skeleton.data.animations.map(a => a.name);
-                    const defaultAnim = anims.includes('Idle_1') ? 'Idle_1' : (anims.includes('Idle') ? 'Idle' : (anims.includes('idle') ? 'idle' : anims[0]));
-                    
-                    if(defaultAnim) {
-                        player.animationState.setAnimation(0, defaultAnim, true);
-                        document.getElementById('animSelectText').innerText = defaultAnim;
-                    }
                 },
                 error: function (player, reason) {
                     console.error("❌ Spine Load Error:", reason);
-                    container.innerHTML = `<div class="text-red-500 font-bold text-sm text-center p-4">載入失敗：請確認檔案是否存在於<br>./spine_sd_assets/${baseFolderKey}/${costumeKey}.skel.bytes</div>`;
+                    container.innerHTML = `<div class="text-red-500 font-bold text-sm text-center p-4">載入失敗：檔案可能不存在<br>./spine_sd_assets/${baseFolderKey}/</div>`;
                 }
             });
         }
 
+        // 🌟 修改：建構客製化的「動作」懸浮名單
         function buildAnimationDropdown(player) {
             const animList = document.getElementById('animList');
             animList.innerHTML = '';
@@ -404,18 +415,26 @@
                 btn.className = "text-left px-3 py-2.5 text-[11px] sm:text-xs hover:bg-amber-100 dark:hover:bg-slate-700 w-full truncate transition-colors text-gray-700 dark:text-gray-300 flex-shrink-0 border-b border-gray-50 dark:border-slate-700/50";
                 btn.innerText = animName;
                 btn.onclick = (e) => {
-                    e.stopPropagation(); 
+                    e.stopPropagation(); // 防止觸發外層點擊事件
                     playAnimation(animName);
+                    // 點擊後收起名單
                     animList.classList.add('hidden');
                     animList.classList.remove('flex');
                 };
                 animList.appendChild(btn);
             });
+
+            // 預設顯示的按鈕文字
+            const defaultAnim = anims.includes('Idle_1') ? 'Idle_1' : (anims.includes('Idle') ? 'Idle' : anims[0]);
+            if(defaultAnim) {
+                document.getElementById('animSelectText').innerText = defaultAnim;
+            }
         }
 
         function playAnimation(animName) {
             if (!globalPlayer || !animName) return;
             globalPlayer.animationState.setAnimation(0, animName, true);
+            // 更新按鈕文字
             document.getElementById('animSelectText').innerText = animName;
         }
 
@@ -444,6 +463,7 @@
             });
         }
 
+        // 🌟 修改：建構客製化的「插槽」懸浮名單
         function buildSlotsPanel(player) {
             const container = document.getElementById('slotsContainerInner');
             container.innerHTML = '';
@@ -455,6 +475,7 @@
                 slotVisibilityMap[slotName] = true;
 
                 const item = document.createElement('label');
+                // 為了讓點擊容易，加大了 py padding
                 item.className = "flex items-center gap-2 px-3 py-2 lg:py-1.5 hover:bg-amber-50 dark:hover:bg-slate-700 cursor-pointer transition-colors border-b border-gray-50 dark:border-slate-700/50";
                 
                 item.innerHTML = `
@@ -462,6 +483,7 @@
                     <span class="text-[10px] sm:text-xs font-medium text-gray-700 dark:text-gray-300 truncate">${slotName}</span>
                 `;
 
+                // 防止點擊 checkbox 收起整個表單
                 item.addEventListener('click', (e) => e.stopPropagation());
 
                 item.addEventListener('mouseenter', () => {
@@ -508,7 +530,7 @@
         }
 
         function toggleAllSlots(show, event) {
-            if(event) event.stopPropagation(); 
+            if(event) event.stopPropagation(); // 防止點擊按鈕時關閉選單
             const checkboxes = document.querySelectorAll('#slotsContainerInner input[type="checkbox"]');
             checkboxes.forEach(cb => {
                 cb.checked = show;
@@ -523,7 +545,6 @@
             });
         }
 
-        // 🟢 將所有互動機制拔除，僅保留單純的縮放與平移
         function setupComplexInteractions(player, container) {
             const canvas = container.querySelector('canvas');
             if (!canvas) return;
@@ -531,11 +552,37 @@
 
             let currentZoom = 1.0;
             const ZOOM_ANCHOR_Y = 600; 
+            const baseViewport = { x: -400, y: 0, width: 800, height: 1000 }; 
             const pointers = {}; 
             let initialPinchDistance = 0;
             
             let isPointerDown = false;
+            let dragDistance = 0;
             let lastX = 0, lastY = 0;
+            let startX = 0, startY = 0; 
+            
+            let hitZoneOnDown = null;
+            let hasTriggeredRub = false; 
+            let activeFaceBone = null; 
+            let initialBoneX = 0, initialBoneY = 0;
+
+            const EXCLUDED_RANDOM_ANIMS = ["Smash_End_1", "Idle_1", "Touch_Idle", "Tickle_Idle_1", "Tickle_Idle_2"];
+
+            function startRandomAnimationLoop() {
+                clearTimeout(globalIdleTimer);
+                globalIdleTimer = setTimeout(() => {
+                    const allAnimNames = player.skeleton.data.animations.map(a => a.name);
+                    const safeAnims = allAnimNames.filter(name => !EXCLUDED_RANDOM_ANIMS.includes(name));
+                    if (safeAnims.length > 0) {
+                        const randomAnim = safeAnims[Math.floor(Math.random() * safeAnims.length)];
+                        player.animationState.setAnimation(0, randomAnim, true);
+                        
+                        document.getElementById('animSelectText').innerText = randomAnim;
+                        startRandomAnimationLoop();
+                    }
+                }, 5000);
+            }
+            startRandomAnimationLoop();
 
             canvas.addEventListener('wheel', function(event) {
                 event.preventDefault();
@@ -559,18 +606,83 @@
                 }
             });
 
+            function getHitZone(mouseX, mouseY) {
+                const rect = canvas.getBoundingClientRect();
+                let clickedPart = null;
+                let minDistance = Infinity;
+                const hitZones = [
+                    { name: "頭部", bones: ["Character_Pat", "S3_Head", "S1_Head", "Head"], radius: 220 }, 
+                    { name: "身體", bones: ["Character_Tickle", "S3_Body_1", "S1_Body_1", "Body_1"], radius: 150 }
+                ];
+                hitZones.forEach(zone => {
+                    let targetBone = null;
+                    for (let bName of zone.bones) {
+                        targetBone = player.skeleton.findBone(bName);
+                        if (targetBone) break;
+                    }
+                    if (targetBone) {
+                        const boneCanvasX = ((targetBone.worldX - player.viewport.x) / player.viewport.width) * rect.width;
+                        const boneCanvasY = rect.height - ((targetBone.worldY - player.viewport.y) / player.viewport.height) * rect.height;
+                        const dx = mouseX - boneCanvasX;
+                        const dy = mouseY - boneCanvasY;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        const scaledRadius = (zone.radius * currentZoom) * (rect.height / player.viewport.height);
+
+                        if (distance < scaledRadius && distance < minDistance) {
+                            minDistance = distance;
+                            clickedPart = zone;
+                        }
+                    }
+                });
+                return clickedPart;
+            }
+
             canvas.addEventListener('pointerdown', (e) => {
                 pointers[e.pointerId] = { x: e.clientX, y: e.clientY }; 
                 const pointerKeys = Object.keys(pointers);
 
                 if (pointerKeys.length === 2) {
                     isPointerDown = false; 
+                    clearTimeout(tickleTimer); 
                     const p1 = pointers[pointerKeys[0]];
                     const p2 = pointers[pointerKeys[1]];
                     initialPinchDistance = Math.hypot(p1.x - p2.x, p1.y - p2.y);
                 } else if (pointerKeys.length === 1) {
                     isPointerDown = true;
+                    dragDistance = 0;
+                    startX = e.clientX; startY = e.clientY;
                     lastX = e.clientX; lastY = e.clientY;
+                    activeFaceBone = null;
+                    hasTriggeredRub = false;
+                    
+                    const rect = canvas.getBoundingClientRect();
+                    hitZoneOnDown = getHitZone(e.clientX - rect.left, e.clientY - rect.top);
+
+                    if (hitZoneOnDown && hitZoneOnDown.name === "頭部") {
+                        let minBoneDist = Infinity;
+                        let bone = player.skeleton.findBone("Character_Ball_Move");
+                        if (!bone) {
+                            const fallbackBones = ["S1_Ball_R_CT", "S2_F_Ball_R_CT", "S3_F_Ball_R_CT", "S1_F_Ball_R", "S3_F_Ball_R", "Ball_R_CT"];
+                            for (let bName of fallbackBones) {
+                                bone = player.skeleton.findBone(bName);
+                                if (bone) break;
+                            }
+                        }
+                        if (bone) {
+                            const boneCanvasX = ((bone.worldX - player.viewport.x) / player.viewport.width) * rect.width;
+                            const boneCanvasY = rect.height - ((bone.worldY - player.viewport.y) / player.viewport.height) * rect.height;
+                            minBoneDist = Math.hypot((e.clientX - rect.left) - boneCanvasX, (e.clientY - rect.top) - boneCanvasY);
+                            activeFaceBone = bone;
+                        }
+
+                        const maxPullRadius = 280 * currentZoom * (rect.height / player.viewport.height);
+                        if (minBoneDist <= maxPullRadius && activeFaceBone) {
+                            initialBoneX = activeFaceBone.x;
+                            initialBoneY = activeFaceBone.y;
+                        } else {
+                            activeFaceBone = null; 
+                        }
+                    }
                 }
             });
 
@@ -597,6 +709,169 @@
                 } else if (pointerKeys.length === 1 && isPointerDown) {
                     const dx = e.clientX - lastX;
                     const dy = e.clientY - lastY;
+                    dragDistance += Math.sqrt(dx * dx + dy * dy);
+
+                    if (!hitZoneOnDown) {
+                        const rect = canvas.getBoundingClientRect();
+                        const spineScaleX = player.viewport.width / rect.width / currentZoom;
+                        const spineScaleY = player.viewport.height / rect.height / currentZoom;
+                        
+                        player.viewport.x -= dx * spineScaleX;
+                        player.viewport.y += dy * spineScaleY;
+                    } 
+                    else {
+                        if (dragDistance > 10 && !hasTriggeredRub) {
+                            hasTriggeredRub = true;
+                            clearTimeout(globalIdleTimer);
+                            clearTimeout(tickleTimer);
+                            
+                            if (hitZoneOnDown.name === "頭部") {
+                                player.animationState.setAnimation(0, "Touch_Idle", true);
+                                document.getElementById('animSelectText').innerText = "Touch_Idle";
+                            } else if (hitZoneOnDown.name === "身體") {
+                                player.animationState.setAnimation(0, "Tickle_Idle_1", true);
+                                document.getElementById('animSelectText').innerText = "Tickle_Idle_1";
+                                tickleTimer = setTimeout(() => {
+                                    const animNames = player.skeleton.data.animations.map(a => a.name);
+                                    if (animNames.includes("Tickle_Idle_2")) {
+                                        player.animationState.setAnimation(0, "Tickle_Idle_2", true);
+                                        document.getElementById('animSelectText').innerText = "Tickle_Idle_2";
+                                    }
+                                }, 5000);
+                            }
+                        }
+
+                        if (hasTriggeredRub && hitZoneOnDown.name === "頭部" && activeFaceBone) {
+                            const rect = canvas.getBoundingClientRect();
+                            const spineScaleX = player.viewport.width / rect.width / currentZoom;
+                            const spineScaleY = player.viewport.height / rect.height / currentZoom;
+                            
+                            const stretchIntensity = 1.3; 
+                            let worldDx = (e.clientX - startX) * spineScaleX * stretchIntensity;
+                            let worldDy = -(e.clientY - startY) * spineScaleY * stretchIntensity;
+
+                            if (worldDx > 0) worldDx = 0; 
+                            let targetWorld = { x: activeFaceBone.worldX + worldDx, y: activeFaceBone.worldY + worldDy };
+
+                            if (activeFaceBone.parent) {
+                                activeFaceBone.parent.worldToLocal(targetWorld);
+                            }
+
+                            let localDx = targetWorld.x - initialBoneX;
+                            let localDy = targetWorld.y - initialBoneY;
+                            let rawDistance = Math.hypot(localDx, localDy);
+
+                            const MAX_RADIUS = 55; 
+
+                            if (rawDistance > 0) {
+                                let elasticDist = MAX_RADIUS * (1 - Math.exp(-rawDistance / (MAX_RADIUS * 1.2)));
+                                localDx = (localDx / rawDistance) * elasticDist;
+                                localDy = (localDy / rawDistance) * elasticDist;
+                            }
+
+                            activeFaceBone.x = initialBoneX + localDx;
+                            activeFaceBone.y = initialBoneY + localDy;
+                        }
+                    }
+
+                    lastX = e.clientX;
+                    lastY = e.clientY;
+                }
+            });
+
+            const handlePointerUp = (e) => {
+                delete pointers[e.pointerId];
+                const pointerKeys = Object.keys(pointers);
+
+                if (pointerKeys.length === 1) {
+                    isPointerDown = false;
+                    return;
+                }
+
+                if (pointerKeys.length === 0 && isPointerDown) {
+                    isPointerDown = false;
+                    const allAnimNames = player.skeleton.data.animations.map(a => a.name);
+
+                    if (activeFaceBone) {
+                        let targetX = initialBoneX;
+                        let targetY = initialBoneY;
+                        let bouncingFaceBone = activeFaceBone;
+                        activeFaceBone = null; 
+
+                        const tension = 0.35, friction = 0.65; 
+                        let velX = 0, velY = 0;
+
+                        function applyBounce() {
+                            let dx = targetX - bouncingFaceBone.x;
+                            let dy = targetY - bouncingFaceBone.y;
+                            velX += dx * tension;
+                            velY += dy * tension;
+                            velX *= friction;
+                            velY *= friction;
+
+                            bouncingFaceBone.x += velX;
+                            bouncingFaceBone.y += velY;
+
+                            if (Math.abs(dx) > 0.1 || Math.abs(velX) > 0.1 || Math.abs(dy) > 0.1 || Math.abs(velY) > 0.1) {
+                                requestAnimationFrame(applyBounce);
+                            } else {
+                                bouncingFaceBone.x = targetX;
+                                bouncingFaceBone.y = targetY;
+                            }
+                        }
+                        applyBounce();
+                    }
+        
+                    clearTimeout(tickleTimer); 
+                    clearTimeout(globalIdleTimer); 
+
+                    if (hasTriggeredRub) {
+                        if (hitZoneOnDown && hitZoneOnDown.name === "頭部") {
+                            if (allAnimNames.includes("Touch_End")) {
+                                player.animationState.setAnimation(0, "Touch_End", false);
+                            } else {
+                                player.animationState.setAnimation(0, "Idle_1", true);
+                            }
+                        } else if (hitZoneOnDown && hitZoneOnDown.name === "身體") {
+                            if (allAnimNames.includes("Tickle_End")) {
+                                player.animationState.setAnimation(0, "Tickle_End", false);
+                            } else {
+                                player.animationState.setAnimation(0, "Idle_1", true);
+                            }
+                        }
+                        player.animationState.addAnimation(0, "Idle_1", true, 0);
+                        document.getElementById('animSelectText').innerText = "Idle_1";
+                        startRandomAnimationLoop();
+                    } else if (!hitZoneOnDown && dragDistance < 10) {
+                        const safeAnims = allAnimNames.filter(name => !EXCLUDED_RANDOM_ANIMS.includes(name));
+                        if (safeAnims.length > 0) {
+                            const randomAnim = safeAnims[Math.floor(Math.random() * safeAnims.length)];
+                            player.animationState.setAnimation(0, randomAnim, true);
+                            document.getElementById('animSelectText').innerText = randomAnim;
+                            
+                            globalIdleTimer = setTimeout(() => {
+                                player.animationState.setAnimation(0, "Idle_1", true);
+                                document.getElementById('animSelectText').innerText = "Idle_1";
+                                startRandomAnimationLoop();
+                            }, 5000);
+                        }
+                    } else if (hitZoneOnDown && hitZoneOnDown.name === "頭部") {
+                        if (allAnimNames.includes("Smash_End_1")) {
+                            player.animationState.setAnimation(0, "Smash_End_1", false);
+                            if (allAnimNames.includes("Smash_End_2")) {
+                                player.animationState.addAnimation(0, "Smash_End_2", false, 0);
+                            }
+                            player.animationState.addAnimation(0, "Idle_1", true, 0);
+                            document.getElementById('animSelectText').innerText = "Smash_End_1";
+                        } else {
+                            player.animationState.setAnimation(0, "Idle_1", true);
+                            document.getElementById('animSelectText').innerText = "Idle_1";
+                        }
+                        startRandomAnimationLoop();
+                    }
+                    } else if (pointerKeys.length === 1 && isPointerDown) {
+                    const dx = e.clientX - lastX;
+                    const dy = e.clientY - lastY;
 
                     // 純粹拖曳平移畫布
                     if (player.viewport) {
@@ -610,13 +885,6 @@
 
                     lastX = e.clientX;
                     lastY = e.clientY;
-                }
-            });
-
-            const handlePointerUp = (e) => {
-                delete pointers[e.pointerId];
-                if (Object.keys(pointers).length === 0) {
-                    isPointerDown = false;
                 }
             };
             canvas.addEventListener('pointerup', handlePointerUp);
