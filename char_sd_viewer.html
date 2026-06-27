@@ -12,8 +12,8 @@
     <link id="dynamicFavicon" rel="icon" href="https://i.postimg.cc/mkfSTq5k/Favicon.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@esotericsoftware/spine-player@4.1/dist/spine-player.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/@esotericsoftware/spine-player@4.1/dist/iife/spine-player.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@esotericsoftware/spine-player@4.1.23/dist/spine-player.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@esotericsoftware/spine-player@4.1.23/dist/iife/spine-player.min.js"></script>
 
     <script>
         tailwind.config = { darkMode: 'class', }
@@ -40,7 +40,10 @@
             position: relative;
             z-index: 1; /* 背景預設是背景層 */
         }
-
+        #spineCanvasContainer canvas {
+            position: relative !important;
+            z-index: 2 !important;
+        }
         @keyframes crayonFloat {
             0%, 100% { transform: translateY(0) scale(1); filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.5)); }
             50% { transform: translateY(-10px) scale(1.05); filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.9)); }
@@ -69,23 +72,6 @@
         .dark .animated-bg { opacity: 0.8; }
         
         .custom-select-btn { -webkit-tap-highlight-color: transparent; }
-        
-        /* 🐛 畫布邊界除錯專用 */
-        #spineCanvasContainer {
-    border: 4px dashed red !important; /* 藍色虛線：外層容器範圍 */
-        }
-
-        #spineCanvasContainer canvas {
-            /* 👇 這兩行是救命關鍵，防止 Canvas 被 Flex 壓縮成 0 */
-            width: 100% !important;
-            height: 100% !important;
-            display: block !important;
-    
-            border: 3px solid red !important; /* 測試完可刪除 */
-            background-color: rgba(255, 0, 0, 0.05) !important; /* 測試完可刪除 */
-            position: relative !important;
-            z-index: 50 !important;
-        }
     </style>
 </head>
 <body class="p-2 sm:p-6 bg-[#fcf8f2] dark:bg-slate-900 text-gray-800 dark:text-gray-200 min-h-screen transition-colors duration-300">
@@ -125,7 +111,7 @@
 
             <div class="flex flex-col gap-3 min-w-0 relative z-10 w-full lg:w-3/4 mx-auto">
                 
-                <div id="spineCanvasContainer" class="w-full h-[60vh] sm:h-[600px] rounded-xl border-2 border-dashed border-amber-300 dark:border-slate-600 bg-slate-50 dark
+                <div id="spineCanvasContainer" class="w-full h-[60vh] sm:h-[600px] rounded-xl border-2 border-dashed border-amber-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50 relative overflow-hidden flex items-center justify-center cursor-move">
                     <div class="text-gray-400 font-bold tracking-widest">等待載入...</div>
                 </div>
 
@@ -366,102 +352,74 @@
 
             container.innerHTML = '<div class="spine-player-loading-custom"></div>';
             document.getElementById('playerControls').classList.add('opacity-50', 'pointer-events-none');
-            document.getElementById('slotsContainerInner').innerHTML = '<div class="p-3 text-center text-xs font-bold text-gray-400">讀取中...</div>';
+            document.getElementById('slotsContainerInner').innerHTML = '<div class="p-3 text-center text-xs font-bold text-gray-400">讀取資料中...</div>';
+            document.getElementById('animSelectText').innerText = "讀取中...";
 
+            // ✅ 修正：移除 baseFolderKey 資料夾層級，直接讀取檔名
             const skelUrl = `./spine_sd_assets/${costumeKey}.skel.bytes`;
             const atlasUrl = `./spine_sd_assets/${costumeKey}.atlas.txt`;
 
-            setTimeout(() => {
-                globalPlayer = new spine.SpinePlayer(container, {
-                    skelUrl: skelUrl,
-                    atlasUrl: atlasUrl,
-                    
-                    animation: "Spawn", 
-                    skin: "Normal",     
-                    premultipliedAlpha: false, 
-                    backgroundColor: "#00000000", 
-                    alpha: true,
-                    showControls: false,
-                    showLoading: false, 
-                    
-                    success: function (player) {
-                        const loader = container.querySelector('.spine-player-loading-custom');
-                        if (loader) loader.remove();
-                        const canvas = container.querySelector('canvas');
-                        if (canvas) {
-                            canvas.width = 800; 
-                            canvas.height = 600;
-                        }
+            globalPlayer = new spine.SpinePlayer(container, {
+                skelUrl: skelUrl,
+                atlasUrl: atlasUrl,
+                premultipliedAlpha: true,
+                backgroundColor: "#00000000", 
+                alpha: true,
+                showControls: false,
+                showLoading: false, 
+                // viewport 移除固定參數，讓系統自動適配
 
-                        // 🔍 檢查 player.viewport 到底發生什麼事
-                        console.log("Player Viewport Object:", player.viewport);
-                        
-                        // 如果 Viewport 還是空的，我們手動強塞一個進去
-                        if (isNaN(player.viewport.width)) {
-                            console.warn("Viewport 檢測到 NaN，嘗試手動校正...");
-                            player.viewport.x = -800;
-                            player.viewport.y = 100;
-                            player.viewport.width = 2500;
-                            player.viewport.height = 1500;
-                        }
-                        document.getElementById('playerControls').classList.remove('opacity-50', 'pointer-events-none');
-                        setSpeed(1);
+                success: function (player) {
+                    const loader = container.querySelector('.spine-player-loading-custom');
+                    if (loader) loader.remove();
 
-                        // 印出確認 Viewport 是否不再是 NaN
-                        console.log("Viewport Fixed:", player.viewport);
-                        console.log("Canvas 尺寸:", canvas.width, canvas.height);
-                        console.log("Player 狀態:", player.skeleton ? "Skeleton 存在" : "Skeleton 缺失");
-                        try {
-                            const skins = player.skeleton.data.skins;
-                            // 在 success 函數中，暫時註解掉這些 Skin 設定
-                            /*
-                            const targetSkin = skins.find(s => s.name === 'Normal') || skins[0];
-                            if (targetSkin) {
+                    document.getElementById('playerControls').classList.remove('opacity-50', 'pointer-events-none');
+                    setSpeed(1);
+
+                    const skins = player.skeleton.data.skins;
+                    if (skins && skins.length > 0) {
+                        const targetSkin = skins.find(s => s.name === 'Normal') || skins.find(s => s.name === 'default') || skins[0];
+                        if (targetSkin) {
                             player.skeleton.setSkinByName(targetSkin.name);
-                            player.skeleton.setSlotsToSetupPose(); 
-                            }
-                            */
-                            // 改為簡單強制顯示預設
-                            player.skeleton.setToSetupPose();
-                        } catch (e) {}
-
-                        buildAnimationDropdown(player);
-                        buildSlotsPanel(player);
-                        setupComplexInteractions(player, container);
-
-                        const anims = player.skeleton.data.animations.map(a => a.name);
-                        const idleAnim = anims.includes("Idle") ? "Idle" : (anims.includes("idle") ? "idle" : (anims[0] || ""));
-
-                        if (anims.includes("Spawn") && idleAnim) {
-                            player.animationState.addAnimation(0, idleAnim, true, 0);
-                            document.getElementById('animSelectText').innerText = "Spawn";
-                            setTimeout(() => {
-                                document.getElementById('animSelectText').innerText = idleAnim;
-                            }, 1500);
-                        } else if (idleAnim) {
-                            player.animationState.setAnimation(0, idleAnim, true);
-                            document.getElementById('animSelectText').innerText = idleAnim;
+                            player.skeleton.setToSetupPose(); 
                         }
-                        skeleton.slots.forEach(slot => {
-                        slot.color.a = 1; // 透明度調滿
-                        console.log(`Slot: ${slot.data.name}, Attachment: ${slot.attachment ? slot.attachment.name : '無'}`);
-                    });
-    
-                    // 強制更新所有變形計算
-                    skeleton.setToSetupPose();
-                    skeleton.updateWorldTransform();
-                    player.animationState.apply(skeleton);
-    
-                    console.log("骨骼數量:", skeleton.bones.length);
-                    console.log("Slot 數量:", skeleton.slots.length);
-                    console.log("骨骼原點:", skeleton.x, skeleton.y);
-                    },
-                    error: function (player, reason) {
-                        console.error("❌ Spine Load Error:", reason);
-                        container.innerHTML = `<div class="text-red-500 font-bold text-sm text-center p-4">載入失敗<br>${skelUrl}</div>`;
                     }
-                });
-            }, 50); 
+
+                    buildAnimationDropdown(player);
+                    buildSlotsPanel(player);
+                    setupComplexInteractions(player, container);
+
+                    const anims = player.skeleton.data.animations.map(a => a.name);
+    
+                    // ⭐ 新增：優先尋找出場動作 (Spawn / Entrance / 등장 / 等等)
+                    // 請根據您 Spine 檔案中實際的出場動作名稱調整這組關鍵字
+                    const spawnKeywords = ["Spawn", "Entrance", "Enter", "Deploy", "Start"];
+                    const spawnAnim = anims.find(a => spawnKeywords.some(k => a.includes(k)));
+    
+                    const idleAnim = anims.includes("Idle") ? "Idle" : (anims.includes("idle") ? "idle" : (anims[0] || ""));
+
+                    if (spawnAnim) {
+                        // 先播一次出場，結束後自動銜接 Idle
+                        player.animationState.setAnimation(0, spawnAnim, false);
+                        player.animationState.addAnimation(0, idleAnim, true, 0);
+                        document.getElementById('animSelectText').innerText = spawnAnim;
+        
+                        // 為了讓 UI 選單能即時同步，可以在幾秒後將選單顯示變回 Idle
+                        setTimeout(() => {
+                            document.getElementById('animSelectText').innerText = idleAnim;
+                        }, 1500); 
+                    } else if (idleAnim) {
+                        // 沒有出場動作時，直接播 Idle
+                        player.animationState.setAnimation(0, idleAnim, true);
+                        document.getElementById('animSelectText').innerText = idleAnim;
+                    }
+                },
+
+                error: function (player, reason) {
+                    console.error("❌ Spine Load Error:", reason);
+                    container.innerHTML = `<div class="text-red-500 font-bold text-sm text-center p-4">載入失敗：檔案不存在<br>${skelUrl}</div>`;
+                }
+            });
         }
 
         function buildAnimationDropdown(player) {
