@@ -413,11 +413,16 @@
                         console.log("Player 狀態:", player.skeleton ? "Skeleton 存在" : "Skeleton 缺失");
                         try {
                             const skins = player.skeleton.data.skins;
-                            const targetSkin = skins.find(s => s.name === 'Normal') || skins.find(s => s.name === 'default') || skins[0];
+                            // 在 success 函數中，暫時註解掉這些 Skin 設定
+                            /*
+                            const targetSkin = skins.find(s => s.name === 'Normal') || skins[0];
                             if (targetSkin) {
-                                player.skeleton.setSkinByName(targetSkin.name);
-                                player.skeleton.setSlotsToSetupPose(); 
+                            player.skeleton.setSkinByName(targetSkin.name);
+                            player.skeleton.setSlotsToSetupPose(); 
                             }
+                            */
+                            // 改為簡單強制顯示預設
+                            player.skeleton.setToSetupPose();
                         } catch (e) {}
 
                         buildAnimationDropdown(player);
@@ -437,6 +442,12 @@
                             player.animationState.setAnimation(0, idleAnim, true);
                             document.getElementById('animSelectText').innerText = idleAnim;
                         }
+                        const skeleton = player.skeleton;
+                        skeleton.x = 0; 
+                        skeleton.y = 0;
+                        skeleton.updateWorldTransform();
+    
+                        console.log("骨骼原點:", skeleton.x, skeleton.y);
                     },
                     error: function (player, reason) {
                         console.error("❌ Spine Load Error:", reason);
