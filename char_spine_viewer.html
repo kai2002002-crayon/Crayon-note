@@ -869,6 +869,22 @@
                         }
                         startRandomAnimationLoop();
                     }
+                    } else if (pointerKeys.length === 1 && isPointerDown) {
+                    const dx = e.clientX - lastX;
+                    const dy = e.clientY - lastY;
+
+                    // 純粹拖曳平移畫布
+                    if (player.viewport) {
+                        const rect = canvas.getBoundingClientRect();
+                        const spineScaleX = player.viewport.width / rect.width / currentZoom;
+                        const spineScaleY = player.viewport.height / rect.height / currentZoom;
+                        
+                        player.viewport.x -= dx * spineScaleX;
+                        player.viewport.y += dy * spineScaleY;
+                    }
+
+                    lastX = e.clientX;
+                    lastY = e.clientY;
                 }
             };
             canvas.addEventListener('pointerup', handlePointerUp);
