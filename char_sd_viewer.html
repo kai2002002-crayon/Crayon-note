@@ -40,10 +40,7 @@
             position: relative;
             z-index: 1; /* 背景預設是背景層 */
         }
-        #spineCanvasContainer canvas {
-            position: relative !important;
-            z-index: 2 !important;
-        }
+
         @keyframes crayonFloat {
             0%, 100% { transform: translateY(0) scale(1); filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.5)); }
             50% { transform: translateY(-10px) scale(1.05); filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.9)); }
@@ -79,10 +76,15 @@
         }
 
         #spineCanvasContainer canvas {
-            border: 3px solid red !important; /* 紅色實線：Spine 實際繪製的畫布範圍 */
-            background-color: rgba(255, 0, 0, 0.05) !important; /* 微紅底色：確認畫布沒有被完全透明化 */
+            /* 👇 這兩行是救命關鍵，防止 Canvas 被 Flex 壓縮成 0 */
+            width: 100% !important;
+            height: 100% !important;
+            display: block !important;
+    
+            border: 3px solid red !important; /* 測試完可刪除 */
+            background-color: rgba(255, 0, 0, 0.05) !important; /* 測試完可刪除 */
             position: relative !important;
-            z-index: 50 !important; /* 強制置頂，防止被其他元素蓋住 */
+            z-index: 50 !important;
         }
     </style>
 </head>
@@ -123,7 +125,7 @@
 
             <div class="flex flex-col gap-3 min-w-0 relative z-10 w-full lg:w-3/4 mx-auto">
                 
-                <div id="spineCanvasContainer" class="w-full h-[60vh] sm:h-[600px] rounded-xl border-2 border-dashed border-amber-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50 relative overflow-hidden flex items-center justify-center cursor-move">
+                <div id="spineCanvasContainer" class="w-full h-[60vh] sm:h-[600px] rounded-xl border-2 border-dashed border-amber-300 dark:border-slate-600 bg-slate-50 dark
                     <div class="text-gray-400 font-bold tracking-widest">等待載入...</div>
                 </div>
 
@@ -364,18 +366,12 @@
 
             container.innerHTML = '<div class="spine-player-loading-custom"></div>';
             document.getElementById('playerControls').classList.add('opacity-50', 'pointer-events-none');
-            document.getElementById('slotsContainerInner').innerHTML = '<div class="p-3 text-center text-xs font-bold text-gray-400">讀取資料中...</div>';
-            document.getElementById('animSelectText').innerText = "讀取中...";
+            document.getElementById('slotsContainerInner').innerHTML = '<div class="p-3 text-center text-xs font-bold text-gray-400">讀取中...</div>';
 
             const skelUrl = `./spine_sd_assets/${costumeKey}.skel.bytes`;
             const atlasUrl = `./spine_sd_assets/${costumeKey}.atlas.txt`;
 
-            // ⭐ 終極解法：強制等待 50 毫秒，讓瀏覽器確保 div 已經有正確的長寬，不再是 0x0
             setTimeout(() => {
-                
-                // 確認目前容器大小
-                console.log(`📏 準備渲染的容器大小: ${container.clientWidth} x ${container.clientHeight}`);
-
                 globalPlayer = new spine.SpinePlayer(container, {
                     skelUrl: skelUrl,
                     atlasUrl: atlasUrl,
@@ -388,8 +384,8 @@
                     showControls: false,
                     showLoading: false, 
                     
-                    // ⚠️ 把原本寫死的 viewport 拿掉！讓 SpinePlayer 自己算出最適合的置中大小
-                    // viewport: { x: -800, y: 100, width: 2500, height: 1500, transitionTime: 0 },
+                    // 🌟 恢復 index.html 成功使用的 Viewport，強制鏡頭看著小人
+                    viewport: { x: -800, y: 100, width: 2500, height: 1500, transitionTime: 0 },
 
                     success: function (player) {
                         const loader = container.querySelector('.spine-player-loading-custom');
@@ -398,14 +394,8 @@
                         document.getElementById('playerControls').classList.remove('opacity-50', 'pointer-events-none');
                         setSpeed(1);
 
-                        // 🐛 如果成功出現了，您可以把這幾行註解掉關閉綠線
-                        if (player.skeletonRenderer) {
-                            player.skeletonRenderer.debugRendering = true;
-                            player.skeletonRenderer.debugBones = true;
-                        }
-
-                        console.log("==== Spine 成功啟動 ====");
-                        console.log("Viewport:", player.viewport);
+                        // 印出確認 Viewport 是否不再是 NaN
+                        console.log("Viewport Fixed:", player.viewport);
 
                         try {
                             const skins = player.skeleton.data.skins;
@@ -414,9 +404,7 @@
                                 player.skeleton.setSkinByName(targetSkin.name);
                                 player.skeleton.setSlotsToSetupPose(); 
                             }
-                        } catch (e) {
-                            console.warn("Skin 設定發生例外", e);
-                        }
+                        } catch (e) {}
 
                         buildAnimationDropdown(player);
                         buildSlotsPanel(player);
@@ -438,11 +426,10 @@
                     },
                     error: function (player, reason) {
                         console.error("❌ Spine Load Error:", reason);
-                        container.innerHTML = `<div class="text-red-500 font-bold text-sm text-center p-4 bg-white/80 rounded-lg">載入失敗：檔案不存在或路徑錯誤<br>${skelUrl}</div>`;
+                        container.innerHTML = `<div class="text-red-500 font-bold text-sm text-center p-4">載入失敗<br>${skelUrl}</div>`;
                     }
                 });
-
-            }, 50); // 延遲時間
+            }, 50); 
         }
 
         function buildAnimationDropdown(player) {
