@@ -442,12 +442,19 @@
                             player.animationState.setAnimation(0, idleAnim, true);
                             document.getElementById('animSelectText').innerText = idleAnim;
                         }
-                        const skeleton = player.skeleton;
-                        skeleton.x = 0; 
-                        skeleton.y = 0;
-                        skeleton.updateWorldTransform();
+                        skeleton.slots.forEach(slot => {
+                        slot.color.a = 1; // 透明度調滿
+                        console.log(`Slot: ${slot.data.name}, Attachment: ${slot.attachment ? slot.attachment.name : '無'}`);
+                    });
     
-                        console.log("骨骼原點:", skeleton.x, skeleton.y);
+                    // 強制更新所有變形計算
+                    skeleton.setToSetupPose();
+                    skeleton.updateWorldTransform();
+                    player.animationState.apply(skeleton);
+    
+                    console.log("骨骼數量:", skeleton.bones.length);
+                    console.log("Slot 數量:", skeleton.slots.length);
+                    console.log("骨骼原點:", skeleton.x, skeleton.y);
                     },
                     error: function (player, reason) {
                         console.error("❌ Spine Load Error:", reason);
