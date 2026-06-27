@@ -412,7 +412,7 @@
                 : `./spine_assets/${baseFolderKey}/${costumeKey}.atlas.txt`;
             
             let initAnim = isCombatMode ? "Idle" : "Idle_1";
-            / 1. 在宣告 skelUrl 的下方，新增視野判斷：
+            // 1. 在宣告 skelUrl 的下方，新增視野判斷：
             const lobbyViewport = { x: -400, y: 0, width: 800, height: 1000 };
             const combatViewport = { x: -500, y: -150, width: 1500, height: 3000 }; // 參考 char_detail.html 的設定
             const activeViewport = isCombatMode ? combatViewport : lobbyViewport;
