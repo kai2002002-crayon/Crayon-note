@@ -384,18 +384,13 @@
                     showControls: false,
                     showLoading: false, 
                     
-                    // 🌟 恢復 index.html 成功使用的 Viewport，強制鏡頭看著小人
-                    viewport: { x: -800, y: 100, width: 2500, height: 1500, transitionTime: 0 },
-
                     success: function (player) {
                         const loader = container.querySelector('.spine-player-loading-custom');
                         if (loader) loader.remove();
                         const canvas = container.querySelector('canvas');
                         if (canvas) {
-                            canvas.style.width = '100%';
-                            canvas.style.height = '100%';
-                            // 強制觸發一次 resize
-                            window.dispatchEvent(new Event('resize'));
+                            canvas.width = 800; 
+                            canvas.height = 600;
                         }
 
                         // 🔍 檢查 player.viewport 到底發生什麼事
@@ -414,7 +409,8 @@
 
                         // 印出確認 Viewport 是否不再是 NaN
                         console.log("Viewport Fixed:", player.viewport);
-
+                        console.log("Canvas 尺寸:", canvas.width, canvas.height);
+                        console.log("Player 狀態:", player.skeleton ? "Skeleton 存在" : "Skeleton 缺失");
                         try {
                             const skins = player.skeleton.data.skins;
                             const targetSkin = skins.find(s => s.name === 'Normal') || skins.find(s => s.name === 'default') || skins[0];
@@ -430,7 +426,7 @@
 
                         const anims = player.skeleton.data.animations.map(a => a.name);
                         const idleAnim = anims.includes("Idle") ? "Idle" : (anims.includes("idle") ? "idle" : (anims[0] || ""));
-                        
+
                         if (anims.includes("Spawn") && idleAnim) {
                             player.animationState.addAnimation(0, idleAnim, true, 0);
                             document.getElementById('animSelectText').innerText = "Spawn";
