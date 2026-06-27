@@ -404,14 +404,18 @@
             document.getElementById('animSelectText').innerText = '讀取中...';
 
             let skelUrl = isCombatMode 
-                ? `./spine_sd_assets/${baseFolderKey}.skel.bytes` 
+                ? `./spine_sd_assets/${costumeKey}.skel.bytes`  // 👈 這裡原本是 baseFolderKey，改為 costumeKey
                 : `./spine_assets/${baseFolderKey}/${costumeKey}.skel.bytes`;
-            
+
             let atlasUrl = isCombatMode 
-                ? `./spine_sd_assets/${baseFolderKey}.atlas.txt` 
+                ? `./spine_sd_assets/${costumeKey}.atlas.txt`   // 👈 這裡原本是 baseFolderKey，改為 costumeKey
                 : `./spine_assets/${baseFolderKey}/${costumeKey}.atlas.txt`;
             
             let initAnim = isCombatMode ? "Idle" : "Idle_1";
+            / 1. 在宣告 skelUrl 的下方，新增視野判斷：
+            const lobbyViewport = { x: -400, y: 0, width: 800, height: 1000 };
+            const combatViewport = { x: -500, y: -150, width: 1500, height: 3000 }; // 參考 char_detail.html 的設定
+            const activeViewport = isCombatMode ? combatViewport : lobbyViewport;
 
             globalPlayer = new spine.SpinePlayer(container, {
                 skelUrl: skelUrl,
@@ -422,7 +426,7 @@
                 alpha: true,
                 showControls: false,
                 showLoading: false, 
-                viewport: { x: -400, y: 0, width: 800, height: 1000 },
+                viewport: activeViewport, // 👈 2. 這裡將寫死的數值換成動態變數
 
                 success: function (player) {
                     const loader = container.querySelector('.spine-player-loading-custom');
@@ -666,8 +670,9 @@
                     player.skeleton.scaleY = 1.0;
                     player.skeleton.y = 0;
                     player.skeleton.x = 0;
-                    player.viewport.x = -400; 
-                    player.viewport.y = 0;
+                    // 👈 修改以下兩行，根據模式還原到正確的起點
+                    player.viewport.x = isCombatMode ? -500 : -400; 
+                    player.viewport.y = isCombatMode ? -150 : 0;
                 }
             });
 
