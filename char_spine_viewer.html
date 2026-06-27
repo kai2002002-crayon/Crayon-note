@@ -399,34 +399,29 @@
             container.innerHTML = '<div class="spine-player-loading-custom"></div>';
             document.getElementById('playerControls').classList.add('opacity-50', 'pointer-events-none');
             
-            // 🐛 修正：這裡的 ID 必須是 slotsContainerInner
             document.getElementById('slotsContainerInner').innerHTML = '<div class="p-3 text-center text-[10px] sm:text-xs font-bold text-gray-400">讀取資料中...</div>';
             document.getElementById('animSelectText').innerText = '讀取中...';
 
             let skelUrl = isCombatMode 
-                ? `./spine_sd_assets/${costumeKey}.skel.bytes`  // 👈 這裡原本是 baseFolderKey，改為 costumeKey
+                ? `./spine_sd_assets/${costumeKey}.skel.bytes` 
                 : `./spine_assets/${baseFolderKey}/${costumeKey}.skel.bytes`;
-
+            
             let atlasUrl = isCombatMode 
-                ? `./spine_sd_assets/${costumeKey}.atlas.txt`   // 👈 這裡原本是 baseFolderKey，改為 costumeKey
+                ? `./spine_sd_assets/${costumeKey}.atlas.txt` 
                 : `./spine_assets/${baseFolderKey}/${costumeKey}.atlas.txt`;
             
             let initAnim = isCombatMode ? "Idle" : "Idle_1";
-            // 1. 在宣告 skelUrl 的下方，新增視野判斷：
-            const lobbyViewport = { x: -400, y: 0, width: 800, height: 1000 };
-            const combatViewport = { x: -500, y: -150, width: 1500, height: 3000 }; // 參考 char_detail.html 的設定
-            const activeViewport = isCombatMode ? combatViewport : lobbyViewport;
 
-            globalPlayer = new spine.SpinePlayer(container, {
+            // 建立基礎配置物件
+            const playerConfig = {
                 skelUrl: skelUrl,
                 atlasUrl: atlasUrl,
-                animation: initAnim, 
+                // ⚠️ 修正矛盾一：移除初始 animation 屬性，完全由 success 回呼函數動態、安全地播放
                 premultipliedAlpha: true,
                 backgroundColor: "#00000000", 
                 alpha: true,
                 showControls: false,
                 showLoading: false, 
-                viewport: activeViewport, // 👈 2. 這裡將寫死的數值換成動態變數
 
                 success: function (player) {
                     const loader = container.querySelector('.spine-player-loading-custom');
@@ -435,14 +430,11 @@
                     document.getElementById('playerControls').classList.remove('opacity-50', 'pointer-events-none');
                     setSpeed(1);
 
-                    // ✅ 移除 isCombatMode 判斷，大廳與戰鬥都統一在這裡尋找正確的 Skin
                     const skins = player.skeleton.data.skins;
                     if (skins && skins.length > 0) {
-                        // 比照 char_detail.html 的寫法：優先找 Normal，沒有就找 default，再沒有就抓第一個
                         const targetSkin = skins.find(s => s.name === 'Normal') || skins.find(s => s.name === 'default') || skins[0];
                         if (targetSkin) {
                             player.skeleton.setSkinByName(targetSkin.name);
-                            // 同時重置插槽，確保圖層顯示正確
                             player.skeleton.setSlotsToSetupPose(); 
                         }
                     }
@@ -452,12 +444,12 @@
                     buildSlotsPanel(player);
                     setupComplexInteractions(player, container);
 
+                    // 在成功讀取後，安全地執行高容錯動作播放邏輯
                     const anims = player.skeleton.data.animations.map(a => a.name);
                     let animToPlay = anims.includes(initAnim) ? initAnim : (anims.includes("Idle") ? "Idle" : (anims.includes("Idle_1") ? "Idle_1" : (anims[0] || "")));
 
                     if (animToPlay) {
                         player.animationState.setAnimation(0, animToPlay, true);
-                        // 🐛 修正：這裡的 ID 必須是 animSelectText，並且用 innerText 更新
                         const animSelectText = document.getElementById('animSelectText');
                         if (animSelectText) animSelectText.innerText = animToPlay;
                     }
@@ -466,7 +458,14 @@
                     console.error("❌ Spine Load Error:", reason);
                     container.innerHTML = `<div class="text-red-500 font-bold text-xs sm:text-sm text-center p-4">載入失敗：檔案可能不存在或未實裝<br>${skelUrl}</div>`;
                 }
-            });
+            };
+
+            // ⚠️ 修正矛盾二：大廳模式維持手動遮罩視野，戰鬥模式（SD小人）直接不給 viewport，讓系統全自動適配居中與完美縮放
+            if (!isCombatMode) {
+                playerConfig.viewport = { x: -400, y: 0, width: 800, height: 1000 };
+            }
+
+            globalPlayer = new spine.SpinePlayer(container, playerConfig);
         }
         
         function buildAnimationDropdown(player) {
@@ -523,7 +522,6 @@
             
             const slots = player.skeleton.slots;
             
-            // 🐛 關鍵修復：因為新版介面沒有 id="slotCount" 的元素，必須加上防呆判斷，否則會造成 SpinePlayer 崩潰！
             const slotCountEl = document.getElementById('slotCount');
             if (slotCountEl) {
                 slotCountEl.innerText = slots.length;
@@ -564,7 +562,7 @@
                 slotsContainer.appendChild(item);
             });
 
-            if(!globalPlayer.config.injectedUpdate) {
+            if(!player.config.injectedUpdate) {
                 const origUpdate = player.skeleton.updateWorldTransform;
                 player.skeleton.updateWorldTransform = function() {
                     origUpdate.call(player.skeleton);
@@ -574,7 +572,7 @@
                         if (slotVisibilityMap[s.data.name] === false) s.color.a = 0;
                     }
                 };
-                globalPlayer.config.injectedUpdate = true;
+                player.config.injectedUpdate = true;
             }
         }
 
@@ -611,7 +609,6 @@
 
             let currentZoom = 1.0;
             const ZOOM_ANCHOR_Y = 600; 
-            const baseViewport = { x: -400, y: 0, width: 800, height: 1000 }; 
             const pointers = {}; 
             let initialPinchDistance = 0;
             
@@ -637,7 +634,6 @@
                         const randomAnim = safeAnims[Math.floor(Math.random() * safeAnims.length)];
                         player.animationState.setAnimation(0, randomAnim, true);
                         
-                        // 🐛 修正：更新選單文字
                         const animSelectText = document.getElementById('animSelectText');
                         if(animSelectText) animSelectText.innerText = randomAnim;
 
@@ -670,9 +666,11 @@
                     player.skeleton.scaleY = 1.0;
                     player.skeleton.y = 0;
                     player.skeleton.x = 0;
-                    // 👈 修改以下兩行，根據模式還原到正確的起點
-                    player.viewport.x = isCombatMode ? -500 : -400; 
-                    player.viewport.y = isCombatMode ? -150 : 0;
+                    // 如果是大廳模式，則重置手動 viewport 座標
+                    if (!isCombatMode && player.viewport) {
+                        player.viewport.x = -400; 
+                        player.viewport.y = 0;
+                    }
                 }
             });
 
@@ -797,7 +795,6 @@
                             clearTimeout(globalIdleTimer);
                             clearTimeout(tickleTimer);
                             
-                            // 🐛 修正：抓取顯示文字用的 Span
                             const animSelectText = document.getElementById('animSelectText');
 
                             if (hitZoneOnDown.name === "頭部") {
