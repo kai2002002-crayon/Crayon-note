@@ -72,6 +72,18 @@
         .dark .animated-bg { opacity: 0.8; }
         
         .custom-select-btn { -webkit-tap-highlight-color: transparent; }
+        
+        /* 🐛 畫布邊界除錯專用 */
+        #spineCanvasContainer {
+    border: 4px dashed blue !important; /* 藍色虛線：外層容器範圍 */
+        }
+
+        #spineCanvasContainer canvas {
+            border: 3px solid red !important; /* 紅色實線：Spine 實際繪製的畫布範圍 */
+            background-color: rgba(255, 0, 0, 0.05) !important; /* 微紅底色：確認畫布沒有被完全透明化 */
+            position: relative !important;
+            z-index: 50 !important; /* 強制置頂，防止被其他元素蓋住 */
+        }
     </style>
 </head>
 <body class="p-2 sm:p-6 bg-[#fcf8f2] dark:bg-slate-900 text-gray-800 dark:text-gray-200 min-h-screen transition-colors duration-300">
@@ -355,7 +367,6 @@
             document.getElementById('slotsContainerInner').innerHTML = '<div class="p-3 text-center text-xs font-bold text-gray-400">讀取資料中...</div>';
             document.getElementById('animSelectText').innerText = "讀取中...";
 
-            // 確保路徑與 index.html 完全一致（扁平化路徑）
             const skelUrl = `./spine_sd_assets/${costumeKey}.skel.bytes`;
             const atlasUrl = `./spine_sd_assets/${costumeKey}.atlas.txt`;
 
@@ -363,17 +374,15 @@
                 skelUrl: skelUrl,
                 atlasUrl: atlasUrl,
                 
-                // 🌟 1. 完美還原 index.html 的初始化設定
-                animation: "Spawn",  // 直接從 Spawn 開始播
-                skin: "Normal",      // 預設抓 Normal 皮膚
-                premultipliedAlpha: false, // 🚨 解決黑畫面的最大功臣！
+                animation: "Spawn", 
+                skin: "Normal",     
+                premultipliedAlpha: false, 
                 backgroundColor: "#00000000", 
                 alpha: true,
                 showControls: false,
                 showLoading: false, 
                 
-                // 🌟 2. 完美還原 index.html 的可視範圍，確保小人在正中央
-                viewport: { x: 0, y: 100, width: 2500, height: 1500, transitionTime: 0 },
+                viewport: { x: -800, y: 100, width: 2500, height: 1500, transitionTime: 0 },
 
                 success: function (player) {
                     const loader = container.querySelector('.spine-player-loading-custom');
@@ -382,7 +391,20 @@
                     document.getElementById('playerControls').classList.remove('opacity-50', 'pointer-events-none');
                     setSpeed(1);
 
-                    // 🌟 3. 完美還原 index.html 的強制作業：setSlotsToSetupPose
+                    // 🐛 核心除錯設定：開啟綠線骨架與區域框
+                    if (player.skeletonRenderer) {
+                        player.skeletonRenderer.debugRendering = true;
+                        player.skeletonRenderer.debugBones = true;   // 顯示綠色骨架線
+                        player.skeletonRenderer.debugRegions = true; // 顯示圖片區塊邊框
+                    }
+
+                    // 🐛 在 Console (F12) 印出關鍵座標，看看小人有沒有飛到畫面外
+                    console.log("==== Spine Debug Info ====");
+                    console.log("Viewport:", player.viewport);
+                    console.log("Skeleton Position (X, Y):", player.skeleton.x, player.skeleton.y);
+                    console.log("Skeleton Scale (X, Y):", player.skeleton.scaleX, player.skeleton.scaleY);
+                    console.log("==========================");
+
                     try {
                         const skins = player.skeleton.data.skins;
                         const targetSkin = skins.find(s => s.name === 'Normal') || skins.find(s => s.name === 'default') || skins[0];
@@ -391,23 +413,19 @@
                             player.skeleton.setSlotsToSetupPose(); 
                         }
                     } catch (e) {
-                        console.warn("Skin 設定發生例外，但不影響運行", e);
+                        console.warn("Skin 設定發生例外", e);
                     }
 
                     buildAnimationDropdown(player);
                     buildSlotsPanel(player);
                     setupComplexInteractions(player, container);
 
-                    // 🌟 4. 自動銜接邏輯：Spawn 播完後，自動排隊播 Idle
                     const anims = player.skeleton.data.animations.map(a => a.name);
                     const idleAnim = anims.includes("Idle") ? "Idle" : (anims.includes("idle") ? "idle" : (anims[0] || ""));
                     
                     if (anims.includes("Spawn") && idleAnim) {
-                        // setAnimation 的第 0 軌已經在設定檔填了 Spawn，這裡只需「加入排程」
                         player.animationState.addAnimation(0, idleAnim, true, 0);
                         document.getElementById('animSelectText').innerText = "Spawn";
-                        
-                        // 1.5 秒後 UI 文字轉回 Idle
                         setTimeout(() => {
                             document.getElementById('animSelectText').innerText = idleAnim;
                         }, 1500);
