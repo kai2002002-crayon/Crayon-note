@@ -171,6 +171,7 @@
             }
         }
 
+        // 核心載入函數 (防呆喚醒版)
         function loadSpine(charName, costumeKey) {
             const container = document.getElementById('spineContainer');
             const overlay = document.getElementById('loadingOverlay');
@@ -184,7 +185,6 @@
             controls.classList.add('opacity-50', 'pointer-events-none');
             overlay.classList.remove('hidden');
             
-            // 初始化數值
             currentZoom = 1.0;
             currentSpeedIndex = 1;
             updateSpeedUI();
@@ -195,12 +195,11 @@
             globalPlayer = new spine.SpinePlayer(container, {
                 skelUrl: skelUrl,
                 atlasUrl: atlasUrl,
-                animation: "Idle", 
-                skin: "Normal",     
+                // 🛑 致命錯誤修正：把 animation 和 skin 的硬編碼刪除！讓它安全進入預設狀態
                 premultipliedAlpha: false,
                 backgroundColor: "#00000000",
                 alpha: true,
-                showControls: true, // 關閉預設 UI
+                showControls: false, 
                 showLoading: false,
                 viewport: { ...BASE_VIEWPORT },
 
@@ -210,33 +209,44 @@
                     
                     const canvas = container.querySelector('canvas');
                     
-                    // 皮膚設定
+                    // 1. 安全設定皮膚
                     const skins = player.skeleton.data.skins;
                     if (skins && skins.length > 0) {
                         const targetSkin = skins.find(s => s.name === 'Normal') || skins.find(s => s.name === 'default') || skins[0];
                         if (targetSkin) {
                             player.skeleton.setSkinByName(targetSkin.name);
-                            player.skeleton.setSlotsToSetupPose(); 
                         }
                     }
 
-                    // 動作選單
+                    // 2. 強制重置骨架姿態，避免因為沒有設定動作而塌陷
+                    player.skeleton.setToSetupPose();
+                    player.skeleton.updateWorldTransform();
+
+                    // 3. 取得實際存在的動作
                     const anims = player.skeleton.data.animations.map(a => a.name);
                     buildAnimMenu(player, anims);
                     
                     let startAnim = anims.includes("Idle") ? "Idle" : (anims.includes("idle") ? "idle" : anims[0]);
-                    if (startAnim) {
-                        player.animationState.setAnimation(0, startAnim, true);
-                        document.getElementById('currentAnimText').innerText = startAnim;
-                        document.getElementById('btnPlayPause').innerText = '⏸️';
-                    }
 
-                    // 插槽選單與攝影機操作綁定
-                    buildSlotMenu(player);
-                    if (canvas) setupCameraControls(canvas, player);
+                    // 🌟 4. 關鍵魔法：延遲 50 毫秒套用動作，並強制觸發 Resize 喚醒畫布
+                    setTimeout(() => {
+                        if (startAnim) {
+                            player.animationState.setAnimation(0, startAnim, true);
+                            document.getElementById('currentAnimText').innerText = startAnim;
+                            document.getElementById('btnPlayPause').innerText = '⏸️';
+                        }
+                        
+                        // 強制啟動播放器
+                        player.play();
 
-                    // 🐛 確保渲染迴圈強制啟動
-                    player.play();
+                        // 建立插槽與攝影機控制
+                        buildSlotMenu(player);
+                        if (canvas) setupCameraControls(canvas, player);
+
+                        // 💥 暴力喚醒 WebGL：模擬瀏覽器視窗大小改變，強迫 Canvas 重新繪製內容！
+                        window.dispatchEvent(new Event('resize'));
+
+                    }, 50);
                 },
                 error: function (player, reason) {
                     overlay.innerHTML = `<span class="text-red-400">載入失敗，檔案路徑錯誤</span>`;
@@ -268,7 +278,7 @@
             document.getElementById('btnSpeed').innerText = `${speedOptions[currentSpeedIndex]}x`;
         }
 
-        // --- 動態選單建置 ---
+        // --- 動態選單建置 (修復自訂 UI 播放問題) ---
         function buildAnimMenu(player, anims) {
             const list = document.getElementById('animList');
             list.innerHTML = '';
@@ -277,11 +287,17 @@
                 btn.className = "text-left px-3 py-2 text-sm font-medium text-gray-700 hover:bg-amber-100 hover:text-amber-700 rounded transition-colors";
                 btn.innerText = animName;
                 btn.onclick = () => {
+                    // 切換動作
                     player.animationState.setAnimation(0, animName, true);
                     document.getElementById('currentAnimText').innerText = animName;
                     document.getElementById('animDropdown').classList.add('hidden');
+                    
+                    // 確保引擎處於播放狀態
                     player.play();
                     document.getElementById('btnPlayPause').innerText = '⏸️';
+                    
+                    // 確保 WebGL 有被更新
+                    player.skeleton.updateWorldTransform();
                 };
                 list.appendChild(btn);
             });
