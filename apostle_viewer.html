@@ -455,14 +455,13 @@
                  ? `./spine_assets/${baseFolderKey}/${costumeKey}.atlas.txt`
                  : `./spine_sd_assets/${costumeKey}.atlas.txt`;
          
-             // 大廳使用 premultipliedAlpha: true，戰鬥(SD)用 false
              const isPma = mode === 'lobby';
              const baseViewport = mode === 'lobby' ? { x: -400, y: 0, width: 800, height: 1000 } : { x: -750, y: -150, width: 1500, height: 3000 };
          
              globalPlayer = new spine.SpinePlayer(container, {
                  skelUrl: skelUrl,
                  atlasUrl: atlasUrl,
-                 premultipliedAlpha: isPma,
+                 premultipliedAlpha: true,
                  backgroundColor: "#00000000", 
                  alpha: true,
                  showControls: false,
