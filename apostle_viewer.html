@@ -77,8 +77,10 @@
         
         <header class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md p-4 sm:p-5 rounded-2xl shadow-md border-4 border-amber-400 dark:border-slate-600 flex justify-between items-center relative z-10">
             <div>
-                <h1 class="text-xl sm:text-2xl font-black text-amber-950 dark:text-amber-400 mb-0.5">
-                    <img src="https://i.postimg.cc/sDstHDN1/Aside-Skill-Rim-3.png" alt="RimIcon" class="h-[1.15em] w-auto object-contain drop-shadow-sm">嘟嘟臉角色動態展示器</h1>
+                <h1 class="text-xl sm:text-2xl font-black text-amber-950 dark:text-amber-400 mb-0.5 flex items-center gap-2">
+                    <img src="https://i.postimg.cc/sDstHDN1/Aside-Skill-Rim-3.png" class="h-6 sm:h-7 w-auto object-contain drop-shadow-sm" alt="Rim Icon">
+                    角色動態展示
+                </h1>
             </div>
             <button onclick="window.close()" class="px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm bg-amber-500 text-white font-bold rounded-xl shadow hover:bg-amber-600 transition shrink-0">
                 ⬅️ 返回
@@ -330,7 +332,7 @@
             });
         }
 
-function applyRaceBackground(charName) {
+        function applyRaceBackground(charName) {
             const container = document.getElementById('spineCanvasContainer');
             const char = INITIAL_DATA.find(c => c.name === charName);
             
@@ -369,14 +371,24 @@ function applyRaceBackground(charName) {
             refreshCostumeDropdownAndLoad();
         }
 
-        function selectCharacter(charObj, spineName, iconUrl) {
+                function selectCharacter(charObj, spineName, iconUrl) {
             activeCharData = { ...charObj, spineName: spineName };
             document.getElementById('spineViewerSection').classList.remove('hidden');
             
+            // 🌟 1. 抓取該性格對應的顏色 (若無則預設為黃色)
+            const pColors = personalityColors[charObj.personality] || "border-amber-400 text-amber-900";
+            const borderClass = pColors.split(' ')[0]; // 取出 border 顏色
+            const textClass = pColors.split(' ')[1];   // 取出 text 顏色
+            
+            // 🌟 2. 替換 Icon 的圖片與外框顏色 (並自動顯示)
             const iconEl = document.getElementById('activeCharIcon');
             iconEl.src = iconUrl;
-            iconEl.classList.remove('hidden');
-            document.getElementById('activeCharName').innerText = getI18n(charObj.name);
+            iconEl.className = `w-10 h-10 sm:w-12 sm:h-12 rounded-lg border-2 ${borderClass} shadow-sm object-cover bg-white dark:bg-slate-700`;
+            
+            // 🌟 3. 替換名稱與文字顏色
+            const nameEl = document.getElementById('activeCharName');
+            nameEl.innerText = getI18n(charObj.name);
+            nameEl.className = `text-lg sm:text-xl font-black ${textClass}`;
 
             // 重置狀態
             document.getElementById('animList').classList.add('hidden');
@@ -388,6 +400,7 @@ function applyRaceBackground(charName) {
 
             refreshCostumeDropdownAndLoad();
         }
+
 
         function refreshCostumeDropdownAndLoad() {
             const costumes = getCostumeList(activeCharData.name, currentMode);
