@@ -1364,7 +1364,7 @@
             
                 currentRunnerPlayer = new spine.SpinePlayer("topRunnerContainer", {
                     skelUrl: `./spine_sd_assets/${folderKey}.skel.bytes`, atlasUrl: `./spine_sd_assets/${folderKey}.atlas.txt`,
-                    animation: "Spawn", skin: "Normal", backgroundColor: "#00000000", alpha: true, premultipliedAlpha: false, showControls: false, showLoading: false,
+                    animation: "Spawn", skin: "Normal", backgroundColor: "#00000000", alpha: true, premultipliedAlpha: true, showControls: false, showLoading: false,
                     viewport: { x: -800, y: 100, width: 2500, height: 1500, transitionTime: 0 },
                     success: function (player) {
                         loader.remove(); 
@@ -1384,7 +1384,7 @@
                                     const bossKey = typeof SPINE_MAP !== 'undefined' && SPINE_MAP['R41雷內瓦'] ? SPINE_MAP['R41雷內瓦'] : 'R41雷內瓦';
                                     currentBossPlayer = new spine.SpinePlayer("bossRunnerContainer", {
                                         skelUrl: `./spine_sd_assets/${bossKey}.skel.bytes`, atlasUrl: `./spine_sd_assets/${bossKey}.atlas.txt`,
-                                        animation: "Idle", backgroundColor: "#00000000", alpha: true, premultipliedAlpha: false, showControls: false, showLoading: false,
+                                        animation: "Idle", backgroundColor: "#00000000", alpha: true, premultipliedAlpha: true, showControls: false, showLoading: false,
                                         viewport: { x: -1500, y: -450, width: 3000, height: 3000, transitionTime: 0 },
                                         success: function (bossPlayer) {
                                             if(!isAnimationEnabled) { bossPlayer.dispose(); return; }
@@ -1620,7 +1620,7 @@
             function initRimLive2D() {
                 if (typeof spine === 'undefined') return;
                 const rimContainer = document.getElementById("rim-live-container"); const loader = document.createElement('div'); loader.className = 'spine-loader-crayon'; rimContainer.appendChild(loader);
-                new spine.SpinePlayer("rim-live-container", { skelUrl: "RimSkin2.skel.bytes", atlasUrl: "RimSkin2.atlas.txt", alpha: true, backgroundColor: "#00000000", showControls: false, premultipliedAlpha: false, skin: "Normal", animation: "Happy_4", showLoading: false, viewport: { transitionTime: 0 },
+                new spine.SpinePlayer("rim-live-container", { skelUrl: "RimSkin2.skel.bytes", atlasUrl: "RimSkin2.atlas.txt", alpha: true, backgroundColor: "#00000000", showControls: false, premultipliedAlpha: true, skin: "Normal", animation: "Happy_4", showLoading: false, viewport: { transitionTime: 0 },
                     success: function (player) {
                         loader.remove(); const animations = ["Happy_4", "Pat_End", "Tickle_Idle_2"]; let currentIndex = 1; 
                         function playNextAnimation() { const nextAnim = animations[currentIndex % animations.length]; player.skeleton.setToSetupPose(); player.animationState.setAnimation(0, nextAnim, true); currentIndex++; }
