@@ -90,6 +90,28 @@
         .btn-gacha:active { transform: scale(0.95); }
         .pool-btn { transition: all 0.2s; }
         .pool-btn.active { background-color: #f59e0b; color: white; border-color: #d97706; }
+        /* 回頂部按鈕樣式 */
+#backToTop {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: none; /* 預設隱藏 */
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background-color: #fbbf24; /* 琥珀色 */
+    color: white;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s, background-color 0.3s;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#backToTop:hover { background-color: #d97706; transform: translateY(-5px); }
     </style>
 </head>
 <body class="p-3 sm:p-6 md:p-8 text-gray-800 dark:text-gray-100">
@@ -518,7 +540,26 @@
         window.addEventListener('load', () => {
             initUI();
         });
+        // 偵測捲動距離以顯示/隱藏按鈕
+window.onscroll = function() {
+    const btn = document.getElementById("backToTop");
+    if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+        btn.style.display = "flex";
+    } else {
+        btn.style.display = "none";
+    }
+};
 
+// 執行平滑滾動至頂部
+function scrollToTop() {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+}
     </script>
+    <button id="backToTop" onclick="scrollToTop()" title="回頂部">
+    ▲
+</button>
 </body>
 </html>
