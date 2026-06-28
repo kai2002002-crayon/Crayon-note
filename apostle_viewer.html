@@ -653,31 +653,60 @@
             let dragDistance = 0;
             
             let hitZoneOnDown = null;
-            let activeInteractBone = null; // 改為泛用的互動骨骼
+            let activeInteractBone = null; 
             let initialBoneX = 0, initialBoneY = 0;
 
             let hasTriggeredRub = false; 
             let tickleTimer = null; 
 
+            // 🌟 安全獲取當前環境狀態 (兼容 spine_viewer 和 char_detail)
+            const getIsLobby = () => typeof currentMode === 'undefined' || currentMode === 'lobby';
+            const getBaseViewport = () => {
+                if (typeof currentMode !== 'undefined') {
+                    return currentMode === 'lobby' ? { x: -400, y: 0, width: 800, height: 1000 } : { x: -750, y: -150, width: 1500, height: 3000 };
+                }
+                return { x: -400, y: 0, width: 800, height: 1000 };
+            };
+            const updateUI = (text) => { const el = document.getElementById('animSelectText'); if (el) el.innerText = text; };
+            const safeClearIdle = () => { if (typeof globalIdleTimer !== 'undefined') clearTimeout(globalIdleTimer); };
+            const safeStartIdle = () => { if (typeof startRandomAnimationLoop === 'function') startRandomAnimationLoop(); };
+
+            // 🌟 核心修正：動態計算真實攝影機範圍，根絕點擊位置偏移問題
+            function getEffectiveViewport(canvasRect, baseViewport) {
+                const scale = Math.min(canvasRect.width / baseViewport.width, canvasRect.height / baseViewport.height);
+                const effW = canvasRect.width / scale;
+                const effH = canvasRect.height / scale;
+                const effX = baseViewport.x - (effW - baseViewport.width) / 2;
+                const effY = baseViewport.y - (effH - baseViewport.height) / 2;
+                return { x: effX, y: effY, width: effW, height: effH };
+            }
+
             canvas.addEventListener('wheel', (e) => {
                 e.preventDefault();
+                if (!player.skeleton) return;
+                const isLobby = getIsLobby();
+                const oldZoomOffsetY = isLobby ? 600 * (1 - currentZoom) : 0;
+                const currentPanY = player.skeleton.y - oldZoomOffsetY;
+
                 const zoomDelta = e.deltaY < 0 ? 0.1 : -0.1;
                 currentZoom = Math.min(Math.max(currentZoom + zoomDelta, 0.3), 6.0); 
+                
                 player.skeleton.scaleX = currentZoom;
                 player.skeleton.scaleY = currentZoom;
-                if (currentMode === 'lobby') player.skeleton.y = 600 * (1 - currentZoom);
+                player.skeleton.y = currentPanY + (isLobby ? 600 * (1 - currentZoom) : 0);
             }, { passive: false });
 
-            function getLobbyHitZone(mouseX, mouseY) {
-                if(currentMode !== 'lobby') return null;
+            function getHitZone(mouseX, mouseY) {
+                if (!getIsLobby()) return null;
                 const rect = canvas.getBoundingClientRect();
+                const effView = getEffectiveViewport(rect, getBaseViewport());
+                
                 let clickedPart = null;
                 let minDistance = Infinity;
                 
-                // 🌟 將臉頰與頭部分離，臉頰範圍較小，頭部範圍較大
                 const hitZones = [
-                    { name: "臉頰", bones: ["Character_Ball_Move", "S1_Ball_R_CT", "Ball_R_CT"], radius: 140 },
-                    { name: "頭部", bones: ["Character_Pat", "S3_Head", "S1_Head", "Head"], radius: 120 }, 
+                    { name: "臉頰", bones: ["Character_Ball_Move", "S1_Ball_R_CT", "Ball_R_CT"], radius: 130 },
+                    { name: "頭部", bones: ["Character_Pat", "S3_Head", "S1_Head", "Head"], radius: 140 }, 
                     { name: "身體", bones: ["Character_Tickle", "S3_Body_1", "S1_Body_1", "Body_1"], radius: 150 }
                 ];
                 
@@ -685,15 +714,14 @@
                     let targetBone = null;
                     for (let bName of zone.bones) { targetBone = player.skeleton.findBone(bName); if (targetBone) break; }
                     if (targetBone) {
-                        const boneCanvasX = ((targetBone.worldX - player.viewport.x) / player.viewport.width) * rect.width;
-                        const boneCanvasY = rect.height - ((targetBone.worldY - player.viewport.y) / player.viewport.height) * rect.height;
+                        const boneCanvasX = ((targetBone.worldX - effView.x) / effView.width) * rect.width;
+                        const boneCanvasY = rect.height - ((targetBone.worldY - effView.y) / effView.height) * rect.height;
                         const distance = Math.hypot(mouseX - boneCanvasX, mouseY - boneCanvasY);
-                        const scaledRadius = (zone.radius * currentZoom) * (rect.height / player.viewport.height);
+                        const scaledRadius = (zone.radius * currentZoom) * (rect.height / effView.height);
                         
-                        // 優先判定範圍較小且距離最近的部位
                         if (distance < scaledRadius && distance < minDistance) { 
                             minDistance = distance; 
-                            clickedPart = { ...zone, bone: targetBone }; // 記錄抓到的骨骼
+                            clickedPart = { ...zone, bone: targetBone }; 
                         }
                     }
                 });
@@ -721,16 +749,13 @@
                 activeInteractBone = null;
                 canvas.setPointerCapture(e.pointerId);
 
-                if (currentMode === 'lobby') {
-                    const rect = canvas.getBoundingClientRect();
-                    hitZoneOnDown = getLobbyHitZone(e.clientX - rect.left, e.clientY - rect.top);
-                    
-                    // 🌟 記錄互動部位的初始位置，準備進行物理偏移
-                    if (hitZoneOnDown && (hitZoneOnDown.name === "臉頰" || hitZoneOnDown.name === "頭部")) {
-                        activeInteractBone = hitZoneOnDown.bone; 
-                        initialBoneX = activeInteractBone.x; 
-                        initialBoneY = activeInteractBone.y;
-                    }
+                const rect = canvas.getBoundingClientRect();
+                hitZoneOnDown = getHitZone(e.clientX - rect.left, e.clientY - rect.top);
+                
+                if (hitZoneOnDown && (hitZoneOnDown.name === "臉頰" || hitZoneOnDown.name === "頭部")) {
+                    activeInteractBone = hitZoneOnDown.bone; 
+                    initialBoneX = activeInteractBone.x; 
+                    initialBoneY = activeInteractBone.y;
                 }
             });
 
@@ -746,11 +771,16 @@
                     const currentDistance = Math.hypot(p1.x - p2.x, p1.y - p2.y);
                     const zoomChange = currentDistance / initialPinchDistance;
                     
+                    const isLobby = getIsLobby();
+                    const oldZoomOffsetY = isLobby ? 600 * (1 - currentZoom) : 0;
+                    const currentPanY = player.skeleton.y - oldZoomOffsetY;
+
                     currentZoom = Math.min(Math.max(currentZoom * zoomChange, 0.3), 6.0);
-                    player.skeleton.scaleX = currentZoom;
-                    player.skeleton.scaleY = currentZoom;
-                    if (currentMode === 'lobby') player.skeleton.y = 600 * (1 - currentZoom);
-                    
+                    if (player.skeleton) {
+                        player.skeleton.scaleX = currentZoom;
+                        player.skeleton.scaleY = currentZoom;
+                        player.skeleton.y = currentPanY + (isLobby ? 600 * (1 - currentZoom) : 0);
+                    }
                     initialPinchDistance = currentDistance;
                     return;
                 }
@@ -763,42 +793,42 @@
                 const dy = e.clientY - lastMouseY;
                 dragDistance += Math.hypot(dx, dy);
 
-                // 🌟 判定觸發拖拉動畫
-                if (currentMode === 'lobby' && dragDistance > 10 && hitZoneOnDown && !hasTriggeredRub) {
+                if (dragDistance > 10 && hitZoneOnDown && !hasTriggeredRub) {
                     hasTriggeredRub = true;
                     clearTimeout(tickleTimer);
+                    safeClearIdle(); 
+
                     const animNames = player.skeleton.data.animations.map(a => a.name);
 
                     if (hitZoneOnDown.name === "臉頰" && animNames.includes("Touch_Idle")) {
                         player.animationState.setAnimation(0, "Touch_Idle", true);
-                        document.getElementById('animSelectText').innerText = "Touch_Idle";
+                        updateUI("Touch_Idle");
                     } else if (hitZoneOnDown.name === "頭部" && animNames.includes("Pat_Idle")) {
                         player.animationState.setAnimation(0, "Pat_Idle", true);
-                        document.getElementById('animSelectText').innerText = "Pat_Idle";
+                        updateUI("Pat_Idle");
                     } else if (hitZoneOnDown.name === "身體" && animNames.includes("Tickle_Idle_1")) {
                         player.animationState.setAnimation(0, "Tickle_Idle_1", true);
-                        document.getElementById('animSelectText').innerText = "Tickle_Idle_1";
+                        updateUI("Tickle_Idle_1");
                         tickleTimer = setTimeout(() => {
                             if (animNames.includes("Tickle_Idle_2")) {
                                 player.animationState.setAnimation(0, "Tickle_Idle_2", true);
-                                document.getElementById('animSelectText').innerText = "Tickle_Idle_2";
+                                updateUI("Tickle_Idle_2");
                             }
                         }, 2000); 
                     }
                 }
 
-                // 🌟 拉扯與跟隨的物理運算 (臉頰 & 摸頭)
-                if (currentMode === 'lobby' && hasTriggeredRub && hitZoneOnDown && activeInteractBone) {
+                if (hasTriggeredRub && hitZoneOnDown && activeInteractBone) {
+                    const effView = getEffectiveViewport(rect, getBaseViewport());
                     const isCheek = hitZoneOnDown.name === "臉頰";
-                    const spineScaleX = player.viewport.width / rect.width / currentZoom;
-                    const spineScaleY = player.viewport.height / rect.height / currentZoom;
                     
-                    // 摸頭跟隨幅度較小 (0.3)，拉臉頰力度較大 (1.3)
+                    const spineScaleX = effView.width / rect.width / currentZoom;
+                    const spineScaleY = effView.height / rect.height / currentZoom;
+                    
                     const stretchIntensity = isCheek ? 1.3 : 0.3; 
                     let worldDx = (e.clientX - startX) * spineScaleX * stretchIntensity;
                     let worldDy = -(e.clientY - startY) * spineScaleY * stretchIntensity;
 
-                    // 臉頰通常只限制往外拉，摸頭則允許全向微調跟隨
                     if (isCheek && worldDx > 0) worldDx = 0; 
                     
                     let targetWorld = { x: activeInteractBone.worldX + worldDx, y: activeInteractBone.worldY + worldDy };
@@ -808,7 +838,6 @@
                     let localDy = targetWorld.y - initialBoneY;
                     let rawDistance = Math.hypot(localDx, localDy);
                     
-                    // 摸頭跟隨極限範圍小 (20)，拉臉頰極限範圍大 (55)
                     const MAX_RADIUS = isCheek ? 55 : 20; 
 
                     if (rawDistance > 0) {
@@ -820,12 +849,22 @@
                     activeInteractBone.y = initialBoneY + localDy;
                 } 
                 else if (!hitZoneOnDown) {
-                    const camW = player.viewport.cameraWidth || player.viewport.width;
-                    const camH = player.viewport.cameraHeight || player.viewport.height;
-                    const scaleFactorX = camW / rect.width / currentZoom;
-                    const scaleFactorY = camH / rect.height / currentZoom;
-                    player.skeleton.x += dx * scaleFactorX;
-                    player.skeleton.y -= dy * scaleFactorY;
+                    // 🌟 修正搬動視角的準確度
+                    const effView = getEffectiveViewport(rect, getBaseViewport());
+                    const scaleFactorX = effView.width / rect.width;
+                    const scaleFactorY = effView.height / rect.height;
+                    
+                    const isLobby = getIsLobby();
+                    const oldZoomOffsetY = isLobby ? 600 * (1 - currentZoom) : 0;
+                    
+                    let currentPanX = player.skeleton.x;
+                    let currentPanY = player.skeleton.y - oldZoomOffsetY;
+
+                    currentPanX += dx * scaleFactorX;
+                    currentPanY -= dy * scaleFactorY;
+
+                    player.skeleton.x = currentPanX;
+                    player.skeleton.y = currentPanY + oldZoomOffsetY;
                 }
 
                 lastMouseX = e.clientX;
@@ -840,16 +879,19 @@
                 isDragging = false; 
                 clearTimeout(tickleTimer);
 
-                if (currentMode !== 'lobby') return;
+                if (!getIsLobby()) return;
                 const animNames = player.skeleton.data.animations.map(a => a.name);
 
-                // 🌟 鬆開時的回彈物理運算
+                // 🌟 麻糬果凍版 Q 彈物理 (大改版在這裡)
                 if (activeInteractBone) {
                     let targetX = initialBoneX, targetY = initialBoneY;
                     let bouncingBone = activeInteractBone;
                     activeInteractBone = null; 
                     let velX = 0, velY = 0;
-                    const tension = 0.25, friction = 0.95;
+                    
+                    // tension 變小(20)拉力較軟；friction 變大(85)阻力變小，彈超久！
+                    const tension = 0.20, friction = 0.85; 
+                    
                     function applyBounce() {
                         let dx = targetX - bouncingBone.x; let dy = targetY - bouncingBone.y;
                         velX += dx * tension; velY += dy * tension;
@@ -864,31 +906,36 @@
                     applyBounce();
                 }
 
-                // 🌟 鬆開後的動畫串接邏輯
                 if (hasTriggeredRub) {
                     if (hitZoneOnDown && hitZoneOnDown.name === "臉頰" && animNames.includes("Touch_End")) {
                         player.animationState.setAnimation(0, "Touch_End", false);
                         player.animationState.addAnimation(0, "Idle_1", true, 0);
-                        document.getElementById('animSelectText').innerText = "Touch_End";
+                        updateUI("Touch_End");
                     } else if (hitZoneOnDown && hitZoneOnDown.name === "頭部" && animNames.includes("Pat_End")) {
                         player.animationState.setAnimation(0, "Pat_End", false);
                         player.animationState.addAnimation(0, "Idle_1", true, 0);
-                        document.getElementById('animSelectText').innerText = "Pat_End";
+                        updateUI("Pat_End");
                     } else if (hitZoneOnDown && hitZoneOnDown.name === "身體" && animNames.includes("Tickle_End")) {
                         player.animationState.setAnimation(0, "Tickle_End", false);
                         player.animationState.addAnimation(0, "Idle_1", true, 0);
-                        document.getElementById('animSelectText').innerText = "Tickle_End";
+                        updateUI("Tickle_End");
+                    } else {
+                        player.animationState.setAnimation(0, "Idle_1", true);
+                        updateUI("Idle_1");
                     }
+                    safeStartIdle();
                 } else if (hitZoneOnDown && dragDistance < 10) {
-                    // 單純點擊敲打 (敲頭或敲臉頰都算)
                     if ((hitZoneOnDown.name === "頭部" || hitZoneOnDown.name === "臉頰") && animNames.includes("Smash_End_1")) {
                         player.animationState.setAnimation(0, "Smash_End_1", false);
                         if (animNames.includes("Smash_End_2")) {
                             player.animationState.addAnimation(0, "Smash_End_2", false, 0);
                         }
                         player.animationState.addAnimation(0, "Idle_1", true, 0);
-                        document.getElementById('animSelectText').innerText = "Smash_End";
+                        updateUI("Smash_End");
                     }
+                    safeStartIdle();
+                } else {
+                    safeStartIdle();
                 }
             };
 
@@ -896,7 +943,6 @@
             canvas.addEventListener('pointercancel', stopDrag);
             canvas.addEventListener('pointerout', stopDrag);
         }
-
 
         window.onload = function() { initCharacterGrid(); };
     </script>
