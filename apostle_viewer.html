@@ -676,8 +676,8 @@
                 
                 // 🌟 將臉頰與頭部分離，臉頰範圍較小，頭部範圍較大
                 const hitZones = [
-                    { name: "臉頰", bones: ["Character_Ball_Move", "S1_Ball_R_CT", "Ball_R_CT"], radius: 120 },
-                    { name: "頭部", bones: ["Character_Pat", "S3_Head", "S1_Head", "Head"], radius: 150 }, 
+                    { name: "臉頰", bones: ["Character_Ball_Move", "S1_Ball_R_CT", "Ball_R_CT"], radius: 130 },
+                    { name: "頭部", bones: ["Character_Pat", "S3_Head", "S1_Head", "Head"], radius: 130 }, 
                     { name: "身體", bones: ["Character_Tickle", "S3_Body_1", "S1_Body_1", "Body_1"], radius: 150 }
                 ];
                 
@@ -849,7 +849,7 @@
                     let bouncingBone = activeInteractBone;
                     activeInteractBone = null; 
                     let velX = 0, velY = 0;
-                    const tension = 0.35, friction = 0.65;
+                    const tension = 0.25, friction = 0.95;
                     function applyBounce() {
                         let dx = targetX - bouncingBone.x; let dy = targetY - bouncingBone.y;
                         velX += dx * tension; velY += dy * tension;
