@@ -27,6 +27,31 @@ const ASIDE_DATA = {
             }
         }
     },
+    "Barong": { 
+        asideIcon: "https://i.postimg.cc/9D2LGRq7/Aside-Icon-Barong.png", 
+        totalName: { zh: "備受喜愛的幽靈芭瓏", ja: "愛され幽霊バロン", en: "Beloved Phantom Barong" }, 
+        stars: {
+            1: { 
+                icon: "https://i.postimg.cc/XvnKk0zc/Aside-Skill-Barong-1.png", 
+                name: { zh: "", ja: "", en: "" }, 
+                desc: { zh: "", ja: "", en: "" }, 
+                effects: { zh: [""], ja: [""], en: [""] } 
+            },
+            2: { 
+                icon: "https://i.postimg.cc/dhF58kTC/Aside-Skill-Barong-2.png", 
+                name: { zh: "", ja: "", en: "" }, 
+                desc: { zh: "", ja: "", en: "" }, 
+                effects: { zh: [""], ja: [""], en: [""] } 
+            },
+            3: { 
+                icon: "https://i.postimg.cc/tsbBhZVn/Aside-Skill-Barong-3.png", 
+                name: { zh: "", ja: "", en: "" }, 
+                desc: { zh: "", ja: "", en: "" }, 
+                effects: { zh: [""], ja: [""], en: [""] }, 
+                globalEffects: { zh: ["全體 %", "全體 %"], ja: ["全体 %", "全体 %"], en: ["All %", "All %"] } 
+            }
+        }
+    },
     "Chloe": { 
         asideIcon: "https://i.postimg.cc/tYsYyHLT/Aside-Icon-Chloe.png", 
         totalName: { zh: "時尚封面庫洛艾", ja: "ファッションカバークロエ", en: "Fashion Cover Chloe" }, 
