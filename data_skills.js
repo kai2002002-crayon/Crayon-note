@@ -21,67 +21,67 @@ const characterSkills = [
     "skills": {
       "zh-TW": {
         "normalAttack": {
-          "basic": " [魔法傷害：]",
-          "enhanced": " []"
+          "basic": "以釘子刺傷敵軍,對其造成2次魔法傷害。 [總魔法傷害:120%]",
+          "enhanced": "投擲釘子對敵人造成2次魔法傷害,並給予自身障眼法效樂。當有處於詛咒狀態的敵人時,將發動強化攻擊而非基本攻擊。 [障眼法:不會成為敵人的攻擊目標。沒有友軍時不會觸發。] [詛咒:隨機對其他對象造成相當於目標所受傷害量一定比例的魔法傷害。] [魔法傷害:360%] [障眼持續時間:9秒]"
         },
         "normalSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""]
+          "name": "八卦玩偶",
+          "desc": "南向距離自身最遠的敵人造成魔法傷害,並給予完效果。梅展技能後,一定時間內給予敵人沉默效果。當敵人有3名以上時,則優先攻擊未攻擊過的敵人。",
+          "stats": ["詛咒:隨機對其他對象造成相當於目標所受傷害量一定比例的魔法傷害。", "沉默:無法使用任何技能。", "魔法傷害:630%", "詛咒持續時間:15秒", "沉默持持續時間:10秒"]
         },
         "ultimateSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""],
-          "cooldown": "秒"
+          "name": "召喚鬼火",
+          "desc": "以自身為中心,對敵人造成範圍魔法傷害,給予詛咒效果,並於一定時間內減少受到的傷害。",
+          "stats": ["詛咒:隨機對其他對象造成相當於目標所受傷害量一定比例的魔法傷害。", "魔法傷害:930%", "詛咒持續時間:15秒", "受到的傷害量減少:25%", "受到的傷害量減少持續時間:8秒"],
+          "cooldown": "40秒"
         },
         "passiveSkill": {
-          "desc": "",
-          "stats": [""]
+          "desc": "回合開始時,一定時間內對自身生成護霜。使用普通技能後，一定時間內增加自身的攻擊速度。",
+          "stats": ["讓店:最大HP的68%", "護盾持續時間:10秒", "攻擊速度增加:63%", "攻擊速度增加持續時間:10秒"]
         }
       },
       "ja": {
         "normalAttack": {
-          "basic": " [魔法ダメージ：]",
-          "enhanced": " []"
+          "basic": "釘で刺し、敵に魔法ダメージを2回与える。[総魔法ダメージ: 120%]",
+          "enhanced": "釘を飛ばして敵に2回魔法ダメージを与え、自身に目くらましを付与する。呪い状態の敵が存在する場合、基本攻撃の代わりに強化攻撃を発動する。 [目くらまし:敵の目標にならない。他の味方がいない時は発動しない。] [呪い:対象が受けたダメージの一定割合分、ランダムな別の対象に魔法ダメージを与える。] [総魔法ダメージ:360%] [目くらましの持続時間:8秒]"
         },
         "normalSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""]
+          "name": "陰口ぬいぐるみ",
+          "desc": "自分から最も遠い敵に突進して魔法ダメージを与え、 呪いを付与する。スキル発動後、一定時間敵に沈黙を付与する。敵が3体以上の場合、攻撃していない敵を優先的に攻撃する。",
+          "stats": ["呪い:対象が受けたダメージの一定割合分、ランダムな別の対象に魔法ダメージを与える。", "沈黙: 全てのスキルが使用できなくなる。", "魔法ダメージ:630%", "呪いの持続時間:15秒", "沈黙の持続時間:10秒"]
         },
         "ultimateSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""],
-          "cooldown": "秒"
+          "name": "鬼火召喚",
+          "desc": "自身を中心に敵に範囲魔法ダメージを与え、呪いを付与する、一定時間、被ダメージ量が減少する。",
+          "stats": ["呪い:対象が受けたダメージの一定割合分、ランダムな別の対象に魔法ダメージを与える。", "魔法ダメージ:930%", "呪いの持続時間:15秒", "被ダメージ量減少:25%", "被ダメージ量減少の持続時間:8秒"],
+          "cooldown": "s"
         },
         "passiveSkill": {
-          "desc": "",
-          "stats": [""]
+          "desc": "ウェーフ開始時に一定時間、自身にシールドを生成する。低学年スキル使用後、一定時間自身の攻撃速度が増加する。",
+          "stats": ["シールド: 最大HPの68%", "シールドの持続時間:10秒", "攻擊速度增加:63%", "攻撃速度増加の持続時間: 10秒"]
         }
       },
       "en": {
         "normalAttack": {
-          "basic": " [Magical DMG: %]",
-          "enhanced": " []"
+          "basic": "Pierces with a nail, dealing Magical Damage 2 times to the enemy. [Total Magical DMG: 120%]",
+          "enhanced": "Launches nails to deal Magical Damage 2 times, applying Trickery to herself. If there is an enemy inflicted with the Curse effect, triggers an Enhanced Attack instead of a Basic Attack. [Trickery: Cannot be targeted by enemies. Does not trigger when no allies are present.] [Curse: Ratio of Damage Received by the target is dealt as Magical Damage to a random target.] [Total Magical DMG: 360%] [Trickery Duration: 8s]"
         },
         "normalSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""]
+          "name": "Backstabbing Doll",
+          "desc": "Dashes to the farthest enemy from self, and deals Magical DMG, applying Curse. After using the skill, applies Silence to enemies for a set period of time. Prioritizes attacking unharmed enemies if there are 3 or more present",
+          "stats": ["Curse: Ratio of Damage Received by the target Is dealt as Magical DMG to a random target.", "Silence: Unable to use any skills.", "Magical DMG: 630%", "Curse Duration: 15s", "Silence Duration: 10s"]
         },
         "ultimateSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""],
-          "cooldown": "s"
+          "name": "Summon Will-o'-wisp",
+          "desc": "Deals AoE Magical Damage around self, applying Curse. Reduces Incoming Damage for a set period of time,",
+          "stats": ["Curse: Ratio of Damage Received by the target is dealt as Magical Damage to a random target.", "Magical DMG: 930%", "Curse Duration: 15s", "Incoming DMG Reduction: 25%", "Incoming DMG Reduction Duration: 8s"],
+          "cooldown": "40s"
         },
         "passiveSkill": {
-          "desc": "",
-          "stats": [""]
+          "desc": "At the start of a wave, casts a shield on herself for a set duration, After using Freshman Skill, increases own Attack Speed for a set period of time.",
+          "stats": ["Shield: 68% of Max HP", "Shield Duration: 10s", "ATK SPD Increase: 63%", "ATK SPD Increase Duration: 10s"]
         }
-      }
+      },
     }
   },
   {
