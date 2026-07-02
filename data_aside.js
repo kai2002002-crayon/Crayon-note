@@ -33,22 +33,22 @@ const ASIDE_DATA = {
         stars: {
             1: { 
                 icon: "https://i.postimg.cc/XvnKk0zc/Aside-Skill-Barong-1.png", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "" }, 
-                effects: { zh: [""], ja: [""], en: [""] } 
+                name: { zh: "惹人愛的小搗蛋", ja: "みんなの愛されキャラ", en: "Everyone's Little Darling" }, 
+                desc: { zh: "穿戴者的最大HP、魔法攻擊力、爆擊、爆擊傷害增加。", ja: "着用者の最大HP、魔法攻撃力、会心、会心ダメージが増加する。", en: "Increases bearer's Max HP, Magical ATK, CRIT, and CRIT DMG." }, 
+                effects: { zh: ["最大HP增加:6%", "魔法攻擊力增加:6%", "爆擊增加:6%", "爆擊傷害增加:6%"], ja: ["最大HP增加:6%", "魔法攻擊力增加:6%", "会心增加:6%", "会心ダメージ増加:6%"], en: ["Max HP Increase: 6%", "Magical ATK Increase: 6%", "CRIT Increase: 6%", "CRIT DMG Increase: 6%"] } 
             },
             2: { 
                 icon: "https://i.postimg.cc/dhF58kTC/Aside-Skill-Barong-2.png", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "" }, 
-                effects: { zh: [""], ja: [""], en: [""] } 
+                name: { zh: "主人的時間到了", ja: "ご主人様の時間だ", en: "Master's Time" }, 
+                desc: { zh: "衝向普通技能的目標對象時,受到的傷害量減少,並沿著足跡生成不祥的霧氣。每隔一段時間給予不祥霧氣內的敵人詛咒效果。普通技能命中時,給予敵人中毒效果,並恢復自身的HP。每波次,第一次普通技能命中時,給予敵人昏迷效果。", ja: "低学年スキルの目標対象に向かって突進する際、被ダメージ量が減少し、足跡に沿って不吉な需を生成する。不吉な霧の中にいる敵に一定時間ごとに呪いを付与する。低学年スキル命中時、敵に毒を付与し、自身の HPを回復する。ウェーブごとに最初の低学年スキル命中時、敵に気絶を付与する。", en: "When charging toward the target of her Freshman Skill, reduces Incoming Damage and creates an ominous fog along her trail. Enemies within the ominous fog are afflicted with Curse at regular intervals. When Freshman Skill hits, applies Poison to the enemy and recovers own HP. Per wave, when the first Freshman Skill hits, applies Stun to the enemy." }, 
+                effects: { zh: ["中毒:每秒造成傷害並減少所受傷害量。", "詛咒:隨機對其他對象造成相當於目標所受傷害量一定比例的魔法傷害。", "昏迷:無法進行任何行動。", "受到的傷害量減少:40%", "不祥的霧氣持續時間:10秒", "詛咒持續時間:6秒", "中毒持續時間:3秒", "HP恢復:最大HP的15%", "昏迷持續時間:3秒"], ja: ["毒:攻撃力が減少し、1秒ごとにダメージを受ける。", "呪い: 対象が受けたダメージの一定割合分、ランダムな別の対象に魔法ダメージを与える。", "気絶:行動不能になる。", "被ダメージ量減少:40%", "不吉な霊の持続時間:10秒", "呪いの持続時間:6秒", "毒の持続時間:3秒", "HP回復:最大HPの15%", "気絶の持続時間:3秒"], en: ["Poison: Applies Damage every second and reduces Attack", "Curse: Ratio of Damage Received by the target is dealt as Magical Damage to a random target.", "Stun: Becomes unable to act.", "Incoming DMG Reduction: 140%", "Ominous Fog Duration: 10s", "Curse Duration: 6s", "Poison Duration: 3s", "HP Recovery: 15% of Max HP", "Stun Duration: 3s"] } 
             },
             3: { 
                 icon: "https://i.postimg.cc/tsbBhZVn/Aside-Skill-Barong-3.png", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "" }, 
-                effects: { zh: [""], ja: [""], en: [""] }, 
-                globalEffects: { zh: ["全體 %", "全體 %"], ja: ["全体 %", "全体 %"], en: ["All %", "All %"] } 
+                name: { zh: "新任大金主", ja: "新たなクジラ", en: "The New Big Spender" }, 
+                desc: { zh: "增加前排友軍對敵人造成的傷害量,並減少前排友軍受到敵人的傷害量。", ja: "前列の味方の敵への与ダメージ量を増加させ、 前列の味方の敵からの被ダメージ量を減少させる。", en: "Increases Outgoing Damage and reduces Incoming Damage of Front Row allies." }, 
+                effects: { zh: ["傷害量增加:13.6%", "受到的傷害量減少:5.9%"], ja: ["ダメージ量増加:13.6%", "被ダメージ量減少:5,9%"], en: ["DMG Increase: 13,6%", "Incoming DMG Reduction: 5.9%"] }, 
+                globalEffects: { zh: ["全體魔法攻擊力 3%", "全體魔法防禦力 3%"], ja: ["全体魔法攻撃力 3%", "全体魔法防御力 3%"], en: ["All Magical ATK 3%", "All Magical DEF3%"] } 
             }
         }
     },
