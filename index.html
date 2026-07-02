@@ -36,8 +36,8 @@
         <link rel="stylesheet" href="sprites.css">
         <style>
             /* =======================================
-               🌟 系統與佈局 CSS
-               ======================================= */
+            🌟 系統與佈局 CSS
+            ======================================= */
             .spine-loader-crayon {
             position: absolute;
             top: 50%; left: 50%;
@@ -133,7 +133,7 @@
             }
             @media (hover: hover) and (pointer: fine) {
             .char-avatar-container:not(.pointer-events-none):hover { 
-            transform: scale(1.5) translateZ(0); z-index: 50; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3); 
+            transform: scale(1.0) translateZ(0); z-index: 50; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3); 
             }
             .hover-scale:hover { transform: scale(1.15) translateZ(0); z-index: 10; }
             }
@@ -603,24 +603,24 @@
                 personality_狂亂: "sprite-Personality_Madness",
                 personality_活潑: "sprite-Personality_Vivacious",
                 personality_憂鬱: "sprite-Personality_Depressed",
-
+            
                 // 站位
                 position_前排: "sprite-Position_Front",
                 position_中排: "sprite-Position_Middle",
                 position_後排: "sprite-Position_Back",
-
+            
                 // 職業
                 job_輸出: "sprite-Job_DPS", job_肉盾: "sprite-Job_Tank", job_輔助: "sprite-Job_Support",
-
+            
                 // 攻擊類型
                 type_物理: "sprite-Type_Physic", type_魔法: "sprite-Type_Magic",
-
+            
                 // 金蠟筆屬性
                 boardon_攻擊: "sprite-boardon_ATK", boardon_防禦: "sprite-boardon_DEF",
                 boardon_血量: "sprite-boardon_HP", boardon_爆擊: "sprite-boardon_CRI",
                 boardon_爆抗: "sprite-boardon_RES"
             };
-
+            
             const CHAR_SPRITE_MAP = {
                 "冷靜": "sprite-char-composed",
                 "憂鬱": "sprite-char-depressed",
@@ -628,7 +628,7 @@
                 "狂亂": "sprite-char-madness",
                 "活潑": "sprite-char-vivacious"
             };
-
+            
             const ULT_SPRITE_MAP = {
                 "冷靜": "sprite-ult-composed",
                 "憂鬱": "sprite-ult-depressed",
@@ -636,7 +636,7 @@
                 "狂亂": "sprite-ult-madness",
                 "活潑": "sprite-ult-vivacious"
             };
-
+            
             // ------------------------------------------------------------
             // 基本工具函式 (開關動畫、翻譯、主題、資料預載)
             // ------------------------------------------------------------
@@ -995,7 +995,7 @@
                     handleBannerHover(false);
                 }
             }, { passive: true }); // passive: true 可確保不影響頁面滑動效能
-
+            
             function initStates() {
                 INITIAL_DATA.forEach(char => {
                     if (savedStates['owned_' + char.name] === undefined) savedStates['owned_' + char.name] = false;
@@ -1127,7 +1127,7 @@
                         {v:"opened", n: t("filter_btn_opened")}, 
                         {v:"unopened", n: t("filter_btn_unopened")} 
                     ];
-    
+            
                     statuses.forEach(st => { 
                         const btn = document.createElement("button"); 
                         btn.innerText = st.n; 
@@ -1255,7 +1255,7 @@
                         const ultSpriteBase = ULT_SPRITE_MAP[char.personality] || "";
                         const charSpriteClass = `sprite-${spineName}`;
                         const ultSpriteClass = `sprite-Icon_UltimateSkill_${spineName}`;
-
+            
                         let raceIconName = char.race; if (char.race === "???") raceIconName = "unknown";
                         const pSprite = SPRITE_CLASS_MAP[`personality_${char.personality}`] || "";
                         const rSprite = SPRITE_CLASS_MAP[`race_${raceIconName}`] || "";
@@ -1287,7 +1287,7 @@
                                 return `<span id="${fallbackId}" class="bg-gray-100 dark:bg-gray-700 px-1 rounded text-[9px] text-gray-500 dark:text-gray-400 font-medium whitespace-nowrap">${fallbackText}</span>`;
                             }
                         };
-
+            
                         const traitsHtml = isUnreleased ? 
                             `<div class="flex items-center gap-1.5 pt-1 border-t border-dashed border-gray-100 dark:border-gray-700 text-gray-400 dark:text-gray-500 text-[10px] font-bold tracking-widest">DATA CLASSIFIED</div>` :
                             `<div class="flex items-center gap-1.5 pt-1 border-t border-dashed border-gray-100 dark:border-gray-700">
@@ -1351,103 +1351,107 @@
                                 layerBox.className = `${bgStyle} p-2 rounded-xl border flex-col justify-between backdrop-blur-sm`;
                                 layerBox.style.flex = flexWeight; 
                                 layerBox.innerHTML = `<span class="text-[10px] font-bold mb-1 block opacity-70 whitespace-nowrap">${badgeText}</span>`;
-                                const btnGroup = document.createElement('div'); btnGroup.className = `grid ${gridCols} gap-1.5 h-full content-start`;
-                                const sortedAttrs = char[`layer${l}`].slice().sort((a, b) => ATTR_PRIORITY.indexOf(a) - ATTR_PRIORITY.indexOf(b));
+                                const btnGroup = document.createElement('div'); 
+            btnGroup.className = `grid ${gridCols} gap-1.5 h-full content-start`;
             
-                                sortedAttrs.forEach((attr, idx) => {
-                                    const originalIdx = char[`layer${l}`].indexOf(attr); const stateKey = `${char.name}_l${l}_${attr}_${originalIdx}`;
-                                    const isOpened = savedStates[stateKey]; const btnId = `btn_${char.name}_l${l}_${attr}_${originalIdx}`;
-                                    const btn = document.createElement('button'); btn.id = btnId;
-                                    // 🌟 點亮與未點亮的背景/邊框樣式設定
-                                    const attrClasses = {
-                                        "攻擊": {
-                                            off: "bg-orange-50 dark:bg-gray-700 border-orange-400 dark:border-orange-500 opacity-60 hover:opacity-80 shadow-sm",
-                                            on:  "bg-orange-500 dark:bg-orange-600 border-orange-600 dark:border-orange-500 shadow-md opacity-100"
-                                        },
-                                        "防禦": {
-                                            off: "bg-blue-50 dark:bg-gray-700 border-blue-400 dark:border-blue-500 opacity-60 hover:opacity-80 shadow-sm",
-                                            on:  "bg-blue-500 dark:bg-blue-600 border-blue-600 dark:border-blue-500 shadow-md opacity-100"
-                                        },
-                                        "血量": {
-                                            off: "bg-green-50 dark:bg-gray-700 border-green-400 dark:border-green-500 opacity-60 hover:opacity-80 shadow-sm",
-                                            on:  "bg-green-500 dark:bg-green-600 border-green-600 dark:border-green-500 shadow-md opacity-100"
-                                        },
-                                        "爆擊": {
-                                            off: "bg-red-50 dark:bg-gray-700 border-red-400 dark:border-red-500 opacity-60 hover:opacity-80 shadow-sm",
-                                            on:  "bg-red-500 dark:bg-red-600 border-red-600 dark:border-red-500 shadow-md opacity-100"
-                                        },
-                                        "爆抗": {
-                                            off: "bg-purple-50 dark:bg-gray-700 border-purple-400 dark:border-purple-500 opacity-60 hover:opacity-80 shadow-sm",
-                                            on:  "bg-purple-500 dark:bg-purple-600 border-purple-600 dark:border-purple-500 shadow-md opacity-100"
-                                        }
-                                    };
-
-                                    // 🌟 點亮與未點亮的文字樣式設定 (淡底配實色字，實底配粗體白字)
-                                    const attrTextColors = {
-                                        "攻擊": { off: "text-orange-600 dark:text-orange-400", on: "text-white drop-shadow-sm" },
-                                        "防禦": { off: "text-blue-600 dark:text-blue-400",   on: "text-white drop-shadow-sm" },
-                                        "血量": { off: "text-green-600 dark:text-green-400",  on: "text-white drop-shadow-sm" },
-                                        "爆擊": { off: "text-red-600 dark:text-red-400",     on: "text-white drop-shadow-sm" },
-                                        "爆抗": { off: "text-purple-600 dark:text-purple-400", on: "text-white drop-shadow-sm" }
-                                    };
-
-                                    const baseClass = "char-btn hover-scale flex items-center justify-center w-full h-[45px] sm:h-[50px] rounded-lg border transition-all duration-200 overflow-hidden cursor-pointer";
-
-                                    // 動態獲取該屬性對應的開啟/關閉樣式
-                                    const openClass = attrClasses[attr]?.on || "bg-amber-500 opacity-100 text-white";
-                                    const closeClass = attrClasses[attr]?.off || "bg-gray-100 opacity-50";
-
-                                    btn.className = `${baseClass} ${isOpened ? openClass : closeClass}`;
-                                                                        
-                                    // 由於原本只有 boardon，我們依賴圖示，所以維持 boardon 圖片即可
-                                    const spriteClass = SPRITE_CLASS_MAP[`boardon_${attr}`] || "";
-                                    const textColor = isOpened ? attrTextColors[attr].on : attrTextColors[attr].off;
-                                    
-                                    // 點亮時給圖片加上一點陰影，讓它在實心深色背景上不至於被吃掉
-                                    const spriteShadow = isOpened ? "drop-shadow-sm" : "";
-
-                                    btn.innerHTML = `
-                                        <div class="w-full h-full flex flex-col items-center justify-center gap-0.5">
-                                            <div class="w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center shrink-0">
-                                                <div class="sprite-base sprite-common ${spriteClass} shrink-0 scale-[0.35] origin-center transition-all duration-200 ${spriteShadow}"></div>
-                                            </div>
-                                            <span class="text-[9px] sm:text-[10px] font-bold ${textColor} transition-all duration-200 leading-none">${t(attr)}</span>
-                                        </div>
-                                    `;
-
-                                    btn.onclick = () => {
-                                        savedStates[stateKey] = !savedStates[stateKey];
-                                        if(savedStates[stateKey] && !savedStates['owned_' + char.name]) { savedStates['owned_' + char.name] = true; updateOwnershipUI(char.name); }
-                                        btn.className = `${baseClass} ${savedStates[stateKey] ? openClass : closeClass}`;
-                                        
-                                        // 🌟 確保點擊時，文字顏色與圖片的陰影特效跟著切換
-                                        const newTextColor = savedStates[stateKey] ? attrTextColors[attr].on : attrTextColors[attr].off;
-                                        const newSpriteShadow = savedStates[stateKey] ? "drop-shadow-sm" : "";
-                                        
-                                        btn.innerHTML = `
-                                            <div class="w-full h-full flex flex-col items-center justify-center gap-0.5">
-                                                <div class="w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center shrink-0">
-                                                    <div class="sprite-base sprite-common ${spriteClass} shrink-0 scale-[0.35] origin-center transition-all duration-200 ${newSpriteShadow}"></div>
-                                                </div>
-                                                <span class="text-[9px] sm:text-[10px] font-bold ${newTextColor} transition-all duration-200 leading-none">${t(attr)}</span>
-                                            </div>
-                                        `;
-                                        calculateStats();
-                                    };
-
-
-                                    btn.onclick = () => {
-                                        savedStates[stateKey] = !savedStates[stateKey];
-                                        if(savedStates[stateKey] && !savedStates['owned_' + char.name]) { savedStates['owned_' + char.name] = true; updateOwnershipUI(char.name); }
-                                        btn.className = `${baseClass} ${savedStates[stateKey] ? openClass : closeClass}`;
-                                        calculateStats();
-                                    };
-                                    btnGroup.appendChild(btn);
-                                });
-                                layerBox.appendChild(btnGroup); layersContainer.appendChild(layerBox);
-                            });
-                        }
-                        cardInner.appendChild(layersContainer); charCard.appendChild(cardInner); charListContainer.appendChild(charCard);
+            // 🛡️ 防護 1：安全讀取 layer，如果沒有資料就給空陣列 []
+            const layerData = char[`layer${l}`] || [];
+            
+            if (layerData.length === 0) {
+            // 💡 如果該層沒有資料，顯示一個漂亮的「資料待更新」空框，不會讓網頁壞掉
+            btnGroup.innerHTML = `<div class="col-span-full flex items-center justify-center h-[45px] sm:h-[50px] bg-gray-100/50 dark:bg-gray-700/30 rounded-lg border border-dashed border-gray-300 dark:border-gray-600"><span class="text-[10px] text-gray-400 font-bold tracking-widest">DATA PENDING</span></div>`;
+            } else {
+            // 有資料時，正常排序並生成按鈕
+            const sortedAttrs = layerData.slice().sort((a, b) => ATTR_PRIORITY.indexOf(a) - ATTR_PRIORITY.indexOf(b));
+            
+            sortedAttrs.forEach((attr, idx) => {
+            // 🛡️ 防護 2：安全尋找 originalIdx
+            const originalIdx = layerData.indexOf(attr); 
+            const stateKey = `${char.name}_l${l}_${attr}_${originalIdx}`;
+            const isOpened = savedStates[stateKey]; 
+            const btnId = `btn_${char.name}_l${l}_${attr}_${originalIdx}`;
+            
+            const btn = document.createElement('button'); 
+            btn.id = btnId;
+            
+            // 🌟 點亮與未點亮的背景/邊框樣式設定
+            const attrClasses = {
+            "攻擊": { off: "bg-orange-50 dark:bg-gray-700 border-orange-400 dark:border-orange-500 opacity-60 hover:opacity-80 shadow-sm", on: "bg-orange-500 dark:bg-orange-600 border-orange-600 dark:border-orange-500 shadow-md opacity-100" },
+            "防禦": { off: "bg-blue-50 dark:bg-gray-700 border-blue-400 dark:border-blue-500 opacity-60 hover:opacity-80 shadow-sm", on: "bg-blue-500 dark:bg-blue-600 border-blue-600 dark:border-blue-500 shadow-md opacity-100" },
+            "血量": { off: "bg-green-50 dark:bg-gray-700 border-green-400 dark:border-green-500 opacity-60 hover:opacity-80 shadow-sm", on: "bg-green-500 dark:bg-green-600 border-green-600 dark:border-green-500 shadow-md opacity-100" },
+            "爆擊": { off: "bg-red-50 dark:bg-gray-700 border-red-400 dark:border-red-500 opacity-60 hover:opacity-80 shadow-sm", on: "bg-red-500 dark:bg-red-600 border-red-600 dark:border-red-500 shadow-md opacity-100" },
+            "爆抗": { off: "bg-purple-50 dark:bg-gray-700 border-purple-400 dark:border-purple-500 opacity-60 hover:opacity-80 shadow-sm", on: "bg-purple-500 dark:bg-purple-600 border-purple-600 dark:border-purple-500 shadow-md opacity-100" }
+            };
+            
+            // 🌟 點亮與未點亮的文字樣式設定
+            const attrTextColors = {
+            "攻擊": { off: "text-orange-600 dark:text-orange-400", on: "text-white drop-shadow-sm" },
+            "防禦": { off: "text-blue-600 dark:text-blue-400",  on: "text-white drop-shadow-sm" },
+            "血量": { off: "text-green-600 dark:text-green-400",  on: "text-white drop-shadow-sm" },
+            "爆擊": { off: "text-red-600 dark:text-red-400",     on: "text-white drop-shadow-sm" },
+            "爆抗": { off: "text-purple-600 dark:text-purple-400", on: "text-white drop-shadow-sm" }
+            };
+            
+            const baseClass = "char-btn hover-scale flex items-center justify-center w-full h-[45px] sm:h-[50px] rounded-lg border transition-all duration-200 overflow-hidden cursor-pointer";
+            
+            // 🛡️ 防護 3：動態獲取樣式，加上 ?. 保護
+            const openClass = attrClasses[attr]?.on || "bg-gray-400 text-white shadow-md opacity-100";
+            const closeClass = attrClasses[attr]?.off || "bg-gray-100 border-gray-300 opacity-60";
+            btn.className = `${baseClass} ${isOpened ? openClass : closeClass}`;
+            
+            const spriteClass = SPRITE_CLASS_MAP[`boardon_${attr}`] || "";
+            
+            const textColor = isOpened 
+            ? (attrTextColors[attr]?.on || "text-white drop-shadow-sm") 
+            : (attrTextColors[attr]?.off || "text-gray-500 dark:text-gray-400");
+            const spriteShadow = isOpened ? "drop-shadow-sm" : "";
+            
+            btn.innerHTML = `
+            <div class="w-full h-full flex flex-col items-center justify-center gap-0.5">
+                <div class="w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center shrink-0">
+                    <div class="sprite-base sprite-common ${spriteClass} shrink-0 scale-[0.35] origin-center transition-all duration-200 ${spriteShadow}"></div>
+                </div>
+                <span class="text-[9px] sm:text-[10px] font-bold ${textColor} transition-all duration-200 leading-none">${t(attr) || "未知"}</span>
+            </div>
+            `;
+            
+            // 🌟 將兩個 onclick 合併為一個正確的
+            btn.onclick = () => {
+            savedStates[stateKey] = !savedStates[stateKey];
+            if(savedStates[stateKey] && !savedStates['owned_' + char.name]) { 
+                savedStates['owned_' + char.name] = true; 
+                updateOwnershipUI(char.name); 
+            }
+            btn.className = `${baseClass} ${savedStates[stateKey] ? openClass : closeClass}`;
+            
+            const newTextColor = savedStates[stateKey] 
+                ? (attrTextColors[attr]?.on || "text-white drop-shadow-sm") 
+                : (attrTextColors[attr]?.off || "text-gray-500 dark:text-gray-400");
+            const newSpriteShadow = savedStates[stateKey] ? "drop-shadow-sm" : "";
+            
+            btn.innerHTML = `
+                <div class="w-full h-full flex flex-col items-center justify-center gap-0.5">
+                    <div class="w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center shrink-0">
+                        <div class="sprite-base sprite-common ${spriteClass} shrink-0 scale-[0.35] origin-center transition-all duration-200 ${newSpriteShadow}"></div>
+                    </div>
+                    <span class="text-[9px] sm:text-[10px] font-bold ${newTextColor} transition-all duration-200 leading-none">${t(attr) || "未知"}</span>
+                </div>
+            `;
+            calculateStats();
+            };
+            
+            btnGroup.appendChild(btn);
+            }); // 這是關閉 sortedAttrs.forEach 的大括號
+            } // 👈 🌟 必須補上這個大括號！用來關閉 else { ... } 區塊
+            
+            // 確保無論有沒有資料，最後都會把 btnGroup 放進 layerBox，再放進畫面裡
+            layerBox.appendChild(btnGroup); 
+            layersContainer.appendChild(layerBox);
+            }); // 這是關閉 [1, 2, 3].forEach 的大括號
+            }
+            cardInner.appendChild(layersContainer); 
+            charCard.appendChild(cardInner); 
+            charListContainer.appendChild(charCard);
                     });
                     pSection.appendChild(charListContainer); container.appendChild(pSection);
                 });
@@ -1935,15 +1939,15 @@
             
             // 偵測捲動距離以顯示/隱藏按鈕
             window.onscroll = function() {
-                const btn = document.getElementById("backToTop");
-                // 只有在 btn 確實存在於頁面上時，才執行後續邏輯
-                if (btn) {
-                    if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-                        btn.style.display = "flex";
-                    } else {
-                        btn.style.display = "none";
-                    }
-                }
+            const btn = document.getElementById("backToTop");
+            // 只有在 btn 確實存在於頁面上時，才執行後續邏輯
+            if (btn) {
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+            btn.style.display = "flex";
+            } else {
+            btn.style.display = "none";
+            }
+            }
             };
             
             // 執行平滑滾動至頂部
