@@ -468,6 +468,10 @@
                                 <span class="text-[11px] text-gray-400 dark:text-gray-500 font-medium bg-gray-50 dark:bg-gray-700 px-1 rounded whitespace-nowrap mt-0.5" data-lang-key="cell_kind">格子種類:</span>
                                 <div id="filter_gridType" class="flex flex-wrap gap-1.5 flex-1"></div>
                             </div>
+                            <div class="flex items-center sm:items-start gap-1.5 w-full mt-1">
+                                <span class="text-[11px] text-gray-400 dark:text-gray-500 font-medium bg-gray-50 dark:bg-gray-700 px-1 rounded whitespace-nowrap mt-0.5" data-lang-key="grid_status">格子狀態:</span>
+                                <div id="filter_gridStatus" class="flex flex-wrap gap-1.5 flex-1"></div>
+                            </div>
                         </div>
                     </div>
                     <div class="flex flex-col sm:flex-row items-start gap-2 border-t border-dashed border-gray-100 dark:border-gray-700 pt-2 w-full">
@@ -562,7 +566,7 @@
             let savedStates = {};
             try { savedStates = JSON.parse(localStorage.getItem(storageKey)) || {}; } catch(e) { savedStates = {}; }
             
-            let activeFilters = { personality: [], race: [], position: [], job: [], type: [], gridLayer: "all", gridType: [], search: "", displayMode: "all" };
+            let activeFilters = { personality: [], race: [], position: [], job: [], type: [], gridLayer: "all", gridType: [], gridStatus: "all", search: "", displayMode: "all" };
             
             let isFilterOpen = true;
             let isStatsOpen = window.innerWidth >= 768;
@@ -1113,6 +1117,27 @@
                         typeContainer.appendChild(btn); 
                     });
                 }
+                // 👇 新增這段來產生「已開啟/未開啟」按鈕
+                const statusContainer = document.getElementById("filter_gridStatus");
+                if(statusContainer){
+                    statusContainer.innerHTML = ""; 
+                    // 使用翻譯鍵值陣列
+                    const statuses = [ 
+                        {v:"all", n: t("filter_btn_all")}, 
+                        {v:"opened", n: t("filter_btn_opened")}, 
+                        {v:"unopened", n: t("filter_btn_unopened")} 
+                    ];
+    
+                    statuses.forEach(st => { 
+                        const btn = document.createElement("button"); 
+                        btn.innerText = st.n; 
+                        btn.id = `btn_filter_gridStatus_${st.v}`; 
+                        // 這裡確保 active/inactive 的樣式邏輯與你原本的篩選器一致
+                        btn.className = (activeFilters.gridStatus === st.v) ? btnActiveStyle : btnInactiveStyle; 
+                        btn.onclick = () => selectGridStatusFilter(st.v); 
+                        statusContainer.appendChild(btn); 
+                    });
+                }
             }
             
             function selectFilter(category, value) {
@@ -1136,8 +1161,17 @@
                 for (let btn of buttons) { if ((typeValue === "" && btn.id.endsWith("_all")) || (typeValue !== "" && btn.id.endsWith(`_${typeValue}`))) btn.className = btnActiveStyle; else btn.className = btnInactiveStyle; } applyFilterUI();
             }
             
+            // 👇 新增這一個函數
+            function selectGridStatusFilter(statusValue) {
+                activeFilters.gridStatus = statusValue; 
+                const buttons = document.getElementById("filter_gridStatus").getElementsByTagName("button");
+                for (let btn of buttons) { if (btn.id.endsWith(`_${statusValue}`)) btn.className = btnActiveStyle; else btn.className = btnInactiveStyle; } 
+                applyFilterUI();
+            }
+            
             function resetFilters() {
-                selectFilter("personality", ""); selectFilter("race", ""); selectFilter("position", ""); selectFilter("job", ""); selectFilter("type", ""); selectGridLayerFilter("all"); selectGridTypeFilter("");
+                // 👇 這裡的結尾補上 selectGridStatusFilter("all");
+                selectFilter("personality", ""); selectFilter("race", ""); selectFilter("position", ""); selectFilter("job", ""); selectFilter("type", ""); selectGridLayerFilter("all"); selectGridTypeFilter(""); selectGridStatusFilter("all");
                 document.getElementById("searchInput").value = ""; activeFilters.search = ""; setDisplayMode('all');
             }
             
@@ -1149,9 +1183,29 @@
                     const matchJ = activeFilters.job.length === 0 || activeFilters.job.includes(char.job);
                     const matchT = activeFilters.type.length === 0 || activeFilters.type.includes(char.type);
                     let matchGrid = true;
-                    if (activeFilters.gridType.length > 0) {
+                    // 如果有選擇特定的金蠟筆種類，或是有指定「已開啟/未開啟」狀態
+                    if (activeFilters.gridType.length > 0 || activeFilters.gridStatus !== "all") {
                         const layersToSearch = activeFilters.gridLayer === "all" ? [1,2,3] : [parseInt(activeFilters.gridLayer)];
-                        matchGrid = layersToSearch.some(l => char[`layer${l}`].some(attr => activeFilters.gridType.includes(attr)));
+                        
+                        matchGrid = layersToSearch.some(l => {
+                            return char[`layer${l}`].some((attr, originalIdx) => {
+                                // 1. 檢查種類是否符合 (如果沒選種類就全部通過)
+                                const typeMatches = activeFilters.gridType.length === 0 || activeFilters.gridType.includes(attr);
+                                
+                                // 2. 檢查狀態是否符合 (如果沒選狀態就全部通過)
+                                let statusMatches = true;
+                                if (activeFilters.gridStatus !== "all") {
+                                    const stateKey = `${char.name}_l${l}_${attr}_${originalIdx}`;
+                                    const isOpened = !!savedStates[stateKey]; // 讀取該格子的真實狀態
+                                    
+                                    if (activeFilters.gridStatus === "opened") statusMatches = isOpened;
+                                    if (activeFilters.gridStatus === "unopened") statusMatches = !isOpened;
+                                }
+                                
+                                // 必須種類跟狀態都符合，這格才算數
+                                return typeMatches && statusMatches;
+                            });
+                        });
                     }
                     const matchSearch = !activeFilters.search || t(char.name).toLowerCase().includes(activeFilters.search) || char.name.toLowerCase().includes(activeFilters.search);
             
