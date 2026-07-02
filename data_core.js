@@ -710,7 +710,7 @@ const PICKUP_SCHEDULE = [
     {
         start: "2026-07-02T17:00:00+09:00",
         end: "2026-07-16T10:59:59+09:00",
-        chars: ["雷內瓦, 芭瓏"],
+        chars: ["雷內瓦", "芭瓏"],
         note: "barong"
     },
 ];
