@@ -94,7 +94,7 @@
         <header class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md p-4 sm:p-5 rounded-2xl shadow-md border-4 border-amber-400 dark:border-slate-600 flex justify-between items-center relative z-10">
             <div>
                 <h1 class="text-xl sm:text-2xl font-black text-amber-950 dark:text-amber-400 mb-0.5 flex items-center gap-2">
-                    <div class="sprite-base sprite-common sprite-Title_Rim shrink-0 scale-[0.45] sm:scale-[0.6] origin-left -ml-1"></div>
+                    <div class="sprite-base sprite-common sprite-Title_Rim shrink-0 scale-[0.45] origin-left -ml-1"></div>
                     <span class="-ml-2">角色動態展示器</span>
                 </h1>
             </div>
@@ -212,28 +212,40 @@
                     let suffix = costumeKey.replace(baseName, "");
                     this.skinSuffix = suffix ? `_${suffix}` : ""; 
                 },
-
-                // 加入 onEnded 參數
-                play(folder, filename, onEnded = null) {
+                // 🌟 新增：統一停止語音的方法
+                stop(fadeDuration = 0.5) {
+                    if (this.currentAudio) {
+                        const audio = this.currentAudio;
+                        audio.loop = false; // 確保停止循環
+                        // 簡單的淡出處理
+                        let fadeOut = setInterval(() => {
+                            if (audio.volume > 0.1) {
+                                audio.volume -= 0.1;
+                            } else {
+                                audio.pause();
+                                audio.currentTime = 0;
+                                audio.volume = 0.8;
+                                clearInterval(fadeOut);
+                            }
+                        }, (fadeDuration * 1000) / 10);
+                        this.currentAudio = null;
+                    }
+                },
+                play(folder, filename, onEnded = null, loop = false) {
                     if (this.currentAudio) {
                         this.currentAudio.pause();
                         this.currentAudio.currentTime = 0;
-                        this.currentAudio.onended = null; // 清除上一個回呼，避免衝突
                     }
                     const path = `./${folder}/${filename}.mp3`;
                     this.currentAudio = new Audio(path);
-                    this.currentAudio.volume = 0.8; 
+                    this.currentAudio.volume = 0.8;
+                    this.currentAudio.loop = loop; // 🌟 支援循環
                     
-                    // 如果有傳入結束事件，綁定到音檔上
-                    if (onEnded) {
+                    if (onEnded && !loop) {
                         this.currentAudio.onended = onEnded;
                     }
-
-                    this.currentAudio.play().catch(e => {
-                        console.log("語音無法播放或找不到檔案:", path);
-                        // 防呆機制：如果檔案遺失，立刻執行 onEnded，確保角色不會永遠卡住
-                        if (onEnded) onEnded();
-                    });
+                    
+                    this.currentAudio.play().catch(e => console.log("語音無法播放:", path));
                     return this.currentAudio;
                 },
 
@@ -247,7 +259,8 @@
                     this.playRandom('spawn', variants, "", onEnded); 
                 },
                 playTickleStart(onEnded = null) { this.play('tickle', `Voice_${this.baseName}_TickleStart1`, onEnded); },
-                playTickleDuring(onEnded = null) { this.play('tickle', `Voice_${this.baseName}_TickleDuring1`, onEnded); },
+                // 🌟 修改：將 loop 設為 true
+                playTickleDuring() { this.play('tickle', `Voice_${this.baseName}_TickleDuring1`, null, true); },
                 
                 playTouch(onEnded = null) { 
                     const variants = [`Voice_${this.baseName}_Touch1`, `Voice_${this.baseName}_Touch1_1`, `Voice_${this.baseName}_Touch1_2`];
@@ -414,7 +427,7 @@
                                     <div class="sprite-base sprite-common ${raceSprite} shrink-0 scale-[0.45]"></div>
                                 </div>
                                 <div class="w-full h-full bg-white/20 dark:bg-black/20 backdrop-blur-[1px] absolute inset-0"></div>
-                                <div class="sprite-base ${charSpriteBase} ${charSpriteClass} shrink-0 scale-[0.375] relative z-10"></div>
+                                <div class="sprite-base ${charSpriteBase} ${charSpriteClass} shrink-0 scale-[0.72] relative z-10"></div>
                             </div>
                             <span class="text-[9px] sm:text-[10px] font-bold text-gray-600 dark:text-gray-300 group-hover:text-amber-600 dark:group-hover:text-amber-400 text-center w-full truncate leading-tight">${displayName}</span>
                         `;
@@ -961,19 +974,24 @@
                         } else if (hitZoneOnDown.name === "頭部" && animNames.includes("Pat_Idle")) {
                             player.animationState.setAnimation(0, "Pat_Idle", true);
                             updateUI("Pat_Idle");
-                        } else if (hitZoneOnDown.name === "身體" && animNames.includes("Tickle_Idle_1")) {
-                            player.animationState.setAnimation(0, "Tickle_Idle_1", true);
-                            updateUI("Tickle_Idle_1");
-                            VoiceManager.playTickleStart();
+                       } else if (hitZoneOnDown.name === "身體" && animNames.includes("Tickle_Idle_1")) {
+    player.animationState.setAnimation(0, "Tickle_Idle_1", true);
+    updateUI("Tickle_Idle_1");
+    VoiceManager.playTickleStart(() => {
+        // 只有在 TickleStart 播完後，才開始循環播放 During
+        // 並且要檢查是否還在按著 (isDragging)
+        if (isDragging) {
+            VoiceManager.playTickleDuring();
+        }
+    });
 
-                            tickleTimer = setTimeout(() => {
-                                if (animNames.includes("Tickle_Idle_2")) {
-                                    player.animationState.setAnimation(0, "Tickle_Idle_2", true);
-                                    updateUI("Tickle_Idle_2");
-                                    VoiceManager.playTickleDuring();
-                                }
-                            }, 2000); 
-                        }
+    tickleTimer = setTimeout(() => {
+        if (isDragging && animNames.includes("Tickle_Idle_2")) {
+            player.animationState.setAnimation(0, "Tickle_Idle_2", true);
+            updateUI("Tickle_Idle_2");
+        }
+    }, 2000); 
+}
                     }
             
                     if (hasTriggeredRub && hitZoneOnDown && activeInteractBone) {
@@ -1062,6 +1080,8 @@
                     if (!isDragging) return;
                     isDragging = false; 
                     clearTimeout(tickleTimer);
+
+                    VoiceManager.stop(0.5);
             
                     if (!getIsLobby()) return;
                     const animNames = player.skeleton.data.animations.map(a => a.name);
