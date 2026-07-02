@@ -1935,12 +1935,15 @@
             
             // 偵測捲動距離以顯示/隱藏按鈕
             window.onscroll = function() {
-            const btn = document.getElementById("backToTop");
-            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-            btn.style.display = "flex";
-            } else {
-            btn.style.display = "none";
-            }
+                const btn = document.getElementById("backToTop");
+                // 只有在 btn 確實存在於頁面上時，才執行後續邏輯
+                if (btn) {
+                    if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                        btn.style.display = "flex";
+                    } else {
+                        btn.style.display = "none";
+                    }
+                }
             };
             
             // 執行平滑滾動至頂部
