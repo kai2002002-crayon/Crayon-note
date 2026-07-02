@@ -7,6 +7,7 @@
         <link rel="icon" href="https://i.postimg.cc/mkfSTq5k/Favicon.png" type="image/png">
         <script src="data_core.js"></script>
         <script src="data_skills.js"></script>
+        <link rel="stylesheet" href="sprites.css">
         <script src="https://cdn.tailwindcss.com"></script>
         <script>
             tailwind.config = { darkMode: 'class' }
@@ -109,8 +110,9 @@
         <div class="max-w-4xl mx-auto space-y-6">
             <header class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-2xl p-4 sm:p-6 shadow border-2 border-amber-200/80 dark:border-gray-700 flex flex-col sm:flex-row justify-between items-center gap-4">
                 <h1 class="text-2xl sm:text-3xl font-bold text-amber-900 dark:text-amber-400 flex items-center gap-2">
-                    <img src="https://i.postimg.cc/sDstHDN1/Aside-Skill-Rim-3.png" alt="RimIcon" class="h-8 sm:h-10 w-auto object-contain drop-shadow-sm">
-                    嘟嘟臉角色招募模擬器
+                    <!-- 🌟 替換為 Title_Rim 雪碧圖 -->
+                    <div class="sprite-base sprite-common sprite-Title_Rim shrink-0 scale-[0.5] sm:scale-[0.6] origin-left -ml-1"></div>
+                    <span class="-ml-2">嘟嘟臉角色招募模擬器</span>
                 </h1>
                 <button onclick="window.close()" class="px-4 py-1.5 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg text-sm font-bold transition-colors shrink-0">
                 返回記事本
@@ -125,13 +127,23 @@
                 </div>
             </section>
             <section class="flex flex-wrap justify-center gap-4 py-4">
-                <button onclick="performGacha(1)" class="btn-gacha px-6 sm:px-8 py-3 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-xl shadow-lg border-b-4 border-blue-700 text-base sm:text-lg flex items-center gap-2">
-                <img id="iconGacha1" src="https://i.postimg.cc/q68rkhcZ/Icon-Gacha-Ticket-Hero.png" alt="Ticket" class="w-6 h-6 sm:w-7 sm:h-7 object-contain drop-shadow-md">
-                1次招募
+                <!-- 1次招募 -->
+                <button onclick="performGacha(1)" class="btn-gacha px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-xl shadow-lg border-b-4 border-blue-700 flex items-center gap-2 relative h-[50px]">
+                    <!-- 將 left-4 改為 left-3，讓 icon 更靠左 -->
+                    <div class="absolute left-3 flex items-center justify-center pointer-events-none">
+                        <span id="iconGacha1" class="sprite-base sprite-common sprite-Icon_GachaTicketHero scale-[0.4] origin-center"></span>
+                    </div>
+                    <!-- 將 ml-8 改為 ml-10，確保文字不會被 icon 蓋到 -->
+                    <span class="ml-10">1次招募</span>
                 </button>
-                <button onclick="performGacha(10)" class="btn-gacha px-6 sm:px-8 py-3 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl shadow-lg border-b-4 border-amber-700 text-base sm:text-lg flex items-center gap-2">
-                <img id="iconGacha10" src="https://i.postimg.cc/QKpDX9g4/Icon-Gacha-Ticket-Hero-10.png" alt="Ticket 10" class="w-6 h-6 sm:w-7 sm:h-7 object-contain drop-shadow-md">
-                10次招募
+                <!-- 10次招募 -->
+                <button onclick="performGacha(10)" class="btn-gacha px-6 py-3 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl shadow-lg border-b-4 border-amber-700 flex items-center gap-2 relative h-[50px]">
+                    <!-- 將 left-4 改為 left-3，讓 icon 更靠左 -->
+                    <div class="absolute left-3 flex items-center justify-center pointer-events-none">
+                        <span id="iconGacha10" class="sprite-base sprite-common sprite-Icon_GachaTicketHero_10 scale-[0.4] origin-center"></span>
+                    </div>
+                    <!-- 將 ml-8 改為 ml-10，確保文字不會被 icon 蓋到 -->
+                    <span class="ml-10">10次招募</span>
                 </button>
             </section>
             <section id="resultArea" class="bg-gradient-to-b from-white/95 to-amber-50/95 dark:from-gray-800/95 dark:to-gray-900/95 backdrop-blur-md rounded-2xl p-6 shadow-xl border-4 border-amber-300 dark:border-gray-600 min-h-[250px] flex flex-col items-center justify-center">
@@ -269,18 +281,21 @@
                 if (activeElement) activeElement.classList.add('active');
                 if (type !== 'personality') document.getElementById('personalitySubMenu').classList.add('hidden');
             
-                // 🌟 更新招募按鈕的 Icon
                 const icon1 = document.getElementById('iconGacha1');
-                const icon10 = document.getElementById('iconGacha10');
-                if (icon1 && icon10) {
-                    if (type === 'personality') {
-                        icon1.src = 'https://i.postimg.cc/7Jg4xG1B/Icon-Gacha-Personality.png';
-                        icon10.src = 'https://i.postimg.cc/nsGjRr96/Icon-Gacha-Personality-10.png';
-                    } else {
-                        icon1.src = 'https://i.postimg.cc/q68rkhcZ/Icon-Gacha-Ticket-Hero.png';
-                        icon10.src = 'https://i.postimg.cc/QKpDX9g4/Icon-Gacha-Ticket-Hero-10.png';
-                    }
-                }
+            const icon10 = document.getElementById('iconGacha10');
+            
+            // 設定基礎樣式，將 scale 與尺寸分開設定
+            const commonClasses = "sprite-base sprite-common shrink-0 origin-center transition-all";
+            
+            if (icon1 && icon10) {
+            if (type === 'personality') {
+            icon1.className = "sprite-base sprite-common sprite-Icon_GachaPersonality scale-[0.4] origin-center";
+            icon10.className = "sprite-base sprite-common sprite-Icon_GachaPersonality_10 scale-[0.4] origin-center";
+            } else {
+            icon1.className = "sprite-base sprite-common sprite-Icon_GachaTicketHero scale-[0.4] origin-center";
+            icon10.className = "sprite-base sprite-common sprite-Icon_GachaTicketHero_10 scale-[0.4] origin-center";
+            }
+            }
             }
             
             function updatePersonalityBtns(selectedP) {
@@ -407,14 +422,22 @@
             // ==========================
             // UI 渲染與動畫
             // ==========================
+            // 🌟 加入雪碧圖基礎設定對應表
+            const SPRITE_CLASS_MAP = {
+                race_龍族: "sprite-Bg_Dragon", race_精靈: "sprite-Bg_Elf", race_妖精: "sprite-Bg_Sprite",
+                race_幽靈: "sprite-Bg_Phantom", race_魔靈: "sprite-Bg_Elemental", race_不明: "sprite-Bg_Unknown",
+                race_獸人: "sprite-Bg_Werebeast", race_魔女: "sprite-Bg_Witch", race_unknown: "sprite-Bg_Unknown"
+            };
+            const CHAR_SPRITE_MAP = {
+                "冷靜": "sprite-char-composed", "憂鬱": "sprite-char-depressed",
+                "天真": "sprite-char-innocence", "狂亂": "sprite-char-madness", "活潑": "sprite-char-vivacious"
+            };
+            
             function createAvatarDOM(resultObj, index = 0, isHistory = false) {
                 const char = resultObj.char;
                 const isRateUp = resultObj.isRateUp;
                 const is3StarNormal = (char.star === 3 && !isRateUp);
                 
-                const avatarPath = typeof IMAGE_MAP !== 'undefined' && IMAGE_MAP[`avatar_${char.name}`] ? IMAGE_MAP[`avatar_${char.name}`] : ""; 
-                const bgUrl = (typeof CHAR_BACKGROUNDS !== 'undefined' && CHAR_BACKGROUNDS[char.race]) ? CHAR_BACKGROUNDS[char.race] : "";
-                const bgInlineStyle = bgUrl ? `background-image: url('${bgUrl}'); background-size: cover; background-position: center;` : "background-color: #fef3c7;";
                 const borderColorClass = personalityBorderColors[char.personality] || "border-gray-300";
                 
                 // 非特選三星性格發光
@@ -424,13 +447,32 @@
                 const animClass = isHistory ? "" : (isRateUp ? "animate-pop-exaggerated" : "animate-pop");
                 const animStyle = isHistory ? "" : `animation-delay: ${index * 0.12}s;`;
                 const sizeClass = isHistory ? "w-10 h-10" : "w-16 h-16 sm:w-20 sm:h-20"; 
+                
+                // 🌟 雪碧圖變數準備
+                const spineName = typeof SPINE_MAP !== 'undefined' && SPINE_MAP[char.name] ? SPINE_MAP[char.name] : char.name;
+                const charSpriteBase = CHAR_SPRITE_MAP[char.personality] || "sprite-char-innocence";
+                const charSpriteClass = `sprite-${spineName}`;
+                
+                let raceKey = char.race; if (raceKey === "???") raceKey = "unknown";
+                const raceSprite = SPRITE_CLASS_MAP[`race_${raceKey}`] || "sprite-Bg_Unknown";
+                
+                // 根據歷史紀錄區或展示區微調縮放比例
+                // 🌟 放大頭像比例 (0.55 -> 0.6, 0.9 -> 1.0, 1.1 -> 1.2)
+                const innerScale = isHistory ? "scale-[0.6]" : "scale-[1.0] sm:scale-[1.2]";
+                const bgScale = isHistory ? "scale-[0.35]" : "scale-[0.6] sm:scale-[0.75]";
             
                 let avatarHTML = `
                     <div class="relative shrink-0 ${sizeClass}">
-                        <div class="char-avatar-container ${sizeClass} rounded-lg border-[3px] ${borderColorClass} ${glowClass} bg-white transition-all" style="${bgInlineStyle}">
-                            <img src="${avatarPath}" alt="${char.name}" onerror="this.style.display='none';">
+                        <div class="char-avatar-container ${sizeClass} rounded-lg border-[3px] ${borderColorClass} ${glowClass} bg-[#fcf8f2] dark:bg-gray-800 transition-all overflow-hidden relative flex items-center justify-center">
+                            <!-- 種族背景 -->
+                            <div class="absolute inset-0 flex items-center justify-center opacity-85">
+                                <div class="sprite-base sprite-common ${raceSprite} shrink-0 ${bgScale} origin-center"></div>
+                            </div>
+                            <div class="w-full h-full bg-white/20 dark:bg-black/20 backdrop-blur-[1px] absolute inset-0 z-0"></div>
+                            <!-- 角色頭像 -->
+                            <div class="sprite-base ${charSpriteBase} ${charSpriteClass} shrink-0 ${innerScale} origin-center relative z-10"></div>
                         </div>
-                        <div class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 flex gap-[1px]">
+                        <div class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 flex gap-[1px] z-20">
                             ${Array(char.star).fill('<span class="text-xs drop-shadow-md">⭐</span>').join('')}
                         </div>
                     </div>
@@ -444,7 +486,7 @@
                                     ${avatarHTML}
                                 </div>
                             </div>
-                            <span class="text-[10px] font-bold text-amber-600 bg-amber-100 px-1 rounded">${char.name}</span>
+                            <span class="text-[10px] font-bold text-amber-600 bg-amber-100 px-1 rounded z-10 relative">${char.name}</span>
                         </div>
                     `;
                 }
@@ -452,7 +494,7 @@
                 return `
                     <div class="flex flex-col items-center gap-2 pt-[3px] ${animClass}" style="${animStyle}">
                         ${avatarHTML}
-                        <span class="text-[10px] font-bold text-gray-500 bg-gray-100 dark:bg-gray-800 px-1 rounded">${char.name}</span>
+                        <span class="text-[10px] font-bold text-gray-500 bg-gray-100 dark:bg-gray-800 px-1 rounded z-10 relative">${char.name}</span>
                     </div>
                 `;
             }
