@@ -1171,8 +1171,8 @@
                     return arrObj[lang] || arrObj['zh'] || []; 
                 };
             
-                const isUpcoming = ['Rim', 'xXionx'].includes(charName) || ['Rim', 'xXionx'].includes(spineKey);
-                const releaseTime = new Date('2026-06-25T04:00:00+09:00').getTime(); 
+                const isUpcoming = ['Sylla', 'Alice'].includes(charName) || ['Rim', 'xXionx'].includes(spineKey);
+                const releaseTime = new Date('2026-07-09T04:00:00+09:00').getTime(); 
                 const now = new Date().getTime();
             
                 if (!data) {
@@ -1185,9 +1185,9 @@
                 // 🌟 3. 處理「即將實裝」的提示多語系
                 if (isUpcoming && now < releaseTime) {
                     const upcomingMsg = {
-                        zh: "此角色的願像系統將於 2026/06/25 04:00 (JST) 實裝解鎖",
-                        ja: "このキャラクターのアサイドシステムは 2026/06/25 04:00 (JST) に実装されます",
-                        en: "This character's Yearning system will be unlocked on 2026/06/25 04:00 (JST)"
+                        zh: "此角色的願像系統將於 2026/07/09 04:00 (JST) 實裝解鎖",
+                        ja: "このキャラクターのアサイドシステムは 2026/07/09 04:00 (JST) に実装されます",
+                        en: "This character's Yearning system will be unlocked on 2026/07/09 04:00 (JST)"
                     };
                     
                     asideContainer.innerHTML = `
@@ -1858,7 +1858,7 @@
             <div class="flex flex-col gap-1 text-[11px] text-gray-500 dark:text-gray-400 opacity-80">
                 <p data-i18n="footer_author">📝 記事本製作者: 冷笑話幽靈</p>
                 <p data-i18n="footer_copyright">© 遊戲版權: EpidGames & Bilibili</p>
-                <p data-i18n="footer_lastupdate">最後更新日期：18/06/2026</p>
+                <p data-i18n="footer_lastupdate">最後更新日期：02/07/2026</p>
             </div>
         </footer>
         <button id="backToTop" onclick="scrollToTop()" title="回頂部">
