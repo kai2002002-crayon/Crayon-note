@@ -1,0 +1,95 @@
+.sprite {
+    background-image: url(char_depressed.png);
+    background-repeat: no-repeat;
+    display: block;
+}
+
+.sprite-Ashur {
+    width: 63px;
+    height: 63px;
+    background-position: -5px -5px;
+}
+
+.sprite-Blanchet {
+    width: 63px;
+    height: 63px;
+    background-position: -5px -78px;
+}
+
+.sprite-Chopi {
+    width: 63px;
+    height: 63px;
+    background-position: -5px -151px;
+}
+
+.sprite-Festa {
+    width: 63px;
+    height: 63px;
+    background-position: -5px -224px;
+}
+
+.sprite-Hilde {
+    width: 63px;
+    height: 63px;
+    background-position: -5px -297px;
+}
+
+.sprite-Kidian {
+    width: 63px;
+    height: 63px;
+    background-position: -5px -370px;
+}
+
+.sprite-Kommy {
+    width: 63px;
+    height: 63px;
+    background-position: -5px -443px;
+}
+
+.sprite-Levi {
+    width: 63px;
+    height: 63px;
+    background-position: -5px -516px;
+}
+
+.sprite-Posher {
+    width: 63px;
+    height: 63px;
+    background-position: -5px -589px;
+}
+
+.sprite-Rim {
+    width: 63px;
+    height: 63px;
+    background-position: -5px -662px;
+}
+
+.sprite-Risty {
+    width: 63px;
+    height: 63px;
+    background-position: -5px -735px;
+}
+
+.sprite-Snorky {
+    width: 63px;
+    height: 63px;
+    background-position: -5px -808px;
+}
+
+.sprite-Veroo {
+    width: 63px;
+    height: 63px;
+    background-position: -5px -881px;
+}
+
+.sprite-Yomi {
+    width: 63px;
+    height: 63px;
+    background-position: -5px -954px;
+}
+
+.sprite-xXionx {
+    width: 63px;
+    height: 63px;
+    background-position: -5px -1027px;
+}

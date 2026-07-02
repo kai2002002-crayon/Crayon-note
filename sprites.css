@@ -1,0 +1,240 @@
+/* 🌟 CSS Sprite 雪碧圖基礎與分類設定 */
+.sprite-base {
+    background-repeat: no-repeat;
+    display: block;
+}
+.sprite-common { background-image: url('common_icon.png'); }
+.sprite-char-composed { background-image: url('char_composed.png'); }
+.sprite-char-depressed { background-image: url('char_depressed.png'); }
+.sprite-char-innocence { background-image: url('char_innocence.png'); }
+.sprite-char-madness { background-image: url('char_madness.png'); }
+.sprite-char-vivacious { background-image: url('char_vivacious.png'); }
+.sprite-ult-composed { background-image: url('ultimate_composed.png'); }
+.sprite-ult-depressed { background-image: url('ultimate_depressed.png'); }
+.sprite-ult-innocence { background-image: url('ultimate_innocence.png'); }
+.sprite-ult-madness { background-image: url('ultimate_madness.png'); }
+.sprite-ult-vivacious { background-image: url('ultimate_vivacious.png'); }
+
+/* =======================================
+   🌟 通用圖示 (common_icon.png)
+   ======================================= */
+.sprite-1STAR { width: 478px; height: 116px; background-position: -5px -5px; }
+.sprite-2STAR { width: 478px; height: 116px; background-position: -5px -131px; }
+.sprite-3STAR { width: 478px; height: 116px; background-position: -5px -257px; }
+.sprite-ASIDE_1STAR { width: 73px; height: 29px; background-position: -493px -5px; }
+.sprite-ASIDE_2STAR { width: 73px; height: 29px; background-position: -576px -5px; }
+.sprite-ASIDE_3STAR { width: 73px; height: 29px; background-position: -659px -5px; }
+.sprite-Album_Icon_Info { width: 54px; height: 54px; background-position: -493px -44px; }
+.sprite-Album_Icon_Skin { width: 58px; height: 62px; background-position: -557px -44px; }
+.sprite-Bg_Dragon { width: 114px; height: 114px; background-position: -625px -44px; }
+.sprite-Bg_Elemental { width: 114px; height: 114px; background-position: -493px -168px; }
+.sprite-Bg_Elf { width: 114px; height: 114px; background-position: -617px -168px; }
+.sprite-Bg_Phantom { width: 114px; height: 114px; background-position: -493px -292px; }
+.sprite-Bg_Sprite { width: 114px; height: 114px; background-position: -617px -292px; }
+.sprite-Bg_Unknown { width: 114px; height: 114px; background-position: -5px -416px; }
+.sprite-Bg_Werebeast { width: 114px; height: 114px; background-position: -129px -416px; }
+.sprite-Bg_Witch { width: 114px; height: 114px; background-position: -253px -416px; }
+.sprite-GachaButton { width: 72px; height: 72px; background-position: -377px -416px; }
+.sprite-Icon_GachaPersonality { width: 64px; height: 64px; background-position: -459px -416px; }
+.sprite-Icon_GachaPersonality_10 { width: 72px; height: 72px; background-position: -533px -416px; }
+.sprite-Icon_GachaTicketHero { width: 64px; height: 64px; background-position: -615px -416px; }
+.sprite-Icon_GachaTicketHero_10 { width: 72px; height: 72px; background-position: -615px -490px; }
+.sprite-Job_DPS { width: 64px; height: 64px; background-position: -459px -490px; }
+.sprite-Job_Support { width: 64px; height: 64px; background-position: -5px -572px; }
+.sprite-Job_Tank { width: 64px; height: 64px; background-position: -79px -572px; }
+.sprite-Personality_Composed { width: 62px; height: 66px; background-position: -153px -572px; }
+.sprite-Personality_Depressed { width: 62px; height: 66px; background-position: -225px -572px; }
+.sprite-Personality_Innocence { width: 62px; height: 66px; background-position: -297px -572px; }
+.sprite-Personality_Madness { width: 62px; height: 66px; background-position: -369px -572px; }
+.sprite-Personality_Vivacious { width: 62px; height: 66px; background-position: -441px -572px; }
+.sprite-PickPerconalityIcon_EldainHero { width: 73px; height: 71px; background-position: -513px -572px; }
+.sprite-PickPerconalityIcon_NormalHero { width: 73px; height: 71px; background-position: -596px -572px; }
+.sprite-Position_Back { width: 64px; height: 64px; background-position: -5px -653px; }
+.sprite-Position_Front { width: 64px; height: 64px; background-position: -79px -653px; }
+.sprite-Position_Middle { width: 64px; height: 64px; background-position: -153px -653px; }
+.sprite-Race_Dragon { width: 55px; height: 55px; background-position: -679px -572px; }
+.sprite-Race_Elemental { width: 55px; height: 55px; background-position: -679px -637px; }
+.sprite-Race_Elf { width: 55px; height: 55px; background-position: -749px -5px; }
+.sprite-Race_Phantom { width: 55px; height: 55px; background-position: -749px -70px; }
+.sprite-Race_Sprite { width: 55px; height: 55px; background-position: -749px -135px; }
+.sprite-Race_Unknown { width: 55px; height: 55px; background-position: -741px -200px; }
+.sprite-Race_Werebeast { width: 55px; height: 55px; background-position: -741px -265px; }
+.sprite-Race_Witch { width: 55px; height: 55px; background-position: -741px -330px; }
+.sprite-Title_Rim { width: 64px; height: 64px; background-position: -741px -395px; }
+.sprite-Type_Magic { width: 64px; height: 64px; background-position: -697px -469px; }
+.sprite-Type_Physic { width: 64px; height: 64px; background-position: -227px -702px; }
+.sprite-boardoff_ATK { width: 64px; height: 64px; background-position: -301px -702px; }
+.sprite-boardoff_CRI { width: 64px; height: 64px; background-position: -375px -702px; }
+.sprite-boardoff_DEF { width: 64px; height: 64px; background-position: -449px -702px; }
+.sprite-boardoff_HP { width: 64px; height: 64px; background-position: -523px -702px; }
+.sprite-boardoff_RES { width: 64px; height: 64px; background-position: -597px -702px; }
+.sprite-boardon_ATK { width: 64px; height: 64px; background-position: -671px -702px; }
+.sprite-boardon_CRI { width: 64px; height: 64px; background-position: -814px -5px; }
+.sprite-boardon_DEF { width: 64px; height: 64px; background-position: -814px -79px; }
+.sprite-boardon_HP { width: 64px; height: 64px; background-position: -814px -153px; }
+.sprite-boardon_RES { width: 64px; height: 64px; background-position: -806px -227px; }
+.sprite-attack_magical { width: 64px; height: 64px; background-position: -806px -301px; }
+.sprite-minirim { width: 63px; height: 83px; background-position: -815px -375px; }
+.sprite-attack_physical { width: 64px; height: 64px; background-position: -815px -468px; }
+
+/* =======================================
+   🌟 角色頭像 (char_*.png)
+   ======================================= */
+/* Composed */
+.sprite-Amelia { width: 63px; height: 63px; background-position: -5px -5px; }
+.sprite-Aya { width: 63px; height: 63px; background-position: -5px -78px; }
+.sprite-Barong { width: 63px; height: 63px; background-position: -5px -151px; }
+.sprite-Ed { width: 63px; height: 63px; background-position: -5px -224px; }
+.sprite-Elena { width: 63px; height: 63px; background-position: -5px -297px; }
+.sprite-Espi { width: 63px; height: 63px; background-position: -5px -370px; }
+.sprite-Fricle { width: 63px; height: 63px; background-position: -5px -443px; }
+.sprite-Jade { width: 63px; height: 63px; background-position: -5px -516px; }
+.sprite-Lazy { width: 63px; height: 63px; background-position: -5px -589px; }
+.sprite-Meluna { width: 63px; height: 63px; background-position: -5px -662px; }
+.sprite-Patula { width: 63px; height: 63px; background-position: -5px -735px; }
+.sprite-Picora { width: 63px; height: 63px; background-position: -5px -808px; }
+.sprite-Sylla { width: 63px; height: 63px; background-position: -5px -881px; }
+.sprite-Velvet { width: 63px; height: 63px; background-position: -5px -954px; }
+/* Depressed */
+.sprite-Ashur { width: 63px; height: 63px; background-position: -5px -5px; }
+.sprite-Blanchet { width: 63px; height: 63px; background-position: -5px -78px; }
+.sprite-Chopi { width: 63px; height: 63px; background-position: -5px -151px; }
+.sprite-Festa { width: 63px; height: 63px; background-position: -5px -224px; }
+.sprite-Hilde { width: 63px; height: 63px; background-position: -5px -297px; }
+.sprite-Kidian { width: 63px; height: 63px; background-position: -5px -370px; }
+.sprite-Kommy { width: 63px; height: 63px; background-position: -5px -443px; }
+.sprite-Levi { width: 63px; height: 63px; background-position: -5px -516px; }
+.sprite-Posher { width: 63px; height: 63px; background-position: -5px -589px; }
+.sprite-Rim { width: 63px; height: 63px; background-position: -5px -662px; }
+.sprite-Risty { width: 63px; height: 63px; background-position: -5px -735px; }
+.sprite-Snorky { width: 63px; height: 63px; background-position: -5px -808px; }
+.sprite-Veroo { width: 63px; height: 63px; background-position: -5px -881px; }
+.sprite-Yomi { width: 63px; height: 63px; background-position: -5px -954px; }
+.sprite-xXionx { width: 63px; height: 63px; background-position: -5px -1027px; }
+/* Innocence */
+.sprite-Allet { width: 63px; height: 63px; background-position: -5px -5px; }
+.sprite-BigWood { width: 63px; height: 63px; background-position: -5px -78px; }
+.sprite-Cuee { width: 63px; height: 63px; background-position: -5px -151px; }
+.sprite-Erpin { width: 63px; height: 63px; background-position: -5px -224px; }
+.sprite-Gabia { width: 63px; height: 63px; background-position: -5px -297px; }
+.sprite-Haley { width: 63px; height: 63px; background-position: -5px -370px; }
+.sprite-Kyarot { width: 63px; height: 63px; background-position: -5px -443px; }
+.sprite-Mago { width: 63px; height: 63px; background-position: -5px -516px; }
+.sprite-Naia { width: 63px; height: 63px; background-position: -5px -589px; }
+.sprite-Rohne { width: 63px; height: 63px; background-position: -5px -662px; }
+.sprite-Sari { width: 63px; height: 63px; background-position: -5px -735px; }
+.sprite-Silphir { width: 63px; height: 63px; background-position: -5px -808px; }
+.sprite-Speaki { width: 63px; height: 63px; background-position: -5px -881px; }
+.sprite-Vivi { width: 63px; height: 63px; background-position: -5px -954px; }
+/* Madness */
+.sprite-Alice { width: 63px; height: 63px; background-position: -5px -5px; }
+.sprite-Belita { width: 63px; height: 63px; background-position: -5px -78px; }
+.sprite-Chloe { width: 63px; height: 63px; background-position: -5px -151px; }
+.sprite-Diana { width: 63px; height: 63px; background-position: -5px -224px; }
+.sprite-Ifrit { width: 63px; height: 63px; background-position: -5px -297px; }
+.sprite-Leets { width: 63px; height: 63px; background-position: -5px -370px; }
+.sprite-MaestroMK2 { width: 63px; height: 63px; background-position: -5px -443px; }
+.sprite-Maison { width: 63px; height: 63px; background-position: -5px -516px; }
+.sprite-Mayo { width: 63px; height: 63px; background-position: -5px -589px; }
+.sprite-Ner { width: 63px; height: 63px; background-position: -5px -662px; }
+.sprite-RenewaAwaken { width: 63px; height: 63px; background-position: -5px -735px; }
+.sprite-Shady { width: 63px; height: 63px; background-position: -5px -808px; }
+.sprite-Sist { width: 63px; height: 63px; background-position: -5px -881px; }
+.sprite-Yumimi { width: 63px; height: 63px; background-position: -5px -954px; }
+/* Vivacious */
+.sprite-Beni { width: 63px; height: 63px; background-position: -5px -5px; }
+.sprite-Butter { width: 63px; height: 63px; background-position: -5px -78px; }
+.sprite-Canna { width: 63px; height: 63px; background-position: -5px -151px; }
+.sprite-Carren { width: 63px; height: 63px; background-position: -5px -224px; }
+.sprite-Epica { width: 63px; height: 63px; background-position: -5px -297px; }
+.sprite-Jubee { width: 63px; height: 63px; background-position: -5px -370px; }
+.sprite-Marie { width: 63px; height: 63px; background-position: -5px -443px; }
+.sprite-Momo { width: 63px; height: 63px; background-position: -5px -516px; }
+.sprite-Mynx { width: 63px; height: 63px; background-position: -5px -589px; }
+.sprite-Rude { width: 63px; height: 63px; background-position: -5px -662px; }
+.sprite-Rufo { width: 63px; height: 63px; background-position: -5px -735px; }
+.sprite-Selline { width: 63px; height: 63px; background-position: -5px -808px; }
+.sprite-Shoupan { width: 63px; height: 63px; background-position: -5px -881px; }
+.sprite-Taida { width: 63px; height: 63px; background-position: -5px -954px; }
+.sprite-Ui { width: 63px; height: 63px; background-position: -5px -1027px; }
+
+/* =======================================
+   🌟 角色大絕頭像 (ultimate_*.png)
+   ======================================= */
+/* Composed */
+.sprite-Icon_UltimateSkill_Amelia { width: 64px; height: 64px; background-position: -5px -5px; }
+.sprite-Icon_UltimateSkill_Aya { width: 64px; height: 64px; background-position: -5px -79px; }
+.sprite-Icon_UltimateSkill_Barong { width: 64px; height: 64px; background-position: -5px -153px; }
+.sprite-Icon_UltimateSkill_Ed { width: 64px; height: 64px; background-position: -5px -227px; }
+.sprite-Icon_UltimateSkill_Elena { width: 64px; height: 64px; background-position: -5px -301px; }
+.sprite-Icon_UltimateSkill_Espi { width: 64px; height: 64px; background-position: -5px -375px; }
+.sprite-Icon_UltimateSkill_Fricle { width: 64px; height: 64px; background-position: -5px -449px; }
+.sprite-Icon_UltimateSkill_Jade { width: 64px; height: 64px; background-position: -5px -523px; }
+.sprite-Icon_UltimateSkill_Lazy { width: 64px; height: 64px; background-position: -5px -597px; }
+.sprite-Icon_UltimateSkill_Meluna { width: 64px; height: 64px; background-position: -5px -671px; }
+.sprite-Icon_UltimateSkill_Patula { width: 64px; height: 64px; background-position: -5px -745px; }
+.sprite-Icon_UltimateSkill_Picora { width: 64px; height: 64px; background-position: -5px -819px; }
+.sprite-Icon_UltimateSkill_Sylla { width: 64px; height: 64px; background-position: -5px -893px; }
+.sprite-Icon_UltimateSkill_Velvet { width: 64px; height: 64px; background-position: -5px -967px; }
+/* Depressed */
+.sprite-Icon_UltimateSkill_Ashur { width: 64px; height: 64px; background-position: -5px -5px; }
+.sprite-Icon_UltimateSkill_Blanche { width: 64px; height: 64px; background-position: -5px -79px; }
+.sprite-Icon_UltimateSkill_Chopi { width: 64px; height: 64px; background-position: -5px -153px; }
+.sprite-Icon_UltimateSkill_Festa { width: 64px; height: 64px; background-position: -5px -227px; }
+.sprite-Icon_UltimateSkill_Hilde { width: 64px; height: 64px; background-position: -5px -301px; }
+.sprite-Icon_UltimateSkill_Kidian { width: 64px; height: 64px; background-position: -5px -375px; }
+.sprite-Icon_UltimateSkill_Kommy { width: 64px; height: 64px; background-position: -5px -449px; }
+.sprite-Icon_UltimateSkill_Levi { width: 64px; height: 64px; background-position: -5px -523px; }
+.sprite-Icon_UltimateSkill_Posher { width: 64px; height: 64px; background-position: -5px -597px; }
+.sprite-Icon_UltimateSkill_Rim { width: 64px; height: 64px; background-position: -5px -671px; }
+.sprite-Icon_UltimateSkill_Risty { width: 64px; height: 64px; background-position: -5px -745px; }
+.sprite-Icon_UltimateSkill_Snorky { width: 64px; height: 64px; background-position: -5px -819px; }
+.sprite-Icon_UltimateSkill_Veroo { width: 64px; height: 64px; background-position: -5px -893px; }
+.sprite-Icon_UltimateSkill_Yomi { width: 64px; height: 64px; background-position: -5px -967px; }
+.sprite-Icon_UltimateSkill_xXionx { width: 64px; height: 64px; background-position: -5px -1041px; }
+/* Innocence */
+.sprite-Icon_UltimateSkill_Allet { width: 64px; height: 64px; background-position: -5px -5px; }
+.sprite-Icon_UltimateSkill_BigWood { width: 64px; height: 64px; background-position: -5px -79px; }
+.sprite-Icon_UltimateSkill_Cuee { width: 64px; height: 64px; background-position: -5px -153px; }
+.sprite-Icon_UltimateSkill_Erpin { width: 64px; height: 64px; background-position: -5px -227px; }
+.sprite-Icon_UltimateSkill_Gabia { width: 64px; height: 64px; background-position: -5px -301px; }
+.sprite-Icon_UltimateSkill_Haley { width: 64px; height: 64px; background-position: -5px -375px; }
+.sprite-Icon_UltimateSkill_Kyarot { width: 64px; height: 64px; background-position: -5px -449px; }
+.sprite-Icon_UltimateSkill_Mago { width: 64px; height: 64px; background-position: -5px -523px; }
+.sprite-Icon_UltimateSkill_Naia { width: 64px; height: 64px; background-position: -5px -597px; }
+.sprite-Icon_UltimateSkill_Rohne { width: 64px; height: 64px; background-position: -5px -671px; }
+.sprite-Icon_UltimateSkill_Sari { width: 64px; height: 64px; background-position: -5px -745px; }
+.sprite-Icon_UltimateSkill_Silphir { width: 64px; height: 64px; background-position: -5px -819px; }
+.sprite-Icon_UltimateSkill_Speaki { width: 64px; height: 64px; background-position: -5px -893px; }
+.sprite-Icon_UltimateSkill_Vivi { width: 64px; height: 64px; background-position: -5px -967px; }
+/* Madness */
+.sprite-Icon_UltimateSkill_Alice { width: 64px; height: 64px; background-position: -5px -5px; }
+.sprite-Icon_UltimateSkill_Belita { width: 64px; height: 64px; background-position: -5px -79px; }
+.sprite-Icon_UltimateSkill_Chloe { width: 64px; height: 64px; background-position: -5px -153px; }
+.sprite-Icon_UltimateSkill_Diana { width: 64px; height: 64px; background-position: -5px -227px; }
+.sprite-Icon_UltimateSkill_Ifrit { width: 64px; height: 64px; background-position: -5px -301px; }
+.sprite-Icon_UltimateSkill_Leets { width: 64px; height: 64px; background-position: -5px -375px; }
+.sprite-Icon_UltimateSkill_MaestroMK2 { width: 64px; height: 64px; background-position: -5px -449px; }
+.sprite-Icon_UltimateSkill_Maison { width: 64px; height: 64px; background-position: -5px -523px; }
+.sprite-Icon_UltimateSkill_Mayo { width: 64px; height: 64px; background-position: -5px -597px; }
+.sprite-Icon_UltimateSkill_Ner { width: 64px; height: 64px; background-position: -5px -671px; }
+.sprite-Icon_UltimateSkill_RenewaAwaken { width: 64px; height: 64px; background-position: -5px -745px; }
+.sprite-Icon_UltimateSkill_Shady { width: 64px; height: 64px; background-position: -5px -819px; }
+.sprite-Icon_UltimateSkill_Sist { width: 64px; height: 64px; background-position: -5px -893px; }
+.sprite-Icon_UltimateSkill_Yumimi { width: 64px; height: 64px; background-position: -5px -967px; }
+/* Vivacious */
+.sprite-Icon_UltimateSkill_Beni { width: 64px; height: 64px; background-position: -5px -5px; }
+.sprite-Icon_UltimateSkill_Butter { width: 64px; height: 64px; background-position: -5px -79px; }
+.sprite-Icon_UltimateSkill_Canna { width: 64px; height: 64px; background-position: -5px -153px; }
+.sprite-Icon_UltimateSkill_Carren { width: 64px; height: 64px; background-position: -5px -227px; }
+.sprite-Icon_UltimateSkill_Epica { width: 64px; height: 64px; background-position: -5px -301px; }
+.sprite-Icon_UltimateSkill_Jubee { width: 64px; height: 64px; background-position: -5px -375px; }
+.sprite-Icon_UltimateSkill_Marie { width: 64px; height: 64px; background-position: -5px -449px; }
+.sprite-Icon_UltimateSkill_Momo { width: 64px; height: 64px; background-position: -5px -523px; }
+.sprite-Icon_UltimateSkill_Mynx { width: 64px; height: 64px; background-position: -5px -597px; }
+.sprite-Icon_UltimateSkill_Rude { width: 64px; height: 64px; background-position: -5px -671px; }
+.sprite-Icon_UltimateSkill_Rufo { width: 64px; height: 64px; background-position: -5px -745px; }
+.sprite-Icon_UltimateSkill_Selline { width: 64px; height: 64px; background-position: -5px -819px; }
+.sprite-Icon_UltimateSkill_Shoupan { width: 64px; height: 64px; background-position: -5px -893px; }
+.sprite-Icon_UltimateSkill_Taida { width: 64px; height: 64px; background-position: -5px -967px; }
+.sprite-Icon_UltimateSkill_Ui { width: 64px; height: 64px; background-position: -5px -1041px; }

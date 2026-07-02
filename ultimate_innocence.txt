@@ -1,0 +1,89 @@
+.sprite {
+    background-image: url(ultimate_innocence.png);
+    background-repeat: no-repeat;
+    display: block;
+}
+
+.sprite-Icon_UltimateSkill_Allet {
+    width: 64px;
+    height: 64px;
+    background-position: -5px -5px;
+}
+
+.sprite-Icon_UltimateSkill_BigWood {
+    width: 64px;
+    height: 64px;
+    background-position: -5px -79px;
+}
+
+.sprite-Icon_UltimateSkill_Cuee {
+    width: 64px;
+    height: 64px;
+    background-position: -5px -153px;
+}
+
+.sprite-Icon_UltimateSkill_Erpin {
+    width: 64px;
+    height: 64px;
+    background-position: -5px -227px;
+}
+
+.sprite-Icon_UltimateSkill_Gabia {
+    width: 64px;
+    height: 64px;
+    background-position: -5px -301px;
+}
+
+.sprite-Icon_UltimateSkill_Haley {
+    width: 64px;
+    height: 64px;
+    background-position: -5px -375px;
+}
+
+.sprite-Icon_UltimateSkill_Kyarot {
+    width: 64px;
+    height: 64px;
+    background-position: -5px -449px;
+}
+
+.sprite-Icon_UltimateSkill_Mago {
+    width: 64px;
+    height: 64px;
+    background-position: -5px -523px;
+}
+
+.sprite-Icon_UltimateSkill_Naia {
+    width: 64px;
+    height: 64px;
+    background-position: -5px -597px;
+}
+
+.sprite-Icon_UltimateSkill_Rohne {
+    width: 64px;
+    height: 64px;
+    background-position: -5px -671px;
+}
+
+.sprite-Icon_UltimateSkill_Sari {
+    width: 64px;
+    height: 64px;
+    background-position: -5px -745px;
+}
+
+.sprite-Icon_UltimateSkill_Silphir {
+    width: 64px;
+    height: 64px;
+    background-position: -5px -819px;
+}
+
+.sprite-Icon_UltimateSkill_Speaki {
+    width: 64px;
+    height: 64px;
+    background-position: -5px -893px;
+}
+
+.sprite-Icon_UltimateSkill_Vivi {
+    width: 64px;
+    height: 64px;
+    background-position: -5px -967px;
+}

@@ -1,0 +1,89 @@
+.sprite {
+    background-image: url(char_innocence.png);
+    background-repeat: no-repeat;
+    display: block;
+}
+
+.sprite-Allet {
+    width: 63px;
+    height: 63px;
+    background-position: -5px -5px;
+}
+
+.sprite-BigWood {
+    width: 63px;
+    height: 63px;
+    background-position: -5px -78px;
+}
+
+.sprite-Cuee {
+    width: 63px;
+    height: 63px;
+    background-position: -5px -151px;
+}
+
+.sprite-Erpin {
+    width: 63px;
+    height: 63px;
+    background-position: -5px -224px;
+}
+
+.sprite-Gabia {
+    width: 63px;
+    height: 63px;
+    background-position: -5px -297px;
+}
+
+.sprite-Haley {
+    width: 63px;
+    height: 63px;
+    background-position: -5px -370px;
+}
+
+.sprite-Kyarot {
+    width: 63px;
+    height: 63px;
+    background-position: -5px -443px;
+}
+
+.sprite-Mago {
+    width: 63px;
+    height: 63px;
+    background-position: -5px -516px;
+}
+
+.sprite-Naia {
+    width: 63px;
+    height: 63px;
+    background-position: -5px -589px;
+}
+
+.sprite-Rohne {
+    width: 63px;
+    height: 63px;
+    background-position: -5px -662px;
+}
+
+.sprite-Sari {
+    width: 63px;
+    height: 63px;
+    background-position: -5px -735px;
+}
+
+.sprite-Silphir {
+    width: 63px;
+    height: 63px;
+    background-position: -5px -808px;
+}
+
+.sprite-Speaki {
+    width: 63px;
+    height: 63px;
+    background-position: -5px -881px;
+}
+
+.sprite-Vivi {
+    width: 63px;
+    height: 63px;
+    background-position: -5px -954px;
+}
