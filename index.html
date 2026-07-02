@@ -33,8 +33,11 @@
         <script defer src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
         <link rel="stylesheet" href="https://unpkg.com/@esotericsoftware/spine-player@4.1/dist/spine-player.css">
         <script defer src="https://unpkg.com/@esotericsoftware/spine-player@4.1/dist/iife/spine-player.js"></script>
+        <link rel="stylesheet" href="sprites.css">
         <style>
-            /* 🌟 統一的金蠟筆載入圖案 */
+            /* =======================================
+               🌟 系統與佈局 CSS
+               ======================================= */
             .spine-loader-crayon {
             position: absolute;
             top: 50%; left: 50%;
@@ -362,7 +365,9 @@
                     <div class="flex flex-row items-center justify-center lg:justify-start gap-3 text-center lg:text-left">
                         <div class="flex flex-col items-center lg:items-start">
                             <h1 class="text-2xl sm:text-3xl font-bold text-amber-900 dark:text-amber-400 mb-1 flex items-center justify-center lg:justify-start gap-1.5 sm:gap-2">
-                                <img src="https://i.postimg.cc/sDstHDN1/Aside-Skill-Rim-3.png" alt="RimIcon" class="h-[1.15em] w-auto object-contain drop-shadow-sm">
+                                <div class="w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center shrink-0 drop-shadow-sm overflow-hidden">
+                                    <div class="sprite-base sprite-common sprite-Title_Rim scale-[0.4] sm:scale-[0.5] origin-center shrink-0"></div>
+                                </div>
                                 <span data-lang-key="app_title">嘟嘟臉金蠟筆記事本</span>
                             </h1>
                             <p data-lang-key="app_subtitle" class="text-amber-800 dark:text-gray-300 text-xs sm:text-sm">祝各位教主日日出金蠟筆</p>
@@ -370,13 +375,19 @@
                     </div>
                     <div class="flex flex-row items-center justify-end gap-2 w-full lg:w-auto">
                         <button onclick="toggleAnimation()" class="hidden md:flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center bg-white/80 dark:bg-gray-800/80 border border-amber-300 dark:border-gray-600 rounded-xl shadow-sm transition hover:bg-gray-50 dark:hover:bg-gray-700 shrink-0 backdrop-blur-sm text-xs sm:text-sm" title="開關小坨坨動畫">
-                        <img id="rimAnimIcon" src="https://i.postimg.cc/dhW04Kw2/minirim.png" alt="Rim Animation Toggle" class="w-[80%] h-[80%] object-contain transition-all duration-200">
+                            <div class="w-full h-full flex items-center justify-center overflow-hidden">
+                                <div id="rimAnimIcon" class="sprite-base sprite-common sprite-minirim shrink-0 scale-[0.45] origin-center transition-all duration-200"></div>
+                            </div>
                         </button>
                         <a href="apostle_viewer.html" target="_blank" title="前往動態展示器" class="h-10 w-10 sm:h-11 sm:w-11 flex items-center justify-center bg-white/80 dark:bg-gray-800/80 border border-amber-300 dark:border-gray-600 rounded-xl shadow-sm transition hover:bg-amber-100 dark:hover:bg-gray-700 shrink-0 backdrop-blur-sm overflow-hidden group">
-                        <img src="https://i.postimg.cc/jL53hdWJ/Album-Icon-Skin.png" alt="動態展示器" class="w-[85%] h-[85%] object-contain drop-shadow-sm group-hover:scale-110 transition-transform">
+                            <div class="w-full h-full flex items-center justify-center">
+                                <div class="sprite-base sprite-common sprite-Album_Icon_Skin shrink-0 scale-[0.55] group-hover:scale-[0.65] drop-shadow-sm transition-transform origin-center"></div>
+                            </div>
                         </a>
                         <a href="gacha.html" target="_blank" title="前往招募模擬器" class="h-10 w-10 sm:h-11 sm:w-11 flex items-center justify-center bg-white/80 dark:bg-gray-800/80 border border-amber-300 dark:border-gray-600 rounded-xl shadow-sm transition hover:bg-amber-100 dark:hover:bg-gray-700 shrink-0 backdrop-blur-sm overflow-hidden group">
-                        <img src="https://i.postimg.cc/9wG2WRPg/Gacha-Button.png" alt="Gacha Simulator" class="w-[85%] h-[85%] object-contain drop-shadow-sm group-hover:scale-110 transition-transform">
+                            <div class="w-full h-full flex items-center justify-center">
+                                <div class="sprite-base sprite-common sprite-GachaButton shrink-0 scale-[0.45] group-hover:scale-[0.55] drop-shadow-sm transition-transform origin-center"></div>
+                            </div>
                         </a>
                         <div class="relative h-10 w-10 sm:h-11 sm:w-11 group">
                             <div class="absolute inset-0 flex items-center justify-center bg-white/80 dark:bg-gray-800/80 border border-amber-300 dark:border-gray-600 rounded-xl shadow-sm backdrop-blur-sm transition group-hover:bg-gray-50 dark:group-hover:bg-gray-700 pointer-events-none text-amber-900 dark:text-amber-400">
@@ -442,6 +453,10 @@
                         <span class="font-bold text-gray-500 dark:text-gray-400 shrink-0 pt-1 whitespace-nowrap" data-lang-key="stats_job">⚔️ 職業：</span>
                         <div id="filter_job" class="flex flex-wrap gap-1.5 flex-1"></div>
                     </div>
+                    <div class="flex items-start gap-2 w-full">
+                        <span class="font-bold text-gray-500 dark:text-gray-400 shrink-0 pt-1 whitespace-nowrap" data-lang-key="stats_type">💥 類型：</span>
+                        <div id="filter_type" class="flex flex-wrap gap-1.5 flex-1"></div>
+                    </div>
                     <div class="flex flex-col sm:flex-row items-start gap-2 border-t border-dashed border-gray-100 dark:border-gray-700 pt-2 w-full">
                         <span class="font-bold text-amber-800 dark:text-amber-500 shrink-0 pt-1 flex items-center gap-0.5 whitespace-nowrap" data-lang-key="stats_cell">🖍️ 金蠟筆格：</span>
                         <div class="flex flex-col gap-2 flex-1 w-full">
@@ -503,11 +518,11 @@
                         </div>
                     </div>
                     <div class="grid grid-cols-5 gap-1 text-center mt-2 pt-2 border-t border-amber-200 dark:border-gray-700 text-[9px] sm:text-[10px]">
-                        <div class="bg-orange-50 dark:bg-gray-700 rounded p-1"><span class="block text-gray-500 dark:text-gray-400 scale-90" data-lang-key="stats_attack">攻</span><span id="attr_attack" class="font-bold text-orange-600 dark:text-orange-400">+0%</span></div>
-                        <div class="bg-blue-50 dark:bg-gray-700 rounded p-1"><span class="block text-gray-500 dark:text-gray-400 scale-90" data-lang-key="stats_defence">防</span><span id="attr_def" class="font-bold text-blue-600 dark:text-blue-400">+0%</span></div>
-                        <div class="bg-green-50 dark:bg-gray-700 rounded p-1"><span class="block text-gray-500 dark:text-gray-400 scale-90" data-lang-key="stats_hp">血</span><span id="attr_hp" class="font-bold text-green-600 dark:text-green-400">+0%</span></div>
-                        <div class="bg-red-50 dark:bg-gray-700 rounded p-1"><span class="block text-gray-500 dark:text-gray-400 scale-90" data-lang-key="stats_critical">爆</span><span id="attr_crit" class="font-bold text-red-600 dark:text-red-400">+0%</span></div>
-                        <div class="bg-purple-50 dark:bg-gray-700 rounded p-1"><span class="block text-gray-500 dark:text-gray-400 scale-90" data-lang-key="stats_resist">抗</span><span id="attr_crit_res" class="font-bold text-purple-600 dark:text-purple-400">+0%</span></div>
+                        <div class="bg-orange-50 dark:bg-gray-700 rounded p-1"><span class="block text-gray-500 dark:text-gray-400 scale-90" data-lang-key="stats_attack">攻擊</span><span id="attr_attack" class="font-bold text-orange-600 dark:text-orange-400">+0%</span></div>
+                        <div class="bg-blue-50 dark:bg-gray-700 rounded p-1"><span class="block text-gray-500 dark:text-gray-400 scale-90" data-lang-key="stats_defence">防禦</span><span id="attr_def" class="font-bold text-blue-600 dark:text-blue-400">+0%</span></div>
+                        <div class="bg-green-50 dark:bg-gray-700 rounded p-1"><span class="block text-gray-500 dark:text-gray-400 scale-90" data-lang-key="stats_hp">血量</span><span id="attr_hp" class="font-bold text-green-600 dark:text-green-400">+0%</span></div>
+                        <div class="bg-red-50 dark:bg-gray-700 rounded p-1"><span class="block text-gray-500 dark:text-gray-400 scale-90" data-lang-key="stats_critical">爆擊</span><span id="attr_crit" class="font-bold text-red-600 dark:text-red-400">+0%</span></div>
+                        <div class="bg-purple-50 dark:bg-gray-700 rounded p-1"><span class="block text-gray-500 dark:text-gray-400 scale-90" data-lang-key="stats_resist">爆抗</span><span id="attr_crit_res" class="font-bold text-purple-600 dark:text-purple-400">+0%</span></div>
                     </div>
                 </div>
             </section>
@@ -547,7 +562,8 @@
             let savedStates = {};
             try { savedStates = JSON.parse(localStorage.getItem(storageKey)) || {}; } catch(e) { savedStates = {}; }
             
-            let activeFilters = { personality: [], race: [], position: [], job: [], gridLayer: "all", gridType: [], search: "", displayMode: "all" };
+            let activeFilters = { personality: [], race: [], position: [], job: [], type: [], gridLayer: "all", gridType: [], search: "", displayMode: "all" };
+            
             let isFilterOpen = true;
             let isStatsOpen = window.innerWidth >= 768;
             
@@ -565,20 +581,68 @@
             const btnInactiveStyle = "whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-medium transition bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600";
             const btnDispActiveStyle = "whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-bold transition bg-blue-500 text-white border-blue-600 shadow-sm";
             
+            // 🌟 CSS Sprite 屬性映射表
+            const SPRITE_CLASS_MAP = {
+                // 種族與背景
+                race_龍族: "sprite-Race_Dragon", bg_龍族: "sprite-Bg_Dragon",
+                race_精靈: "sprite-Race_Elf", bg_精靈: "sprite-Bg_Elf",
+                race_妖精: "sprite-Race_Sprite", bg_妖精: "sprite-Bg_Sprite",
+                race_獸人: "sprite-Race_Werebeast", bg_獸人: "sprite-Bg_Werebeast",
+                race_幽靈: "sprite-Race_Phantom", bg_幽靈: "sprite-Bg_Phantom",
+                race_unknown: "sprite-Race_Unknown", bg_unknown: "sprite-Bg_Unknown",
+                race_魔靈: "sprite-Race_Elemental", bg_魔靈: "sprite-Bg_Elemental",
+                race_魔女: "sprite-Race_Witch", bg_魔女: "sprite-Bg_Witch",
+                
+                // 性格
+                personality_天真: "sprite-Personality_Innocence",
+                personality_冷靜: "sprite-Personality_Composed",
+                personality_狂亂: "sprite-Personality_Madness",
+                personality_活潑: "sprite-Personality_Vivacious",
+                personality_憂鬱: "sprite-Personality_Depressed",
+
+                // 站位
+                position_前排: "sprite-Position_Front",
+                position_中排: "sprite-Position_Middle",
+                position_後排: "sprite-Position_Back",
+
+                // 職業
+                job_輸出: "sprite-Job_DPS", job_肉盾: "sprite-Job_Tank", job_輔助: "sprite-Job_Support",
+
+                // 攻擊類型
+                type_物理: "sprite-Type_Physic", type_魔法: "sprite-Type_Magic",
+
+                // 金蠟筆屬性
+                boardon_攻擊: "sprite-boardon_ATK", boardon_防禦: "sprite-boardon_DEF",
+                boardon_血量: "sprite-boardon_HP", boardon_爆擊: "sprite-boardon_CRI",
+                boardon_爆抗: "sprite-boardon_RES"
+            };
+
+            const CHAR_SPRITE_MAP = {
+                "冷靜": "sprite-char-composed",
+                "憂鬱": "sprite-char-depressed",
+                "天真": "sprite-char-innocence",
+                "狂亂": "sprite-char-madness",
+                "活潑": "sprite-char-vivacious"
+            };
+
+            const ULT_SPRITE_MAP = {
+                "冷靜": "sprite-ult-composed",
+                "憂鬱": "sprite-ult-depressed",
+                "天真": "sprite-ult-innocence",
+                "狂亂": "sprite-ult-madness",
+                "活潑": "sprite-ult-vivacious"
+            };
+
             // ------------------------------------------------------------
             // 基本工具函式 (開關動畫、翻譯、主題、資料預載)
             // ------------------------------------------------------------
             
-            // 🌟 新增：動畫開關邏輯
-            // 🌟 更新：控制 Rim 迷你圖案的灰階與透明度狀態
             function updateAnimToggleUI() {
                 const rimIcon = document.getElementById('rimAnimIcon');
                 if (rimIcon) {
                     if (isAnimationEnabled) {
-                        // 開啟狀態：恢復色彩
                         rimIcon.classList.remove('grayscale', 'opacity-50');
                     } else {
-                        // 關閉狀態：變成灰階並微調透明度
                         rimIcon.classList.add('grayscale', 'opacity-50');
                     }
                 }
@@ -927,6 +991,7 @@
                     handleBannerHover(false);
                 }
             }, { passive: true }); // passive: true 可確保不影響頁面滑動效能
+
             function initStates() {
                 INITIAL_DATA.forEach(char => {
                     if (savedStates['owned_' + char.name] === undefined) savedStates['owned_' + char.name] = false;
@@ -1007,7 +1072,7 @@
             function setDisplayMode(mode) { activeFilters.displayMode = mode; ["all", "1", "2", "3"].forEach(m => { const btn = document.getElementById(`btn_disp_${m}`); if(btn) btn.className = (mode === m) ? btnDispActiveStyle : btnInactiveStyle; }); applyFilterUI(); }
             
             function buildFilterPanel() {
-                const keys = { personality: ["天真", "冷靜", "狂亂", "活潑", "憂鬱"], race: [], position: ["前排", "中排", "後排"], job: [] };
+                const keys = { personality: ["天真", "冷靜", "狂亂", "活潑", "憂鬱"], race: [], position: ["前排", "中排", "後排"], job: [], type: ["物理", "魔法"] };
                 INITIAL_DATA.forEach(c => { if (c.race && !keys.race.includes(c.race)) keys.race.push(c.race); if (c.job && !keys.job.includes(c.job)) keys.job.push(c.job); });
                 Object.keys(keys).forEach(category => {
                     const container = document.getElementById(`filter_${category}`); if(!container) return; container.innerHTML = "";
@@ -1015,9 +1080,14 @@
                     keys[category].forEach(val => {
                         const btn = document.createElement("button"); btn.id = `btn_filter_${category}_${val}`; btn.className = btnInactiveStyle; btn.onclick = () => selectFilter(category, val);
                         let keyName = val; if (category === 'race' && val === '???') keyName = 'unknown';
-                        const mapKey = `${category}_${keyName}`; const cloudIconPath = typeof IMAGE_MAP !== 'undefined' ? IMAGE_MAP[mapKey] : "";
-                        if(cloudIconPath) btn.innerHTML = `<img src="${cloudIconPath}" alt="${val}" onerror="this.style.display='none';" class="w-3.5 h-3.5 object-contain shrink-0"><span>${t(val)}</span>`;
-                        else btn.innerHTML = `<span>${t(val)}</span>`;
+                        const mapKey = `${category}_${keyName}`; 
+                        const spriteClass = SPRITE_CLASS_MAP[mapKey];
+                        
+                        if(spriteClass) {
+                            btn.innerHTML = `<div class="w-3.5 h-3.5 flex items-center justify-center shrink-0"><div class="sprite-base sprite-common ${spriteClass} scale-[0.25] origin-center shrink-0"></div></div><span>${t(val)}</span>`;
+                        } else {
+                            btn.innerHTML = `<span>${t(val)}</span>`;
+                        }
                         container.appendChild(btn);
                     });
                 });
@@ -1032,7 +1102,16 @@
                 if(typeContainer){
                     typeContainer.innerHTML = ""; const types = ["攻擊", "防禦", "血量", "爆擊", "爆抗"];
                     const allTypeBtn = document.createElement("button"); allTypeBtn.innerText = t("全部"); allTypeBtn.id = `btn_filter_gridType_all`; allTypeBtn.className = btnActiveStyle; allTypeBtn.onclick = () => selectGridTypeFilter(""); typeContainer.appendChild(allTypeBtn);
-                    types.forEach(tp => { const btn = document.createElement("button"); btn.innerText = t(tp); btn.id = `btn_filter_gridType_${tp}`; btn.className = btnInactiveStyle; btn.onclick = () => selectGridTypeFilter(tp); typeContainer.appendChild(btn); });
+                    types.forEach(tp => { 
+                        const btn = document.createElement("button"); btn.id = `btn_filter_gridType_${tp}`; btn.className = btnInactiveStyle; btn.onclick = () => selectGridTypeFilter(tp); 
+                        const spriteClass = SPRITE_CLASS_MAP[`boardon_${tp}`];
+                        if (spriteClass) {
+                            btn.innerHTML = `<div class="w-3.5 h-3.5 flex items-center justify-center shrink-0"><div class="sprite-base sprite-common ${spriteClass} shrink-0 scale-[0.25] origin-center"></div></div><span>${t(tp)}</span>`;
+                        } else {
+                            btn.innerText = t(tp);
+                        }
+                        typeContainer.appendChild(btn); 
+                    });
                 }
             }
             
@@ -1058,7 +1137,7 @@
             }
             
             function resetFilters() {
-                selectFilter("personality", ""); selectFilter("race", ""); selectFilter("position", ""); selectFilter("job", ""); selectGridLayerFilter("all"); selectGridTypeFilter("");
+                selectFilter("personality", ""); selectFilter("race", ""); selectFilter("position", ""); selectFilter("job", ""); selectFilter("type", ""); selectGridLayerFilter("all"); selectGridTypeFilter("");
                 document.getElementById("searchInput").value = ""; activeFilters.search = ""; setDisplayMode('all');
             }
             
@@ -1068,6 +1147,7 @@
                     const matchR = activeFilters.race.length === 0 || activeFilters.race.includes(char.race);
                     const matchPos = activeFilters.position.length === 0 || activeFilters.position.includes(char.position);
                     const matchJ = activeFilters.job.length === 0 || activeFilters.job.includes(char.job);
+                    const matchT = activeFilters.type.length === 0 || activeFilters.type.includes(char.type);
                     let matchGrid = true;
                     if (activeFilters.gridType.length > 0) {
                         const layersToSearch = activeFilters.gridLayer === "all" ? [1,2,3] : [parseInt(activeFilters.gridLayer)];
@@ -1077,7 +1157,7 @@
             
                     const cardElement = document.getElementById(`char_card_${char.name}`);
                     if (cardElement) {
-                        if (matchP && matchR && matchPos && matchJ && matchGrid && matchSearch) cardElement.classList.remove("hidden"); else cardElement.classList.add("hidden");
+                        if (matchP && matchR && matchPos && matchJ && matchT && matchGrid && matchSearch) cardElement.classList.remove("hidden"); else cardElement.classList.add("hidden");
                         [1, 2, 3].forEach(l => {
                             const layerWrap = document.getElementById(`layer_wrap_${char.name}_${l}`);
                             if(layerWrap) { if(activeFilters.displayMode === 'all' || activeFilters.displayMode === String(l)) layerWrap.style.display = 'flex'; else layerWrap.style.display = 'none'; }
@@ -1115,50 +1195,69 @@
                             charCard.setAttribute('onmouseleave', 'checkMarquee(this, false)');
                         }
                         
-                        const avatarPath = typeof IMAGE_MAP !== 'undefined' ? (IMAGE_MAP[`avatar_${char.name}`] || "") : ""; 
-                        const hoverPath = typeof IMAGE_MAP !== 'undefined' ? (IMAGE_MAP[`hover_avatar_${char.name}`] || avatarPath) : avatarPath;
-                        const pPath = typeof IMAGE_MAP !== 'undefined' ? (IMAGE_MAP[`personality_${char.personality}`] || "") : ""; 
+                        // 🌟 準備 Sprite 類別
+                        const spineName = typeof SPINE_MAP !== 'undefined' && SPINE_MAP[char.name] ? SPINE_MAP[char.name] : char.name;
+                        const charSpriteBase = CHAR_SPRITE_MAP[char.personality] || "";
+                        const ultSpriteBase = ULT_SPRITE_MAP[char.personality] || "";
+                        const charSpriteClass = `sprite-${spineName}`;
+                        const ultSpriteClass = `sprite-Icon_UltimateSkill_${spineName}`;
+
                         let raceIconName = char.race; if (char.race === "???") raceIconName = "unknown";
-                        const racePath = typeof IMAGE_MAP !== 'undefined' ? (IMAGE_MAP[`race_${raceIconName}`] || "") : ""; 
-                        const posPath = typeof IMAGE_MAP !== 'undefined' ? (IMAGE_MAP[`position_${char.position}`] || "") : ""; 
-                        const jobPath = typeof IMAGE_MAP !== 'undefined' ? (IMAGE_MAP[`job_${char.job}`] || "") : "";
+                        const pSprite = SPRITE_CLASS_MAP[`personality_${char.personality}`] || "";
+                        const rSprite = SPRITE_CLASS_MAP[`race_${raceIconName}`] || "";
+                        const posSprite = SPRITE_CLASS_MAP[`position_${char.position}`] || "";
+                        const jSprite = SPRITE_CLASS_MAP[`job_${char.job}`] || "";
+                        const tSprite = SPRITE_CLASS_MAP[`type_${char.type}`] || "";
+                        const bgSprite = SPRITE_CLASS_MAP[`bg_${raceIconName}`] || "sprite-Bg_Unknown";
                         const borderColorClass = personalityBorderColors[char.personality] || "border-gray-300"; 
                         const isOwned = savedStates['owned_' + char.name]; 
             
-                        const bgUrl = (typeof CHAR_BACKGROUNDS !== 'undefined' && CHAR_BACKGROUNDS[char.race]) ? CHAR_BACKGROUNDS[char.race] : "";
-                        const bgInlineStyle = bgUrl ? `background-image: url('${bgUrl}'); background-size: cover; background-position: center;` : "background-color: #fef3c7;";
-                        
                         const avatarClass = isOwned && !isUnreleased ? "" : "unowned-avatar";
                         const displayName = isUnreleased ? "???" : t(char.name);
-                        const hoverImgHtml = isUnreleased ? "" : `<img src="${hoverPath}" class="avatar-alt" alt="${displayName}" onerror="this.style.display='none';" loading="lazy">`;
                         
                         const detailBtn = document.createElement('button'); 
                         detailBtn.onclick = () => window.open(`char_detail.html?char=${encodeURIComponent(char.name)}`, '_blank');
                         const displayClass = isUnreleased ? 'hidden' : 'flex';
                         detailBtn.className = `w-8 sm:w-10 shrink-0 ${displayClass} items-center justify-center bg-amber-500/10 hover:bg-amber-300 dark:bg-gray-700/50 dark:hover:bg-gray-600 border-r border-amber-200/50 dark:border-gray-600 transition-colors cursor-pointer group`;
                         detailBtn.title = (window.currentLang === 'en') ? `View details for ${t(char.name)}` : ((window.currentLang === 'ja') ? `${t(char.name)}の詳細データを見る` : `查看 ${t(char.name)} 的詳細資料`);
-                        detailBtn.innerHTML = `<img src="https://i.postimg.cc/T1Y9CC22/Album-Icon-Info.png" alt="Info" class="w-5 h-5 sm:w-6 sm:h-6 opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-200">`;
+                        detailBtn.innerHTML = `<div class="w-full h-full flex items-center justify-center"><div class="sprite-base sprite-common sprite-Album_Icon_Info shrink-0 scale-[0.35] sm:scale-[0.4] opacity-70 group-hover:opacity-100 group-hover:scale-[0.45] sm:group-hover:scale-[0.5] transition-all duration-200 origin-center"></div></div>`;
                         charCard.appendChild(detailBtn);
             
                         const cardInner = document.createElement('div'); cardInner.className = "flex-1 p-3 sm:p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-4 w-full overflow-hidden";
                         const nameCol = document.createElement('div'); nameCol.className = "flex flex-row items-center justify-start gap-3 min-w-[210px] w-full md:w-auto border-b md:border-b-0 pb-2 md:pb-0 border-gray-200/50 dark:border-gray-700";
                         
+                        const createTraitNode = (sprite, fallbackId, fallbackText, titleTxt) => {
+                            if (sprite) {
+                                return `<div class="flex items-center hover-scale cursor-help" title="${titleTxt}"><div class="w-4 h-4 flex items-center justify-center shrink-0"><div class="sprite-base sprite-common ${sprite} scale-[0.25] origin-center shrink-0"></div></div></div>`;
+                            } else {
+                                return `<span id="${fallbackId}" class="bg-gray-100 dark:bg-gray-700 px-1 rounded text-[9px] text-gray-500 dark:text-gray-400 font-medium whitespace-nowrap">${fallbackText}</span>`;
+                            }
+                        };
+
                         const traitsHtml = isUnreleased ? 
                             `<div class="flex items-center gap-1.5 pt-1 border-t border-dashed border-gray-100 dark:border-gray-700 text-gray-400 dark:text-gray-500 text-[10px] font-bold tracking-widest">DATA CLASSIFIED</div>` :
                             `<div class="flex items-center gap-1.5 pt-1 border-t border-dashed border-gray-100 dark:border-gray-700">
-                                <div class="flex items-center hover-scale cursor-help"><img src="${pPath}" alt="${t(char.personality)}" title="${t('stats_personality')} ${t(char.personality)}" onerror="this.style.display='none'; document.getElementById('fall_p_${char.name}').classList.remove('hidden');" class="w-4 h-4 object-contain" loading="lazy"><span id="fall_p_${char.name}" class="hidden text-[9px] px-1 rounded bg-amber-50 dark:bg-gray-700 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-gray-600 whitespace-nowrap">${t(char.personality)}</span></div>
-                                <div class="flex items-center hover-scale cursor-help"><img src="${racePath}" alt="${t(char.race)}" title="${t('stats_race')} ${t(char.race)}" onerror="this.style.display='none'; document.getElementById('fall_r_${char.name}').classList.remove('hidden');" class="w-4 h-4 object-contain" loading="lazy"><span id="fall_r_${char.name}" class="hidden bg-gray-100 dark:bg-gray-700 px-1 rounded text-[9px] text-gray-500 dark:text-gray-400 font-medium whitespace-nowrap">${t(char.race)}</span></div>
-                                <div class="flex items-center hover-scale cursor-help"><img src="${posPath}" alt="${t(char.position)}" title="${t('stats_position')} ${t(char.position)}" onerror="this.style.display='none'; document.getElementById('fall_pos_${char.name}').classList.remove('hidden');" class="w-4 h-4 object-contain opacity-85" loading="lazy"><span id="fall_pos_${char.name}" class="hidden bg-blue-50 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-1 rounded text-[9px] font-medium whitespace-nowrap">${t(char.position)}</span></div>
-                                <div class="flex items-center hover-scale cursor-help"><img src="${jobPath}" alt="${t(char.job)}" title="${t('stats_job')} ${t(char.job)}" onerror="this.style.display='none'; document.getElementById('fall_j_${char.name}').classList.remove('hidden');" class="w-4 h-4 object-contain opacity-85" loading="lazy"><span id="fall_j_${char.name}" class="hidden bg-purple-50 dark:bg-purple-900 text-purple-700 dark:text-purple-300 px-1 rounded text-[9px] font-medium whitespace-nowrap">${t(char.job)}</span></div>
+                                ${createTraitNode(pSprite, `fall_p_${char.name}`, t(char.personality), `${t('stats_personality')} ${t(char.personality)}`)}
+                                ${createTraitNode(rSprite, `fall_r_${char.name}`, t(char.race), `${t('stats_race')} ${t(char.race)}`)}
+                                ${createTraitNode(posSprite, `fall_pos_${char.name}`, t(char.position), `${t('stats_position')} ${t(char.position)}`)}
+                                ${createTraitNode(jSprite, `fall_j_${char.name}`, t(char.job), `${t('stats_job')} ${t(char.job)}`)}
+                                ${createTraitNode(tSprite, `fall_t_${char.name}`, t(char.type), `💥 類型： ${t(char.type)}`)}
                             </div>`;
             
                         nameCol.innerHTML = `
                             <div class="relative shrink-0 w-12 h-12" ${isUnreleased ? '' : `onclick="toggleOwnership('${char.name}')"`}>
-                                <div id="avatar_container_${char.name}" class="char-avatar-container w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-inner ${avatarClass} ${isUnreleased ? 'pointer-events-none' : ''}" style="${bgInlineStyle}">
-                                    <img src="${avatarPath}" alt="${displayName}" class="${isUnreleased ? 'silhouette-mode' : ''}" onerror="this.style.display='none'; document.getElementById('fall_av_${char.name}').classList.remove('hidden');" loading="lazy">
-                                    ${hoverImgHtml}
+                                <div id="avatar_container_${char.name}" class="char-avatar-container w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-inner ${avatarClass} ${isUnreleased ? 'pointer-events-none' : ''} bg-[#fcf8f2] dark:bg-gray-800 relative overflow-hidden">
+                                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 sprite-base sprite-common ${bgSprite} scale-[0.45] z-0 opacity-90"></div>
+                                    <div class="absolute inset-0 bg-white/20 dark:bg-black/20 backdrop-blur-[1px] z-[5]"></div>
+                                    <div class="absolute inset-0 flex items-center justify-center z-10 ${isUnreleased ? 'silhouette-mode' : ''}">
+                                        <div class="sprite-base ${charSpriteBase} ${charSpriteClass} shrink-0 scale-[0.75] origin-center"></div>
+                                    </div>
+                                    ${isUnreleased ? '' : `
+                                    <div class="avatar-alt absolute inset-0 z-20 flex items-center justify-center bg-[#fcf8f2] dark:bg-gray-800 transition-opacity duration-300">
+                                        <div class="sprite-base ${ultSpriteBase} ${ultSpriteClass} shrink-0 scale-[0.75] origin-center"></div>
+                                    </div>`}
                                 </div>
-                                <div id="fall_av_${char.name}" class="hidden char-avatar-container w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-sm flex items-center justify-center font-bold text-amber-900 text-lg ${avatarClass} ${isUnreleased ? 'silhouette-mode' : ''}" style="${bgInlineStyle}">${isUnreleased ? '?' : t(char.name).charAt(0)}</div>
+                                <div id="fall_av_${char.name}" class="hidden char-avatar-container w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-sm flex items-center justify-center font-bold text-amber-900 text-lg ${avatarClass} ${isUnreleased ? 'silhouette-mode' : ''}">${isUnreleased ? '?' : t(char.name).charAt(0)}</div>
                             </div>
                             <div class="flex flex-col gap-0.5 w-full overflow-hidden">
                                 <div class="marquee-box text-sm sm:text-base font-bold text-gray-900 dark:text-gray-100" title="${displayName}"><span class="marquee-content">${displayName}</span></div>
@@ -1189,11 +1288,15 @@
                         } else {
                             [1, 2, 3].forEach(l => {
                                 const layerBox = document.createElement('div'); layerBox.id = `layer_wrap_${char.name}_${l}`;
-                                let bgStyle = "bg-amber-50/40 border-amber-100/60 dark:border-amber-900/40", badgeText = `🥇 ${t("level_1st")}`, gridCols = "grid-cols-2";
-                                if (l === 2) { bgStyle = "bg-orange-50/40 border-orange-100/60 dark:border-orange-900/40"; badgeText = `🥈 ${t("level_2nd")}`; gridCols = "grid-cols-3"; }
-                                else if (l === 3) { bgStyle = "bg-red-50/40 border-red-100/60 dark:border-red-900/40"; badgeText = `🥉 ${t("level_3rd")}`; gridCols = "grid-cols-4"; }
-            
-                                layerBox.className = `${bgStyle} flex-1 p-2 rounded-xl border flex-col justify-between backdrop-blur-sm`; layerBox.innerHTML = `<span class="text-[10px] font-bold mb-1 block opacity-70 whitespace-nowrap">${badgeText}</span>`;
+                                // 🌟 改成這樣：加入 flexWeight 變數
+                                let bgStyle = "bg-amber-50/40 border-amber-100/60 dark:border-amber-900/40", badgeText = `🥇 ${t("level_1st")}`, gridCols = "grid-cols-2", flexWeight = "2";
+                                if (l === 2) { bgStyle = "bg-orange-50/40 border-orange-100/60 dark:border-orange-900/40"; badgeText = `🥈 ${t("level_2nd")}`; gridCols = "grid-cols-3"; flexWeight = "3"; }
+                                else if (l === 3) { bgStyle = "bg-red-50/40 border-red-100/60 dark:border-red-900/40"; badgeText = `🥉 ${t("level_3rd")}`; gridCols = "grid-cols-4"; flexWeight = "4"; }
+                                
+                                // 🌟 移除原本的 flex-1，改用 style.flex 來按照 2:3:4 比例分配寬度
+                                layerBox.className = `${bgStyle} p-2 rounded-xl border flex-col justify-between backdrop-blur-sm`;
+                                layerBox.style.flex = flexWeight; 
+                                layerBox.innerHTML = `<span class="text-[10px] font-bold mb-1 block opacity-70 whitespace-nowrap">${badgeText}</span>`;
                                 const btnGroup = document.createElement('div'); btnGroup.className = `grid ${gridCols} gap-1.5 h-full content-start`;
                                 const sortedAttrs = char[`layer${l}`].slice().sort((a, b) => ATTR_PRIORITY.indexOf(a) - ATTR_PRIORITY.indexOf(b));
             
@@ -1201,13 +1304,88 @@
                                     const originalIdx = char[`layer${l}`].indexOf(attr); const stateKey = `${char.name}_l${l}_${attr}_${originalIdx}`;
                                     const isOpened = savedStates[stateKey]; const btnId = `btn_${char.name}_l${l}_${attr}_${originalIdx}`;
                                     const btn = document.createElement('button'); btn.id = btnId;
-                                    const styleConfig = ATTR_STYLES[attr] || { unopened: "bg-gray-100 text-gray-700 border-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600", opened: "bg-gray-500 text-white font-bold" };
-                                    btn.className = `char-btn hover-scale px-1 py-1.5 sm:py-2 text-[11px] sm:text-xs text-center border rounded-lg cursor-pointer whitespace-nowrap ${isOpened ? styleConfig.opened : styleConfig.unopened}`;
-                                    btn.innerText = t(attr);
+                                    // 🌟 點亮與未點亮的背景/邊框樣式設定
+                                    const attrClasses = {
+                                        "攻擊": {
+                                            off: "bg-orange-50 dark:bg-gray-700 border-orange-400 dark:border-orange-500 opacity-60 hover:opacity-80 shadow-sm",
+                                            on:  "bg-orange-500 dark:bg-orange-600 border-orange-600 dark:border-orange-500 shadow-md opacity-100"
+                                        },
+                                        "防禦": {
+                                            off: "bg-blue-50 dark:bg-gray-700 border-blue-400 dark:border-blue-500 opacity-60 hover:opacity-80 shadow-sm",
+                                            on:  "bg-blue-500 dark:bg-blue-600 border-blue-600 dark:border-blue-500 shadow-md opacity-100"
+                                        },
+                                        "血量": {
+                                            off: "bg-green-50 dark:bg-gray-700 border-green-400 dark:border-green-500 opacity-60 hover:opacity-80 shadow-sm",
+                                            on:  "bg-green-500 dark:bg-green-600 border-green-600 dark:border-green-500 shadow-md opacity-100"
+                                        },
+                                        "爆擊": {
+                                            off: "bg-red-50 dark:bg-gray-700 border-red-400 dark:border-red-500 opacity-60 hover:opacity-80 shadow-sm",
+                                            on:  "bg-red-500 dark:bg-red-600 border-red-600 dark:border-red-500 shadow-md opacity-100"
+                                        },
+                                        "爆抗": {
+                                            off: "bg-purple-50 dark:bg-gray-700 border-purple-400 dark:border-purple-500 opacity-60 hover:opacity-80 shadow-sm",
+                                            on:  "bg-purple-500 dark:bg-purple-600 border-purple-600 dark:border-purple-500 shadow-md opacity-100"
+                                        }
+                                    };
+
+                                    // 🌟 點亮與未點亮的文字樣式設定 (淡底配實色字，實底配粗體白字)
+                                    const attrTextColors = {
+                                        "攻擊": { off: "text-orange-600 dark:text-orange-400", on: "text-white drop-shadow-sm" },
+                                        "防禦": { off: "text-blue-600 dark:text-blue-400",   on: "text-white drop-shadow-sm" },
+                                        "血量": { off: "text-green-600 dark:text-green-400",  on: "text-white drop-shadow-sm" },
+                                        "爆擊": { off: "text-red-600 dark:text-red-400",     on: "text-white drop-shadow-sm" },
+                                        "爆抗": { off: "text-purple-600 dark:text-purple-400", on: "text-white drop-shadow-sm" }
+                                    };
+
+                                    const baseClass = "char-btn hover-scale flex items-center justify-center w-full h-[45px] sm:h-[50px] rounded-lg border transition-all duration-200 overflow-hidden cursor-pointer";
+
+                                    // 動態獲取該屬性對應的開啟/關閉樣式
+                                    const openClass = attrClasses[attr]?.on || "bg-amber-500 opacity-100 text-white";
+                                    const closeClass = attrClasses[attr]?.off || "bg-gray-100 opacity-50";
+
+                                    btn.className = `${baseClass} ${isOpened ? openClass : closeClass}`;
+                                                                        
+                                    // 由於原本只有 boardon，我們依賴圖示，所以維持 boardon 圖片即可
+                                    const spriteClass = SPRITE_CLASS_MAP[`boardon_${attr}`] || "";
+                                    const textColor = isOpened ? attrTextColors[attr].on : attrTextColors[attr].off;
+                                    
+                                    // 點亮時給圖片加上一點陰影，讓它在實心深色背景上不至於被吃掉
+                                    const spriteShadow = isOpened ? "drop-shadow-sm" : "";
+
+                                    btn.innerHTML = `
+                                        <div class="w-full h-full flex flex-col items-center justify-center gap-0.5">
+                                            <div class="w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center shrink-0">
+                                                <div class="sprite-base sprite-common ${spriteClass} shrink-0 scale-[0.35] origin-center transition-all duration-200 ${spriteShadow}"></div>
+                                            </div>
+                                            <span class="text-[9px] sm:text-[10px] font-bold ${textColor} transition-all duration-200 leading-none">${t(attr)}</span>
+                                        </div>
+                                    `;
+
                                     btn.onclick = () => {
                                         savedStates[stateKey] = !savedStates[stateKey];
                                         if(savedStates[stateKey] && !savedStates['owned_' + char.name]) { savedStates['owned_' + char.name] = true; updateOwnershipUI(char.name); }
-                                        btn.className = `char-btn hover-scale px-1 py-1.5 sm:py-2 text-[11px] sm:text-xs text-center border rounded-lg cursor-pointer whitespace-nowrap ${savedStates[stateKey] ? styleConfig.opened : styleConfig.unopened}`;
+                                        btn.className = `${baseClass} ${savedStates[stateKey] ? openClass : closeClass}`;
+                                        
+                                        // 🌟 確保點擊時，文字顏色與圖片的陰影特效跟著切換
+                                        const newTextColor = savedStates[stateKey] ? attrTextColors[attr].on : attrTextColors[attr].off;
+                                        const newSpriteShadow = savedStates[stateKey] ? "drop-shadow-sm" : "";
+                                        
+                                        btn.innerHTML = `
+                                            <div class="w-full h-full flex flex-col items-center justify-center gap-0.5">
+                                                <div class="w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center shrink-0">
+                                                    <div class="sprite-base sprite-common ${spriteClass} shrink-0 scale-[0.35] origin-center transition-all duration-200 ${newSpriteShadow}"></div>
+                                                </div>
+                                                <span class="text-[9px] sm:text-[10px] font-bold ${newTextColor} transition-all duration-200 leading-none">${t(attr)}</span>
+                                            </div>
+                                        `;
+                                        calculateStats();
+                                    };
+
+
+                                    btn.onclick = () => {
+                                        savedStates[stateKey] = !savedStates[stateKey];
+                                        if(savedStates[stateKey] && !savedStates['owned_' + char.name]) { savedStates['owned_' + char.name] = true; updateOwnershipUI(char.name); }
+                                        btn.className = `${baseClass} ${savedStates[stateKey] ? openClass : closeClass}`;
                                         calculateStats();
                                     };
                                     btnGroup.appendChild(btn);
@@ -1637,12 +1815,33 @@
             
                 try {
                     if (typeof INITIAL_DATA === 'undefined') throw new Error("找不到 INITIAL_DATA，請確認 data_core.js 是否載入成功！");
+                    
+                    // 🌟 【最終解決版】搜尋整個結構匹配 name 欄位
+                    if (typeof characterSkills !== 'undefined') {
+                        // 如果 characterSkills 是一個陣列，或者是包了一層的物件
+                        const skillsArray = Array.isArray(characterSkills) ? characterSkills : Object.values(characterSkills);
+                        
+                        INITIAL_DATA.forEach(char => {
+                            // 找到那個 name 屬性與我們目標相符的資料項
+                            const skillData = skillsArray.find(item => item.name === char.name);
+                            
+                            if (skillData && skillData.attribute) {
+                                // 根據 attribute 內容判定
+                                if (String(skillData.attribute).includes("魔")) {
+                                    char.type = "魔法";
+                                } else {
+                                    char.type = "物理";
+                                }
+                            } else {
+                                char.type = "物理"; // 找不到時的防呆
+                            }
+                        });
+                    }
                     renderPickupBanner(); renderCardBanner(); updateEventBanner(); startBannerRotation(); initStates(); changeLanguage(currentLang); updateAnimToggleUI();
                     if (!isStatsOpen) { const body = document.getElementById("statsPanelBody"); const icon = document.getElementById("statsToggleIcon"); if(body) { body.classList.add("hidden"); body.classList.remove("grid"); icon.innerText = "▶"; } }
                 } catch (e) { const errBanner = document.getElementById('errorBanner'); if(errBanner) { errBanner.innerHTML = `⚠️ 畫面繪製失敗: ${e.message}`; errBanner.classList.remove('hidden'); } }
             
                 // 啟動 Firebase
-                // Google cloud console 安全風險已設定
                 try {
                     if (typeof firebase !== 'undefined') {
                         const firebaseConfig = { apiKey: "AIzaSyDhv8D2pY_0M56UJrDTQw0RGPHA-BkXU8Y", authDomain: "crayon-note.firebaseapp.com", projectId: "crayon-note", storageBucket: "crayon-note.firebasestorage.app", messagingSenderId: "210614088940", appId: "1:210614088940:web:7addbdc7c466eeb05421c9", measurementId: "G-M1EJPE12TE" };
@@ -1679,6 +1878,7 @@
                     }, 300);
                 }, 100);
             });
+            
             // 偵測捲動距離以顯示/隱藏按鈕
             window.onscroll = function() {
             const btn = document.getElementById("backToTop");
