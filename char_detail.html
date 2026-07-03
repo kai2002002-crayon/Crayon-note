@@ -12,6 +12,10 @@
         <script src="https://cdn.tailwindcss.com"></script>
         <link id="dynamicFavicon" rel="icon" href="https://i.postimg.cc/mkfSTq5k/Favicon.png" type="image/png">
         <link rel="preconnect" href="https://firebasestorage.googleapis.com">
+        <!-- 通用雪碧圖 -->
+        <link rel="stylesheet" href="sprites.css">
+        <!-- 角色專屬雪碧圖 -->
+        <link rel="stylesheet" href="char_sprites/char_sprites.css">
         <link rel="preconnect" href="https://i.postimg.cc">
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
         <script>
@@ -31,6 +35,15 @@
         <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
         <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
         <style>
+            /* 🌟 預設空珍藏品：情信 (加入 !important 確保不受外在 CSS 干擾，防止被切) */
+            .sprite-letter {
+                width: 71px !important;
+                height: 71px !important;
+                background-position: -813px -700px !important;
+                background-image: url('common_icon.png') !important;
+                background-size: auto !important;
+            }
+
             /* 🌟 種族專屬背景的平鋪與移動動畫 (全域背景) */
             #raceBackground {
             position: fixed;
@@ -117,6 +130,7 @@
             @keyframes slowZoom {
             0% { transform: scale(1); }
             100% { transform: scale(1.25); } 
+            }
             #backToTop {
             position: fixed;
             bottom: 20px;
@@ -124,7 +138,6 @@
             transform: translateX(-50%);
             z-index: 9999;
             display: none;
-            /* 調整大小為 20px */
             width: 20px;
             height: 20px;
             border-radius: 50%;
@@ -132,9 +145,8 @@
             color: white;
             border: none;
             cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* 陰影也跟著稍微縮小 */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             transition: transform 0.2s, background-color 0.3s;
-            /* 調整字體大小以適應小按鈕 */
             font-size: 10px; 
             display: flex;
             align-items: center;
@@ -142,9 +154,7 @@
             }
             #backToTop:hover { 
             background-color: #d97706; 
-            /* 保持置中並微微上浮 */
             transform: translateX(-50%) translateY(-5px); 
-            }
             }
         </style>
     </head>
@@ -216,7 +226,7 @@
                 </div>
                 <div id="presentWrapper" class="flex flex-col md:flex-row gap-6 items-center md:items-start rounded-xl bg-white/60 dark:bg-gray-900/50 border border-rose-100 dark:border-gray-800 p-5">
                     <div id="presentLeft" class="w-full md:w-1/3 flex flex-col items-center gap-3 transition-all duration-300">
-                        <div id="presentContainer" class="w-full flex justify-center items-center overflow-hidden">
+                        <div id="presentContainer" class="w-full flex justify-center items-center relative min-h-[160px]">
                             <p data-i18n="present_loading" class="text-orange-400 dark:text-gray-500 text-sm animate-pulse">寶箱開啟中...</p>
                         </div>
                         <div id="presentName" class="hidden text-center font-bold text-rose-900 dark:text-rose-200 bg-rose-100/50 dark:bg-rose-900/30 px-3 py-1 rounded-lg border border-rose-200 dark:border-rose-800 text-sm"></div>
@@ -332,11 +342,12 @@
             
                 el.className = 'relative group flex items-center justify-center'; 
             
+                const iconHtml = (iconUrl.startsWith('http') || iconUrl.startsWith('./'))
+                    ? `<img src="${iconUrl}" alt="${label}" class="w-8 h-8 object-contain transition-transform duration-300 group-hover:scale-125 cursor-help drop-shadow-sm">`
+                    : `<div class="flex items-center justify-center w-8 h-8 transition-transform duration-300 group-hover:scale-125 cursor-help drop-shadow-sm"><div class="${iconUrl} scale-[0.45]"></div></div>`;
+
                 el.innerHTML = `
-                    <img src="${iconUrl}" 
-                         alt="${label}" 
-                         class="w-8 h-8 object-contain transition-transform duration-300 group-hover:scale-125 cursor-help drop-shadow-sm">
-            
+                    ${iconHtml}
                     <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 px-3 py-1.5 bg-slate-900 dark:bg-slate-700 text-white dark:text-gray-100 text-[11px] font-black rounded-lg shadow-xl whitespace-nowrap pointer-events-none
                                 hidden group-hover:block transition-all duration-300 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 translate-y-1 z-50">
                         ${label}：${t(value)}
@@ -352,10 +363,14 @@
                     container.innerHTML = `<span class="text-xs text-gray-400 font-bold px-2 py-1 bg-gray-100 dark:bg-slate-700 rounded-md">無圖片</span>`;
                     return;
                 }
+                const iconHtml = (imgUrl.startsWith('http') || imgUrl.startsWith('./')) 
+                    ? `<img src="${imgUrl}" alt="icon" class="w-full h-full object-contain p-1 drop-shadow-sm">`
+                    : `<div class="w-full h-full flex items-center justify-center"><div class="${imgUrl} origin-center scale-[0.8] drop-shadow-sm"></div></div>`;
+                    
                 container.innerHTML = `
                     <div class="relative group flex items-center justify-center cursor-help">
                         <div class="w-14 h-14 sm:w-16 sm:h-16 bg-white dark:bg-slate-700 rounded-xl border-2 border-amber-200 dark:border-slate-600 shadow-sm overflow-hidden transition-transform duration-300 group-hover:scale-110 group-active:scale-95">
-                            <img src="${imgUrl}" alt="icon" class="w-full h-full object-contain p-1 drop-shadow-sm">
+                            ${iconHtml}
                         </div>
                         <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-slate-900 dark:bg-slate-800 text-white dark:text-gray-100 text-xs sm:text-sm font-black rounded-lg shadow-xl whitespace-nowrap pointer-events-none hidden group-hover:block transition-all duration-300 z-50 border border-slate-700">
                             ${tooltipText}
@@ -365,6 +380,7 @@
                 `;
             }
             
+            // 🌟 將角色星星修改為 Sprite 排版並完美縮放對齊
             function renderStars(charName) {
                 const starsContainer = document.getElementById('charStars');
                 if (!starsContainer) return;
@@ -374,17 +390,9 @@
                     grade = GRADE_MAP[charName];
                 }
             
-                let starIconUrl = "";
-                if (typeof ICON_MAP !== 'undefined') {
-                    starIconUrl = ICON_MAP[`grade_${grade}`];
-                }
-            
-                if (starIconUrl) {
-                    starsContainer.innerHTML = `<img src="${starIconUrl}" class="h-6 sm:h-7 object-contain drop-shadow-md" alt="${grade} Stars">`;
-                } else {
-                    const starCount = parseInt(grade) || 3;
-                    starsContainer.innerHTML = `<span class="text-amber-500 dark:text-amber-400 text-xl sm:text-2xl tracking-widest drop-shadow-sm">${'★'.repeat(starCount)}</span>`;
-                }
+                const starClass = `sprite-${grade}STAR`;
+                // 直接使用雪碧圖原寸 478x116px 並用 transform: scale 調整到適合介面的大小 (~28px 左右高度)
+                starsContainer.innerHTML = `<div class="flex items-center" style="height: 28px;"><div class="sprite-base sprite-common ${starClass} drop-shadow-md origin-left" style="width: 478px; height: 116px; transform: scale(0.24);"></div></div>`;
             }
             
             // 🌟 新增安全獲取食物圖示的輔助函式，兼容字串與物件格式
@@ -450,7 +458,7 @@
                         const imgUrl = getSafeFoodIconUrl(foodName);
                         html += `
                             <div class="w-12 h-12 sm:w-14 sm:h-14 bg-white dark:bg-slate-700 rounded-xl border-[3px] border-[#F06292] shadow-[0_0_8px_#ff00ff80] flex items-center justify-center overflow-hidden transition-transform duration-300 hover:scale-110">
-                                ${imgUrl ? `<img src="${imgUrl}" class="w-full h-full object-contain p-1 drop-shadow-sm">` : `<span class="text-[10px] text-gray-400 font-bold">${foodName}</span>`}
+                                ${imgUrl ? (imgUrl.startsWith('http') || imgUrl.startsWith('./') ? `<img src="${imgUrl}" class="w-full h-full object-contain p-1 drop-shadow-sm">` : `<div class="w-full h-full flex items-center justify-center"><div class="${imgUrl} origin-center scale-[0.6] sm:scale-[0.8] drop-shadow-sm"></div></div>`) : `<span class="text-[10px] text-gray-400 font-bold">${foodName}</span>`}
                             </div>
                         `;
                     });
@@ -460,7 +468,7 @@
                         const imgUrl = getSafeFoodIconUrl(foodName);
                         html += `
                             <div class="w-12 h-12 sm:w-14 sm:h-14 bg-white dark:bg-slate-700 rounded-xl border-[3px] border-[#00ff00] shadow-[0_0_8px_#00ff0080] flex items-center justify-center overflow-hidden transition-transform duration-300 hover:scale-110">
-                                ${imgUrl ? `<img src="${imgUrl}" class="w-full h-full object-contain p-1 drop-shadow-sm">` : `<span class="text-[10px] text-gray-400 font-bold">${foodName}</span>`}
+                                ${imgUrl ? (imgUrl.startsWith('http') || imgUrl.startsWith('./') ? `<img src="${imgUrl}" class="w-full h-full object-contain p-1 drop-shadow-sm">` : `<div class="w-full h-full flex items-center justify-center"><div class="${imgUrl} origin-center scale-[0.6] sm:scale-[0.8] drop-shadow-sm"></div></div>`) : `<span class="text-[10px] text-gray-400 font-bold">${foodName}</span>`}
                             </div>
                         `;
                     });
@@ -471,7 +479,7 @@
                             const imgUrl = getSafeFoodIconUrl(foodName);
                             html += `
                                 <div class="w-12 h-12 sm:w-14 sm:h-14 bg-white dark:bg-slate-700 rounded-xl border-[3px] border-amber-400 shadow-sm flex items-center justify-center overflow-hidden transition-transform duration-300 hover:scale-110">
-                                    ${imgUrl ? `<img src="${imgUrl}" class="w-full h-full object-contain p-1 drop-shadow-sm">` : `<span class="text-[10px] text-gray-400 font-bold">${foodName}</span>`}
+                                    ${imgUrl ? (imgUrl.startsWith('http') || imgUrl.startsWith('./') ? `<img src="${imgUrl}" class="w-full h-full object-contain p-1 drop-shadow-sm">` : `<div class="w-full h-full flex items-center justify-center"><div class="${imgUrl} origin-center scale-[0.6] sm:scale-[0.8] drop-shadow-sm"></div></div>`) : `<span class="text-[10px] text-gray-400 font-bold">${foodName}</span>`}
                                 </div>
                             `;
                         });
@@ -512,7 +520,7 @@
             
                             html += `
                                 <div class="w-12 h-12 sm:w-14 sm:h-14 bg-white dark:bg-slate-700 rounded-xl ${borderClass} flex items-center justify-center overflow-hidden transition-transform duration-300 hover:scale-110" title="${rewardDisplay}">
-                                    ${rewardUrl ? `<img src="${rewardUrl}" alt="${rewardDisplay}" class="w-full h-full object-contain p-1 drop-shadow-sm">` : `<span class="text-[10px] text-gray-400 font-bold p-1 break-words text-center">${rewardDisplay}</span>`}
+                                    ${rewardUrl ? (rewardUrl.startsWith('http') || rewardUrl.startsWith('./') ? `<img src="${rewardUrl}" alt="${rewardDisplay}" class="w-full h-full object-contain p-1 drop-shadow-sm">` : `<div class="w-full h-full flex items-center justify-center"><div class="${rewardUrl} origin-center scale-[0.6] sm:scale-[0.8] drop-shadow-sm"></div></div>`) : `<span class="text-[10px] text-gray-400 font-bold p-1 break-words text-center">${rewardDisplay}</span>`}
                                 </div>
                             `;
                         });
@@ -592,7 +600,6 @@
             }
             
             function loadSpineAnimation(costumeKey) {
-                // 修正點擊偏移的核心：計算真實視口
                 function getEffectiveViewport(canvasRect, baseViewport) {
                     const scale = Math.min(canvasRect.width / baseViewport.width, canvasRect.height / baseViewport.height);
                     const effW = canvasRect.width / scale;
@@ -710,12 +717,13 @@
             
                                 function getHitZone(mouseX, mouseY) {
                                     const rect = canvas.getBoundingClientRect();
+                                    const effView = getEffectiveViewport(rect, baseViewport);
                                     let clickedPart = null;
                                     let minDistance = Infinity;
                                     
                                     const hitZones = [
                                         { name: "臉頰", bones: ["Character_Ball_Move"], radius: 50 },
-                                        { name: "頭部", bones: ["Character_Pat"], radius: 50 }, 
+                                        { name: "頭部", bones: ["Character_Pat"], radius: 50 },
                                         { name: "身體", bones: ["Character_Tickle"], radius: 60 }
                                     ];
                                     
@@ -723,10 +731,10 @@
                                         let targetBone = null;
                                         for (let bName of zone.bones) { targetBone = player.skeleton.findBone(bName); if (targetBone) break; }
                                         if (targetBone) {
-                                            const boneCanvasX = ((targetBone.worldX - baseViewport.x) / baseViewport.width) * rect.width;
-                                            const boneCanvasY = rect.height - ((targetBone.worldY - baseViewport.y) / baseViewport.height) * rect.height;
+                                            const boneCanvasX = ((targetBone.worldX - effView.x) / effView.width) * rect.width;
+                                            const boneCanvasY = rect.height - ((targetBone.worldY - effView.y) / effView.height) * rect.height;
                                             const distance = Math.hypot(mouseX - boneCanvasX, mouseY - boneCanvasY);
-                                            const scaledRadius = (zone.radius * currentZoom) * (rect.height / baseViewport.height);
+                                            const scaledRadius = (zone.radius * currentZoom) * (rect.width / effView.width);
                                             
                                             if (distance < scaledRadius && distance < minDistance) { 
                                                 minDistance = distance; 
@@ -769,89 +777,84 @@
                                 });
             
                                 canvas.addEventListener('pointermove', (e) => {
-            if (pointers[e.pointerId]) {
-            pointers[e.pointerId] = { x: e.clientX, y: e.clientY };
-            }
-            const pointerKeys = Object.keys(pointers);
-            
-            if (pointerKeys.length === 2) {
-            e.preventDefault();
-            const p1 = pointers[pointerKeys[0]], p2 = pointers[pointerKeys[1]];
-            const currentDistance = Math.hypot(p1.x - p2.x, p1.y - p2.y);
-            const zoomChange = currentDistance / initialPinchDistance;
-            
-            currentZoom = Math.min(Math.max(currentZoom * zoomChange, 0.5), 4.0);
-            if (player.skeleton) {
-                player.skeleton.scaleX = currentZoom;
-                player.skeleton.scaleY = currentZoom;
-                // 這裡保留您原本的偏移邏輯
-                player.skeleton.y = ZOOM_ANCHOR_Y * (1 - currentZoom);
-                player.skeleton.x = 0;
-            }
-            initialPinchDistance = currentDistance;
-            return;
-            }
-            
-            if (!isDragging || !player.skeleton) return;
-            const rect = canvas.getBoundingClientRect();
-            if (rect.width === 0) return;
-            
-            const dx = e.clientX - lastMouseX;
-            const dy = e.clientY - lastMouseY;
-            dragDistance += Math.hypot(dx, dy);
-            
-            // 🌟 判斷觸發互動
-            if (dragDistance > 10 && hitZoneOnDown && !hasTriggeredRub) {
-            hasTriggeredRub = true;
-            clearTimeout(tickleTimer);
-            clearTimeout(globalIdleTimer); 
-            const animNames = player.skeleton.data.animations.map(a => a.name);
-            if (hitZoneOnDown.name === "臉頰" && animNames.includes("Touch_Idle")) player.animationState.setAnimation(0, "Touch_Idle", true);
-            else if (hitZoneOnDown.name === "頭部" && animNames.includes("Pat_Idle")) player.animationState.setAnimation(0, "Pat_Idle", true);
-            else if (hitZoneOnDown.name === "身體" && animNames.includes("Tickle_Idle_1")) {
-                player.animationState.setAnimation(0, "Tickle_Idle_1", true);
-                tickleTimer = setTimeout(() => { if (animNames.includes("Tickle_Idle_2")) player.animationState.setAnimation(0, "Tickle_Idle_2", true); }, 2000);
-            }
-            }
-            
-            // 🌟 臉頰/摸頭 物理運算
-            if (hasTriggeredRub && hitZoneOnDown && activeInteractBone) {
-            const effView = getEffectiveViewport(rect, baseViewport); // 使用新計算函數
-            const isCheek = hitZoneOnDown.name === "臉頰";
-            const spineScaleX = effView.width / rect.width / currentZoom;
-            const spineScaleY = effView.height / rect.height / currentZoom;
-            const stretchIntensity = isCheek ? 1.3 : 0.3; 
-            
-            let worldDx = (e.clientX - startX) * spineScaleX * stretchIntensity;
-            let worldDy = -(e.clientY - startY) * spineScaleY * stretchIntensity;
-            if (isCheek && worldDx > 0) worldDx = 0; 
-            
-            let targetWorld = { x: activeInteractBone.worldX + worldDx, y: activeInteractBone.worldY + worldDy };
-            if (activeInteractBone.parent) activeInteractBone.parent.worldToLocal(targetWorld);
-            
-            let localDx = targetWorld.x - initialBoneX;
-            let localDy = targetWorld.y - initialBoneY;
-            let rawDistance = Math.hypot(localDx, localDy);
-            const MAX_RADIUS = isCheek ? 55 : 20; 
-            
-            if (rawDistance > 0) {
-                let elasticDist = MAX_RADIUS * (1 - Math.exp(-rawDistance / (MAX_RADIUS * 1.2)));
-                localDx = (localDx / rawDistance) * elasticDist;
-                localDy = (localDy / rawDistance) * elasticDist;
-            }
-            activeInteractBone.x = initialBoneX + localDx;
-            activeInteractBone.y = initialBoneY + localDy;
-            } 
-            else if (!hitZoneOnDown) {
-            // 🌟 修正 `char_detail` 的視角拖動
-            const effView = getEffectiveViewport(rect, baseViewport);
-            player.skeleton.x += dx * (effView.width / rect.width);
-            player.skeleton.y -= dy * (effView.height / rect.height);
-            }
-            
-            lastMouseX = e.clientX;
-            lastMouseY = e.clientY;
-            });
+                                    if (pointers[e.pointerId]) {
+                                        pointers[e.pointerId] = { x: e.clientX, y: e.clientY };
+                                    }
+                                    const pointerKeys = Object.keys(pointers);
+                                    
+                                    if (pointerKeys.length === 2) {
+                                        e.preventDefault();
+                                        const p1 = pointers[pointerKeys[0]], p2 = pointers[pointerKeys[1]];
+                                        const currentDistance = Math.hypot(p1.x - p2.x, p1.y - p2.y);
+                                        const zoomChange = currentDistance / initialPinchDistance;
+                                        
+                                        currentZoom = Math.min(Math.max(currentZoom * zoomChange, 0.5), 4.0);
+                                        if (player.skeleton) {
+                                            player.skeleton.scaleX = currentZoom;
+                                            player.skeleton.scaleY = currentZoom;
+                                            player.skeleton.y = ZOOM_ANCHOR_Y * (1 - currentZoom);
+                                            player.skeleton.x = 0;
+                                        }
+                                        initialPinchDistance = currentDistance;
+                                        return;
+                                    }
+                                    
+                                    if (!isDragging || !player.skeleton) return;
+                                    const rect = canvas.getBoundingClientRect();
+                                    if (rect.width === 0) return;
+                                    
+                                    const dx = e.clientX - lastMouseX;
+                                    const dy = e.clientY - lastMouseY;
+                                    dragDistance += Math.hypot(dx, dy);
+                                    
+                                    if (dragDistance > 10 && hitZoneOnDown && !hasTriggeredRub) {
+                                        hasTriggeredRub = true;
+                                        clearTimeout(tickleTimer);
+                                        clearTimeout(globalIdleTimer); 
+                                        const animNames = player.skeleton.data.animations.map(a => a.name);
+                                        if (hitZoneOnDown.name === "臉頰" && animNames.includes("Touch_Idle")) player.animationState.setAnimation(0, "Touch_Idle", true);
+                                        else if (hitZoneOnDown.name === "頭部" && animNames.includes("Pat_Idle")) player.animationState.setAnimation(0, "Pat_Idle", true);
+                                        else if (hitZoneOnDown.name === "身體" && animNames.includes("Tickle_Idle_1")) {
+                                            player.animationState.setAnimation(0, "Tickle_Idle_1", true);
+                                            tickleTimer = setTimeout(() => { if (animNames.includes("Tickle_Idle_2")) player.animationState.setAnimation(0, "Tickle_Idle_2", true); }, 2000);
+                                        }
+                                    }
+                                    
+                                    if (hasTriggeredRub && hitZoneOnDown && activeInteractBone) {
+                                        const effView = getEffectiveViewport(rect, baseViewport); 
+                                        const isCheek = hitZoneOnDown.name === "臉頰";
+                                        const spineScaleX = effView.width / rect.width / currentZoom;
+                                        const spineScaleY = effView.height / rect.height / currentZoom;
+                                        const stretchIntensity = isCheek ? 1.3 : 0.3; 
+                                        
+                                        let worldDx = (e.clientX - startX) * spineScaleX * stretchIntensity;
+                                        let worldDy = -(e.clientY - startY) * spineScaleY * stretchIntensity;
+                                        if (isCheek && worldDx > 0) worldDx = 0; 
+                                        
+                                        let targetWorld = { x: activeInteractBone.worldX + worldDx, y: activeInteractBone.worldY + worldDy };
+                                        if (activeInteractBone.parent) activeInteractBone.parent.worldToLocal(targetWorld);
+                                        
+                                        let localDx = targetWorld.x - initialBoneX;
+                                        let localDy = targetWorld.y - initialBoneY;
+                                        let rawDistance = Math.hypot(localDx, localDy);
+                                        const MAX_RADIUS = isCheek ? 55 : 20; 
+                                        
+                                        if (rawDistance > 0) {
+                                            let elasticDist = MAX_RADIUS * (1 - Math.exp(-rawDistance / (MAX_RADIUS * 1.2)));
+                                            localDx = (localDx / rawDistance) * elasticDist;
+                                            localDy = (localDy / rawDistance) * elasticDist;
+                                        }
+                                        activeInteractBone.x = initialBoneX + localDx;
+                                        activeInteractBone.y = initialBoneY + localDy;
+                                    } else if (!hitZoneOnDown) {
+                                        const effView = getEffectiveViewport(rect, baseViewport);
+                                        player.skeleton.x += dx * (effView.width / rect.width) / currentZoom;
+                                        player.skeleton.y -= dy * (effView.height / rect.height) / currentZoom;
+                                    }
+                                    
+                                    lastMouseX = e.clientX;
+                                    lastMouseY = e.clientY;
+                                });
             
                                 const stopDrag = (e) => { 
                                     delete pointers[e.pointerId];
@@ -864,7 +867,6 @@
             
                                     const animNames = player.skeleton.data.animations.map(a => a.name);
             
-                                    // 🌟 回彈物理
                                     if (activeInteractBone) {
                                         let targetX = initialBoneX, targetY = initialBoneY;
                                         let bouncingBone = activeInteractBone;
@@ -885,7 +887,6 @@
                                         applyBounce();
                                     }
             
-                                    // 🌟 鬆開後的動畫串接與重啟隨機 Idle
                                     if (hasTriggeredRub) {
                                         if (hitZoneOnDown && hitZoneOnDown.name === "臉頰" && animNames.includes("Touch_End")) {
                                             player.animationState.setAnimation(0, "Touch_End", false);
@@ -901,7 +902,6 @@
                                         }
                                         startRandomAnimationLoop();
                                     } else if (hitZoneOnDown && dragDistance < 10) {
-                                        // 單純點擊敲打
                                         if ((hitZoneOnDown.name === "頭部" || hitZoneOnDown.name === "臉頰") && animNames.includes("Smash_End_1")) {
                                             player.animationState.setAnimation(0, "Smash_End_1", false);
                                             if (animNames.includes("Smash_End_2")) {
@@ -911,7 +911,6 @@
                                         }
                                         startRandomAnimationLoop();
                                     } else {
-                                        // 沒點到熱區，直接恢復隨機迴圈
                                         startRandomAnimationLoop();
                                     }
                                 };
@@ -966,18 +965,14 @@
             
             function renderCollectibles(charName) {
                 const lang = window.currentLang || 'zh-TW';
-                // 🌟 1. 取得對應的英文鍵值 (例如將 "愛麗絲" 轉為 "Alice")
                 const spineKey = typeof SPINE_MAP !== 'undefined' && SPINE_MAP[charName] ? SPINE_MAP[charName] : charName;
             
-                // 🌟 2. 安全更新珍藏品名稱
                 if (typeof PRESENT_MAP !== 'undefined' && PRESENT_MAP[spineKey]) {
                     const presentData = PRESENT_MAP[spineKey];
-                    // 👉 修正 HTML 的正確 ID: presentName
                     const presentNameBox = document.getElementById('presentName');
             
                     if (presentNameBox) {
                         if (typeof presentData.name === 'object') {
-                            // 依照語系切換，若找不到則退回中文
                             presentNameBox.innerText = presentData.name[lang] || presentData.name['zh-TW'] || presentData.name['zh'] || "未知珍藏品";
                         } else {
                             presentNameBox.innerText = presentData.name;
@@ -986,7 +981,6 @@
                 }
             }
             
-            // 🌟 建立一個全域陣列，用來儲存技能區塊的 Spine 播放器，方便切換語言時銷毀舊的
             window.skillSpinePlayers = [];
             
             function renderSkills(charName) {
@@ -1006,7 +1000,7 @@
                 
                 if (charBaseData) {
                     const charSkillData = charBaseData.skills[window.currentLang] || charBaseData.skills["zh-TW"];
-                
+            
                     if (charSkillData) {
                         const makeStatChips = (statsArray) => {
                             if (!statsArray || statsArray.length === 0) return '';
@@ -1014,14 +1008,12 @@
             
                             statsArray.forEach(stat => {
                                 if (typeof stat === 'string') {
-                                    // 【修改重點】直接推入字串並去除頭尾空白，不要再用 split 切割了！
                                     processedStats.push(stat.trim());
                                 } else {
                                     processedStats.push(stat);
                                 }
                             });
             
-                            // 過濾掉可能是空字串的元素
                             processedStats = processedStats.filter(Boolean);
             
                             if (processedStats.length === 0) return '';
@@ -1052,10 +1044,47 @@
                             return `<p class="text-xs text-gray-600 dark:text-gray-300 font-medium leading-relaxed whitespace-pre-wrap relative z-10">${skillObj.desc || ''}</p>${makeStatChips(skillObj.stats)}`;
                         };
             
-                        const normalAttackIcon = typeof SKILL_ICONS !== 'undefined' ? (charBaseData.attribute === "物理" ? SKILL_ICONS["attack_物理"] : SKILL_ICONS["attack_魔法"]) : "";
-                        const normalSkillIcon = typeof SKILL_ICONS !== 'undefined' ? (SKILL_ICONS[`skill_normal_${charName}`] || "") : "";
-                        const ultSkillIcon = typeof SKILL_ICONS !== 'undefined' ? (SKILL_ICONS[`hover_avatar_${charName}`] || "") : "";
-                        const passiveSkillIcon = typeof SKILL_ICONS !== 'undefined' ? (SKILL_ICONS[`skill_passive_${charName}`] || "") : "";
+                        // 🌟 修改：利用 absolute center 完全避免 overflow-hidden 因 scale 所導致的裁切
+                       // 🌟 修改：利用 absolute center 完全避免 overflow-hidden 因 scale 所導致的裁切，並支援傳入額外 style (處理 64x64 雪碧圖)
+                        const getSkillIconHtml = (iconSrc, borderClasses, fallbackIcon, extraStyle = "") => {
+                            if (!iconSrc) return `<span>${fallbackIcon}</span>`;
+                            if (iconSrc.startsWith('http') || iconSrc.startsWith('./')) {
+                                return `<img src="${iconSrc}" class="w-10 h-10 rounded-lg shadow-sm border ${borderClasses}">`;
+                            } else {
+                                // 原本 64x64px 的技能圖標，縮放 0.625 倍後剛好為 40x40px，完美塞滿外框
+                                const styleAttr = extraStyle ? extraStyle : 'transform: translate(-50%, -50%) scale(0.625);';
+                                return `<div class="w-10 h-10 flex items-center justify-center rounded-lg shadow-sm border ${borderClasses} overflow-hidden bg-white dark:bg-slate-700 shrink-0 relative">
+                                            <div class="${iconSrc} absolute top-1/2 left-1/2" style="${styleAttr}"></div>
+                                        </div>`;
+                            }
+                        };
+
+                        const spineKey = typeof SPINE_MAP !== 'undefined' && SPINE_MAP[charName] ? SPINE_MAP[charName] : charName;
+                        
+                        const normalAttackIcon = charBaseData.attribute === "物理" ? "sprite-base sprite-common sprite-attack_physical" : "sprite-base sprite-common sprite-attack_magical";
+                        const normalSkillIcon = `sprite-Icon_NormalSkill_${spineKey}`;
+                        const passiveSkillIcon = `sprite-Icon_PassiveSkill_${spineKey}`;
+
+                        const pKey = currentCharData.personality || "冷靜";
+                        // 對應各性格實體的雪碧圖檔案名稱
+                        const personalityMap = {
+                            "冷靜": "ultimate_composed",
+                            "憂鬱": "ultimate_depressed",
+                            "天真": "ultimate_innocence",
+                            "狂亂": "ultimate_madness",
+                            "活潑": "ultimate_vivacious",
+                            "Composed": "ultimate_composed",
+                            "Depressed": "ultimate_depressed",
+                            "Innocence": "ultimate_innocence",
+                            "Madness": "ultimate_madness",
+                            "Vivacious": "ultimate_vivacious"
+                        };
+                        const ultFileName = personalityMap[pKey] || "ultimate_composed";
+
+                        // 僅保留 css 內的 position class
+                        const ultSkillIcon = `sprite-Icon_UltimateSkill_${spineKey}`;
+                        // 強制綁定背景圖片與長寬 (64x64)，並將 scale 設為 0.625，完美等比縮放進 40px 的外框中
+                        const ultStyle = `width: 64px; height: 64px; background-image: url('${ultFileName}.png'); background-size: auto; transform: translate(-50%, -50%) scale(0.625);`;
             
                         const enhancedData = charSkillData.normalAttack.enhanced;
                         const hasEnhanced = enhancedData && enhancedData !== "無" && (typeof enhancedData === 'string' ? true : enhancedData.desc !== "無");
@@ -1069,7 +1098,7 @@
                             <div class="relative bg-emerald-50/80 dark:bg-emerald-900/20 border-2 border-emerald-300 dark:border-emerald-700 rounded-xl p-4 shadow-sm overflow-visible">
                                 <div class="flex justify-between items-center border-b border-emerald-200 dark:border-emerald-800 pb-2 mb-3 relative z-10">
                                     <div class="flex items-center gap-2">
-                                        ${normalSkillIcon ? `<img src="${normalSkillIcon}" class="w-8 h-8 rounded-lg shadow-sm border border-emerald-300 dark:border-emerald-700">` : `<span>🟢</span>`}
+                                        ${getSkillIconHtml(normalSkillIcon, "border-emerald-300 dark:border-emerald-700", "🟢")}
                                         <span class="font-extrabold text-emerald-800 dark:text-emerald-300 text-base">${charSkillData.normalSkill.name}</span>
                                     </div>
                                 </div>
@@ -1085,7 +1114,7 @@
                             <div class="relative bg-violet-50/80 dark:bg-violet-900/20 border-2 border-violet-300 dark:border-violet-700 rounded-xl p-4 shadow-sm overflow-visible">
                                 <div class="flex justify-between items-center border-b border-violet-200 dark:border-violet-800 pb-2 mb-3 relative z-10">
                                     <div class="flex items-center gap-2">
-                                        ${ultSkillIcon ? `<img src="${ultSkillIcon}" class="w-8 h-8 rounded-lg shadow-sm border border-violet-300 dark:border-violet-700">` : `<span>🔥</span>`}
+                                        ${getSkillIconHtml(ultSkillIcon, "border-violet-300 dark:border-violet-700", "🔥", ultStyle)}
                                         <span class="font-extrabold text-violet-800 dark:text-violet-300 text-base">${charSkillData.ultimateSkill.name}</span>
                                     </div>
                                     <span class="px-2 py-0.5 bg-violet-600 dark:bg-violet-500 text-white font-black text-[10px] rounded-md shadow-sm">CD: ${charSkillData.ultimateSkill.cooldown || "N/A"}</span>
@@ -1098,12 +1127,11 @@
                             </div>
                         `;
             
-                        // 被動技能不放置 Spine，維持原本設計
                         html += `
                             <div class="relative bg-amber-50/70 dark:bg-amber-900/20 border-2 border-amber-300 dark:border-amber-700 rounded-xl p-4 shadow-sm overflow-hidden">
                                 <div class="flex justify-between items-center border-b border-amber-200 dark:border-amber-800 pb-2 mb-3 relative z-10">
                                     <div class="flex items-center gap-2">
-                                        ${passiveSkillIcon ? `<img src="${passiveSkillIcon}" class="w-8 h-8 rounded-lg shadow-sm border border-amber-300 dark:border-amber-700">` : `<span>✨</span>`}
+                                        ${getSkillIconHtml(passiveSkillIcon, "border-amber-300 dark:border-amber-700", "✨")}
                                         <span class="font-extrabold text-amber-800 dark:text-amber-300 text-base">${txtPassive}</span>
                                     </div>
                                 </div>
@@ -1118,7 +1146,7 @@
                             <div class="relative bg-slate-50 dark:bg-slate-700/40 border-2 border-slate-300 dark:border-slate-600 rounded-xl p-4 shadow-sm overflow-visible">
                                 <div class="flex justify-between items-center border-b border-slate-200 dark:border-slate-600 pb-2 mb-3 relative z-10">
                                     <div class="flex items-center gap-2">
-                                        ${normalAttackIcon ? `<img src="${normalAttackIcon}" class="w-8 h-8 rounded-lg shadow-sm border border-slate-300 dark:border-slate-600">` : `<span>🎯</span>`}
+                                        ${getSkillIconHtml(normalAttackIcon, "border-slate-300 dark:border-slate-600", "🎯")}
                                         <span class="font-extrabold text-slate-800 dark:text-slate-200 text-base">${txtNormalAtk}</span>
                                     </div>
                                 </div>
@@ -1139,7 +1167,6 @@
                         
                         skillsContainer.innerHTML = html;
             
-                        // 🌟 呼叫加載戰鬥小人
                         setTimeout(() => loadSkillSpines(charName), 100);
             
                     } else {
@@ -1147,19 +1174,16 @@
                     }
                 }
             }
+            
             function renderAside(charName) {
                 const asideSection = document.getElementById('asideSection');
                 const asideContainer = document.getElementById('asideContainer');
                 const spineKey = typeof SPINE_MAP !== 'undefined' && SPINE_MAP[charName] ? SPINE_MAP[charName] : charName;
                 const data = ASIDE_DATA[spineKey] || ASIDE_DATA[charName];
-            
-                // 🌟 1. 取得當前語言 (請確認你的系統是用哪個變數儲存語言，這裡以 currentLang 為例)
-                // 🌟 1. 取得當前語言 (對應你的 window.currentLang)
+                
                 let lang = window.currentLang || 'zh-TW';
-                // 如果你的資料庫是寫 'zh'，但系統抓到的是 'zh-TW'，我們在這裡做個轉換對應
                 if (lang === 'zh-TW') lang = 'zh'; 
-            
-                // 🌟 2. 建立安全讀取多語系資料的輔助函數
+                
                 const getLocText = (obj) => {
                     if (!obj) return '';
                     if (typeof obj === 'string') return obj; 
@@ -1170,19 +1194,18 @@
                     if (Array.isArray(arrObj)) return arrObj; 
                     return arrObj[lang] || arrObj['zh'] || []; 
                 };
-            
+                
                 const isUpcoming = ['Sylla', 'Alice'].includes(charName) || ['Sylla', 'Alice'].includes(spineKey);
                 const releaseTime = new Date('2026-07-09T04:00:00+09:00').getTime(); 
                 const now = new Date().getTime();
-            
-                if (!data) {
+                
+                if (!data && !isUpcoming) {
                     asideSection.classList.add('hidden');
                     return;
                 }
-            
+                
                 asideSection.classList.remove('hidden');
-            
-                // 🌟 3. 處理「即將實裝」的提示多語系
+                
                 if (isUpcoming && now < releaseTime) {
                     const upcomingMsg = {
                         zh: "此角色的願像系統將於 2026/07/09 04:00 (JST) 實裝解鎖",
@@ -1191,12 +1214,17 @@
                     };
                     
                     asideContainer.innerHTML = `
-                        <div class="p-5 bg-fuchsia-50/80 dark:bg-slate-800/80 text-fuchsia-700 dark:text-fuchsia-400 font-bold border border-fuchsia-200 dark:border-slate-600 rounded-xl text-center shadow-sm flex items-center justify-center gap-2">
-                            <span>⏳</span> ${upcomingMsg[lang] || upcomingMsg['zh']}
-                        </div>`;
+                    <div class="p-5 bg-fuchsia-50/80 dark:bg-slate-800/80 text-fuchsia-700 dark:text-fuchsia-400 font-bold border border-fuchsia-200 dark:border-slate-600 rounded-xl text-center shadow-sm flex items-center justify-center gap-2">
+                        <span>⏳</span> ${upcomingMsg[lang] || upcomingMsg['zh']}
+                    </div>`;
                     return;
                 }
-            
+                
+                if (!data) {
+                    asideSection.classList.add('hidden');
+                    return;
+                }
+                
                 const makeEffectChips = (effectsObj) => {
                     const effects = getLocArray(effectsObj);
                     if (effects.length === 0) return '';
@@ -1208,30 +1236,31 @@
                 let html = `
                     <div class="mb-4 text-center sm:text-left">
                         <span class="inline-flex items-center justify-center gap-2 px-4 py-1.5 bg-gradient-to-r from-fuchsia-100 to-purple-100 dark:from-fuchsia-900/50 dark:to-purple-900/50 text-fuchsia-900 dark:text-fuchsia-200 text-sm font-black rounded-lg border border-fuchsia-300 dark:border-fuchsia-700 shadow-sm drop-shadow-sm tracking-wide">
-                            ${data.asideIcon ? `<img src="${data.asideIcon}" class="w-12 h-12 object-contain drop-shadow-sm" alt="Aside Icon">` : ''}
+                            ${data.asideIcon ? (data.asideIcon.startsWith('http') || data.asideIcon.startsWith('./') ? `<img src="${data.asideIcon}" class="w-12 h-12 object-contain drop-shadow-sm" alt="Aside Icon">` : `<div class="flex items-center justify-center w-12 h-12"><div class="${data.asideIcon} scale-[0.65] drop-shadow-sm"></div></div>`) : ''}
                             ${getLocText(data.totalName)}
                         </span>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 `;
             
+                // 🌟 使用願像專屬 Sprite，並用絕對定位完美縮放
                 for (let i = 1; i <= 3; i++) {
                     const starData = data.stars[i];
                     if (!starData) continue;
             
                     const starIcons = {
-                        1: "https://i.postimg.cc/yJmwZkSz/ASIDE-1STAR.png",
-                        2: "https://i.postimg.cc/VSq3Cdb1/ASIDE-2STAR.png",
-                        3: "https://i.postimg.cc/JyN9kGB8/ASIDE-3STAR.png"
+                        1: "sprite-ASIDE_1STAR",
+                        2: "sprite-ASIDE_2STAR",
+                        3: "sprite-ASIDE_3STAR"
                     };
             
                     html += `
                         <div class="relative bg-white dark:bg-slate-800/80 border-2 border-fuchsia-200 dark:border-fuchsia-800/60 rounded-xl p-4 shadow-sm flex flex-col h-full hover:shadow-md transition-shadow">
                             <div class="flex items-center gap-3 border-b border-fuchsia-100 dark:border-fuchsia-800/50 pb-3 mb-3">
-                                <img src="${starData.icon}" class="w-8 h-8 rounded-lg shadow-sm border border-fuchsia-300 dark:border-fuchsia-600 bg-fuchsia-50 dark:bg-slate-700 object-contain">
+                                ${starData.icon.startsWith('http') || starData.icon.startsWith('./') ? `<img src="${starData.icon}" class="w-9 h-9 rounded-lg shadow-sm border border-fuchsia-300 dark:border-fuchsia-600 bg-fuchsia-50 dark:bg-slate-700 object-contain">` : `<div class="w-9 h-9 flex items-center justify-center rounded-lg shadow-sm border border-fuchsia-300 dark:border-fuchsia-600 bg-fuchsia-50 dark:bg-slate-700 overflow-hidden relative shrink-0"><div class="${starData.icon} absolute top-1/2 left-1/2" style="transform: translate(-50%, -50%) scale(0.45);"></div></div>`}
                                 <div>
-                                    <div class="mb-0.5 flex items-center">
-                                        <img src="${starIcons[i]}" alt="Star" class="h-3.5 object-contain drop-shadow-sm">
+                                    <div class="mb-0.5 flex items-center" style="height: 14px;">
+                                        <div class="${starIcons[i]} drop-shadow-sm origin-left" style="width: 73px; height: 29px; transform: scale(0.6);"></div>
                                     </div>
                                     <div class="font-extrabold text-gray-800 dark:text-gray-200 text-sm">${getLocText(starData.name)}</div>
                                 </div>
@@ -1267,14 +1296,13 @@
                 html += `</div>`;
                 asideContainer.innerHTML = html;
             }
-            // 🌟 跨平台自適應終極版：完美修正螢幕旋轉飄移問題
+            
             function loadSkillSpines(charName) {
                 if (window.skillSpinePlayers && window.skillSpinePlayers.length > 0) {
                     window.skillSpinePlayers.forEach(p => p.dispose());
                     window.skillSpinePlayers = [];
                 }
             
-                // 儲存目前的角色名稱，供旋轉時重新載入使用
                 window.currentActiveCharName = charName;
             
                 const baseFolderKey = typeof SPINE_MAP !== 'undefined' && SPINE_MAP[charName] ? SPINE_MAP[charName] : charName;
@@ -1289,31 +1317,25 @@
                     const container = document.getElementById(target.id);
                     if (!container) return;
             
-                    // 📱 動態偵測是否為手機螢幕 (寬度小於等於 768px)
                     const isMobile = window.innerWidth <= 768;
             
-                    // 🌟 【絕對錨定】強制拉到最頂層
                     container.style.position = "absolute"; 
                     container.style.zIndex = "999";        
                     container.style.pointerEvents = "none"; 
-                    container.style.transform = "none"; // 清除位移干擾
+                    container.style.transform = "none"; 
             
-                    // 🔀 雙平台獨立排版
                     if (isMobile) {
-                        // 🌟 核心修正：將 minWidth/minHeight 改為絕對的 width/height
                         container.style.width = "150px";    
                         container.style.height = "150px";
                         container.style.bottom = "10px";  
                         container.style.right = "-60px";   
                     } else {
-                        // 🌟 電腦版也同樣鎖死絕對寬高
                         container.style.width = "240px";    
                         container.style.height = "240px";
                         container.style.bottom = "10px";  
-                        container.style.right = "-40px";    
+                        container.style.right = "-40px";   
                     }
             
-                    // 📸 雙平台獨立鏡頭設定
                     const desktopViewport = { 
                         x: -500, y: -150, width: 1500, height: 3000, 
                         padLeft: "0%", padRight: "0%", padTop: "0%", padBottom: "0%", transitionTime: 0 
@@ -1339,7 +1361,6 @@
                         success: function (player) {
                             window.skillSpinePlayers.push(player);
             
-                            // 強制畫布寬高與層級
                             const canvas = container.querySelector('canvas');
                             if (canvas) {
                                 canvas.style.width = '100%';
@@ -1348,7 +1369,6 @@
                                 canvas.style.zIndex = '999'; 
                             }
             
-                            // 套用皮膚
                             const skins = player.skeleton.data.skins;
                             if (skins && skins.length > 0) {
                                 const targetSkin = skins.find(s => s.name === 'Normal') || skins.find(s => s.name === 'default') || skins[0];
@@ -1358,7 +1378,6 @@
                                 }
                             }
             
-                            // 取得動作與智慧連招邏輯 (維持不變)
                             const allAnims = player.skeleton.data.animations.map(a => a.name);
                             const hasIdle = allAnims.includes("Idle") ? "Idle" : null;
                             
@@ -1423,7 +1442,6 @@
                 const container = document.getElementById('topMiniSpineContainer');
                 if (!container) return;
             
-                // 🌟 調整點 1：將尺寸從 120px 改為 90px (原本的 75%)
                 container.style.pointerEvents = "none";
                 container.style.display = 'block';
                 container.style.height = '90px'; 
@@ -1477,10 +1495,7 @@
                             }
                         }
             
-                        // 🌟 調整點 2：修改動畫播放時間軸的速度為 0.5 倍 (慢動作)
-                        // 如果未來想加快，設為 1.5 或 2.0 即可
                         player.animationState.timeScale = 0.5;
-            
                         player.play();
                     },
                     error: (player, reason) => {
@@ -1488,25 +1503,19 @@
                     }
                 });
             }
-            // 🌟 【核心修正】加入全域監聽器：當螢幕尺寸改變或旋轉時，自動重繪 Spine
             let resizeTimeout;
-            // 紀錄目前的螢幕寬度
             let lastWindowWidth = window.innerWidth;
             
             window.addEventListener('resize', () => {
-                // 🚫 防誤觸機制：如果螢幕「寬度」沒變，代表只是手機滑動導致網址列縮放，直接忽略！
                 if (window.innerWidth === lastWindowWidth) {
                     return; 
                 }
             
-                // 更新最新的螢幕寬度
                 lastWindowWidth = window.innerWidth;
             
-                // 使用 debounce 避免短時間內重複觸發，優化手機效能
                 clearTimeout(resizeTimeout);
                 resizeTimeout = setTimeout(() => {
                     if (window.currentActiveCharName) {
-                        // 只有在真正旋轉螢幕（寬度改變）時，才重新載入小人
                         loadSkillSpines(window.currentActiveCharName);
                     }
                 }, 300); 
@@ -1522,8 +1531,10 @@
             const displayName = getI18n(currentCharData.name);
             
             const isEldain = ELDAIN_LIST.includes(currentCharData.name);
-            const identityIconUrl = isEldain ? ICON_ELDAIN : ICON_NORMAL;
-            document.getElementById('charName').innerHTML = `${displayName} <img src="${identityIconUrl}" class="inline-block h-[1.5em] align-middle ml-1 -mt-1 drop-shadow-sm" alt="Identity">`;
+            const identityHtml = ICON_ELDAIN.startsWith('http') 
+                ? `<img src="${isEldain ? ICON_ELDAIN : ICON_NORMAL}" class="inline-block h-[1.5em] align-middle ml-1 -mt-1 drop-shadow-sm" alt="Identity">` 
+                : `<div class="${isEldain ? ICON_ELDAIN : ICON_NORMAL} inline-block align-middle ml-1 -mt-1 drop-shadow-sm origin-center scale-[0.6]"></div>`;
+            document.getElementById('charName').innerHTML = `${displayName} ${identityHtml}`;
             
             document.title = `${displayName} - ${getI18n('page_title_char_detail') || '詳細資料'}`;
             
@@ -1573,7 +1584,6 @@
                 currentCharData = INITIAL_DATA.find(c => c.name.trim() === currentTargetName);
                 if (!currentCharData) { renderError(`${getI18n('error_char_not_found') || "❌ 找不到角色資料: "}${currentTargetName}`); return; }
             
-                // 🌟 新增：在此處隨機抽取 LOBBY_BACKGROUNDS 並套用至 #charAvatar 
                 const avatarBox = document.getElementById('charAvatar');
                 if (typeof LOBBY_BACKGROUNDS !== 'undefined' && LOBBY_BACKGROUNDS.length > 0) {
                     const randomIndex = Math.floor(Math.random() * LOBBY_BACKGROUNDS.length);
@@ -1586,8 +1596,10 @@
                 const displayName = getI18n(currentCharData.name);
                 
                 const isEldain = ELDAIN_LIST.includes(currentCharData.name);
-                const identityIconUrl = isEldain ? ICON_ELDAIN : ICON_NORMAL;
-                document.getElementById('charName').innerHTML = `${displayName} <img src="${identityIconUrl}" class="inline-block h-[1.5em] align-middle ml-1 -mt-1 drop-shadow-sm" alt="Identity">`;
+                const identityHtml = ICON_ELDAIN.startsWith('http') 
+                    ? `<img src="${isEldain ? ICON_ELDAIN : ICON_NORMAL}" class="inline-block h-[1.5em] align-middle ml-1 -mt-1 drop-shadow-sm" alt="Identity">`
+                    : `<div class="${isEldain ? ICON_ELDAIN : ICON_NORMAL} inline-block align-middle ml-1 -mt-1 drop-shadow-sm origin-center scale-[0.6]"></div>`;
+                document.getElementById('charName').innerHTML = `${displayName} ${identityHtml}`;
             
                 let pLabel = getI18n('stats_personality'); if(pLabel === 'stats_personality') pLabel = '性格';
                 let rLabel = getI18n('stats_race'); if(rLabel === 'stats_race') rLabel = '種族';
@@ -1605,22 +1617,17 @@
             
                 const spineKey = typeof SPINE_MAP !== 'undefined' ? SPINE_MAP[currentCharData.name] : currentCharData.name;
             
-                // 🌟 動態替換專屬 Favicon
-                // 🌟 動態替換專屬 Favicon (含防呆機制)
                 const faviconEl = document.getElementById('dynamicFavicon');
                 const defaultFaviconUrl = 'https://i.postimg.cc/mkfSTq5k/Favicon.png';
                 
                 if (faviconEl && spineKey) {
                     const testImg = new Image();
                     testImg.onload = function() {
-                        // ✅ 測試成功：確實有這張圖，正式替換 Favicon
                         faviconEl.href = this.src;
                     };
                     testImg.onerror = function() {
-                        // ❌ 測試失敗：找不到該角色的圖，退回預設金蠟筆
                         faviconEl.href = defaultFaviconUrl;
                     };
-                    // 啟動測試載入
                     testImg.src = `./favicon/${spineKey}.png`;
                 }
             
@@ -1630,16 +1637,19 @@
                     const presentContainer = document.getElementById('presentContainer');
                     const presentNameBox = document.getElementById('presentName');
             
-                    const DEFAULT_NO_PRESENT_URL = "https://i.postimg.cc/qtwD6bsq/Icon-Present.png";
+                    // 🌟 修正預設無珍藏品的 Class (加入 sprite-base sprite-common 確保抓到背景)
+                    const DEFAULT_NO_PRESENT = "sprite-base sprite-common sprite-letter";
             
-                    let finalImgUrl = DEFAULT_NO_PRESENT_URL;
+                    let finalImgUrl = DEFAULT_NO_PRESENT;
                     let presentDisplayName = getI18n('present_delivering'); 
                     if (presentDisplayName === 'present_delivering') presentDisplayName = '未配發寶物';
             
                     let isHasPresent = false;
             
                     if (typeof PRESENT_MAP !== 'undefined' && PRESENT_MAP[spineKey]) {
-                        finalImgUrl = PRESENT_MAP[spineKey].url;
+                        // 🌟 強制優先讀取 Sprite 排版配置，若沒設定屬性也強制 fallback 到 sprite 名稱，不再用 postimage url
+                        finalImgUrl = PRESENT_MAP[spineKey].sprite || `sprite-PresentList_${spineKey}`;
+                        if (!finalImgUrl.includes('sprite-base')) finalImgUrl = `sprite-base sprite-common ${finalImgUrl}`;
                         isHasPresent = true;
             
                         const pNameData = PRESENT_MAP[spineKey].name;
@@ -1675,18 +1685,31 @@
                     }
             
                     const altText = isHasPresent ? `${currentCharData.name} - ${presentDisplayName}` : "No Present";
-                    const imgClass = isHasPresent 
-                        ? "w-32 h-32 md:w-40 md:h-40 object-contain transition-transform duration-300 hover:scale-110 drop-shadow-md"
-                        : "w-24 h-24 md:w-32 md:h-32 object-contain opacity-70 animate-pulse"; 
             
                     if (presentContainer) {
-                        presentContainer.innerHTML = `
-                            <img src="${finalImgUrl}" 
-                                 alt="${altText}" 
-                                 class="${imgClass}"
-                                 loading="lazy"
-                                 onerror="if(this.src != '${DEFAULT_NO_PRESENT_URL}') this.src='${DEFAULT_NO_PRESENT_URL}'; else this.parentElement.innerHTML='<p class=\\'text-gray-500 text-sm\\'>⚠️ Image Error</p>'">
-                        `;
+                        // 🌟 修正：利用 position absolute 把珍藏品放在正中央並進行縮放，完全不受到外圍寬高與裁切問題影響
+                        const animClass = isHasPresent ? 'transition-transform duration-300 drop-shadow-md' : 'opacity-70 drop-shadow-sm transition-transform duration-300';
+                        const baseScale = isHasPresent ? 'scale(0.8)' : 'scale(1.2)';
+                        const hoverWrapperClass = isHasPresent ? 'hover:scale-110 transition-transform duration-300' : '';
+                        
+                        if (finalImgUrl.startsWith('http') || finalImgUrl.startsWith('./') || finalImgUrl.startsWith('data:')) {
+                            const imgClass = isHasPresent 
+                                ? "w-32 h-32 md:w-40 md:h-40 object-contain transition-transform duration-300 hover:scale-110 drop-shadow-md"
+                                : "w-24 h-24 md:w-32 md:h-32 object-contain opacity-70 animate-pulse"; 
+                            presentContainer.innerHTML = `
+                                <img src="${finalImgUrl}" 
+                                     alt="${altText}" 
+                                     class="${imgClass}"
+                                     loading="lazy"
+                                     onerror="if(this.src != 'https://i.postimg.cc/qtwD6bsq/Icon-Present.png') this.src='https://i.postimg.cc/qtwD6bsq/Icon-Present.png'; else this.parentElement.innerHTML='<p class=\\'text-gray-500 text-sm\\'>⚠️ Image Error</p>'">
+                            `;
+                        } else {
+                            presentContainer.innerHTML = `
+                                <div class="flex items-center justify-center w-full h-full ${hoverWrapperClass} relative min-h-[120px]">
+                                    <div class="${finalImgUrl} ${animClass} absolute top-1/2 left-1/2" style="transform: translate(-50%, -50%) ${baseScale};" title="${altText}"></div>
+                                </div>
+                            `;
+                        }
                     }
             
                     if (!isHasPresent) {
@@ -1730,8 +1753,7 @@
                 
                 loadComments(currentTargetName);
                 switchPresentTab('thought'); 
-                // 👇 在這裡補上這行，觸發小人載入！
-                    loadTopMiniSpine(currentTargetName);
+                loadTopMiniSpine(currentTargetName);
              };
             
             function getAnonymousId() {
@@ -1836,7 +1858,6 @@
                     btn.classList.replace('dark:bg-gray-500', 'dark:bg-amber-600');
                 });
             }
-            // 偵測捲動距離以顯示/隱藏按鈕
             window.onscroll = function() {
             const btn = document.getElementById("backToTop");
             if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
@@ -1846,7 +1867,6 @@
             }
             };
             
-            // 執行平滑滾動至頂部
             function scrollToTop() {
             window.scrollTo({
             top: 0,
