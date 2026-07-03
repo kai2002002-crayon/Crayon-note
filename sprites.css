@@ -76,6 +76,7 @@
 .sprite-attack_magical { width: 64px; height: 64px; background-position: -806px -301px; }
 .sprite-minirim { width: 63px; height: 83px; background-position: -815px -375px; }
 .sprite-attack_physical { width: 64px; height: 64px; background-position: -815px -468px; }
+.sprite-letter { width: 71px; height: 71px; background-position: -813px -700px; }
 
 /* =======================================
    🌟 角色頭像 (char_*.png)
