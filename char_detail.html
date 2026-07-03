@@ -337,6 +337,7 @@
             
             const updateTag = (id, label, value, prefix) => {
                 const el = document.getElementById(id);
+                // 修正：檢查 ICON_MAP 是否正確存在
                 const iconUrl = typeof ICON_MAP !== 'undefined' ? (ICON_MAP[`${prefix}_${value}`] || "") : "";
                 
                 if (!iconUrl) {
@@ -344,16 +345,21 @@
                     return;
                 }
             
+                el.classList.remove('hidden');
+                // 統一容器 class，確保 group-hover 效果能傳遞給內部的 icon
                 el.className = 'relative group flex items-center justify-center'; 
             
+                // 統一使用 scale-[0.6] 作為基礎大小，確保物理/魔法圖示與其他 icon 大小一致
                 const iconHtml = (iconUrl.startsWith('http') || iconUrl.startsWith('./'))
                     ? `<img src="${iconUrl}" alt="${label}" class="w-8 h-8 object-contain transition-transform duration-300 group-hover:scale-125 cursor-help drop-shadow-sm">`
-                    : `<div class="flex items-center justify-center w-8 h-8 transition-transform duration-300 group-hover:scale-125 cursor-help drop-shadow-sm"><div class="${iconUrl} shrink-0 origin-center scale-[0.45]"></div></div>`;
+                    : `<div class="flex items-center justify-center w-8 h-8 transition-transform duration-300 group-hover:scale-125 cursor-help drop-shadow-sm">
+                        <div class="${iconUrl} shrink-0 origin-center scale-[0.4]"></div>
+                       </div>`;
                 
+                // 修正：tooltip 文字強制呼叫 t() 進行翻譯
                 el.innerHTML = `
                     ${iconHtml}
-                    <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 px-3 py-1.5 bg-slate-900 dark:bg-slate-700 text-white dark:text-gray-100 text-[11px] font-black rounded-lg shadow-xl whitespace-nowrap pointer-events-none
-                                hidden group-hover:block transition-all duration-300 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 translate-y-1 z-50">
+                    <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 px-3 py-1.5 bg-slate-900 dark:bg-slate-700 text-white dark:text-gray-100 text-[11px] font-black rounded-lg shadow-xl whitespace-nowrap pointer-events-none hidden group-hover:block transition-all duration-300 opacity-0 group-hover:opacity-100 z-50">
                         ${label}：${t(value)}
                         <div class="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-900 dark:border-t-slate-700"></div>
                     </div>
@@ -762,8 +768,8 @@
                                     if (player.skeleton) {
                                         player.skeleton.scaleX = currentZoom;
                                         player.skeleton.scaleY = currentZoom;
-                                        player.skeleton.y = ZOOM_ANCHOR_Y * (1 - currentZoom);
-                                        player.skeleton.x = 0;
+                                        // 🌟 修正：移除 player.skeleton.x = 0; 以免縮放時拖曳位置被強制重置
+                                        // 保留 Y 軸的底部錨點邏輯，但不覆蓋掉拖曳的偏移量
                                     }
                                 }, { passive: false });
             
@@ -888,8 +894,9 @@
                                     if (hasTriggeredRub && hitZoneOnDown && activeInteractBone) {
                                         const effView = getEffectiveViewport(rect, baseViewport); 
                                         const isCheek = hitZoneOnDown.name === "臉頰";
-                                        const spineScaleX = effView.width / rect.width / currentZoom;
-                                        const spineScaleY = effView.height / rect.height / currentZoom;
+                                        // 🌟 修正：Spine 的 worldToLocal 會自動處理骨架縮放，此處直接使用畫布與視窗比例即可，不需除以 currentZoom
+                                        const spineScaleX = effView.width / rect.width;
+                                        const spineScaleY = effView.height / rect.height;
                                         const stretchIntensity = isCheek ? 1.3 : 0.3; 
                                         
                                         let worldDx = (e.clientX - startX) * spineScaleX * stretchIntensity;
@@ -912,11 +919,11 @@
                                         activeInteractBone.x = initialBoneX + localDx;
                                         activeInteractBone.y = initialBoneY + localDy;
                                     } else if (!hitZoneOnDown) {
-            // 🌟 修正 3：視角拖動時，必須除以 currentZoom，否則放大後拖曳速度會暴走並導致滑鼠與小人錯位
-            const effView = getEffectiveViewport(rect, baseViewport);
-            player.skeleton.x += dx * (effView.width / rect.width) / currentZoom;
-            player.skeleton.y -= dy * (effView.height / rect.height) / currentZoom;
-            }
+                                        // 🌟 修正：skeleton.x/y 是絕對偏移量，加入 / currentZoom 會導致放大時拖曳跟不上滑鼠，這正是產生錯位的主因
+                                        const effView = getEffectiveViewport(rect, baseViewport);
+                                        player.skeleton.x += dx * (effView.width / rect.width);
+                                        player.skeleton.y -= dy * (effView.height / rect.height);
+                                    }
                                     
                                     lastMouseX = e.clientX;
                                     lastMouseY = e.clientY;
