@@ -12,9 +12,7 @@
         <script src="https://cdn.tailwindcss.com"></script>
         <link id="dynamicFavicon" rel="icon" href="https://i.postimg.cc/mkfSTq5k/Favicon.png" type="image/png">
         <link rel="preconnect" href="https://firebasestorage.googleapis.com">
-        <!-- 通用雪碧圖 -->
         <link rel="stylesheet" href="sprites.css">
-        <!-- 坨坨專屬雪碧圖 -->
         <link rel="stylesheet" href="char_sprites/char_sprites.css">
         <link rel="preconnect" href="https://i.postimg.cc">
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -172,9 +170,10 @@
                     <div id="costumeButtonsContainer" class="flex flex-wrap justify-center gap-2 hidden w-full max-w-[320px]"></div>
                 </div>
                 <div class="text-center sm:text-left w-full mt-2 sm:mt-0">
-                    <h1 id="charName" data-i18n="loading" class="text-3xl font-extrabold text-amber-950 dark:text-amber-400 mb-1 tracking-tight">載入中...</h1>
+                    <h1 id="charName" data-i18n="loading" class="text-3xl font-extrabold text-amber-950 dark:text-amber-400 mb-1 tracking-tight flex items-center justify-center sm:justify-start flex-wrap gap-2">載入中...</h1>
                     <div id="charStars" class="flex justify-center sm:justify-start items-center min-h-[28px] mb-3"></div>
                     <div class="flex justify-center sm:justify-start gap-5 sm:gap-4 pt-3 flex-wrap">
+                        <div id="charIdentity"></div>
                         <div id="charPersonality"></div>
                         <div id="charRace"></div>
                         <div id="charPosition"></div>
@@ -197,7 +196,6 @@
                                     <span class="font-black text-amber-800 dark:text-amber-400 shrink-0" data-i18n="info_job_reward">💰 打工獎勵</span>
                                     <div id="charRewardIcon" class="flex flex-wrap gap-2 justify-start"></div>
                                 </div>
-                                <!-- 打工 CG 圖的放置容器 -->
                                 <div id="charJobCgContainer" class="shrink-0 hidden mb-1"></div>
                             </div>
                         </div>
@@ -335,10 +333,55 @@
             firebase.initializeApp(firebaseConfig);
             const db = firebase.firestore();
             
+            // 🌟 集中註冊全屬性的雪碧圖對應字典 (相容中/英雙語原始值)
+            const initIconMap = () => {
+                if (typeof window.ICON_MAP === 'undefined') window.ICON_MAP = {};
+                // 在 initIconMap 內新增這段：
+                window.ICON_MAP['identity_艾爾丁'] = 'sprite-base sprite-common sprite-PickPerconalityIcon_EldainHero';
+                window.ICON_MAP['identity_普通坨坨'] = 'sprite-base sprite-common sprite-PickPerconalityIcon_NormalHero';
+                // 攻擊類型
+                window.ICON_MAP['attribute_物理'] = 'sprite-base sprite-common sprite-Type_Physic';
+                window.ICON_MAP['attribute_魔法'] = 'sprite-base sprite-common sprite-Type_Magic';
+                window.ICON_MAP['attribute_Physical'] = 'sprite-base sprite-common sprite-Type_Physic';
+                window.ICON_MAP['attribute_Magic'] = 'sprite-base sprite-common sprite-Type_Magic';
+
+                // 性格
+                const personalities = { '冷靜': 'Composed', '憂鬱': 'Depressed', '天真': 'Innocence', '狂亂': 'Madness', '活潑': 'Vivacious' };
+                Object.entries(personalities).forEach(([zh, en]) => {
+                    const cls = `sprite-base sprite-common sprite-Personality_${en}`;
+                    window.ICON_MAP[`personality_${zh}`] = cls;
+                    window.ICON_MAP[`personality_${en}`] = cls;
+                });
+
+                // 種族
+                const races = { '龍族': 'Dragon', '魔靈': 'Elemental', '精靈': 'Elf', '幽靈': 'Phantom', '妖精': 'Sprite', '???': 'Unknown', '獸人': 'Werebeast', '魔女': 'Witch' };
+                Object.entries(races).forEach(([zh, en]) => {
+                    const cls = `sprite-base sprite-common sprite-Race_${en}`;
+                    window.ICON_MAP[`race_${zh}`] = cls;
+                    window.ICON_MAP[`race_${en}`] = cls;
+                });
+
+                // 站位
+                const positions = { '後排': 'Back', '前排': 'Front', '中排': 'Middle' };
+                Object.entries(positions).forEach(([zh, en]) => {
+                    const cls = `sprite-base sprite-common sprite-Position_${en}`;
+                    window.ICON_MAP[`position_${zh}`] = cls;
+                    window.ICON_MAP[`position_${en}`] = cls;
+                });
+
+                // 職業
+                const jobs = { '輸出': 'DPS', '輔助': 'Support', '肉盾': 'Tank' };
+                Object.entries(jobs).forEach(([zh, en]) => {
+                    const cls = `sprite-base sprite-common sprite-Job_${en}`;
+                    window.ICON_MAP[`job_${zh}`] = cls;
+                    window.ICON_MAP[`job_${en}`] = cls;
+                });
+            };
+
             const updateTag = (id, label, value, prefix) => {
                 const el = document.getElementById(id);
-                // 修正：檢查 ICON_MAP 是否正確存在
-                const iconUrl = typeof ICON_MAP !== 'undefined' ? (ICON_MAP[`${prefix}_${value}`] || "") : "";
+                initIconMap();
+                const iconUrl = window.ICON_MAP[`${prefix}_${value}`] || "";
                 
                 if (!iconUrl) {
                     el.classList.add('hidden');
@@ -346,17 +389,22 @@
                 }
             
                 el.classList.remove('hidden');
-                // 統一容器 class，確保 group-hover 效果能傳遞給內部的 icon
+                // 統一容器 class，確保 group-hover 效果能完美傳遞給內部的 icon
                 el.className = 'relative group flex items-center justify-center'; 
             
-                // 統一使用 scale-[0.6] 作為基礎大小，確保物理/魔法圖示與其他 icon 大小一致
+                // 🌟 根據屬性大圖的大小設定精準的 CSS scale 比率，使其在 32x32px 佔位格內外觀完全一致
+                let scaleClass = 'scale-[0.5]'; // 64x64 縮小為 32x32 (預設)
+                if (prefix === 'race') scaleClass = 'scale-[0.58]';       // 55x55 縮小為 32x32
+                if (prefix === 'personality') scaleClass = 'scale-[0.48]';// 62x66 縮小為 32x32
+                if (prefix === 'identity') scaleClass = 'scale-[0.43]';
+            
                 const iconHtml = (iconUrl.startsWith('http') || iconUrl.startsWith('./'))
                     ? `<img src="${iconUrl}" alt="${label}" class="w-8 h-8 object-contain transition-transform duration-300 group-hover:scale-125 cursor-help drop-shadow-sm">`
-                    : `<div class="flex items-center justify-center w-8 h-8 transition-transform duration-300 group-hover:scale-125 cursor-help drop-shadow-sm">
-                        <div class="${iconUrl} shrink-0 origin-center scale-[0.5]"></div>
+                    : `<div class="w-8 h-8 flex items-center justify-center transition-transform duration-300 group-hover:scale-125 cursor-help drop-shadow-sm relative overflow-hidden shrink-0 bg-transparent">
+                        <div class="${iconUrl} absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 origin-center ${scaleClass}"></div>
                        </div>`;
                 
-                // 修正：tooltip 文字強制呼叫 t() 進行翻譯
+                // 修正：tooltip 文字強制呼叫 t() 進行字典對比翻譯
                 el.innerHTML = `
                     ${iconHtml}
                     <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 px-3 py-1.5 bg-slate-900 dark:bg-slate-700 text-white dark:text-gray-100 text-[11px] font-black rounded-lg shadow-xl whitespace-nowrap pointer-events-none hidden group-hover:block transition-all duration-300 opacity-0 group-hover:opacity-100 z-50">
@@ -390,7 +438,7 @@
                 `;
             }
             
-                        // 🌟 將坨坨星星修改為 Sprite 排版並完美縮放對齊
+            // 🌟 將坨坨星星修改為 Sprite 排版並完美縮放對齊
             function renderStars(charName) {
                 const starsContainer = document.getElementById('charStars');
                 if (!starsContainer) return;
@@ -408,7 +456,6 @@
                     </div>
                 `;
             }
-            
             
             // 🌟 新增安全獲取食物圖示的輔助函式，兼容字串與物件格式
             function getSafeFoodIconUrl(foodKey) {
@@ -501,7 +548,6 @@
                     }
                     
                     foodContainer.innerHTML = html;
-            
                 }
             
                 // --- 處理打工獎勵 ---
@@ -623,9 +669,6 @@
                     if(bgDiv) bgDiv.style.backgroundImage = "none";
                 }
             };
-            
-            const ICON_ELDAIN = "https://i.postimg.cc/JtN3bRG5/Pick-Perconality-Icon-Eldain-Hero.png";
-            const ICON_NORMAL = "https://i.postimg.cc/dD2R8JLy/Pick-Perconality-Icon-Normal-Hero.png";
             
             let currentTargetName = "";
             let currentCharData = null;
@@ -768,8 +811,6 @@
                                     if (player.skeleton) {
                                         player.skeleton.scaleX = currentZoom;
                                         player.skeleton.scaleY = currentZoom;
-                                        // 🌟 修正：移除 player.skeleton.x = 0; 以免縮放時拖曳位置被強制重置
-                                        // 保留 Y 軸的底部錨點邏輯，但不覆蓋掉拖曳的偏移量
                                     }
                                 }, { passive: false });
             
@@ -784,37 +825,34 @@
                                 });
             
                                 function getHitZone(mouseX, mouseY) {
-            const rect = canvas.getBoundingClientRect();
-            // 🌟 修正 1：使用 effView 來確保判斷不會受到畫布長寬比影響
-            const effView = getEffectiveViewport(rect, baseViewport);
-            let clickedPart = null;
-            let minDistance = Infinity;
-            
-            const hitZones = [
-            { name: "臉頰", bones: ["Character_Ball_Move"], radius: 50 },
-            { name: "頭部", bones: ["Character_Pat"], radius: 50 },
-            { name: "身體", bones: ["Character_Tickle"], radius: 60 }
-            ];
-            
-            hitZones.forEach(zone => {
-            let targetBone = null;
-            for (let bName of zone.bones) { targetBone = player.skeleton.findBone(bName); if (targetBone) break; }
-            if (targetBone) {
-            // 🌟 修正 2：將 baseViewport 改為 effView，確保骨骼映射正確
-            const boneCanvasX = ((targetBone.worldX - effView.x) / effView.width) * rect.width;
-            const boneCanvasY = rect.height - ((targetBone.worldY - effView.y) / effView.height) * rect.height;
-            const distance = Math.hypot(mouseX - boneCanvasX, mouseY - boneCanvasY);
-            // 根據當前縮放比例動態調整判定半徑
-            const scaledRadius = (zone.radius * currentZoom) * (rect.width / effView.width);
-            
-            if (distance < scaledRadius && distance < minDistance) { 
-                minDistance = distance; 
-                clickedPart = { ...zone, bone: targetBone }; 
-            }
-            }
-            });
-            return clickedPart;
-            }
+                                    const rect = canvas.getBoundingClientRect();
+                                    const effView = getEffectiveViewport(rect, baseViewport);
+                                    let clickedPart = null;
+                                    let minDistance = Infinity;
+                                    
+                                    const hitZones = [
+                                    { name: "臉頰", bones: ["Character_Ball_Move"], radius: 50 },
+                                    { name: "頭部", bones: ["Character_Pat"], radius: 50 },
+                                    { name: "身體", bones: ["Character_Tickle"], radius: 60 }
+                                    ];
+                                    
+                                    hitZones.forEach(zone => {
+                                        let targetBone = null;
+                                        for (let bName of zone.bones) { targetBone = player.skeleton.findBone(bName); if (targetBone) break; }
+                                        if (targetBone) {
+                                            const boneCanvasX = ((targetBone.worldX - effView.x) / effView.width) * rect.width;
+                                            const boneCanvasY = rect.height - ((targetBone.worldY - effView.y) / effView.height) * rect.height;
+                                            const distance = Math.hypot(mouseX - boneCanvasX, mouseY - boneCanvasY);
+                                            const scaledRadius = (zone.radius * currentZoom) * (rect.width / effView.width);
+                                            
+                                            if (distance < scaledRadius && distance < minDistance) { 
+                                                minDistance = distance; 
+                                                clickedPart = { ...zone, bone: targetBone }; 
+                                            }
+                                        }
+                                    });
+                                    return clickedPart;
+                                }
             
                                 canvas.addEventListener('pointerdown', (e) => {
                                     pointers[e.pointerId] = { x: e.clientX, y: e.clientY };
@@ -894,7 +932,6 @@
                                     if (hasTriggeredRub && hitZoneOnDown && activeInteractBone) {
                                         const effView = getEffectiveViewport(rect, baseViewport); 
                                         const isCheek = hitZoneOnDown.name === "臉頰";
-                                        // 🌟 修正：Spine 的 worldToLocal 會自動處理骨架縮放，此處直接使用畫布與視窗比例即可，不需除以 currentZoom
                                         const spineScaleX = effView.width / rect.width;
                                         const spineScaleY = effView.height / rect.height;
                                         const stretchIntensity = isCheek ? 1.3 : 0.3; 
@@ -919,7 +956,6 @@
                                         activeInteractBone.x = initialBoneX + localDx;
                                         activeInteractBone.y = initialBoneY + localDy;
                                     } else if (!hitZoneOnDown) {
-                                        // 🌟 修正：skeleton.x/y 是絕對偏移量，加入 / currentZoom 會導致放大時拖曳跟不上滑鼠，這正是產生錯位的主因
                                         const effView = getEffectiveViewport(rect, baseViewport);
                                         player.skeleton.x += dx * (effView.width / rect.width);
                                         player.skeleton.y -= dy * (effView.height / rect.height);
@@ -1117,14 +1153,11 @@
                             return `<p class="text-xs text-gray-600 dark:text-gray-300 font-medium leading-relaxed whitespace-pre-wrap relative z-10">${skillObj.desc || ''}</p>${makeStatChips(skillObj.stats)}`;
                         };
             
-                        // 🌟 修改：利用 absolute center 完全避免 overflow-hidden 因 scale 所導致的裁切
-                       // 🌟 修改：利用 absolute center 完全避免 overflow-hidden 因 scale 所導致的裁切，並支援傳入額外 style (處理 64x64 雪碧圖)
                         const getSkillIconHtml = (iconSrc, borderClasses, fallbackIcon, extraStyle = "") => {
                             if (!iconSrc) return `<span>${fallbackIcon}</span>`;
                             if (iconSrc.startsWith('http') || iconSrc.startsWith('./')) {
                                 return `<img src="${iconSrc}" class="w-10 h-10 rounded-lg shadow-sm border ${borderClasses}">`;
                             } else {
-                                // 原本 64x64px 的技能圖標，縮放 0.625 倍後剛好為 40x40px，完美塞滿外框
                                 const styleAttr = extraStyle ? extraStyle : 'transform: translate(-50%, -50%) scale(0.625);';
                                 return `<div class="w-10 h-10 flex items-center justify-center rounded-lg shadow-sm border ${borderClasses} overflow-hidden bg-white dark:bg-slate-700 shrink-0 relative">
                                             <div class="${iconSrc} absolute top-1/2 left-1/2" style="${styleAttr}"></div>
@@ -1139,24 +1172,13 @@
                         const passiveSkillIcon = `sprite-Icon_PassiveSkill_${spineKey}`;
             
                         const pKey = currentCharData.personality || "冷靜";
-                        // 對應各性格實體的雪碧圖檔案名稱
                         const personalityMap = {
-                            "冷靜": "ultimate_composed",
-                            "憂鬱": "ultimate_depressed",
-                            "天真": "ultimate_innocence",
-                            "狂亂": "ultimate_madness",
-                            "活潑": "ultimate_vivacious",
-                            "Composed": "ultimate_composed",
-                            "Depressed": "ultimate_depressed",
-                            "Innocence": "ultimate_innocence",
-                            "Madness": "ultimate_madness",
-                            "Vivacious": "ultimate_vivacious"
+                            "冷靜": "ultimate_composed", "憂鬱": "ultimate_depressed", "天真": "ultimate_innocence", "狂亂": "ultimate_madness", "活潑": "ultimate_vivacious",
+                            "Composed": "ultimate_composed", "Depressed": "ultimate_depressed", "Innocence": "ultimate_innocence", "Madness": "ultimate_madness", "Vivacious": "ultimate_vivacious"
                         };
                         const ultFileName = personalityMap[pKey] || "ultimate_composed";
             
-                        // 僅保留 css 內的 position class
                         const ultSkillIcon = `sprite-Icon_UltimateSkill_${spineKey}`;
-                        // 強制綁定背景圖片與長寬 (64x64)，並將 scale 設為 0.625，完美等比縮放進 40px 的外框中
                         const ultStyle = `width: 64px; height: 64px; background-image: url('${ultFileName}.png'); background-size: auto; transform: translate(-50%, -50%) scale(0.625);`;
             
                         const enhancedData = charSkillData.normalAttack.enhanced;
@@ -1306,34 +1328,39 @@
                            `</div>`;
                 };
             
+                // 🌟 願像主圖：應用動態專屬雪碧圖 Class (sprite-AsideIcon_*)，並等比完美縮放置中
+                const asideMainSprite = `sprite-AsideIcon_${spineKey}`;
+                const asideMainHtml = `<div class="w-12 h-12 flex items-center justify-center relative overflow-hidden shrink-0 bg-transparent">
+                    <div class="${asideMainSprite} absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 origin-center" style="transform: translate(-50%, -50%) scale(0.1875); width: 256px; height: 256px;"></div>
+                </div>`;
+            
                 let html = `
                     <div class="mb-4 text-center sm:text-left">
                         <span class="inline-flex items-center justify-center gap-2 px-4 py-1.5 bg-gradient-to-r from-fuchsia-100 to-purple-100 dark:from-fuchsia-900/50 dark:to-purple-900/50 text-fuchsia-900 dark:text-fuchsia-200 text-sm font-black rounded-lg border border-fuchsia-300 dark:border-fuchsia-700 shadow-sm drop-shadow-sm tracking-wide">
-                            ${data.asideIcon ? (data.asideIcon.startsWith('http') || data.asideIcon.startsWith('./') ? `<img src="${data.asideIcon}" class="w-12 h-12 object-contain drop-shadow-sm" alt="Aside Icon">` : `<div class="flex items-center justify-center w-12 h-12"><div class="${data.asideIcon} scale-[0.65] drop-shadow-sm"></div></div>`) : ''}
+                            ${asideMainHtml}
                             ${getLocText(data.totalName)}
                         </span>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 `;
             
-                // 🌟 使用願像專屬 Sprite，並用絕對定位完美縮放
+                // 🌟 願像星級技能圖標：套用專屬雪碧圖 Class (sprite-Aside_Skill_*_1~3)，並精準縮放對齊
                 for (let i = 1; i <= 3; i++) {
                     const starData = data.stars[i];
                     if (!starData) continue;
             
-                    const starIcons = {
-                        1: "sprite-ASIDE_1STAR",
-                        2: "sprite-ASIDE_2STAR",
-                        3: "sprite-ASIDE_3STAR"
-                    };
+                    const starIcons = { 1: "sprite-ASIDE_1STAR", 2: "sprite-ASIDE_2STAR", 3: "sprite-ASIDE_3STAR" };
+                    const asideSkillSprite = `sprite-Aside_Skill_${spineKey}_${i}`;
             
                     html += `
                         <div class="relative bg-white dark:bg-slate-800/80 border-2 border-fuchsia-200 dark:border-fuchsia-800/60 rounded-xl p-4 shadow-sm flex flex-col h-full hover:shadow-md transition-shadow">
                             <div class="flex items-center gap-3 border-b border-fuchsia-100 dark:border-fuchsia-800/50 pb-3 mb-3">
-                                ${starData.icon.startsWith('http') || starData.icon.startsWith('./') ? `<img src="${starData.icon}" class="w-9 h-9 rounded-lg shadow-sm border border-fuchsia-300 dark:border-fuchsia-600 bg-fuchsia-50 dark:bg-slate-700 object-contain">` : `<div class="w-9 h-9 flex items-center justify-center rounded-lg shadow-sm border border-fuchsia-300 dark:border-fuchsia-600 bg-fuchsia-50 dark:bg-slate-700 overflow-hidden relative shrink-0"><div class="${starData.icon} absolute top-1/2 left-1/2" style="transform: translate(-50%, -50%) scale(0.45);"></div></div>`}
+                                <div class="w-9 h-9 flex items-center justify-center rounded-lg shadow-sm border border-fuchsia-300 dark:border-fuchsia-600 bg-fuchsia-50 dark:bg-slate-700 overflow-hidden relative shrink-0 bg-transparent">
+                                    <div class="${asideSkillSprite} absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 origin-center scale-[0.5625]"></div>
+                                </div>
                                 <div>
                                     <div class="mb-0.5 flex items-center" style="height: 14px;">
-                                        <div class="${starIcons[i]} drop-shadow-sm origin-left" style="width: 73px; height: 29px; transform: scale(0.6);"></div>
+                                        <div class="${starIcons[i]} drop-shadow-sm origin-left" style="width: 73px; height: 29px; transform: scale(0.6); transform-origin: left center;"></div>
                                     </div>
                                     <div class="font-extrabold text-gray-800 dark:text-gray-200 text-sm">${getLocText(starData.name)}</div>
                                 </div>
@@ -1593,66 +1620,74 @@
                     }
                 }, 300); 
             });
+            
             window.changeLanguage = function(lang) {
-            window.currentLang = lang;
-            document.documentElement.lang = lang === "ja" ? "ja" : "zh-TW";
-            
-            if (!currentCharData) return;
-            
-            applyI18n();
-            
-            const displayName = getI18n(currentCharData.name);
-            
-            const isEldain = ELDAIN_LIST.includes(currentCharData.name);
-            const identityHtml = ICON_ELDAIN.startsWith('http') 
-                ? `<img src="${isEldain ? ICON_ELDAIN : ICON_NORMAL}" class="inline-block h-[1.5em] align-middle ml-1 -mt-1 drop-shadow-sm" alt="Identity">` 
-                : `<div class="${isEldain ? ICON_ELDAIN : ICON_NORMAL} inline-block align-middle ml-1 -mt-1 drop-shadow-sm origin-center scale-[0.6]"></div>`;
-            document.getElementById('charName').innerHTML = `${displayName} ${identityHtml}`;
-            
-            document.title = `${displayName} - ${getI18n('page_title_char_detail') || '詳細資料'}`;
-            
-            let pLabel = getI18n('stats_personality'); if(pLabel === 'stats_personality') pLabel = '性格';
-            let rLabel = getI18n('stats_race'); if(rLabel === 'stats_race') rLabel = '種族';
-            let posLabel = getI18n('stats_position'); if(posLabel === 'stats_position') posLabel = '站位';
-            let jLabel = getI18n('stats_job'); if(jLabel === 'stats_job') jLabel = '職業';
-            let aLabel = getI18n('stats_attribute'); if(aLabel === 'stats_attribute') aLabel = '類型';
-            
-            // 確保 ICON_MAP 有對應的物理/魔法圖示，使其相容 updateTag 函式
-            if (typeof ICON_MAP === 'undefined') window.ICON_MAP = {};
-            ICON_MAP['attribute_物理'] = 'sprite-base sprite-common sprite-Type_Physic';
-            ICON_MAP['attribute_魔法'] = 'sprite-base sprite-common sprite-Type_Magic';
-            
-            // 從 data_skills.js 取得攻擊類型 (物理/魔法)
-            let currentAttribute = "未知";
-            if (typeof characterSkills !== 'undefined') {
-                const skillData = characterSkills.find(s => s.name.trim() === currentCharData.name);
-                if (skillData && skillData.attribute) {
-                    currentAttribute = skillData.attribute;
-                }
-            }
-            
-            updateTag('charPersonality', pLabel, currentCharData.personality, 'personality');
-            updateTag('charRace', rLabel, currentCharData.race, 'race');
-            updateTag('charPosition', posLabel, currentCharData.position, 'position');
-            updateTag('charJob', jLabel, currentCharData.job, 'job');
-            updateTag('charAttribute', aLabel, currentAttribute, 'attribute');
-            
-            renderStars(currentTargetName);
-            renderExtraInfo(currentTargetName);
-            
-            const renderCrayonList = (elementId, array) => {
-            const ul = document.getElementById(elementId);
-            ul.innerHTML = array.map(attr => `<li>${t(attr)}</li>`).join('');
+                window.currentLang = lang;
+                document.documentElement.lang = lang === "ja" ? "ja" : "zh-TW";
+                
+                if (!currentCharData) return;
+                
+                applyI18n();
+
+                document.querySelectorAll('.costume-btn').forEach((btn, idx) => {
+                    let displayName = idx === 0 ? t("costume_default") : `${t("costume_prefix")}${idx}`;
+                    if (displayName === "costume_default") displayName = "預設";
+                    if (displayName.includes("costume_prefix")) displayName = `服裝${idx}`;
+                    btn.innerText = displayName;
+                });
+                
+                const displayName = getI18n(currentCharData.name);
+    
+    // 1. 名字恢復為純文字
+    document.getElementById('charName').innerHTML = displayName;
+    document.title = `${displayName} - ${getI18n('page_title_char_detail') || '詳細資料'}`;
+    
+    // 2. 準備所有屬性標籤的多國語言文字
+    let idLabel = getI18n('stats_identity'); if(idLabel === 'stats_identity') idLabel = '身份';
+    let pLabel = getI18n('stats_personality'); if(pLabel === 'stats_personality') pLabel = '性格';
+    let rLabel = getI18n('stats_race'); if(rLabel === 'stats_race') rLabel = '種族';
+    let posLabel = getI18n('stats_position'); if(posLabel === 'stats_position') posLabel = '站位';
+    let jLabel = getI18n('stats_job'); if(jLabel === 'stats_job') jLabel = '職業';
+    let aLabel = getI18n('stats_attribute'); if(aLabel === 'stats_attribute') aLabel = '攻擊類型';
+    
+    // 3. 判斷是否為艾爾丁身份
+    const isEldain = (typeof ELDAIN_LIST !== 'undefined') ? ELDAIN_LIST.includes(currentCharData.name) : false;
+    const identityValue = isEldain ? '艾爾丁' : '普通坨坨';
+    
+    // 4. 取得攻擊類型
+    let currentAttribute = "未知";
+    if (typeof characterSkills !== 'undefined') {
+        const skillData = characterSkills.find(s => s.name.trim() === currentCharData.name);
+        if (skillData && skillData.attribute) {
+            currentAttribute = skillData.attribute;
+        }
+    }
+    
+    // 5. 渲染全部屬性圖示
+    updateTag('charIdentity', idLabel, identityValue, 'identity');
+    updateTag('charPersonality', pLabel, currentCharData.personality, 'personality');
+    updateTag('charRace', rLabel, currentCharData.race, 'race');
+    updateTag('charPosition', posLabel, currentCharData.position, 'position');
+    updateTag('charJob', jLabel, currentCharData.job, 'job');
+    updateTag('charAttribute', aLabel, currentAttribute, 'attribute');
+                
+                renderStars(currentTargetName);
+                renderExtraInfo(currentTargetName);
+                
+                const renderCrayonList = (elementId, array) => {
+                    const ul = document.getElementById(elementId);
+                    ul.innerHTML = array.map(attr => `<li>${t(attr)}</li>`).join('');
+                };
+                renderCrayonList('layer1List', currentCharData.layer1);
+                renderCrayonList('layer2List', currentCharData.layer2);
+                renderCrayonList('layer3List', currentCharData.layer3);
+                
+                renderSkills(currentTargetName);
+                renderCollectibles(currentTargetName);
+                renderAside(currentTargetName); 
+                switchPresentTab(currentTab);
             };
-            renderCrayonList('layer1List', currentCharData.layer1);
-            renderCrayonList('layer2List', currentCharData.layer2);
-            renderCrayonList('layer3List', currentCharData.layer3);
-            
-            renderSkills(currentTargetName);
-            renderCollectibles(currentTargetName);
-            renderAside(currentTargetName); 
-            switchPresentTab(currentTab);
-            };
+
             window.addEventListener('storage', (e) => {
                 if (e.key === 'user_lang' && e.newValue && e.newValue !== window.currentLang) {
                     console.log(`📡 偵測到主頁將語言切換至 ${e.newValue}，自動同步更新！`);
@@ -1682,39 +1717,39 @@
                 }
             
                 const displayName = getI18n(currentCharData.name);
-                
-                const isEldain = ELDAIN_LIST.includes(currentCharData.name);
-                const identityHtml = ICON_ELDAIN.startsWith('http') 
-                    ? `<img src="${isEldain ? ICON_ELDAIN : ICON_NORMAL}" class="inline-block h-[1.5em] align-middle ml-1 -mt-1 drop-shadow-sm" alt="Identity">`
-                    : `<div class="${isEldain ? ICON_ELDAIN : ICON_NORMAL} inline-block align-middle ml-1 -mt-1 drop-shadow-sm origin-center scale-[0.6]"></div>`;
-                document.getElementById('charName').innerHTML = `${displayName} ${identityHtml}`;
-            
-                let pLabel = getI18n('stats_personality'); if(pLabel === 'stats_personality') pLabel = '性格';
-                let rLabel = getI18n('stats_race'); if(rLabel === 'stats_race') rLabel = '種族';
-                let posLabel = getI18n('stats_position'); if(posLabel === 'stats_position') posLabel = '站位';
-                let jLabel = getI18n('stats_job'); if(jLabel === 'stats_job') jLabel = '職業';
-                let aLabel = getI18n('stats_attribute'); if(aLabel === 'stats_attribute') aLabel = '攻擊類型';
-            
-                // 確保 ICON_MAP 有對應的物理/魔法圖示，使其相容 updateTag 函式
-                if (typeof ICON_MAP === 'undefined') window.ICON_MAP = {};
-                ICON_MAP['attribute_物理'] = 'sprite-base sprite-common sprite-Type_Physic';
-                ICON_MAP['attribute_魔法'] = 'sprite-base sprite-common sprite-Type_Magic';
-            
-                // 從 data_skills.js 取得類型 (物理/魔法)
-                let currentAttribute = "未知";
-                if (typeof characterSkills !== 'undefined') {
-                    const skillData = characterSkills.find(s => s.name.trim() === currentCharData.name);
-                    if (skillData && skillData.attribute) {
-                        currentAttribute = skillData.attribute;
-                    }
-                }
-            
-                updateTag('charPersonality', pLabel, currentCharData.personality, 'personality');
-                updateTag('charRace', rLabel, currentCharData.race, 'race');
-                updateTag('charPosition', posLabel, currentCharData.position, 'position');
-                updateTag('charJob', jLabel, currentCharData.job, 'job');
-                updateTag('charAttribute', aLabel, currentAttribute, 'attribute');
-                updateRaceBackground(currentCharData.race);
+    
+    // 1. 名字恢復為純文字，移除舊的 identityHtml
+    document.getElementById('charName').innerHTML = displayName;
+
+    // 2. 準備所有屬性標籤的多國語言文字
+    let idLabel = getI18n('stats_identity'); if(idLabel === 'stats_identity') idLabel = '身份';
+    let pLabel = getI18n('stats_personality'); if(pLabel === 'stats_personality') pLabel = '性格';
+    let rLabel = getI18n('stats_race'); if(rLabel === 'stats_race') rLabel = '種族';
+    let posLabel = getI18n('stats_position'); if(posLabel === 'stats_position') posLabel = '站位';
+    let jLabel = getI18n('stats_job'); if(jLabel === 'stats_job') jLabel = '職業';
+    let aLabel = getI18n('stats_attribute'); if(aLabel === 'stats_attribute') aLabel = '攻擊類型';
+
+    // 3. 判斷是否為艾爾丁身份
+    const isEldain = (typeof ELDAIN_LIST !== 'undefined') ? ELDAIN_LIST.includes(currentCharData.name) : false;
+    const identityValue = isEldain ? '艾爾丁' : '普通坨坨';
+
+    // 4. 取得攻擊類型
+    let currentAttribute = "未知";
+    if (typeof characterSkills !== 'undefined') {
+        const skillData = characterSkills.find(s => s.name.trim() === currentCharData.name);
+        if (skillData && skillData.attribute) {
+            currentAttribute = skillData.attribute;
+        }
+    }
+
+    // 5. 渲染全部屬性圖示
+    updateTag('charIdentity', idLabel, identityValue, 'identity');
+    updateTag('charPersonality', pLabel, currentCharData.personality, 'personality');
+    updateTag('charRace', rLabel, currentCharData.race, 'race');
+    updateTag('charPosition', posLabel, currentCharData.position, 'position');
+    updateTag('charJob', jLabel, currentCharData.job, 'job');
+    updateTag('charAttribute', aLabel, currentAttribute, 'attribute');
+    updateRaceBackground(currentCharData.race);
                 
                 renderStars(currentTargetName);
                 renderExtraInfo(currentTargetName);
@@ -1726,12 +1761,8 @@
                 
                 if (faviconEl && spineKey) {
                     const testImg = new Image();
-                    testImg.onload = function() {
-                        faviconEl.href = this.src;
-                    };
-                    testImg.onerror = function() {
-                        faviconEl.href = defaultFaviconUrl;
-                    };
+                    testImg.onload = function() { faviconEl.href = this.src; };
+                    testImg.onerror = function() { faviconEl.href = defaultFaviconUrl; };
                     testImg.src = `./favicon/${spineKey}.png`;
                 }
             
@@ -1741,7 +1772,6 @@
                     const presentContainer = document.getElementById('presentContainer');
                     const presentNameBox = document.getElementById('presentName');
             
-                    // 🌟 修正預設無珍藏品的 Class (加入 sprite-base sprite-common 確保抓到背景)
                     const DEFAULT_NO_PRESENT = "sprite-base sprite-common sprite-letter";
             
                     let finalImgUrl = DEFAULT_NO_PRESENT;
@@ -1751,7 +1781,6 @@
                     let isHasPresent = false;
             
                     if (typeof PRESENT_MAP !== 'undefined' && PRESENT_MAP[spineKey]) {
-                        // 🌟 強制優先讀取 Sprite 排版配置，若沒設定屬性也強制 fallback 到 sprite 名稱，不再用 postimage url
                         finalImgUrl = PRESENT_MAP[spineKey].sprite || `sprite-PresentList_${spineKey}`;
                         if (!finalImgUrl.includes('sprite-base')) finalImgUrl = `sprite-base sprite-common ${finalImgUrl}`;
                         isHasPresent = true;
@@ -1791,7 +1820,6 @@
                     const altText = isHasPresent ? `${currentCharData.name} - ${presentDisplayName}` : "No Present";
             
                     if (presentContainer) {
-                        // 🌟 修正：利用 position absolute 把珍藏品放在正中央並進行縮放，完全不受到外圍寬高與裁切問題影響
                         const animClass = isHasPresent ? 'transition-transform duration-300 drop-shadow-md' : 'opacity-70 drop-shadow-sm transition-transform duration-300';
                         const baseScale = isHasPresent ? 'scale(0.8)' : 'scale(1.2)';
                         const hoverWrapperClass = isHasPresent ? 'hover:scale-110 transition-transform duration-300' : '';
@@ -1801,11 +1829,7 @@
                                 ? "w-32 h-32 md:w-40 md:h-40 object-contain transition-transform duration-300 hover:scale-110 drop-shadow-md"
                                 : "w-24 h-24 md:w-32 md:h-32 object-contain opacity-70 animate-pulse"; 
                             presentContainer.innerHTML = `
-                                <img src="${finalImgUrl}" 
-                                     alt="${altText}" 
-                                     class="${imgClass}"
-                                     loading="lazy"
-                                     onerror="if(this.src != 'https://i.postimg.cc/qtwD6bsq/Icon-Present.png') this.src='https://i.postimg.cc/qtwD6bsq/Icon-Present.png'; else this.parentElement.innerHTML='<p class=\\'text-gray-500 text-sm\\'>⚠️ Image Error</p>'">
+                                <img src="${finalImgUrl}" alt="${altText}" class="${imgClass}" loading="lazy" onerror="if(this.src != 'https://i.postimg.cc/qtwD6bsq/Icon-Present.png') this.src='https://i.postimg.cc/qtwD6bsq/Icon-Present.png'; else this.parentElement.innerHTML='<p class=\\'text-gray-500 text-sm\\'>⚠️ Image Error</p>'">
                             `;
                         } else {
                             presentContainer.innerHTML = `
@@ -1829,10 +1853,7 @@
                     const initialCostumeKey = (typeof COSTUME_MAP !== 'undefined' && COSTUME_MAP[currentCharData.name] && COSTUME_MAP[currentCharData.name].length > 0) 
                                               ? COSTUME_MAP[currentCharData.name][0] 
                                               : spineKey;
-                    setTimeout(() => {
-                        loadSpineAnimation(initialCostumeKey);
-                    }, 100);
-            
+                    setTimeout(() => { loadSpineAnimation(initialCostumeKey); }, 100);
                 } else {
                     const imgUrl = typeof IMAGE_MAP !== 'undefined' ? IMAGE_MAP[`avatar_${currentCharData.name}`] : '';
                     if (imgUrl) {
@@ -1919,9 +1940,7 @@
             
             function submitComment() {
                 let authorInput = document.getElementById('commentAuthor').value.trim();
-                if (!authorInput) {
-                    authorInput = getAnonymousId();
-                }
+                if (!authorInput) { authorInput = getAnonymousId(); }
             
                 const contentInput = document.getElementById('commentContent').value.trim();
                 const btn = document.getElementById('submitCommentBtn');
@@ -1963,19 +1982,16 @@
                 });
             }
             window.onscroll = function() {
-            const btn = document.getElementById("backToTop");
-            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-            btn.style.display = "flex";
-            } else {
-            btn.style.display = "none";
-            }
+                const btn = document.getElementById("backToTop");
+                if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                    btn.style.display = "flex";
+                } else {
+                    btn.style.display = "none";
+                }
             };
             
             function scrollToTop() {
-            window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-            });
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         </script>
         <footer class="mt-12 mb-6 text-center border-t border-gray-200 dark:border-gray-700 pt-6">
@@ -1985,8 +2001,6 @@
                 <p data-i18n="footer_lastupdate">最後更新日期：02/07/2026</p>
             </div>
         </footer>
-        <button id="backToTop" onclick="scrollToTop()" title="回頂部">
-        ▲
-        </button>
+        <button id="backToTop" onclick="scrollToTop()" title="回頂部"> ▲ </button>
     </body>
 </html>
