@@ -2,7 +2,7 @@
    🌟 角色專屬雪碧圖基礎設定 (char_sprites.css)
    ======================================= */
 /* 套用給所有這個檔案內的 sprite */
-[class^="sprite-Aside"], [class^="sprite-CG_Schedule_"], [class^="sprite-Icon_NormalSkill"], [class^="sprite-Icon_PassiveSkill"], [class^="sprite-PresentList"] {
+[class^="sprite-Aside"], [class^="sprite-CG_"], [class^="sprite-Icon_NormalSkill"], [class^="sprite-Icon_PassiveSkill"], [class^="sprite-PresentList"] {
     background-repeat: no-repeat;
     display: inline-block;
 }
@@ -174,7 +174,7 @@
 .sprite-Aside_Skill_Blanchet_2 { width: 64px; height: 64px; background-position: -5px -345px; }
 .sprite-Aside_Skill_Blanchet_3 { width: 64px; height: 64px; background-position: -5px -419px; }
 .sprite-CG_Schedule_Blanchet { width: 1024px; height: 512px; background-position: -5px -493px; }
-.sprite-Icon_NormalSkill_Blanche { width: 64px; height: 64px; background-position: -5px -1015px; }
+.sprite-Icon_NormalSkill_Blanchet { width: 64px; height: 64px; background-position: -5px -1015px; }
 .sprite-Icon_PassiveSkill_Blanchet { width: 64px; height: 64px; background-position: -5px -1089px; }
 .sprite-PresentList_Blanchet { width: 230px; height: 176px; background-position: -5px -1163px; }
 
@@ -665,8 +665,8 @@
 /* --- Vivi --- */
 .sprite-AsideIcon_Vivi { width: 256px; height: 256px; background-position: -5px -5px; }
 .sprite-Aside_Skill_Vivi_1 { width: 64px; height: 64px; background-position: -5px -271px; }
-.sprite-Aside_skill_Vivi_2 { width: 64px; height: 64px; background-position: -5px -345px; }
-.sprite-Aside_skill_Vivi_3 { width: 64px; height: 64px; background-position: -5px -419px; }
+.sprite-Aside_skill_vivi_2 { width: 64px; height: 64px; background-position: -5px -345px; }
+.sprite-Aside_skill_vivi_3 { width: 64px; height: 64px; background-position: -5px -419px; }
 .sprite-CG_Schedule_Vivi { width: 1020px; height: 510px; background-position: -5px -493px; }
 .sprite-Icon_NormalSkill_Vivi { width: 64px; height: 64px; background-position: -5px -1013px; }
 .sprite-Icon_PassiveSkill_Vivi { width: 64px; height: 64px; background-position: -5px -1087px; }
