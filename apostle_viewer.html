@@ -201,83 +201,119 @@
             let globalPlayer = null;
             let slotVisibilityMap = {};
             
-                        // 🌟 語音管理器 (VoiceManager)
+            // 🌟 語音管理器 (VoiceManager) - 手機記憶體優化版
             const VoiceManager = {
-                currentAudio: null,
-                baseName: "",
-                skinSuffix: "",
-
-                init(baseName, costumeKey) {
-                    this.baseName = baseName;
-                    let suffix = costumeKey.replace(baseName, "");
-                    this.skinSuffix = suffix ? `_${suffix}` : ""; 
-                },
-                // 🌟 新增：統一停止語音的方法
-                stop(fadeDuration = 0.5) {
-                    if (this.currentAudio) {
-                        const audio = this.currentAudio;
-                        audio.loop = false; // 確保停止循環
-                        // 簡單的淡出處理
-                        let fadeOut = setInterval(() => {
-                            if (audio.volume > 0.1) {
-                                audio.volume -= 0.1;
-                            } else {
-                                audio.pause();
-                                audio.currentTime = 0;
-                                audio.volume = 0.8;
-                                clearInterval(fadeOut);
-                            }
-                        }, (fadeDuration * 1000) / 10);
-                        this.currentAudio = null;
-                    }
-                },
-                play(folder, filename, onEnded = null, loop = false) {
-                    if (this.currentAudio) {
-                        this.currentAudio.pause();
-                        this.currentAudio.currentTime = 0;
-                    }
-                    const path = `./${folder}/${filename}.mp3`;
-                    this.currentAudio = new Audio(path);
-                    this.currentAudio.volume = 0.8;
-                    this.currentAudio.loop = loop; // 🌟 支援循環
-                    
-                    if (onEnded && !loop) {
-                        this.currentAudio.onended = onEnded;
-                    }
-                    
-                    this.currentAudio.play().catch(e => console.log("語音無法播放:", path));
-                    return this.currentAudio;
-                },
-
-                playRandom(folder, variants, suffix = "", onEnded = null) {
-                    const pick = variants[Math.floor(Math.random() * variants.length)];
-                    return this.play(folder, `${pick}${suffix}`, onEnded);
-                },
-
-                playSpawn(onEnded = null) {
-                    const variants = [`Voice_${this.baseName}_Spawn1`, `Voice_${this.baseName}_Spawn2`];
-                    this.playRandom('spawn', variants, "", onEnded); 
-                },
-                playTickleStart(onEnded = null) { this.play('tickle', `Voice_${this.baseName}_TickleStart1`, onEnded); },
-                // 🌟 修改：將 loop 設為 true
-                playTickleDuring() { this.play('tickle', `Voice_${this.baseName}_TickleDuring1`, null, true); },
-                
-                playTouch(onEnded = null) { 
-                    const variants = [`Voice_${this.baseName}_Touch1`, `Voice_${this.baseName}_Touch1_1`, `Voice_${this.baseName}_Touch1_2`];
-                    this.playRandom('touch', variants, this.skinSuffix, onEnded);
-                },
-                playPat(onEnded = null) { 
-                    const variants = [`Voice_${this.baseName}_Touch2`, `Voice_${this.baseName}_Touch2_1`, `Voice_${this.baseName}_Touch2_2`];
-                    this.playRandom('pat', variants, this.skinSuffix, onEnded);
-                },
-                playSmash(onEnded = null) { 
-                    // 將 onEnded 綁定到最後一句對白，確保兩句都播完才切換
-                    this.play('smash', `Voice_${this.baseName}_DutchRubEnd1`, () => {
-                        this.play('smash', `Voice_${this.baseName}_DutchRubEnd2${this.skinSuffix}`, onEnded);
-                    });
+            currentAudio: null, // 只保留一個 Audio 實體
+            fadeInterval: null, // 用來控制淡出的計時器
+            baseName: "",
+            skinSuffix: "",
+            
+            init(baseName, costumeKey) {
+            this.baseName = baseName;
+            let suffix = costumeKey.replace(baseName, "");
+            this.skinSuffix = suffix ? `_${suffix}` : ""; 
+            
+            // 💡 針對手機版：初始化時就建立唯一的一個 Audio 實體
+            if (!this.currentAudio) {
+            this.currentAudio = new Audio();
+            this.currentAudio.setAttribute('playsinline', 'true'); // iOS 必須
+            this.currentAudio.setAttribute('preload', 'auto');
+            }
+            },
+            
+            stop(fadeDuration = 0.5) {
+            if (this.fadeInterval) {
+            clearInterval(this.fadeInterval);
+            this.fadeInterval = null;
+            }
+            
+            if (this.currentAudio && !this.currentAudio.paused) {
+            const audio = this.currentAudio;
+            audio.loop = false; // 確保停止循環
+            
+            // 簡單的淡出處理
+            this.fadeInterval = setInterval(() => {
+                if (audio.volume > 0.1) {
+                    audio.volume -= 0.1;
+                } else {
+                    audio.pause();
+                    audio.currentTime = 0;
+                    audio.volume = 0.8;
+                    clearInterval(this.fadeInterval);
                 }
+            }, (fadeDuration * 1000) / 10);
+            }
+            },
+            
+            play(folder, filename, onEnded = null, loop = false) {
+            // 如果正在淡出，立刻中斷並強制停止舊聲音
+            if (this.fadeInterval) {
+            clearInterval(this.fadeInterval);
+            this.fadeInterval = null;
+            }
+            
+            // 防呆保護
+            if (!this.currentAudio) {
+            this.currentAudio = new Audio();
+            this.currentAudio.setAttribute('playsinline', 'true');
+            }
+            
+            const audio = this.currentAudio;
+            audio.pause();
+            audio.onended = null; // 清除上一個回呼，避免衝突
+            
+            const path = `./${folder}/${filename}.mp3`;
+            
+            // 💡 針對手機版：重複利用同一個 Audio，只替換 src，並呼叫 load()
+            audio.src = path;
+            audio.volume = 0.8;
+            audio.loop = loop;
+            audio.currentTime = 0;
+            audio.load(); // 強制讀取，解開手機快取限制
+            
+            if (onEnded && !loop) {
+            audio.onended = onEnded;
+            }
+            
+            const playPromise = audio.play();
+            if (playPromise !== undefined) {
+            playPromise.catch(e => {
+                console.log("語音無法播放或被手機阻擋:", path, e);
+                // 防呆機制：如果檔案遺失，立刻執行 onEnded，確保角色不會永遠卡住
+                if (onEnded) onEnded();
+            });
+            }
+            
+            return audio;
+            },
+            
+            playRandom(folder, variants, suffix = "", onEnded = null) {
+            const pick = variants[Math.floor(Math.random() * variants.length)];
+            return this.play(folder, `${pick}${suffix}`, onEnded);
+            },
+            
+            playSpawn(onEnded = null) {
+            const variants = [`Voice_${this.baseName}_Spawn1`, `Voice_${this.baseName}_Spawn2`];
+            this.playRandom('spawn', variants, "", onEnded); 
+            },
+            playTickleStart(onEnded = null) { this.play('tickle', `Voice_${this.baseName}_TickleStart1`, onEnded); },
+            playTickleDuring() { this.play('tickle', `Voice_${this.baseName}_TickleDuring1`, null, true); },
+            
+            playTouch(onEnded = null) { 
+            const variants = [`Voice_${this.baseName}_Touch1`, `Voice_${this.baseName}_Touch1_1`, `Voice_${this.baseName}_Touch1_2`];
+            this.playRandom('touch', variants, this.skinSuffix, onEnded);
+            },
+            playPat(onEnded = null) { 
+            const variants = [`Voice_${this.baseName}_Touch2`, `Voice_${this.baseName}_Touch2_1`, `Voice_${this.baseName}_Touch2_2`];
+            this.playRandom('pat', variants, this.skinSuffix, onEnded);
+            },
+            playSmash(onEnded = null) { 
+            this.play('smash', `Voice_${this.baseName}_DutchRubEnd1`, () => {
+            this.play('smash', `Voice_${this.baseName}_DutchRubEnd2${this.skinSuffix}`, onEnded);
+            });
+            }
             };
-
+            
             // 核心狀態變數
             let activeCharData = null; 
             let currentMode = 'lobby'; // 'lobby' | 'battle'
@@ -615,7 +651,7 @@
                                console.log("提示：200ms 後依然抓不到 sceneRenderer");
                            }
                        }, 200);
-
+            
                        const skins = player.skeleton.data.skins;
                        if (skins && skins.length > 0) {
                            const targetSkin = skins.find(s => s.name === 'Normal') || skins.find(s => s.name !== 'default') || skins[0];
@@ -650,7 +686,7 @@
                            
                            // 🌟 如果是大廳模式，播放出場/換裝語音
                            if (mode === 'lobby') VoiceManager.playSpawn();
-
+            
                            setupComplexInteractions(player, container);
                            window.dispatchEvent(new Event('resize'));
                        }, 50);
@@ -844,7 +880,7 @@
                 const safeClearIdle = () => { if (typeof globalIdleTimer !== 'undefined') clearTimeout(globalIdleTimer); };
                 const safeStartIdle = () => { if (typeof startRandomAnimationLoop === 'function') startRandomAnimationLoop(); };
                 
-// 滾輪縮放保留不動
+            // 滾輪縮放保留不動
                 canvas.addEventListener('wheel', (e) => {
                     e.preventDefault();
                     if (!player.skeleton) return;
@@ -975,23 +1011,23 @@
                             player.animationState.setAnimation(0, "Pat_Idle", true);
                             updateUI("Pat_Idle");
                        } else if (hitZoneOnDown.name === "身體" && animNames.includes("Tickle_Idle_1")) {
-    player.animationState.setAnimation(0, "Tickle_Idle_1", true);
-    updateUI("Tickle_Idle_1");
-    VoiceManager.playTickleStart(() => {
-        // 只有在 TickleStart 播完後，才開始循環播放 During
-        // 並且要檢查是否還在按著 (isDragging)
-        if (isDragging) {
+            player.animationState.setAnimation(0, "Tickle_Idle_1", true);
+            updateUI("Tickle_Idle_1");
+            
+            // 讓語音決定什麼時候切換動作
+            VoiceManager.playTickleStart(() => {
+            // 當 TickleStart1 說完時，先檢查玩家是否「還在按著 (isDragging)」
+            if (isDragging) {
+            // 切換成笑的動作
+            if (animNames.includes("Tickle_Idle_2")) {
+                player.animationState.setAnimation(0, "Tickle_Idle_2", true);
+                updateUI("Tickle_Idle_2");
+            }
+            // 開始無限循環笑聲
             VoiceManager.playTickleDuring();
-        }
-    });
-
-    tickleTimer = setTimeout(() => {
-        if (isDragging && animNames.includes("Tickle_Idle_2")) {
-            player.animationState.setAnimation(0, "Tickle_Idle_2", true);
-            updateUI("Tickle_Idle_2");
-        }
-    }, 2000); 
-}
+            }
+            });
+            }
                     }
             
                     if (hasTriggeredRub && hitZoneOnDown && activeInteractBone) {
@@ -1080,7 +1116,7 @@
                     if (!isDragging) return;
                     isDragging = false; 
                     clearTimeout(tickleTimer);
-
+            
                     VoiceManager.stop(0.5);
             
                     if (!getIsLobby()) return;
@@ -1119,7 +1155,7 @@
                                     safeStartIdle();
                                 }, 500);
                             });
-
+            
                         } else if (hitZoneOnDown && hitZoneOnDown.name === "頭部" && animNames.includes("Pat_End")) {
                             player.animationState.setAnimation(0, "Pat_End", true);
                             updateUI("Pat_End");
@@ -1131,7 +1167,7 @@
                                     safeStartIdle();
                                 }, 500);
                             });
-
+            
                         } else if (hitZoneOnDown && hitZoneOnDown.name === "身體" && animNames.includes("Tickle_End")) {
                             player.animationState.setAnimation(0, "Tickle_End", false);
                             player.animationState.addAnimation(0, "Idle_1", true, 0);
