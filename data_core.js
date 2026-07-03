@@ -43,7 +43,7 @@ const LANG_DICT = {
         "艾斯皮": "艾斯皮", "艾琳娜": "艾琳娜", "艾皮卡": "艾皮卡", "艾舒爾": "艾舒爾", "艾蜜莉雅": "艾蜜莉雅", "芙莉可": "芙莉可", "茱蜜": "茱蜜", "莉茲": "莉茲",
         "莎莉": "莎莉", "萊薇": "萊薇", "蒂亞娜": "蒂亞娜", "謝蒂": "謝蒂", "貝魯": "貝魯", "貝麗塔": "貝麗塔", "路德": "路德", "路易": "路易",
         "阿萊特": "阿萊特", "雷吉": "雷吉", "馬爾": "馬爾", "泰達": "泰達", "寧琉": "寧琉", "莉絲蒂": "莉絲蒂", "雷內瓦": "雷內瓦", "芭瓏": "芭瓏",
-        page_title_char_detail: "角色詳細資料", btn_close_page: "⬅️ 關閉此頁", loading: "載入中...",
+        page_title_char_detail: "坨坨詳細資料", btn_close_page: "⬅️ 關閉此頁", loading: "載入中...",
         crayon_detail_title: "🖍️ 金蠟筆分佈詳情", layer_1_stats: "🥇 第一層屬性", layer_2_stats: "🥈 第二層屬性", layer_3_stats: "🥉 第三層屬性",
         present_title: "坨坨珍藏品", present_loading: "寶箱開啟中...", btn_letter: "坨坨情信", btn_thought: "教主感想",
         present_select_hint: "請選擇顯示內容...", no_letter_hint: "（這隻坨坨好像還沒寫信給你呢...）", no_thought_hint: "（教主目前還沒寫下對這個珍藏品的感想呢...）",
@@ -54,9 +54,9 @@ const LANG_DICT = {
         comment_title: "💬 玩家評價與心得", comment_author_placeholder: "您的暱稱 (留白將以匿名顯示)", comment_content_placeholder: "寫下您對這位坨坨的評價、組隊心得或是發廚發言...",
         btn_submit_comment: "送出評價 🚀", btn_submitting: "傳送中... ⏳", comment_loading: "連線至留言板中...",
         no_comment_hint: "目前還沒有評價，來搶頭香吧！ 🐾", time_just_now: "剛剛", anonymous_leader: "匿名教主#",
-        error_no_char: "❌ 未指定角色，請從主頁點擊角色按鈕進入。", error_no_data: "❌ 載入失敗：找不到 INITIAL_DATA。",
-        error_char_not_found: "❌ 找不到該角色資料。", error_no_skill_data: "❌ 找不到 skill.js 資料，請確認檔案存在。",
-        error_char_skill_not_found: "⚠️ 找不到該角色的技能資料。", alert_empty_comment: "請輸入評價內容！",
+        error_no_char: "❌ 未指定坨坨，請從主頁點擊坨坨按鈕進入。", error_no_data: "❌ 載入失敗：找不到 INITIAL_DATA。",
+        error_char_not_found: "❌ 找不到該坨坨資料。", error_no_skill_data: "❌ 找不到 skill.js 資料，請確認檔案存在。",
+        error_char_skill_not_found: "⚠️ 找不到該坨坨的技能資料。", alert_empty_comment: "請輸入評價內容！",
         alert_comment_too_long: "評價內容太長囉，請縮減至 500 字以內！", alert_comment_failed: "留言失敗，請稍後再試！", error_load_comment: "讀取留言失敗，請確認資料庫權限設定。"
     },
     "ja": {
