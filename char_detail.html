@@ -180,6 +180,7 @@
                         <div id="charRace"></div>
                         <div id="charPosition"></div>
                         <div id="charJob"></div>
+                        <div id="charAttribute"></div>
                     </div>
                     <div class="mt-6 pt-5 border-t border-dashed border-amber-200 dark:border-slate-600 space-y-4">
                         <p id="charIntro" class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed font-medium bg-amber-50/50 dark:bg-slate-800/50 p-4 rounded-xl border border-amber-100 dark:border-slate-700 shadow-sm text-left"></p>
@@ -349,8 +350,8 @@
             
                 const iconHtml = (iconUrl.startsWith('http') || iconUrl.startsWith('./'))
                     ? `<img src="${iconUrl}" alt="${label}" class="w-8 h-8 object-contain transition-transform duration-300 group-hover:scale-125 cursor-help drop-shadow-sm">`
-                    : `<div class="flex items-center justify-center w-8 h-8 transition-transform duration-300 group-hover:scale-125 cursor-help drop-shadow-sm"><div class="${iconUrl} scale-[0.45]"></div></div>`;
-
+                    : `<div class="flex items-center justify-center w-8 h-8 transition-transform duration-300 group-hover:scale-125 cursor-help drop-shadow-sm"><div class="${iconUrl} shrink-0 origin-center scale-[0.45]"></div></div>`;
+                
                 el.innerHTML = `
                     ${iconHtml}
                     <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 px-3 py-1.5 bg-slate-900 dark:bg-slate-700 text-white dark:text-gray-100 text-[11px] font-black rounded-lg shadow-xl whitespace-nowrap pointer-events-none
@@ -1605,12 +1606,27 @@
             let rLabel = getI18n('stats_race'); if(rLabel === 'stats_race') rLabel = '種族';
             let posLabel = getI18n('stats_position'); if(posLabel === 'stats_position') posLabel = '站位';
             let jLabel = getI18n('stats_job'); if(jLabel === 'stats_job') jLabel = '職業';
+            let aLabel = getI18n('stats_attribute'); if(aLabel === 'stats_attribute') aLabel = '攻擊類型';
+
+            // 確保 ICON_MAP 有對應的物理/魔法圖示，使其相容 updateTag 函式
+            if (typeof ICON_MAP === 'undefined') window.ICON_MAP = {};
+            ICON_MAP['attribute_物理'] = 'sprite-base sprite-common sprite-Type_Physic';
+            ICON_MAP['attribute_魔法'] = 'sprite-base sprite-common sprite-Type_Magic';
+
+            // 從 data_skills.js 取得攻擊類型 (物理/魔法)
+            let currentAttribute = "未知";
+            if (typeof characterSkills !== 'undefined') {
+                const skillData = characterSkills.find(s => s.name.trim() === currentCharData.name);
+                if (skillData && skillData.attribute) {
+                    currentAttribute = skillData.attribute;
+                }
+            }
             
             updateTag('charPersonality', pLabel, currentCharData.personality, 'personality');
             updateTag('charRace', rLabel, currentCharData.race, 'race');
             updateTag('charPosition', posLabel, currentCharData.position, 'position');
             updateTag('charJob', jLabel, currentCharData.job, 'job');
-            updateRaceBackground(currentCharData.race);
+            updateTag('charAttribute', aLabel, currentAttribute, 'attribute');
             
             renderStars(currentTargetName);
             renderExtraInfo(currentTargetName);
@@ -1668,11 +1684,27 @@
                 let rLabel = getI18n('stats_race'); if(rLabel === 'stats_race') rLabel = '種族';
                 let posLabel = getI18n('stats_position'); if(posLabel === 'stats_position') posLabel = '站位';
                 let jLabel = getI18n('stats_job'); if(jLabel === 'stats_job') jLabel = '職業';
+                let aLabel = getI18n('stats_attribute'); if(aLabel === 'stats_attribute') aLabel = '攻擊類型';
+
+                // 確保 ICON_MAP 有對應的物理/魔法圖示，使其相容 updateTag 函式
+                if (typeof ICON_MAP === 'undefined') window.ICON_MAP = {};
+                ICON_MAP['attribute_物理'] = 'sprite-base sprite-common sprite-Type_Physic';
+                ICON_MAP['attribute_魔法'] = 'sprite-base sprite-common sprite-Type_Magic';
+
+                // 從 data_skills.js 取得攻擊類型 (物理/魔法)
+                let currentAttribute = "未知";
+                if (typeof characterSkills !== 'undefined') {
+                    const skillData = characterSkills.find(s => s.name.trim() === currentCharData.name);
+                    if (skillData && skillData.attribute) {
+                        currentAttribute = skillData.attribute;
+                    }
+                }
             
                 updateTag('charPersonality', pLabel, currentCharData.personality, 'personality');
                 updateTag('charRace', rLabel, currentCharData.race, 'race');
                 updateTag('charPosition', posLabel, currentCharData.position, 'position');
                 updateTag('charJob', jLabel, currentCharData.job, 'job');
+                updateTag('charAttribute', aLabel, currentAttribute, 'attribute');
                 updateRaceBackground(currentCharData.race);
                 
                 renderStars(currentTargetName);
