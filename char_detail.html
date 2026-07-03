@@ -37,13 +37,12 @@
         <style>
             /* 🌟 預設空珍藏品：情信 (加入 !important 確保不受外在 CSS 干擾，防止被切) */
             .sprite-letter {
-                width: 71px !important;
-                height: 71px !important;
-                background-position: -813px -700px !important;
-                background-image: url('common_icon.png') !important;
-                background-size: auto !important;
+            width: 71px !important;
+            height: 71px !important;
+            background-position: -813px -700px !important;
+            background-image: url('common_icon.png') !important;
+            background-size: auto !important;
             }
-
             /* 🌟 種族專屬背景的平鋪與移動動畫 (全域背景) */
             #raceBackground {
             position: fixed;
@@ -193,7 +192,7 @@
                                 <span class="font-black text-amber-800 dark:text-amber-400 shrink-0" data-i18n="info_food">🍲 喜好料理</span>
                                 <div id="charFoodIcon" class="flex flex-wrap gap-2 justify-start"></div>
                             </div>
-                                <div class="pt-2 border-t border-gray-100 dark:border-slate-700 flex flex-wrap items-end justify-between gap-x-4 gap-y-3">
+                            <div class="pt-2 border-t border-gray-100 dark:border-slate-700 flex flex-wrap items-end justify-between gap-x-4 gap-y-3">
                                 <div class="flex flex-col gap-2 flex-1 min-w-[200px]">
                                     <span class="font-black text-amber-800 dark:text-amber-400 shrink-0" data-i18n="info_job_reward">💰 打工獎勵</span>
                                     <div id="charRewardIcon" class="flex flex-wrap gap-2 justify-start"></div>
@@ -201,7 +200,6 @@
                                 <!-- 打工 CG 圖的放置容器 -->
                                 <div id="charJobCgContainer" class="shrink-0 hidden mb-1"></div>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -404,7 +402,7 @@
                     </div>
                 `;
             }
-
+            
             
             // 🌟 新增安全獲取食物圖示的輔助函式，兼容字串與物件格式
             function getSafeFoodIconUrl(foodKey) {
@@ -545,7 +543,7 @@
                 } else {
                     rewardContainer.innerHTML = `<span class="text-sm text-gray-500 dark:text-gray-400 font-bold py-1">無</span>`;
                 }
-
+            
                 // --- 處理打工劇情 CG 與 YouTube 連結 ---
                 const cgContainer = document.getElementById('charJobCgContainer');
                 if (cgContainer) {
@@ -780,34 +778,37 @@
                                 });
             
                                 function getHitZone(mouseX, mouseY) {
-                                    const rect = canvas.getBoundingClientRect();
-                                    const effView = getEffectiveViewport(rect, baseViewport);
-                                    let clickedPart = null;
-                                    let minDistance = Infinity;
-                                    
-                                    const hitZones = [
-                                        { name: "臉頰", bones: ["Character_Ball_Move"], radius: 50 },
-                                        { name: "頭部", bones: ["Character_Pat"], radius: 50 },
-                                        { name: "身體", bones: ["Character_Tickle"], radius: 60 }
-                                    ];
-                                    
-                                    hitZones.forEach(zone => {
-                                        let targetBone = null;
-                                        for (let bName of zone.bones) { targetBone = player.skeleton.findBone(bName); if (targetBone) break; }
-                                        if (targetBone) {
-                                            const boneCanvasX = ((targetBone.worldX - effView.x) / effView.width) * rect.width;
-                                            const boneCanvasY = rect.height - ((targetBone.worldY - effView.y) / effView.height) * rect.height;
-                                            const distance = Math.hypot(mouseX - boneCanvasX, mouseY - boneCanvasY);
-                                            const scaledRadius = (zone.radius * currentZoom) * (rect.width / effView.width);
-                                            
-                                            if (distance < scaledRadius && distance < minDistance) { 
-                                                minDistance = distance; 
-                                                clickedPart = { ...zone, bone: targetBone }; 
-                                            }
-                                        }
-                                    });
-                                    return clickedPart;
-                                }
+            const rect = canvas.getBoundingClientRect();
+            // 🌟 修正 1：使用 effView 來確保判斷不會受到畫布長寬比影響
+            const effView = getEffectiveViewport(rect, baseViewport);
+            let clickedPart = null;
+            let minDistance = Infinity;
+            
+            const hitZones = [
+            { name: "臉頰", bones: ["Character_Ball_Move"], radius: 50 },
+            { name: "頭部", bones: ["Character_Pat"], radius: 50 },
+            { name: "身體", bones: ["Character_Tickle"], radius: 60 }
+            ];
+            
+            hitZones.forEach(zone => {
+            let targetBone = null;
+            for (let bName of zone.bones) { targetBone = player.skeleton.findBone(bName); if (targetBone) break; }
+            if (targetBone) {
+            // 🌟 修正 2：將 baseViewport 改為 effView，確保骨骼映射正確
+            const boneCanvasX = ((targetBone.worldX - effView.x) / effView.width) * rect.width;
+            const boneCanvasY = rect.height - ((targetBone.worldY - effView.y) / effView.height) * rect.height;
+            const distance = Math.hypot(mouseX - boneCanvasX, mouseY - boneCanvasY);
+            // 根據當前縮放比例動態調整判定半徑
+            const scaledRadius = (zone.radius * currentZoom) * (rect.width / effView.width);
+            
+            if (distance < scaledRadius && distance < minDistance) { 
+                minDistance = distance; 
+                clickedPart = { ...zone, bone: targetBone }; 
+            }
+            }
+            });
+            return clickedPart;
+            }
             
                                 canvas.addEventListener('pointerdown', (e) => {
                                     pointers[e.pointerId] = { x: e.clientX, y: e.clientY };
@@ -911,10 +912,11 @@
                                         activeInteractBone.x = initialBoneX + localDx;
                                         activeInteractBone.y = initialBoneY + localDy;
                                     } else if (!hitZoneOnDown) {
-                                        const effView = getEffectiveViewport(rect, baseViewport);
-                                        player.skeleton.x += dx * (effView.width / rect.width) / currentZoom;
-                                        player.skeleton.y -= dy * (effView.height / rect.height) / currentZoom;
-                                    }
+            // 🌟 修正 3：視角拖動時，必須除以 currentZoom，否則放大後拖曳速度會暴走並導致滑鼠與小人錯位
+            const effView = getEffectiveViewport(rect, baseViewport);
+            player.skeleton.x += dx * (effView.width / rect.width) / currentZoom;
+            player.skeleton.y -= dy * (effView.height / rect.height) / currentZoom;
+            }
                                     
                                     lastMouseX = e.clientX;
                                     lastMouseY = e.clientY;
@@ -1122,13 +1124,13 @@
                                         </div>`;
                             }
                         };
-
+            
                         const spineKey = typeof SPINE_MAP !== 'undefined' && SPINE_MAP[charName] ? SPINE_MAP[charName] : charName;
                         
                         const normalAttackIcon = charBaseData.attribute === "物理" ? "sprite-base sprite-common sprite-attack_physical" : "sprite-base sprite-common sprite-attack_magical";
                         const normalSkillIcon = `sprite-Icon_NormalSkill_${spineKey}`;
                         const passiveSkillIcon = `sprite-Icon_PassiveSkill_${spineKey}`;
-
+            
                         const pKey = currentCharData.personality || "冷靜";
                         // 對應各性格實體的雪碧圖檔案名稱
                         const personalityMap = {
@@ -1144,7 +1146,7 @@
                             "Vivacious": "ultimate_vivacious"
                         };
                         const ultFileName = personalityMap[pKey] || "ultimate_composed";
-
+            
                         // 僅保留 css 內的 position class
                         const ultSkillIcon = `sprite-Icon_UltimateSkill_${spineKey}`;
                         // 強制綁定背景圖片與長寬 (64x64)，並將 scale 設為 0.625，完美等比縮放進 40px 的外框中
@@ -1606,13 +1608,13 @@
             let rLabel = getI18n('stats_race'); if(rLabel === 'stats_race') rLabel = '種族';
             let posLabel = getI18n('stats_position'); if(posLabel === 'stats_position') posLabel = '站位';
             let jLabel = getI18n('stats_job'); if(jLabel === 'stats_job') jLabel = '職業';
-            let aLabel = getI18n('stats_attribute'); if(aLabel === 'stats_attribute') aLabel = '攻擊類型';
-
+            let aLabel = getI18n('stats_attribute'); if(aLabel === 'stats_attribute') aLabel = '類型';
+            
             // 確保 ICON_MAP 有對應的物理/魔法圖示，使其相容 updateTag 函式
             if (typeof ICON_MAP === 'undefined') window.ICON_MAP = {};
             ICON_MAP['attribute_物理'] = 'sprite-base sprite-common sprite-Type_Physic';
             ICON_MAP['attribute_魔法'] = 'sprite-base sprite-common sprite-Type_Magic';
-
+            
             // 從 data_skills.js 取得攻擊類型 (物理/魔法)
             let currentAttribute = "未知";
             if (typeof characterSkills !== 'undefined') {
@@ -1685,13 +1687,13 @@
                 let posLabel = getI18n('stats_position'); if(posLabel === 'stats_position') posLabel = '站位';
                 let jLabel = getI18n('stats_job'); if(jLabel === 'stats_job') jLabel = '職業';
                 let aLabel = getI18n('stats_attribute'); if(aLabel === 'stats_attribute') aLabel = '攻擊類型';
-
+            
                 // 確保 ICON_MAP 有對應的物理/魔法圖示，使其相容 updateTag 函式
                 if (typeof ICON_MAP === 'undefined') window.ICON_MAP = {};
                 ICON_MAP['attribute_物理'] = 'sprite-base sprite-common sprite-Type_Physic';
                 ICON_MAP['attribute_魔法'] = 'sprite-base sprite-common sprite-Type_Magic';
-
-                // 從 data_skills.js 取得攻擊類型 (物理/魔法)
+            
+                // 從 data_skills.js 取得類型 (物理/魔法)
                 let currentAttribute = "未知";
                 if (typeof characterSkills !== 'undefined') {
                     const skillData = characterSkills.find(s => s.name.trim() === currentCharData.name);
