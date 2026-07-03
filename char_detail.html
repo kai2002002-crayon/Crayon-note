@@ -192,10 +192,15 @@
                                 <span class="font-black text-amber-800 dark:text-amber-400 shrink-0" data-i18n="info_food">🍲 喜好料理</span>
                                 <div id="charFoodIcon" class="flex flex-wrap gap-2 justify-start"></div>
                             </div>
-                            <div class="pt-2 border-t border-gray-100 dark:border-slate-700">
-                                <span class="font-black text-amber-800 dark:text-amber-400 shrink-0" data-i18n="info_job_reward">💰 打工獎勵</span>
-                                <div id="charRewardIcon" class="flex flex-wrap gap-2 justify-start"></div>
+                                                        <div class="pt-2 border-t border-gray-100 dark:border-slate-700 flex flex-row items-end justify-between gap-4">
+                                <div class="flex flex-col gap-2 flex-1">
+                                    <span class="font-black text-amber-800 dark:text-amber-400 shrink-0" data-i18n="info_job_reward">💰 打工獎勵</span>
+                                    <div id="charRewardIcon" class="flex flex-wrap gap-2 justify-start"></div>
+                                </div>
+                                <!-- 打工 CG 圖的放置容器 -->
+                                <div id="charJobCgContainer" class="shrink-0 hidden mb-1"></div>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -380,7 +385,7 @@
                 `;
             }
             
-            // 🌟 將角色星星修改為 Sprite 排版並完美縮放對齊
+                        // 🌟 將角色星星修改為 Sprite 排版並完美縮放對齊
             function renderStars(charName) {
                 const starsContainer = document.getElementById('charStars');
                 if (!starsContainer) return;
@@ -391,9 +396,14 @@
                 }
             
                 const starClass = `sprite-${grade}STAR`;
-                // 直接使用雪碧圖原寸 478x116px 並用 transform: scale 調整到適合介面的大小 (~28px 左右高度)
-                starsContainer.innerHTML = `<div class="flex items-center" style="height: 28px;"><div class="sprite-base sprite-common ${starClass} drop-shadow-md origin-left" style="width: 478px; height: 116px; transform: scale(0.24);"></div></div>`;
+                // 建立一個實際大小為 115x28px 的相對定位外框，阻絕 478px 原始寬度對 flex 居中排版的影響
+                starsContainer.innerHTML = `
+                    <div class="relative" style="width: 115px; height: 28px;">
+                        <div class="sprite-base sprite-common ${starClass} drop-shadow-md absolute top-0 left-0" style="width: 478px; height: 116px; transform: scale(0.24); transform-origin: top left;"></div>
+                    </div>
+                `;
             }
+
             
             // 🌟 新增安全獲取食物圖示的輔助函式，兼容字串與物件格式
             function getSafeFoodIconUrl(foodKey) {
@@ -529,6 +539,35 @@
                 } else {
                     rewardContainer.innerHTML = `<span class="text-sm text-gray-500 dark:text-gray-400 font-bold py-1">無</span>`;
                 }
+                                // --- 處理打工劇情 CG 與 YouTube 連結 ---
+                const cgContainer = document.getElementById('charJobCgContainer');
+                if (cgContainer) {
+                    // TODO: 之後您可以在這裡建置一個 MAP，或是直接替換成各角色的特定影片網址
+                    // 這裡暫時使用 YouTube 的搜尋頁面作為預設連結
+                    const youtubeUrl = `https://www.youtube.com/results?search_query=Trickcal+${spineName}+打工`;
+                    const cgClass = `sprite-CG_Schedule_${spineName}`;
+                    
+                    // 為了讓 1024x512 塞進合適的高度 (72px)，縮放比例為 72 / 512 = 0.140625
+                    // 框框尺寸設定為 144px 寬 x 72px 高，不擠爆版面
+                    cgContainer.innerHTML = `
+                        <a href="${youtubeUrl}" target="_blank" class="block relative rounded-xl border-[3px] border-amber-300 dark:border-slate-600 shadow-sm overflow-hidden group w-[144px] h-[72px] bg-slate-900 shrink-0 cursor-pointer" title="點擊觀看打工劇情">
+                            <!-- CG 圖本體，透過絕對置中並縮放 -->
+                            <div class="absolute top-1/2 left-1/2 transition-transform duration-300 group-hover:scale-105" style="transform: translate(-50%, -50%) scale(0.140625); width: 1024px; height: 512px;">
+                                <div class="${cgClass} w-full h-full opacity-80 group-hover:opacity-100 transition-opacity"></div>
+                            </div>
+                            <!-- 黑色半透明遮罩，用來凸顯中間的播放鍵 -->
+                            <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-300"></div>
+                            <!-- YouTube 播放按鈕 -->
+                            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                <div class="w-8 h-8 bg-red-600/90 group-hover:bg-red-600 rounded-full flex items-center justify-center shadow-[0_0_10px_rgba(220,38,38,0.5)] transform group-hover:scale-110 transition-all duration-300">
+                                    <svg class="w-4 h-4 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                </div>
+                            </div>
+                        </a>
+                    `;
+                    cgContainer.classList.remove('hidden');
+                }
+
             }
             
             const renderError = (msg) => {
