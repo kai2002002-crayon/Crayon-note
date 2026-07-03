@@ -353,7 +353,7 @@
                 const iconHtml = (iconUrl.startsWith('http') || iconUrl.startsWith('./'))
                     ? `<img src="${iconUrl}" alt="${label}" class="w-8 h-8 object-contain transition-transform duration-300 group-hover:scale-125 cursor-help drop-shadow-sm">`
                     : `<div class="flex items-center justify-center w-8 h-8 transition-transform duration-300 group-hover:scale-125 cursor-help drop-shadow-sm">
-                        <div class="${iconUrl} shrink-0 origin-center scale-[0.4]"></div>
+                        <div class="${iconUrl} shrink-0 origin-center scale-[0.5]"></div>
                        </div>`;
                 
                 // 修正：tooltip 文字強制呼叫 t() 進行翻譯
