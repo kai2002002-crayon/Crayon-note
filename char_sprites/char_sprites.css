@@ -2,7 +2,7 @@
    🌟 角色專屬雪碧圖基礎設定 (char_sprites.css)
    ======================================= */
 /* 套用給所有這個檔案內的 sprite */
-[class^="sprite-Aside"], [class^="sprite-CG_"], [class^="sprite-Icon_NormalSkill"], [class^="sprite-Icon_PassiveSkill"], [class^="sprite-PresentList"] {
+[class^="sprite-Aside"], [class^="sprite-CG_Schedule_"], [class^="sprite-Icon_NormalSkill"], [class^="sprite-Icon_PassiveSkill"], [class^="sprite-PresentList"] {
     background-repeat: no-repeat;
     display: inline-block;
 }
