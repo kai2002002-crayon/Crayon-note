@@ -566,7 +566,7 @@ const FOOD_ICON = {
     "薄荷巧克力冰淇淋": { ja: "チョコミントアイス", url: "https://i.postimg.cc/mc9JCXx0/Icon-Food-27.png" },
     "UFC炸胡蘿蔔": { ja: "UFC ニンジンフライ", url: "https://i.postimg.cc/7Czd0svj/Icon-Food-28.png" },
     "棉花糖馬卡龍": { ja: "マシュマロマカロン", url: "https://i.postimg.cc/d7CprHPc/Icon-Food-29.png" },
-    "一碗米飯": { ja: "ご飯", url: "https://i.postimg.cc/hJm6TyWB/Icon-Food-30.pn" },
+    "一碗米飯": { ja: "ご飯", url: "https://i.postimg.cc/hJm6TyWB/Icon-Food-30.png" },
     "美味維他命C": { ja: "もぐもぐビタミンC", url: "https://i.postimg.cc/hJm6TyWg/Icon-Food-31.png" },
     "松糕": { ja: "笹団子", url: "https://i.postimg.cc/Z9N2p7th/Icon-Food-32.png" },
     "酸甜維他命F": { ja: "スパビタF", url: "https://i.postimg.cc/SX93CTFk/Icon-Food-33.png" },
