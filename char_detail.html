@@ -33,14 +33,22 @@
         <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
         <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
         <style>
-            /* 🌟 預設空珍藏品：情信 (加入 !important 確保不受外在 CSS 干擾，防止被切) */
-            .sprite-letter {
-            width: 71px !important;
-            height: 71px !important;
-            background-position: -813px -700px !important;
-            background-image: url('common_icon.png') !important;
-            background-size: auto !important;
-            }
+            /* 🌟 預設空珍藏品：情信 (維持原始尺寸，修正渲染切邊問題) */
+.sprite-letter {
+    width: 71px !important;
+    height: 71px !important;
+    background-position: -813px -700px !important;
+    background-image: url('common_icon.png') !important;
+    
+    /* 移除 background-size: auto，讓它自然繼承 sprite.css 的設定 */
+    background-repeat: no-repeat !important;
+    
+    /* 確保 padding 或 border 不會往內擠壓原本的 71px 空間 */
+    box-sizing: content-box !important;
+    border: none !important;
+    padding: 0 !important;
+}
+
             /* 🌟 種族專屬背景的平鋪與移動動畫 (全域背景) */
             #raceBackground {
             position: fixed;
