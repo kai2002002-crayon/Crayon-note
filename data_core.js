@@ -281,7 +281,7 @@ const FOOD_MAP = {
     "Ashur": { super: "UFC炸蔬菜", special: ["UFC炸胡蘿蔔", "焦糖爆米花", "追劇焦糖爆米花"] },
     "Aya": { super: "三重薄荷冰淇淋", special: ["薄荷巧克力冰淇淋", "巧克力冰淇淋", "深黑巧克力冰淇淋"] },
     "Belita": { super: "草莓切片蛋糕", special: ["草莓蛋糕", "巧克力冰淇淋", "深黑巧克力冰淇淋"] },
-	"Barong": "無",
+	"Barong": { super: "寶石蛋塔", special: ["寶石塔", "肉桂口味糖球", "肉桂口味健康糖球"] },
     "Beni": { super: "甜甜蜂蜜罐", special: ["蜂蜜罐", "蜂蜜大蒜鮭魚", "皇家蜂蜜大蒜鮭魚"] },
     "BigWood": { super: "椰子萬能青汁", special: ["椰子松針粥", "一碗米飯", "一碗糯米飯"] },
     "Blanchet": { super: "有機檸檬茶", special: ["檸檬茶", "寶石塔", "寶石蛋塔"] },
