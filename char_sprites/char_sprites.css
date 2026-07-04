@@ -77,7 +77,7 @@
 [class*="_Velvet"] { background-image: url('Velvetsheet.png'); }
 [class*="_Veroo"] { background-image: url('Veroosheet.png'); }
 /* 修正大小寫通用 */
-[class*="_Vivi"], [class*="_vivi"] { background-image: url('Vivisheet.png'); }
+[class*="_Vivi"] { background-image: url('Vivisheet.png'); }
 [class*="_xXionx"] { background-image: url('xXionxsheet.png'); }
 [class*="_Yomi"] { background-image: url('Yomisheet.png'); }
 [class*="_Yumimi"] { background-image: url('Yumimisheet.png'); }
