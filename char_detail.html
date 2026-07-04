@@ -34,18 +34,17 @@
         <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
         <style>
             /* 🌟 預設空珍藏品：情信 (更新為正確的雪碧圖尺寸與座標) */
-.sprite-letter {
-    width: 144px !important;
-    height: 117px !important;
-    background-position: -740px -654px !important;
-    background-image: url('common_icon.png') !important;
-    
-    /* 移除 background-size: auto，讓其正確讀取原始像素，並確保外框不會擠壓 */
-    background-repeat: no-repeat !important;
-    box-sizing: content-box !important;
-    border: none !important;
-    padding: 0 !important;
-}
+            .sprite-letter {
+            width: 144px !important;
+            height: 117px !important;
+            background-position: -740px -654px !important;
+            background-image: url('common_icon.png') !important;
+            /* 移除 background-size: auto，讓其正確讀取原始像素，並確保外框不會擠壓 */
+            background-repeat: no-repeat !important;
+            box-sizing: content-box !important;
+            border: none !important;
+            padding: 0 !important;
+            }
             /* 🌟 種族專屬背景的平鋪與移動動畫 (全域背景) */
             #raceBackground {
             position: fixed;
@@ -349,7 +348,7 @@
                 window.ICON_MAP['attribute_魔法'] = 'sprite-base sprite-common sprite-Type_Magic';
                 window.ICON_MAP['attribute_Physical'] = 'sprite-base sprite-common sprite-Type_Physic';
                 window.ICON_MAP['attribute_Magic'] = 'sprite-base sprite-common sprite-Type_Magic';
-
+            
                 // 性格
                 const personalities = { '冷靜': 'Composed', '憂鬱': 'Depressed', '天真': 'Innocence', '狂亂': 'Madness', '活潑': 'Vivacious' };
                 Object.entries(personalities).forEach(([zh, en]) => {
@@ -357,7 +356,7 @@
                     window.ICON_MAP[`personality_${zh}`] = cls;
                     window.ICON_MAP[`personality_${en}`] = cls;
                 });
-
+            
                 // 種族
                 const races = { '龍族': 'Dragon', '魔靈': 'Elemental', '精靈': 'Elf', '幽靈': 'Phantom', '妖精': 'Sprite', '???': 'Unknown', '獸人': 'Werebeast', '魔女': 'Witch' };
                 Object.entries(races).forEach(([zh, en]) => {
@@ -365,7 +364,7 @@
                     window.ICON_MAP[`race_${zh}`] = cls;
                     window.ICON_MAP[`race_${en}`] = cls;
                 });
-
+            
                 // 站位
                 const positions = { '後排': 'Back', '前排': 'Front', '中排': 'Middle' };
                 Object.entries(positions).forEach(([zh, en]) => {
@@ -373,7 +372,7 @@
                     window.ICON_MAP[`position_${zh}`] = cls;
                     window.ICON_MAP[`position_${en}`] = cls;
                 });
-
+            
                 // 職業
                 const jobs = { '輸出': 'DPS', '輔助': 'Support', '肉盾': 'Tank' };
                 Object.entries(jobs).forEach(([zh, en]) => {
@@ -382,7 +381,7 @@
                     window.ICON_MAP[`job_${en}`] = cls;
                 });
             };
-
+            
             const updateTag = (id, label, value, prefix) => {
                 const el = document.getElementById(id);
                 initIconMap();
@@ -809,14 +808,14 @@
                 
                                     let hasTriggeredRub = false; 
                                     let tickleTimer = null; 
-
+            
                                     // 🌟 修正 1：建立專屬變數儲存拉扯狀態，並劫持更新函數防止被 Spine 動畫覆蓋
                                     player._customDragTargetX = null;
                                     player._customDragTargetY = null;
                                     player._bouncingBone = null;
                                     player._bounceX = null;
                                     player._bounceY = null;
-
+            
                                     const origUpdateWorldTransform = player.skeleton.updateWorldTransform;
                                     player.skeleton.updateWorldTransform = function () {
                                         // 在 Spine 計算絕對世界座標前，強制寫入我們的自訂拉扯座標
@@ -980,7 +979,7 @@
                                             const effView = getEffectiveViewport(rect, baseViewport);
                                             currentCamW = effView.width; currentCamH = effView.height;
                                         }
-
+            
                                         if (hasTriggeredRub && hitZoneOnDown && activeInteractBone) {
                                             const isCheek = hitZoneOnDown.name === "臉頰";
                                             const spineScaleX = currentCamW / rect.width;
@@ -1014,7 +1013,7 @@
                                             // 🌟 修正 3：將計算好的座標寫入劫持變數中，交由 Spine 迴圈每幀死死咬住位置
                                             player._customDragTargetX = initialBoneX + localDx;
                                             player._customDragTargetY = initialBoneY + localDy;
-
+            
                                         } else if (!hitZoneOnDown) {
                                             player.skeleton.x += dx * (currentCamW / rect.width);
                                             player.skeleton.y -= dy * (currentCamH / rect.height);
@@ -1703,7 +1702,7 @@
                 if (!currentCharData) return;
                 
                 applyI18n();
-
+            
                 document.querySelectorAll('.costume-btn').forEach((btn, idx) => {
                     let displayName = idx === 0 ? t("costume_default") : `${t("costume_prefix")}${idx}`;
                     if (displayName === "costume_default") displayName = "預設";
@@ -1712,39 +1711,39 @@
                 });
                 
                 const displayName = getI18n(currentCharData.name);
-    
-    // 1. 名字恢復為純文字
-    document.getElementById('charName').innerHTML = displayName;
-    document.title = `${displayName} - ${getI18n('page_title_char_detail') || '詳細資料'}`;
-    
-    // 2. 準備所有屬性標籤的多國語言文字
-    let idLabel = getI18n('stats_identity'); if(idLabel === 'stats_identity') idLabel = '身份';
-    let pLabel = getI18n('stats_personality'); if(pLabel === 'stats_personality') pLabel = '性格';
-    let rLabel = getI18n('stats_race'); if(rLabel === 'stats_race') rLabel = '種族';
-    let posLabel = getI18n('stats_position'); if(posLabel === 'stats_position') posLabel = '站位';
-    let jLabel = getI18n('stats_job'); if(jLabel === 'stats_job') jLabel = '職業';
-    let aLabel = getI18n('stats_attribute'); if(aLabel === 'stats_attribute') aLabel = '攻擊類型';
-    
-    // 3. 判斷是否為艾爾丁身份
-    const isEldain = (typeof ELDAIN_LIST !== 'undefined') ? ELDAIN_LIST.includes(currentCharData.name) : false;
-    const identityValue = isEldain ? '艾爾丁' : '普通坨坨';
-    
-    // 4. 取得攻擊類型
-    let currentAttribute = "未知";
-    if (typeof characterSkills !== 'undefined') {
-        const skillData = characterSkills.find(s => s.name.trim() === currentCharData.name);
-        if (skillData && skillData.attribute) {
+            
+            // 1. 名字恢復為純文字
+            document.getElementById('charName').innerHTML = displayName;
+            document.title = `${displayName} - ${getI18n('page_title_char_detail') || '詳細資料'}`;
+            
+            // 2. 準備所有屬性標籤的多國語言文字
+            let idLabel = getI18n('stats_identity'); if(idLabel === 'stats_identity') idLabel = '身份';
+            let pLabel = getI18n('stats_personality'); if(pLabel === 'stats_personality') pLabel = '性格';
+            let rLabel = getI18n('stats_race'); if(rLabel === 'stats_race') rLabel = '種族';
+            let posLabel = getI18n('stats_position'); if(posLabel === 'stats_position') posLabel = '站位';
+            let jLabel = getI18n('stats_job'); if(jLabel === 'stats_job') jLabel = '職業';
+            let aLabel = getI18n('stats_attribute'); if(aLabel === 'stats_attribute') aLabel = '攻擊類型';
+            
+            // 3. 判斷是否為艾爾丁身份
+            const isEldain = (typeof ELDAIN_LIST !== 'undefined') ? ELDAIN_LIST.includes(currentCharData.name) : false;
+            const identityValue = isEldain ? '艾爾丁' : '普通坨坨';
+            
+            // 4. 取得攻擊類型
+            let currentAttribute = "未知";
+            if (typeof characterSkills !== 'undefined') {
+            const skillData = characterSkills.find(s => s.name.trim() === currentCharData.name);
+            if (skillData && skillData.attribute) {
             currentAttribute = skillData.attribute;
-        }
-    }
-    
-    // 5. 渲染全部屬性圖示
-    updateTag('charIdentity', idLabel, identityValue, 'identity');
-    updateTag('charPersonality', pLabel, currentCharData.personality, 'personality');
-    updateTag('charRace', rLabel, currentCharData.race, 'race');
-    updateTag('charPosition', posLabel, currentCharData.position, 'position');
-    updateTag('charJob', jLabel, currentCharData.job, 'job');
-    updateTag('charAttribute', aLabel, currentAttribute, 'attribute');
+            }
+            }
+            
+            // 5. 渲染全部屬性圖示
+            updateTag('charIdentity', idLabel, identityValue, 'identity');
+            updateTag('charPersonality', pLabel, currentCharData.personality, 'personality');
+            updateTag('charRace', rLabel, currentCharData.race, 'race');
+            updateTag('charPosition', posLabel, currentCharData.position, 'position');
+            updateTag('charJob', jLabel, currentCharData.job, 'job');
+            updateTag('charAttribute', aLabel, currentAttribute, 'attribute');
                 
                 renderStars(currentTargetName);
                 renderExtraInfo(currentTargetName);
@@ -1762,7 +1761,7 @@
                 renderAside(currentTargetName); 
                 switchPresentTab(currentTab);
             };
-
+            
             window.addEventListener('storage', (e) => {
                 if (e.key === 'user_lang' && e.newValue && e.newValue !== window.currentLang) {
                     console.log(`📡 偵測到主頁將語言切換至 ${e.newValue}，自動同步更新！`);
@@ -1792,39 +1791,39 @@
                 }
             
                 const displayName = getI18n(currentCharData.name);
-    
-    // 1. 名字恢復為純文字，移除舊的 identityHtml
-    document.getElementById('charName').innerHTML = displayName;
-
-    // 2. 準備所有屬性標籤的多國語言文字
-    let idLabel = getI18n('stats_identity'); if(idLabel === 'stats_identity') idLabel = '身份';
-    let pLabel = getI18n('stats_personality'); if(pLabel === 'stats_personality') pLabel = '性格';
-    let rLabel = getI18n('stats_race'); if(rLabel === 'stats_race') rLabel = '種族';
-    let posLabel = getI18n('stats_position'); if(posLabel === 'stats_position') posLabel = '站位';
-    let jLabel = getI18n('stats_job'); if(jLabel === 'stats_job') jLabel = '職業';
-    let aLabel = getI18n('stats_attribute'); if(aLabel === 'stats_attribute') aLabel = '攻擊類型';
-
-    // 3. 判斷是否為艾爾丁身份
-    const isEldain = (typeof ELDAIN_LIST !== 'undefined') ? ELDAIN_LIST.includes(currentCharData.name) : false;
-    const identityValue = isEldain ? '艾爾丁' : '普通坨坨';
-
-    // 4. 取得攻擊類型
-    let currentAttribute = "未知";
-    if (typeof characterSkills !== 'undefined') {
-        const skillData = characterSkills.find(s => s.name.trim() === currentCharData.name);
-        if (skillData && skillData.attribute) {
+            
+            // 1. 名字恢復為純文字，移除舊的 identityHtml
+            document.getElementById('charName').innerHTML = displayName;
+            
+            // 2. 準備所有屬性標籤的多國語言文字
+            let idLabel = getI18n('stats_identity'); if(idLabel === 'stats_identity') idLabel = '身份';
+            let pLabel = getI18n('stats_personality'); if(pLabel === 'stats_personality') pLabel = '性格';
+            let rLabel = getI18n('stats_race'); if(rLabel === 'stats_race') rLabel = '種族';
+            let posLabel = getI18n('stats_position'); if(posLabel === 'stats_position') posLabel = '站位';
+            let jLabel = getI18n('stats_job'); if(jLabel === 'stats_job') jLabel = '職業';
+            let aLabel = getI18n('stats_attribute'); if(aLabel === 'stats_attribute') aLabel = '攻擊類型';
+            
+            // 3. 判斷是否為艾爾丁身份
+            const isEldain = (typeof ELDAIN_LIST !== 'undefined') ? ELDAIN_LIST.includes(currentCharData.name) : false;
+            const identityValue = isEldain ? '艾爾丁' : '普通坨坨';
+            
+            // 4. 取得攻擊類型
+            let currentAttribute = "未知";
+            if (typeof characterSkills !== 'undefined') {
+            const skillData = characterSkills.find(s => s.name.trim() === currentCharData.name);
+            if (skillData && skillData.attribute) {
             currentAttribute = skillData.attribute;
-        }
-    }
-
-    // 5. 渲染全部屬性圖示
-    updateTag('charIdentity', idLabel, identityValue, 'identity');
-    updateTag('charPersonality', pLabel, currentCharData.personality, 'personality');
-    updateTag('charRace', rLabel, currentCharData.race, 'race');
-    updateTag('charPosition', posLabel, currentCharData.position, 'position');
-    updateTag('charJob', jLabel, currentCharData.job, 'job');
-    updateTag('charAttribute', aLabel, currentAttribute, 'attribute');
-    updateRaceBackground(currentCharData.race);
+            }
+            }
+            
+            // 5. 渲染全部屬性圖示
+            updateTag('charIdentity', idLabel, identityValue, 'identity');
+            updateTag('charPersonality', pLabel, currentCharData.personality, 'personality');
+            updateTag('charRace', rLabel, currentCharData.race, 'race');
+            updateTag('charPosition', posLabel, currentCharData.position, 'position');
+            updateTag('charJob', jLabel, currentCharData.job, 'job');
+            updateTag('charAttribute', aLabel, currentAttribute, 'attribute');
+            updateRaceBackground(currentCharData.race);
                 
                 renderStars(currentTargetName);
                 renderExtraInfo(currentTargetName);
