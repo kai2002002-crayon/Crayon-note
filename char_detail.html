@@ -157,6 +157,28 @@
             background-color: #d97706; 
             transform: translateX(-50%) translateY(-5px); 
             }
+            /* YouTube 彈出視窗樣式 */
+            .yt-modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.8); z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+            }
+            .yt-modal-content {
+            position: relative; width: 90%; max-width: 800px;
+            background: #000; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); padding: 10px;
+            }
+            .yt-modal-close {
+            position: absolute; top: -15px; right: -15px; background: #e74c3c;
+            color: white; border-radius: 50%; width: 35px; height: 35px;
+            text-align: center; line-height: 35px; cursor: pointer; font-size: 24px; font-weight: bold; z-index: 10000;
+            }
+            .yt-modal-close:hover { background: #c0392b; }
+            .video-container {
+            position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;
+            }
+            .video-container iframe {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            }
         </style>
     </head>
     <body class="p-4 sm:p-8 bg-[#fcf8f2] dark:bg-slate-900 text-gray-800 dark:text-gray-200 transition-colors duration-300">
@@ -601,53 +623,56 @@
                 }
             
                 // --- 處理打工劇情 CG 與 YouTube 連結 ---
-                const cgContainer = document.getElementById('charJobCgContainer');
-                if (cgContainer) {
-                    // 🌟 防呆機制：如果沒有打工獎勵 (hasJobStory 為 false)，直接清空並隱藏該區塊
-                    if (!hasJobStory) {
-                        cgContainer.innerHTML = '';
-                        cgContainer.classList.add('hidden');
-                    } else {
-                        // 檢查 WORK_URL 中是否有該坨坨的專屬連結
-                        let youtubeUrl = null;
-                        if (typeof WORK_URL !== 'undefined' && WORK_URL[spineName]) {
-                            youtubeUrl = WORK_URL[spineName];
-                        }
-                        
-                        const cgClass = `sprite-CG_Schedule_${spineName}`;
-                        
-                        if (youtubeUrl) {
-                            // 🌟 狀態一：有影片連結，顯示正常的可點擊樣式與 YouTube 播放鍵
-                            cgContainer.innerHTML = `
-                                <a href="${youtubeUrl}" target="_blank" class="block relative rounded-xl border-[3px] border-amber-300 dark:border-slate-600 shadow-sm overflow-hidden group w-[144px] h-[72px] bg-slate-900 shrink-0 cursor-pointer" title="點擊觀看打工劇情">
-                                    <div class="absolute top-1/2 left-1/2 transition-transform duration-300 group-hover:scale-105" style="transform: translate(-50%, -50%) scale(0.140625); width: 1024px; height: 512px;">
-                                        <div class="${cgClass} w-full h-full opacity-80 group-hover:opacity-100 transition-opacity"></div>
-                                    </div>
-                                    <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-300"></div>
-                                    <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-                                        <div class="w-8 h-8 bg-red-600/90 group-hover:bg-red-600 rounded-full flex items-center justify-center shadow-[0_0_10px_rgba(220,38,38,0.5)] transform group-hover:scale-110 transition-all duration-300">
-                                            <svg class="w-4 h-4 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                                        </div>
-                                    </div>
-                                </a>
-                            `;
-                        } else {
-                            // 🌟 狀態二：有劇情但尚未準備好連結，顯示灰階與「準備中」提示
-                            cgContainer.innerHTML = `
-                                <div class="block relative rounded-xl border-[3px] border-gray-400 dark:border-slate-700 shadow-sm overflow-hidden w-[144px] h-[72px] bg-slate-900 shrink-0 cursor-not-allowed" title="劇情影片準備中...">
-                                    <div class="absolute top-1/2 left-1/2" style="transform: translate(-50%, -50%) scale(0.140625); width: 1024px; height: 512px;">
-                                        <div class="${cgClass} w-full h-full opacity-50 grayscale"></div>
-                                    </div>
-                                    <div class="absolute inset-0 flex items-center justify-center pointer-events-none bg-black/30">
-                                        <span class="text-white text-xs font-bold tracking-wider px-2 py-1 bg-black/60 rounded backdrop-blur-sm">準備中</span>
-                                    </div>
-                                </div>
-                            `;
-                        }
-                        cgContainer.classList.remove('hidden');
-                    }
-                }
+                // 請找到 renderExtraInfo 函式中的這一段並確保這樣寫：
+            const cgContainer = document.getElementById('charJobCgContainer');
+            if (cgContainer) {
+            if (!hasJobStory) {
+            cgContainer.innerHTML = '';
+            cgContainer.classList.add('hidden');
+            } else {
+            let youtubeUrl = null;
+            if (typeof WORK_URL !== 'undefined' && WORK_URL[spineName]) {
+            youtubeUrl = WORK_URL[spineName];
             }
+            
+            const cgClass = `sprite-CG_Schedule_${spineName}`;
+            
+            // 🌟 請找到宣告 youtubeUrl 與 cgClass 的地方，下方接續這段：
+            if (youtubeUrl && youtubeUrl.length > 0) {
+            // 擷取 Youtube ID
+            const videoId = youtubeUrl.split('/').pop().replace('watch?v=', '');
+            
+            cgContainer.innerHTML = `
+                <a href="#" 
+                   class="youtube-modal-trigger block relative rounded-xl border-[3px] border-amber-300 dark:border-slate-600 shadow-sm overflow-hidden group w-[144px] h-[72px] bg-slate-900 shrink-0 cursor-pointer" 
+                   title="點擊觀看打工劇情"
+                   data-video-id="${videoId}">
+                    <div class="absolute top-1/2 left-1/2 transition-transform duration-300 group-hover:scale-105" style="transform: translate(-50%, -50%) scale(0.140625); width: 1024px; height: 512px;">
+                        <div class="${cgClass} w-full h-full opacity-80 group-hover:opacity-100 transition-opacity"></div>
+                    </div>
+                    <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-300"></div>
+                    <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                        <div class="w-8 h-8 bg-red-600/90 group-hover:bg-red-600 rounded-full flex items-center justify-center shadow-[0_0_10px_rgba(220,38,38,0.5)] transform group-hover:scale-110 transition-all duration-300">
+                            <svg class="w-4 h-4 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        </div>
+                    </div>
+                </a>
+            `;
+            } else {
+            cgContainer.innerHTML = `
+                <div class="block relative rounded-xl border-[3px] border-gray-400 dark:border-slate-700 shadow-sm overflow-hidden w-[144px] h-[72px] bg-slate-900 shrink-0 cursor-not-allowed" title="劇情影片準備中...">
+                    <div class="absolute top-1/2 left-1/2" style="transform: translate(-50%, -50%) scale(0.140625); width: 1024px; height: 512px;">
+                        <div class="${cgClass} w-full h-full opacity-50 grayscale"></div>
+                    </div>
+                    <div class="absolute inset-0 flex items-center justify-center pointer-events-none bg-black/30">
+                        <span class="text-white text-xs font-bold tracking-wider px-2 py-1 bg-black/60 rounded backdrop-blur-sm">準備中</span>
+                    </div>
+                </div>
+            `;
+            }
+            cgContainer.classList.remove('hidden');
+            }
+            }            }
             
             const renderError = (msg) => {
                 document.getElementById('mainContainer').innerHTML = `
@@ -2076,5 +2101,45 @@
             </div>
         </footer>
         <button id="backToTop" onclick="scrollToTop()" title="回頂部"> ▲ </button>
+        <!-- YouTube 播放器彈出視窗 -->
+        <div id="ytModal" class="yt-modal-overlay" style="display: none;">
+            <div class="yt-modal-content">
+                <span class="yt-modal-close">&times;</span>
+                <div class="video-container">
+                    <iframe id="ytIframe" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const modal = document.getElementById('ytModal');
+                const iframe = document.getElementById('ytIframe');
+                const closeBtn = document.querySelector('.yt-modal-close');
+            
+                // 處理動態生成的按鈕點擊 (使用事件代理)
+                document.body.addEventListener('click', function(e) {
+                    // 尋找被點擊的元素是不是我們的觸發按鈕
+                    const trigger = e.target.closest('.youtube-modal-trigger');
+                    if (trigger) {
+                        e.preventDefault();
+                        const videoId = trigger.getAttribute('data-video-id');
+                        if (videoId) {
+                            iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+                            modal.style.display = 'flex';
+                        }
+                    }
+                });
+            
+                function closeModal() {
+                    modal.style.display = 'none';
+                    iframe.src = ''; // 清空以停止播放
+                }
+            
+                closeBtn.addEventListener('click', closeModal);
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) closeModal();
+                });
+            });
+        </script>
     </body>
 </html>
