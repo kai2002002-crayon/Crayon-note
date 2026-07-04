@@ -33,14 +33,19 @@
         <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
         <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
         <style>
-            /* 🌟 預設空珍藏品：情信 (加入 !important 確保不受外在 CSS 干擾，防止被切) */
-            .sprite-letter {
-            width: 114px !important;
-            height: 117px !important;
-            background-position: -770px -654px !important;
-            background-image: url('common_icon.png') !important;
-            background-size: auto !important;
-            }
+            /* 🌟 預設空珍藏品：情信 (更新為正確的雪碧圖尺寸與座標) */
+.sprite-letter {
+    width: 144px !important;
+    height: 117px !important;
+    background-position: -770px -654px !important;
+    background-image: url('common_icon.png') !important;
+    
+    /* 移除 background-size: auto，讓其正確讀取原始像素，並確保外框不會擠壓 */
+    background-repeat: no-repeat !important;
+    box-sizing: content-box !important;
+    border: none !important;
+    padding: 0 !important;
+}
             /* 🌟 種族專屬背景的平鋪與移動動畫 (全域背景) */
             #raceBackground {
             position: fixed;
@@ -1861,7 +1866,7 @@ if (hasTriggeredRub && hitZoneOnDown && activeInteractBone) {
             
                     if (presentContainer) {
                         const animClass = isHasPresent ? 'transition-transform duration-300 drop-shadow-md' : 'opacity-70 drop-shadow-sm transition-transform duration-300';
-                        const baseScale = isHasPresent ? 'scale(0.8)' : 'scale(1.0)';
+                        const baseScale = isHasPresent ? 'scale(0.8)' : 'scale(0.7)';
                         const hoverWrapperClass = isHasPresent ? 'hover:scale-110 transition-transform duration-300' : '';
                         
                         if (finalImgUrl.startsWith('http') || finalImgUrl.startsWith('./') || finalImgUrl.startsWith('data:')) {
