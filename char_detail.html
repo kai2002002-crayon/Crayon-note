@@ -749,333 +749,363 @@
                     viewport: { x: -400, y: 0, width: 800, height: 1000 },
             
                     success: function (player) {
-                        const loader = avatarBox.querySelector('.spine-player-loading-custom');
-                        if (loader) loader.remove();
+                            const loader = avatarBox.querySelector('.spine-player-loading-custom');
+                            if (loader) loader.remove();
             
-                        window.myPlayer = player;
+                            window.myPlayer = player;
             
-                        let activeFaceBone = null; 
-                        let initialBoneX = 0;
-                        let initialBoneY = 0;
+                            let activeFaceBone = null; 
+                            let initialBoneX = 0;
+                            let initialBoneY = 0;
             
-                        const skins = player.skeleton.data.skins;
-                        if (skins && skins.length > 1) {
-                            const targetSkin = skins.find(s => s.name === 'Normal') || skins.find(s => s.name !== 'default');
-                            if (targetSkin) {
-                                player.skeleton.setSkinByName(targetSkin.name);
-                                player.skeleton.setToSetupPose(); 
-                                player.skeleton.updateWorldTransform(); 
+                            const skins = player.skeleton.data.skins;
+                            if (skins && skins.length > 1) {
+                                const targetSkin = skins.find(s => s.name === 'Normal') || skins.find(s => s.name !== 'default');
+                                if (targetSkin) {
+                                    player.skeleton.setSkinByName(targetSkin.name);
+                                    player.skeleton.setToSetupPose(); 
+                                    player.skeleton.updateWorldTransform(); 
+                                }
                             }
-                        }
-                        
-                        const animations = player.skeleton.data.animations;
-                        if (animations && animations.length > 0) {
-                            const animNames = animations.map(a => a.name);
-                            const playList = animNames;
+                            
+                            const animations = player.skeleton.data.animations;
+                            if (animations && animations.length > 0) {
+                                const animNames = animations.map(a => a.name);
+                                const playList = animNames;
             
-                            function startRandomAnimationLoop() {
-                                clearTimeout(globalIdleTimer);
-                                globalIdleTimer = setTimeout(playNextAnimation, 5000);
-                            }
+                                function startRandomAnimationLoop() {
+                                    clearTimeout(globalIdleTimer);
+                                    globalIdleTimer = setTimeout(playNextAnimation, 5000);
+                                }
             
-                            function playNextAnimation() {
-                                const targetAnims = playList.length > 0 ? playList : ['Idle_1'];
-                                const randomIndex = Math.floor(Math.random() * targetAnims.length);
-                                const nextAnim = targetAnims[randomIndex];
-                                player.animationState.setAnimation(0, nextAnim, true); 
+                                function playNextAnimation() {
+                                    const targetAnims = playList.length > 0 ? playList : ['Idle_1'];
+                                    const randomIndex = Math.floor(Math.random() * targetAnims.length);
+                                    const nextAnim = targetAnims[randomIndex];
+                                    player.animationState.setAnimation(0, nextAnim, true); 
+                                    startRandomAnimationLoop();
+                                }
+            
                                 startRandomAnimationLoop();
-                            }
             
-                            startRandomAnimationLoop();
+                                const canvas = avatarBox.querySelector('canvas');
+                                if (canvas) {
+                                    canvas.style.touchAction = 'none';
             
-                            const canvas = avatarBox.querySelector('canvas');
-                            if (canvas) {
-                                canvas.style.touchAction = 'none';
-            
-                                let currentZoom = 1.0;
-                                const ZOOM_ANCHOR_Y = 600; 
-                                const baseViewport = { x: -400, y: 0, width: 800, height: 1000 }; 
-                                const pointers = {}; 
-                                let initialPinchDistance = 0;
+                                    let currentZoom = 1.0;
+                                    const ZOOM_ANCHOR_Y = 600; 
+                                    const baseViewport = { x: -400, y: 0, width: 800, height: 1000 }; 
+                                    const pointers = {}; 
+                                    let initialPinchDistance = 0;
                 
-                                let isDragging = false;
-                                let startX = 0, startY = 0;
-                                let lastMouseX = 0, lastMouseY = 0;
-                                let dragDistance = 0;
-                                
-                                let hitZoneOnDown = null;
-                                let activeInteractBone = null; 
-                                let initialBoneX = 0, initialBoneY = 0;
-                                let initialBoneWorldX = 0, initialBoneWorldY = 0; // 🌌 新增：凍結起始絕對世界座標
+                                    let isDragging = false;
+                                    let startX = 0, startY = 0;
+                                    let lastMouseX = 0, lastMouseY = 0;
+                                    let dragDistance = 0;
+                                    
+                                    let hitZoneOnDown = null;
+                                    let activeInteractBone = null; 
+                                    let initialBoneWorldX = 0, initialBoneWorldY = 0; 
                 
-                                let hasTriggeredRub = false; 
-                                let tickleTimer = null; 
+                                    let hasTriggeredRub = false; 
+                                    let tickleTimer = null; 
+
+                                    // 🌟 修正 1：建立專屬變數儲存拉扯狀態，並劫持更新函數防止被 Spine 動畫覆蓋
+                                    player._customDragTargetX = null;
+                                    player._customDragTargetY = null;
+                                    player._bouncingBone = null;
+                                    player._bounceX = null;
+                                    player._bounceY = null;
+
+                                    const origUpdateWorldTransform = player.skeleton.updateWorldTransform;
+                                    player.skeleton.updateWorldTransform = function () {
+                                        // 在 Spine 計算絕對世界座標前，強制寫入我們的自訂拉扯座標
+                                        if (activeInteractBone && player._customDragTargetX !== null) {
+                                            activeInteractBone.x = player._customDragTargetX;
+                                            activeInteractBone.y = player._customDragTargetY;
+                                        } else if (player._bouncingBone) {
+                                            player._bouncingBone.x = player._bounceX;
+                                            player._bouncingBone.y = player._bounceY;
+                                        }
+                                        origUpdateWorldTransform.call(this);
+                                    };
             
-                                canvas.addEventListener('wheel', function(event) {
-                                    event.preventDefault();
-                                    currentZoom = event.deltaY < 0 ? Math.min(currentZoom + 0.1, 4.0) : Math.max(currentZoom - 0.1, 0.5);
-                                    if (player.skeleton) {
-                                        player.skeleton.scaleX = currentZoom;
-                                        player.skeleton.scaleY = currentZoom;
-                                        // 為了平滑縮放，保留作者原本的 Y 軸錨點補償
-                                        player.skeleton.y = ZOOM_ANCHOR_Y * (1 - currentZoom);
-                                    }
-                                }, { passive: false });
-            
-                                canvas.addEventListener('dblclick', function() {
-                                    currentZoom = 1.0;
-                                    if (player.skeleton) {
-                                        player.skeleton.scaleX = 1.0;
-                                        player.skeleton.scaleY = 1.0;
-                                        player.skeleton.y = 0;
-                                        player.skeleton.x = 0;
-                                        player.skeleton.updateWorldTransform();
-                                    }
-                                });
-            
-                                function getHitZone(mouseX, mouseY) {
-    const rect = canvas.getBoundingClientRect();
-    
-    // 🌌 坍縮點：直接讀取 spine-player 內部的真實相機參數，而不是寫死的 baseViewport
-    let camX, camY, camW, camH;
-    const camera = player.camera || (player.sceneRenderer && player.sceneRenderer.camera);
-    if (camera) {
-        camW = camera.viewportWidth * camera.zoom;
-        camH = camera.viewportHeight * camera.zoom;
-        camX = camera.position.x - camW / 2;
-        camY = camera.position.y - camH / 2;
-    } else {
-        const effView = getEffectiveViewport(rect, baseViewport);
-        camX = effView.x; camY = effView.y; camW = effView.width; camH = effView.height;
-    }
-    
-    let clickedPart = null;
-    let minDistance = Infinity;
-    
-    const hitZones = [
-    { name: "臉頰", bones: ["Character_Ball_Move"], radius: 50 },
-    { name: "頭部", bones: ["Character_Pat"], radius: 50 },
-    { name: "身體", bones: ["Character_Tickle"], radius: 60 }
-    ];
-    
-    hitZones.forEach(zone => {
-        let targetBone = null;
-        for (let bName of zone.bones) { targetBone = player.skeleton.findBone(bName); if (targetBone) break; }
-        if (targetBone) {
-            // 完美映射至真實畫布坐標
-            const boneCanvasX = ((targetBone.worldX - camX) / camW) * rect.width;
-            const boneCanvasY = rect.height - ((targetBone.worldY - camY) / camH) * rect.height;
-            const distance = Math.hypot(mouseX - boneCanvasX, mouseY - boneCanvasY);
-            
-            // 結合骨骼自身縮放與相機縮放的最終半徑
-            let skeletonScale = player.skeleton ? Math.abs(player.skeleton.scaleX) : 1;
-            const scaledRadius = (zone.radius * skeletonScale) * (rect.width / camW);
-            
-            if (distance < scaledRadius && distance < minDistance) { 
-                minDistance = distance; 
-                clickedPart = { ...zone, bone: targetBone }; 
-            }
-        }
-    });
-    return clickedPart;
-}
-            
-                                canvas.addEventListener('pointerdown', (e) => {
-                                    pointers[e.pointerId] = { x: e.clientX, y: e.clientY };
-                                    const pointerKeys = Object.keys(pointers);
-            
-                                    if (pointerKeys.length === 2) {
-                                        isDragging = false;
-                                        clearTimeout(tickleTimer); 
-                                        const p1 = pointers[pointerKeys[0]], p2 = pointers[pointerKeys[1]];
-                                        initialPinchDistance = Math.hypot(p1.x - p2.x, p1.y - p2.y);
-                                        return; 
-                                    }
-            
-                                    isDragging = true;
-                                    startX = lastMouseX = e.clientX;
-                                    startY = lastMouseY = e.clientY;
-                                    dragDistance = 0;
-                                    hasTriggeredRub = false; 
-                                    hitZoneOnDown = null;
-                                    activeInteractBone = null;
-                                    canvas.setPointerCapture(e.pointerId);
-            
-                                    const rect = canvas.getBoundingClientRect();
-                                    hitZoneOnDown = getHitZone(e.clientX - rect.left, e.clientY - rect.top);
-                                    
-                                    if (hitZoneOnDown && (hitZoneOnDown.name === "臉頰" || hitZoneOnDown.name === "頭部")) {
-                                        activeInteractBone = hitZoneOnDown.bone; 
-                                        initialBoneX = activeInteractBone.x; 
-                                        initialBoneY = activeInteractBone.y;
-                                        initialBoneWorldX = activeInteractBone.worldX; 
-                                        initialBoneWorldY = activeInteractBone.worldY; 
-                                    }
-                                });
-            
-                                canvas.addEventListener('pointermove', (e) => {
-                                    if (pointers[e.pointerId]) {
-                                        pointers[e.pointerId] = { x: e.clientX, y: e.clientY };
-                                    }
-                                    const pointerKeys = Object.keys(pointers);
-                                    
-                                    if (pointerKeys.length === 2) {
-                                        e.preventDefault();
-                                        const p1 = pointers[pointerKeys[0]], p2 = pointers[pointerKeys[1]];
-                                        const currentDistance = Math.hypot(p1.x - p2.x, p1.y - p2.y);
-                                        const zoomChange = currentDistance / initialPinchDistance;
-                                        
-                                        currentZoom = Math.min(Math.max(currentZoom * zoomChange, 0.5), 4.0);
+                                    canvas.addEventListener('wheel', function(event) {
+                                        event.preventDefault();
+                                        currentZoom = event.deltaY < 0 ? Math.min(currentZoom + 0.1, 4.0) : Math.max(currentZoom - 0.1, 0.5);
                                         if (player.skeleton) {
                                             player.skeleton.scaleX = currentZoom;
                                             player.skeleton.scaleY = currentZoom;
-                                            // 移除把 x 歸零的錯誤代碼，讓平移結果不會因縮放而消失
                                             player.skeleton.y = ZOOM_ANCHOR_Y * (1 - currentZoom);
+                                        }
+                                    }, { passive: false });
+            
+                                    canvas.addEventListener('dblclick', function() {
+                                        currentZoom = 1.0;
+                                        if (player.skeleton) {
+                                            player.skeleton.scaleX = 1.0;
+                                            player.skeleton.scaleY = 1.0;
+                                            player.skeleton.y = 0;
+                                            player.skeleton.x = 0;
                                             player.skeleton.updateWorldTransform();
                                         }
-                                        initialPinchDistance = currentDistance;
-                                        return;
+                                    });
+            
+                                    function getHitZone(mouseX, mouseY) {
+                                        const rect = canvas.getBoundingClientRect();
+                                        let camX, camY, camW, camH;
+                                        const camera = player.camera || (player.sceneRenderer && player.sceneRenderer.camera);
+                                        if (camera) {
+                                            camW = camera.viewportWidth * camera.zoom;
+                                            camH = camera.viewportHeight * camera.zoom;
+                                            camX = camera.position.x - camW / 2;
+                                            camY = camera.position.y - camH / 2;
+                                        } else {
+                                            const effView = getEffectiveViewport(rect, baseViewport);
+                                            camX = effView.x; camY = effView.y; camW = effView.width; camH = effView.height;
+                                        }
+                                        
+                                        let clickedPart = null;
+                                        let minDistance = Infinity;
+                                        
+                                        const hitZones = [
+                                            { name: "臉頰", bones: ["Character_Ball_Move"], radius: 50 },
+                                            { name: "頭部", bones: ["Character_Pat"], radius: 50 },
+                                            { name: "身體", bones: ["Character_Tickle"], radius: 60 }
+                                        ];
+                                        
+                                        hitZones.forEach(zone => {
+                                            let targetBone = null;
+                                            for (let bName of zone.bones) { targetBone = player.skeleton.findBone(bName); if (targetBone) break; }
+                                            if (targetBone) {
+                                                const boneCanvasX = ((targetBone.worldX - camX) / camW) * rect.width;
+                                                const boneCanvasY = rect.height - ((targetBone.worldY - camY) / camH) * rect.height;
+                                                const distance = Math.hypot(mouseX - boneCanvasX, mouseY - boneCanvasY);
+                                                
+                                                let skeletonScale = player.skeleton ? Math.abs(player.skeleton.scaleX) : 1;
+                                                const scaledRadius = (zone.radius * skeletonScale) * (rect.width / camW);
+                                                
+                                                if (distance < scaledRadius && distance < minDistance) { 
+                                                    minDistance = distance; 
+                                                    clickedPart = { ...zone, bone: targetBone }; 
+                                                }
+                                            }
+                                        });
+                                        return clickedPart;
                                     }
                                     
-                                    if (!isDragging || !player.skeleton) return;
-                                    const rect = canvas.getBoundingClientRect();
-                                    if (rect.width === 0) return;
-                                    
-                                    const dx = e.clientX - lastMouseX;
-                                    const dy = e.clientY - lastMouseY;
-                                    dragDistance += Math.hypot(dx, dy);
-                                    
-                                    if (dragDistance > 10 && hitZoneOnDown && !hasTriggeredRub) {
-                                        hasTriggeredRub = true;
+                                    canvas.addEventListener('pointerdown', (e) => {
+                                        pointers[e.pointerId] = { x: e.clientX, y: e.clientY };
+                                        const pointerKeys = Object.keys(pointers);
+            
+                                        if (pointerKeys.length === 2) {
+                                            isDragging = false;
+                                            clearTimeout(tickleTimer); 
+                                            const p1 = pointers[pointerKeys[0]], p2 = pointers[pointerKeys[1]];
+                                            initialPinchDistance = Math.hypot(p1.x - p2.x, p1.y - p2.y);
+                                            return; 
+                                        }
+            
+                                        isDragging = true;
+                                        startX = lastMouseX = e.clientX;
+                                        startY = lastMouseY = e.clientY;
+                                        dragDistance = 0;
+                                        hasTriggeredRub = false; 
+                                        hitZoneOnDown = null;
+                                        activeInteractBone = null;
+                                        canvas.setPointerCapture(e.pointerId);
+            
+                                        const rect = canvas.getBoundingClientRect();
+                                        hitZoneOnDown = getHitZone(e.clientX - rect.left, e.clientY - rect.top);
+                                        
+                                        if (hitZoneOnDown && (hitZoneOnDown.name === "臉頰" || hitZoneOnDown.name === "頭部")) {
+                                            activeInteractBone = hitZoneOnDown.bone; 
+                                            initialBoneX = activeInteractBone.x; 
+                                            initialBoneY = activeInteractBone.y;
+                                            initialBoneWorldX = activeInteractBone.worldX; 
+                                            initialBoneWorldY = activeInteractBone.worldY; 
+                                        }
+                                    });
+            
+                                    canvas.addEventListener('pointermove', (e) => {
+                                        if (pointers[e.pointerId]) {
+                                            pointers[e.pointerId] = { x: e.clientX, y: e.clientY };
+                                        }
+                                        const pointerKeys = Object.keys(pointers);
+                                        
+                                        if (pointerKeys.length === 2) {
+                                            e.preventDefault();
+                                            const p1 = pointers[pointerKeys[0]], p2 = pointers[pointerKeys[1]];
+                                            const currentDistance = Math.hypot(p1.x - p2.x, p1.y - p2.y);
+                                            const zoomChange = currentDistance / initialPinchDistance;
+                                            
+                                            currentZoom = Math.min(Math.max(currentZoom * zoomChange, 0.5), 4.0);
+                                            if (player.skeleton) {
+                                                player.skeleton.scaleX = currentZoom;
+                                                player.skeleton.scaleY = currentZoom;
+                                                player.skeleton.y = ZOOM_ANCHOR_Y * (1 - currentZoom);
+                                                player.skeleton.updateWorldTransform();
+                                            }
+                                            initialPinchDistance = currentDistance;
+                                            return;
+                                        }
+                                        
+                                        if (!isDragging || !player.skeleton) return;
+                                        const rect = canvas.getBoundingClientRect();
+                                        if (rect.width === 0) return;
+                                        
+                                        const dx = e.clientX - lastMouseX;
+                                        const dy = e.clientY - lastMouseY;
+                                        dragDistance += Math.hypot(dx, dy);
+                                        
+                                        if (dragDistance > 10 && hitZoneOnDown && !hasTriggeredRub) {
+                                            hasTriggeredRub = true;
+                                            clearTimeout(tickleTimer);
+                                            clearTimeout(globalIdleTimer); 
+                                            const animNames = player.skeleton.data.animations.map(a => a.name);
+                                            if (hitZoneOnDown.name === "臉頰" && animNames.includes("Touch_Idle")) player.animationState.setAnimation(0, "Touch_Idle", true);
+                                            else if (hitZoneOnDown.name === "頭部" && animNames.includes("Pat_Idle")) player.animationState.setAnimation(0, "Pat_Idle", true);
+                                            else if (hitZoneOnDown.name === "身體" && animNames.includes("Tickle_Idle_1")) {
+                                                player.animationState.setAnimation(0, "Tickle_Idle_1", true);
+                                                tickleTimer = setTimeout(() => { if (animNames.includes("Tickle_Idle_2")) player.animationState.setAnimation(0, "Tickle_Idle_2", true); }, 2000);
+                                            }
+                                        }
+                                        
+                                        let currentCamW = 800, currentCamH = 1000;
+                                        const camera = player.camera || (player.sceneRenderer && player.sceneRenderer.camera);
+                                        if (camera) {
+                                            currentCamW = camera.viewportWidth * camera.zoom;
+                                            currentCamH = camera.viewportHeight * camera.zoom;
+                                        } else {
+                                            const effView = getEffectiveViewport(rect, baseViewport);
+                                            currentCamW = effView.width; currentCamH = effView.height;
+                                        }
+
+                                        if (hasTriggeredRub && hitZoneOnDown && activeInteractBone) {
+                                            const isCheek = hitZoneOnDown.name === "臉頰";
+                                            const spineScaleX = currentCamW / rect.width;
+                                            const spineScaleY = currentCamH / rect.height;
+                                            const stretchIntensity = isCheek ? 1.3 : 0.3; 
+                                            
+                                            let worldDx = (e.clientX - startX) * spineScaleX * stretchIntensity;
+                                            let worldDy = -(e.clientY - startY) * spineScaleY * stretchIntensity;
+                                            
+                                            // 🌟 修正 2：如果往反方向拉，給予很大阻力而不是直接歸零卡死，手感更滑順
+                                            if (isCheek && worldDx > 0) worldDx *= 0.1; 
+                                            
+                                            let targetWorld = { 
+                                                x: initialBoneWorldX + worldDx, 
+                                                y: initialBoneWorldY + worldDy 
+                                            };
+                                            if (activeInteractBone.parent) activeInteractBone.parent.worldToLocal(targetWorld);
+                                            
+                                            let localDx = targetWorld.x - initialBoneX;
+                                            let localDy = targetWorld.y - initialBoneY;
+                                            
+                                            let rawDistance = Math.hypot(localDx, localDy);
+                                            const MAX_RADIUS = isCheek ? 55 : 20; 
+                                            
+                                            if (rawDistance > 0) {
+                                                let elasticDist = MAX_RADIUS * (1 - Math.exp(-rawDistance / (MAX_RADIUS * 1.2)));
+                                                localDx = (localDx / rawDistance) * elasticDist;
+                                                localDy = (localDy / rawDistance) * elasticDist;
+                                            }
+                                            
+                                            // 🌟 修正 3：將計算好的座標寫入劫持變數中，交由 Spine 迴圈每幀死死咬住位置
+                                            player._customDragTargetX = initialBoneX + localDx;
+                                            player._customDragTargetY = initialBoneY + localDy;
+
+                                        } else if (!hitZoneOnDown) {
+                                            player.skeleton.x += dx * (currentCamW / rect.width);
+                                            player.skeleton.y -= dy * (currentCamH / rect.height);
+                                            player.skeleton.updateWorldTransform(); 
+                                        }
+                                        
+                                        lastMouseX = e.clientX;
+                                        lastMouseY = e.clientY;
+                                    });
+            
+                                    const stopDrag = (e) => { 
+                                        delete pointers[e.pointerId];
+                                        if (Object.keys(pointers).length < 2) initialPinchDistance = 0;
+            
+                                        if (!isDragging) return;
+                                        isDragging = false; 
                                         clearTimeout(tickleTimer);
                                         clearTimeout(globalIdleTimer); 
+            
                                         const animNames = player.skeleton.data.animations.map(a => a.name);
-                                        if (hitZoneOnDown.name === "臉頰" && animNames.includes("Touch_Idle")) player.animationState.setAnimation(0, "Touch_Idle", true);
-                                        else if (hitZoneOnDown.name === "頭部" && animNames.includes("Pat_Idle")) player.animationState.setAnimation(0, "Pat_Idle", true);
-                                        else if (hitZoneOnDown.name === "身體" && animNames.includes("Tickle_Idle_1")) {
-                                            player.animationState.setAnimation(0, "Tickle_Idle_1", true);
-                                            tickleTimer = setTimeout(() => { if (animNames.includes("Tickle_Idle_2")) player.animationState.setAnimation(0, "Tickle_Idle_2", true); }, 2000);
+            
+                                        if (activeInteractBone) {
+                                            let targetX = initialBoneX, targetY = initialBoneY;
+                                            
+                                            // 🌟 修正 4：將骨骼交接給回彈劫持變數，維持動畫流暢度
+                                            player._bouncingBone = activeInteractBone;
+                                            player._bounceX = player._customDragTargetX !== null ? player._customDragTargetX : initialBoneX;
+                                            player._bounceY = player._customDragTargetY !== null ? player._customDragTargetY : initialBoneY;
+                                            
+                                            activeInteractBone = null; 
+                                            player._customDragTargetX = null;
+                                            player._customDragTargetY = null;
+                                            
+                                            let velX = 0, velY = 0;
+                                            const tension = 0.20, friction = 0.85; // 優化阻力避免過度抖動
+                                            function applyBounce() {
+                                                if (!player._bouncingBone) return;
+                                                
+                                                let dx = targetX - player._bounceX; 
+                                                let dy = targetY - player._bounceY;
+                                                velX += dx * tension; velY += dy * tension;
+                                                velX *= friction; velY *= friction;
+                                                
+                                                player._bounceX += velX; 
+                                                player._bounceY += velY;
+                                                
+                                                if (Math.abs(dx) > 0.1 || Math.abs(velX) > 0.1 || Math.abs(dy) > 0.1 || Math.abs(velY) > 0.1) {
+                                                    requestAnimationFrame(applyBounce);
+                                                } else {
+                                                    player._bounceX = targetX; 
+                                                    player._bounceY = targetY;
+                                                    player._bouncingBone = null; // 結束回彈
+                                                }
+                                            }
+                                            applyBounce();
                                         }
-                                    }
-                                    
-// 獲取當前真實的相機視口寬高
-let currentCamW = 800, currentCamH = 1000;
-const camera = player.camera || (player.sceneRenderer && player.sceneRenderer.camera);
-if (camera) {
-    currentCamW = camera.viewportWidth * camera.zoom;
-    currentCamH = camera.viewportHeight * camera.zoom;
-} else {
-    const effView = getEffectiveViewport(rect, baseViewport);
-    currentCamW = effView.width; currentCamH = effView.height;
-}
-
-if (hasTriggeredRub && hitZoneOnDown && activeInteractBone) {
-    const isCheek = hitZoneOnDown.name === "臉頰";
-    const spineScaleX = currentCamW / rect.width;
-    const spineScaleY = currentCamH / rect.height;
-    const stretchIntensity = isCheek ? 1.3 : 0.3; 
-    
-    let worldDx = (e.clientX - startX) * spineScaleX * stretchIntensity;
-    let worldDy = -(e.clientY - startY) * spineScaleY * stretchIntensity;
-    if (isCheek && worldDx > 0) worldDx = 0; 
-    
-    // 🌌 坍縮點：改用「凍結的起始座標 + 總移動量」，防止每幀累加導致的座標暴衝漂移！
-    let targetWorld = { 
-        x: initialBoneWorldX + worldDx, 
-        y: initialBoneWorldY + worldDy 
-    };
-    if (activeInteractBone.parent) activeInteractBone.parent.worldToLocal(targetWorld);
-    
-    let localDx = targetWorld.x - initialBoneX;
-    let localDy = targetWorld.y - initialBoneY;
-    
-    let rawDistance = Math.hypot(localDx, localDy);
-    const MAX_RADIUS = isCheek ? 55 : 20; 
-    
-    if (rawDistance > 0) {
-        let elasticDist = MAX_RADIUS * (1 - Math.exp(-rawDistance / (MAX_RADIUS * 1.2)));
-        localDx = (localDx / rawDistance) * elasticDist;
-        localDy = (localDy / rawDistance) * elasticDist;
-    }
-    activeInteractBone.x = initialBoneX + localDx;
-    activeInteractBone.y = initialBoneY + localDy;
-
-} else if (!hitZoneOnDown) {
-    // 🌌 坍縮點：平移整個角色時，使用真實的相機比例，保證視覺拖曳速度與滑鼠 1:1 同步
-    player.skeleton.x += dx * (currentCamW / rect.width);
-    player.skeleton.y -= dy * (currentCamH / rect.height);
-    player.skeleton.updateWorldTransform(); // 強制即時更新骨骼，防止放開後點擊判定延遲
-}
-                                    
-                                    lastMouseX = e.clientX;
-                                    lastMouseY = e.clientY;
-                                });
             
-                                const stopDrag = (e) => { 
-                                    delete pointers[e.pointerId];
-                                    if (Object.keys(pointers).length < 2) initialPinchDistance = 0;
-            
-                                    if (!isDragging) return;
-                                    isDragging = false; 
-                                    clearTimeout(tickleTimer);
-                                    clearTimeout(globalIdleTimer); 
-            
-                                    const animNames = player.skeleton.data.animations.map(a => a.name);
-            
-                                    if (activeInteractBone) {
-                                        let targetX = initialBoneX, targetY = initialBoneY;
-                                        let bouncingBone = activeInteractBone;
-                                        activeInteractBone = null; 
-                                        let velX = 0, velY = 0;
-                                        const tension = 0.20, friction = 0.9;
-                                        function applyBounce() {
-                                            let dx = targetX - bouncingBone.x; let dy = targetY - bouncingBone.y;
-                                            velX += dx * tension; velY += dy * tension;
-                                            velX *= friction; velY *= friction;
-                                            bouncingBone.x += velX; bouncingBone.y += velY;
-                                            if (Math.abs(dx) > 0.1 || Math.abs(velX) > 0.1 || Math.abs(dy) > 0.1 || Math.abs(velY) > 0.1) {
-                                                requestAnimationFrame(applyBounce);
+                                        if (hasTriggeredRub) {
+                                            if (hitZoneOnDown && hitZoneOnDown.name === "臉頰" && animNames.includes("Touch_End")) {
+                                                player.animationState.setAnimation(0, "Touch_End", false);
+                                                player.animationState.addAnimation(0, "Idle_1", true, 0);
+                                            } else if (hitZoneOnDown && hitZoneOnDown.name === "頭部" && animNames.includes("Pat_End")) {
+                                                player.animationState.setAnimation(0, "Pat_End", false);
+                                                player.animationState.addAnimation(0, "Idle_1", true, 0);
+                                            } else if (hitZoneOnDown && hitZoneOnDown.name === "身體" && animNames.includes("Tickle_End")) {
+                                                player.animationState.setAnimation(0, "Tickle_End", false);
+                                                player.animationState.addAnimation(0, "Idle_1", true, 0);
                                             } else {
-                                                bouncingBone.x = targetX; bouncingBone.y = targetY;
+                                                player.animationState.setAnimation(0, "Idle_1", true);
                                             }
-                                        }
-                                        applyBounce();
-                                    }
-            
-                                    if (hasTriggeredRub) {
-                                        if (hitZoneOnDown && hitZoneOnDown.name === "臉頰" && animNames.includes("Touch_End")) {
-                                            player.animationState.setAnimation(0, "Touch_End", false);
-                                            player.animationState.addAnimation(0, "Idle_1", true, 0);
-                                        } else if (hitZoneOnDown && hitZoneOnDown.name === "頭部" && animNames.includes("Pat_End")) {
-                                            player.animationState.setAnimation(0, "Pat_End", false);
-                                            player.animationState.addAnimation(0, "Idle_1", true, 0);
-                                        } else if (hitZoneOnDown && hitZoneOnDown.name === "身體" && animNames.includes("Tickle_End")) {
-                                            player.animationState.setAnimation(0, "Tickle_End", false);
-                                            player.animationState.addAnimation(0, "Idle_1", true, 0);
+                                            startRandomAnimationLoop();
+                                        } else if (hitZoneOnDown && dragDistance < 10) {
+                                            if ((hitZoneOnDown.name === "頭部" || hitZoneOnDown.name === "臉頰") && animNames.includes("Smash_End_1")) {
+                                                player.animationState.setAnimation(0, "Smash_End_1", false);
+                                                if (animNames.includes("Smash_End_2")) {
+                                                    player.animationState.addAnimation(0, "Smash_End_2", false, 0);
+                                                }
+                                                player.animationState.addAnimation(0, "Idle_1", true, 0);
+                                            }
+                                            startRandomAnimationLoop();
                                         } else {
-                                            player.animationState.setAnimation(0, "Idle_1", true);
+                                            startRandomAnimationLoop();
                                         }
-                                        startRandomAnimationLoop();
-                                    } else if (hitZoneOnDown && dragDistance < 10) {
-                                        if ((hitZoneOnDown.name === "頭部" || hitZoneOnDown.name === "臉頰") && animNames.includes("Smash_End_1")) {
-                                            player.animationState.setAnimation(0, "Smash_End_1", false);
-                                            if (animNames.includes("Smash_End_2")) {
-                                                player.animationState.addAnimation(0, "Smash_End_2", false, 0);
-                                            }
-                                            player.animationState.addAnimation(0, "Idle_1", true, 0);
-                                        }
-                                        startRandomAnimationLoop();
-                                    } else {
-                                        startRandomAnimationLoop();
-                                    }
-                                };
+                                    };
             
-                                canvas.addEventListener('pointerup', stopDrag);
-                                canvas.addEventListener('pointercancel', stopDrag);
-                                canvas.addEventListener('pointerout', stopDrag);
+                                    canvas.addEventListener('pointerup', stopDrag);
+                                    canvas.addEventListener('pointercancel', stopDrag);
+                                    // 🌟 修正 5：移除 pointerout，既然有 setPointerCapture，讓滑鼠即使出界也不會突然鬆手斷掉
+                                }
                             }
-                        }
-                    },
+                        },
                     error: function (player, reason) {
                         console.error("❌ Spine Load Error:", reason);
                         const imgUrl = typeof IMAGE_MAP !== 'undefined' ? IMAGE_MAP[`avatar_${currentCharData.name}`] : '';
