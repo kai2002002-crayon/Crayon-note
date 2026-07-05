@@ -2024,11 +2024,18 @@
                                   const rTime = r.timestamp ? new Date(r.timestamp).toLocaleString(window.currentLang === 'ja' ? 'ja-JP' : 'zh-TW', {
                                       month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit'
                                   }) : justNowMsg;
+                                  
+                                  const safeAuthorName = escapeHTML(r.author); // 取得對方名字
+                                  
                                   repliesHtml += `
-                                      <div class="bg-amber-50/60 dark:bg-slate-800/60 p-2 sm:p-3 rounded-lg text-xs sm:text-sm">
+                                      <div class="bg-amber-50/60 dark:bg-slate-800/60 p-2 sm:p-3 rounded-lg text-xs sm:text-sm group relative">
                                           <div class="flex justify-between items-baseline mb-1 border-b border-amber-100 dark:border-slate-700 pb-1">
-                                              <span class="font-bold text-amber-800 dark:text-amber-400">↳ 👤 ${escapeHTML(r.author)}</span>
-                                              <span class="text-[10px] text-gray-500 dark:text-gray-400">${rTime}</span>
+                                              <span class="font-bold text-amber-800 dark:text-amber-400">↳ 👤 ${safeAuthorName}</span>
+                                              <div class="flex items-center gap-2">
+                                                  <span class="text-[10px] text-gray-500 dark:text-gray-400">${rTime}</span>
+                                                  <!-- 🌟 針對單一回覆的小按鈕 -->
+                                                  <button onclick="openReplyModal('${doc.id}', '${safeAuthorName}')" class="text-[10px] font-bold text-amber-600 dark:text-amber-400 opacity-0 group-hover:opacity-100 transition-opacity bg-amber-100/50 dark:bg-slate-700 px-1.5 py-0.5 rounded">回覆</button>
+                                              </div>
                                           </div>
                                           <p class="text-gray-700 dark:text-gray-300 whitespace-pre-wrap">${escapeHTML(r.content)}</p>
                                       </div>
@@ -2109,13 +2116,24 @@
                     btn.classList.replace('dark:bg-gray-500', 'dark:bg-amber-600');
                 });
             }
-            // 🌟 回覆功能相關函式
-            function openReplyModal(docId) {
+            // 🌟 回覆功能相關函式 (支援 @ 標註)
+            function openReplyModal(docId, targetAuthor = null) {
                 document.getElementById('replyTargetDocId').value = docId;
-                document.getElementById('replyModalContent').value = '';
+                
+                const contentBox = document.getElementById('replyModalContent');
+                
+                // 如果有傳入 targetAuthor (代表是點擊別人的回覆)，就自動加上 @ 標註
+                if (targetAuthor) {
+                    contentBox.value = `@${targetAuthor} `;
+                } else {
+                    contentBox.value = '';
+                }
+                
                 document.getElementById('replyModal').style.display = 'flex';
+                
+                // 彈出後自動將游標對焦到輸入框，提升體驗
+                setTimeout(() => contentBox.focus(), 100);
             }
-
             function closeReplyModal() {
                 document.getElementById('replyModal').style.display = 'none';
                 document.getElementById('replyTargetDocId').value = '';
