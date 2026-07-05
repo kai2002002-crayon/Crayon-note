@@ -444,7 +444,7 @@ const WORK_URL = {
     "Ed": "https://youtu.be/HFj4FtrvjqI",
     "Elena": "",
     "Epica": "",
-    "Erpin": "",
+    "Erpin": "https://youtu.be/rgbOtvbLdB0",
     "Espi": "https://youtu.be/hTyUw7ZfI28",
     "Festa": "",
     "Fricle": "",
