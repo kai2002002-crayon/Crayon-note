@@ -35,8 +35,8 @@
             z-index: 10;
             }
             @keyframes crayonFloat {
-            0%, 100% { transform: translateY(0) scale(1); filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.5)); }
-            50% { transform: translateY(-10px) scale(1.05); filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.9)); }
+            0%, 100% { transform: translateY(0) (1); filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.5)); }
+            50% { transform: translateY(-10px) (1.05); filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.9)); }
             }
             /* 捲動條美化 */
             ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -60,14 +60,33 @@
             .dark .animated-bg { opacity: 0.8; }
             .custom-select-btn { -webkit-tap-highlight-color: transparent; }
             #backToTop {
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            z-index: 9999; display: none; width: 20px; height: 20px;
-            border-radius: 50%; background-color: #fbbf24; color: white;
-            border: none; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            display: none;
+            /* 調整大小為 20px */
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: #fbbf24;
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* 陰影也跟著稍微縮小 */
             transition: transform 0.2s, background-color 0.3s;
-            font-size: 10px; display: flex; align-items: center; justify-content: center;
+            /* 調整字體大小以適應小按鈕 */
+            font-size: 10px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
             }
-            #backToTop:hover { background-color: #d97706; transform: translateX(-50%) translateY(-5px); }
+            #backToTop:hover { 
+            background-color: #d97706; 
+            /* 保持置中並微微上浮 */
+            transform: translateX(-50%) translateY(-5px); 
+            }
         </style>
     </head>
     <body class="p-2 sm:p-6 bg-[#fcf8f2] dark:bg-slate-900 text-gray-800 dark:text-gray-200 min-h-screen transition-colors duration-300">
@@ -90,7 +109,8 @@
                 顯示全部 🔽
                 </button>
             </div>
-            <div id="charGridContainer" class="space-y-3 collapsible-content collapsed" style="max-height: 0px; opacity: 0;"></div>
+            <div id="charGridContainer" class="space-y-3 collapsible-content collapsed" style="max-height: 0px; opacity: 0;">
+            </div>
         </section>
         <section id="spineViewerSection" class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md p-4 sm:p-5 rounded-2xl shadow-md border-4 border-amber-400 dark:border-slate-600 transition-all">
             <div class="flex justify-between items-center mb-4 border-b border-amber-100 dark:border-slate-700 pb-3">
@@ -106,9 +126,6 @@
             </div>
             <div class="flex flex-col gap-3 min-w-0 relative z-10 w-full lg:w-3/4 mx-auto">
                 <div id="spineCanvasContainer" class="w-full h-[60vh] sm:h-[600px] rounded-xl border-2 border-dashed border-amber-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50 relative overflow-hidden flex items-center justify-center cursor-move animated-bg" style="background-image: url('https://i.postimg.cc/x8wY5V8Q/Monster-Slot-Property-Tile.png');">
-                    <!-- 🌟 AR 攝影機畫面 -->
-                    <video id="arVideoBg" class="absolute inset-0 w-full h-full object-cover hidden pointer-events-none z-0" autoplay playsinline muted></video>
-                    
                     <div class="text-gray-500 font-bold tracking-widest bg-white/80 dark:bg-slate-800/80 px-4 py-2 rounded-lg backdrop-blur-sm shadow-sm">等待載入...</div>
                 </div>
                 <div id="playerControls" class="bg-amber-50 dark:bg-slate-700/50 p-3 rounded-xl border border-amber-200 dark:border-slate-600 flex flex-col gap-3 opacity-50 pointer-events-none transition-opacity">
@@ -125,10 +142,6 @@
                         <div class="flex items-center gap-2">
                             <button id="btnModeSwitch" onclick="toggleViewerMode()" class="px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs sm:text-sm font-bold rounded-lg shadow transition-colors whitespace-nowrap">
                             🔄 模式: 大廳
-                            </button>
-                            <!-- 🌟 AR 模式按鈕 -->
-                            <button id="btnARMode" onclick="toggleARMode()" class="px-3 py-1.5 bg-purple-500 hover:bg-purple-600 text-white text-[10px] sm:text-sm font-bold rounded-lg shadow transition-colors whitespace-nowrap">
-                            📷 AR 模式
                             </button>
                             <select id="costumeSelect" onchange="changeSpineCostume(this.value)" class="bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-xs sm:text-sm font-bold rounded-lg px-2 py-1.5 outline-none focus:ring-2 focus:ring-amber-500 min-w-[100px]">
                                 <option value="">服裝</option>
@@ -175,6 +188,7 @@
                 "活潑": "border-yellow-400 text-yellow-400", 
                 "憂鬱": "border-purple-400 text-purple-400" 
             };
+            // 🌟 雪碧圖類別對應表
             const SPRITE_CLASS_MAP = {
                 race_龍族: "sprite-Bg_Dragon", race_精靈: "sprite-Bg_Elf", race_妖精: "sprite-Bg_Sprite",
                 race_幽靈: "sprite-Bg_Phantom", race_魔靈: "sprite-Bg_Elemental", race_不明: "sprite-Bg_Unknown",
@@ -187,63 +201,127 @@
             let globalPlayer = null;
             let slotVisibilityMap = {};
             
+            // 🌟 語音管理器 (VoiceManager) - 手機記憶體優化版
             const VoiceManager = {
-                currentAudio: null, fadeInterval: null, baseName: "", skinSuffix: "",
-                init(baseName, costumeKey) {
-                    this.baseName = baseName;
-                    let suffix = costumeKey.replace(baseName, "");
-                    this.skinSuffix = suffix ? `_${suffix}` : ""; 
-                    if (!this.currentAudio) {
-                        this.currentAudio = new Audio();
-                        this.currentAudio.setAttribute('playsinline', 'true');
-                        this.currentAudio.setAttribute('preload', 'auto');
-                    }
-                },
-                stop(fadeDuration = 0.5) {
-                    if (this.fadeInterval) { clearInterval(this.fadeInterval); this.fadeInterval = null; }
-                    if (this.currentAudio && !this.currentAudio.paused) {
-                        const audio = this.currentAudio;
-                        audio.loop = false;
-                        this.fadeInterval = setInterval(() => {
-                            if (audio.volume > 0.1) { audio.volume -= 0.1; } 
-                            else { audio.pause(); audio.currentTime = 0; audio.volume = 0.8; clearInterval(this.fadeInterval); }
-                        }, (fadeDuration * 1000) / 10);
-                    }
-                },
-                play(folder, filename, onEnded = null, loop = false) {
-                    if (this.fadeInterval) { clearInterval(this.fadeInterval); this.fadeInterval = null; }
-                    if (!this.currentAudio) { this.currentAudio = new Audio(); this.currentAudio.setAttribute('playsinline', 'true'); }
-                    const audio = this.currentAudio;
-                    audio.pause(); audio.onended = null;
-                    const path = `./${folder}/${filename}.mp3`;
-                    audio.src = path; audio.volume = 0.8; audio.loop = loop; audio.currentTime = 0; audio.load();
-                    if (onEnded && !loop) { audio.onended = onEnded; }
-                    const playPromise = audio.play();
-                    if (playPromise !== undefined) {
-                        playPromise.catch(e => {
-                            console.log("語音無法播放:", path, e);
-                            if (onEnded) onEnded();
-                        });
-                    }
-                    return audio;
-                },
-                playRandom(folder, variants, suffix = "", onEnded = null) {
-                    const pick = variants[Math.floor(Math.random() * variants.length)];
-                    return this.play(folder, `${pick}${suffix}`, onEnded);
-                },
-                playSpawn(onEnded = null) { this.playRandom('spawn', [`Voice_${this.baseName}_Spawn1`, `Voice_${this.baseName}_Spawn2`], "", onEnded); },
-                playTickleStart(onEnded = null) { this.play('tickle', `Voice_${this.baseName}_TickleStart1`, onEnded); },
-                playTickleDuring() { this.play('tickle', `Voice_${this.baseName}_TickleDuring1`, null, true); },
-                playTouch(onEnded = null) { this.playRandom('touch', [`Voice_${this.baseName}_Touch1`, `Voice_${this.baseName}_Touch1_1`, `Voice_${this.baseName}_Touch1_2`], this.skinSuffix, onEnded); },
-                playPat(onEnded = null) { this.playRandom('pat', [`Voice_${this.baseName}_Touch2`, `Voice_${this.baseName}_Touch2_1`, `Voice_${this.baseName}_Touch2_2`], this.skinSuffix, onEnded); },
-                playSmash(onEnded = null) { this.play('smash', `Voice_${this.baseName}_DutchRubEnd1`, () => { this.play('smash', `Voice_${this.baseName}_DutchRubEnd2${this.skinSuffix}`, onEnded); }); }
+            currentAudio: null, // 只保留一個 Audio 實體
+            fadeInterval: null, // 用來控制淡出的計時器
+            baseName: "",
+            skinSuffix: "",
+            
+            init(baseName, costumeKey) {
+            this.baseName = baseName;
+            let suffix = costumeKey.replace(baseName, "");
+            this.skinSuffix = suffix ? `_${suffix}` : ""; 
+            
+            // 💡 針對手機版：初始化時就建立唯一的一個 Audio 實體
+            if (!this.currentAudio) {
+            this.currentAudio = new Audio();
+            this.currentAudio.setAttribute('playsinline', 'true'); // iOS 必須
+            this.currentAudio.setAttribute('preload', 'auto');
+            }
+            },
+            
+            stop(fadeDuration = 0.5) {
+            if (this.fadeInterval) {
+            clearInterval(this.fadeInterval);
+            this.fadeInterval = null;
+            }
+            
+            if (this.currentAudio && !this.currentAudio.paused) {
+            const audio = this.currentAudio;
+            audio.loop = false; // 確保停止循環
+            
+            // 簡單的淡出處理
+            this.fadeInterval = setInterval(() => {
+                if (audio.volume > 0.1) {
+                    audio.volume -= 0.1;
+                } else {
+                    audio.pause();
+                    audio.currentTime = 0;
+                    audio.volume = 0.8;
+                    clearInterval(this.fadeInterval);
+                }
+            }, (fadeDuration * 1000) / 10);
+            }
+            },
+            
+            play(folder, filename, onEnded = null, loop = false) {
+            // 如果正在淡出，立刻中斷並強制停止舊聲音
+            if (this.fadeInterval) {
+            clearInterval(this.fadeInterval);
+            this.fadeInterval = null;
+            }
+            
+            // 防呆保護
+            if (!this.currentAudio) {
+            this.currentAudio = new Audio();
+            this.currentAudio.setAttribute('playsinline', 'true');
+            }
+            
+            const audio = this.currentAudio;
+            audio.pause();
+            audio.onended = null; // 清除上一個回呼，避免衝突
+            
+            const path = `./${folder}/${filename}.mp3`;
+            
+            // 💡 針對手機版：重複利用同一個 Audio，只替換 src，並呼叫 load()
+            audio.src = path;
+            audio.volume = 0.8;
+            audio.loop = loop;
+            audio.currentTime = 0;
+            audio.load(); // 強制讀取，解開手機快取限制
+            
+            if (onEnded && !loop) {
+            audio.onended = onEnded;
+            }
+            
+            const playPromise = audio.play();
+            if (playPromise !== undefined) {
+            playPromise.catch(e => {
+                console.log("語音無法播放或被手機阻擋:", path, e);
+                // 防呆機制：如果檔案遺失，立刻執行 onEnded，確保角色不會永遠卡住
+                if (onEnded) onEnded();
+            });
+            }
+            
+            return audio;
+            },
+            
+            playRandom(folder, variants, suffix = "", onEnded = null) {
+            const pick = variants[Math.floor(Math.random() * variants.length)];
+            return this.play(folder, `${pick}${suffix}`, onEnded);
+            },
+            
+            playSpawn(onEnded = null) {
+            const variants = [`Voice_${this.baseName}_Spawn1`, `Voice_${this.baseName}_Spawn2`];
+            this.playRandom('spawn', variants, "", onEnded); 
+            },
+            playTickleStart(onEnded = null) { this.play('tickle', `Voice_${this.baseName}_TickleStart1`, onEnded); },
+            playTickleDuring() { this.play('tickle', `Voice_${this.baseName}_TickleDuring1`, null, true); },
+            
+            playTouch(onEnded = null) { 
+            const variants = [`Voice_${this.baseName}_Touch1`, `Voice_${this.baseName}_Touch1_1`, `Voice_${this.baseName}_Touch1_2`];
+            this.playRandom('touch', variants, this.skinSuffix, onEnded);
+            },
+            playPat(onEnded = null) { 
+            const variants = [`Voice_${this.baseName}_Touch2`, `Voice_${this.baseName}_Touch2_1`, `Voice_${this.baseName}_Touch2_2`];
+            this.playRandom('pat', variants, this.skinSuffix, onEnded);
+            },
+            playSmash(onEnded = null) { 
+            this.play('smash', `Voice_${this.baseName}_DutchRubEnd1`, () => {
+            this.play('smash', `Voice_${this.baseName}_DutchRubEnd2${this.skinSuffix}`, onEnded);
+            });
+            }
             };
             
+            // 核心狀態變數
             let activeCharData = null; 
-            let currentMode = 'lobby'; 
+            let currentMode = 'lobby'; // 'lobby' | 'battle'
             let currentZoom = 1.0;
             let isDragging = false;
             let lastMouseX = 0, lastMouseY = 0;
+            
+            // 互動拉扯專用變數 (僅大廳生效)
             let hitZoneOnDown = null;
             let activeFaceBone = null; 
             let initialBoneX = 0, initialBoneY = 0;
@@ -265,9 +343,11 @@
                 const list = document.getElementById(listId);
                 if (list.classList.contains('hidden')) {
                     if (listId === 'animList') {
-                        document.getElementById('slotList').classList.add('hidden'); document.getElementById('slotList').classList.remove('flex');
+                        document.getElementById('slotList').classList.add('hidden');
+                        document.getElementById('slotList').classList.remove('flex');
                     } else {
-                        document.getElementById('animList').classList.add('hidden'); document.getElementById('animList').classList.remove('flex');
+                        document.getElementById('animList').classList.add('hidden');
+                        document.getElementById('animList').classList.remove('flex');
                     }
                     list.classList.remove('hidden'); list.classList.add('flex');
                 } else {
@@ -279,9 +359,15 @@
                 const container = document.getElementById('charGridContainer');
                 const btn = document.getElementById('toggleAllCharBtn');
                 if (container.classList.contains('collapsed')) {
-                    container.classList.remove('collapsed'); container.style.maxHeight = '2000px'; container.style.opacity = '1'; btn.innerHTML = '隱藏全部 🔼';
+                    container.classList.remove('collapsed');
+                    container.style.maxHeight = '2000px';
+                    container.style.opacity = '1';
+                    btn.innerHTML = '隱藏全部 🔼';
                 } else {
-                    container.classList.add('collapsed'); container.style.maxHeight = '0px'; container.style.opacity = '0'; btn.innerHTML = '顯示全部 🔽';
+                    container.classList.add('collapsed');
+                    container.style.maxHeight = '0px';
+                    container.style.opacity = '0';
+                    btn.innerHTML = '顯示全部 🔽';
                 }
             }
             
@@ -289,12 +375,19 @@
                 const group = document.getElementById(id);
                 const btn = document.getElementById(btnId);
                 if (group.classList.contains('collapsed')) {
-                    group.classList.remove('collapsed'); group.style.maxHeight = '1000px'; group.style.opacity = '1'; btn.innerHTML = btn.innerHTML.replace('🔽', '🔼');
+                    group.classList.remove('collapsed');
+                    group.style.maxHeight = '1000px';
+                    group.style.opacity = '1';
+                    btn.innerHTML = btn.innerHTML.replace('🔽', '🔼');
                 } else {
-                    group.classList.add('collapsed'); group.style.maxHeight = '0px'; group.style.opacity = '0'; btn.innerHTML = btn.innerHTML.replace('🔼', '🔽');
+                    group.classList.add('collapsed');
+                    group.style.maxHeight = '0px';
+                    group.style.opacity = '0';
+                    btn.innerHTML = btn.innerHTML.replace('🔼', '🔽');
                 }
             }
             
+            // 預載圖片以加快後續顯示
             function preloadIcons() {
                 if (typeof INITIAL_DATA === 'undefined') return;
                 INITIAL_DATA.forEach(c => {
@@ -304,16 +397,20 @@
             }
             
             function initCharacterGrid() {
-                preloadIcons();
+                preloadIcons(); // 背景預載
+            
                 const container = document.getElementById('charGridContainer');
                 if (typeof INITIAL_DATA === 'undefined' || !INITIAL_DATA) return;
+            
                 const personalities = ["天真", "冷靜", "狂亂", "活潑", "憂鬱"];
                 
                 personalities.forEach((p, index) => {
                     const chars = INITIAL_DATA.filter(c => c.personality === p);
                     if (chars.length === 0) return;
+            
                     const borderTextClass = personalityColors[p] || "border-gray-400 text-gray-400";
                     const borderClass = borderTextClass.split(' ')[0];
+                                
                     const groupId = `group_${index}`;
                     const btnId = `btn_${index}`;
             
@@ -333,20 +430,30 @@
                     `;
                     
                     const iconContainer = document.createElement('div');
-                    iconContainer.id = groupId; iconContainer.className = "flex flex-wrap gap-1.5 pt-2 pl-1 collapsible-content";
-                    iconContainer.style.maxHeight = "1000px"; iconContainer.style.opacity = "1";
+                    iconContainer.id = groupId;
+                    iconContainer.className = "flex flex-wrap gap-1.5 pt-2 pl-1 collapsible-content";
+                    iconContainer.style.maxHeight = "1000px";
+                    iconContainer.style.opacity = "1";
             
                     chars.forEach(c => {
                         const iconUrl = typeof IMAGE_MAP !== 'undefined' ? IMAGE_MAP[`avatar_${c.name}`] : '';
                         const spineName = typeof SPINE_MAP !== 'undefined' ? SPINE_MAP[c.name] : c.name;
                         const displayName = getI18n(c.name);
                         
+                        // 🌟 獲取種族背景圖 (如果找不到對應種族，給一個預設值或透明)
+                        const raceBg = (typeof SPINE_BACKGROUNDS !== 'undefined' && SPINE_BACKGROUNDS[c.race]) 
+                                       ? SPINE_BACKGROUNDS[c.race] 
+                                       : 'https://i.postimg.cc/x8wY5V8Q/Monster-Slot-Property-Tile.png';
+            
                         const btn = document.createElement('button');
                         btn.className = "group flex flex-col items-center gap-0.5 transition-transform hover:scale-110 active:scale-95 w-12 sm:w-14";
                         btn.onclick = () => selectCharacter(c, spineName, iconUrl);
             
+                        // 🌟 使用雪碧圖取代原本的 img 與 url
+                        // 🌟 修正：利用 SpineName (英文) 去抓對應的 class，並補上性格 base
                         const charSpriteBase = CHAR_SPRITE_MAP[c.personality] || "sprite-char-innocence";
                         const charSpriteClass = `sprite-${spineName}`;
+                        
                         let raceKey = c.race; if (raceKey === "???") raceKey = "unknown";
                         const raceSprite = SPRITE_CLASS_MAP[`race_${raceKey}`] || "sprite-Bg_Unknown";
             
@@ -363,26 +470,32 @@
                         iconContainer.appendChild(btn);
                     });
             
-                    row.appendChild(header); row.appendChild(iconContainer); container.appendChild(row);
+                    row.appendChild(header);
+                    row.appendChild(iconContainer);
+                    container.appendChild(row);
                 });
             }
             
             function applyRaceBackground(charName) {
                 const container = document.getElementById('spineCanvasContainer');
                 const char = INITIAL_DATA.find(c => c.name === charName);
+                
                 if (char && typeof SPINE_BACKGROUNDS !== 'undefined' && SPINE_BACKGROUNDS[char.race]) {
                     container.style.backgroundImage = `url('${SPINE_BACKGROUNDS[char.race]}')`;
                     container.classList.add('animated-bg');
                 } else {
+                    // 若無專屬種族背景，退回預設的連續圖案背景
                     container.style.backgroundImage = `url('https://i.postimg.cc/x8wY5V8Q/Monster-Slot-Property-Tile.png')`;
                     container.classList.add('animated-bg');
                 }
             }
             
+            // 取得對應模式的服裝清單
             function getCostumeList(charName, mode) {
                 if (mode === 'lobby') {
                     return (typeof COSTUME_MAP !== 'undefined' && COSTUME_MAP[charName]) ? COSTUME_MAP[charName] : [];
                 } else {
+                    // SD 戰鬥版的資料來源 (若無 SD_COSTUME，就試著用標準的)
                     return (typeof SD_COSTUME !== 'undefined' && SD_COSTUME[charName]) ? SD_COSTUME[charName] : 
                            ((typeof COSTUME_MAP !== 'undefined' && COSTUME_MAP[charName]) ? COSTUME_MAP[charName] : []);
                 }
@@ -391,24 +504,33 @@
             function toggleViewerMode() {
                 if (!activeCharData) return;
                 currentMode = currentMode === 'lobby' ? 'battle' : 'lobby';
+                
                 const btn = document.getElementById('btnModeSwitch');
                 btn.innerHTML = currentMode === 'lobby' ? '🔄 模式: 大廳' : '⚔️ 模式: 戰鬥';
                 btn.className = currentMode === 'lobby' 
                     ? "px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs sm:text-sm font-bold rounded-lg shadow transition-colors whitespace-nowrap"
                     : "px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-xs sm:text-sm font-bold rounded-lg shadow transition-colors whitespace-nowrap";
+            
+                // 重新整理服裝選單並載入 (會自動 Fallback)
                 refreshCostumeDropdownAndLoad();
             }
             
-            function selectCharacter(charObj, spineName, iconUrl) {
+                    function selectCharacter(charObj, spineName, iconUrl) {
                 activeCharData = { ...charObj, spineName: spineName };
                 document.getElementById('spineViewerSection').classList.remove('hidden');
                 
+                // 🌟 1. 抓取該性格對應的顏色 (若無則預設為黃色)
                 const pColors = personalityColors[charObj.personality] || "border-amber-400 text-amber-900";
-                const borderClass = pColors.split(' ')[0]; const textClass = pColors.split(' ')[1];  
+                const borderClass = pColors.split(' ')[0]; // 取出 border 顏色
+                const textClass = pColors.split(' ')[1];   // 取出 text 顏色
                 
+                // 🌟 2. 替換 Icon 的圖片與外框顏色 (並自動顯示)
+                // 🌟 2. 替換 Icon 為雪碧圖組合
+                // 🌟 2. 替換 Icon 為雪碧圖組合
                 const iconEl = document.getElementById('activeCharIconContainer');
                 const charSpriteBase = CHAR_SPRITE_MAP[charObj.personality] || "sprite-char-innocence";
                 const charSpriteClass = `sprite-${spineName}`;
+                
                 let raceKey = charObj.race; if (raceKey === "???") raceKey = "unknown";
                 const raceSprite = SPRITE_CLASS_MAP[`race_${raceKey}`] || "sprite-Bg_Unknown";
                 
@@ -417,24 +539,32 @@
                         <div class="sprite-base sprite-common ${raceSprite} shrink-0 scale-[0.45]"></div>
                     </div>
                     <div class="w-full h-full bg-white/20 dark:bg-black/20 backdrop-blur-[1px] absolute inset-0"></div>
-                    <div class="sprite-base ${charSpriteBase} ${charSpriteClass} shrink-0 scale-[0.36] sm:scale-[0.72] relative z-10"></div>
+                    <div class="sprite-base ${charSpriteBase} ${charSpriteClass} shrink-0 scale-[0.36] sm:scale-[0.72]relative z-10"></div>
                 `;
                 iconEl.className = `w-10 h-10 sm:w-12 sm:h-12 rounded-lg border-2 ${borderClass} shadow-sm overflow-hidden bg-white dark:bg-slate-700 flex items-center justify-center shrink-0 relative`;
                 
+                // 🌟 3. 替換名稱與文字顏色
                 const nameEl = document.getElementById('activeCharName');
-                nameEl.innerText = getI18n(charObj.name); nameEl.className = `text-lg sm:text-xl font-black ${textClass}`;
+                nameEl.innerText = getI18n(charObj.name);
+                nameEl.className = `text-lg sm:text-xl font-black ${textClass}`;
             
-                document.getElementById('animList').classList.add('hidden'); document.getElementById('slotList').classList.add('hidden');
+                // 重置狀態
+                document.getElementById('animList').classList.add('hidden');
+                document.getElementById('slotList').classList.add('hidden');
                 slotVisibilityMap = {};
                 
                 applyRaceBackground(charObj.name);
                 document.getElementById('spineViewerSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            
                 refreshCostumeDropdownAndLoad();
             }
+            
             
             function refreshCostumeDropdownAndLoad() {
                 const costumes = getCostumeList(activeCharData.name, currentMode);
                 const fallbackKey = costumes.length > 0 ? costumes[0] : activeCharData.spineName;
+                
+                // 嘗試保留當前選擇的服裝，如果新模式找不到，就用 fallbackKey
                 const selectEl = document.getElementById('costumeSelect');
                 const currentSelection = selectEl.value;
                 let targetCostume = costumes.includes(currentSelection) ? currentSelection : fallbackKey;
@@ -443,13 +573,18 @@
                 if (costumes.length > 0) {
                     costumes.forEach((costume, idx) => {
                         const opt = document.createElement('option');
-                        opt.value = costume; opt.text = idx === 0 ? "預設服裝" : `服裝 ${idx}`;
+                        opt.value = costume;
+                        opt.text = idx === 0 ? "預設服裝" : `服裝 ${idx}`;
                         if (costume === targetCostume) opt.selected = true;
                         selectEl.appendChild(opt);
                     });
                 } else {
-                    const opt = document.createElement('option'); opt.value = targetCostume; opt.text = "預設模型"; selectEl.appendChild(opt);
+                    const opt = document.createElement('option');
+                    opt.value = targetCostume;
+                    opt.text = "預設模型";
+                    selectEl.appendChild(opt);
                 }
+            
                 loadSpine(activeCharData.spineName, targetCostume, currentMode);
             }
             
@@ -458,41 +593,62 @@
                 loadSpine(activeCharData.spineName, costumeKey, currentMode);
             }
             
+            // 核心載入：根據模式設定路徑與參數
+            // 核心載入：根據模式設定路徑與參數
             function loadSpine(baseFolderKey, costumeKey, mode) {
                const container = document.getElementById('spineCanvasContainer');
+               
+               // 🌟 初始化語音管理器
                VoiceManager.init(baseFolderKey, costumeKey);
+               
                if (globalPlayer) { globalPlayer.dispose(); globalPlayer = null; }
             
-               // 保留 AR Video 標籤，只修改內部其他元素
-               const existingVideo = document.getElementById('arVideoBg');
                container.innerHTML = '<div class="spine-player-loading-custom"></div>';
-               if (existingVideo) container.appendChild(existingVideo);
-               
                document.getElementById('playerControls').classList.add('opacity-50', 'pointer-events-none');
                document.getElementById('slotsContainerInner').innerHTML = '<div class="p-3 text-center text-xs font-bold text-gray-400">讀取資料中...</div>';
             
                currentZoom = mode === 'battle' ? 2.5 : 1.0; 
-               const skelUrl = mode === 'lobby' ? `./spine_assets/${baseFolderKey}/${costumeKey}.skel.bytes` : `./spine_sd_assets/${costumeKey}.skel.bytes`;
-               const atlasUrl = mode === 'lobby' ? `./spine_assets/${baseFolderKey}/${costumeKey}.atlas.txt` : `./spine_sd_assets/${costumeKey}.atlas.txt`;
+               
+               const skelUrl = mode === 'lobby' 
+                   ? `./spine_assets/${baseFolderKey}/${costumeKey}.skel.bytes` 
+                   : `./spine_sd_assets/${costumeKey}.skel.bytes`;
+                   
+               const atlasUrl = mode === 'lobby' 
+                   ? `./spine_assets/${baseFolderKey}/${costumeKey}.atlas.txt`
+                   : `./spine_sd_assets/${costumeKey}.atlas.txt`;
+            
+               const isPma = true; 
                const baseViewport = mode === 'lobby' ? { x: -400, y: 0, width: 800, height: 1000 } : { x: -750, y: -150, width: 1500, height: 3000 };
             
                globalPlayer = new spine.SpinePlayer(container, {
-                   skelUrl: skelUrl, atlasUrl: atlasUrl, premultipliedAlpha: true,
-                   backgroundColor: "#00000000", alpha: true, showControls: false,
-                   showLoading: false, debugRendering: true, viewport: { ...baseViewport },
+                   skelUrl: skelUrl,
+                   atlasUrl: atlasUrl,
+                   premultipliedAlpha: isPma,
+                   backgroundColor: "#00000000", 
+                   alpha: true,
+                   showControls: false,
+                   showLoading: false, 
+                   debugRendering: true,
+                   viewport: { ...baseViewport },
             
                    success: function (player) {
                        const loader = container.querySelector('.spine-player-loading-custom');
                        if (loader) loader.remove();
+            
                        document.getElementById('playerControls').classList.remove('opacity-50', 'pointer-events-none');
                        setSpeed(1);
+                                             // 🌟 開啟骨架 Debug 顯示模式 (加上 200ms 延遲強制注入)
                        setTimeout(() => {
                            if (player.sceneRenderer) {
-                               player.sceneRenderer.debugRendering = true;
-                               player.sceneRenderer.debugBones = true;     
-                               player.sceneRenderer.debugRegions = false;  
-                               player.sceneRenderer.debugMeshes = false;   
+                               player.sceneRenderer.debugRendering = true; // 總開關
+                               player.sceneRenderer.debugBones = true;     // 顯示骨骼線條與節點
+                               player.sceneRenderer.debugRegions = false;  // 隱藏圖片外框
+                               player.sceneRenderer.debugMeshes = false;   // 隱藏網格
+                               
+                               // 💡 強制重繪一幀，讓骨架射線立刻衝出來
                                player.skeleton.updateWorldTransform();
+                           } else {
+                               console.log("提示：200ms 後依然抓不到 sceneRenderer");
                            }
                        }, 200);
             
@@ -502,81 +658,45 @@
                            if (targetSkin) { player.skeleton.setSkinByName(targetSkin.name); }
                        }
                        
-                       player.skeleton.scaleX = currentZoom; player.skeleton.scaleY = currentZoom;
+                       player.skeleton.scaleX = currentZoom;
+                       player.skeleton.scaleY = currentZoom;
                        player.skeleton.setToSetupPose(); 
             
                        const shadowSlot = player.skeleton.findSlot("Sport_Face_Shadow");
-                       if (shadowSlot) { shadowSlot.data.blendMode = 0; shadowSlot.color.a = 0.6; }
+                       if (shadowSlot) {
+                           shadowSlot.data.blendMode = 0;
+                           shadowSlot.color.a = 0.6;
+                       }
             
                        player.skeleton.updateWorldTransform();
-                       buildAnimationDropdown(player); buildSlotsPanel(player);
+                       buildAnimationDropdown(player);
+                       buildSlotsPanel(player);
             
                        setTimeout(() => {
                            const anims = player.skeleton.data.animations.map(a => a.name);
                            const fallbackAnim = mode === 'lobby' ? 'Idle_1' : 'Idle';
                            let startAnim = anims.includes(fallbackAnim) ? fallbackAnim : (anims.includes('idle') ? 'idle' : anims[0]);
+                           
                            if (startAnim) {
                                player.animationState.setAnimation(0, startAnim, true);
                                document.getElementById('animSelectText').innerText = startAnim;
                                document.getElementById('btnPlayPause').innerText = '⏸️';
                            }
                            player.play();
+                           
+                           // 🌟 如果是大廳模式，播放出場/換裝語音
                            if (mode === 'lobby') VoiceManager.playSpawn();
+            
                            setupComplexInteractions(player, container);
                            window.dispatchEvent(new Event('resize'));
                        }, 50);
                    },
-                   error: function () {
+                   error: function (player, reason) {
                        container.innerHTML = `<div class="text-red-500 font-bold text-sm text-center p-4">載入失敗：${mode === 'lobby' ? '大廳' : '戰鬥'}檔案可能不存在</div>`;
                    }
                });
             }
-
-            // ==========================================
-            // 🌟 AR 攝影機模式 (WebRTC)
-            // ==========================================
-            let arStream = null;
-
-            async function toggleARMode() {
-                const video = document.getElementById('arVideoBg');
-                const container = document.getElementById('spineCanvasContainer');
-                const btn = document.getElementById('btnARMode');
-
-                if (arStream) {
-                    // 關閉 AR 模式
-                    arStream.getTracks().forEach(track => track.stop());
-                    arStream = null;
-                    video.classList.add('hidden');
-                    
-                    btn.innerHTML = '📷 AR 模式';
-                    btn.classList.replace('bg-red-500', 'bg-purple-500');
-                    btn.classList.replace('hover:bg-red-600', 'hover:bg-purple-600');
-                    
-                    if (activeCharData) applyRaceBackground(activeCharData.name);
-                } else {
-                    // 開啟 AR 模式
-                    try {
-                        arStream = await navigator.mediaDevices.getUserMedia({ 
-                            video: { facingMode: { ideal: "environment" } } 
-                        });
-                        video.srcObject = arStream;
-                        video.classList.remove('hidden');
-                        
-                        container.style.backgroundImage = "none";
-                        container.classList.remove('animated-bg');
-                        
-                        btn.innerHTML = '❌ 關閉 AR';
-                        btn.classList.replace('bg-purple-500', 'bg-red-500');
-                        btn.classList.replace('hover:bg-purple-600', 'hover:bg-red-600');
-                        
-                        resetCamera();
-                    } catch (err) {
-                        console.error("相機開啟失敗:", err);
-                        alert(`相機開啟失敗 😢\n\n錯誤類型：${err.name}\n錯誤訊息：${err.message}\n\n(如果是 NotAllowedError，代表依然被瀏覽器權限阻擋)`);
-                    }
-                }
-            }
-
+            // --- 播放器控制與 UI 刷新 ---
             function togglePlay() {
                 if (!globalPlayer) return;
                 if (globalPlayer.paused) {
@@ -588,7 +708,7 @@
             
             function setSpeed(speed) {
                 if (!globalPlayer) return;
-                globalPlayer.speed = speed;
+                globalPlayer.speed = speed; // 統一使用 speed 屬性
                 document.querySelectorAll('.speed-btn').forEach(btn => {
                     if (btn.innerText.includes(speed.toFixed(1))) {
                         btn.className = "speed-btn px-2 py-1 text-[10px] sm:text-xs font-bold rounded bg-amber-200 dark:bg-slate-600 text-amber-900 dark:text-white";
@@ -599,8 +719,10 @@
             }
             
             function buildAnimationDropdown(player) {
-                const animList = document.getElementById('animList'); animList.innerHTML = '';
+                const animList = document.getElementById('animList');
+                animList.innerHTML = '';
                 const anims = player.skeleton.data.animations.map(a => a.name).sort();
+                
                 anims.forEach(animName => {
                     const btn = document.createElement('button');
                     btn.className = "text-left px-3 py-2.5 text-[11px] sm:text-xs hover:bg-amber-100 dark:hover:bg-slate-700 w-full truncate transition-colors text-gray-700 dark:text-gray-300 flex-shrink-0 border-b border-gray-50 dark:border-slate-700/50";
@@ -618,19 +740,23 @@
             }
             
             function buildSlotsPanel(player) {
-                const container = document.getElementById('slotsContainerInner'); container.innerHTML = '';
+                const container = document.getElementById('slotsContainerInner');
+                container.innerHTML = '';
                 slotVisibilityMap = {};
+                
                 const slots = player.skeleton.slots.filter(s => s.attachment != null);
             
                 slots.forEach((slot) => {
-                    const slotName = slot.data.name; slotVisibilityMap[slotName] = true;
+                    const slotName = slot.data.name;
+                    slotVisibilityMap[slotName] = true;
                     const originalColor = { r: slot.color.r, g: slot.color.g, b: slot.color.b };
             
                     const item = document.createElement('label');
                     item.className = "flex items-center gap-2 px-3 py-2 lg:py-1.5 hover:bg-red-50 dark:hover:bg-slate-700 cursor-pointer transition-colors border-b border-gray-50 dark:border-slate-700/50 group";
                     
                     const checkbox = document.createElement('input');
-                    checkbox.type = "checkbox"; checkbox.checked = true;
+                    checkbox.type = "checkbox";
+                    checkbox.checked = true;
                     checkbox.className = "w-3.5 h-3.5 text-amber-500 rounded focus:ring-amber-500 border-gray-300";
                     checkbox.onchange = (e) => { toggleSlot(slotName, e.target.checked); };
             
@@ -642,7 +768,9 @@
                     item.onmouseenter = () => { slot.color.r = 1; slot.color.g = 0; slot.color.b = 0; };
                     item.onmouseleave = () => { slot.color.r = originalColor.r; slot.color.g = originalColor.g; slot.color.b = originalColor.b; };
             
-                    item.appendChild(checkbox); item.appendChild(span); container.appendChild(item);
+                    item.appendChild(checkbox);
+                    item.appendChild(span);
+                    container.appendChild(item);
                 });
             
                 if(!globalPlayer.config.injectedUpdate) {
@@ -688,6 +816,7 @@
                 globalPlayer.skeleton.scaleY = currentZoom;
                 globalPlayer.skeleton.x = 0;
                 globalPlayer.skeleton.y = 0;
+                // 恢復大廳特定的 y 軸錨點偏移
                 if(currentMode === 'lobby') {
                     globalPlayer.skeleton.y = 600 * (1 - currentZoom);
                 }
@@ -697,8 +826,11 @@
                 const canvas = container.querySelector('canvas');
                 if (!canvas) return;
                 canvas.style.touchAction = 'none';
+                // 🌟 無敵坐標轉換器：強行將滑鼠坐標轉為 100% 精準的 Spine 世界坐標
+                // 🌟 無敵坐標轉換器：強行將滑鼠坐標轉為 100% 精準的 Spine 世界坐標
                 function screenToWorldCoords(cam, screenX, screenY, rect) {
                     let vec;
+                    // 🌟 核心修正：移除 rect.height - screenY！Spine 的 API 會自己處理 Y 軸翻轉
                     if (typeof spine !== 'undefined' && spine.webgl && spine.webgl.Vector3) {
                         vec = new spine.webgl.Vector3(screenX, screenY, 0);
                     } else if (typeof spine !== 'undefined' && spine.Vector3) {
@@ -736,11 +868,19 @@
                 let tickleTimer = null; 
                 let voiceRecoveryTimer = null;
             
+                // 🌟 安全獲取當前環境狀態
                 const getIsLobby = () => typeof currentMode === 'undefined' || currentMode === 'lobby';
+                const getBaseViewport = () => {
+                    if (typeof currentMode !== 'undefined') {
+                        return currentMode === 'lobby' ? { x: -400, y: 0, width: 800, height: 1000 } : { x: -750, y: -150, width: 1500, height: 3000 };
+                    }
+                    return { x: -400, y: 0, width: 800, height: 1000 };
+                };
                 const updateUI = (text) => { const el = document.getElementById('animSelectText'); if (el) el.innerText = text; };
                 const safeClearIdle = () => { if (typeof globalIdleTimer !== 'undefined') clearTimeout(globalIdleTimer); };
                 const safeStartIdle = () => { if (typeof startRandomAnimationLoop === 'function') startRandomAnimationLoop(); };
                 
+            // 滾輪縮放保留不動
                 canvas.addEventListener('wheel', (e) => {
                     e.preventDefault();
                     if (!player.skeleton) return;
@@ -756,12 +896,14 @@
                     player.skeleton.y = currentPanY + (isLobby ? 600 * (1 - currentZoom) : 0);
                 }, { passive: false });
             
+                // 🌟 終極坐標對齊版：直接依賴 Spine 相機矩陣
                 function getHitZone(mouseX, mouseY) {
                     if (!getIsLobby()) return null;
                     const rect = canvas.getBoundingClientRect();
                     if (!globalPlayer || !globalPlayer.sceneRenderer || !globalPlayer.sceneRenderer.camera) return null;
                     const cam = globalPlayer.sceneRenderer.camera;
                     
+                    // 🌟 直接呼叫無敵轉換器，取得完美的判定坐標
                     const worldPos = screenToWorldCoords(cam, mouseX, mouseY, rect);
                     player.skeleton.updateWorldTransform();
                  
@@ -778,6 +920,7 @@
                         let targetBone = null;
                         for (let bName of zone.bones) { targetBone = player.skeleton.findBone(bName); if (targetBone) break; }
                         if (targetBone) {
+                            // 坐標已在同一個世界，直接相減計算距離！
                             const distance = Math.hypot(worldPos.x - targetBone.worldX, worldPos.y - targetBone.worldY);
                             if (distance < zone.radius && distance < minDistance) { 
                                 minDistance = distance; 
@@ -821,7 +964,9 @@
                 });
             
                 canvas.addEventListener('pointermove', (e) => {
-                    if (pointers[e.pointerId]) { pointers[e.pointerId] = { x: e.clientX, y: e.clientY }; }
+                    if (pointers[e.pointerId]) {
+                        pointers[e.pointerId] = { x: e.clientX, y: e.clientY };
+                    }
                     const pointerKeys = Object.keys(pointers);
             
                     if (pointerKeys.length === 2) {
@@ -860,34 +1005,47 @@
                         const animNames = player.skeleton.data.animations.map(a => a.name);
             
                         if (hitZoneOnDown.name === "臉頰" && animNames.includes("Touch_Idle")) {
-                            player.animationState.setAnimation(0, "Touch_Idle", true); updateUI("Touch_Idle");
+                            player.animationState.setAnimation(0, "Touch_Idle", true);
+                            updateUI("Touch_Idle");
                         } else if (hitZoneOnDown.name === "頭部" && animNames.includes("Pat_Idle")) {
-                            player.animationState.setAnimation(0, "Pat_Idle", true); updateUI("Pat_Idle");
+                            player.animationState.setAnimation(0, "Pat_Idle", true);
+                            updateUI("Pat_Idle");
                        } else if (hitZoneOnDown.name === "身體" && animNames.includes("Tickle_Idle_1")) {
-                            player.animationState.setAnimation(0, "Tickle_Idle_1", true); updateUI("Tickle_Idle_1");
-                            VoiceManager.playTickleStart(() => {
-                                if (isDragging) {
-                                    if (animNames.includes("Tickle_Idle_2")) {
-                                        player.animationState.setAnimation(0, "Tickle_Idle_2", true); updateUI("Tickle_Idle_2");
-                                    }
-                                    VoiceManager.playTickleDuring();
-                                }
-                            });
-                        }
+            player.animationState.setAnimation(0, "Tickle_Idle_1", true);
+            updateUI("Tickle_Idle_1");
+            
+            // 讓語音決定什麼時候切換動作
+            VoiceManager.playTickleStart(() => {
+            // 當 TickleStart1 說完時，先檢查玩家是否「還在按著 (isDragging)」
+            if (isDragging) {
+            // 切換成笑的動作
+            if (animNames.includes("Tickle_Idle_2")) {
+                player.animationState.setAnimation(0, "Tickle_Idle_2", true);
+                updateUI("Tickle_Idle_2");
+            }
+            // 開始無限循環笑聲
+            VoiceManager.playTickleDuring();
+            }
+            });
+            }
                     }
             
                     if (hasTriggeredRub && hitZoneOnDown && activeInteractBone) {
                         const isCheek = hitZoneOnDown.name === "臉頰";
                         const cam = globalPlayer.sceneRenderer.camera;
+                        
+                        // 1. 把起點與現在的滑鼠位置，精準轉換為世界坐標
                         const startWorld = screenToWorldCoords(cam, startX - rect.left, startY - rect.top, rect);
                         const currentWorld = screenToWorldCoords(cam, e.clientX - rect.left, e.clientY - rect.top, rect);
                         
+                        // 2. 兩者的差距，就是 100% 精準的世界拖曳距離！不會跑太遠也不會太短
                         const stretchIntensity = isCheek ? 0.8 : 0.5; 
                         let worldDx = (currentWorld.x - startWorld.x) * stretchIntensity;
                         let worldDy = (currentWorld.y - startWorld.y) * stretchIntensity;
             
                         if (isCheek && worldDx > 0) worldDx = 0; 
                         
+                        // 3. 【必須保留】利用父骨骼反推初始真實坐標
                         let baseWorld = { x: initialBoneX, y: initialBoneY };
                         if (activeInteractBone.parent) {
                             activeInteractBone.parent.localToWorld(baseWorld);
@@ -916,6 +1074,8 @@
                     } 
                     else if (!hitZoneOnDown) {
                         const cam = globalPlayer.sceneRenderer.camera;
+                        
+                        // 🌟 精準計算前一次與現在滑鼠移動的「世界坐標差」
                         const currentWorld = screenToWorldCoords(cam, e.clientX - rect.left, e.clientY - rect.top, rect);
                         const prevWorld = screenToWorldCoords(cam, lastMouseX - rect.left, lastMouseY - rect.top, rect);
                         
@@ -925,6 +1085,7 @@
                         let currentPanX = player.skeleton.x;
                         let currentPanY = player.skeleton.y - oldZoomOffsetY;
             
+                        // 直接加上精準的世界差異 (1:1對齊，絕對不飄)
                         currentPanX += (currentWorld.x - prevWorld.x);
                         currentPanY += (currentWorld.y - prevWorld.y);
             
@@ -933,13 +1094,19 @@
                         player.skeleton.updateWorldTransform();
                     }
             
-                    lastMouseX = e.clientX; lastMouseY = e.clientY;
+                    lastMouseX = e.clientX;
+                    lastMouseY = e.clientY;
                 });
-
+                // 🌟 新增：滑鼠移動時，檢查是否在互動區，自動切換游標
                 canvas.addEventListener('mousemove', (e) => {
                     const rect = canvas.getBoundingClientRect();
                     const hit = getHitZone(e.clientX - rect.left, e.clientY - rect.top);
-                    if (hit) { canvas.style.cursor = 'pointer'; } else { canvas.style.cursor = 'move'; }
+                    
+                    if (hit) {
+                        canvas.style.cursor = 'pointer'; // 變成手指
+                    } else {
+                        canvas.style.cursor = 'move';    // 回復原本的十字箭咀
+                    }
                 });
             
                 const stopDrag = (e) => { 
@@ -978,36 +1145,61 @@
             
                     if (hasTriggeredRub) {
                         if (hitZoneOnDown && hitZoneOnDown.name === "臉頰" && animNames.includes("Touch_End")) {
-                            player.animationState.setAnimation(0, "Touch_End", true); updateUI("Touch_End");
+                            player.animationState.setAnimation(0, "Touch_End", true);
+                            updateUI("Touch_End");
+                            
                             VoiceManager.playTouch(() => {
                                 voiceRecoveryTimer = setTimeout(() => {
-                                    player.animationState.setAnimation(0, "Idle_1", true); updateUI("Idle_1"); safeStartIdle();
+                                    player.animationState.setAnimation(0, "Idle_1", true);
+                                    updateUI("Idle_1");
+                                    safeStartIdle();
                                 }, 500);
                             });
+            
                         } else if (hitZoneOnDown && hitZoneOnDown.name === "頭部" && animNames.includes("Pat_End")) {
-                            player.animationState.setAnimation(0, "Pat_End", true); updateUI("Pat_End");
+                            player.animationState.setAnimation(0, "Pat_End", true);
+                            updateUI("Pat_End");
+                            
                             VoiceManager.playPat(() => {
                                 voiceRecoveryTimer = setTimeout(() => {
-                                    player.animationState.setAnimation(0, "Idle_1", true); updateUI("Idle_1"); safeStartIdle();
+                                    player.animationState.setAnimation(0, "Idle_1", true);
+                                    updateUI("Idle_1");
+                                    safeStartIdle();
                                 }, 500);
                             });
+            
                         } else if (hitZoneOnDown && hitZoneOnDown.name === "身體" && animNames.includes("Tickle_End")) {
-                            player.animationState.setAnimation(0, "Tickle_End", false); player.animationState.addAnimation(0, "Idle_1", true, 0); updateUI("Tickle_End"); safeStartIdle();
+                            player.animationState.setAnimation(0, "Tickle_End", false);
+                            player.animationState.addAnimation(0, "Idle_1", true, 0);
+                            updateUI("Tickle_End");
+                            safeStartIdle();
                         } else {
-                            player.animationState.setAnimation(0, "Idle_1", true); updateUI("Idle_1"); safeStartIdle();
+                            player.animationState.setAnimation(0, "Idle_1", true);
+                            updateUI("Idle_1");
+                            safeStartIdle();
                         }
                     } else if (hitZoneOnDown && dragDistance < 10) {
                         if ((hitZoneOnDown.name === "頭部" || hitZoneOnDown.name === "臉頰") && animNames.includes("Smash_End_1")) {
+                            
                             player.animationState.setAnimation(0, "Smash_End_1", false);
-                            if (animNames.includes("Smash_End_2")) { player.animationState.addAnimation(0, "Smash_End_2", true, 0); }
+                            if (animNames.includes("Smash_End_2")) {
+                                player.animationState.addAnimation(0, "Smash_End_2", true, 0);
+                            }
                             updateUI("Smash_End");
+                            
                             VoiceManager.playSmash(() => {
                                 voiceRecoveryTimer = setTimeout(() => {
-                                    player.animationState.setAnimation(0, "Idle_1", true); updateUI("Idle_1"); safeStartIdle();
+                                    player.animationState.setAnimation(0, "Idle_1", true);
+                                    updateUI("Idle_1");
+                                    safeStartIdle();
                                 }, 500);
                             });
-                        } else { safeStartIdle(); }
-                    } else { safeStartIdle(); }
+                        } else {
+                            safeStartIdle();
+                        }
+                    } else {
+                        safeStartIdle();
+                    }
                 };
             
                 canvas.addEventListener('pointerup', stopDrag);
@@ -1016,12 +1208,26 @@
             }
             
             window.onload = function() { initCharacterGrid(); };
+            // 偵測捲動距離以顯示/隱藏按鈕
             window.onscroll = function() {
-                const btn = document.getElementById("backToTop");
-                if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) { btn.style.display = "flex"; } else { btn.style.display = "none"; }
+            const btn = document.getElementById("backToTop");
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+            btn.style.display = "flex";
+            } else {
+            btn.style.display = "none";
+            }
             };
-            function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+            
+            // 執行平滑滾動至頂部
+            function scrollToTop() {
+            window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+            });
+            }
         </script>
-        <button id="backToTop" onclick="scrollToTop()" title="回頂部">▲</button>
+        <button id="backToTop" onclick="scrollToTop()" title="回頂部">
+        ▲
+        </button>
     </body>
 </html>
