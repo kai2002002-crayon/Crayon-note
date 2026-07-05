@@ -111,6 +111,18 @@
                     
                     <div class="text-gray-500 font-bold tracking-widest bg-white/80 dark:bg-slate-800/80 px-4 py-2 rounded-lg backdrop-blur-sm shadow-sm">等待載入...</div>
                 </div>
+
+                <!-- 🌟 新增：AR 專屬相機控制區塊 (預設隱藏) -->
+                <div id="arControlsBar" class="hidden bg-slate-800/90 dark:bg-slate-900/90 backdrop-blur-md p-3 rounded-xl border-2 border-slate-600 shadow-lg relative z-20 flex justify-center items-center gap-3 transition-all duration-300">
+                    <span class="text-xs sm:text-sm font-bold text-amber-400 flex-shrink-0 tracking-widest">📷 相機面板</span>
+                    <button onclick="switchCamera()" class="px-4 py-2 bg-teal-500 hover:bg-teal-600 text-white text-xs sm:text-sm font-bold rounded-lg shadow transition-colors flex-1 max-w-[140px]">
+                        🔄 翻轉鏡頭
+                    </button>
+                    <button onclick="captureARPhoto()" class="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white text-xs sm:text-sm font-bold rounded-lg shadow transition-colors flex-1 max-w-[140px]">
+                        📸 拍照儲存
+                    </button>
+                </div>
+
                 <div id="playerControls" class="bg-amber-50 dark:bg-slate-700/50 p-3 rounded-xl border border-amber-200 dark:border-slate-600 flex flex-col gap-3 opacity-50 pointer-events-none transition-opacity">
                     <div class="flex items-center justify-between gap-2 flex-wrap">
                         <div class="flex items-center gap-2">
@@ -125,17 +137,10 @@
                         <div class="flex items-center gap-2">
                             <button id="btnModeSwitch" onclick="toggleViewerMode()" class="px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs sm:text-sm font-bold rounded-lg shadow transition-colors whitespace-nowrap">
                             🔄 模式: 大廳
-                            <!-- 🌟 AR 模式按鈕 -->
+                            </button>
+                            <!-- AR 總開關保留在此處 -->
                             <button id="btnARMode" onclick="toggleARMode()" class="px-3 py-1.5 bg-purple-500 hover:bg-purple-600 text-white text-[10px] sm:text-sm font-bold rounded-lg shadow transition-colors whitespace-nowrap">
-                            📷 AR
-                            </button>
-                            <!-- 🌟 切換鏡頭按鈕 (預設隱藏) -->
-                            <button id="btnSwitchCamera" onclick="switchCamera()" class="hidden px-3 py-1.5 bg-teal-500 hover:bg-teal-600 text-white text-[10px] sm:text-sm font-bold rounded-lg shadow transition-colors whitespace-nowrap">
-                            🔄 相機
-                            </button>
-                            <!-- 🌟 拍照按鈕 (預設隱藏) -->
-                            <button id="btnCapture" onclick="captureARPhoto()" class="hidden px-3 py-1.5 bg-yellow-500 hover:bg-yellow-600 text-white text-[10px] sm:text-sm font-bold rounded-lg shadow transition-colors whitespace-nowrap">
-                                📸 拍照
+                            📷 開啟AR
                             </button>
                             <select id="costumeSelect" onchange="changeSpineCostume(this.value)" class="bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-xs sm:text-sm font-bold rounded-lg px-2 py-1.5 outline-none focus:ring-2 focus:ring-amber-500 min-w-[100px]">
                                 <option value="">服裝</option>
@@ -552,34 +557,95 @@
                HTMLCanvasElement.prototype.getContext = originalGetContext;
             }
             // ==========================================
-            // 🌟 AR 攝影機模式 (WebRTC)
+            // 🌟 AR 攝影機模式 (WebRTC) + 點擊對焦功能
             // ==========================================
             let arStream = null;
-            let useFrontCamera = false; // 新增：追蹤目前是否使用前鏡頭
+            let useFrontCamera = false;
+
+            // 1. 初始化「點擊對焦」的黃色方框 UI
+            function initFocusRing() {
+                if (document.getElementById('arFocusRing')) return; // 確保只建立一次
+                
+                const focusRing = document.createElement('div');
+                focusRing.id = "arFocusRing";
+                // 仿原生相機風格：黃色邊框、預設隱藏、帶有縮放動畫
+                focusRing.className = "absolute hidden w-16 h-16 border-[2.5px] border-yellow-400 pointer-events-none z-[150] shadow-sm transition-all duration-200 ease-out";
+                document.getElementById('spineCanvasContainer').appendChild(focusRing);
+
+                // 綁定點擊事件到畫布容器上
+                document.getElementById('spineCanvasContainer').addEventListener('click', async (e) => {
+                    if (!arStream) return; // 只有在 AR 模式才觸發對焦
+                    
+                    const container = document.getElementById('spineCanvasContainer');
+                    const rect = container.getBoundingClientRect();
+                    const tapX = e.clientX - rect.left;
+                    const tapY = e.clientY - rect.top;
+
+                    // 1️⃣ 顯示黃色框框動畫
+                    focusRing.style.left = `${tapX - 32}px`; // 32 是寬度 64px 的一半
+                    focusRing.style.top = `${tapY - 32}px`;
+                    focusRing.style.transform = "scale(1.3)";
+                    focusRing.classList.remove('hidden');
+                    
+                    setTimeout(() => focusRing.style.transform = "scale(1)", 50);
+                    setTimeout(() => focusRing.classList.add('hidden'), 2000); // 2秒後淡出隱藏
+
+                    // 2️⃣ 呼叫底層相機 WebRTC 對焦 API
+                    try {
+                        const track = arStream.getVideoTracks()[0];
+                        const caps = track.getCapabilities();
+
+                        // 如果鏡頭支援手動對焦 API
+                        if (caps.focusMode) {
+                            const advancedOpts = {};
+                            
+                            // 設定對焦座標 (需轉換為 0.0 ~ 1.0 的比例)
+                            if (caps.pointsOfInterest) {
+                                advancedOpts.pointsOfInterest = [{ x: tapX / rect.width, y: tapY / rect.height }];
+                            }
+                            
+                            // 觸發單次點擊對焦 (Single-shot)
+                            if (caps.focusMode.includes('single-shot')) {
+                                advancedOpts.focusMode = 'single-shot';
+                            } else if (caps.focusMode.includes('continuous')) {
+                                advancedOpts.focusMode = 'continuous';
+                            }
+                            
+                            // 應用相機參數
+                            if (Object.keys(advancedOpts).length > 0) {
+                                await track.applyConstraints({ advanced: [advancedOpts] });
+                            }
+                        }
+                    } catch (err) {
+                        console.warn("此裝置/瀏覽器不支援底層手動對焦 API", err);
+                    }
+                });
+            }
 
             async function toggleARMode() {
                 const video = document.getElementById('arVideoBg');
                 const container = document.getElementById('spineCanvasContainer');
                 const btn = document.getElementById('btnARMode');
-                const btnCapture = document.getElementById('btnCapture');
-                const btnSwitchCamera = document.getElementById('btnSwitchCamera');
+                // 取得新建立的 AR 專屬控制區塊
+                const arControlsBar = document.getElementById('arControlsBar');
+
+                initFocusRing(); // 確保對焦框已經載入
 
                 if (arStream) {
-                    // 關閉 AR 模式時：隱藏拍照與翻轉按鈕
-                    btnCapture.classList.add('hidden');
-                    btnSwitchCamera.classList.add('hidden');
+                    // ❌ 關閉 AR 模式
+                    arControlsBar.classList.add('hidden'); // 直接隱藏整條工具列
                     
                     arStream.getTracks().forEach(track => track.stop());
                     arStream = null;
                     video.classList.add('hidden');
                     
-                    btn.innerHTML = '📷 AR';
+                    btn.innerHTML = '📷 開啟AR';
                     btn.classList.replace('bg-red-500', 'bg-purple-500');
                     btn.classList.replace('hover:bg-red-600', 'hover:bg-purple-600');
                     
                     if (activeCharData) applyRaceBackground(activeCharData.name);
                 } else {
-                    // 開啟 AR 模式：注意，此時先不顯示拍照按鈕
+                    // ✅ 開啟 AR 模式
                     try {
                         arStream = await navigator.mediaDevices.getUserMedia({ 
                             video: { facingMode: useFrontCamera ? "user" : { ideal: "environment" } } 
@@ -596,16 +662,23 @@
                         
                         resetCamera();
                         
-                        // 🌟 只有當相機「成功取得權限並開啟」後，才顯示拍照與翻轉按鈕
-                        btnCapture.classList.remove('hidden');
-                        btnSwitchCamera.classList.remove('hidden');
+                        // 🌟 相機啟動成功後，顯示專屬的相機控制面板
+                        arControlsBar.classList.remove('hidden');
+
+                        // 啟動 AR 時，嘗試強制開啟系統的「連續自動對焦」
+                        try {
+                            const track = arStream.getVideoTracks()[0];
+                            const caps = track.getCapabilities();
+                            if (caps.focusMode && caps.focusMode.includes('continuous')) {
+                                await track.applyConstraints({ advanced: [{ focusMode: "continuous" }] });
+                            }
+                        } catch(e) { console.warn("無法啟動連續對焦", e); }
                         
                     } catch (err) {
                         console.error("相機開啟失敗:", err);
-                        // 發生錯誤或沒有相機時，確保按鈕維持隱藏
-                        btnCapture.classList.add('hidden');
-                        btnSwitchCamera.classList.add('hidden');
-                        alert(`相機開啟失敗 😢\n\n錯誤類型：${err.name}\n錯誤訊息：${err.message}\n\n(可能原因：無相機鏡頭、或瀏覽器權限被拒絕)`);
+                        // 如果啟動失敗或沒鏡頭，確保面板保持隱藏
+                        arControlsBar.classList.add('hidden'); 
+                        alert(`相機開啟失敗 😢\n請確認瀏覽器權限是否允許使用相機。`);
                     }
                 }
             }
@@ -629,11 +702,20 @@
                     });
                     const video = document.getElementById('arVideoBg');
                     video.srcObject = arStream;
+
+                    // 切換鏡頭後同樣嘗試重啟自動對焦
+                    try {
+                        const track = arStream.getVideoTracks()[0];
+                        const caps = track.getCapabilities();
+                        if (caps.focusMode && caps.focusMode.includes('continuous')) {
+                            await track.applyConstraints({ advanced: [{ focusMode: "continuous" }] });
+                        }
+                    } catch(e) {}
+                    
                 } catch (err) {
                     console.error("切換鏡頭失敗:", err);
-                    alert("切換鏡頭失敗 😢\n可能是您的裝置沒有另一個鏡頭。");
-                    // 如果切換失敗，強制關閉 AR 以避免畫面卡死
-                    toggleARMode(); 
+                    alert("切換鏡頭失敗 😢\n可能是您的裝置沒有支援另一個鏡頭。");
+                    toggleARMode(); // 若失敗則安全關閉 AR
                 }
             }
             // ==========================================
