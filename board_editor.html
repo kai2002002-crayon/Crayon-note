@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>著色板路徑繪製工具</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        /* 畫布網格設定由 JS 動態寫入，這裡只留共用設定 */
+        #board {
+            display: grid;
+            gap: 1px;
+            background-color: #ffffff;
+            border: 2px solid #475569;
+            padding: 1px;
+            width: max-content;
+            touch-action: none;
+        }
+
+        .cell {
+            width: 64px;
+            height: 64px;
+            background-color: #cbd5e1;
+            cursor: crosshair;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .cell:hover { filter: brightness(0.9); }
+
+        .tool-btn {
+            width: 64px;
+            height: 64px;
+            border: 3px solid transparent;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: transform 0.1s;
+        }
+        .tool-btn:hover { transform: scale(1.05); }
+        .tool-btn.active { border-color: #fbbf24; background-color: #fef3c7; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .tool-icon { width: 100%; height: 100%; object-fit: contain; }
+    </style>
+</head>
+<body class="bg-slate-800 text-slate-200 min-h-screen flex flex-col items-center py-8">
+
+    <h1 class="text-3xl font-black text-amber-400 mb-6">🖍️ 著色板路徑繪製工具</h1>
+
+    <div class="flex flex-col md:flex-row gap-8 items-start">
+        
+        <!-- 左側：工具列 (調色盤 & 設定) -->
+        <div class="bg-slate-700 p-4 rounded-xl shadow-lg flex flex-col items-center gap-3 w-full md:w-auto">
+            
+            <!-- 🌟 新增：尺寸設定區塊 -->
+            <div class="w-full bg-slate-800 p-3 rounded-lg border border-slate-600 mb-2">
+                <h2 class="font-bold text-slate-300 text-sm mb-2 text-center">📐 畫布尺寸設定</h2>
+                <div class="flex gap-2 w-full">
+                    <label class="flex flex-col text-[11px] text-slate-400 font-bold w-1/2">
+                        橫向格數 (Cols)
+                        <input type="number" id="inputCols" value="7" min="1" max="30" class="mt-1 px-2 py-1.5 bg-slate-700 border border-slate-500 rounded text-white text-center outline-none focus:border-amber-400">
+                    </label>
+                    <label class="flex flex-col text-[11px] text-slate-400 font-bold w-1/2">
+                        縱向格數 (Rows)
+                        <input type="number" id="inputRows" value="14" min="1" max="50" class="mt-1 px-2 py-1.5 bg-slate-700 border border-slate-500 rounded text-white text-center outline-none focus:border-amber-400">
+                    </label>
+                </div>
+                <button onclick="applyNewSize()" class="mt-3 w-full px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white font-bold text-sm rounded shadow transition">
+                    套用新尺寸
+                </button>
+            </div>
+
+            <h2 class="font-bold text-amber-300 border-b border-slate-500 pb-2 w-full text-center">選擇蠟筆</h2>
+            <div id="palette" class="grid grid-cols-2 gap-2"></div>
+            
+            <button onclick="clearBoard()" class="mt-2 w-full px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-bold rounded shadow transition">
+                🗑️ 清空畫布
+            </button>
+            <button onclick="exportPNG()" class="mt-2 w-full px-4 py-3 bg-green-500 hover:bg-green-600 text-white font-black rounded-lg shadow-lg transition flex items-center justify-center gap-2">
+                📸 匯出 PNG
+            </button>
+        </div>
+
+        <!-- 右側：繪圖區 -->
+        <div class="bg-slate-700 p-6 rounded-xl shadow-lg flex flex-col items-center overflow-auto max-w-[90vw] max-h-[85vh]">
+            <div class="mb-3 text-sm text-slate-400 font-bold shrink-0">提示：支援按住滑鼠左鍵「拖曳」連續繪製！</div>
+            <div id="board" draggable="false"></div>
+        </div>
+
+    </div>
+
+    <canvas id="exportCanvas" class="hidden"></canvas>
+
+    <script>
+        const ICONS = {
+            START: "https://i.postimg.cc/qBbXP4x1/START.png",
+            GATE: "https://i.postimg.cc/jqgQpt4z/GATE.png",
+            PATH: "https://i.postimg.cc/SQT7BkfG/PATH.png",
+            PURPLE: "https://i.postimg.cc/pVGYwRJZ/PURPLE.png",
+            ATK: "https://i.postimg.cc/1RCcksrw/ATK.png",
+            DEF: "https://i.postimg.cc/zDtSs8FC/DEF.png",
+            HP: "https://i.postimg.cc/8kKB2Nmm/HP.png",
+            CRI: "https://i.postimg.cc/zDtSs8Fw/CRI.png",
+            RES: "https://i.postimg.cc/fW2jGDfC/RES.png",
+            ERASE: null 
+        };
+
+        // 🌟 將 const 改為 let，讓程式可以動態修改它們
+        let cols = 7;
+        let rows = 14;
+        const CELL_SIZE = 64;
+        const GAP = 1;
+
+        let currentTool = 'START';
+        let isDrawing = false;
+        let boardData = []; 
+        
+        const loadedImages = {};
+        for (const [key, url] of Object.entries(ICONS)) {
+            if (url) {
+                const img = new Image();
+                img.crossOrigin = "anonymous";
+                img.src = url;
+                loadedImages[key] = img;
+            }
+        }
+
+        // 初始化調色盤 (只執行一次)
+        function initPalette() {
+            const palette = document.getElementById('palette');
+            for (const [key, url] of Object.entries(ICONS)) {
+                const btn = document.createElement('div');
+                btn.className = `tool-btn flex items-center justify-center bg-slate-800 ${key === currentTool ? 'active' : ''}`;
+                btn.onclick = () => selectTool(key, btn);
+                btn.title = key;
+                if (url) {
+                    btn.innerHTML = `<img src="${url}" class="tool-icon" draggable="false" alt="${key}">`;
+                } else {
+                    btn.innerHTML = `❌<br><span class="text-[10px]">橡皮擦</span>`;
+                }
+                palette.appendChild(btn);
+            }
+        }
+
+        // 🌟 產生/重置畫布網格
+        function renderBoard() {
+            const board = document.getElementById('board');
+            board.innerHTML = ''; // 清空現有格子
+            
+            // 動態寫入 CSS 網格規則
+            board.style.gridTemplateColumns = `repeat(${cols}, ${CELL_SIZE}px)`;
+            board.style.gridTemplateRows = `repeat(${rows}, ${CELL_SIZE}px)`;
+            
+            boardData = new Array(cols * rows).fill(null);
+
+            for (let i = 0; i < cols * rows; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'cell';
+                cell.dataset.index = i;
+                
+                cell.addEventListener('mousedown', (e) => {
+                    e.preventDefault();
+                    isDrawing = true;
+                    paintCell(cell, i);
+                });
+                cell.addEventListener('mouseenter', (e) => {
+                    if (isDrawing) paintCell(cell, i);
+                });
+                board.appendChild(cell);
+            }
+        }
+
+        // 🌟 套用新尺寸按鈕邏輯
+        function applyNewSize() {
+            const newCols = parseInt(document.getElementById('inputCols').value);
+            const newRows = parseInt(document.getElementById('inputRows').value);
+            
+            if (isNaN(newCols) || isNaN(newRows) || newCols < 1 || newRows < 1) {
+                return alert("請輸入有效的正整數數字！");
+            }
+
+            // 防呆確認，避免使用者誤觸清空辛苦畫好的圖
+            if (!confirm("⚠️ 變更尺寸會清空目前所有的畫布進度，確定要繼續嗎？")) return;
+
+            cols = newCols;
+            rows = newRows;
+            renderBoard();
+        }
+
+        function selectTool(key, btnElement) {
+            currentTool = key;
+            document.querySelectorAll('.tool-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+        }
+
+        function paintCell(cellElement, index) {
+            boardData[index] = currentTool === 'ERASE' ? null : currentTool;
+            if (currentTool === 'ERASE') {
+                cellElement.style.backgroundImage = 'none';
+            } else {
+                cellElement.style.backgroundImage = `url('${ICONS[currentTool]}')`;
+            }
+        }
+
+        function clearBoard() {
+            if(!confirm("確定要清空整張畫布嗎？")) return;
+            boardData.fill(null);
+            document.querySelectorAll('.cell').forEach(cell => cell.style.backgroundImage = 'none');
+        }
+
+        function exportPNG() {
+            const canvas = document.getElementById('exportCanvas');
+            // 🌟 匯出時會自動使用最新的 cols 和 rows 計算總寬高
+            canvas.width = (cols * CELL_SIZE) + ((cols - 1) * GAP);
+            canvas.height = (rows * CELL_SIZE) + ((rows - 1) * GAP);
+            
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = "rgba(255, 255, 255, 0)"; 
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            boardData.forEach((toolKey, i) => {
+                const col = i % cols;
+                const row = Math.floor(i / cols);
+                const x = col * (CELL_SIZE + GAP);
+                const y = row * (CELL_SIZE + GAP);
+
+                if (toolKey && loadedImages[toolKey]) {
+                    ctx.drawImage(loadedImages[toolKey], x, y, CELL_SIZE, CELL_SIZE);
+                } else {
+                    ctx.fillStyle = "rgba(203, 213, 225, 0.4)";
+                    ctx.fillRect(x, y, CELL_SIZE, CELL_SIZE);
+                }
+            });
+
+            try {
+                const dataURL = canvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.download = `CrayonPath_${cols}x${rows}_${new Date().getTime()}.png`;
+                link.href = dataURL;
+                link.click();
+            } catch (err) {
+                alert("匯出失敗！請確認在 localhost 環境開啟。");
+            }
+        }
+
+        // 全域滑鼠事件
+        document.addEventListener('mouseup', () => isDrawing = false);
+        document.addEventListener('mouseleave', () => isDrawing = false);
+
+        // 啟動程式
+        initPalette();
+        renderBoard();
+    </script>
+</body>
+</html>
