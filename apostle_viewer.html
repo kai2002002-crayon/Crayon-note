@@ -688,13 +688,7 @@
                 }
             }
             // ==========================================
-            // 🌟 AR 拍照與儲存功能
-            // ==========================================
-            // ==========================================
-            // 🌟 整合版：拍照、合成角色、並呼叫系統相簿儲存
-            // ==========================================
-            // ==========================================
-            // 🌟 最終整合版：拍照、合成角色、並呼叫系統相簿儲存
+            // 🌟 最終整合版：拍照、合成角色、智慧判斷(手機分享 / 電腦下載)
             // ==========================================
             async function captureARPhoto() {
                 try {
@@ -708,7 +702,6 @@
 
                     // 1. 建立一個暫存的 Canvas 來進行合成
                     const captureCanvas = document.createElement('canvas');
-                    // 為了確保比例正確，使用實際畫布的長寬
                     captureCanvas.width = canvas.width || video.videoWidth;
                     captureCanvas.height = canvas.height || video.videoHeight;
                     const ctx = captureCanvas.getContext('2d');
@@ -719,10 +712,10 @@
                     // 3. 再疊加上 Spine 畫布 (角色)
                     ctx.drawImage(canvas, 0, 0, captureCanvas.width, captureCanvas.height);
                     
-                    // 4. 轉為 Base64 圖片數據 (這行如果報錯，通常是因為伺服器的 CORS 安全限制)
+                    // 4. 轉為 Base64 圖片數據
                     const dataURL = captureCanvas.toDataURL('image/png');
                     
-                    // 5. 【關鍵修正】同步將 Base64 轉為 File 物件，避免 Safari 阻擋 await 異步操作
+                    // 5. 同步將 Base64 轉為 File 物件
                     const byteString = atob(dataURL.split(',')[1]);
                     const mimeString = dataURL.split(',')[0].split(':')[1].split(';')[0];
                     const ab = new ArrayBuffer(byteString.length);
@@ -731,25 +724,32 @@
                         ia[i] = byteString.charCodeAt(i);
                     }
                     const blob = new Blob([ab], { type: mimeString });
-                    const file = new File([blob], `AR_trickcal_${new Date().getTime()}.png`, { type: 'image/png' });
+                    const fileName = `AR_trickcal_${new Date().getTime()}.png`;
+                    const file = new File([blob], fileName, { type: 'image/png' });
 
-                    // 6. 呼叫系統分享介面 (iOS 儲存到相簿)
-                    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    // 🌟 判斷是否為手機裝置 (包含 iOS, Android 等)
+                    const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+                    // 6. 手機版：呼叫系統分享介面 (儲存到相簿)
+                    if (isMobile && navigator.canShare && navigator.canShare({ files: [file] })) {
                         await navigator.share({
                             files: [file],
                             title: 'Trickcal AR',
                             text: 'See my Apostle!'
                         });
                     } else {
-                        // 如果不支援分享，改用自動下載備用方案
+                        // 🌟 電腦版 (或不支援分享的手機)：直接觸發背景下載
                         const link = document.createElement('a');
-                        link.download = file.name;
+                        link.download = fileName;
                         link.href = dataURL;
+                        // 為了相容部分電腦瀏覽器 (如 Firefox)，必須先將連結加入畫面再點擊
+                        document.body.appendChild(link); 
                         link.click();
+                        document.body.removeChild(link); // 點擊後移除乾淨
                     }
                 } catch (err) {
                     console.error("拍照功能發生錯誤:", err);
-                    alert("拍照失敗 😢\n錯誤訊息：" + err.name + " - " + err.message + "\n\n(如果是 SecurityError，代表伺服器載入圖片時觸發了跨域安全限制)");
+                    alert("拍照失敗 😢\n錯誤訊息：" + err.name + " - " + err.message);
                 }
             }
             function togglePlay() {
