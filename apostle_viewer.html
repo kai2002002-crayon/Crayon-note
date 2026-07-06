@@ -76,17 +76,23 @@
             <div>
                 <h1 class="text-xl sm:text-2xl font-black text-amber-950 dark:text-amber-400 mb-0.5 flex items-center gap-2">
                     <div class="sprite-base sprite-common sprite-Title_Rim scale-[0.6] sm:scale-[0.6] origin-center shrink-0"></div>
-                    <span class="-ml-2">坨坨動態展示器</span>
+                    <span class="-ml-2" data-i18n="ui_title">坨坨動態展示器</span>
                 </h1>
             </div>
-            <button onclick="window.close()" class="px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm bg-amber-500 text-white font-bold rounded-xl shadow hover:bg-amber-600 transition shrink-0">
+            <div class="flex items-center gap-2 shrink-0">
+                <select id="langSelect" onchange="changeLanguage(this.value)" class="bg-amber-100 dark:bg-slate-700 text-amber-900 dark:text-white border border-amber-300 dark:border-slate-500 text-xs sm:text-sm font-bold rounded-lg px-2 py-1.5 outline-none shadow-sm cursor-pointer">
+                    <option value="zh-TW">繁中</option>
+                    <option value="ja">日本語</option>
+                    <option value="en">EN</option>
+                </select>
+            <button onclick="window.close()" class="px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm bg-amber-500 text-white font-bold rounded-xl shadow hover:bg-amber-600 transition shrink-0" data-i18n="ui_back">
             ⬅️ 返回
             </button>
         </header>
         <section class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md p-4 sm:p-5 rounded-2xl shadow-md border border-amber-200 dark:border-slate-700 transition-all">
             <div class="flex justify-between items-center mb-3 border-b border-amber-200 dark:border-slate-700 pb-2">
-                <h2 class="text-base sm:text-lg font-bold text-amber-900 dark:text-amber-400">👥 選擇坨坨</h2>
-                <button id="toggleAllCharBtn" onclick="toggleAllCharacters()" class="px-3 py-1 text-xs font-bold bg-amber-100 dark:bg-slate-700 text-amber-800 dark:text-gray-300 rounded-lg hover:bg-amber-200 dark:hover:bg-slate-600 transition shadow-sm">
+                <h2 class="text-base sm:text-lg font-bold text-amber-900 dark:text-amber-400" data-i18n="ui_select_char">👥 選擇坨坨</h2>
+                <button id="toggleAllCharBtn" onclick="toggleAllCharacters()" class="px-3 py-1 text-xs font-bold bg-amber-100 dark:bg-slate-700 text-amber-800 dark:text-gray-300 rounded-lg hover:bg-amber-200 dark:hover:bg-slate-600 transition shadow-sm" data-i18n="ui_show_all">
                 顯示全部 🔽
                 </button>
             </div>
@@ -97,10 +103,10 @@
                 <div class="flex items-center gap-3">
                     <div id="activeCharIconContainer" class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg border-2 border-amber-400 shadow-sm overflow-hidden bg-white dark:bg-slate-700 hidden relative items-center justify-center shrink-0"></div>
                     <div>
-                        <h2 id="activeCharName" class="text-lg sm:text-xl font-black text-amber-900 dark:text-amber-300">請先選擇坨坨</h2>
+                        <h2 id="activeCharName" class="text-lg sm:text-xl font-black text-amber-900 dark:text-amber-300" data-i18n="ui_please_select">請先選擇坨坨</h2>
                     </div>
                 </div>
-                <button onclick="resetCamera()" class="px-3 py-1.5 bg-slate-600 hover:bg-slate-700 text-white text-[10px] sm:text-xs font-bold rounded-lg shadow transition-colors whitespace-nowrap shrink-0">
+                <button onclick="resetCamera()" class="px-3 py-1.5 bg-slate-600 hover:bg-slate-700 text-white text-[10px] sm:text-xs font-bold rounded-lg shadow transition-colors whitespace-nowrap shrink-0" data-i18n="ui_camera">
                 🔄 重置
                 </button>
             </div>
@@ -109,16 +115,16 @@
                     <!-- 🌟 AR 攝影機畫面 -->
                     <video id="arVideoBg" class="absolute inset-0 w-full h-full object-cover hidden pointer-events-none z-0" autoplay playsinline muted></video>
                     
-                    <div class="text-gray-500 font-bold tracking-widest bg-white/80 dark:bg-slate-800/80 px-4 py-2 rounded-lg backdrop-blur-sm shadow-sm">等待載入...</div>
+                    <div class="text-gray-500 font-bold tracking-widest bg-white/80 dark:bg-slate-800/80 px-4 py-2 rounded-lg backdrop-blur-sm shadow-sm" data-i18n="ui_waiting">等待載入...</div>
                 </div>
 
                 <!-- 🌟 新增：AR 專屬相機控制區塊 (預設隱藏) -->
                 <div id="arControlsBar" class="hidden bg-slate-800/90 dark:bg-slate-900/90 backdrop-blur-md p-3 rounded-xl border-2 border-slate-600 shadow-lg relative z-20 flex justify-center items-center gap-3 transition-all duration-300">
-                    <span class="text-xs sm:text-sm font-bold text-amber-400 flex-shrink-0 tracking-widest">📷 相機面板</span>
-                    <button onclick="switchCamera()" class="px-4 py-2 bg-teal-500 hover:bg-teal-600 text-white text-xs sm:text-sm font-bold rounded-lg shadow transition-colors flex-1 max-w-[140px]">
+                    <span class="text-xs sm:text-sm font-bold text-amber-400 flex-shrink-0 tracking-widest" data-i18n="ui_ar_panel">📷 相機面板</span>
+                    <button onclick="switchCamera()" class="px-4 py-2 bg-teal-500 hover:bg-teal-600 text-white text-xs sm:text-sm font-bold rounded-lg shadow transition-colors flex-1 max-w-[140px]" data-i18n="ui_ar_flip">
                         🔄 翻轉鏡頭
                     </button>
-                    <button onclick="captureARPhoto()" class="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white text-xs sm:text-sm font-bold rounded-lg shadow transition-colors flex-1 max-w-[140px]">
+                    <button onclick="captureARPhoto()" class="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white text-xs sm:text-sm font-bold rounded-lg shadow transition-colors flex-1 max-w-[140px]" data-i18n="ui_ar_capture">
                         📸 拍照儲存
                     </button>
                 </div>
@@ -135,35 +141,35 @@
                             </div>
                         </div>
                         <div class="flex items-center gap-2">
-                            <button id="btnModeSwitch" onclick="toggleViewerMode()" class="px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs sm:text-sm font-bold rounded-lg shadow transition-colors whitespace-nowrap">
+                            <button id="btnModeSwitch" onclick="toggleViewerMode()" class="px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs sm:text-sm font-bold rounded-lg shadow transition-colors whitespace-nowrap" data-i18n="ui_mode_lobby">
                             🔄 模式: 大廳
                             </button>
                             <!-- AR 總開關保留在此處 -->
-                            <button id="btnARMode" onclick="toggleARMode()" class="px-3 py-1.5 bg-purple-500 hover:bg-purple-600 text-white text-[10px] sm:text-sm font-bold rounded-lg shadow transition-colors whitespace-nowrap">
+                            <button id="btnARMode" onclick="toggleARMode()" class="px-3 py-1.5 bg-purple-500 hover:bg-purple-600 text-white text-[10px] sm:text-sm font-bold rounded-lg shadow transition-colors whitespace-nowrap" data-i18n="ui_ar_open">
                             📷 開啟AR
                             </button>
                             <select id="costumeSelect" onchange="changeSpineCostume(this.value)" class="bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-xs sm:text-sm font-bold rounded-lg px-2 py-1.5 outline-none focus:ring-2 focus:ring-amber-500 min-w-[100px]">
-                                <option value="">服裝</option>
+                                <option value="" data-i18n="ui_costume">服裝</option>
                             </select>
                         </div>
                     </div>
                     <div class="flex justify-between w-full relative z-[100] items-center gap-4">
                         <div class="relative w-[48%]" id="animDropdownWrapper">
                             <button onclick="toggleCustomSelect('animList')" class="custom-select-btn w-full bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-[10px] sm:text-xs font-bold rounded-lg px-2 py-1.5 flex justify-between items-center text-left shadow-sm">
-                            <span id="animSelectText" class="truncate text-amber-900 dark:text-gray-200">選擇動作</span>
+                            <span id="animSelectText" class="truncate text-amber-900 dark:text-gray-200" data-i18n="ui_select_anim">選擇動作</span>
                             <span class="ml-1 text-gray-400 shrink-0 text-[10px]">▼</span>
                             </button>
                             <div id="animList" class="hidden absolute bottom-[calc(100%+6px)] left-0 w-full sm:w-[240px] bg-white dark:bg-slate-800 border border-amber-300 dark:border-slate-600 rounded-lg shadow-2xl max-h-[240px] sm:max-h-[360px] overflow-y-auto flex-col py-1 z-[110]"></div>
                         </div>
                         <div class="relative w-[48%]" id="slotDropdownWrapper">
                             <button onclick="toggleCustomSelect('slotList')" class="custom-select-btn w-full bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-[10px] sm:text-xs font-bold rounded-lg px-2 py-1.5 flex justify-between items-center text-left shadow-sm">
-                            <span class="truncate text-amber-900 dark:text-gray-200">🧩 外觀插槽</span>
+                            <span class="truncate text-amber-900 dark:text-gray-200" data-i18n="ui_slots">🧩 外觀插槽</span>
                             <span class="ml-1 text-gray-400 shrink-0 text-[10px]">▼</span>
                             </button>
                             <div id="slotList" class="hidden absolute bottom-[calc(100%+6px)] right-0 w-full sm:w-[240px] bg-white dark:bg-slate-800 border border-amber-300 dark:border-slate-600 rounded-lg shadow-2xl max-h-[240px] sm:max-h-[360px] overflow-y-auto flex-col z-[110]">
                                 <div class="flex gap-1 p-1.5 border-b border-gray-100 dark:border-slate-700 sticky top-0 bg-gray-50 dark:bg-slate-800 z-20">
-                                    <button onclick="toggleAllSlots(true, event)" class="flex-1 py-1 text-[10px] font-bold bg-white dark:bg-slate-700 hover:bg-amber-100 dark:hover:bg-slate-600 rounded border transition shadow-sm text-gray-700 dark:text-gray-200">全顯</button>
-                                    <button onclick="toggleAllSlots(false, event)" class="flex-1 py-1 text-[10px] font-bold bg-white dark:bg-slate-700 hover:bg-amber-100 dark:hover:bg-slate-600 rounded border transition shadow-sm text-gray-700 dark:text-gray-200">全隱</button>
+                                    <button onclick="toggleAllSlots(true, event)" class="flex-1 py-1 text-[10px] font-bold bg-white dark:bg-slate-700 hover:bg-amber-100 dark:hover:bg-slate-600 rounded border transition shadow-sm text-gray-700 dark:text-gray-200" data-i18n="ui_show_slots">全顯</button>
+                                    <button onclick="toggleAllSlots(false, event)" class="flex-1 py-1 text-[10px] font-bold bg-white dark:bg-slate-700 hover:bg-amber-100 dark:hover:bg-slate-600 rounded border transition shadow-sm text-gray-700 dark:text-gray-200" data-i18n="ui_hide_slots">全隱</button>
                                 </div>
                                 <div id="slotsContainerInner" class="flex flex-col pb-1"></div>
                             </div>
@@ -173,6 +179,35 @@
         </section>
         </div>
         <script>
+            // 🌟 1. 切換語言並重新整理
+            function changeLanguage(lang) {
+                localStorage.setItem('user_lang', lang);
+                window.currentLang = lang;
+                location.reload(); // 重新整理網頁套用
+            }
+
+            // 🌟 2. 啟動時翻譯靜態介面
+            function applyTranslations() {
+                // 設定下拉選單的目前語言
+                const langSelect = document.getElementById('langSelect');
+                if (langSelect) langSelect.value = window.currentLang;
+
+                // 替換所有帶有 data-i18n 的文字
+                document.querySelectorAll('[data-i18n]').forEach(el => {
+                    const key = el.getAttribute('data-i18n');
+                    const translatedText = getI18n(key);
+                    // 避免覆蓋原本標籤內的圖示(如 👥 或 🔄)，這裡建議 html 把純文字用 <span> 包起來，或者直接整個替換
+                    el.innerText = translatedText; 
+                });
+                document.title = getI18n('ui_title');
+            }
+            
+            // 確保在 window.onload 時呼叫它
+            // 請找到你原本的 window.onload = function() { initCharacterGrid(); }; 改成：
+            window.onload = function() { 
+                applyTranslations(); // 先翻譯靜態介面
+                initCharacterGrid();       // 再渲染角色清單
+            };
             function getI18n(key) {
                 if (!key) return key;
                 const safeLang = (typeof LANG_DICT !== 'undefined' && LANG_DICT[window.currentLang]) ? window.currentLang : 'zh-TW';
@@ -291,9 +326,9 @@
                 const container = document.getElementById('charGridContainer');
                 const btn = document.getElementById('toggleAllCharBtn');
                 if (container.classList.contains('collapsed')) {
-                    container.classList.remove('collapsed'); container.style.maxHeight = '2000px'; container.style.opacity = '1'; btn.innerHTML = '隱藏全部 🔼';
+                    container.classList.remove('collapsed'); container.style.maxHeight = '2000px'; container.style.opacity = '1'; btn.innerHTML = `${getI18n('ui_hide_all')} 🔼`;
                 } else {
-                    container.classList.add('collapsed'); container.style.maxHeight = '0px'; container.style.opacity = '0'; btn.innerHTML = '顯示全部 🔽';
+                    container.classList.add('collapsed'); container.style.maxHeight = '0px'; container.style.opacity = '0'; btn.innerHTML = `${getI18n('ui_show_all')} 🔽`;
                 }
             }
             
@@ -339,7 +374,7 @@
                     header.innerHTML = `
                         <div class="flex items-center gap-1">
                             <div class="sprite-base sprite-common ${pSprite} shrink-0 scale-[0.35] origin-left -ml-2"></div>
-                            <h3 class="text-xs sm:text-sm font-black text-amber-700 dark:text-amber-500 border-l-4 ${borderClass} pl-1 -ml-3">性格: ${p}</h3>
+                            <h3 class="text-xs sm:text-sm font-black text-amber-700 dark:text-amber-500 border-l-4 ${borderClass} pl-1 -ml-3">${getI18n(p)}</h3>
                         </div>
                         <span id="${btnId}" class="text-xs text-gray-400">🔼</span>
                     `;
@@ -404,7 +439,8 @@
                 if (!activeCharData) return;
                 currentMode = currentMode === 'lobby' ? 'battle' : 'lobby';
                 const btn = document.getElementById('btnModeSwitch');
-                btn.innerHTML = currentMode === 'lobby' ? '🔄 模式: 大廳' : '⚔️ 模式: 戰鬥';
+               // 原本： btn.innerHTML = currentMode === 'lobby' ? '🔄 模式: 大廳' : '⚔️ 模式: 戰鬥';
+                btn.innerHTML = currentMode === 'lobby' ? getI18n('ui_mode_lobby') : getI18n('ui_mode_battle');
                 btn.className = currentMode === 'lobby' 
                     ? "px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs sm:text-sm font-bold rounded-lg shadow transition-colors whitespace-nowrap"
                     : "px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-xs sm:text-sm font-bold rounded-lg shadow transition-colors whitespace-nowrap";
@@ -455,12 +491,12 @@
                 if (costumes.length > 0) {
                     costumes.forEach((costume, idx) => {
                         const opt = document.createElement('option');
-                        opt.value = costume; opt.text = idx === 0 ? "預設服裝" : `服裝 ${idx}`;
+                        opt.text = idx === 0 ? getI18n('ui_default_costume') : `${getI18n('ui_costume')} ${idx}`;
                         if (costume === targetCostume) opt.selected = true;
                         selectEl.appendChild(opt);
                     });
                 } else {
-                    const opt = document.createElement('option'); opt.value = targetCostume; opt.text = "預設模型"; selectEl.appendChild(opt);
+                    const opt = document.createElement('option'); opt.value = targetCostume; opt.text = getI18n('ui_default_model'); selectEl.appendChild(opt);
                 }
                 loadSpine(activeCharData.spineName, targetCostume, currentMode);
             }
@@ -481,7 +517,7 @@
                if (existingVideo) container.appendChild(existingVideo);
                
                document.getElementById('playerControls').classList.add('opacity-50', 'pointer-events-none');
-               document.getElementById('slotsContainerInner').innerHTML = '<div class="p-3 text-center text-xs font-bold text-gray-400">讀取資料中...</div>';
+               document.getElementById('slotsContainerInner').innerHTML = '<div class="p-3 text-center text-xs font-bold text-gray-400" data-i18n="ui_loading_data">讀取資料中...</div>';
             
                currentZoom = mode === 'battle' ? 2.5 : 1.0; 
                const skelUrl = mode === 'lobby' ? `./spine_assets/${baseFolderKey}/${costumeKey}.skel.bytes` : `./spine_sd_assets/${costumeKey}.skel.bytes`;
@@ -608,7 +644,7 @@
                     arStream = null;
                     video.classList.add('hidden');
                     
-                    btn.innerHTML = '📷 開啟AR';
+                    btn.innerHTML = getI18n('ui_ar_open');
                     btn.classList.replace('bg-red-500', 'bg-purple-500');
                     btn.classList.replace('hover:bg-red-600', 'hover:bg-purple-600');
                     
@@ -625,7 +661,7 @@
                         container.style.backgroundImage = "none";
                         container.classList.remove('animated-bg');
                         
-                        btn.innerHTML = '❌ 關閉AR';
+                        btn.innerHTML = getI18n('ui_ar_close');
                         btn.classList.replace('bg-purple-500', 'bg-red-500');
                         btn.classList.replace('hover:bg-purple-600', 'hover:bg-red-600');
                         
@@ -1190,7 +1226,6 @@
                 canvas.addEventListener('pointerout', stopDrag);
             }
             
-            window.onload = function() { initCharacterGrid(); };
             window.onscroll = function() {
                 const btn = document.getElementById("backToTop");
                 if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) { btn.style.display = "flex"; } else { btn.style.display = "none"; }
