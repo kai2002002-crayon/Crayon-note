@@ -57,7 +57,8 @@ const LANG_DICT = {
         error_no_char: "❌ 未指定坨坨，請從主頁點擊坨坨按鈕進入。", error_no_data: "❌ 載入失敗：找不到 INITIAL_DATA。",
         error_char_not_found: "❌ 找不到該坨坨資料。", error_no_skill_data: "❌ 找不到 skill.js 資料，請確認檔案存在。",
         error_char_skill_not_found: "⚠️ 找不到該坨坨的技能資料。", alert_empty_comment: "請輸入評價內容！",
-        alert_comment_too_long: "評價內容太長囉，請縮減至 500 字以內！", alert_comment_failed: "留言失敗，請稍後再試！", error_load_comment: "讀取留言失敗，請確認資料庫權限設定。"
+        alert_comment_too_long: "評價內容太長囉，請縮減至 500 字以內！", alert_comment_failed: "留言失敗，請稍後再試！", error_load_comment: "讀取留言失敗，請確認資料庫權限設定。",
+		ui_title: "坨坨動態展示器", ui_back: "⬅️ 返回", ui_select_char: "👥 選擇坨坨", ui_show_all: "顯示全部", ui_hide_all: "隱藏全部", ui_please_select: "請先選擇坨坨", ui_camera: "🔄 重置", ui_waiting: "等待載入...", ui_mode_lobby: "🔄 模式: 大廳", ui_mode_battle: "⚔️ 模式: 戰鬥", ui_ar_open: "📷 開啟AR", ui_ar_close: "❌ 關閉AR", ui_ar_panel: "📷 相機面板", ui_ar_flip: "🔄 翻轉鏡頭", ui_ar_capture: "📸 拍照儲存", ui_costume: "服裝", ui_default_costume: "預設服裝", ui_default_model: "預設模型", ui_select_anim: "選擇動作", ui_slots: "🧩 外觀插槽", ui_show_slots: "全顯", ui_hide_slots: "全隱", ui_loading_data: "讀取資料中..."
     },
     "ja": {
         app_title: "トリッカル特級クレヨンノート", app_subtitle: "教主が毎日特級クレヨンを受け取れますように", stats_title: "📊 統計とボーナス情報",
@@ -109,7 +110,8 @@ const LANG_DICT = {
         error_no_char: "❌ 使徒が指定されていません。ホーム画面からキャラクターボタンをタップしてください。", error_no_data: "❌ 読み込み失敗：INITIAL_DATAが見つかりません。",
         error_char_not_found: "❌ 該当する使徒データが見つかりません。", error_no_skill_data: "❌ skill.jsのデータが見つかりません。ファイルが存在するか確認してください。",
         error_char_skill_not_found: "⚠️ 該当する使徒のスキルデータが見つかりません。", alert_empty_comment: "評価内容を入力してください！",
-        alert_comment_too_long: "評価内容が長すぎます。500文字以内に短縮してください！", alert_comment_failed: "送信に失敗しました。後でもう一度お試しください！", error_load_comment: "コメントの読み込みに失敗しました。データベースの権限設定を確認してください。"
+        alert_comment_too_long: "評価内容が長すぎます。500文字以内に短縮してください！", alert_comment_failed: "送信に失敗しました。後でもう一度お試しください！", error_load_comment: "コメントの読み込みに失敗しました。データベースの権限設定を確認してください。",
+		ui_title: "使徒ビューアー", ui_back: "⬅️ 戻る", ui_select_char: "👥 使徒選択", ui_show_all: "全て表示", ui_hide_all: "全て隠す", ui_please_select: "先に選択してください", ui_camera: "🔄 リセット", ui_waiting: "ロード中...", ui_mode_lobby: "🔄 モード: ロビー", ui_mode_battle: "⚔️ モード: バトル", ui_ar_open: "📷 ARオン", ui_ar_close: "❌ ARオフ", ui_ar_panel: "📷 カメラパネル", ui_ar_flip: "🔄 反転", ui_ar_capture: "📸 撮影", ui_costume: "衣装", ui_default_costume: "デフォルト", ui_default_model: "基本モデル", ui_select_anim: "モーション", ui_slots: "🧩 スロット", ui_show_slots: "全表示", ui_hide_slots: "全非表示", ui_loading_data: "読み込み中...",
     },
     "en": {
         app_title: "Trickcal Crayon Notepad", app_subtitle: "May the Master get Ultra Crayons daily", stats_title: "📊 Stats & Bonus Info",
@@ -161,7 +163,8 @@ const LANG_DICT = {
         error_no_char: "❌ Apostle not specified. Please enter via the home page.", error_no_data: "❌ Load Failed: INITIAL_DATA not found.",
         error_char_not_found: "❌ Apostle data not found.", error_no_skill_data: "❌ skill.js not found. Please check if the file exists.",
         error_char_skill_not_found: "⚠️ Skill data for this Apostle not found.", alert_empty_comment: "Please enter your review content!",
-        alert_comment_too_long: "Review content is too long. Please keep it under 500 characters!", alert_comment_failed: "Failed to submit. Please try again later!", error_load_comment: "Failed to load comments. Please check database permissions."
+        alert_comment_too_long: "Review content is too long. Please keep it under 500 characters!", alert_comment_failed: "Failed to submit. Please try again later!", error_load_comment: "Failed to load comments. Please check database permissions.",
+		ui_title: "Apostle Viewer", ui_back: "⬅️ Back", ui_select_char: "👥 Select Apostle", ui_show_all: "Show All", ui_hide_all: "Hide All", ui_please_select: "Please select first", ui_camera: "🔄 Reset", ui_waiting: "Loading...", ui_mode_lobby: "🔄 Mode: Lobby", ui_mode_battle: "⚔️ Mode: Battle", ui_ar_open: "📷 AR On", ui_ar_close: "❌ AR Off", ui_ar_panel: "📷 Camera UI", ui_ar_flip: "🔄 Flip", ui_ar_capture: "📸 Capture", ui_costume: "Costume", ui_default_costume: "Default", ui_default_model: "Base Model", ui_select_anim: "Animation", ui_slots: "🧩 Slots", ui_show_slots: "Show All", ui_hide_slots: "Hide All", ui_loading_data: "Loading..."
     }
 };
 
@@ -480,7 +483,7 @@ const WORK_URL = {
     "Selline": "",
     "Shady": "https://youtu.be/1siB-6t2eL0",
     "Shoupan": "https://youtu.be/su0DhWANaeg",
-    "Silphir": "https://youtu.be/dPklHe2kZhs",
+    "Silphir": "",
     "Sist": "https://youtu.be/j3QVWfLrJUo",
     "Snorky": "https://youtu.be/A6kjEYeavNM",
     "Speaki": "https://youtu.be/N1tmPLmZoXQ",
