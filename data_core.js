@@ -483,7 +483,7 @@ const WORK_URL = {
     "Selline": "",
     "Shady": "https://youtu.be/1siB-6t2eL0",
     "Shoupan": "https://youtu.be/su0DhWANaeg",
-    "Silphir": "",
+    "Silphir": "https://youtu.be/dPklHe2kZhs",
     "Sist": "https://youtu.be/j3QVWfLrJUo",
     "Snorky": "https://youtu.be/A6kjEYeavNM",
     "Speaki": "https://youtu.be/N1tmPLmZoXQ",
