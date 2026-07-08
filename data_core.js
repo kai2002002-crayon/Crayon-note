@@ -26,6 +26,7 @@ const LANG_DICT = {
         stats_toggle_hint: "點擊展開 / 收起", stats_layer_1_title: "🥇 第一層統計", stats_layer_2_title: "🥈 第二層統計", stats_layer_3_title: "🥉 第三層統計",
         stats_layer_1_rule: "(每格+3%, 蠟筆×2)", stats_layer_2_rule: "(每格+4%, 蠟筆×4)", stats_layer_3_rule: "(每格+5%, 蠟筆×6)",
         stats_global_bonus: "📊 全體屬性加成", stats_need_more_prefix: "尚要 ", stats_need_more_suffix: " 根蠟筆",
+		path_image_hint: "查看路徑圖".
 		info_job_reward: "💰 打工獎勵", info_food: "🍲 喜好料理", aside_title: "願像", aside_loading: "願像資料載入中...",
 		stats_attribute: "攻擊類型", 物理: "物理", 魔法: "魔法", 艾爾丁: "艾爾丁", 普通坨坨: "普通坨坨", 身份: "身份",
 		x_label: "台港澳服官方X", official_x_url: "https://x.com/trickcal_TW",
@@ -79,6 +80,7 @@ const LANG_DICT = {
         stats_toggle_hint: "クリックで展開 / 折りたたみ", stats_layer_1_title: "🥇 1段階目の統計", stats_layer_2_title: "🥈 2段階目の統計", stats_layer_3_title: "🥉 3段階目の統計",
         stats_layer_1_rule: "(各マス+3%, クレヨン×2)", stats_layer_2_rule: "(各マス+4%, クレヨン×4)", stats_layer_3_rule: "(各マス+5%, クレヨン×6)",
         stats_global_bonus: "📊 全体ステータスバフ", stats_need_more_prefix: "必要クレヨン数: ", stats_need_more_suffix: " 本",
+		path_image_hint: "ルート図を見る",
 		info_job_reward: "💰 獲得報酬", info_food: "🍲 食べ物の好み", aside_title: "アサイド", aside_loading: "アサイドデータ読み込み中...",
 		stats_attribute: "攻撃タイプ", 物理: "物理", 魔法: "魔法", 艾爾丁: "エルダイン", 普通坨坨: "ノーマル使徒", 身份: "身分",
         x_label: "公式 X", official_x_url: "https://x.com/trickcal_jp",
@@ -132,6 +134,7 @@ const LANG_DICT = {
         stats_toggle_hint: "Click to Expand / Collapse", stats_layer_1_title: "🥇 Board 1 Stats", stats_layer_2_title: "🥈 Board 2 Stats", stats_layer_3_title: "🥉 Board 3 Stats",
         stats_layer_1_rule: "(Node+3%, Crayon×2)", stats_layer_2_rule: "(Node+4%, Crayon×4)", stats_layer_3_rule: "(Node+5%, Crayon×6)",
         stats_global_bonus: "📊 Global Stat Bonus", stats_need_more_prefix: "Need ", stats_need_more_suffix: " Crayons",
+		"path_image_hint": "View Path Chart",
 		info_job_reward: "💰 Acquired Rewards", info_food: "🍲 Favorite Food", aside_title: "Aside", aside_loading: "Loading Aside data...",
 		stats_attribute: "Attack Type", 物理: "Physical", 魔法: "Magical", 艾爾丁: "Eldain", 普通坨坨: "Normal Apostle", 身份: "Identity",
         x_label: "Official Global X", official_x_url: "https://x.com/trickcal_en",
