@@ -1,89 +1,95 @@
 .sprite {
-    background-image: url(char_innocence.png);
+    background-image: url(spritesheet.png);
     background-repeat: no-repeat;
     display: block;
 }
 
 .sprite-Allet {
-    width: 63px;
-    height: 63px;
+    width: 126px;
+    height: 126px;
     background-position: -5px -5px;
 }
 
 .sprite-BigWood {
-    width: 63px;
-    height: 63px;
-    background-position: -5px -78px;
+    width: 126px;
+    height: 126px;
+    background-position: -5px -141px;
 }
 
 .sprite-Cuee {
-    width: 63px;
-    height: 63px;
-    background-position: -5px -151px;
+    width: 126px;
+    height: 126px;
+    background-position: -5px -277px;
 }
 
 .sprite-Erpin {
-    width: 63px;
-    height: 63px;
-    background-position: -5px -224px;
+    width: 126px;
+    height: 126px;
+    background-position: -5px -413px;
 }
 
 .sprite-Gabia {
-    width: 63px;
-    height: 63px;
-    background-position: -5px -297px;
+    width: 126px;
+    height: 126px;
+    background-position: -5px -549px;
 }
 
 .sprite-Haley {
-    width: 63px;
-    height: 63px;
-    background-position: -5px -370px;
+    width: 126px;
+    height: 126px;
+    background-position: -5px -685px;
 }
 
 .sprite-Kyarot {
-    width: 63px;
-    height: 63px;
-    background-position: -5px -443px;
+    width: 126px;
+    height: 126px;
+    background-position: -5px -821px;
 }
 
 .sprite-Mago {
-    width: 63px;
-    height: 63px;
-    background-position: -5px -516px;
+    width: 126px;
+    height: 126px;
+    background-position: -5px -957px;
 }
 
 .sprite-Naia {
-    width: 63px;
-    height: 63px;
-    background-position: -5px -589px;
+    width: 126px;
+    height: 126px;
+    background-position: -5px -1093px;
 }
 
 .sprite-Rohne {
-    width: 63px;
-    height: 63px;
-    background-position: -5px -662px;
+    width: 126px;
+    height: 126px;
+    background-position: -5px -1229px;
 }
 
 .sprite-Sari {
-    width: 63px;
-    height: 63px;
-    background-position: -5px -735px;
+    width: 126px;
+    height: 126px;
+    background-position: -5px -1365px;
 }
 
 .sprite-Silphir {
-    width: 63px;
-    height: 63px;
-    background-position: -5px -808px;
+    width: 126px;
+    height: 126px;
+    background-position: -5px -1501px;
 }
 
 .sprite-Speaki {
-    width: 63px;
-    height: 63px;
-    background-position: -5px -881px;
+    width: 126px;
+    height: 126px;
+    background-position: -5px -1637px;
 }
 
 .sprite-Vivi {
-    width: 63px;
-    height: 63px;
-    background-position: -5px -954px;
+    width: 126px;
+    height: 126px;
+    background-position: -5px -1773px;
+}
+
+.sprite-Daya {
+    width: 126px;
+    height: 126px;
+    background-position: -5px -1909px;
 }
