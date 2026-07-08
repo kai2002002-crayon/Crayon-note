@@ -171,83 +171,186 @@ const LANG_DICT = {
 const currentLang = localStorage.getItem('user_lang') || 'zh-TW';
 function t(key) { return LANG_DICT[currentLang][key] || key; }
 
-// ------------------------------------------
-// 2. 角色基本屬性與金蠟筆分布
-// ------------------------------------------
 const INITIAL_DATA = [
-    { name: "洛涅", personality: "天真", race: "精靈", position: "前排", job: "肉盾", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-    { name: "薇薇", personality: "天真", race: "龍族", position: "前排", job: "肉盾", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-    { name: "卡洛特", personality: "天真", race: "妖精", position: "後排", job: "輔助", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-    { name: "奈雅", personality: "天真", race: "魔靈", position: "中排", job: "輔助", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-    { name: "艾爾芬", personality: "天真", race: "妖精", position: "後排", job: "輸出", layer1: ["攻擊", "防禦"], layer2: ["血量", "攻擊", "防禦"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-    { name: "馬爾", personality: "天真", race: "獸人", position: "中排", job: "輔助", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-    { name: "加薇雅", personality: "天真", race: "魔靈", position: "中排", job: "輔助", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "爆擊", "防禦", "爆抗"] },
-    { name: "希菲爾", personality: "天真", race: "龍族", position: "中排", job: "輸出", layer1: ["爆擊", "血量"], layer2: ["爆擊", "防禦", "爆抗"], layer3: ["攻擊", "爆擊", "血量", "防禦"] },
-    { name: "斯皮奇", personality: "天真", race: "幽靈", position: "後排", job: "輸出", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-    { name: "海莉", personality: "天真", race: "精靈", position: "中排", job: "輸出", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-    { name: "大木頭", personality: "天真", race: "魔靈", position: "前排", job: "肉盾", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-    { name: "阿萊特", personality: "天真", race: "精靈", position: "前排", job: "肉盾", layer1: ["爆擊", "爆抗"], layer2: ["爆擊", "血量", "爆抗"], layer3: ["爆擊", "防禦", "血量", "爆抗"] },
-    { name: "莎莉", personality: "天真", race: "幽靈", position: "中排", job: "輸出", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-    { name: "路易", personality: "天真", race: "妖精", position: "中排", job: "輔助", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-    { name: "修帕", personality: "活潑", race: "妖精", position: "後排", job: "輔助", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] },
-    { name: "奶油", personality: "活潑", race: "獸人", position: "後排", job: "輸出", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-    { name: "桃桃", personality: "活潑", race: "獸人", position: "後排", job: "輸出", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊",  "防禦", "爆擊", "爆抗"] },
-    { name: "瑟琳娜", personality: "活潑", race: "幽靈", position: "前排", job: "肉盾", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-    { name: "羽伊", personality: "活潑", race: "魔靈", position: "中排", job: "輔助", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] },
-    { name: "艾皮卡", personality: "活潑", race: "獸人", position: "中排", job: "輸出", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] },
-    { name: "路德", personality: "活潑", race: "龍族", position: "前排", job: "肉盾", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-    { name: "康娜", personality: "活潑", race: "精靈", position: "後排", job: "輸出", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-    { name: "班尼", personality: "活潑", race: "獸人", position: "前排", job: "輸出", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-    { name: "盧波", personality: "活潑", race: "獸人", position: "中排", job: "輸出", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] },
-    { name: "茱蜜", personality: "活潑", race: "魔靈", position: "中排", job: "輸出", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-    { name: "卡蓮", personality: "活潑", race: "妖精", position: "後排", job: "輔助", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] },
-    { name: "泰達", personality: "活潑", race: "精靈", position: "後排", job: "輸出", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-    { name: "瑪麗", personality: "活潑", race: "妖精", position: "中排", job: "輸出", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-    { name: "米雪", personality: "活潑", race: "獸人", position: "前排", job: "輸出", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-    { name: "伊德", personality: "冷靜", race: "精靈", position: "前排", job: "肉盾", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-    { name: "艾琳娜", personality: "冷靜", race: "精靈", position: "中排", job: "輸出", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-    { name: "佩佩", personality: "冷靜", race: "魔女", position: "前排", job: "肉盾", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] },
-    { name: "希拉", personality: "冷靜", race: "魔靈", position: "後排", job: "輸出", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-    { name: "皮可菈", personality: "冷靜", race: "魔女", position: "後排", job: "輔助", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-    { name: "艾蜜莉雅", personality: "冷靜", race: "精靈", position: "後排", job: "輔助", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-    { name: "芙莉可", personality: "冷靜", race: "魔女", position: "中排", job: "輸出", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-    { name: "綾", personality: "冷靜", race: "魔女", position: "中排", job: "輸出", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-    { name: "帕特拉", personality: "冷靜", race: "妖精", position: "前排", job: "輸出", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-    { name: "梅露娜", personality: "冷靜", race: "魔靈", position: "後排", job: "輔助", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-    { name: "傑德", personality: "冷靜", race: "龍族", position: "中排", job: "輸出", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-    { name: "艾斯皮", personality: "冷靜", race: "幽靈", position: "中排", job: "輔助", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] },
-    { name: "雷吉", personality: "冷靜", race: "精靈", position: "後排", job: "輸出", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-    { name: "瑪約", personality: "狂亂", race: "妖精", position: "後排", job: "輸出", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-    { name: "莉茲", personality: "狂亂", race: "龍族", position: "前排", job: "輸出", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-    { name: "謝蒂", personality: "狂亂", race: "幽靈", position: "前排", job: "輸出", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-    { name: "庫洛艾", personality: "狂亂", race: "妖精", position: "前排", job: "肉盾", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-    { name: "愛麗絲", personality: "狂亂", race: "幽靈", position: "中排", job: "輸出", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-    { name: "蒂亞娜", personality: "狂亂", race: "獸人", position: "中排", job: "輔助", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] },
-    { name: "貝麗塔", personality: "狂亂", race: "魔女", position: "後排", job: "輸出", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-    { name: "希瑟圖", personality: "狂亂", race: "龍族", position: "中排", job: "輸出", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["爆擊", "防禦", "血量", "爆抗"] },
-    { name: "大師2號", personality: "狂亂", race: "精靈", position: "前排", job: "肉盾", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-    { name: "梅森", personality: "狂亂", race: "幽靈", position: "後排", job: "輸出", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] },
-    { name: "伊弗利特", personality: "狂亂", race: "魔靈", position: "前排", job: "輸出", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-    { name: "劉美美", personality: "狂亂", race: "獸人", position: "後排", job: "輸出", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-    { name: "x乂錫安乂x", personality: "憂鬱", race: "幽靈", position: "後排", job: "輸出", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-    { name: "基狄恩", personality: "憂鬱", race: "龍族", position: "前排", job: "輸出", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-    { name: "布蘭切", personality: "憂鬱", race: "魔靈", position: "中排", job: "輸出", layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-    { name: "琳", personality: "憂鬱", race: "幽靈", position: "前排", job: "輸出", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] },
-    { name: "優米", personality: "憂鬱", race: "???", position: "中排", job: "輔助", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-    { name: "希爾德", personality: "憂鬱", race: "精靈", position: "中排", job: "輔助", layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-    { name: "柯米", personality: "憂鬱", race: "獸人", position: "前排", job: "肉盾", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-    { name: "珀榭", personality: "憂鬱", race: "魔女", position: "後排", job: "輔助", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-    { name: "艾舒爾", personality: "憂鬱", race: "妖精", position: "後排", job: "輸出", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] },
-    { name: "斯諾奇", personality: "憂鬱", race: "魔女", position: "前排", job: "肉盾", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-    { name: "貝魯", personality: "憂鬱", race: "幽靈", position: "中排", job: "輸出", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-    { name: "佩斯塔", personality: "憂鬱", race: "精靈", position: "前排", job: "輔助", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-    { name: "萊薇", personality: "憂鬱", race: "魔女", position: "中排", job: "輸出", layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] },
-    { name: "喬菲", personality: "憂鬱", race: "獸人", position: "中排", job: "輸出", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-    { name: "寧琉", personality: "狂亂", race: "妖精", position: "前排", job: "輔助", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-    { name: "莉絲蒂", personality: "憂鬱", race: "精靈", position: "後排", job: "輸出", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-    { name: "雷內瓦", personality: "狂亂", race: "精靈", position: "中排", job: "輸出", layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"], releaseDate: "2026-06-18T17:00:00+09:00" },
-	{ name: "芭瓏", personality: "冷靜", race: "幽靈", position: "前排", job: "輸出", layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"], releaseDate: "2026-07-02T17:00:00+09:00" }
+    { name: "洛涅", personality: "天真", race: "精靈", position: "前排", job: "肉盾", pathVersion: "V4" },
+    { name: "薇薇", personality: "天真", race: "龍族", position: "前排", job: "肉盾", pathVersion: "V4" },
+    { name: "卡洛特", personality: "天真", race: "妖精", position: "後排", job: "輔助", pathVersion: "V3" },
+    { name: "奈雅", personality: "天真", race: "魔靈", position: "中排", job: "輔助", pathVersion: "V1" },
+    { name: "艾爾芬", personality: "天真", race: "妖精", position: "後排", job: "輸出", pathVersion: "V2" },
+    { name: "馬爾", personality: "天真", race: "獸人", position: "中排", job: "輔助", pathVersion: "V1" },
+    { name: "加薇雅", personality: "天真", race: "魔靈", position: "中排", job: "輔助", pathVersion: "V2" },
+    { name: "希菲爾", personality: "天真", race: "龍族", position: "中排", job: "輸出", pathVersion: "V4" },
+    { name: "斯皮奇", personality: "天真", race: "幽靈", position: "後排", job: "輸出", pathVersion: "V1" },
+    { name: "海莉", personality: "天真", race: "精靈", position: "中排", job: "輸出", pathVersion: "V2" },
+    { name: "大木頭", personality: "天真", race: "魔靈", position: "前排", job: "肉盾", pathVersion: "V2" },
+    { name: "阿萊特", personality: "天真", race: "精靈", position: "前排", job: "肉盾", pathVersion: "V5" },
+    { name: "莎莉", personality: "天真", race: "幽靈", position: "中排", job: "輸出", pathVersion: "V2" },
+    { name: "路易", personality: "天真", race: "妖精", position: "中排", job: "輔助", pathVersion: "V3" },
+    { name: "修帕", personality: "活潑", race: "妖精", position: "後排", job: "輔助", pathVersion: "V5" },
+    { name: "奶油", personality: "活潑", race: "獸人", position: "後排", job: "輸出", pathVersion: "V3" },
+    { name: "桃桃", personality: "活潑", race: "獸人", position: "後排", job: "輸出", pathVersion: "V1" },
+    { name: "瑟琳娜", personality: "活潑", race: "幽靈", position: "前排", job: "肉盾", pathVersion: "V1" },
+    { name: "羽伊", personality: "活潑", race: "魔靈", position: "中排", job: "輔助", pathVersion: "V4" },
+    { name: "艾皮卡", personality: "活潑", race: "獸人", position: "中排", job: "輸出", pathVersion: "V5" },
+    { name: "路德", personality: "活潑", race: "龍族", position: "前排", job: "肉盾", pathVersion: "V4" },
+    { name: "康娜", personality: "活潑", race: "精靈", position: "後排", job: "輸出", pathVersion: "V2" },
+    { name: "班尼", personality: "活潑", race: "獸人", position: "前排", job: "輸出", pathVersion: "V4" },
+    { name: "盧波", personality: "活潑", race: "獸人", position: "中排", job: "輸出", pathVersion: "V5" },
+    { name: "茱蜜", personality: "活潑", race: "魔靈", position: "中排", job: "輸出", pathVersion: "V5" },
+    { name: "卡蓮", personality: "活潑", race: "妖精", position: "後排", job: "輔助", pathVersion: "V5" },
+    { name: "泰達", personality: "活潑", race: "精靈", position: "後排", job: "輸出", pathVersion: "V1" },
+    { name: "瑪麗", personality: "活潑", race: "妖精", position: "中排", job: "輸出", pathVersion: "V3" },
+    { name: "米雪", personality: "活潑", race: "獸人", position: "前排", job: "輸出", pathVersion: "V1" },
+    { name: "伊德", personality: "冷靜", race: "精靈", position: "前排", job: "肉盾", pathVersion: "V3" },
+    { name: "艾琳娜", personality: "冷靜", race: "精靈", position: "中排", job: "輸出", pathVersion: "V3" },
+    { name: "佩佩", personality: "冷靜", race: "魔女", position: "前排", job: "肉盾", pathVersion: "V5" },
+    { name: "希拉", personality: "冷靜", race: "魔靈", position: "後排", job: "輸出", pathVersion: "V2" },
+    { name: "皮可菈", personality: "冷靜", race: "魔女", position: "後排", job: "輔助", pathVersion: "V1" },
+    { name: "艾蜜莉雅", personality: "冷靜", race: "精靈", position: "後排", job: "輔助", pathVersion: "V2" },
+    { name: "芙莉可", personality: "冷靜", race: "魔女", position: "中排", job: "輸出", pathVersion: "V2" },
+    { name: "綾", personality: "冷靜", race: "魔女", position: "中排", job: "輸出", pathVersion: "V3" },
+    { name: "帕特拉", personality: "冷靜", race: "妖精", position: "前排", job: "輸出", pathVersion: "V2" },
+    { name: "梅露娜", personality: "冷靜", race: "魔靈", position: "後排", job: "輔助", pathVersion: "V2" },
+    { name: "傑德", personality: "冷靜", race: "龍族", position: "中排", job: "輸出", pathVersion: "V3" },
+    { name: "艾斯皮", personality: "冷靜", race: "幽靈", position: "中排", job: "輔助", pathVersion: "V4" },
+    { name: "雷吉", personality: "冷靜", race: "精靈", position: "後排", job: "輸出", pathVersion: "V2" },
+    { name: "瑪約", personality: "狂亂", race: "妖精", position: "後排", job: "輸出", pathVersion: "V1" },
+    { name: "莉茲", personality: "狂亂", race: "龍族", position: "前排", job: "輸出", pathVersion: "V2" },
+    { name: "謝蒂", personality: "狂亂", race: "幽靈", position: "前排", job: "輸出", pathVersion: "V1" },
+    { name: "庫洛艾", personality: "狂亂", race: "妖精", position: "前排", job: "肉盾", pathVersion: "V4" },
+    { name: "愛麗絲", personality: "狂亂", race: "幽靈", position: "中排", job: "輸出", pathVersion: "V2" },
+    { name: "蒂亞娜", personality: "狂亂", race: "獸人", position: "中排", job: "輔助", pathVersion: "V5" },
+    { name: "貝麗塔", personality: "狂亂", race: "魔女", position: "後排", job: "輸出", pathVersion: "V4" },
+    { name: "希瑟圖", personality: "狂亂", race: "龍族", position: "中排", job: "輸出", pathVersion: "V1" },
+    { name: "大師2號", personality: "狂亂", race: "精靈", position: "前排", job: "肉盾", pathVersion: "V4" },
+    { name: "梅森", personality: "狂亂", race: "幽靈", position: "後排", job: "輸出", pathVersion: "V4" },
+    { name: "伊弗利特", personality: "狂亂", race: "魔靈", position: "前排", job: "輸出", pathVersion: "V3" },
+    { name: "劉美美", personality: "狂亂", race: "獸人", position: "後排", job: "輸出", pathVersion: "V4" },
+    { name: "x乂錫安乂x", personality: "憂鬱", race: "幽靈", position: "後排", job: "輸出", pathVersion: "V3" },
+    { name: "基狄恩", personality: "憂鬱", race: "龍族", position: "前排", job: "輸出", pathVersion: "V3" },
+    { name: "布蘭切", personality: "憂鬱", race: "魔靈", position: "中排", job: "輸出", pathVersion: "V1" },
+    { name: "琳", personality: "憂鬱", race: "幽靈", position: "前排", job: "輸出", pathVersion: "V4" },
+    { name: "優米", personality: "憂鬱", race: "???", position: "中排", job: "輔助", pathVersion: "V1" },
+    { name: "希爾德", personality: "憂鬱", race: "精靈", position: "中排", job: "輔助", pathVersion: "V1" },
+    { name: "柯米", personality: "憂鬱", race: "獸人", position: "前排", job: "肉盾", pathVersion: "V2" },
+    { name: "珀榭", personality: "憂鬱", race: "魔女", position: "後排", job: "輔助", pathVersion: "V1" },
+    { name: "艾舒爾", personality: "憂鬱", race: "妖精", position: "後排", job: "輸出", pathVersion: "V5" },
+    { name: "斯諾奇", personality: "憂鬱", race: "魔女", position: "前排", job: "肉盾", pathVersion: "V3" },
+    { name: "貝魯", personality: "憂鬱", race: "幽靈", position: "中排", job: "輸出", pathVersion: "V1" },
+    { name: "佩斯塔", personality: "憂鬱", race: "精靈", position: "前排", job: "輔助", pathVersion: "V3" },
+    { name: "萊薇", personality: "憂鬱", race: "魔女", position: "中排", job: "輸出", pathVersion: "V5" },
+    { name: "喬菲", personality: "憂鬱", race: "獸人", position: "中排", job: "輸出", pathVersion: "V2" },
+    { name: "寧琉", personality: "狂亂", race: "妖精", position: "前排", job: "輔助", pathVersion: "V2" },
+    { name: "莉絲蒂", personality: "憂鬱", race: "精靈", position: "後排", job: "輸出", pathVersion: "V3" },
+    { name: "雷內瓦", personality: "狂亂", race: "精靈", position: "中排", job: "輸出", pathVersion: "V3", releaseDate: "2026-06-18T17:00:00+09:00" },
+    { name: "芭瓏", personality: "冷靜", race: "幽靈", position: "前排", job: "輸出", pathVersion: "V3", releaseDate: "2026-07-02T17:00:00+09:00" }
 ];
+
+const CRAYON_PATH_CONFIG = {
+    "精靈": {
+        "V1": { layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
+        "V2": { layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
+        "V3": { layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
+        "V4": { layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
+        "V5": { layer1: ["爆擊", "爆抗"], layer2: ["爆擊", "血量", "爆抗"], layer3: ["爆擊", "防禦", "血量", "爆抗"] }
+    },
+    "獸人": {
+        "V1": { layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
+        "V2": { layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
+        "V3": { layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
+        "V4": { layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
+        "V5": { layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] }
+    },
+    "龍族": {
+        "V1": { layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["爆擊", "防禦", "血量", "爆抗"] },
+        "V2": { layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
+        "V3": { layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
+        "V4": { layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "血量", "爆擊", "防禦"] }
+    },
+    "幽靈": {
+        "V1": { layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
+        "V2": { layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
+        "V3": { layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
+        "V4": { layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] }
+    },
+    "魔女": {
+        "V1": { layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
+        "V2": { layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
+        "V3": { layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
+        "V4": { layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
+        "V5": { layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] }
+    },
+    "魔靈": {
+        "V1": { layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
+        "V2": { layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
+        "V3": { layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
+        "V4": { layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] },
+        "V5": { layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] }
+    },
+    "妖精": {
+        "V1": { layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
+        "V2": { layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
+        "V3": { layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
+        "V4": { layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
+        "V5": { layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] }
+    },
+    "???": {
+        "V1": { layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] }
+    }
+};
+
+const PATH_IMAGES = {
+    "幽靈": {
+        "V1": { 1: "https://i.postimg.cc/nMb6P1wY/PHANTOM-V1-L1.png", 2: "https://i.postimg.cc/dDPzx9S6/PHANTOM-V1-L2.png", 3: "https://i.postimg.cc/vDFpNvSt/PHANTOM-V1-L3.png" },
+        "V2": { 1: "https://i.postimg.cc/PNsBRMF2/PHANTOM-V2-L1.png", 2: "https://i.postimg.cc/z3Z9ckPP/PHANTOM-V2-L2.png", 3: "https://i.postimg.cc/V5Q3VFHZ/PHANTOM-V2-L3.png" },
+        "V3": { 1: "https://i.postimg.cc/pybg6B1S/PHANTOM-V3-L1.png", 2: "https://i.postimg.cc/23RPKxXK/PHANTOM-V3-L2.png", 3: "https://i.postimg.cc/qBhqWM5V/PHANTOM-V3-L3.png" },
+        "V4": { 1: "https://i.postimg.cc/FFdzwsBm/PHANTOM-V4-L1.png", 2: "https://i.postimg.cc/WpFzxbHc/PHANTOM-V4-L2.png", 3: "https://i.postimg.cc/J7D0S428/PHANTOM-V4-L3.png" }
+    },
+    "???": {
+        "V1": { 1: "https://i.postimg.cc/L5LH55cN/UNKNOWN-V1-L1.png", 2: "https://i.postimg.cc/vTfQTTJ0/UNKNOWN-V1-L2.png", 3: "https://i.postimg.cc/ZnpTnnGj/UNKNOWN-V1-L3.png" }
+    },
+    "妖精": {
+        "V1": { 1: "https://i.postimg.cc/VNvmMKyN/SPRITE-V1-L1.png", 2: "https://i.postimg.cc/43ystWCx/SPRITE-V1-L2.png", 3: "https://i.postimg.cc/fbyDX84T/SPRITE-V1-L3.png" },
+        "V2": { 1: "https://i.postimg.cc/Jh0MJpwn/SPRITE-V2-L1.png", 2: "https://i.postimg.cc/s2xsSTFW/SPRITE-V2-L2.png", 3: "https://i.postimg.cc/TP1fmt85/SPRITE-V2-L3.png" },
+        "V3": { 1: "https://i.postimg.cc/k5Gq8Tr8/SPRITE-V3-L1.png", 2: "https://i.postimg.cc/xd8nH6rM/SPRITE-V3-L2.png", 3: "https://i.postimg.cc/yNxs9Lqm/SPRITE-V3-L3.png" },
+        "V4": { 1: "https://i.postimg.cc/zfQ5kT5y/SPRITE-V4-L1.png", 2: "https://i.postimg.cc/W4yj70jD/SPRITE-V4-L2.png", 3: "https://i.postimg.cc/d0fv9GvT/SPRITE-V4-L3.png" },
+        "V5": { 1: "https://i.postimg.cc/XvP3g935/SPRITE-V5-L1.png", 2: "https://i.postimg.cc/8CYDbLDW/SPRITE-V5-L2.png", 3: "https://i.postimg.cc/XvP3g93d/SPRITE-V5-L3.png" }
+    },
+    "魔靈": {
+        "V1": { 1: "https://i.postimg.cc/t4CjQB4m/ELEMENTAL-V1-L1.png", 2: "https://i.postimg.cc/NjfcqdjC/ELEMENTAL-V1-L2.png", 3: "https://i.postimg.cc/135Qhv3C/ELEMENTAL-V1-L3.png" },
+        "V2": { 1: "https://i.postimg.cc/mg2sfmgn/ELEMENTAL-V2-L1.png", 2: "https://i.postimg.cc/g2SPY3xg/ELEMENTAL-V2-L2.png", 3: "https://i.postimg.cc/pLGt2Kmq/ELEMENTAL-V2-L3.png" },
+        "V3": { 1: "https://i.postimg.cc/7ZsyxS5R/ELEMENTAL-V3-L1.png", 2: "https://i.postimg.cc/7ZsyxS5j/ELEMENTAL-V3-L2.png", 3: "https://i.postimg.cc/vZqdQ51w/ELEMENTAL-V3-L3.png" },
+        "V4": { 1: "https://i.postimg.cc/13CZ9Dgh/ELEMENTAL-V4-L1.png", 2: "https://i.postimg.cc/dVHKqG7K/ELEMENTAL-V4-L2.png", 3: "https://i.postimg.cc/zGt1JTLr/ELEMENTAL-V4-L3.png" },
+        "V5": { 1: "https://i.postimg.cc/sg6RV5Bs/ELEMENTAL-V5-L1.png", 2: "https://i.postimg.cc/3xSHK2yK/ELEMENTAL-V5-L2.png", 3: "https://i.postimg.cc/P53kt1LX/ELEMENTAL-V5-L3.png" }
+    },
+    "魔女": {
+        "V1": { 1: "https://i.postimg.cc/bYxcZ7G2/WITCH-V1-L1.png", 2: "https://i.postimg.cc/ZY8tWG9v/WITCH-V1-L2.png", 3: "https://i.postimg.cc/VsqQJxSt/WITCH-V1-L3.png" },
+        "V2": { 1: "https://i.postimg.cc/VsqQJxSC/WITCH-V2-L1.png", 2: "https://i.postimg.cc/RC75Wk3f/WITCH-V2-L2.png", 3: "https://i.postimg.cc/qBsVNPt8/WITCH-V2-L3.png" },
+        "V3": { 1: "https://i.postimg.cc/h4LWXkJV/WITCH-V3-L1.png", 2: "https://i.postimg.cc/dQ2Phb7r/WITCH-V3-L2.png", 3: "https://i.postimg.cc/ry1XDBdg/WITCH-V3-L3.png" },
+        "V4": { 1: "https://i.postimg.cc/NG6qK3yx/WITCH-V4-L1.png", 2: "https://i.postimg.cc/HWwDrqJ2/WITCH-V4-L2.png", 3: "https://i.postimg.cc/T2VMKzyC/WITCH-V4-L3.png" },
+        "V5": { 1: "https://i.postimg.cc/sfYdMkB0/WITCH-V5-L1.png", 2: "https://i.postimg.cc/SQ6FnBX5/WITCH-V5-L2.png", 3: "https://i.postimg.cc/FFy5YMfw/WITCH-V5-L3.png" }
+    },
+    "精靈": {
+        "V1": { 1: "https://i.postimg.cc/CMNrTSnK/ELF-V1-L1.png", 2: "https://i.postimg.cc/CMNrTSnM/ELF-V1-L2.png", 3: "https://i.postimg.cc/FFZC5Nks/ELF-V1-L3.png" },
+        "V2": { 1: "https://i.postimg.cc/h4rZWcQj/ELF-V2-L1.png", 2: "https://i.postimg.cc/J4z6RvjW/ELF-V2-L2.png", 3: "https://i.postimg.cc/Pr53d91H/ELF-V2-L3.png" },
+        "V3": { 1: "https://i.postimg.cc/5N27fT8f/ELF-V3-L1.png", 2: "https://i.postimg.cc/nchRngqV/ELF-V3-L2.png", 3: "https://i.postimg.cc/jdSgRmyx/ELF-V3-L3.png" },
+        "V4": { 1: "https://i.postimg.cc/28ScCMn5/ELF-V4-L1.png", 2: "https://i.postimg.cc/dtVHJpG1/ELF-V4-L2.png", 3: "https://i.postimg.cc/Ghm7bVv9/ELF-V4-L3.png" },
+        "V5": { 1: "https://i.postimg.cc/7YZsqdSf/ELF-V5-L1.png", 2: "https://i.postimg.cc/kXg17zW2/ELF-V5-L2.png", 3: "https://i.postimg.cc/rFwnq35r/ELF-V5-L3.png" }
+    },
+    "獸人": {
+        "V1": { 1: "https://i.postimg.cc/nrPvFRtL/WEREBEAST-V1-L1.png", 2: "https://i.postimg.cc/j2FzxgrL/WEREBEAST-V1-L2.png", 3: "https://i.postimg.cc/hv59Dyqv/WEREBEAST-V1-L3.png" },
+        "V2": { 1: "https://i.postimg.cc/NFz1sJwM/WEREBEAST-V2-L1.png", 2: "https://i.postimg.cc/qq58Jbdn/WEREBEAST-V2-L2.png", 3: "https://i.postimg.cc/nrPvFRtB/WEREBEAST-V2-L3.png" },
+        "V3": { 1: "https://i.postimg.cc/PJRmX3km/WEREBEAST-V3-L1.png", 2: "https://i.postimg.cc/j2Fzxgry/WEREBEAST-V3-L2.png", 3: "https://i.postimg.cc/MHFy6P8s/WEREBEAST-V3-L3.png" },
+        "V4": { 1: "https://i.postimg.cc/v8q7tBxp/WEREBEAST-V4-L1.png", 2: "https://i.postimg.cc/BZY5B6PR/WEREBEAST-V4-L2.png", 3: "https://i.postimg.cc/pVGQJTnt/WEREBEAST-V4-L3.png" },
+        "V5": { 1: "https://i.postimg.cc/c197BH8S/WEREBEAST-V5-L1.png", 2: "https://i.postimg.cc/QN4gJtWX/WEREBEAST-V5-L2.png", 3: "https://i.postimg.cc/L4Ck3XZ4/WEREBEAST-V5-L3.png" }
+    },
+    "龍族": {
+        "V1": { 1: "https://i.postimg.cc/5tSLYNVY/DRAGON-V1-L1.png", 2: "https://i.postimg.cc/W4wgFbvd/DRAGON-V1-L2.png", 3: "https://i.postimg.cc/Ls3LY6pq/DRAGON-V1-L3.png" },
+        "V2": { 1: "https://i.postimg.cc/cJBwg4St/DRAGON-V2-L1.png", 2: "https://i.postimg.cc/SsQ8WFSN/DRAGON-V2-L2.png", 3: "https://i.postimg.cc/RFCfc5SF/DRAGON-V2-L3.png" },
+        "V3": { 1: "https://i.postimg.cc/gJcRvFzc/DRAGON-V3-L1.png", 2: "https://i.postimg.cc/HxW5QDYn/DRAGON-V3-L2.png", 3: "https://i.postimg.cc/k4M8x3JR/DRAGON-V3-L3.png" },
+        "V4": { 1: "https://i.postimg.cc/9MXTG5mq/DRAGON-V4-L1.png", 2: "https://i.postimg.cc/PxfZmsXD/DRAGON-V4-L2.png", 3: "https://i.postimg.cc/bJYbQcyb/DRAGON-V4-L3.png" }
+    }
+};
 
 const CV_MAP = {
     "洛涅": "田向結月", "薇薇": "新井里美", "艾爾芬": "木野日菜", "x乂錫安乂x": "上坂すみれ", "伊弗利特": "安堂ななこ", "伊德": "内田真礼", "佩佩": "上田瞳", "佩斯塔": "仁見紗綾",
@@ -483,7 +586,7 @@ const WORK_URL = {
     "Selline": "",
     "Shady": "https://youtu.be/1siB-6t2eL0",
     "Shoupan": "https://youtu.be/su0DhWANaeg",
-    "Silphir": "https://youtu.be/dPklHe2kZhs",
+    "Silphir": "",
     "Sist": "https://youtu.be/j3QVWfLrJUo",
     "Snorky": "https://youtu.be/A6kjEYeavNM",
     "Speaki": "https://youtu.be/N1tmPLmZoXQ",
@@ -789,12 +892,6 @@ const PICKUP_SCHEDULE = [
         chars: ["雷內瓦", "芭瓏"],
         note: "barong"
     },
-	{
-        start: "2026-07-16T17:00:00+09:00",
-        end: "2026-07-30T10:59:59+09:00",
-        chars: ["達雅"],
-        note: "Daya"
-    },
 ];
 
 // 🎪 遊戲內活動排程表
@@ -835,12 +932,6 @@ const CARD_SCHEDULE = [
         end: "2026-07-16T10:59:59+09:00",
         id: "Artifact20",
         type: "Artifact"
-    },
-		{
-        start: "2026-07-09T04:00:00+09:00",
-        end: "2026-07-16T10:59:59+09:00",
-        id: "Rune52",
-        type: "Rune"
     }
 ];
 console.log("LANG_DICT 內容:", LANG_DICT);
