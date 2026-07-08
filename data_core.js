@@ -789,6 +789,12 @@ const PICKUP_SCHEDULE = [
         chars: ["雷內瓦", "芭瓏"],
         note: "barong"
     },
+	{
+        start: "2026-07-16T17:00:00+09:00",
+        end: "2026-07-30T10:59:59+09:00",
+        chars: ["達雅"],
+        note: "Daya"
+    },
 ];
 
 // 🎪 遊戲內活動排程表
@@ -829,6 +835,12 @@ const CARD_SCHEDULE = [
         end: "2026-07-16T10:59:59+09:00",
         id: "Artifact20",
         type: "Artifact"
+    },
+		{
+        start: "2026-07-09T04:00:00+09:00",
+        end: "2026-07-16T10:59:59+09:00",
+        id: "Rune52",
+        type: "Rune"
     }
 ];
 console.log("LANG_DICT 內容:", LANG_DICT);
