@@ -26,7 +26,7 @@ const LANG_DICT = {
         stats_toggle_hint: "點擊展開 / 收起", stats_layer_1_title: "🥇 第一層統計", stats_layer_2_title: "🥈 第二層統計", stats_layer_3_title: "🥉 第三層統計",
         stats_layer_1_rule: "(每格+3%, 蠟筆×2)", stats_layer_2_rule: "(每格+4%, 蠟筆×4)", stats_layer_3_rule: "(每格+5%, 蠟筆×6)",
         stats_global_bonus: "📊 全體屬性加成", stats_need_more_prefix: "尚要 ", stats_need_more_suffix: " 根蠟筆",
-		path_image_hint: "查看著色板".
+		path_image_hint: "查看著色板",
 		info_job_reward: "💰 打工獎勵", info_food: "🍲 喜好料理", aside_title: "願像", aside_loading: "願像資料載入中...",
 		stats_attribute: "攻擊類型", 物理: "物理", 魔法: "魔法", 艾爾丁: "艾爾丁", 普通坨坨: "普通坨坨", 身份: "身份",
 		x_label: "台港澳服官方X", official_x_url: "https://x.com/trickcal_TW",
