@@ -565,7 +565,7 @@
             <button class="bg-black text-white w-10 h-10 rounded-full shadow-xl flex items-center justify-center font-bold text-sm">X</button>
         </div>
         <div id="rim-live-container"></div>
-        <!-- 🌟 路徑圖彈出視窗 (Tooltip 懸浮版) -->
+        <!-- 🌟 著色板彈出視窗 (Tooltip 懸浮版) -->
         <div id="pathImageModal" class="fixed z-[4000] hidden opacity-0 transition-opacity duration-200 pointer-events-none" style="top: 0; left: 0;">
             <div class="relative bg-[#fcf8f2] dark:bg-gray-800 rounded-xl p-1.5 shadow-[0_10px_40px_rgba(0,0,0,0.3)] border-2 border-amber-300 dark:border-gray-600 pointer-events-auto">
                 <button class="absolute -top-3 -right-3 bg-red-500 hover:bg-red-600 transition-colors text-white rounded-full w-6 h-6 font-bold text-xs border-2 border-white shadow-md flex items-center justify-center z-50" onclick="closePathImage()">X</button>
@@ -817,16 +817,16 @@
             }
             
             // ------------------------------------------------------------
-            // 顯示與關閉路徑圖的函數
+            // 顯示與關閉著色板的函數
             // ------------------------------------------------------------
             // ------------------------------------------------------------
-            // 顯示與關閉路徑圖的函數 (懸浮 Tooltip 版)
+            // 顯示與關閉著色板的函數 (懸浮 Tooltip 版)
             // ------------------------------------------------------------
             function showPathImage(race, version, layer, event) {
             if (event) event.stopPropagation();
             
             if (!PATH_IMAGES || !PATH_IMAGES[race] || !PATH_IMAGES[race][version]) {
-            alert("目前尚無此版本的路徑圖資料！");
+            alert("目前尚無此版本的著色板資料！");
             return;
             }
             const url = PATH_IMAGES[race][version][layer];
