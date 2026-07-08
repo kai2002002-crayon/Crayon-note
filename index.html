@@ -578,7 +578,6 @@
                 </div>
             </div>
         </div>
-
         <script>
             // ------------------------------------------------------------
             // 全域變數與常數宣告
@@ -1484,14 +1483,18 @@
                                 layerBox.className = `${bgStyle} p-2 rounded-xl border flex-col justify-between backdrop-blur-sm`;
                                 layerBox.style.flex = flexWeight; 
                                 
-                                layerBox.innerHTML = `
-                                <div class="flex items-center gap-1.5 mb-1">
-                                <span class="text-[10px] font-bold opacity-70 whitespace-nowrap">${badgeText}</span>
-                                <div onclick="showPathImage('${char.race}', '${char.pathVersion}', ${l}, event)" class="path-btn cursor-pointer hover:scale-125 transition-transform flex items-center justify-center shrink-0 w-5 h-5 group" title="查看路徑圖">
-                                <div class="sprite-base sprite-common sprite-Album_Icon_Info shrink-0 scale-[0.35] origin-center opacity-60 group-hover:opacity-100 drop-shadow-sm"></div>
-                                </div>
-                                </div>
-                                `;
+                                // 在產生 layerBox.innerHTML 的地方，改成這樣：
+            layerBox.innerHTML = `
+            <div class="flex items-center gap-1.5 mb-1">
+            <span class="text-[10px] font-bold opacity-70 whitespace-nowrap">${badgeText}</span>
+            <div onclick="showPathImage('${char.race}', '${char.pathVersion}', ${l}, event)" 
+             class="path-btn cursor-pointer hover:scale-125 transition-transform flex items-center justify-center shrink-0 w-5 h-5 group" 
+             data-lang-key="path_image_hint"
+             title="${t('path_image_hint')}">
+            <div class="sprite-base sprite-common sprite-Album_Icon_Info shrink-0 scale-[0.35] origin-center opacity-60 group-hover:opacity-100 drop-shadow-sm"></div>
+            </div>
+            </div>
+            `;
             
                                 const btnGroup = document.createElement('div'); 
                                 btnGroup.className = `grid ${gridCols} gap-1.5 h-full content-start`;
