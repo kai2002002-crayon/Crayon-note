@@ -480,27 +480,32 @@
                 refreshCostumeDropdownAndLoad();
             }
             
-            function refreshCostumeDropdownAndLoad() {
-                const costumes = getCostumeList(activeCharData.name, currentMode);
-                const fallbackKey = costumes.length > 0 ? costumes[0] : activeCharData.spineName;
-                const selectEl = document.getElementById('costumeSelect');
-                const currentSelection = selectEl.value;
-                let targetCostume = costumes.includes(currentSelection) ? currentSelection : fallbackKey;
-            
-                selectEl.innerHTML = '';
-                if (costumes.length > 0) {
-                    costumes.forEach((costume, idx) => {
-                        const opt = document.createElement('option');
-                        opt.text = idx === 0 ? getI18n('ui_default_costume') : `${getI18n('ui_costume')} ${idx}`;
-                        if (costume === targetCostume) opt.selected = true;
-                        selectEl.appendChild(opt);
-                    });
-                } else {
-                    const opt = document.createElement('option'); opt.value = targetCostume; opt.text = getI18n('ui_default_model'); selectEl.appendChild(opt);
-                }
-                loadSpine(activeCharData.spineName, targetCostume, currentMode);
-            }
-            
+           function refreshCostumeDropdownAndLoad() {
+    const costumes = getCostumeList(activeCharData.name, currentMode);
+    const fallbackKey = costumes.length > 0 ? costumes[0] : activeCharData.spineName;
+    const selectEl = document.getElementById('costumeSelect');
+    const currentSelection = selectEl.value;
+    let targetCostume = costumes.includes(currentSelection) ? currentSelection : fallbackKey;
+
+    selectEl.innerHTML = '';
+    if (costumes.length > 0) {
+        costumes.forEach((costume, idx) => {
+            const opt = document.createElement('option');
+            // 🌟 關鍵修正：將陣列中的 Spine 檔名設定為選項的值
+            opt.value = costume; 
+            opt.text = idx === 0 ? getI18n('ui_default_costume') : `${getI18n('ui_costume')} ${idx}`;
+            if (costume === targetCostume) opt.selected = true;
+            selectEl.appendChild(opt);
+        });
+    } else {
+        const opt = document.createElement('option'); 
+        // 🌟 針對沒有額外服裝的角色也補上 value
+        opt.value = targetCostume; 
+        opt.text = getI18n('ui_default_model'); 
+        selectEl.appendChild(opt);
+    }
+    loadSpine(activeCharData.spineName, targetCostume, currentMode);
+}
             function changeSpineCostume(costumeKey) {
                 if(!costumeKey || !activeCharData) return;
                 loadSpine(activeCharData.spineName, costumeKey, currentMode);
