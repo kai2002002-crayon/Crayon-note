@@ -833,7 +833,10 @@
             function buildSlotsPanel(player) {
                 const container = document.getElementById('slotsContainerInner'); container.innerHTML = '';
                 slotVisibilityMap = {};
-                const slots = player.skeleton.slots.filter(s => s.attachment != null);
+                const slots = player.skeleton.slots
+                    .filter(s => s.attachment != null)
+                    .sort((a, b) => a.data.name.localeCompare(b.data.name));
+
             
                 slots.forEach((slot) => {
                     const slotName = slot.data.name; slotVisibilityMap[slotName] = true;
