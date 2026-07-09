@@ -542,13 +542,22 @@
                };
             
                globalPlayer = new spine.SpinePlayer(container, {
-                   skelUrl: skelUrl, atlasUrl: atlasUrl, premultipliedAlpha: true,
-                   backgroundColor: "#00000000", alpha: true, showControls: false,
-                   showLoading: false, debugRendering: true, viewport: { ...baseViewport },
-            
-                   success: function (player) {
-                       const loader = container.querySelector('.spine-player-loading-custom');
-                       if (loader) loader.remove();
+    skelUrl: skelUrl, atlasUrl: atlasUrl, premultipliedAlpha: true,
+    backgroundColor: "#00000000", alpha: true, showControls: false,
+    showLoading: false, debugRendering: true, viewport: { ...baseViewport },
+
+    success: function (player) {
+        const loader = container.querySelector('.spine-player-loading-custom');
+        if (loader) loader.remove();
+        
+        // 🌟 新增：換角色/服裝/模式時，如果目前是像素風，自動將新畫布變透明
+        if (isPixelMode) {
+            const originalCanvas = container.querySelector('canvas:not(#pixelOverlay)');
+            if (originalCanvas) originalCanvas.style.opacity = '0.001';
+        }
+
+        document.getElementById('playerControls').classList.remove('opacity-50', 'pointer-events-none');
+        setSpeed(1);
                        document.getElementById('playerControls').classList.remove('opacity-50', 'pointer-events-none');
                        setSpeed(1);
                        setTimeout(() => {
@@ -1256,16 +1265,19 @@ function togglePixelMode() {
     const container = document.getElementById('spineCanvasContainer');
     const originalCanvas = container.querySelector('canvas:not(#pixelOverlay)'); 
 
+    // 🌟 先確保清除舊的動畫幀，避免重複疊加
+    if (pixelAnimationFrame) {
+        cancelAnimationFrame(pixelAnimationFrame);
+        pixelAnimationFrame = null;
+    }
+
     if (isPixelMode) {
-        // 🌟 修正點 1：直接強制寫入 style inline 樣式，繞過 CSS !important 的衝突
         overlay.style.setProperty('display', 'block', 'important');
         if (originalCanvas) originalCanvas.style.opacity = '0.001'; 
         startPixelLoop();
     } else {
-        // 🌟 修正點 1：關閉時強制定製為 none
         overlay.style.setProperty('display', 'none', 'important');
         if (originalCanvas) originalCanvas.style.opacity = '1'; 
-        cancelAnimationFrame(pixelAnimationFrame);
     }
 }
 
