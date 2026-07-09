@@ -2,6 +2,31 @@
 // 🔮 願像系統 (Aside) 資料庫 - 多語系版本 (zh: 中文, ja: 日文, en: 英文)
 
 const ASIDE_DATA = {
+    "Alice": { 
+        asideIcon: "", 
+        totalName: { zh: "最強幸運卡", ja: "最高の吉のカード", en: "The Ultimate Lucky Card" }, 
+        stars: {
+            1: { 
+                icon: "", 
+                name: { zh: "幸運卡片的主角", ja: "幸運カードの主人公", en: "Protagonist of the Lucky Card" }, 
+                desc: { zh: "穿戴者的最大HP、魔法攻擊力、爆擊、爆擊傷害增加。", ja: "着用者の最大HP、魔法攻撃力、会心、会心ダメージが増加する。", en: "Increases bearer's Max HP, Magical ATK, CRIT, and CRIT DMG." }, 
+                effects: { zh: ["最大HP增加:6%", "魔法攻擊力增加:6%", "爆擊增加:6%", "爆擊傷害增加:6%"], ja: ["最大HP增加:6%", "魔法攻擊力增加:6%", "会心增加:6%", "会心ダメージ増加:6%"], en: ["Max HP Increase: 6%", "Magical ATK Increase: 6%", "CRIT Increase: 6%", "CRIT DMG Increase: 6%"] } 
+            },
+            2: { 
+                icon: "", 
+                name: { zh: "這完全是 Lucky 愛麗絲吧!", ja: "完全ラッキーアリスでしょ!", en: "Totally Lucky Alice!" }, 
+                desc: { zh: "技能傷害量增加。當友軍受到一定次数的直接傷害時，恢復自身的HP與SP。", ja: "スキルダメージ量が増加する。味方が一定回数直接ダメージを受けると、自身のHPとSPを回復する。", en: "Increases Skill Damage. When allies receive Direct Damage a certain number of times, recovers own HP and SP." }, 
+                effects: { zh: ["直接傷害:指狀態異常傷害、反射傷害以外的直接攻擊傷害。", "技能傷害量增加:33%", "HP恢復:最大HP的25%", "SP恢復:100%", "傷害次數:12次", "冷卻時間:5秒"], ja: ["直接ダメージ: 直接攻撃によるダメージ(状態異常ダメージ、反射ダメージを除く)。", "スキルダメージ量増加:33%", "HP回復:最大HPの25%", "SP回復:100%", "ダメージ回数:12回", "クールタイム:5秒"], en: ["Direct Damage: Refers to damage caused by Direct Attacks, excluding Status Effect Damage and Damage Reflection.", "Skill DMG Increase: 33%", "HP Recovery: 25% of Max HP", "SP Recovery: 100%", "DMG Count: 12 time(s)", "Reactivation Cooldown: 5s"] } 
+            },
+            3: { 
+                icon: "", 
+                name: { zh: "祝你好運!", ja: "幸運を祈るわ!!", en: "I wish you good fortune!" }, 
+                desc: { zh: "增加中排友軍對敵人造成的傷害量。", ja: "中列の味方が敵に与えるダメージ量を増加させ 3。", en: "Increases Outgoing Damage dealt by Middle Row allies to enemies." }, 
+                effects: { zh: ["造成的傷害量增加:19.5%"], ja: ["ダメージ量増加:19.5%"], en: ["DMG Increase: 19,5%"] }, 
+                globalEffects: { zh: ["全體魔法攻撃力 3%", "全體爆擊 3%"], ja: ["全体魔法攻撃力 3%", "全体会心 3%"], en: ["All Magical ATK 3%", "All CRIT Hit 3%"] } 
+            }
+        }
+    },
     "Amelia": { 
         asideIcon: "https://i.postimg.cc/bsZs8jKN/Aside-Icon-Amelia.png", 
         totalName: { zh: "王子艾琳娜", ja: "王子エレナ", en: "White Knight Elena" }, 
@@ -474,6 +499,31 @@ const ASIDE_DATA = {
                 desc: { zh: "使敵人對所有友軍造成的傷害量減少。", ja: "味方全員の敵からの被ダメージ量を減少させる。", en: "Reduces the Incoming Damage of all allies." }, 
                 effects: { zh: ["受到的傷害量減少:7.5%"], ja: ["被ダメージ量減少: 7.5%"], en: ["Incoming DMG Reduction: 7.5%"] }, 
                 globalEffects: { zh: ["全體物理攻擊力 3%", "全體物理防禦力 3%"], ja: ["全体物理攻撃力 3%", "全体物理防御力 3%"], en: ["All Physical ATK 3%", "All Physical DEF 3%"] } 
+            }
+        }
+    },
+    "Sylla": { 
+        asideIcon: "", 
+        totalName: { zh: "回憶中的魔靈", ja: "思い出の中の精霊たち", en: "Elemental Memories" }, 
+        stars: {
+            1: { 
+                icon: "", 
+                name: { zh: "友情的證明", ja: "友情の証", en: "Token of Friendship" }, 
+                desc: { zh: "穿戴者的最大HP、物理攻擊力、爆擊、爆擊傷害增加。", ja: "着用者の最大HP、物理攻撃力、会心、会心ダメージが増加する。", en: "Increases the bearer's Max HP, Physical ATK, CRIT Hit, and CRIT DMG." }, 
+                effects: { zh: ["最大HP增加:6%", "物理攻擊力增加:6%", "爆擊增加:6%", "爆擊傷害增加:6%"], ja: ["最大HP增加:6%", "物理攻擊力增加:6%", "会心增加:6%", "会心ダメージ増加:6%"], en: ["Max HP Increase: 6%", "Physical ATK Increase: 6%", "CRIT Increase: 6%", "CRIT DMG Increase: 6%"] } 
+            },
+            2: { 
+                icon: "", 
+                name: { zh: "颳起龍捲風", ja: "竜巻が吹く", en: "A Twister Sweeps Through" }, 
+                desc: { zh: "攻擊速度增加。普通攻擊命中時,有一定機率產生龍捲風,對被擊中的敵人造成物理傷害後消失。周圍有敵人時,會額外產生1個龍捲風,對被擊中目標以外的其他敵人造成物理傷害後消失。", ja: "攻撃速度が増加する。 普通攻撃命中時に一定確率で竜巻が発生し、ダメージを受けた敵に物理ダメージを与えて消える。周囲に敵がいる場合、竜巻が追加で1つ発生し、ダメージを受けた敵を除く他の敵に物理ダメージを与えて消える。", en: "Increases Attack Speed. When a Normal Attack hits, a twister is generated at a set chance that deals Physical Damage to the struck enemy and disappears. If there are surrounding enemies, generates 1 additional twister that deals Physical Damage to other enemies excluding the struck enemy and disappears." }, 
+                effects: { zh: ["攻擊速度提升:40%", "每個龍捲風的物理傷害:120%"], ja: ["攻擊速度增加:40%", "竜巻につき物理ダメージ: 120%"], en: ["ATK SPD Increase: 40%", "Physical DMG per Twister: 120%"] } 
+            },
+            3: { 
+                icon: "", 
+                name: { zh: "魔靈守護者", ja: "精霊の守護者", en: "Guardian of the Elementals" }, 
+                desc: { zh: "使所有友軍爆擊及爆擊傷害增加。", ja: "味方全員の会心と会心ダメージを増加させる。", en: "Increase CRIT Hit and CRIT DMG of all allies." }, 
+                effects: { zh: ["爆擊增加:6%", "爆擊傷害增加:6%"], ja: ["会心增加:6%", "会心ダメージ増加:6%"], en: ["CRIT Increase: 6%", "CRIT DMG Increase: 6%"] }, 
+                globalEffects: { zh: ["全體爆擊 3%", "全體爆擊傷害 3%"], ja: ["全体会心 3%", "全体会心ダメージ 3%"], en: ["All CRIT Hit 3%", "All CRIT DMG 3%"] } 
             }
         }
     },
