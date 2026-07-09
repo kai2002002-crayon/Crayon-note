@@ -1345,11 +1345,12 @@
                 document.getElementById("searchInput").value = ""; activeFilters.search = ""; setDisplayMode('all');
             }
             // ------------------------------------------------------------
-            // 🌟 資深玩家：一鍵快捷操作邏輯
+            // 🌟 資深玩家：一鍵快捷操作邏輯 (含全面防呆機制)
             // ------------------------------------------------------------
             function toggleAllCharacters(own) {
-                // 如果是取消全部，加上防呆詢問
-                if (!own && !confirm("確定要取消擁有所有角色嗎？(這不會清除蠟筆，只會變暗)")) return;
+                // 角色狀態防呆
+                const actionName = own ? '擁有' : '取消擁有';
+                if (!confirm(`確定要一鍵「${actionName}」所有角色嗎？\n(此操作會覆蓋所有角色的擁有狀態！)`)) return;
                 
                 INITIAL_DATA.forEach(char => {
                     savedStates['owned_' + char.name] = own;
@@ -1359,10 +1360,12 @@
             }
 
             function toggleAllGrids(layer, open) {
-                // 如果是清空操作，加上防呆詢問
-                if (!open) {
-                    const layerName = layer === 'all' ? '所有層數' : `第 ${layer} 層`;
-                    if (!confirm(`確定要清空全體角色【${layerName}】的蠟筆格子嗎？`)) return;
+                // 蠟筆狀態全面防呆 (填滿與清空都詢問)
+                const actionName = open ? '填滿' : '清空';
+                const layerName = layer === 'all' ? '所有層數' : `第 ${layer} 層`;
+                
+                if (!confirm(`確定要「${actionName}」全體角色【${layerName}】的蠟筆格子嗎？\n(⚠️ 警告：此操作會直接覆蓋目前的紀錄，且無法復原！)`)) {
+                    return;
                 }
                 
                 const targetLayers = layer === 'all' ? [1, 2, 3] : [parseInt(layer)];
@@ -1385,6 +1388,7 @@
                 renderMatrix();   // 重新渲染整個卡片網格 (重置所有按鈕外觀)
                 calculateStats(); // 重新計算全體屬性並自動觸發存檔
             }
+
             function applyFilterUI() {
                 INITIAL_DATA.forEach(char => {
                     const matchP = activeFilters.personality.length === 0 || activeFilters.personality.includes(char.personality);
