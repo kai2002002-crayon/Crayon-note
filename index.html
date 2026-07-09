@@ -502,7 +502,37 @@
                             <button id="btn_disp_3" onclick="setDisplayMode('3')" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-medium transition bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600" data-lang-key="filter_btn_show_3">僅第三層</button>
                         </div>
                     </div>
-                </div>
+                    <div class="flex flex-col sm:flex-row items-start gap-2 border-t border-dashed border-gray-100 dark:border-gray-700 pt-2 w-full">
+                        <span class="font-bold text-blue-700 dark:text-blue-400 shrink-0 pt-1 flex items-center gap-0.5 whitespace-nowrap" data-lang-key="filter_display_mode">👁️ 版面顯示：</span>
+                        <div id="filter_displayMode" class="flex flex-wrap gap-1.5 flex-1 w-full">
+                            </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row items-start gap-2 border-t border-dashed border-gray-100 dark:border-gray-700 pt-3 w-full mt-1">
+                        <span class="font-bold text-red-700 dark:text-red-400 shrink-0 pt-1 flex items-center gap-0.5 whitespace-nowrap">⚡ 快捷操作：</span>
+                        <div class="flex flex-col gap-2 flex-1 w-full">
+                            <div class="flex flex-wrap items-center gap-1.5 w-full">
+                                <span class="text-[11px] text-gray-400 dark:text-gray-500 font-medium bg-gray-50 dark:bg-gray-700 px-1 rounded whitespace-nowrap mt-0.5">全體角色:</span>
+                                <button onclick="toggleAllCharacters(true)" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-bold transition bg-green-500 text-white border-green-600 hover:bg-green-600 shadow-sm">一鍵全部擁有</button>
+                                <button onclick="toggleAllCharacters(false)" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-bold transition bg-gray-400 text-white border-gray-500 hover:bg-gray-500 shadow-sm">一鍵全部取消</button>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-1.5 w-full">
+                                <span class="text-[11px] text-gray-400 dark:text-gray-500 font-medium bg-gray-50 dark:bg-gray-700 px-1 rounded whitespace-nowrap mt-0.5">填滿蠟筆:</span>
+                                <button onclick="toggleAllGrids('all', true)" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-bold transition bg-amber-500 text-white border-amber-600 hover:bg-amber-600 shadow-sm">填滿全層</button>
+                                <button onclick="toggleAllGrids(1, true)" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-bold transition bg-amber-100 text-amber-800 border-amber-300 hover:bg-amber-200 shadow-sm">第一層</button>
+                                <button onclick="toggleAllGrids(2, true)" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-bold transition bg-orange-100 text-orange-800 border-orange-300 hover:bg-orange-200 shadow-sm">第二層</button>
+                                <button onclick="toggleAllGrids(3, true)" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-bold transition bg-red-100 text-red-800 border-red-300 hover:bg-red-200 shadow-sm">第三層</button>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-1.5 w-full mt-1">
+                                <span class="text-[11px] text-gray-400 dark:text-gray-500 font-medium bg-gray-50 dark:bg-gray-700 px-1 rounded whitespace-nowrap mt-0.5">清空蠟筆:</span>
+                                <button onclick="toggleAllGrids('all', false)" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-bold transition bg-gray-500 text-white border-gray-600 hover:bg-gray-600 shadow-sm">清空全層</button>
+                                <button onclick="toggleAllGrids(1, false)" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-medium transition bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600">第一層</button>
+                                <button onclick="toggleAllGrids(2, false)" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-medium transition bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600">第二層</button>
+                                <button onclick="toggleAllGrids(3, false)" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-medium transition bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600">第三層</button>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
             </section>
             <div class="flex justify-between items-center mb-2 px-1 cursor-pointer select-none" onclick="toggleStatsPanel()">
                 <h3 class="font-bold text-amber-955 dark:text-amber-400 text-sm flex items-center gap-1 drop-shadow-md">
@@ -1314,7 +1344,47 @@
                 selectFilter("personality", ""); selectFilter("race", ""); selectFilter("position", ""); selectFilter("job", ""); selectFilter("type", ""); selectGridLayerFilter("all"); selectGridTypeFilter(""); selectGridStatusFilter("all");
                 document.getElementById("searchInput").value = ""; activeFilters.search = ""; setDisplayMode('all');
             }
-            
+            // ------------------------------------------------------------
+            // 🌟 資深玩家：一鍵快捷操作邏輯
+            // ------------------------------------------------------------
+            function toggleAllCharacters(own) {
+                // 如果是取消全部，加上防呆詢問
+                if (!own && !confirm("確定要取消擁有所有角色嗎？(這不會清除蠟筆，只會變暗)")) return;
+                
+                INITIAL_DATA.forEach(char => {
+                    savedStates['owned_' + char.name] = own;
+                    updateOwnershipUI(char.name); // 更新單一角色的頭像暗化狀態
+                });
+                calculateStats(); // 重新計算全體屬性並自動觸發存檔
+            }
+
+            function toggleAllGrids(layer, open) {
+                // 如果是清空操作，加上防呆詢問
+                if (!open) {
+                    const layerName = layer === 'all' ? '所有層數' : `第 ${layer} 層`;
+                    if (!confirm(`確定要清空全體角色【${layerName}】的蠟筆格子嗎？`)) return;
+                }
+                
+                const targetLayers = layer === 'all' ? [1, 2, 3] : [parseInt(layer)];
+                
+                INITIAL_DATA.forEach(char => {
+                    targetLayers.forEach(l => {
+                        const layerData = char[`layer${l}`] || [];
+                        layerData.forEach((attr, idx) => {
+                            const key = `${char.name}_l${l}_${attr}_${idx}`;
+                            savedStates[key] = open; // 寫入開啟或關閉狀態
+                            
+                            // 如果是開啟格子，且角色尚未擁有，自動將該角色設為已擁有
+                            if (open && !savedStates['owned_' + char.name]) {
+                                savedStates['owned_' + char.name] = true;
+                            }
+                        });
+                    });
+                });
+                
+                renderMatrix();   // 重新渲染整個卡片網格 (重置所有按鈕外觀)
+                calculateStats(); // 重新計算全體屬性並自動觸發存檔
+            }
             function applyFilterUI() {
                 INITIAL_DATA.forEach(char => {
                     const matchP = activeFilters.personality.length === 0 || activeFilters.personality.includes(char.personality);
