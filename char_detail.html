@@ -1773,13 +1773,24 @@
                 renderStars(currentTargetName);
                 renderExtraInfo(currentTargetName);
                 
+                // 🌟 新增：透過種族與 pathVersion 查詢對應的蠟筆設定
+                let crayonConfig = { layer1: [], layer2: [], layer3: [] };
+                if (typeof CRAYON_PATH_CONFIG !== 'undefined' && 
+                    CRAYON_PATH_CONFIG[currentCharData.race] && 
+                    CRAYON_PATH_CONFIG[currentCharData.race][currentCharData.pathVersion]) {
+                    crayonConfig = CRAYON_PATH_CONFIG[currentCharData.race][currentCharData.pathVersion];
+                }
+
                 const renderCrayonList = (elementId, array) => {
                     const ul = document.getElementById(elementId);
-                    ul.innerHTML = array.map(attr => `<li>${t(attr)}</li>`).join('');
+                    const safeArray = array || []; // 終極防呆，確保絕對不會出現 undefined 錯誤
+                    ul.innerHTML = safeArray.map(attr => `<li>${t(attr)}</li>`).join('');
                 };
-                renderCrayonList('layer1List', currentCharData.layer1);
-                renderCrayonList('layer2List', currentCharData.layer2);
-                renderCrayonList('layer3List', currentCharData.layer3);
+                
+                // 改從 crayonConfig 讀取資料
+                renderCrayonList('layer1List', crayonConfig.layer1);
+                renderCrayonList('layer2List', crayonConfig.layer2);
+                renderCrayonList('layer3List', crayonConfig.layer3);
                 
                 renderSkills(currentTargetName);
                 renderCollectibles(currentTargetName);
@@ -1962,13 +1973,24 @@
                     }
                 }
             
+                // 🌟 新增：透過種族與 pathVersion 查詢對應的蠟筆設定
+                let crayonConfig = { layer1: [], layer2: [], layer3: [] };
+                if (typeof CRAYON_PATH_CONFIG !== 'undefined' && 
+                    CRAYON_PATH_CONFIG[currentCharData.race] && 
+                    CRAYON_PATH_CONFIG[currentCharData.race][currentCharData.pathVersion]) {
+                    crayonConfig = CRAYON_PATH_CONFIG[currentCharData.race][currentCharData.pathVersion];
+                }
+
                 const renderCrayonList = (elementId, array) => {
                     const ul = document.getElementById(elementId);
-                    ul.innerHTML = array.map(attr => `<li>${t(attr)}</li>`).join('');
+                    const safeArray = array || []; // 終極防呆，確保絕對不會出現 undefined 錯誤
+                    ul.innerHTML = safeArray.map(attr => `<li>${t(attr)}</li>`).join('');
                 };
-                renderCrayonList('layer1List', currentCharData.layer1);
-                renderCrayonList('layer2List', currentCharData.layer2);
-                renderCrayonList('layer3List', currentCharData.layer3);
+                
+                // 改從 crayonConfig 讀取資料
+                renderCrayonList('layer1List', crayonConfig.layer1);
+                renderCrayonList('layer2List', crayonConfig.layer2);
+                renderCrayonList('layer3List', crayonConfig.layer3);
             
                 document.title = `${displayName} - ${getI18n('page_title_char_detail')}`;
             
