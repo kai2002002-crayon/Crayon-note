@@ -1242,51 +1242,57 @@
                 canvas.addEventListener('pointerout', stopDrag);
             }
             // ==========================================
-            // 🌟 像素化運算邏輯 (Double Canvas)
-            // ==========================================
-            let isPixelMode = false;
-            let pixelAnimationFrame = null;
-            const PIXEL_SCALE = 4; // 像素化程度 (數值越大馬賽克越重)
-            
-            function togglePixelMode() {
-                isPixelMode = !isPixelMode;
-                const overlay = document.getElementById('pixelOverlay');
-                const container = document.getElementById('spineCanvasContainer');
-                const originalCanvas = container.querySelector('canvas:not(#pixelOverlay)'); 
-                
-                if (isPixelMode) {
-                    overlay.classList.remove('hidden');
-                    if (originalCanvas) originalCanvas.style.opacity = '0.001'; // 隱藏本尊但保留點擊事件
-                    startPixelLoop();
-                } else {
-                    overlay.classList.add('hidden');
-                    if (originalCanvas) originalCanvas.style.opacity = '1'; // 恢復本尊
-                    cancelAnimationFrame(pixelAnimationFrame);
-                }
-            }
-            function startPixelLoop() {
-                if (!isPixelMode) return;
+// 🌟 像素化運算邏輯 (優化版：修正重疊與手機高解析度問題)
+// ==========================================
+let isPixelMode = false;
+let pixelAnimationFrame = null;
+
+// 🌟 你可以自由調整這個數值：4 代表原本大小的 1/4，5 或 6 會更復古、顆粒更大
+const PIXEL_SCALE = 5; 
+
+function togglePixelMode() {
+    isPixelMode = !isPixelMode;
+    const overlay = document.getElementById('pixelOverlay');
+    const container = document.getElementById('spineCanvasContainer');
+    const originalCanvas = container.querySelector('canvas:not(#pixelOverlay)'); 
+
+    if (isPixelMode) {
+        // 🌟 修正點 1：直接強制寫入 style inline 樣式，繞過 CSS !important 的衝突
+        overlay.style.setProperty('display', 'block', 'important');
+        if (originalCanvas) originalCanvas.style.opacity = '0.001'; 
+        startPixelLoop();
+    } else {
+        // 🌟 修正點 1：關閉時強制定製為 none
+        overlay.style.setProperty('display', 'none', 'important');
+        if (originalCanvas) originalCanvas.style.opacity = '1'; 
+        cancelAnimationFrame(pixelAnimationFrame);
+    }
+}
+
+function startPixelLoop() {
+    if (!isPixelMode) return;
     
-                const container = document.getElementById('spineCanvasContainer');
-                const webglCanvas = container.querySelector('canvas:not(#pixelOverlay)');
-                const overlay = document.getElementById('pixelOverlay');
+    const container = document.getElementById('spineCanvasContainer');
+    const webglCanvas = container.querySelector('canvas:not(#pixelOverlay)');
+    const overlay = document.getElementById('pixelOverlay');
     
-                if (webglCanvas && overlay) {
-                    const ctx = overlay.getContext('2d');
+    if (webglCanvas && overlay) {
+        const ctx = overlay.getContext('2d');
         
-                    // 縮小畫布內部解析度
-                    overlay.width = webglCanvas.width / PIXEL_SCALE;
-                    overlay.height = webglCanvas.height / PIXEL_SCALE;
+        // 🌟 修正點 2：改用網頁視覺上的「Layout 顯示尺寸 (clientWidth)」來計算，而不是用 WebGL 的高解析度硬體像素
+        // 這樣做可以強制忽略手機 Retina 螢幕的 2x/3x 縮放，在手機和電腦上都能呈現一模一樣的「大顆粒復古像素風」！
+        overlay.width = Math.floor(container.clientWidth / PIXEL_SCALE);
+        overlay.height = Math.floor(container.clientHeight / PIXEL_SCALE);
         
-                    ctx.clearRect(0, 0, overlay.width, overlay.height);
-                    ctx.imageSmoothingEnabled = false; // 關閉平滑，確保銳利色塊
+        ctx.clearRect(0, 0, overlay.width, overlay.height);
+        ctx.imageSmoothingEnabled = false; // 保持鋸齒邊緣
         
-                    // 畫入濃縮版畫面，CSS 會自動將其放大為滿版像素風
-                    ctx.drawImage(webglCanvas, 0, 0, overlay.width, overlay.height);
-                }
+        // 將高解析度 WebGL 畫面強制濃縮壓縮進低像素畫布
+        ctx.drawImage(webglCanvas, 0, 0, overlay.width, overlay.height);
+    }
     
-                pixelAnimationFrame = requestAnimationFrame(startPixelLoop);
-            }
+    pixelAnimationFrame = requestAnimationFrame(startPixelLoop);
+}
             window.onscroll = function() {
                 const btn = document.getElementById("backToTop");
                 if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) { btn.style.display = "flex"; } else { btn.style.display = "none"; }
