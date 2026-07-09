@@ -944,9 +944,10 @@
                 }
             }
             
-            function setupComplexInteractions(player, container) {
-                const canvas = container.querySelector('canvas');
-                if (!canvas) return;
+function setupComplexInteractions(player, container) {
+    // 加上 :not(#pixelOverlay) 排除像素圖層，確保抓到 Spine 的 WebGL 畫布
+    const canvas = container.querySelector('canvas:not(#pixelOverlay)');
+    if (!canvas) return;
                 canvas.style.touchAction = 'none';
                 function screenToWorldCoords(cam, screenX, screenY, rect) {
                     let vec;
