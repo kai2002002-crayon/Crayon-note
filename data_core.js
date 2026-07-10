@@ -247,7 +247,7 @@ const INITIAL_DATA = [
     { name: "莉絲蒂", personality: "憂鬱", race: "精靈", position: "後排", job: "輸出", pathVersion: "V3" },
     { name: "雷內瓦", personality: "狂亂", race: "精靈", position: "中排", job: "輸出", pathVersion: "V3", releaseDate: "2026-06-18T17:00:00+09:00" },
     { name: "芭瓏", personality: "冷靜", race: "幽靈", position: "前排", job: "輸出", pathVersion: "V3", releaseDate: "2026-07-02T17:00:00+09:00" },
-	{ name: "達雅", personality: "天真", race: "龍族", position: "後排", job: "輸出", pathVersion: "", releaseDate: "2026-07-16T17:00:00+09:00" }
+	{ name: "達雅", personality: "天真", race: "龍族", position: "後排", job: "輸出", pathVersion: "V2", releaseDate: "2026-07-16T17:00:00+09:00" }
 ];
 
 const CRAYON_PATH_CONFIG = {
