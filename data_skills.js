@@ -16,6 +16,75 @@ const CHAR_BACKGROUNDS = {
 
 const characterSkills = [
    {
+    "name": "達雅",
+    "attribute": "魔法",
+    "skills": {
+      "zh-TW": {
+        "normalAttack": {
+          "basic": " []",
+          "enhanced": " []"
+        },
+        "normalSkill": {
+          "name": "",
+          "desc": "",
+          "stats": [""]
+        },
+        "ultimateSkill": {
+          "name": "",
+          "desc": "",
+          "stats": [""],
+          "cooldown": "秒"
+        },
+        "passiveSkill": {
+          "desc": "",
+          "stats": [""]
+        }
+      },
+      "ja": {
+        "normalAttack": {
+          "basic": " []",
+          "enhanced": "[]"
+        },
+        "normalSkill": {
+          "name": "",
+          "desc": "",
+          "stats": [""]
+        },
+        "ultimateSkill": {
+          "name": "",
+          "desc": "",
+          "stats": [""],
+          "cooldown": "s"
+        },
+        "passiveSkill": {
+          "desc": "ウ",
+          "stats": [""]
+        }
+      },
+      "en": {
+        "normalAttack": {
+          "basic": " []",
+          "enhanced": " []"
+        },
+        "normalSkill": {
+          "name": "",
+          "desc": "",
+          "stats": [""]
+        },
+        "ultimateSkill": {
+          "name": "",
+          "desc": "",
+          "stats": [""],
+          "cooldown": "s"
+        },
+        "passiveSkill": {
+          "desc": "",
+          "stats": [""]
+        }
+      },
+    }
+  },
+   {
     "name": "芭瓏",
     "attribute": "魔法",
     "skills": {
@@ -37,7 +106,7 @@ const characterSkills = [
         },
         "passiveSkill": {
           "desc": "回合開始時,一定時間內對自身生成護霜。使用普通技能後，一定時間內增加自身的攻擊速度。",
-          "stats": ["讓店:最大HP的68%", "護盾持續時間:10秒", "攻擊速度增加:63%", "攻擊速度增加持續時間:10秒"]
+          "stats": ["護盾:最大HP的68%", "護盾持續時間:10秒", "攻擊速度增加:63%", "攻擊速度增加持續時間:10秒"]
         }
       },
       "ja": {
@@ -73,7 +142,7 @@ const characterSkills = [
         },
         "ultimateSkill": {
           "name": "Summon Will-o'-wisp",
-          "desc": "Deals AoE Magical Damage around self, applying Curse. Reduces Incoming Damage for a set period of time,",
+          "desc": "Deals AoE Magical Damage around self, applying Curse. Reduces Incoming Damage for a set period of time.",
           "stats": ["Curse: Ratio of Damage Received by the target is dealt as Magical Damage to a random target.", "Magical DMG: 930%", "Curse Duration: 15s", "Incoming DMG Reduction: 25%", "Incoming DMG Reduction Duration: 8s"],
           "cooldown": "40s"
         },
