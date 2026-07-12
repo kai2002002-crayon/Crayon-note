@@ -366,7 +366,7 @@
         <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-[2999] hidden backdrop-blur-sm transition-opacity opacity-0" onclick="toggleSidebar()"></div>
         <div id="sidebarMenu" class="fixed top-0 left-0 h-full w-[25vw] min-w-[240px] max-w-[320px] bg-[#fcf8f2] dark:bg-gray-900 z-[3000] shadow-2xl transform -translate-x-full transition-transform duration-300 ease-in-out border-r border-amber-200 dark:border-gray-700 flex flex-col pt-14 sm:pt-16">
             <div class="px-5 pb-4 mb-2 border-b border-amber-200 dark:border-gray-700 flex justify-between items-center">
-                <span class="font-bold text-lg text-amber-900 dark:text-amber-400">系統選單</span>
+                <span class="font-bold text-lg text-amber-900 dark:text-amber-400" data-lang-key="menu_system_title">系統選單</span>
                 <button onclick="toggleSidebar()" class="text-gray-400 hover:text-red-500 transition-colors">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -504,31 +504,34 @@
                     </div>
                     
                     <div class="flex flex-col sm:flex-row items-start gap-2 border-t border-dashed border-gray-100 dark:border-gray-700 pt-3 w-full mt-1">
-                        <span class="font-bold text-red-700 dark:text-red-400 shrink-0 pt-1 flex items-center gap-0.5 whitespace-nowrap cursor-pointer select-none" onclick="toggleQuickAction()">
-                            ⚡ 快捷操作 <span id="quickActionToggleIcon" class="text-[10px] ml-1 opacity-80">▶</span>
-                        </span>
-                        <div id="quickActionBody" class="hidden flex-col gap-2 flex-1 w-full">
-                            <div class="flex flex-wrap items-center gap-1.5 w-full">
-                                <span class="text-[11px] text-gray-400 dark:text-gray-500 font-medium bg-gray-50 dark:bg-gray-700 px-1 rounded whitespace-nowrap mt-0.5">全體角色:</span>
-                                <button onclick="toggleAllCharacters(true)" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-bold transition bg-green-500 text-white border-green-600 hover:bg-green-600 shadow-sm">一鍵全部擁有</button>
-                                <button onclick="toggleAllCharacters(false)" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-bold transition bg-gray-400 text-white border-gray-500 hover:bg-gray-500 shadow-sm">一鍵全部取消</button>
-                            </div>
-                            <div class="flex flex-wrap items-center gap-1.5 w-full">
-                                <span class="text-[11px] text-gray-400 dark:text-gray-500 font-medium bg-gray-50 dark:bg-gray-700 px-1 rounded whitespace-nowrap mt-0.5">填滿蠟筆:</span>
-                                <button onclick="toggleAllGrids('all', true)" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-bold transition bg-amber-500 text-white border-amber-600 hover:bg-amber-600 shadow-sm">填滿全層</button>
-                                <button onclick="toggleAllGrids(1, true)" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-bold transition bg-amber-100 text-amber-800 border-amber-300 hover:bg-amber-200 shadow-sm">第一層</button>
-                                <button onclick="toggleAllGrids(2, true)" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-bold transition bg-orange-100 text-orange-800 border-orange-300 hover:bg-orange-200 shadow-sm">第二層</button>
-                                <button onclick="toggleAllGrids(3, true)" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-bold transition bg-red-100 text-red-800 border-red-300 hover:bg-red-200 shadow-sm">第三層</button>
-                            </div>
-                            <div class="flex flex-wrap items-center gap-1.5 w-full mt-1">
-                                <span class="text-[11px] text-gray-400 dark:text-gray-500 font-medium bg-gray-50 dark:bg-gray-700 px-1 rounded whitespace-nowrap mt-0.5">清空蠟筆:</span>
-                                <button onclick="toggleAllGrids('all', false)" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-bold transition bg-gray-500 text-white border-gray-600 hover:bg-gray-600 shadow-sm">清空全層</button>
-                                <button onclick="toggleAllGrids(1, false)" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-medium transition bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600">第一層</button>
-                                <button onclick="toggleAllGrids(2, false)" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-medium transition bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600">第二層</button>
-                                <button onclick="toggleAllGrids(3, false)" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-medium transition bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600">第三層</button>
-                            </div>
-                        </div>
-                    </div>
+    <span class="font-bold text-red-700 dark:text-red-400 shrink-0 pt-1 flex items-center gap-0.5 whitespace-nowrap cursor-pointer select-none" onclick="toggleQuickAction()">
+        <span data-lang-key="quick_action_title">⚡ 快捷操作</span> <span id="quickActionToggleIcon" class="text-[10px] ml-1 opacity-80">▶</span>
+    </span>
+    <div id="quickActionBody" class="hidden flex-col gap-2 flex-1 w-full">
+        <!-- 全體角色 -->
+        <div class="flex flex-wrap items-center gap-1.5 w-full">
+            <span class="text-[11px] text-gray-400 dark:text-gray-500 font-medium bg-gray-50 dark:bg-gray-700 px-1 rounded whitespace-nowrap mt-0.5" data-lang-key="quick_action_all_chars">全體角色:</span>
+            <button onclick="toggleAllCharacters(true)" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-bold transition bg-green-500 text-white border-green-600 hover:bg-green-600 shadow-sm" data-lang-key="quick_action_own_all">一鍵全部擁有</button>
+            <button onclick="toggleAllCharacters(false)" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-bold transition bg-gray-400 text-white border-gray-500 hover:bg-gray-500 shadow-sm" data-lang-key="quick_action_cancel_all">一鍵全部取消</button>
+        </div>
+        <!-- 填滿蠟筆 -->
+        <div class="flex flex-wrap items-center gap-1.5 w-full">
+            <span class="text-[11px] text-gray-400 dark:text-gray-500 font-medium bg-gray-50 dark:bg-gray-700 px-1 rounded whitespace-nowrap mt-0.5" data-lang-key="quick_action_fill_crayons">填滿蠟筆:</span>
+            <button onclick="toggleAllGrids('all', true)" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-bold transition bg-amber-500 text-white border-amber-600 hover:bg-amber-600 shadow-sm" data-lang-key="quick_action_fill_all">填滿全層</button>
+            <button onclick="toggleAllGrids(1, true)" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-bold transition bg-amber-100 text-amber-800 border-amber-300 hover:bg-amber-200 shadow-sm" data-lang-key="quick_action_layer_1">第一層</button>
+            <button onclick="toggleAllGrids(2, true)" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-bold transition bg-orange-100 text-orange-800 border-orange-300 hover:bg-orange-200 shadow-sm" data-lang-key="quick_action_layer_2">第二層</button>
+            <button onclick="toggleAllGrids(3, true)" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-bold transition bg-red-100 text-red-800 border-red-300 hover:bg-red-200 shadow-sm" data-lang-key="quick_action_layer_3">第三層</button>
+        </div>
+        <!-- 清空蠟筆 -->
+        <div class="flex flex-wrap items-center gap-1.5 w-full mt-1">
+            <span class="text-[11px] text-gray-400 dark:text-gray-500 font-medium bg-gray-50 dark:bg-gray-700 px-1 rounded whitespace-nowrap mt-0.5" data-lang-key="quick_action_clear_crayons">清空蠟筆:</span>
+            <button onclick="toggleAllGrids('all', false)" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-bold transition bg-gray-500 text-white border-gray-600 hover:bg-gray-600 shadow-sm" data-lang-key="quick_action_clear_all">清空全層</button>
+            <button onclick="toggleAllGrids(1, false)" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-medium transition bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600" data-lang-key="quick_action_layer_1">第一層</button>
+            <button onclick="toggleAllGrids(2, false)" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-medium transition bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600" data-lang-key="quick_action_layer_2">第二層</button>
+            <button onclick="toggleAllGrids(3, false)" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-medium transition bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600" data-lang-key="quick_action_layer_3">第三層</button>
+        </div>
+    </div>
+</div>
                     </div>
             </section>
             <div class="flex justify-between items-center mb-2 px-1 cursor-pointer select-none" onclick="toggleStatsPanel()">
@@ -1358,50 +1361,55 @@
                 selectFilter("personality", ""); selectFilter("race", ""); selectFilter("position", ""); selectFilter("job", ""); selectFilter("type", ""); selectGridLayerFilter("all"); selectGridTypeFilter(""); selectGridStatusFilter("all");
                 document.getElementById("searchInput").value = ""; activeFilters.search = ""; setDisplayMode('all');
             }
-            // ------------------------------------------------------------
-            // 🌟 資深玩家：一鍵快捷操作邏輯 (含全面防呆機制)
-            // ------------------------------------------------------------
             function toggleAllCharacters(own) {
-                // 角色狀態防呆
-                const actionName = own ? '擁有' : '取消擁有';
-                if (!confirm(`確定要一鍵「${actionName}」所有角色嗎？\n(此操作會覆蓋所有角色的擁有狀態！)`)) return;
-                
-                INITIAL_DATA.forEach(char => {
-                    savedStates['owned_' + char.name] = own;
-                    updateOwnershipUI(char.name); // 更新單一角色的頭像暗化狀態
-                });
-                calculateStats(); // 重新計算全體屬性並自動觸發存檔
-            }
+    // 角色狀態防呆 - 加入多國語系處理
+    const actionName = own ? (t('quick_action_own') || '擁有') : (t('quick_action_cancel') || '取消擁有');
+    
+    // 從字典讀取模板後，將 {action} 替換掉
+    let confirmMsg = t('quick_action_confirm_chars') || `確定要一鍵「{action}」所有角色嗎？\n(此操作會覆蓋所有角色的擁有狀態！)`;
+    confirmMsg = confirmMsg.replace('{action}', actionName);
+    
+    if (!confirm(confirmMsg)) return;
+    
+    INITIAL_DATA.forEach(char => {
+        savedStates['owned_' + char.name] = own;
+        updateOwnershipUI(char.name); // 更新單一角色的頭像暗化狀態
+    });
+    calculateStats(); // 重新計算全體屬性並自動觸發存檔
+}
 
-            function toggleAllGrids(layer, open) {
-                // 蠟筆狀態全面防呆 (填滿與清空都詢問)
-                const actionName = open ? '填滿' : '清空';
-                const layerName = layer === 'all' ? '所有層數' : `第 ${layer} 層`;
-                
-                if (!confirm(`確定要「${actionName}」全體角色【${layerName}】的蠟筆格子嗎？\n(⚠️ 警告：此操作會直接覆蓋目前的紀錄，且無法復原！)`)) {
-                    return;
+function toggleAllGrids(layer, open) {
+    // 蠟筆狀態全面防呆 - 加入多國語系處理
+    const actionName = open ? (t('quick_action_fill') || '填滿') : (t('quick_action_clear') || '清空');
+    let layerName = layer === 'all' 
+        ? (t('quick_action_all_layers') || '所有層數') 
+        : (t('quick_action_layer_n') || '第 {n} 層').replace('{n}', layer);
+    
+    let confirmMsg = t('quick_action_confirm_grids') || `確定要「{action}」全體角色【{layer}】的蠟筆格子嗎？\n(⚠️ 警告：此操作會直接覆蓋目前的紀錄，且無法復原！)`;
+    confirmMsg = confirmMsg.replace('{action}', actionName).replace('{layer}', layerName);
+    
+    if (!confirm(confirmMsg)) {
+        return;
+    }
+    
+    const targetLayers = layer === 'all' ? [1, 2, 3] : [parseInt(layer)];
+    
+    INITIAL_DATA.forEach(char => {
+        targetLayers.forEach(l => {
+            const layerData = char[`layer${l}`] || [];
+            layerData.forEach((attr, idx) => {
+                const key = `${char.name}_l${l}_${attr}_${idx}`;
+                savedStates[key] = open; 
+                if (open && !savedStates['owned_' + char.name]) {
+                    savedStates['owned_' + char.name] = true;
                 }
-                
-                const targetLayers = layer === 'all' ? [1, 2, 3] : [parseInt(layer)];
-                
-                INITIAL_DATA.forEach(char => {
-                    targetLayers.forEach(l => {
-                        const layerData = char[`layer${l}`] || [];
-                        layerData.forEach((attr, idx) => {
-                            const key = `${char.name}_l${l}_${attr}_${idx}`;
-                            savedStates[key] = open; // 寫入開啟或關閉狀態
-                            
-                            // 如果是開啟格子，且角色尚未擁有，自動將該角色設為已擁有
-                            if (open && !savedStates['owned_' + char.name]) {
-                                savedStates['owned_' + char.name] = true;
-                            }
-                        });
-                    });
-                });
-                
-                renderMatrix();   // 重新渲染整個卡片網格 (重置所有按鈕外觀)
-                calculateStats(); // 重新計算全體屬性並自動觸發存檔
-            }
+            });
+        });
+    });
+    
+    renderMatrix();   
+    calculateStats(); 
+}
 
             function applyFilterUI() {
                 INITIAL_DATA.forEach(char => {
