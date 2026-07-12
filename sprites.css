@@ -159,6 +159,8 @@
 .sprite-Shoupan { width: 126px; height: 126px; background-position: -5px -1637px; }
 .sprite-Taida { width: 126px; height: 126px; background-position: -5px -1773px; }
 .sprite-Ui { width: 126px; height: 126px; background-position: -5px -1909px; }
+.sprite-Tig { width: 252px; height: 252px; background-position: -5px -2045px; }
+
 
 /* =======================================
    🌟 角色大絕頭像 (ultimate_*.png)
@@ -241,3 +243,5 @@
 .sprite-Icon_UltimateSkill_Shoupan { width: 64px; height: 64px; background-position: -5px -893px; }
 .sprite-Icon_UltimateSkill_Taida { width: 64px; height: 64px; background-position: -5px -967px; }
 .sprite-Icon_UltimateSkill_Ui { width: 64px; height: 64px; background-position: -5px -1041px; }
+.sprite-Icon_UltimateSkill_Tig { width: 64px; height: 64px; background-position: -5px -1115px; }
+
