@@ -476,10 +476,12 @@
                         <span class="font-bold text-gray-500 dark:text-gray-400 shrink-0 pt-1 whitespace-nowrap" data-lang-key="stats_type">💥 類型：</span>
                         <div id="filter_type" class="flex flex-wrap gap-1.5 flex-1"></div>
                     </div>
-                    <div class="flex flex-col sm:flex-row items-start gap-2 border-t border-dashed border-gray-100 dark:border-gray-700 pt-2 w-full">
-                        <span class="font-bold text-amber-800 dark:text-amber-500 shrink-0 pt-1 flex items-center gap-0.5 whitespace-nowrap" data-lang-key="stats_cell">🖍️ 金蠟筆格：</span>
-                        <div class="flex flex-col gap-2 flex-1 w-full">
-                            <div class="flex items-center sm:items-start gap-1.5 w-full">
+                    <div class="flex flex-col sm:flex-row items-start gap-2 border-t border-dashed border-gray-100 dark:border-gray-700 pt-3 w-full mt-1">
+                        <span class="font-bold text-red-700 dark:text-red-400 shrink-0 pt-1 flex items-center gap-0.5 whitespace-nowrap cursor-pointer select-none" onclick="toggleQuickAction()">
+                            ⚡ 快捷操作 <span id="quickActionToggleIcon" class="text-[10px] ml-1 opacity-80">▶</span>
+                        </span>
+                        <div id="quickActionBody" class="hidden flex-col gap-2 flex-1 w-full">
+                            <div class="flex flex-wrap items-center gap-1.5 w-full">
                                 <span class="text-[11px] text-gray-400 dark:text-gray-500 font-medium bg-gray-50 dark:bg-gray-700 px-1 rounded whitespace-nowrap mt-0.5" data-lang-key="stats_level">指定層數:</span>
                                 <div id="filter_gridLayer" class="flex flex-wrap gap-1.5 flex-1"></div>
                             </div>
@@ -1241,7 +1243,24 @@
                 isFilterOpen = !isFilterOpen; const body = document.getElementById("filterPanelBody"); const icon = document.getElementById("filterToggleIcon");
                 if(isFilterOpen) { body.classList.remove("hidden"); icon.innerText = "▼"; } else { body.classList.add("hidden"); icon.innerText = "▶"; }
             }
-            
+            // ⚡ 控制「快捷操作」面板的開關狀態 (預設 false = 收起)
+            let isQuickActionOpen = false;
+
+            function toggleQuickAction() {
+                isQuickActionOpen = !isQuickActionOpen; 
+                const body = document.getElementById("quickActionBody"); 
+                const icon = document.getElementById("quickActionToggleIcon");
+    
+                if(isQuickActionOpen) { 
+                    body.classList.remove("hidden"); 
+                    body.classList.add("flex"); // 展開時恢復原本的 flex 排版
+                    icon.innerText = "▼"; 
+                } else { 
+                    body.classList.add("hidden"); 
+                    body.classList.remove("flex"); 
+                    icon.innerText = "▶"; 
+                }
+            }
             function handleSearch() { activeFilters.search = document.getElementById("searchInput").value.trim().toLowerCase(); applyFilterUI(); }
             function setDisplayMode(mode) { activeFilters.displayMode = mode; ["all", "1", "2", "3"].forEach(m => { const btn = document.getElementById(`btn_disp_${m}`); if(btn) btn.className = (mode === m) ? btnDispActiveStyle : btnInactiveStyle; }); applyFilterUI(); }
             
