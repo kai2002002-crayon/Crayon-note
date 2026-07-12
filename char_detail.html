@@ -312,6 +312,17 @@
             </div>
         </div>
         <script>
+            // 🌟 全域通用：專門修復 WebGL 透明畫布下的「色彩增值(Multiply)」破洞 Bug
+            function fixSpineMultiplyHole(player) {
+                if (!player || !player.skeleton) return;
+                player.skeleton.slots.forEach(slot => {
+                    if (slot.data.blendMode === spine.BlendMode.Multiply) {
+                        slot.data.blendMode = spine.BlendMode.Normal;
+                        slot.color.a = Math.min(slot.color.a, 0.4); 
+                    }
+                });
+            }
+
             function getI18n(key) {
                 if (!key) return key;
                 const cleanKey = String(key).trim();
@@ -623,7 +634,6 @@
                 }
             
                 // --- 處理打工劇情 CG 與 YouTube 連結 ---
-                // 請找到 renderExtraInfo 函式中的這一段並確保這樣寫：
             const cgContainer = document.getElementById('charJobCgContainer');
             if (cgContainer) {
             if (!hasJobStory) {
@@ -637,7 +647,7 @@
             
             const cgClass = `sprite-CG_Schedule_${spineName}`;
             
-            // 🌟 請找到宣告 youtubeUrl 與 cgClass 的地方，下方接續這段：
+            // 🌟 這裡接續：
             if (youtubeUrl && youtubeUrl.length > 0) {
             // 擷取 Youtube ID
             const videoId = youtubeUrl.split('/').pop().replace('watch?v=', '');
@@ -773,6 +783,9 @@
                     viewport: { x: -400, y: 0, width: 800, height: 1000 },
             
                     success: function (player) {
+                            // 🌟 呼叫修復函數
+                            fixSpineMultiplyHole(player);
+                            
                             const loader = avatarBox.querySelector('.spine-player-loading-custom');
                             if (loader) loader.remove();
             
@@ -1559,6 +1572,9 @@
                         viewport: isMobile ? mobileViewport : desktopViewport,
             
                         success: function (player) {
+                            // 🌟 呼叫修復函數
+                            fixSpineMultiplyHole(player);
+
                             window.skillSpinePlayers.push(player);
             
                             const canvas = container.querySelector('canvas');
@@ -1673,11 +1689,13 @@
                     showLoading: false, 
                     backgroundColor: "#00000000",
                     alpha: true,
-                    premultipliedAlpha: false,
+                    premultipliedAlpha: true, // 🌟 這裡也修正為 true 確保沒有灰線
                     viewport: { x: -250, y: 0, width: 500, height: 500 },
             
                     success: (player) => {
-                                                
+                        // 🌟 呼叫修復函數
+                        fixSpineMultiplyHole(player);
+                                                                        
                         const canvas = container.querySelector('canvas');
                         if (canvas) {
                             canvas.style.width = '100%';
@@ -2055,7 +2073,6 @@
                                               <span class="font-bold text-amber-800 dark:text-amber-400">↳ 👤 ${safeAuthorName}</span>
                                               <div class="flex items-center gap-2">
                                                   <span class="text-[10px] text-gray-500 dark:text-gray-400">${rTime}</span>
-                                                  <!-- 🌟 針對單一回覆的小按鈕 -->
                                                   <button onclick="openReplyModal('${doc.id}', '${safeAuthorName}')" class="text-[10px] font-bold text-amber-600 dark:text-amber-400 opacity-0 group-hover:opacity-100 transition-opacity bg-amber-100/50 dark:bg-slate-700 px-1.5 py-0.5 rounded">回覆</button>
                                               </div>
                                           </div>
@@ -2231,7 +2248,6 @@
             </div>
         </footer>
         <button id="backToTop" onclick="scrollToTop()" title="回頂部"> ▲ </button>
-        <!-- YouTube 播放器彈出視窗 -->
         <div id="ytModal" class="yt-modal-overlay" style="display: none;">
             <div class="yt-modal-content">
                 <span class="yt-modal-close">&times;</span>
@@ -2271,7 +2287,6 @@
                 });
             });
         </script>
-        <!-- 回覆留言彈出視窗 -->
         <div id="replyModal" class="yt-modal-overlay" style="display: none;">
             <div class="bg-white dark:bg-slate-800 p-5 rounded-xl w-11/12 max-w-md shadow-2xl border-[3px] border-amber-300 dark:border-slate-600 relative">
                 <h3 class="text-lg font-black text-amber-900 dark:text-amber-400 mb-3 flex items-center gap-2">💬 回覆留言</h3>
