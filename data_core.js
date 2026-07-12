@@ -883,7 +883,7 @@ const MINI_SPINE = {
     "瑟琳娜": "Mini_Selline", "瑪約": "Mini_Mayo", "瑪麗": "Mini_Marie", "皮可菈": "Mini_Picora", "盧波": "Mini_Rufo", "米雪": "Mini_Mynx", "綾": "Mini_Aya", "羽伊": "Mini_Ui",
     "艾斯皮": "Mini_Espi", "艾琳娜": "Mini_Elena", "艾皮卡": "Mini_Epica", "艾舒爾": "Mini_Ashur", "艾蜜莉雅": "Mini_Amelia", "芙莉可": "Mini_Fricle", "茱蜜": "Mini_Jubee", "莉茲": "Mini_Leets",
     "莎莉": "Mini_Sari", "萊薇": "Mini_Levi", "蒂亞娜": "Mini_Diana", "謝蒂": "Mini_Shady", "貝魯": "Mini_Veroo", "貝麗塔": "Mini_Belita", "路德": "Mini_Rude", "路易": "Mini_Cuee",
-    "阿萊特": "Mini_Allet", "雷吉": "Mini_Lazy", "馬爾": "Mini_Mago", "泰達": "Mini_Taida", "寧琉": "Mini_Ner", "莉絲蒂": "Mini_Risty",  "雷內瓦": "Mini_RenewaAwaken", "芭瓏": "Mini_Barong", "達雅": "Mini_Daya", "提格": "Mini_Tig",
+    "阿萊特": "Mini_Allet", "雷吉": "Mini_Lazy", "馬爾": "Mini_Mago", "泰達": "Mini_Taida", "寧琉": "Mini_Ner", "莉絲蒂": "Mini_Risty",  "雷內瓦": "Mini_RenewaAwaken", "芭瓏": "Mini_Barong", "達雅": "Mini_Daya", "提格": "Mini_Tig"
 };
 
 // ------------------------------------------
