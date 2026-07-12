@@ -57,7 +57,7 @@ const characterSkills = [
           "cooldown": "s"
         },
         "passiveSkill": {
-          "desc": "ウ",
+          "desc": "",
           "stats": [""]
         }
       },
@@ -126,7 +126,7 @@ const characterSkills = [
           "cooldown": "s"
         },
         "passiveSkill": {
-          "desc": "ウ",
+          "desc": "",
           "stats": [""]
         }
       },
