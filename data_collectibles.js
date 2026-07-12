@@ -62,6 +62,10 @@ const PRESENT_MAP = {
         url: "https://i.postimg.cc/vBrJdXVm/Present-List-Chopi.png",
         name: { "zh-TW": "教主簽名簿", "ja": "教主のサインブック", "en": "The Master's Autograph Book" }
     },
+	"Daya": { 
+        url: "",
+        name: { "zh-TW": "", "ja": "", "en": "" }
+    },
     "Diana": { 
         url: "https://i.postimg.cc/RF7kzGH6/Present-List-Diana.png",
         name: { "zh-TW": "橡樹實木搖椅", "ja": "オーク無垢材のロッキングチェア", "en": "Oak Wood Rocking Chair" }
@@ -246,7 +250,11 @@ const PRESENT_MAP = {
         url: "https://i.postimg.cc/tCSLysY2/Present-List-Taida.png",
         name: { "zh-TW": "偷懶專用睡袋", "ja": "サボり用の寝袋", "en": "Sleeping Bag for Skipping Work" }
     },
-    "Ui": { 
+    "Dig": { 
+        url: "",
+        name: { "zh-TW": "", "ja": "", "en": "" }
+    },
+	"Ui": { 
         url: "https://i.postimg.cc/y8D2N7ZT/Present-List-Ui.png",
         name: { "zh-TW": "魔靈池塘的蓮花", "ja": "精霊蓮池の蓮の花", "en": "Elemental Pond Lotus" }
     },
@@ -335,7 +343,8 @@ const THOUGHT_MAP = {
             "Speaki": "裝滿了南瓜、南瓜花、南瓜石、南瓜糖等與南瓜有關物品的箱子。",
             "Sylla": "她在莫納蒂姆買了這個與風有關的物品，花了不少錢，但感覺像是被騙了。不過心意才是最重要的！",
             "Taida": "這是一個塗有都市迷彩圖案的睡袋。據說躲進教團附近的這個睡袋裡，可以躲避工作、睡個午覺。",
-            "Ui": "這是羽伊居住的池塘裡偶爾盛開的美麗蓮花。似乎是因為羽伊的願望，它不會凋謝。",
+        	"Tig": "",    
+			"Ui": "這是羽伊居住的池塘裡偶爾盛開的美麗蓮花。似乎是因為羽伊的願望，它不會凋謝。",
             "Velvet": "深信著自己未來將會成為某個地方的女王，提前製作的魔女風格王冠。她請我幫忙保管，直到她成為女王為止。",
             "Vivi": "薇薇喝飲料時喜歡用的高級杯子。據說，這是她想著我做成的杯子。",
             "xXionx": "據說，她自費把她發在暗網上的小說出版，這是一本艾利亞斯只有50本的珍貴書籍。",
@@ -405,7 +414,8 @@ const THOUGHT_MAP = {
             "Speaki": "かぼちゃ、かぼちゃの花、かぼちゃの石、かぼちゃの水飴など、かぼちゃと関係のあるものがいっぱい入っている箱。",
             "Sylla": "モナティアムで風と関係あるものだと聞いて大金を叩いて買ったらしいが詐欺にあったみたいだ。大事なのは心だよ！",
             "Taida": "アーバンカモフラージュ柄の寝袋。教団の近くでこの寝袋に入っていると仕事をサボって昼寝ができるそうだ。",
-            "Ui": "ウイが住んでる蓮池にたまに花咲く綺麗な蓮。ウイの願望で枯れないようだ。",
+            "Tig": "",
+			"Ui": "ウイが住んでる蓮池にたまに花咲く綺麗な蓮。ウイの願望で枯れないようだ。",
             "Velvet": "将来、自分がどこかの女王になれると信じ、前もって作っておいた魔女様式の王冠。女王になる前まで預かって欲しいという。",
             "Vivi": "ヴィヴィが飲み物を飲む時よく使う高級なコップ。私を思いながら作ったらしい。",
             "xXionx": "自分がダークネットで書いていた小説を自費で出版するらしい。エーリアスに50部しかない貴重なものだという。",
@@ -474,7 +484,8 @@ const THOUGHT_MAP = {
             "Speaki": "A box filled with various pumpkin-related items, such as pumpkins, pumpkin soup, pumpkin spice, and pumpkin bread.",
             "Sylla": "She spent a fortune on a fan in Monatium that she had heard was a wind-related item, but it turns out she was cheated. It's the thought that counts!",
             "Taida": "A sleeping bag with an urban camouflage pattern. Rumor has it that if she crawls inside near the Order, she can sneak in a nap and avoid work.",
-            "Ui": "A pretty lotus flower that blooms in Ui's pond from time to time. It seems to never wither, perhaps due to her wish.",
+            "Tig": "",
+			"Ui": "A pretty lotus flower that blooms in Ui's pond from time to time. It seems to never wither, perhaps due to her wish.",
             "Velvet": "A witch-style crown that she made in preparation, as she believed she would become a queen sometime in the future. She asked me to take care of it until she becomes a queen.",
             "Vivi": "Vivi's favorite elegant cup for drinking beverages. She said that she made it while thinking of me.",
             "xXionx": "A self-published bound book of a web novel that Xion released on the Darknet. She said it's a rarity with only 50 copies circulating in Elias.",
@@ -546,7 +557,8 @@ const LETTER_MAP = {
             "Speaki": "教主大人！昨天和前天，那位名叫斯皮奇的使者拜託寧琉向您傳達問候！寧琉一字不漏地傳達給您了！教主大人！謝謝您那麼重視斯皮奇和南瓜！斯皮奇一直對您滿懷感激！如果您來到幽靈沼澤，斯皮奇的南瓜朋友們會在背後照應，保護您！還會阻止艾斯皮和愛麗絲對您動手！所以，隨時歡迎您來斯皮奇的家玩哦！",
             "Sylla": "教主，信件有順利送到嗎？我是直接用風送出去的，應該能安全送達吧。我一直對教主心懷感謝。不僅是對我，還有您對魔靈們的友善態度，我可是經常看到的。魔靈和其他種族能比以前相處得更融洽，這其中教主您一定功不可沒。作為尊貴風之靈，也是魔靈們的代表之一，我由衷地想向您表達感謝。希望今天也有一陣令人愉快的微風吹向您。",
             "Taida": "教主大人，您好！利用工作時間稍微抽空寫了這封信給您。這絕～對不是因為我想偷懶當「薪水小偷」啦！每次在莫納蒂姆看到您，您總是熱情地跟我打招呼，還會特別關心我，這點我真的都感受到了。不過呀，下班時間的我，可不是那個「公務員泰達」，而是只想吃喝玩樂的泰達。所以……要是能把一些雜事交給其他人處理就好了……咳咳。下次再見囉！",
-            "Ui": "教主！真的非常感謝您一直陪伴著羽伊！在遇到教主之前，羽伊的朋友只有耶魯。但現在，多虧了教主，羽伊認識了好多朋友，現在朋友變得非常多了！羽伊真的好喜歡教主！教主對羽伊來說是最棒的朋友☆以後也會像現在一樣，繼續當羽伊的朋友吧？我們永遠都是朋友☆給我最好的朋友教主，羽伊上☆",
+            "Tig": "",
+			"Ui": "教主！真的非常感謝您一直陪伴著羽伊！在遇到教主之前，羽伊的朋友只有耶魯。但現在，多虧了教主，羽伊認識了好多朋友，現在朋友變得非常多了！羽伊真的好喜歡教主！教主對羽伊來說是最棒的朋友☆以後也會像現在一樣，繼續當羽伊的朋友吧？我們永遠都是朋友☆給我最好的朋友教主，羽伊上☆",
             "Velvet": "喂、教主！這次我想到了一個建國的超棒計劃！你也一起來吧？如果成功了，我就把最親近的部下位置讓給你！總覺得交給你會很放心。這次我保證真的不會背叛你，說到做到！我懶得讀信，你就別回信了。下次見面再好好聊吧！",
             "Vivi": "致教主大人：教主，您好嗎？本少女為了表達心意，斗膽寫下這封信。沒想到時間竟已過去這麼久了。本少女一開始對您的態度或許有些怠慢，還請您多多包涵。不過，正所謂高貴之人總能識別同類。就如同您看待我的方式一樣，我也很快便理解並接受了教主您價值的所在。未來也請繼續守護本少女吧！為了教主大人，也為了這個世界，本少女將竭盡全力。薇薇亞·納阿爾根土敬上",
             "xXionx": "如果你正在讀這封信，那就代表我們已經親密到可以共享心象世界了，對吧？現在的時間是凌晨2點，連月亮都顯得寂寞的時刻。這是艾利亞斯所有生命體最孤獨的時分，而我在這個時候寫信，就是因為你這傢伙，教主。你在宴會廳聽到我說話後，居然說了句「真有錫安的風格」，這到底是什麼意思？請快點回覆我。P.S. 這樣不奇怪吧？「心象世界」這個詞是不是很酷？",
@@ -615,7 +627,8 @@ const LETTER_MAP = {
             "Speaki": "教主様！昨日と一昨日、スピッキーという使徒から教主様によろしく伝えて欲しいって頼まれたから、今からネルがお伝えします！教主様！スピッキーとかぼちゃを大切にしてくれてありがとうございます！スピッキーはいつも感謝してます！幽霊の沼に来る時は、エスピーやアリスにいじめられないように、スピッキーのかぼちゃたちが教主様を守ってくれますよ。だから、いつでも安心して遊びに来てくださいね！",
             "Sylla": "教主、手紙は無事に届いたか？風に乗せて飛ばしたんだ、きっと問題ないだろう。教主にはいつも感謝している。私はもちろん他の精霊たちにも親切にしてくれているのをよく見かけるからな。精霊たちと他種族が以前より仲良くなれたのは教主のおかげだろう。風の上位精霊であり、精霊たちの代表として礼を言いたかった。今日もお前に心地よい風が吹きますように。",
             "Taida": "教主様、こんにちは。業務中に手が空いたので手紙を書いています。決して給料泥棒とかサボりが目的ではありませんからね？モナティアムで会う度に、挨拶をしてくださるのは嬉しく思っています。ですが勤務時間外は、公務員としてのタイダーではなく、ただ遊んで暮らしたいだけの一個人として接していただきたいんです。なので……雑用は別の方に頼んでいただきたく……コホン。では、またお会いしましょう。",
-            "Ui": "いつもウイと一緒にいてくれてありがとう☆教主ちゃん！教主ちゃんに会うまで、ウイの友達はエルだけだったけど、今は教主ちゃんのおかげで友達がいっぱい！ウイは教主ちゃんがだ〜いすき！教主ちゃんはウイにとってサイコーの友達☆これからもウイと友達でいてくれる？ずぅ〜っと友達だからね☆いつもサイコーの友達の教主ちゃんにウイより☆",
+            "Tig": "",
+			"Ui": "いつもウイと一緒にいてくれてありがとう☆教主ちゃん！教主ちゃんに会うまで、ウイの友達はエルだけだったけど、今は教主ちゃんのおかげで友達がいっぱい！ウイは教主ちゃんがだ〜いすき！教主ちゃんはウイにとってサイコーの友達☆これからもウイと友達でいてくれる？ずぅ〜っと友達だからね☆いつもサイコーの友達の教主ちゃんにウイより☆",
             "Velvet": "おい、教主！王国作りのとっておきの作戦を思いついたんだけどさ、あんたも一緒にどうだ？成功すりゃ、俺の側近にしてやんよ！あんたのことは信用できそうだからな。今度は裏切らないからさ、どうだ？読むのはめんどくさそうだし、返信はいらねぇよ。今度、会って話そうぜ！",
             "Vivi": "教主様へ。ごきげんいかが？わたくしの気持ちを伝えるために手紙を送りますわ。もうこんなに時間が経ちましたのね。初めてお会いした時、冷たい態度を取ったのは謝りますわ。だけど高貴な存在同士は惹かれ合うもの。教主様が親切に接してくださったように、わたくしも教主様の価値を理解し受け入れましたの。これからもわたくしのことをよろしくお願いしますわ。教主様と世界のためにやるべきことをやりますわ。ヴィヴィアーナ・アルゲントゥムより。",
             "xXionx": "この手紙を読んでいるということは、既に我と精神世界を共有するほど親密な関係になったということだろう。現在時刻は午前2時。月すら寂寞を覚え、エーリアスの全生命体が最も孤独になるこの時間にペンを取ったのは、他でもない教主、そなたが原因だ。宴会場で我が話を聞いて「シオンらしい」と言ったのはどういう意味だ？至急返事求む。p.s おかしくないよな？精神世界っていう表現、かっこいいよな？",
@@ -684,7 +697,8 @@ const LETTER_MAP = {
             "Speaki": "Master! Not sure if it was yesterday or the day before, but an Apostle called Speaki asked Ner to pass along her regards to you! Ner is delivering this message word for word! Master, I am always grateful for how you've taken care of me and my pumpkin friends! If you ever visit Phantom Marsh, my pumpkin friends will look out for you and keep you safe. They'll even make sure Espi and Alice don't mess with you! You're always invited to my home anytime!",
             "Sylla": "Master, I hope you got this letter okay. I entrusted it to the wind, so I trust it found its way safely. I'm always grateful to you, Master. I've often seen how considerate you are toward me and the other elementals. It's clear that your efforts have also helped foster better harmony between elementals and other races. As the noble wind elemental, and a representative of our kind, I wanted to extend my gratitude. May a soothing wind grace you today.",
             "Taida": "Hello, Master! I'm writing this to you during a brief break at work. And no, I'm definitely not avoiding my responsibilities or slacking off, okay? I appreciate how you always greet me and ask about my well-being whenever we run into each other in Monatium. But outside of work, I'd like you to see me as Taida, the one who wants to rest and enjoy some time off, not Taida the civil servant. Basically... ask someone else to take care of your busy work... ahem. See you soon.",
-            "Ui": "Master, thank you for always staying by my side! Before I met you, Croakie was my only friend. But now, because of you, I've made so many new friends! I like you so much, Master! You're the best friend I could ever ask for! Will you promise that this will never change and you will always be my friend? We'll be friends forever! Your good friend, Ui✩",
+            "Tig": "",
+			"Ui": "Master, thank you for always staying by my side! Before I met you, Croakie was my only friend. But now, because of you, I've made so many new friends! I like you so much, Master! You're the best friend I could ever ask for! Will you promise that this will never change and you will always be my friend? We'll be friends forever! Your good friend, Ui✩",
             "Velvet": "Hey, Master! I've cooked up a genius plan to start my kingdom. Wanna join me? If it works, I'll make you my most trusted underling. You seem like someone I can count on. This time, I promise I won't betray you. I swear! Don't waste time replying: it's a pain to read. Catch you face-to-face soon.",
             "Vivi": "Dear Master, How are you? I've mustered the courage to send this letter in an attempt to convey my feelings. How swiftly the time has passed! I must offer my sincerest apologies for my coldness at the beginning. However, noble souls are bound to recognize each other and as such, I soon came to grasp thy true worth, just as thou hast seen mine. Please continue to watch over me, and I shall do my utmost for thee and this world. Yours, Viviana Argentum.",
             "xXionx": "If this letter has reached you, it's undeniable... We are now tethered by a bond so profound that we inhabit the same shared mental realm! The time? 2 a.m., when even the moon gazes down in melancholy as all life in Elias succumbs to the weight of its loneliness. Yet it's YOU, Master, who drives me to write at this hour. At the Banquet Hall, in response to what I said, you uttered, \"That's so like you, Xion.\" Explain yourself at once! P.S. Admit it, the phrase \"mental realm\" is just pure genius, isn't it?",
