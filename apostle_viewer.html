@@ -194,6 +194,23 @@
         </section>
         </div>
         <script>
+            // 🌟 全域通用：專門修復 WebGL 透明畫布下的「色彩增值(Multiply)」破洞 Bug
+           
+            function fixSpineMultiplyHole(player) {
+                if (!player || !player.skeleton) return;
+                player.skeleton.slots.forEach(slot => {
+                   if (slot.data.blendMode === spine.BlendMode.Multiply || slot.data.name.toLowerCase().includes('shadow')) {
+                        // 將混合模式改為 Normal 避免自我重疊造成的破洞加深
+                       slot.data.blendMode = spine.BlendMode.Normal;
+            
+                       // 強制設定為半透明黑色 (R, G, B, A)
+                       // 將 Alpha 設為 0.4 或 0.5，絕對不要設為 1.0！
+                       // slot.color.set(0, 0, 0, 0.4);
+                       // 降低透明度讓陰影保持柔和 (如果覺得陰影太深或太淺，可以微調這個 0.4 的數值)
+                       slot.color.a = Math.min(slot.color.a, 0.6);
+                    }
+                });
+            }
             // 🌟 1. 切換語言並重新整理
             function changeLanguage(lang) {
                 localStorage.setItem('user_lang', lang);
@@ -557,13 +574,13 @@
                };
             
                globalPlayer = new spine.SpinePlayer(container, {
-    skelUrl: skelUrl, atlasUrl: atlasUrl, premultipliedAlpha: true,
-    backgroundColor: "#00000000", alpha: true, showControls: false,
-    showLoading: false, debugRendering: true, viewport: { ...baseViewport },
-
-    success: function (player) {
-        const loader = container.querySelector('.spine-player-loading-custom');
-        if (loader) loader.remove();
+                   skelUrl: skelUrl, atlasUrl: atlasUrl, premultipliedAlpha: true,
+                   backgroundColor: "#00000000", alpha: true, showControls: false,
+                   showLoading: false, debugRendering: true, viewport: { ...baseViewport },
+                   
+                   success: function (player) {
+                       const loader = container.querySelector('.spine-player-loading-custom');
+                       if (loader) loader.remove();
         
         // 🌟 新增：換角色/服裝/模式時，如果目前是像素風，自動將新畫布變透明
         if (isPixelMode) {
@@ -593,9 +610,8 @@
                        
                        player.skeleton.scaleX = currentZoom; player.skeleton.scaleY = currentZoom;
                        player.skeleton.setToSetupPose(); 
-            
-                       const shadowSlot = player.skeleton.findSlot("Sport_Face_Shadow");
-                       if (shadowSlot) { shadowSlot.data.blendMode = 0; shadowSlot.color.a = 0.6; }
+
+                       fixSpineMultiplyHole(player);
             
                        player.skeleton.updateWorldTransform();
                        buildAnimationDropdown(player); buildSlotsPanel(player);
@@ -914,7 +930,14 @@
                 slotVisibilityMap[slotName] = isVisible;
                 if (globalPlayer && globalPlayer.skeleton) {
                     const s = globalPlayer.skeleton.findSlot(slotName);
-                    if (s) s.color.a = isVisible ? 1 : 0;
+                    if (s) {
+                        if (isVisible) {
+                            s.setToSetupPose(); // 恢復原始設定（包含預設的透明度）
+                            fixSpineMultiplyHole(globalPlayer); // 重新補強陰影透明度，避免破洞
+                        } else {
+                            s.color.a = 0; // 隱藏時設為 0
+                        }
+                    }
                 }
             }
             
@@ -927,10 +950,21 @@
                     slotVisibilityMap[slotName] = show;
                     if (globalPlayer && globalPlayer.skeleton) {
                         const s = globalPlayer.skeleton.findSlot(slotName);
-                        if (s) s.color.a = show ? 1 : 0;
+                        if (s) {
+                            if (show) {
+                                s.setToSetupPose(); // 恢復原始設定
+                            } else {
+                                s.color.a = 0; // 隱藏時設為 0
+                            }
+                        }
                     }
                 });
-            }
+    
+    // 如果是「全顯」，統一呼叫一次修復陰影函數
+    if (show) {
+        fixSpineMultiplyHole(globalPlayer);
+    }
+}
             
             function resetCamera() {
                 if (!globalPlayer || !globalPlayer.skeleton) return;
@@ -943,8 +977,7 @@
                     globalPlayer.skeleton.y = 600 * (1 - currentZoom);
                 }
             }
-            
-function setupComplexInteractions(player, container) {
+            function setupComplexInteractions(player, container) {
     // 加上 :not(#pixelOverlay) 排除像素圖層，確保抓到 Spine 的 WebGL 畫布
     const canvas = container.querySelector('canvas:not(#pixelOverlay)');
     if (!canvas) return;
