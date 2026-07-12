@@ -314,13 +314,23 @@
         <script>
             // 🌟 全域通用：專門修復 WebGL 透明畫布下的「色彩增值(Multiply)」破洞 Bug
             function fixSpineMultiplyHole(player) {
-                if (!player || !player.skeleton) return;
-                player.skeleton.slots.forEach(slot => {
-                    if (slot.data.blendMode === spine.BlendMode.Multiply) {
+                const skeleton = player.skeleton;
+                if (!skeleton) return;
+
+                for (let i = 0; i < skeleton.slots.length; i++) {
+                    let slot = skeleton.slots[i];
+        
+                    // 判斷是否為陰影插槽 (Trickcal 的陰影通常設定為 Multiply，或是名稱裡有 shadow)
+                    if (slot.data.blendMode === spine.BlendMode.Multiply || slot.data.name.toLowerCase().includes('shadow')) {
+                        // 將混合模式改為 Normal 避免自我重疊造成的破洞加深
                         slot.data.blendMode = spine.BlendMode.Normal;
-                        slot.color.a = Math.min(slot.color.a, 0.4); 
+            
+                        // 強制設定為半透明黑色 (R, G, B, A)
+                        // 將 Alpha 設為 0.4 或 0.5，絕對不要設為 1.0！
+                        // slot.color.set(0, 0, 0, 0.4);
+                        slot.color.a = Math.min(slot.color.a, 0.6);
                     }
-                });
+                }
             }
 
             function getI18n(key) {
@@ -783,9 +793,7 @@
                     viewport: { x: -400, y: 0, width: 800, height: 1000 },
             
                     success: function (player) {
-                            // 🌟 呼叫修復函數
-                            fixSpineMultiplyHole(player);
-                            
+                                                        
                             const loader = avatarBox.querySelector('.spine-player-loading-custom');
                             if (loader) loader.remove();
             
@@ -804,7 +812,9 @@
                                     player.skeleton.updateWorldTransform(); 
                                 }
                             }
-                            
+                            // 🌟 呼叫修復函數
+                            fixSpineMultiplyHole(player);
+                        
                             const animations = player.skeleton.data.animations;
                             if (animations && animations.length > 0) {
                                 const animNames = animations.map(a => a.name);
