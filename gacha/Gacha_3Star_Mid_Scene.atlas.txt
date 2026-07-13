@@ -1,0 +1,264 @@
+Gacha_3Star_Mid_Scene.png
+	size: 2048, 2048
+	filter: Linear, Linear
+	pma: true
+	scale: 0.99
+BG_1_2_50
+	bounds: 1274, 1410, 634, 406
+	rotate: 90
+BG_2_1_2_50
+	bounds: 2, 689, 1584, 507
+BG_3
+	bounds: 1682, 1419, 353, 282
+BG_4_2_50
+	bounds: 2, 1198, 1270, 846
+Ear_Elf
+	bounds: 129, 24, 73, 66
+	offsets: 23, 6, 96, 91
+Ear_Suin
+	bounds: 1609, 60, 85, 102
+Eye_L_Mystic
+	bounds: 1635, 201, 45, 44
+	offsets: 1, 1, 47, 46
+Eyebrow_L_Mystic
+	bounds: 2021, 1925, 22, 10
+	offsets: 1, 1, 24, 12
+Eyebrow_R_Mystic
+	bounds: 2021, 1937, 24, 11
+	offsets: 1, 1, 26, 13
+	rotate: 90
+Face_color
+	bounds: 2, 140, 271, 208
+	offsets: 28, 21, 338, 248
+Face_color_Mystic
+	bounds: 265, 140, 265, 208
+	offsets: 34, 21, 338, 248
+Face_line
+	bounds: 1274, 1200, 271, 208
+	offsets: 28, 21, 338, 248
+Face_line_Mystic
+	bounds: 1166, 141, 265, 208
+	offsets: 34, 21, 338, 248
+Leaf_1
+	bounds: 1274, 1201, 55, 54
+Leaf_2
+	bounds: 1433, 30, 56, 38
+	offsets: 2, 0, 58, 38
+Leaf_L
+	bounds: 1194, 20, 65, 49
+Leaf_R
+	bounds: 908, 22, 65, 49
+Mask
+	bounds: 649, 17, 106, 122
+	rotate: 90
+Mouth_Mystic
+	bounds: 1475, 1201, 41, 12
+	offsets: 1, 1, 43, 14
+Star_1
+	bounds: 1362, 346, 333, 325
+Star_2L_2_50
+	bounds: 345, 350, 337, 341
+	rotate: 90
+Star_2L_50
+	bounds: 2, 350, 337, 341
+	offsets: 1, 1, 339, 343
+	rotate: 90
+Star_2M_2_50
+	bounds: 1025, 360, 335, 327
+Star_2M_50
+	bounds: 688, 360, 335, 327
+Star_2R_2_50
+	bounds: 1588, 673, 337, 341
+	rotate: 90
+Star_2R_50
+	bounds: 1682, 1703, 337, 341
+Star_2_fx_1
+	bounds: 1588, 1012, 388, 396
+Star_Big
+	bounds: 1697, 363, 317, 308
+Strar_1_fx_1
+	bounds: 532, 202, 150, 146
+Strar_1_fx_2
+	bounds: 931, 121, 233, 237
+Symbol_1
+	bounds: 1931, 744, 107, 134
+	offsets: 0, 1, 107, 136
+Symbol_2
+	bounds: 1931, 880, 113, 130
+	offsets: 1, 0, 115, 131
+Symbol_3
+	bounds: 218, 59, 111, 102
+	offsets: 0, 1, 111, 104
+Tail
+	bounds: 2, 49, 126, 118
+	rotate: 180
+Wing
+	bounds: 758, 31, 103, 92
+Wing_2
+	bounds: 862, 67, 95, 54
+Wing_3
+	bounds: 1166, 146, 44, 64
+Wing_L
+	bounds: 333, 32, 142, 122
+Wing_R
+	bounds: 1344, 50, 142, 122
+	rotate: 180
+Wisp_1
+	bounds: 1978, 1179, 52, 79
+Wisp_2
+	bounds: 1546, 1277, 39, 57
+Wisp_3
+	bounds: 1529, 1336, 48, 72
+Witch_head_line
+	bounds: 1696, 54, 171, 48
+Witch_head_line_1
+	bounds: 2021, 2025, 21, 19
+background_White
+	bounds: 476, 57, 79, 50
+ball_L
+	bounds: 1043, 58, 82, 61
+ball_L_Mystic
+	bounds: 135, 79, 81, 63
+	offsets: 0, 0, 81, 64
+ball_L_inline
+	bounds: 496, 328, 33, 20
+ball_R
+	bounds: 1978, 1110, 67, 62
+	rotate: 90
+ball_R_Mystic
+	bounds: 1978, 1040, 68, 63
+	offsets: 2, 2, 72, 67
+	rotate: 90
+ball_R_inline
+	bounds: 236, 330, 42, 18
+dragon_horn_L
+	bounds: 1956, 217, 83, 144
+	offsets: 1, 1, 84, 146
+dragon_horn_R
+	bounds: 516, 109, 91, 143
+	offsets: 0, 1, 92, 145
+	rotate: 90
+driver
+	bounds: 1956, 84, 80, 131
+earth
+	bounds: 1870, 46, 68, 56
+effect_One
+	bounds: 1432, 142, 201, 202
+effect_Plus
+	bounds: 1697, 104, 257, 257
+effect_Star
+	bounds: 688, 125, 241, 233
+eye_L_Smile
+	bounds: 1261, 36, 71, 33
+	offsets: 1, 1, 73, 35
+eye_L_opne_1
+	bounds: 1635, 247, 45, 47
+eye_R_Smile
+	bounds: 1790, 44, 78, 33
+	offsets: 1, 1, 80, 35
+eye_R_opne_1
+	bounds: 1635, 296, 48, 48
+eyebrow_L_Smile
+	bounds: 2021, 1963, 22, 12
+	offsets: 1, 1, 24, 14
+eyebrow_L_opne_1
+	bounds: 2021, 1963, 22, 12
+	offsets: 1, 1, 24, 14
+eyebrow_L_surprised
+	bounds: 2021, 1963, 22, 12
+	offsets: 1, 1, 24, 14
+eyebrow_L_angry
+	bounds: 2021, 1991, 23, 15
+	offsets: 1, 1, 25, 17
+eyebrow_L_oneline
+	bounds: 2021, 1899, 24, 9
+	offsets: 1, 1, 26, 11
+	rotate: 90
+eyebrow_R_Smile
+	bounds: 2021, 1977, 22, 12
+	offsets: 1, 1, 24, 14
+eyebrow_R_opne_1
+	bounds: 2021, 1977, 22, 12
+	offsets: 1, 1, 24, 14
+eyebrow_R_surprised
+	bounds: 2021, 1977, 22, 12
+	offsets: 1, 1, 24, 14
+eyebrow_R_angry
+	bounds: 2021, 2008, 23, 15
+	offsets: 1, 1, 25, 17
+eyebrow_R_oneline
+	bounds: 1274, 1398, 25, 10
+	offsets: 1, 1, 27, 12
+eyeline_L_Mystic
+	bounds: 557, 37, 74, 29
+	offsets: 0, 1, 74, 31
+eyeline_L_oneline
+	bounds: 1978, 1020, 64, 19
+	offsets: 1, 1, 66, 21
+eyeline_L_open_1
+	bounds: 1124, 32, 68, 37
+	offsets: 1, 1, 70, 39
+eyeline_R_Mystic
+	bounds: 1940, 49, 78, 33
+	offsets: 1, 1, 79, 35
+eyeline_R_oneline
+	bounds: 1609, 37, 72, 21
+	offsets: 1, 1, 74, 23
+eyeline_R_opne_1
+	bounds: 557, 68, 81, 39
+	offsets: 1, 1, 83, 41
+fire
+	bounds: 1978, 1260, 65, 72
+hammer
+	bounds: 1487, 55, 85, 120
+	rotate: 90
+horn
+	bounds: 1978, 1334, 62, 83
+	offsets: 0, 0, 62, 84
+mouth_Suin_1
+	bounds: 1635, 162, 43, 37
+	offsets: 1, 1, 45, 39
+mouth_close_1
+	bounds: 1331, 1200, 33, 12
+	offsets: 1, 1, 35, 14
+mouth_close_2
+	bounds: 1551, 1200, 33, 12
+	offsets: 1, 1, 35, 14
+mouth_opne_1
+	bounds: 1024, 28, 39, 30
+	offsets: 1, 1, 41, 32
+mouth_opne_2
+	bounds: 1745, 24, 43, 42
+	offsets: 1, 1, 45, 44
+mouth_opne_3
+	bounds: 1393, 25, 38, 36
+	offsets: 1, 1, 40, 38
+mouth_opne_4
+	bounds: 2016, 659, 25, 24
+	offsets: 1, 1, 27, 26
+mouth_opne_5
+	bounds: 2, 174, 33, 27
+	offsets: 1, 1, 35, 29
+mouth_opne_6
+	bounds: 402, 27, 47, 38
+	offsets: 1, 1, 49, 40
+mouth_opne_7
+	bounds: 204, 33, 40, 24
+	offsets: 1, 1, 42, 26
+mouth_opne_8
+	bounds: 253, 166, 44, 27
+	offsets: 1, 1, 46, 29
+mouth_tongue
+	bounds: 863, 27, 39, 37
+	offsets: 1, 1, 41, 39
+scouter
+	bounds: 1931, 685, 112, 57
+scouter_1
+	bounds: 464, 118, 50, 37
+spanner
+	bounds: 1166, 71, 155, 70
+water
+	bounds: 1517, 1206, 68, 68
+	rotate: 90
+wind
+	bounds: 959, 56, 82, 63
