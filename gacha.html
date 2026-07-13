@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
         <title>嘟嘟臉角色招募模擬器</title>
-        <link rel="icon" href="https://i.postimg.cc/mkfSTq5k/Favicon.png" type="image/png">
+        <link id="dynamicFavicon" rel="icon" href="https://i.postimg.cc/mkfSTq5k/Favicon.png" type="image/png">
         <script src="data_core.js"></script>
         <script src="data_skills.js"></script>
         <link rel="stylesheet" href="sprites.css">
@@ -16,6 +16,8 @@
         <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
         <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
         <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@esotericsoftware/spine-player@4.1.23/dist/spine-player.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/@esotericsoftware/spine-player@4.1.23/dist/iife/spine-player.min.js"></script>
         <style>
             :root { --user-bg-image: url('https://i.postimg.cc/fTJ36ZFT/CG-Schedule-Rim.png'); }
             body { 
@@ -33,75 +35,58 @@
             }
             .dark body { color: #e2e8f0; }
             .dark body::after { background-color: rgba(26, 32, 44, 0.85); }
-            /* 彩虹發光框 (Rate UP 專用) */
-            .rainbow-wrapper {
-            position: relative; padding: 3px; border-radius: 12px;
-            background: linear-gradient(45deg, #ff0000, #ff7300, #ffeb00, #47e247, #00bbff, #0055ff, #8800ff, #ff0000);
-            background-size: 400%; animation: rainbowMove 5s linear infinite;
-            display: inline-flex; align-items: center; justify-content: center;
-            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8));
+            /* 強制隱藏 Spine 控制器 */
+            .spine-player-controls, .spine-player-error {
+            display: none !important;
+            pointer-events: none !important;
             }
-            .rainbow-content { border-radius: 9px; overflow: visible; width: 100%; height: 100%; }
-            @keyframes rainbowMove { 0% { background-position: 0 0; } 100% { background-position: 400% 0; } }
-            /* 頭像框基礎設計 */
-            .char-avatar-container { 
-            position: relative; overflow: hidden; transform-origin: center;
-            display: flex; align-items: center; justify-content: center;
+            
+            /* 🌟 檯面發光防禦容器 */
+            .table-glow-container {
+            position: absolute;
+            bottom: 0; left: 0; width: 100%; height: 100%;
+            overflow: hidden; pointer-events: none;
+            mix-blend-mode: screen; opacity: 0;
+            transform: scaleY(0.5); transform-origin: bottom center;
+            transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 25;
             }
-            .char-avatar-container img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
-            /* 出金閃光特效 */
-            @keyframes flashGold {
-            0% { filter: brightness(1); }
-            50% { filter: brightness(1.5) drop-shadow(0 0 15px gold); transform: scale(1.05); }
-            100% { filter: brightness(1); }
+            .table-glow-container.active {
+            opacity: 1; transform: scaleY(1);
             }
-            .flash-gold { animation: flashGold 0.5s ease-out forwards; }
-            /* 基礎彈出動畫 */
-            @keyframes popIn {
-            0% { transform: scale(0); opacity: 0; }
-            70% { transform: scale(1.1); opacity: 1; }
-            100% { transform: scale(1); opacity: 1; }
+            
+            /* 🌟 2星發光調整 */
+            .table-glow-2star {
+            width: 100%; height: 100%;
+            background: radial-gradient(ellipse at 50% 100%, rgba(255, 215, 0, 1) 0%, rgba(255, 140, 0, 0.4) 25%, transparent 55%);
             }
-            .animate-pop { 
-            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
-            opacity: 0; 
+            
+            /* 🌟 3星彩色發光調整 */
+            .table-glow-3star {
+            width: 100%; height: 100%;
+            background: radial-gradient(ellipse at 50% 100%, 
+            rgba(255, 255, 255, 1) 0%, 
+            rgba(255, 215, 0, 0.8) 15%, 
+            rgba(255, 50, 150, 0.5) 30%, 
+            rgba(0, 150, 255, 0.2) 45%, 
+            transparent 65%);
+            animation: pulseRainbowGlow 2.5s infinite alternate ease-in-out;
             }
-            /* 特選角色：誇張彈出動畫 (旋轉 + 縮放) */
-            @keyframes popInExaggerated {
-            0% { transform: scale(0) rotate(-15deg); opacity: 0; }
-            50% { transform: scale(1.25) rotate(10deg); opacity: 1; filter: brightness(1.2); }
-            75% { transform: scale(0.9) rotate(-5deg); opacity: 1; }
-            100% { transform: scale(1.05) rotate(0deg); opacity: 1; }
+            @keyframes pulseRainbowGlow {
+            0% { filter: hue-rotate(0deg) brightness(1); }
+            100% { filter: hue-rotate(360deg) brightness(1.25); }
             }
-            .animate-pop-exaggerated { 
-            animation: popInExaggerated 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
-            opacity: 0; 
-            }
-            /* 按鈕樣式 */
             .btn-gacha { transition: transform 0.1s; }
             .btn-gacha:active { transform: scale(0.95); }
             .pool-btn { transition: all 0.2s; }
             .pool-btn.active { background-color: #f59e0b; color: white; border-color: #d97706; }
-            /* 回頂部按鈕樣式 */
             #backToTop {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 9999;
-            display: none; /* 預設隱藏 */
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background-color: #fbbf24; /* 琥珀色 */
-            color: white;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: fixed; bottom: 20px; right: 20px; z-index: 9999;
+            display: none; width: 45px; height: 45px; border-radius: 50%;
+            background-color: #fbbf24; color: white; border: none;
+            cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             transition: transform 0.2s, background-color 0.3s;
-            font-size: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            font-size: 20px; display: flex; align-items: center; justify-content: center;
             }
             #backToTop:hover { background-color: #d97706; transform: translateY(-5px); }
         </style>
@@ -110,7 +95,6 @@
         <div class="max-w-4xl mx-auto space-y-6">
             <header class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-2xl p-4 sm:p-6 shadow border-2 border-amber-200/80 dark:border-gray-700 flex flex-col sm:flex-row justify-between items-center gap-4">
                 <h1 class="text-2xl sm:text-3xl font-bold text-amber-900 dark:text-amber-400 flex items-center gap-2">
-                    <!-- 🌟 替換為 Title_Rim 雪碧圖 -->
                     <div class="sprite-base sprite-common sprite-Title_Rim shrink-0 scale-[0.5] sm:scale-[0.6] origin-left -ml-1"></div>
                     <span class="-ml-2">嘟嘟臉角色招募模擬器</span>
                 </h1>
@@ -127,28 +111,32 @@
                 </div>
             </section>
             <section class="flex flex-wrap justify-center gap-4 py-4">
-                <!-- 1次招募 -->
                 <button onclick="performGacha(1)" class="btn-gacha px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-xl shadow-lg border-b-4 border-blue-700 flex items-center gap-2 relative h-[50px]">
-                    <!-- 將 left-4 改為 left-3，讓 icon 更靠左 -->
                     <div class="absolute left-3 flex items-center justify-center pointer-events-none">
                         <span id="iconGacha1" class="sprite-base sprite-common sprite-Icon_GachaTicketHero scale-[0.4] origin-center"></span>
                     </div>
-                    <!-- 將 ml-8 改為 ml-10，確保文字不會被 icon 蓋到 -->
                     <span class="ml-10">1次招募</span>
                 </button>
-                <!-- 10次招募 -->
                 <button onclick="performGacha(10)" class="btn-gacha px-6 py-3 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl shadow-lg border-b-4 border-amber-700 flex items-center gap-2 relative h-[50px]">
-                    <!-- 將 left-4 改為 left-3，讓 icon 更靠左 -->
                     <div class="absolute left-3 flex items-center justify-center pointer-events-none">
                         <span id="iconGacha10" class="sprite-base sprite-common sprite-Icon_GachaTicketHero_10 scale-[0.4] origin-center"></span>
                     </div>
-                    <!-- 將 ml-8 改為 ml-10，確保文字不會被 icon 蓋到 -->
                     <span class="ml-10">10次招募</span>
                 </button>
             </section>
-            <section id="resultArea" class="bg-gradient-to-b from-white/95 to-amber-50/95 dark:from-gray-800/95 dark:to-gray-900/95 backdrop-blur-md rounded-2xl p-6 shadow-xl border-4 border-amber-300 dark:border-gray-600 min-h-[250px] flex flex-col items-center justify-center">
-                <p class="text-gray-400 dark:text-gray-500 font-bold mb-2">等待招募中...</p>
-            </section>
+            <div class="relative w-full max-w-4xl mx-auto mb-6 aspect-video bg-white/90 dark:bg-gray-800/90 rounded-2xl shadow-xl border-4 border-amber-300 dark:border-gray-600 overflow-hidden">
+                <section id="gachaStage" class="absolute inset-0 w-full h-full bg-black transition-opacity duration-500 z-10 opacity-0 pointer-events-none">
+                    <div id="gachaSpineContainerErpin" class="absolute inset-0 w-full h-full z-10 cursor-pointer"></div>
+                    <div id="gachaSpineContainerCloseup" class="absolute inset-0 w-full h-full z-20 pointer-events-none" style="display: none; opacity: 0;"></div>
+                    <div id="closeupTableGlow" class="table-glow-container z-[25]"></div>
+                    <div id="gachaSpineContainerDocs" class="absolute inset-0 w-full h-full z-30 pointer-events-none"></div>
+                </section>
+                <section id="resultArea" class="absolute inset-0 w-full h-full bg-gradient-to-b from-white/95 to-amber-50/95 dark:from-gray-800/95 dark:to-gray-900/95 backdrop-blur-md p-2 sm:p-6 flex flex-col items-center justify-start overflow-y-auto transition-opacity duration-500 z-20">
+                    <div class="h-full w-full flex items-center justify-center min-h-[250px]">
+                        <p class="text-gray-400 dark:text-gray-500 font-bold">等待招募中...</p>
+                    </div>
+                </section>
+            </div>
             <section class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-2xl p-4 shadow border-2 border-gray-200/80 dark:border-gray-700">
                 <h3 class="text-sm font-bold text-gray-500 dark:text-gray-400 mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">📜 招募紀錄</h3>
                 <div id="historyArea" class="space-y-4 max-h-[500px] overflow-y-auto pr-2"></div>
@@ -162,235 +150,126 @@
             if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
             const db = firebase.firestore();
             const auth = firebase.auth();
-            
             let currentUser = null;
-            
-            auth.onAuthStateChanged(user => {
-                currentUser = user;
-                if (user) { loadHistoryFromCloud(); }
-            });
+            auth.onAuthStateChanged(user => { currentUser = user; if (user) { loadHistoryFromCloud(); } });
             
             function saveHistoryToCloud(record) {
                 if (!currentUser) return;
-                db.collection("gacha_history").doc(currentUser.uid).update({
-                    logs: firebase.firestore.FieldValue.arrayUnion(record)
-                }).catch(() => {
-                    db.collection("gacha_history").doc(currentUser.uid).set({ logs: [record] });
-                });
+                db.collection("gacha_history").doc(currentUser.uid).update({ logs: firebase.firestore.FieldValue.arrayUnion(record) })
+                .catch(() => { db.collection("gacha_history").doc(currentUser.uid).set({ logs: [record] }); });
             }
             
             function loadHistoryFromCloud() {
                 if (!currentUser) return;
-                db.collection("gacha_history").doc(currentUser.uid).get().then(doc => {
-                    if (doc.exists && doc.data().logs) {
-                        renderHistory(doc.data().logs);
-                    }
+                db.collection("gacha_history").doc(currentUser.uid).get().then(doc => { 
+                    if (doc.exists && doc.data().logs) { renderHistory(doc.data().logs); } 
                 }).catch(err => console.error("讀取歷史紀錄失敗:", err));
             }
             
             // ==========================
-            // 資料設定與 UI 初始化
+            // 角色與UI初始化
             // ==========================
             let currentPool = { type: 'normal', rateUpChars: [], personality: null, name: '普通招募' };
             const personalities = ["天真", "冷靜", "狂亂", "活潑", "憂鬱"];
-            
-            const personalityBorderColors = { "天真": "border-green-500", "冷靜": "border-blue-500", "狂亂": "border-red-500", "活潑": "border-yellow-400", "憂鬱": "border-purple-500" };
-            const personalityShadows = { 
-                "天真": "shadow-[0_0_15px_rgba(34,197,94,0.85)]", 
-                "冷靜": "shadow-[0_0_15px_rgba(59,130,246,0.85)]", 
-                "狂亂": "shadow-[0_0_15px_rgba(239,68,68,0.85)]", 
-                "活潑": "shadow-[0_0_15px_rgba(250,204,21,0.85)]", 
-                "憂鬱": "shadow-[0_0_15px_rgba(168,85,247,0.85)]" 
-            };
-            
             const validChars = INITIAL_DATA.filter(c => !c.releaseDate || new Date(c.releaseDate).getTime() < Date.now()).map(c => {
-                let starNum = 1;
-                if (typeof GRADE_MAP !== 'undefined' && GRADE_MAP[c.name]) {
-                    const parsedStar = parseInt(GRADE_MAP[c.name]);
-                    if (!isNaN(parsedStar)) starNum = parsedStar;
-                }
-                let isEldainChar = false;
-                if (typeof ELDAIN_LIST !== 'undefined') {
-                    isEldainChar = ELDAIN_LIST.includes(c.name) || (c.name === '羽伊' && ELDAIN_LIST.includes('羽依'));
-                }
+                let starNum = 1; if (typeof GRADE_MAP !== 'undefined' && GRADE_MAP[c.name]) { const parsedStar = parseInt(GRADE_MAP[c.name]); if (!isNaN(parsedStar)) starNum = parsedStar; }
+                let isEldainChar = false; if (typeof ELDAIN_LIST !== 'undefined') { isEldainChar = ELDAIN_LIST.includes(c.name) || (c.name === '羽伊' && ELDAIN_LIST.includes('羽依')); }
                 return { ...c, star: starNum, isEldain: isEldainChar };
             });
             
             function initUI() {
-                const poolBtnContainer = document.getElementById('poolButtons');
-                const pBtnContainer = document.getElementById('personalityButtons');
-                poolBtnContainer.innerHTML = '';
-                pBtnContainer.innerHTML = '';
-            
+                const poolBtnContainer = document.getElementById('poolButtons'); const pBtnContainer = document.getElementById('personalityButtons');
+                poolBtnContainer.innerHTML = ''; pBtnContainer.innerHTML = '';
                 let currentRateUps = [];
                 if (typeof PICKUP_SCHEDULE !== 'undefined') {
                     const now = new Date().getTime();
-                    PICKUP_SCHEDULE.forEach(s => {
-                        if (now >= new Date(s.start).getTime() && now <= new Date(s.end).getTime()) {
-                            currentRateUps.push(...s.chars);
-                        }
-                    });
+                    PICKUP_SCHEDULE.forEach(s => { if (now >= new Date(s.start).getTime() && now <= new Date(s.end).getTime()) { currentRateUps.push(...s.chars); } });
                     currentRateUps = [...new Set(currentRateUps)];
                 }
-            
                 let firstBtn = null;
-            
                 currentRateUps.forEach(charName => {
-                    const btn = document.createElement('button');
-                    btn.className = 'pool-btn px-3 py-1.5 rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 font-bold text-sm text-gray-700 dark:text-gray-200';
-                    btn.innerText = `🎯 特選招募 - ${charName}`;
-                    btn.onclick = () => setPool('rateup', [charName], null, btn.innerText, btn);
-                    poolBtnContainer.appendChild(btn);
-                    if (!firstBtn) firstBtn = { btn, type: 'rateup', args: [[charName], null, btn.innerText] };
+                    const btn = document.createElement('button'); btn.className = 'pool-btn px-3 py-1.5 rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 font-bold text-sm text-gray-700 dark:text-gray-200';
+                    btn.innerText = `🎯 特選招募 - ${charName}`; btn.onclick = () => setPool('rateup', [charName], null, btn.innerText, btn);
+                    poolBtnContainer.appendChild(btn); if (!firstBtn) firstBtn = { btn, type: 'rateup', args: [[charName], null, btn.innerText] };
                 });
-            
-                const normalBtn = document.createElement('button');
-                normalBtn.className = 'pool-btn px-3 py-1.5 rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 font-bold text-sm text-gray-700 dark:text-gray-200';
-                normalBtn.innerText = `🌟 普通招募`;
-                normalBtn.onclick = () => setPool('normal', [], null, normalBtn.innerText, normalBtn);
-                poolBtnContainer.appendChild(normalBtn);
-                if (!firstBtn) firstBtn = { btn: normalBtn, type: 'normal', args: [[], null, normalBtn.innerText] };
-            
-                const pPoolBtn = document.createElement('button');
-                pPoolBtn.className = 'pool-btn px-3 py-1.5 rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 font-bold text-sm text-gray-700 dark:text-gray-200';
+                const normalBtn = document.createElement('button'); normalBtn.className = 'pool-btn px-3 py-1.5 rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 font-bold text-sm text-gray-700 dark:text-gray-200';
+                normalBtn.innerText = `🌟 普通招募`; normalBtn.onclick = () => setPool('normal', [], null, normalBtn.innerText, normalBtn);
+                poolBtnContainer.appendChild(normalBtn); if (!firstBtn) firstBtn = { btn: normalBtn, type: 'normal', args: [[], null, normalBtn.innerText] };
+                
+                const pPoolBtn = document.createElement('button'); pPoolBtn.className = 'pool-btn px-3 py-1.5 rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 font-bold text-sm text-gray-700 dark:text-gray-200';
                 pPoolBtn.innerText = `🔮 性格選擇招募`;
-                pPoolBtn.onclick = () => {
-                    document.getElementById('personalitySubMenu').classList.remove('hidden');
-                    setPool('personality', [], personalities[0], `🔮 性格選擇招募 - ${personalities[0]}`, pPoolBtn);
-                    updatePersonalityBtns(personalities[0]);
-                };
+                pPoolBtn.onclick = () => { document.getElementById('personalitySubMenu').classList.remove('hidden'); setPool('personality', [], personalities[0], `🔮 性格選擇招募 - ${personalities[0]}`, pPoolBtn); updatePersonalityBtns(personalities[0]); };
                 poolBtnContainer.appendChild(pPoolBtn);
-            
                 personalities.forEach(p => {
-                    const btn = document.createElement('button');
-                    btn.className = 'p-sub-btn px-2 py-1 rounded border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-xs font-bold';
-                    btn.innerText = p;
-                    btn.onclick = () => {
-                        setPool('personality', [], p, `🔮 性格選擇招募 - ${p}`, pPoolBtn);
-                        updatePersonalityBtns(p);
-                    };
+                    const btn = document.createElement('button'); btn.className = 'p-sub-btn px-2 py-1 rounded border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-xs font-bold';
+                    btn.innerText = p; btn.onclick = () => { setPool('personality', [], p, `🔮 性格選擇招募 - ${p}`, pPoolBtn); updatePersonalityBtns(p); };
                     pBtnContainer.appendChild(btn);
                 });
-            
                 if (firstBtn) { setPool(firstBtn.type, firstBtn.args[0], firstBtn.args[1], firstBtn.args[2], firstBtn.btn); }
             }
             
             function setPool(type, rateUpChars, personality, poolName, activeElement) {
                 currentPool = { type, rateUpChars, personality, name: poolName };
-                document.querySelectorAll('.pool-btn').forEach(b => b.classList.remove('active'));
-                if (activeElement) activeElement.classList.add('active');
+                document.querySelectorAll('.pool-btn').forEach(b => b.classList.remove('active')); if (activeElement) activeElement.classList.add('active');
                 if (type !== 'personality') document.getElementById('personalitySubMenu').classList.add('hidden');
-            
-                const icon1 = document.getElementById('iconGacha1');
-            const icon10 = document.getElementById('iconGacha10');
-            
-            // 設定基礎樣式，將 scale 與尺寸分開設定
-            const commonClasses = "sprite-base sprite-common shrink-0 origin-center transition-all";
-            
-            if (icon1 && icon10) {
-            if (type === 'personality') {
-            icon1.className = "sprite-base sprite-common sprite-Icon_GachaPersonality scale-[0.4] origin-center";
-            icon10.className = "sprite-base sprite-common sprite-Icon_GachaPersonality_10 scale-[0.4] origin-center";
-            } else {
-            icon1.className = "sprite-base sprite-common sprite-Icon_GachaTicketHero scale-[0.4] origin-center";
-            icon10.className = "sprite-base sprite-common sprite-Icon_GachaTicketHero_10 scale-[0.4] origin-center";
-            }
-            }
+                const icon1 = document.getElementById('iconGacha1'); const icon10 = document.getElementById('iconGacha10');
+                if (icon1 && icon10) {
+                    if (type === 'personality') { icon1.className = "sprite-base sprite-common sprite-Icon_GachaPersonality scale-[0.4] origin-center"; icon10.className = "sprite-base sprite-common sprite-Icon_GachaPersonality_10 scale-[0.4] origin-center"; } 
+                    else { icon1.className = "sprite-base sprite-common sprite-Icon_GachaTicketHero scale-[0.4] origin-center"; icon10.className = "sprite-base sprite-common sprite-Icon_GachaTicketHero_10 scale-[0.4] origin-center"; }
+                }
             }
             
             function updatePersonalityBtns(selectedP) {
                 document.querySelectorAll('.p-sub-btn').forEach(b => {
-                    if(b.innerText === selectedP) {
-                        b.classList.add('bg-purple-500', 'text-white', 'border-purple-600');
-                        b.classList.remove('bg-gray-50', 'text-black', 'dark:bg-gray-800');
-                    } else {
-                        b.classList.remove('bg-purple-500', 'text-white', 'border-purple-600');
-                        b.classList.add('bg-gray-50', 'text-black', 'dark:bg-gray-800');
-                    }
+                    if(b.innerText === selectedP) { b.classList.add('bg-purple-500', 'text-white', 'border-purple-600'); b.classList.remove('bg-gray-50', 'text-black', 'dark:bg-gray-800'); } 
+                    else { b.classList.remove('bg-purple-500', 'text-white', 'border-purple-600'); b.classList.add('bg-gray-50', 'text-black', 'dark:bg-gray-800'); }
                 });
             }
             
             // ==========================
-            // 核心機率計算引擎
+            // 機率運算
             // ==========================
             function getGachaPool(isGuaranteed) {
-                let p1 = isGuaranteed ? 0 : 0.76;
-                let p2 = isGuaranteed ? 0.97 : 0.21;
-                let p3 = 0.03;
-                let eldainBase = 0.00036;
-            
-                let availableChars = validChars;
-                if (currentPool.type === 'personality') {
-                    availableChars = validChars.filter(c => c.personality === currentPool.personality);
-                }
-            
-                let stars1 = availableChars.filter(c => c.star === 1);
-                let stars2 = availableChars.filter(c => c.star === 2);
-                let stars3 = availableChars.filter(c => c.star === 3);
-            
+                let p1 = isGuaranteed ? 0 : 0.76; let p2 = isGuaranteed ? 0.97 : 0.21; let p3 = 0.03; let eldainBase = 0.00036;
+                let availableChars = validChars; 
+                if (currentPool.type === 'personality') availableChars = validChars.filter(c => c.personality === currentPool.personality);
+                let stars1 = availableChars.filter(c => c.star === 1); let stars2 = availableChars.filter(c => c.star === 2); let stars3 = availableChars.filter(c => c.star === 3);
                 let weightedPool = [];
-            
-                if (stars1.length > 0) {
-                    let w = p1 / stars1.length;
-                    stars1.forEach(c => weightedPool.push({ char: c, weight: w, isRateUp: false }));
-                }
-                if (stars2.length > 0) {
-                    let w = p2 / stars2.length;
-                    stars2.forEach(c => weightedPool.push({ char: c, weight: w, isRateUp: false }));
-                }
-            
+                
+                if (stars1.length > 0) { let w = p1 / stars1.length; stars1.forEach(c => weightedPool.push({ char: c, weight: w, isRateUp: false })); }
+                if (stars2.length > 0) { let w = p2 / stars2.length; stars2.forEach(c => weightedPool.push({ char: c, weight: w, isRateUp: false })); }
                 if (stars3.length > 0) {
-                    let allEldains = stars3.filter(c => c.isEldain);
-                    let normal3s = stars3.filter(c => !c.isEldain);
-                    
-                    // 獨立處理「性格選擇招募」的三星機率
+                    let allEldains = stars3.filter(c => c.isEldain); let normal3s = stars3.filter(c => !c.isEldain);
                     if (currentPool.type === 'personality') {
-                        let eldainTotalWeight = 0;
-                        if (allEldains.length > 0) {
-                            eldainTotalWeight = 0.00032; // 該性格內的所有艾爾丁平分 0.032%
-                            let w = eldainTotalWeight / allEldains.length;
-                            allEldains.forEach(c => weightedPool.push({ char: c, weight: w, isRateUp: false }));
+                        let eldainTotalWeight = 0; 
+                        if (allEldains.length > 0) { 
+                            eldainTotalWeight = 0.00032; let w = eldainTotalWeight / allEldains.length; 
+                            allEldains.forEach(c => weightedPool.push({ char: c, weight: w, isRateUp: false })); 
                         }
-            
-                        let remaining3Prob = p3 - eldainTotalWeight;
-                        if (normal3s.length > 0) {
-                            let w = remaining3Prob / normal3s.length;
-                            normal3s.forEach(c => weightedPool.push({ char: c, weight: w, isRateUp: false }));
-                        }
-                    } 
-                    // 處理「特選池」與「普通池」
-                    else {
-                        let rateUpEldains = allEldains.filter(c => currentPool.rateUpChars.includes(c.name));
+                        let remaining3Prob = p3 - eldainTotalWeight; 
+                        if (normal3s.length > 0) { let w = remaining3Prob / normal3s.length; normal3s.forEach(c => weightedPool.push({ char: c, weight: w, isRateUp: false })); }
+                    } else {
+                        let rateUpEldains = allEldains.filter(c => currentPool.rateUpChars.includes(c.name)); 
                         let rateUpNormals = normal3s.filter(c => currentPool.rateUpChars.includes(c.name));
-            
-                        if (rateUpEldains.length > 0) {
-                            let totalEldainProb = allEldains.length * eldainBase;
-                            let targetWeight = (totalEldainProb * 2) / rateUpEldains.length;
-                            rateUpEldains.forEach(c => weightedPool.push({ char: c, weight: targetWeight, isRateUp: true }));
-                        } else {
-                            allEldains.forEach(c => weightedPool.push({ char: c, weight: eldainBase, isRateUp: false }));
-                        }
-            
-                        let currentTotal3Weight = weightedPool.filter(p => p.char.star === 3).reduce((sum, p) => sum + p.weight, 0);
+                        if (rateUpEldains.length > 0) { 
+                            let totalEldainProb = allEldains.length * eldainBase; let targetWeight = (totalEldainProb * 2) / rateUpEldains.length; 
+                            rateUpEldains.forEach(c => weightedPool.push({ char: c, weight: targetWeight, isRateUp: true })); 
+                        } else { allEldains.forEach(c => weightedPool.push({ char: c, weight: eldainBase, isRateUp: false })); }
+                        
+                        let currentTotal3Weight = weightedPool.filter(p => p.char.star === 3).reduce((sum, p) => sum + p.weight, 0); 
                         let remaining3Prob = p3 - currentTotal3Weight;
-            
+                        
                         if (normal3s.length > 0) {
                             if (rateUpNormals.length > 0) {
-                                let baseNormalWeight = remaining3Prob / normal3s.length;
-                                let targetRateUpWeight = baseNormalWeight * 2;
+                                let targetRateUpWeight = 0.008; // 修正特選為精準 0.8%
                                 let totalRateUpWeight = targetRateUpWeight * rateUpNormals.length;
                                 let otherNormalWeight = Math.max(0, (remaining3Prob - totalRateUpWeight) / (normal3s.length - rateUpNormals.length));
-            
-                                normal3s.forEach(c => {
-                                    if (currentPool.rateUpChars.includes(c.name)) {
-                                        weightedPool.push({ char: c, weight: targetRateUpWeight, isRateUp: true });
-                                    } else {
-                                        weightedPool.push({ char: c, weight: otherNormalWeight, isRateUp: false });
-                                    }
+                                normal3s.forEach(c => { 
+                                    if (currentPool.rateUpChars.includes(c.name)) { weightedPool.push({ char: c, weight: targetRateUpWeight, isRateUp: true }); } 
+                                    else { weightedPool.push({ char: c, weight: otherNormalWeight, isRateUp: false }); } 
                                 });
-                            } else {
-                                let w = remaining3Prob / normal3s.length;
-                                normal3s.forEach(c => weightedPool.push({ char: c, weight: w, isRateUp: false }));
+                            } else { 
+                                let w = remaining3Prob / normal3s.length; normal3s.forEach(c => weightedPool.push({ char: c, weight: w, isRateUp: false })); 
                             }
                         }
                     }
@@ -398,127 +277,99 @@
                 return weightedPool;
             }
             
-            function pullOne(isGuaranteed) {
-                const pool = getGachaPool(isGuaranteed);
-                const rand = Math.random();
-                let accum = 0;
-                for (let i = 0; i < pool.length; i++) {
-                    accum += pool[i].weight;
-                    if (rand <= accum) return pool[i];
-                }
-                return pool[pool.length - 1];
-            }
+            function pullOne(isGuaranteed) { const pool = getGachaPool(isGuaranteed); const rand = Math.random(); let accum = 0; for (let i = 0; i < pool.length; i++) { accum += pool[i].weight; if (rand <= accum) return pool[i]; } return pool[pool.length - 1]; }
+            
+            let pendingGachaTimes = 0; let pendingGachaResults = []; let has3Star = false; let has2Star = false; let hasRateUp = false; let isGachaRunning = false;
             
             function performGacha(times) {
-                let results = [];
+                if (isGachaRunning) return; isGachaRunning = true; document.querySelectorAll('.btn-gacha').forEach(btn => { btn.classList.add('opacity-50', 'cursor-not-allowed'); });
+                pendingGachaTimes = times; pendingGachaResults = []; has3Star = false; has2Star = false; hasRateUp = false;
                 for (let i = 0; i < times; i++) {
-                    let isGuaranteed = (times === 10 && i === 9);
-                    results.push(pullOne(isGuaranteed));
+                    let isGuaranteed = (times === 10 && i === 9); let result = pullOne(isGuaranteed); pendingGachaResults.push(result);
+                    if (result.char.star === 3) has3Star = true; if (result.char.star === 2) has2Star = true; if (result.isRateUp) hasRateUp = true;
                 }
-                renderResultArea(results);
-                addToHistory(results, currentPool.name);
+                startGachaAnimation();
             }
             
             // ==========================
-            // UI 渲染與動畫
+            // UI 生成區 (整合舊歷史與新排版)
             // ==========================
-            // 🌟 加入雪碧圖基礎設定對應表
-            const SPRITE_CLASS_MAP = {
-                race_龍族: "sprite-Bg_Dragon", race_精靈: "sprite-Bg_Elf", race_妖精: "sprite-Bg_Sprite",
-                race_幽靈: "sprite-Bg_Phantom", race_魔靈: "sprite-Bg_Elemental", race_不明: "sprite-Bg_Unknown",
-                race_獸人: "sprite-Bg_Werebeast", race_魔女: "sprite-Bg_Witch", race_unknown: "sprite-Bg_Unknown"
-            };
-            const CHAR_SPRITE_MAP = {
-                "冷靜": "sprite-char-composed", "憂鬱": "sprite-char-depressed",
-                "天真": "sprite-char-innocence", "狂亂": "sprite-char-madness", "活潑": "sprite-char-vivacious"
-            };
-            
-            function createAvatarDOM(resultObj, index = 0, isHistory = false) {
-                const char = resultObj.char;
-                const isRateUp = resultObj.isRateUp;
-                const is3StarNormal = (char.star === 3 && !isRateUp);
+            function getGachaCharIconHTML(charData, isLarge = false, isRateUp = false) {
+                const personalityBorderColors = { "天真": "border-green-500", "冷靜": "border-blue-500", "狂亂": "border-red-500", "活潑": "border-yellow-400", "憂鬱": "border-purple-500" };
+                const personalityHexMap = { "天真": "#22c55e", "冷靜": "#3b82f6", "狂亂": "#ef4444", "活潑": "#facc15", "憂鬱": "#a855f7" };
+                const bgClassMap = { "龍族": "sprite-Bg_Dragon", "精靈": "sprite-Bg_Elf", "妖精": "sprite-Bg_Sprite", "獸人": "sprite-Bg_Werebeast", "幽靈": "sprite-Bg_Phantom", "???": "sprite-Bg_Unknown", "unknown": "sprite-Bg_Unknown", "魔靈": "sprite-Bg_Elemental", "魔女": "sprite-Bg_Witch" };
+                const charSpriteBaseMap = { "冷靜": "sprite-char-composed", "憂鬱": "sprite-char-depressed", "天真": "sprite-char-innocence", "狂亂": "sprite-char-madness", "活潑": "sprite-char-vivacious" };
                 
-                const borderColorClass = personalityBorderColors[char.personality] || "border-gray-300";
-                
-                // 非特選三星性格發光
-                const glowClass = (is3StarNormal && !isHistory) ? (personalityShadows[char.personality] || "shadow-[0_0_15px_rgba(255,255,255,0.8)]") : "shadow-inner";
-                
-                // 動畫設定
-                const animClass = isHistory ? "" : (isRateUp ? "animate-pop-exaggerated" : "animate-pop");
-                const animStyle = isHistory ? "" : `animation-delay: ${index * 0.12}s;`;
-                const sizeClass = isHistory ? "w-10 h-10" : "w-16 h-16 sm:w-20 sm:h-20"; 
-                
-                // 🌟 雪碧圖變數準備
-                const spineName = typeof SPINE_MAP !== 'undefined' && SPINE_MAP[char.name] ? SPINE_MAP[char.name] : char.name;
-                const charSpriteBase = CHAR_SPRITE_MAP[char.personality] || "sprite-char-innocence";
+                const borderColor = personalityBorderColors[charData.personality] || "border-gray-300"; 
+                const pColorHex = personalityHexMap[charData.personality] || "rgba(255,255,255,0.5)"; 
+                const raceKey = (charData.race === "???" || !charData.race) ? "unknown" : charData.race; 
+                const bgSprite = bgClassMap[raceKey] || "sprite-Bg_Unknown";
+                const spineName = typeof SPINE_MAP !== 'undefined' && SPINE_MAP[charData.name] ? SPINE_MAP[charData.name] : charData.name; 
+                const charSpriteBase = charSpriteBaseMap[charData.personality] || ""; 
                 const charSpriteClass = `sprite-${spineName}`;
                 
-                let raceKey = char.race; if (raceKey === "???") raceKey = "unknown";
-                const raceSprite = SPRITE_CLASS_MAP[`race_${raceKey}`] || "sprite-Bg_Unknown";
+                const sizeClass = isLarge ? "w-[58px] h-[58px] sm:w-[76px] sm:h-[76px]" : "w-10 h-10"; 
+                const bgScaleClass = isLarge ? "scale-[0.52] sm:scale-[0.6]" : "scale-[0.45]"; 
+                const charScaleClass = isLarge ? "scale-[0.45] sm:scale-[0.55]" : "scale-[0.35]";
                 
-                // 根據歷史紀錄區或展示區微調縮放比例
-                // 🌟 放大頭像比例 (0.55 -> 0.6, 0.9 -> 1.0, 1.1 -> 1.2)
-                const innerScale = isHistory ? "scale-[0.3]" : "scale-[0.5] sm:scale-[0.6]";
-                const bgScale = isHistory ? "scale-[0.35]" : "scale-[0.6] sm:scale-[0.75]";
-            
-                let avatarHTML = `
-                    <div class="relative shrink-0 ${sizeClass}">
-                        <div class="char-avatar-container ${sizeClass} rounded-lg border-[3px] ${borderColorClass} ${glowClass} bg-[#fcf8f2] dark:bg-gray-800 transition-all overflow-hidden relative flex items-center justify-center">
-                            <!-- 種族背景 -->
-                            <div class="absolute inset-0 flex items-center justify-center opacity-85">
-                                <div class="sprite-base sprite-common ${raceSprite} shrink-0 ${bgScale} origin-center"></div>
-                            </div>
-                            <div class="w-full h-full bg-white/20 dark:bg-black/20 backdrop-blur-[1px] absolute inset-0 z-0"></div>
-                            <!-- 角色頭像 -->
-                            <div class="sprite-base ${charSpriteBase} ${charSpriteClass} shrink-0 ${innerScale} origin-center relative z-10"></div>
-                        </div>
-                        <div class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 flex gap-[1px] z-20">
-                            ${Array(char.star).fill('<span class="text-xs drop-shadow-md">⭐</span>').join('')}
-                        </div>
-                    </div>
+                const innerHTML = `
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 sprite-base sprite-common ${bgSprite} ${bgScaleClass} z-0 opacity-90"></div>
+                    <div class="absolute inset-0 bg-white/20 dark:bg-black/20 backdrop-blur-[1px] z-[5]"></div>
+                    <div class="absolute inset-0 flex items-center justify-center z-10"><div class="sprite-base ${charSpriteBase} ${charSpriteClass} shrink-0 ${charScaleClass} origin-center"></div></div>
                 `;
-            
-                if (isRateUp) {
+
+                if (isLarge && isRateUp) {
                     return `
-                        <div class="flex flex-col items-center gap-2 ${animClass}" style="${animStyle}">
-                            <div class="rainbow-wrapper p-[3px] rounded-xl transform scale-110">
-                                <div class="rainbow-content bg-white">
-                                    ${avatarHTML}
-                                </div>
+                        <div class="${sizeClass} rounded-lg relative shrink-0 p-[3px] z-10" style="box-shadow: 0 0 15px ${pColorHex};">
+                            <div class="absolute inset-0 rounded-lg z-0" style="background: linear-gradient(45deg, #ff0000, #ff7300, #ffeb00, #47e247, #00bbff, #0055ff, #8800ff, #ff0000); background-size: 400%; animation: rainbowMove 3s linear infinite;"></div>
+                            <div class="absolute inset-[3px] rounded-[5px] overflow-hidden bg-[#fcf8f2] dark:bg-gray-800 z-10">
+                                ${innerHTML}
                             </div>
-                            <span class="text-[10px] font-bold text-amber-600 bg-amber-100 px-1 rounded z-10 relative">${char.name}</span>
+                        </div>`;
+                } else {
+                    return `
+                        <div class="${sizeClass} rounded-lg border-2 ${borderColor} shadow-inner bg-[#fcf8f2] dark:bg-gray-800 relative overflow-hidden shrink-0">
+                            ${innerHTML}
+                        </div>`;
+                }
+            }
+            
+            function showRealGachaResults() {
+                const resultArea = document.getElementById('resultArea');
+                let gridClass = pendingGachaTimes > 1 
+                    ? "grid grid-cols-5 gap-x-1 gap-y-3 sm:gap-x-4 sm:gap-y-4 w-full max-w-3xl mx-auto justify-items-center" 
+                    : "flex justify-center w-full";
+
+                resultArea.innerHTML = `
+                    <h3 class="text-xl sm:text-2xl font-bold text-amber-900 dark:text-amber-400 mt-2 sm:mt-0 mb-4 w-full text-center drop-shadow-sm">🎉 招募結果 🎉</h3>
+                    <div id="gachaResultsGrid" class="${gridClass}"></div>
+                `;
+                
+                const container = document.getElementById('gachaResultsGrid');
+                pendingGachaResults.forEach((result, idx) => {
+                    const charData = result.char; const isNew = result.isNew; 
+                    const is3Star = charData.star === 3; const isRateUp = result.isRateUp;
+                    const card = document.createElement('div');
+                    card.className = `relative flex flex-col items-center gap-0 w-[58px] sm:w-[76px] transition-transform hover:scale-105`;
+                    const iconHTML = getGachaCharIconHTML(charData, true, isRateUp); 
+                    const displayName = typeof t === 'function' ? t(charData.name) : charData.name;
+                    
+                    card.innerHTML = `
+                        ${isNew ? '<div class="absolute -top-2 -right-2 bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow-md z-20 animate-pulse">NEW</div>' : ''}
+                        <div class="relative ${is3Star && !isRateUp ? 'shadow-[0_0_12px_rgba(250,204,21,0.6)] rounded-lg' : ''}">
+                            ${iconHTML}
+                        </div>
+                        <div class="flex flex-col items-center w-full mt-1.5">
+                            <div class="text-yellow-400 text-[10px] sm:text-xs tracking-widest drop-shadow-sm leading-none mb-1 h-3">${'★'.repeat(charData.star)}</div>
+                            <div class="text-[10px] sm:text-xs font-bold text-gray-800 dark:text-gray-200 text-center w-full truncate px-0.5 leading-none">${displayName}</div>
                         </div>
                     `;
-                }
-            
-                return `
-                    <div class="flex flex-col items-center gap-2 pt-[3px] ${animClass}" style="${animStyle}">
-                        ${avatarHTML}
-                        <span class="text-[10px] font-bold text-gray-500 bg-gray-100 dark:bg-gray-800 px-1 rounded z-10 relative">${char.name}</span>
-                    </div>
-                `;
-            }
-            
-            function renderResultArea(results) {
-                const area = document.getElementById('resultArea');
-                area.innerHTML = '';
-                const container = document.createElement('div');
-                
-                const has3Star = results.some(r => r.char.star === 3);
-                if (has3Star) area.classList.add('flash-gold');
-                else area.classList.remove('flash-gold');
-            
-                container.className = results.length === 1 ? 'flex justify-center items-center w-full min-h-[120px]' : 'grid grid-cols-5 gap-4 sm:gap-6 justify-items-center w-full max-w-2xl min-h-[220px]';
-            
-                results.forEach((r, idx) => {
-                    const domWrapper = document.createElement('div');
-                    domWrapper.innerHTML = createAvatarDOM(r, idx, false);
-                    container.appendChild(domWrapper);
+                    card.style.opacity = '0'; card.style.transform = 'translateY(20px)'; container.appendChild(card);
+                    setTimeout(() => { card.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)'; card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }, 100 * idx);
                 });
-            
-                area.appendChild(container);
             }
             
+            // 🌟 核心修正：完美還原舊版 Firebase 存檔格式與渲染邏輯
             function addToHistory(results, poolName) {
                 const record = {
                     poolName: poolName,
@@ -544,15 +395,28 @@
             
                 const poolBadge = document.createElement('div');
                 poolBadge.className = 'text-[10px] font-bold text-white bg-gray-500 rounded px-1.5 py-0.5 self-start shadow-sm';
-                poolBadge.innerText = record.poolName;
+                
+                // 兼容不同時間格式的保護機制
+                let timeStr = record.timestamp ? new Date(record.timestamp).toLocaleString() : (record.time || "未知時間");
+                let pName = record.poolName || record.pool || "未知招募";
+                poolBadge.innerText = `${timeStr} - ${pName}`;
             
                 const iconRow = document.createElement('div');
                 iconRow.className = 'flex flex-wrap gap-2';
             
-                record.results.forEach(res => {
+                // 兼容新舊資料格式
+                let charsArray = record.results || record.chars || [];
+                
+                charsArray.forEach(charInfo => {
+                    let cName = typeof charInfo === 'string' ? charInfo : charInfo.name;
+                    let cStar = typeof charInfo === 'string' ? 1 : charInfo.star;
+                    
+                    // 從資料庫找回完整資料來作畫，避免歷史紀錄破圖
+                    let fullCharData = validChars.find(c => c.name === cName) || { name: cName, star: cStar, personality: "天真" };
+                    fullCharData.star = cStar; 
+                    
                     const domWrapper = document.createElement('div');
-                    const mockResult = { char: { ...validChars.find(c => c.name === res.name), star: res.star }, isRateUp: false };
-                    domWrapper.innerHTML = createAvatarDOM(mockResult, 0, true);
+                    domWrapper.innerHTML = getGachaCharIconHTML(fullCharData, false, false);
                     iconRow.appendChild(domWrapper);
                 });
             
@@ -561,29 +425,267 @@
                 historyArea.prepend(logEntry);
             }
             
-            window.addEventListener('load', () => {
-                initUI();
-            });
-            // 偵測捲動距離以顯示/隱藏按鈕
-            window.onscroll = function() {
-            const btn = document.getElementById("backToTop");
-            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-            btn.style.display = "flex";
-            } else {
-            btn.style.display = "none";
-            }
-            };
+            // ==========================
+            // Spine 動畫控制系統
+            // ==========================
+            const SPINE_CONFIG = { viewport: { x: -1200, y: -600, width: 2400, height: 1215 } };
+            const CLOSEUP_VIEWPORT = { x: -1080, y: -400, width: 2160, height: 945 };
+            const GachaState = { INIT: 0, ERPIN_IDLE: 1, END1_DROP: 2, END2_WAIT: 3, END3_ZOOM: 4, SHOW_RESULT: 5 };
+            let currentGachaState = GachaState.INIT;
             
-            // 執行平滑滾動至頂部
-            function scrollToTop() {
-            window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-            });
+            let gachaPlayerErpin = null; let gachaPlayerDocs = null; let gachaPlayerCloseup = null;
+            let showGlowingBooks = false; let reactionLightTimers = []; let bookChangeTimer = null;
+            let isSpineInitialized = false; let activeEnd3Handler = null; let activeSkipHandler = null;
+            
+            function startGachaAnimation() {
+                if (gachaPlayerCloseup) {
+                    gachaPlayerCloseup.skeleton.color.a = 0;
+                    gachaPlayerCloseup.animationState.clearTracks();
+                }
+                showGlowingBooks = false; clearTimeout(bookChangeTimer); 
+                const closeupBox = document.getElementById('gachaSpineContainerCloseup');
+                closeupBox.style.display = 'none'; 
+                closeupBox.style.visibility = 'hidden';
+                
+                reactionLightTimers.forEach(t => clearTimeout(t)); reactionLightTimers = [];
+                const glowLayer = document.getElementById('closeupTableGlow'); glowLayer.className = 'table-glow-container'; glowLayer.innerHTML = '';
+                
+                const stage = document.getElementById('gachaStage'); const resultArea = document.getElementById('resultArea');
+                stage.classList.remove('opacity-0', 'pointer-events-none', 'z-10'); stage.classList.add('opacity-100', 'pointer-events-auto', 'z-20');
+                resultArea.classList.remove('opacity-100', 'z-20'); resultArea.classList.add('opacity-0', 'pointer-events-none', 'z-10');
+                
+                document.getElementById('gachaSpineContainerErpin').classList.remove('opacity-0');
+                document.getElementById('gachaSpineContainerDocs').classList.remove('opacity-0');
+                
+                if (gachaPlayerCloseup && gachaPlayerCloseup.skeleton) { gachaPlayerCloseup.skeleton.color.a = 0; }
+                
+                initSpineStages();
+                stage.parentElement.scrollIntoView({ behavior: 'smooth', block: 'center' }); 
             }
+            
+            async function initSpineStages() {
+                currentGachaState = GachaState.ERPIN_IDLE; const vp = SPINE_CONFIG.viewport;
+                let targetErpinSkin = hasRateUp ? "Choon_On" : "Choon_Off"; let animName = has3Star ? "Idle_3" : (has2Star ? "Idle_2" : "Idle_1");
+            
+                function fixMultiplyHole(player) {
+                    if (!player || !player.skeleton) return;
+                    player.skeleton.slots.forEach(slot => { if (slot.data.blendMode === spine.BlendMode.Multiply) { slot.data.blendMode = spine.BlendMode.Normal; slot.color.a = Math.min(slot.color.a, 0.4); } });
+                }
+            
+                if (isSpineInitialized) {
+                    if (gachaPlayerErpin) {
+                        gachaPlayerErpin.skeleton.setSkinByName(targetErpinSkin); gachaPlayerErpin.skeleton.setSlotsToSetupPose();
+                        gachaPlayerErpin.animationState.setAnimation(0, "Idle", true); gachaPlayerErpin._customDragTargetX = null; gachaPlayerErpin._customDragTargetY = null;
+                        try { gachaPlayerErpin.skeleton.setAttachment("BG", "BG"); } catch(e) {}
+                    }
+                    if (gachaPlayerDocs) { gachaPlayerDocs.skeleton.setSlotsToSetupPose(); gachaPlayerDocs.animationState.setAnimation(0, "Idle", true); }
+                    if (gachaPlayerCloseup) {
+                        gachaPlayerCloseup.skeleton.color.a = 0; gachaPlayerCloseup.skeleton.setSlotsToSetupPose();
+                        gachaPlayerCloseup.animationState.setAnimation(0, animName, false); gachaPlayerCloseup.animationState.timeScale = 0; 
+                    }
+                    return; 
+                }
+            
+                gachaPlayerErpin = new spine.SpinePlayer(document.getElementById('gachaSpineContainerErpin'), {
+                    skelUrl: `./gacha/Gacha_Hero_Erpin.skel.bytes`, atlasUrl: `./gacha/Gacha_Hero_Erpin.atlas.txt`,
+                    animation: "Idle", skin: targetErpinSkin, premultipliedAlpha: true, backgroundColor: "#00000000", alpha: true, 
+                    showControls: false, showLoading: false, viewport: { x: vp.x, y: vp.y, width: vp.width, height: vp.height },
+                    success: function (player) { 
+                        try { player.skeleton.setAttachment("BG", "BG"); } catch(e) {}
+                        player.animationState.data.defaultMix = 0; fixMultiplyHole(player); setupCheekDragInteraction(player); 
+                    }
+                });
+            
+                gachaPlayerDocs = new spine.SpinePlayer(document.getElementById('gachaSpineContainerDocs'), {
+                    skelUrl: `./gacha/Gacha_Hero_Documents.skel.bytes`, atlasUrl: `./gacha/Gacha_Hero_Documents.atlas.txt`,
+                    animation: "Idle", premultipliedAlpha: true, backgroundColor: "#00000000", alpha: true,
+                    showControls: false, showLoading: false, viewport: { x: vp.x, y: vp.y, width: vp.width, height: vp.height },
+                    success: function(player) {
+                        player.animationState.data.defaultMix = 0; const origDocsUpdate = player.skeleton.updateWorldTransform;
+                        player.skeleton.updateWorldTransform = function () {
+                            origDocsUpdate.call(this); 
+                            let pulse = 1.0;
+                            if (showGlowingBooks) {
+                                const BREATH_SPEED = 400; 
+                                let sinVal = 0.5 + 0.5 * Math.sin(Date.now() / BREATH_SPEED);
+                                pulse = 1.0 + (sinVal * 0.8); 
+                            }
+                            pendingGachaResults.forEach((result, idx) => {
+                                let slotName = (pendingGachaTimes === 1) ? 'Book_Drop_1' : `Book_Drop_${idx + 1}`;
+                                if (result.char.star === 3 && showGlowingBooks) {
+                                    try { 
+                                        this.setAttachment(slotName, `${slotName}_3star`);
+                                        let slot = this.findSlot(slotName);
+                                        if (slot) { slot.color.r = pulse; slot.color.g = pulse; slot.color.b = pulse; }
+                                    } catch(e) {}
+                                } else {
+                                    try {
+                                        this.setAttachment(slotName, slotName); 
+                                        let slot = this.findSlot(slotName);
+                                        if (slot) { slot.color.r = 1; slot.color.g = 1; slot.color.b = 1; }
+                                    } catch(e) {}
+                                }
+                            });
+                        };
+                    }
+                });
+            
+                gachaPlayerCloseup = new spine.SpinePlayer(document.getElementById('gachaSpineContainerCloseup'), {
+                    skelUrl: `./gacha/Gacha_Hero_Closeup.skel.bytes`, atlasUrl: `./gacha/Gacha_Hero_Closeup.atlas.txt`,
+                    animation: animName, premultipliedAlpha: true, backgroundColor: "#00000000", alpha: true, 
+                    showControls: false, showLoading: false, viewport: CLOSEUP_VIEWPORT, 
+                    success: (player) => { player.skeleton.color.a = 0; player.animationState.timeScale = 0; fixMultiplyHole(player); }
+                });
+                isSpineInitialized = true; 
+            }
+            
+            function triggerDropAndEnd1() {
+                currentGachaState = GachaState.END1_DROP;
+                requestAnimationFrame(() => {
+                    if (gachaPlayerDocs && gachaPlayerDocs.skeleton) {
+                        for (let i = 1; i <= 10; i++) { try { gachaPlayerDocs.skeleton.setAttachment(`Book_Drop_${i}`, `Book_Drop_${i}`); } catch(e) {} }
+                        gachaPlayerDocs.skeleton.updateWorldTransform();
+                    }
+                });
+            
+                let dropAnimName = (pendingGachaTimes === 1) ? "Drop_1" : "Drop_10_1";
+                if (gachaPlayerDocs) gachaPlayerDocs.animationState.setAnimation(0, dropAnimName, false);
+                
+                bookChangeTimer = setTimeout(() => { if (currentGachaState !== GachaState.SHOW_RESULT) { showGlowingBooks = true; } }, 4500); 
+                
+                if (gachaPlayerErpin) {
+                    gachaPlayerErpin.animationState.setAnimation(0, "End_1", false);
+                    gachaPlayerErpin.animationState.addListener({ complete: function(entry) { if (entry.animation.name === "End_1") enterEnd2WaitState(); } });
+                } else { enterEnd2WaitState(); }
+            }
+            
+            function enterEnd2WaitState() {
+                currentGachaState = GachaState.END2_WAIT;
+                if (gachaPlayerErpin) { gachaPlayerErpin.animationState.clearTracks(); gachaPlayerErpin.animationState.setAnimation(0, "End_2", true); }
+                const stage = document.getElementById('gachaStage');
+                activeEnd3Handler = onStageClickForEnd3; stage.addEventListener('click', activeEnd3Handler);
+            }
+            
+            function onStageClickForEnd3() {
+                if (currentGachaState !== GachaState.END2_WAIT) return;
+                const stage = document.getElementById('gachaStage');
+                if (activeEnd3Handler) { stage.removeEventListener('click', activeEnd3Handler); activeEnd3Handler = null; }
+                currentGachaState = GachaState.END3_ZOOM;
+                
+                const closeupBox = document.getElementById('gachaSpineContainerCloseup');
+                closeupBox.style.visibility = 'visible'; closeupBox.style.display = 'block'; closeupBox.style.pointerEvents = "auto";
+                requestAnimationFrame(() => { closeupBox.style.opacity = '1'; if (gachaPlayerCloseup) gachaPlayerCloseup.skeleton.color.a = 1; });
+            
+                const glowLayer = document.getElementById('closeupTableGlow'); glowLayer.className = 'table-glow-container'; glowLayer.innerHTML = '';
+                reactionLightTimers.forEach(t => clearTimeout(t)); reactionLightTimers = [];
+                if (has3Star) {
+                    let t1 = setTimeout(() => { glowLayer.innerHTML = '<div class="table-glow-2star"></div>'; glowLayer.classList.add('active'); }, 3200); 
+                    let t2 = setTimeout(() => { glowLayer.innerHTML = '<div class="table-glow-3star"></div>'; }, 4550); 
+                    reactionLightTimers.push(t1, t2);
+                } else if (has2Star) {
+                    let t1 = setTimeout(() => { glowLayer.innerHTML = '<div class="table-glow-2star"></div>'; glowLayer.classList.add('active'); }, 3200);
+                    reactionLightTimers.push(t1);
+                }
+                if (gachaPlayerDocs) {
+                    let dropEndAnimName = (pendingGachaTimes === 1) ? "Drop_1_End" : "Drop_10_1_End";
+                    gachaPlayerDocs.animationState.setAnimation(0, dropEndAnimName, false);
+                }
+                if (gachaPlayerErpin) gachaPlayerErpin.animationState.setAnimation(0, "End_3", false);
+            
+                let animName = has3Star ? "Idle_3" : (has2Star ? "Idle_2" : "Idle_1");
+                if (gachaPlayerCloseup) {
+                    gachaPlayerCloseup.skeleton.color.a = 1; gachaPlayerCloseup.animationState.timeScale = 1; 
+                    gachaPlayerCloseup.animationState.setAnimation(0, animName, false); gachaPlayerCloseup.animationState.clearListeners();
+                    gachaPlayerCloseup.animationState.addListener({ complete: function(entry) { if (entry.animation.name === animName) finishGachaAnimation(); } });
+                } else { setTimeout(finishGachaAnimation, 1500); }
+                activeSkipHandler = function() { finishGachaAnimation(); }; setTimeout(() => { stage.addEventListener('click', activeSkipHandler); }, 300);
+            }
+            
+            function finishGachaAnimation() {
+                if (currentGachaState === GachaState.SHOW_RESULT) return; currentGachaState = GachaState.SHOW_RESULT;
+                clearTimeout(bookChangeTimer); 
+            
+                const closeupBox = document.getElementById('gachaSpineContainerCloseup');
+                closeupBox.style.transition = 'none'; closeupBox.style.display = 'none'; closeupBox.style.opacity = '0';
+            
+                if (gachaPlayerCloseup && gachaPlayerCloseup.animationState) {
+                    gachaPlayerCloseup.animationState.timeScale = 0; gachaPlayerCloseup.animationState.clearListeners();
+                    if (gachaPlayerCloseup.skeleton) gachaPlayerCloseup.skeleton.color.a = 0;
+                }
+                
+                reactionLightTimers.forEach(t => clearTimeout(t)); reactionLightTimers = [];
+                const glowLayer = document.getElementById('closeupTableGlow'); glowLayer.className = 'table-glow-container z-[25]'; glowLayer.innerHTML = '';
+                const stage = document.getElementById('gachaStage'); const resultArea = document.getElementById('resultArea');
+                
+                if (activeEnd3Handler) { stage.removeEventListener('click', activeEnd3Handler); activeEnd3Handler = null; }
+                if (activeSkipHandler) { stage.removeEventListener('click', activeSkipHandler); activeSkipHandler = null; }
+                
+                stage.classList.remove('opacity-100', 'pointer-events-auto', 'z-20'); stage.classList.add('opacity-0', 'pointer-events-none', 'z-10');
+                resultArea.classList.remove('opacity-0', 'pointer-events-none', 'z-10'); resultArea.classList.add('opacity-100', 'z-20');
+                
+                showRealGachaResults(); addToHistory(pendingGachaResults, currentPool.name);
+                isGachaRunning = false; document.querySelectorAll('.btn-gacha').forEach(btn => { btn.classList.remove('opacity-50', 'cursor-not-allowed'); });
+            }
+            
+            function setupCheekDragInteraction(player) {
+                const canvas = document.querySelector('#gachaSpineContainerErpin canvas'); if (!canvas) return;
+                canvas.style.touchAction = 'none';
+                let activeInteractBone = null; let initialBoneX = 0, initialBoneY = 0; let initialBoneWorldX = 0, initialBoneWorldY = 0;
+                let isDragging = false; let startX = 0, startY = 0, lastMouseX = 0, lastMouseY = 0, dragDistance = 0; let hasTriggeredPull = false;
+                player._customDragTargetX = null; player._customDragTargetY = null; player._bouncingBone = null; player._bounceX = null; player._bounceY = null;
+                const origUpdateWorldTransform = player.skeleton.updateWorldTransform;
+                player.skeleton.updateWorldTransform = function () {
+                    if (activeInteractBone && player._customDragTargetX !== null) { activeInteractBone.x = player._customDragTargetX; activeInteractBone.y = player._customDragTargetY; }
+                    else if (player._bouncingBone) { player._bouncingBone.x = player._bounceX; player._bouncingBone.y = player._bounceY; }
+                    origUpdateWorldTransform.call(this);
+                };
+                function checkHitCheek(mouseX, mouseY) {
+                    const rect = canvas.getBoundingClientRect(); const camera = player.camera || (player.sceneRenderer && player.sceneRenderer.camera);
+                    let camX = camera ? camera.position.x - (camera.viewportWidth * camera.zoom) / 2 : SPINE_CONFIG.viewport.x;
+                    let camY = camera ? camera.position.y - (camera.viewportHeight * camera.zoom) / 2 : SPINE_CONFIG.viewport.y;
+                    let camW = camera ? camera.viewportWidth * camera.zoom : SPINE_CONFIG.viewport.width; let camH = camera ? camera.viewportHeight * camera.zoom : SPINE_CONFIG.viewport.height;
+                    const bone = player.skeleton.findBone("Character_Ball_Move");
+                    if (bone) {
+                        const boneCanvasX = ((bone.worldX - camX) / camW) * rect.width; const boneCanvasY = rect.height - ((bone.worldY - camY) / camH) * rect.height;
+                        if (Math.hypot(mouseX - boneCanvasX, mouseY - boneCanvasY) < 150) return bone;
+                    } return null;
+                }
+                canvas.addEventListener('pointerdown', (e) => {
+                    if (currentGachaState !== GachaState.ERPIN_IDLE) return;
+                    const rect = canvas.getBoundingClientRect(); const hitBone = checkHitCheek(e.clientX - rect.left, e.clientY - rect.top);
+                    if (hitBone) {
+                        isDragging = true; activeInteractBone = hitBone; startX = lastMouseX = e.clientX; startY = lastMouseY = e.clientY;
+                        dragDistance = 0; hasTriggeredPull = false; initialBoneX = activeInteractBone.x; initialBoneY = activeInteractBone.y;
+                        initialBoneWorldX = activeInteractBone.worldX; initialBoneWorldY = activeInteractBone.worldY; canvas.setPointerCapture(e.pointerId);
+                        const animNames = player.skeleton.data.animations.map(a => a.name); if (animNames.includes("Touch")) player.animationState.setAnimation(0, "Touch", true);
+                    }
+                });
+                canvas.addEventListener('pointermove', (e) => {
+                    if (!isDragging || !player.skeleton || !activeInteractBone) return;
+                    const rect = canvas.getBoundingClientRect(); const dx = e.clientX - lastMouseX; const dy = e.clientY - lastMouseY; dragDistance += Math.hypot(dx, dy);
+                    const camera = player.camera || (player.sceneRenderer && player.sceneRenderer.camera);
+                    let camW = camera ? camera.viewportWidth * camera.zoom : SPINE_CONFIG.viewport.width; let camH = camera ? camera.viewportHeight * camera.zoom : SPINE_CONFIG.viewport.height;
+                    let worldDx = (e.clientX - startX) * (camW / rect.width) * 1.3; let worldDy = -(e.clientY - startY) * (camH / rect.height) * 1.3; if (worldDx > 0) worldDx *= 0.1;
+                    let targetWorld = { x: initialBoneWorldX + worldDx, y: initialBoneWorldY + worldDy }; if (activeInteractBone.parent) activeInteractBone.parent.worldToLocal(targetWorld);
+                    let localDx = targetWorld.x - initialBoneX; let localDy = targetWorld.y - initialBoneY; let rawDistance = Math.hypot(localDx, localDy); const MAX_RADIUS = 55;
+                    if (rawDistance > 0) { let elasticDist = MAX_RADIUS * (1 - Math.exp(-rawDistance / (MAX_RADIUS * 1.2))); localDx = (localDx / rawDistance) * elasticDist; localDy = (localDy / rawDistance) * elasticDist; }
+                    player._customDragTargetX = initialBoneX + localDx; player._customDragTargetY = initialBoneY + localDy;
+                    if (dragDistance > 30) hasTriggeredPull = true; lastMouseX = e.clientX; lastMouseY = e.clientY;
+                });
+                const stopDrag = (e) => {
+                    if (!isDragging) return; isDragging = false; canvas.releasePointerCapture(e.pointerId);
+                    if (hasTriggeredPull) { triggerDropAndEnd1(); } else { player._bouncingBone = activeInteractBone; player.animationState.setAnimation(0, "Idle", true); }
+                    activeInteractBone = null;
+                }; canvas.addEventListener('pointerup', stopDrag); canvas.addEventListener('pointercancel', stopDrag);
+            }
+            
+            window.addEventListener('load', () => { initUI(); });
+            window.onscroll = function() {
+                const btn = document.getElementById("backToTop");
+                if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) btn.style.display = "flex"; else btn.style.display = "none";
+            };
+            function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
         </script>
-        <button id="backToTop" onclick="scrollToTop()" title="回頂部">
-        ▲
-        </button>
+        <button id="backToTop" onclick="scrollToTop()" title="回頂部">▲</button>
     </body>
 </html>
