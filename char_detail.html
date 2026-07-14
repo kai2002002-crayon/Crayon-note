@@ -38,7 +38,7 @@
             width: 144px !important;
             height: 117px !important;
             background-position: -740px -654px !important;
-            background-image: url('common_icon.png') !important;
+            background-image: url('char_sprites/common_icon.png') !important;
             /* 移除 background-size: auto，讓其正確讀取原始像素，並確保外框不會擠壓 */
             background-repeat: no-repeat !important;
             box-sizing: content-box !important;
@@ -1302,7 +1302,7 @@
                         const ultFileName = personalityMap[pKey] || "ultimate_composed";
             
                         const ultSkillIcon = `sprite-Icon_UltimateSkill_${spineKey}`;
-                        const ultStyle = `width: 64px; height: 64px; background-image: url('${ultFileName}.png'); background-size: auto; transform: translate(-50%, -50%) scale(0.625);`;
+                        const ultStyle = `width: 64px; height: 64px; background-image: url('char_sprites/${ultFileName}.png'); background-size: auto; transform: translate(-50%, -50%) scale(0.625);`;
             
                         const enhancedData = charSkillData.normalAttack.enhanced;
                         const hasEnhanced = enhancedData && enhancedData !== "無" && (typeof enhancedData === 'string' ? true : enhancedData.desc !== "無");
