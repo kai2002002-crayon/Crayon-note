@@ -18,9 +18,9 @@
 /* =======================================
    🌟 通用圖示 (common_icon.png)
    ======================================= */
-.sprite-1STAR { width: 478px; height: 116px; background-position: -5px -5px; }
-.sprite-2STAR { width: 478px; height: 116px; background-position: -5px -131px; }
-.sprite-3STAR { width: 478px; height: 116px; background-position: -5px -257px; }
+.sprite-1STAR { width: 116px; height: 116px; background-position: -5px -5px; }
+.sprite-2STAR { width: 206px; height: 116px; background-position: -5px -131px; }
+.sprite-3STAR { width: 296px; height: 116px; background-position: -5px -257px; }
 .sprite-ASIDE_1STAR { width: 73px; height: 29px; background-position: -493px -5px; }
 .sprite-ASIDE_2STAR { width: 73px; height: 29px; background-position: -576px -5px; }
 .sprite-ASIDE_3STAR { width: 73px; height: 29px; background-position: -659px -5px; }
