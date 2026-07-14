@@ -86,27 +86,25 @@
             font-size: 20px; display: flex; align-items: center; justify-content: center;
             }
             /* 🌈 流動彩虹邊框動畫 */
-@keyframes rainbowMove {
-    0% { background-position: 0 0; }
-    100% { background-position: 400% 0; }
-}
-
-.rainbow-wrapper {
-    position: relative;
-    padding: 4px; /* 控制邊框粗細 */
-    border-radius: 12px;
-    background: linear-gradient(45deg, #ff0000, #ff7300, #ffeb00, #47e247, #00bbff, #0055ff, #8800ff, #ff0000);
-    background-size: 400%;
-    animation: rainbowMove 5s linear infinite;
-    display: inline-block;
-    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
-}
-
-.rainbow-content {
-    display: block;
-    border-radius: 8px; /* 內層圓角 */
-    overflow: hidden;
-}
+            @keyframes rainbowMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 400% 0; }
+            }
+            .rainbow-wrapper {
+            position: relative;
+            padding: 4px; /* 控制邊框粗細 */
+            border-radius: 12px;
+            background: linear-gradient(45deg, #ff0000, #ff7300, #ffeb00, #47e247, #00bbff, #0055ff, #8800ff, #ff0000);
+            background-size: 400%;
+            animation: rainbowMove 5s linear infinite;
+            display: inline-block;
+            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+            }
+            .rainbow-content {
+            display: block;
+            border-radius: 8px; /* 內層圓角 */
+            overflow: hidden;
+            }
             #backToTop:hover { background-color: #d97706; transform: translateY(-5px); }
         </style>
     </head>
@@ -337,20 +335,20 @@
                     <div class="absolute inset-0 flex items-center justify-center z-10"><div class="sprite-base ${charSpriteBase} ${charSpriteClass} shrink-0 ${charScaleClass} origin-center"></div></div>
                 `;
                 // 在 getGachaCharIconHTML 函數內
-if (isLarge && isRateUp) {
-    return `
-        <div class="rainbow-wrapper ${sizeClass} shadow-lg" style="filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));">
+            if (isLarge && isRateUp) {
+            return `
+            <div class="rainbow-wrapper ${sizeClass} shadow-lg" style="filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));">
             <div class="rainbow-content w-full h-full bg-[#fcf8f2] dark:bg-gray-800">
                 ${innerHTML}
             </div>
-        </div>`;
-} else {
-    // 一般角色的外框
-    return `
-        <div class="${sizeClass} rounded-lg border-[3px] ${borderColor} shadow-inner bg-[#fcf8f2] dark:bg-gray-800 relative overflow-hidden shrink-0">
+            </div>`;
+            } else {
+            // 一般角色的外框
+            return `
+            <div class="${sizeClass} rounded-lg border-[3px] ${borderColor} shadow-inner bg-[#fcf8f2] dark:bg-gray-800 relative overflow-hidden shrink-0">
             ${innerHTML}
-        </div>`;
-}
+            </div>`;
+            }
                 
             }
             
@@ -481,24 +479,24 @@ if (isLarge && isRateUp) {
             iconRow.className = 'flex flex-wrap gap-2';
             
             let charsArray = record.results || record.chars || [];
-    charsArray.forEach(charInfo => {
-        // 取得角色名字
-        let cName = typeof charInfo === 'string' ? charInfo : charInfo.name;
-        
-        // 1. 先從總表中找出該角色的正確資料本體
-        let baseCharData = validChars.find(c => c.name === cName);
-        
-        // 2. 判斷星數：如果是舊紀錄(字串)，就以總表星數為準；新紀錄則以存檔為準
-        let cStar = typeof charInfo === 'string' ? (baseCharData ? baseCharData.star : 1) : charInfo.star;
-        
-        // 3. 🌟 核心修正：使用展開運算子 {...} 創建一個「全新的拷貝物件」！
-        // 這樣怎麼修改都不會污染到 validChars 總表裡面的原始資料
-        let safeCharData = baseCharData ? { ...baseCharData, star: cStar } : { name: cName, star: cStar, personality: "天真" };
-        
-        const domWrapper = document.createElement('div');
-        domWrapper.innerHTML = getGachaCharIconHTML(safeCharData, false, false);
-        iconRow.appendChild(domWrapper);
-    });
+            charsArray.forEach(charInfo => {
+            // 取得角色名字
+            let cName = typeof charInfo === 'string' ? charInfo : charInfo.name;
+            
+            // 1. 先從總表中找出該角色的正確資料本體
+            let baseCharData = validChars.find(c => c.name === cName);
+            
+            // 2. 判斷星數：如果是舊紀錄(字串)，就以總表星數為準；新紀錄則以存檔為準
+            let cStar = typeof charInfo === 'string' ? (baseCharData ? baseCharData.star : 1) : charInfo.star;
+            
+            // 3. 🌟 核心修正：使用展開運算子 {...} 創建一個「全新的拷貝物件」！
+            // 這樣怎麼修改都不會污染到 validChars 總表裡面的原始資料
+            let safeCharData = baseCharData ? { ...baseCharData, star: cStar } : { name: cName, star: cStar, personality: "天真" };
+            
+            const domWrapper = document.createElement('div');
+            domWrapper.innerHTML = getGachaCharIconHTML(safeCharData, false, false);
+            iconRow.appendChild(domWrapper);
+            });
             
             logEntry.appendChild(poolBadge);
             logEntry.appendChild(iconRow);
