@@ -479,6 +479,10 @@
             // ==========================
             // Spine 動畫控制系統
             // ==========================
+            function playGachaSound(soundName) {
+                const audio = new Audio(`./gacha/${soundName}.mp3`);
+                audio.play().catch(e => console.warn("音效播放失敗(可能是瀏覽器阻擋自動播放):", e));
+            }
             const SPINE_CONFIG = { viewport: { x: -1200, y: -600, width: 2400, height: 1215 } };
             const CLOSEUP_VIEWPORT = { x: -1080, y: -400, width: 2160, height: 945 };
             const GachaState = { INIT: 0, ERPIN_IDLE: 1, END1_DROP: 2, END2_WAIT: 3, END3_ZOOM: 4, SHOW_RESULT: 5 };
@@ -602,7 +606,7 @@
                 let dropAnimName = (pendingGachaTimes === 1) ? "Drop_1" : "Drop_10_1";
                 if (gachaPlayerDocs) gachaPlayerDocs.animationState.setAnimation(0, dropAnimName, false);
                 
-                bookChangeTimer = setTimeout(() => { if (currentGachaState !== GachaState.SHOW_RESULT) { showGlowingBooks = true; } }, 4500); 
+                bookChangeTimer = setTimeout(() => { if (currentGachaState !== GachaState.SHOW_RESULT) { showGlowingBooks = true; if (has3Star) playGachaSound('SFX_Gacha_ErpinExclamation'); } }, 4500); 
                 
                 if (gachaPlayerErpin) {
                     gachaPlayerErpin.animationState.setAnimation(0, "End_1", false);
@@ -630,11 +634,11 @@
                 const glowLayer = document.getElementById('closeupTableGlow'); glowLayer.className = 'table-glow-container'; glowLayer.innerHTML = '';
                 reactionLightTimers.forEach(t => clearTimeout(t)); reactionLightTimers = [];
                 if (has3Star) {
-                    let t1 = setTimeout(() => { glowLayer.innerHTML = '<div class="table-glow-2star"></div>'; glowLayer.classList.add('active'); }, 3200); 
-                    let t2 = setTimeout(() => { glowLayer.innerHTML = '<div class="table-glow-3star"></div>'; }, 4550); 
+                    let t1 = setTimeout(() => { glowLayer.innerHTML = '<div class="table-glow-2star"></div>'; glowLayer.classList.add('active'); playGachaSound('SFX_GachaReaction1'); }, 3200); 
+                    let t2 = setTimeout(() => { glowLayer.innerHTML = '<div class="table-glow-3star"></div>'; playGachaSound('SFX_GachaReaction2'); }, 4550); 
                     reactionLightTimers.push(t1, t2);
                 } else if (has2Star) {
-                    let t1 = setTimeout(() => { glowLayer.innerHTML = '<div class="table-glow-2star"></div>'; glowLayer.classList.add('active'); }, 3200);
+                    let t1 = setTimeout(() => { glowLayer.innerHTML = '<div class="table-glow-2star"></div>'; glowLayer.classList.add('active'); playGachaSound('SFX_GachaReaction1'); }, 3200);
                     reactionLightTimers.push(t1);
                 }
                 if (gachaPlayerDocs) {
@@ -708,6 +712,7 @@
                         isDragging = true; activeInteractBone = hitBone; startX = lastMouseX = e.clientX; startY = lastMouseY = e.clientY;
                         dragDistance = 0; hasTriggeredPull = false; initialBoneX = activeInteractBone.x; initialBoneY = activeInteractBone.y;
                         initialBoneWorldX = activeInteractBone.worldX; initialBoneWorldY = activeInteractBone.worldY; canvas.setPointerCapture(e.pointerId);
+                        playGachaSound('SFX_Gacha_PullCheek');
                         const animNames = player.skeleton.data.animations.map(a => a.name); if (animNames.includes("Touch")) player.animationState.setAnimation(0, "Touch", true);
                     }
                 });
@@ -725,6 +730,7 @@
                 });
                 const stopDrag = (e) => {
                     if (!isDragging) return; isDragging = false; canvas.releasePointerCapture(e.pointerId);
+                    playGachaSound('SFX_Gacha_PullCheekEnd');
                     if (hasTriggeredPull) { triggerDropAndEnd1(); } else { player._bouncingBone = activeInteractBone; player.animationState.setAnimation(0, "Idle", true); }
                     activeInteractBone = null;
                 }; canvas.addEventListener('pointerup', stopDrag); canvas.addEventListener('pointercancel', stopDrag);
