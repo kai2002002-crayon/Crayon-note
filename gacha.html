@@ -40,7 +40,6 @@
             display: none !important;
             pointer-events: none !important;
             }
-            
             /* 🌟 檯面發光防禦容器 */
             .table-glow-container {
             position: absolute;
@@ -54,13 +53,11 @@
             .table-glow-container.active {
             opacity: 1; transform: scaleY(1);
             }
-            
             /* 🌟 2星發光調整 */
             .table-glow-2star {
             width: 100%; height: 100%;
             background: radial-gradient(ellipse at 50% 100%, rgba(255, 215, 0, 1) 0%, rgba(255, 140, 0, 0.4) 25%, transparent 55%);
             }
-            
             /* 🌟 3星彩色發光調整 */
             .table-glow-3star {
             width: 100%; height: 100%;
@@ -317,7 +314,7 @@
                     <div class="absolute inset-0 bg-white/20 dark:bg-black/20 backdrop-blur-[1px] z-[5]"></div>
                     <div class="absolute inset-0 flex items-center justify-center z-10"><div class="sprite-base ${charSpriteBase} ${charSpriteClass} shrink-0 ${charScaleClass} origin-center"></div></div>
                 `;
-
+            
                 if (isLarge && isRateUp) {
                     return `
                         <div class="${sizeClass} rounded-lg relative shrink-0 p-[3px] z-10" style="box-shadow: 0 0 15px ${pColorHex};">
@@ -339,7 +336,7 @@
                 let gridClass = pendingGachaTimes > 1 
                     ? "grid grid-cols-5 gap-x-1 gap-y-3 sm:gap-x-4 sm:gap-y-4 w-full max-w-3xl mx-auto justify-items-center" 
                     : "flex justify-center w-full";
-
+            
                 resultArea.innerHTML = `
                     <h3 class="text-xl sm:text-2xl font-bold text-amber-900 dark:text-amber-400 mt-2 sm:mt-0 mb-4 w-full text-center drop-shadow-sm">🎉 招募結果 🎉</h3>
                     <div id="gachaResultsGrid" class="${gridClass}"></div>
@@ -380,87 +377,104 @@
                 saveHistoryToCloud(record);
             }
             
-            // 🌟 新增分頁變數
-let currentHistoryPage = 1;
-const HISTORY_PER_PAGE = 10;
-let fullHistoryData = []; // 暫存所有歷史資料
-
-// 🌟 修改後的渲染歷史紀錄函數 (含分頁邏輯)
-function renderHistory(historyArray) {
-    fullHistoryData = historyArray; // 存入全域變數
-    currentHistoryPage = 1; // 預設回到第一頁
-    renderHistoryPage();
-}
-
-function renderHistoryPage() {
-    const historyArea = document.getElementById('historyArea');
-    historyArea.innerHTML = ''; // 清空目前顯示
-
-    // 計算分頁
-    const totalPages = Math.ceil(fullHistoryData.length / HISTORY_PER_PAGE);
-    const startIdx = (currentHistoryPage - 1) * HISTORY_PER_PAGE;
-    const endIdx = startIdx + HISTORY_PER_PAGE;
-    const pageData = fullHistoryData.slice(startIdx, endIdx);
-
-    // 渲染資料
-    pageData.forEach(record => {
-        renderSingleHistoryEntry(record);
-    });
-
-    // 🌟 生成翻頁按鈕區
-    if (totalPages > 1) {
-        const paginationDiv = document.createElement('div');
-        paginationDiv.className = 'flex justify-center items-center gap-4 mt-4 py-2 border-t border-gray-200 dark:border-gray-700';
-        
-        paginationDiv.innerHTML = `
-            <button onclick="changePage(-1)" ${currentHistoryPage === 1 ? 'disabled' : ''} class="px-3 py-1 bg-amber-500 text-white rounded disabled:opacity-30">上一頁</button>
-            <span class="text-sm font-bold text-gray-600 dark:text-gray-300">${currentHistoryPage} / ${totalPages}</span>
-            <button onclick="changePage(1)" ${currentHistoryPage === totalPages ? 'disabled' : ''} class="px-3 py-1 bg-amber-500 text-white rounded disabled:opacity-30">下一頁</button>
-        `;
-        historyArea.appendChild(paginationDiv);
-    }
-}
-
-function changePage(delta) {
-    currentHistoryPage += delta;
-    renderHistoryPage();
-    // 滾動回到歷史區塊頂端
-    document.getElementById('historyArea').scrollIntoView({ behavior: 'smooth' });
-}
-
-// 🌟 保持單筆渲染邏輯不變
-function renderSingleHistoryEntry(record) {
-    const historyArea = document.getElementById('historyArea');
-    const logEntry = document.createElement('div');
-    logEntry.className = 'relative p-3 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex flex-col gap-2';
-
-    const poolBadge = document.createElement('div');
-    poolBadge.className = 'text-[10px] font-bold text-white bg-gray-500 rounded px-1.5 py-0.5 self-start shadow-sm';
-    
-    let timeStr = record.timestamp ? new Date(record.timestamp).toLocaleString() : (record.time || "未知時間");
-    let pName = record.poolName || record.pool || "未知招募";
-    poolBadge.innerText = `${timeStr} - ${pName}`;
-
-    const iconRow = document.createElement('div');
-    iconRow.className = 'flex flex-wrap gap-2';
-
-    let charsArray = record.results || record.chars || [];
-    charsArray.forEach(charInfo => {
-        let cName = typeof charInfo === 'string' ? charInfo : charInfo.name;
-        let cStar = typeof charInfo === 'string' ? 1 : charInfo.star;
-        let fullCharData = validChars.find(c => c.name === cName) || { name: cName, star: cStar, personality: "天真" };
-        fullCharData.star = cStar; 
-        
-        const domWrapper = document.createElement('div');
-        domWrapper.innerHTML = getGachaCharIconHTML(fullCharData, false, false);
-        iconRow.appendChild(domWrapper);
-    });
-
-    logEntry.appendChild(poolBadge);
-    logEntry.appendChild(iconRow);
-    historyArea.appendChild(logEntry); // 改用 appendChild，因為分頁已經處理好順序
-}
-
+            // ==========================
+            // 🌟 歷史紀錄與分頁系統 (由新到舊)
+            // ==========================
+            let currentHistoryPage = 1;
+            const HISTORY_PER_PAGE = 10;
+            let fullHistoryData = []; // 暫存所有歷史資料
+            
+            function addToHistory(results, poolName) {
+            const record = {
+            poolName: poolName,
+            results: results.map(r => ({ name: r.char.name, star: r.char.star })),
+            timestamp: new Date().toISOString()
+            };
+            
+            // 🌟 將新紀錄加到暫存陣列的「最前面」
+            fullHistoryData.unshift(record);
+            currentHistoryPage = 1; // 自動跳回第一頁看最新紀錄
+            renderHistoryPage();    // 重新渲染畫面
+            
+            saveHistoryToCloud(record); // 存入雲端
+            }
+            
+            function renderHistory(historyArray) {
+            // 🌟 Firebase 讀出來預設是舊到新，用 reverse() 將整個陣列反轉為「新到舊」
+            fullHistoryData = historyArray.reverse();
+            currentHistoryPage = 1;
+            renderHistoryPage();
+            }
+            
+            function renderHistoryPage() {
+            const historyArea = document.getElementById('historyArea');
+            historyArea.innerHTML = ''; // 清空目前顯示
+            
+            // 計算分頁範圍
+            const totalPages = Math.max(1, Math.ceil(fullHistoryData.length / HISTORY_PER_PAGE));
+            const startIdx = (currentHistoryPage - 1) * HISTORY_PER_PAGE;
+            const endIdx = startIdx + HISTORY_PER_PAGE;
+            const pageData = fullHistoryData.slice(startIdx, endIdx);
+            
+            // 依序渲染該頁的紀錄 (因為已經 reverse 過，所以依序畫就是由新到舊)
+            pageData.forEach(record => {
+            renderSingleHistoryEntry(record);
+            });
+            
+            // 生成翻頁按鈕區
+            if (totalPages > 1) {
+            const paginationDiv = document.createElement('div');
+            paginationDiv.className = 'flex justify-center items-center gap-4 mt-4 py-2 border-t border-gray-200 dark:border-gray-700';
+            
+            paginationDiv.innerHTML = `
+            <button onclick="changePage(-1)" ${currentHistoryPage === 1 ? 'disabled' : ''} class="px-3 py-1 bg-amber-500 text-white rounded disabled:opacity-30 transition-opacity">上一頁</button>
+            <span class="text-sm font-bold text-gray-600 dark:text-gray-300">第 ${currentHistoryPage} / ${totalPages} 頁</span>
+            <button onclick="changePage(1)" ${currentHistoryPage === totalPages ? 'disabled' : ''} class="px-3 py-1 bg-amber-500 text-white rounded disabled:opacity-30 transition-opacity">下一頁</button>
+            `;
+            historyArea.appendChild(paginationDiv);
+            }
+            }
+            
+            function changePage(delta) {
+            currentHistoryPage += delta;
+            renderHistoryPage();
+            // 翻頁後自動滾動到紀錄區頂端
+            document.getElementById('historyArea').scrollIntoView({ behavior: 'smooth' });
+            }
+            
+            function renderSingleHistoryEntry(record) {
+            const historyArea = document.getElementById('historyArea');
+            const logEntry = document.createElement('div');
+            logEntry.className = 'relative p-3 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex flex-col gap-2';
+            
+            const poolBadge = document.createElement('div');
+            poolBadge.className = 'text-[10px] font-bold text-white bg-gray-500 rounded px-1.5 py-0.5 self-start shadow-sm';
+            
+            let timeStr = record.timestamp ? new Date(record.timestamp).toLocaleString() : (record.time || "未知時間");
+            let pName = record.poolName || record.pool || "未知招募";
+            poolBadge.innerText = `${timeStr} - ${pName}`;
+            
+            const iconRow = document.createElement('div');
+            iconRow.className = 'flex flex-wrap gap-2';
+            
+            let charsArray = record.results || record.chars || [];
+            charsArray.forEach(charInfo => {
+            let cName = typeof charInfo === 'string' ? charInfo : charInfo.name;
+            let cStar = typeof charInfo === 'string' ? 1 : charInfo.star;
+            let fullCharData = validChars.find(c => c.name === cName) || { name: cName, star: cStar, personality: "天真" };
+            fullCharData.star = cStar; 
+            
+            const domWrapper = document.createElement('div');
+            domWrapper.innerHTML = getGachaCharIconHTML(fullCharData, false, false);
+            iconRow.appendChild(domWrapper);
+            });
+            
+            logEntry.appendChild(poolBadge);
+            logEntry.appendChild(iconRow);
+            
+            // 🌟 因為陣列已經正確排序過了，這裡統一用 appendChild 即可
+            historyArea.appendChild(logEntry); 
+            }
             
             // ==========================
             // Spine 動畫控制系統
