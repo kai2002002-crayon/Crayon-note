@@ -480,24 +480,6 @@
         const domWrapper = document.createElement('div');
         domWrapper.innerHTML = getGachaCharIconHTML(safeCharData, false, false);
         iconRow.appendChild(domWrapper);
-    });let charsArray = record.results || record.chars || [];
-    charsArray.forEach(charInfo => {
-        // 取得角色名字
-        let cName = typeof charInfo === 'string' ? charInfo : charInfo.name;
-        
-        // 1. 先從總表中找出該角色的正確資料本體
-        let baseCharData = validChars.find(c => c.name === cName);
-        
-        // 2. 判斷星數：如果是舊紀錄(字串)，就以總表星數為準；新紀錄則以存檔為準
-        let cStar = typeof charInfo === 'string' ? (baseCharData ? baseCharData.star : 1) : charInfo.star;
-        
-        // 3. 🌟 核心修正：使用展開運算子 {...} 創建一個「全新的拷貝物件」！
-        // 這樣怎麼修改都不會污染到 validChars 總表裡面的原始資料
-        let safeCharData = baseCharData ? { ...baseCharData, star: cStar } : { name: cName, star: cStar, personality: "天真" };
-        
-        const domWrapper = document.createElement('div');
-        domWrapper.innerHTML = getGachaCharIconHTML(safeCharData, false, false);
-        iconRow.appendChild(domWrapper);
     });
             
             logEntry.appendChild(poolBadge);
