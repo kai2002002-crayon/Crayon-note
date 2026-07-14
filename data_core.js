@@ -572,7 +572,7 @@ const WORK_URL = {
     "Fricle": "",
     "Gabia": "",
     "Haley": "https://youtu.be/u6mmhB-zY3Y",
-    "Hilde": "",
+    "Hilde": "https://youtu.be/rLfss0AWKtA",
     "Ifrit": "https://youtu.be/ANWq6bxvkBo",
     "Jade": "",
     "Jubee": "",
