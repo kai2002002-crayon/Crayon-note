@@ -606,7 +606,7 @@
                 let dropAnimName = (pendingGachaTimes === 1) ? "Drop_1" : "Drop_10_1";
                 if (gachaPlayerDocs) gachaPlayerDocs.animationState.setAnimation(0, dropAnimName, false);
                 
-                bookChangeTimer = setTimeout(() => { if (currentGachaState !== GachaState.SHOW_RESULT) { showGlowingBooks = true; if (has3Star) playGachaSound('SFX_Gacha_ErpinExclamation'); } }, 4500); 
+                bookChangeTimer = setTimeout(() => { if (currentGachaState !== GachaState.SHOW_RESULT) { showGlowingBooks = true; playGachaSound('SFX_Gacha_ErpinExclamation'); } }, 4500); 
                 
                 if (gachaPlayerErpin) {
                     gachaPlayerErpin.animationState.setAnimation(0, "End_1", false);
