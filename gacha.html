@@ -477,11 +477,45 @@
             }
             
             // ==========================
-            // Spine 動畫控制系統
+            // 🌟 零延遲音效系統 (Web Audio API)
             // ==========================
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            const audioCtx = new AudioContext();
+            const audioBuffers = {}; // 用來存放解碼後的音訊記憶體
+            
+            // 需要預載的音效清單
+            const soundFiles = [
+            'SFX_Gacha_PullCheek',
+            'SFX_Gacha_PullCheekEnd',
+            'SFX_Gacha_ErpinExclamation',
+            'SFX_GachaReaction1',
+            'SFX_GachaReaction2'
+            ];
+            
+            // 網頁載入時，立刻在背景偷偷下載並解碼所有 mp3
+            soundFiles.forEach(name => {
+            fetch(`./gacha/${name}.mp3`)
+            .then(response => response.arrayBuffer())
+            .then(arrayBuffer => audioCtx.decodeAudioData(arrayBuffer))
+            .then(audioBuffer => { 
+            audioBuffers[name] = audioBuffer; // 存入記憶體
+            })
+            .catch(e => console.warn("音效載入或解碼失敗:", name, e));
+            });
+            
             function playGachaSound(soundName) {
-                const audio = new Audio(`./gacha/${soundName}.mp3`);
-                audio.play().catch(e => console.warn("音效播放失敗(可能是瀏覽器阻擋自動播放):", e));
+            // 解決 iOS 的音訊鎖定限制：必須在使用者第一次點擊時喚醒音效引擎
+            if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+            }
+            
+            // 從記憶體中瞬間取出播放，達成零延遲
+            if (audioBuffers[soundName]) {
+            const source = audioCtx.createBufferSource();
+            source.buffer = audioBuffers[soundName];
+            source.connect(audioCtx.destination);
+            source.start(0);
+            }
             }
             const SPINE_CONFIG = { viewport: { x: -1200, y: -600, width: 2400, height: 1215 } };
             const CLOSEUP_VIEWPORT = { x: -1080, y: -400, width: 2160, height: 945 };
