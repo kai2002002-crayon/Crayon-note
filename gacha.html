@@ -320,7 +320,7 @@
                 if (isLarge && isRateUp) {
                     return `
                         <!-- 🌟 將 p-[3px] 改為 p-[4px] 或 p-[5px] 來加粗彩虹框 -->
-                        <div class="${sizeClass} rounded-lg relative shrink-0 p-[5px] z-10" style="box-shadow: 0 0 15px ${pColorHex};">
+                        <div class="${sizeClass} rounded-lg relative shrink-0 p-[4px] z-10" style="box-shadow: 0 0 15px ${pColorHex};">
                             <div class="absolute inset-0 rounded-lg z-0" style="background: linear-gradient(45deg, #ff0000, #ff7300, #ffeb00, #47e247, #00bbff, #0055ff, #8800ff, #ff0000); background-size: 400%; animation: rainbowMove 3s linear infinite;"></div>
                             <!-- 🌟 這裡的 inset-[3px] 也要跟著改成 inset-[4px] 才能完美貼合 -->
                             <div class="absolute inset-[4px] rounded-[4px] overflow-hidden bg-[#fcf8f2] dark:bg-gray-800 z-10">
@@ -330,7 +330,7 @@
                 } else {
                     return `
                         <!-- 🌟 將 border-2 改為 border-[3px] 或 border-4 來加粗一般框 -->
-                        <div class="${sizeClass} rounded-lg border-4 ${borderColor} shadow-inner bg-[#fcf8f2] dark:bg-gray-800 relative overflow-hidden shrink-0">
+                        <div class="${sizeClass} rounded-lg border-3 ${borderColor} shadow-inner bg-[#fcf8f2] dark:bg-gray-800 relative overflow-hidden shrink-0">
                             ${innerHTML}
                         </div>`;
                 }
