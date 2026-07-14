@@ -309,23 +309,28 @@
                 const bgScaleClass = isLarge ? "scale-[0.52] sm:scale-[0.6]" : "scale-[0.45]"; 
                 const charScaleClass = isLarge ? "scale-[0.45] sm:scale-[0.55]" : "scale-[0.35]";
                 
+                // (前略... 保持上方變數宣告不變)
+                
                 const innerHTML = `
                     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 sprite-base sprite-common ${bgSprite} ${bgScaleClass} z-0 opacity-90"></div>
                     <div class="absolute inset-0 bg-white/20 dark:bg-black/20 backdrop-blur-[1px] z-[5]"></div>
                     <div class="absolute inset-0 flex items-center justify-center z-10"><div class="sprite-base ${charSpriteBase} ${charSpriteClass} shrink-0 ${charScaleClass} origin-center"></div></div>
                 `;
-            
+
                 if (isLarge && isRateUp) {
                     return `
-                        <div class="${sizeClass} rounded-lg relative shrink-0 p-[3px] z-10" style="box-shadow: 0 0 15px ${pColorHex};">
+                        <!-- 🌟 將 p-[3px] 改為 p-[4px] 或 p-[5px] 來加粗彩虹框 -->
+                        <div class="${sizeClass} rounded-lg relative shrink-0 p-[5px] z-10" style="box-shadow: 0 0 15px ${pColorHex};">
                             <div class="absolute inset-0 rounded-lg z-0" style="background: linear-gradient(45deg, #ff0000, #ff7300, #ffeb00, #47e247, #00bbff, #0055ff, #8800ff, #ff0000); background-size: 400%; animation: rainbowMove 3s linear infinite;"></div>
-                            <div class="absolute inset-[3px] rounded-[5px] overflow-hidden bg-[#fcf8f2] dark:bg-gray-800 z-10">
+                            <!-- 🌟 這裡的 inset-[3px] 也要跟著改成 inset-[4px] 才能完美貼合 -->
+                            <div class="absolute inset-[4px] rounded-[4px] overflow-hidden bg-[#fcf8f2] dark:bg-gray-800 z-10">
                                 ${innerHTML}
                             </div>
                         </div>`;
                 } else {
                     return `
-                        <div class="${sizeClass} rounded-lg border-2 ${borderColor} shadow-inner bg-[#fcf8f2] dark:bg-gray-800 relative overflow-hidden shrink-0">
+                        <!-- 🌟 將 border-2 改為 border-[3px] 或 border-4 來加粗一般框 -->
+                        <div class="${sizeClass} rounded-lg border-4 ${borderColor} shadow-inner bg-[#fcf8f2] dark:bg-gray-800 relative overflow-hidden shrink-0">
                             ${innerHTML}
                         </div>`;
                 }
