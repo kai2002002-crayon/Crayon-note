@@ -237,23 +237,59 @@
                     PICKUP_SCHEDULE.forEach(s => { if (now >= new Date(s.start).getTime() && now <= new Date(s.end).getTime()) { currentRateUps.push(...s.chars); } });
                     currentRateUps = [...new Set(currentRateUps)];
                 }
+                // 🌟 新增：判斷當前語言並轉換為圖片後綴 (ZH, JA, EN)
+                const lang = localStorage.getItem('user_lang') || 'zh-TW';
+                let langSuffix = 'ZH';
+                if (lang === 'ja') langSuffix = 'JA';
+                if (lang === 'en') langSuffix = 'EN';
+
                 let firstBtn = null;
-            currentRateUps.forEach(charName => {
-            const btn = document.createElement('button'); btn.className = 'pool-btn px-3 py-1.5 rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 font-bold text-sm text-gray-700 dark:text-gray-200';
-            btn.innerText = `${t('gacha_rate_up')} - ${t(charName)}`; 
-            btn.onclick = () => setPool('rateup', [charName], null, btn.innerText, btn);
-            poolBtnContainer.appendChild(btn); if (!firstBtn) firstBtn = { btn, type: 'rateup', args: [[charName], null, btn.innerText] };
-            });
-            
-            const normalBtn = document.createElement('button'); normalBtn.className = 'pool-btn px-3 py-1.5 rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 font-bold text-sm text-gray-700 dark:text-gray-200';
-            normalBtn.innerText = t('gacha_normal'); 
-            normalBtn.onclick = () => setPool('normal', [], null, normalBtn.innerText, normalBtn);
-            poolBtnContainer.appendChild(normalBtn); if (!firstBtn) firstBtn = { btn: normalBtn, type: 'normal', args: [[], null, normalBtn.innerText] };
-            
-            const pPoolBtn = document.createElement('button'); pPoolBtn.className = 'pool-btn px-3 py-1.5 rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 font-bold text-sm text-gray-700 dark:text-gray-200';
-            pPoolBtn.innerText = t('gacha_personality_pool');
-            pPoolBtn.onclick = () => { document.getElementById('personalitySubMenu').classList.remove('hidden'); setPool('personality', [], personalities[0], `${t('gacha_personality_pool')} - ${t(personalities[0])}`, pPoolBtn); updatePersonalityBtns(personalities[0]); };
-            poolBtnContainer.appendChild(pPoolBtn);
+                
+                // 1. 特選招募按鈕 (讀取 gacha/ 資料夾下的專屬圖片)
+                currentRateUps.forEach(charName => {
+                    const btn = document.createElement('button'); 
+                    // 修改樣式：加高按鈕、移除內距，讓圖片完美填滿
+                    btn.className = 'pool-btn rounded-xl border-4 border-transparent hover:border-amber-400 overflow-hidden transition-all p-0 h-[60px] sm:h-[80px] bg-white dark:bg-gray-800 flex items-center justify-center min-w-[120px] shadow-sm';
+                    
+                    // 獲取 Spine 名稱以對應圖片檔名
+                    const spineName = typeof SPINE_MAP !== 'undefined' && SPINE_MAP[charName] ? SPINE_MAP[charName] : charName;
+                    const poolTitle = `${t('gacha_rate_up')} - ${t(charName)}`;
+                    
+                    // 插入圖片，並設定 onerror 備用方案 (若圖片遺失或讀取失敗，則自動顯示文字)
+                    btn.innerHTML = `
+                        <img src="gacha/Gacha_PickupTitleImg_${spineName}_${langSuffix}.png" class="h-full w-auto object-contain" alt="${poolTitle}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                        <span style="display:none;" class="px-3 font-bold text-sm text-gray-700 dark:text-gray-200">${poolTitle}</span>
+                    `;
+                    
+                    btn.onclick = () => setPool('rateup', [charName], null, poolTitle, btn);
+                    poolBtnContainer.appendChild(btn); 
+                    if (!firstBtn) firstBtn = { btn, type: 'rateup', args: [[charName], null, poolTitle] };
+                });
+                
+                // 2. 普通招募按鈕 (維持純文字，但調整高度與排版以對齊圖片按鈕)
+                const normalBtn = document.createElement('button'); 
+                normalBtn.className = 'pool-btn px-4 py-2 rounded-xl border-4 border-transparent bg-gray-200 dark:bg-gray-700 shadow-sm font-bold text-sm text-gray-700 dark:text-gray-200 h-[60px] sm:h-[80px] flex items-center justify-center transition-all';
+                normalBtn.innerText = t('gacha_normal'); 
+                normalBtn.onclick = () => setPool('normal', [], null, normalBtn.innerText, normalBtn);
+                poolBtnContainer.appendChild(normalBtn); 
+                if (!firstBtn) firstBtn = { btn: normalBtn, type: 'normal', args: [[], null, normalBtn.innerText] };
+                
+                // 3. 性格招募按鈕 (讀取 event/ 資料夾下的專屬圖片)
+                const pPoolBtn = document.createElement('button'); 
+                pPoolBtn.className = 'pool-btn rounded-xl border-4 border-transparent hover:border-amber-400 overflow-hidden transition-all p-0 h-[60px] sm:h-[80px] bg-white dark:bg-gray-800 flex items-center justify-center min-w-[120px] shadow-sm';
+                const pPoolTitle = t('gacha_personality_pool');
+                
+                // 插入性格招募的專屬圖，並設有 onerror 防錯機制
+                pPoolBtn.innerHTML = `
+                    <img src="event/SelectPickPersonality_${langSuffix}.png" class="h-full w-auto object-contain" alt="${pPoolTitle}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <span style="display:none;" class="px-3 font-bold text-sm text-gray-700 dark:text-gray-200">${pPoolTitle}</span>
+                `;
+                pPoolBtn.onclick = () => { 
+                    document.getElementById('personalitySubMenu').classList.remove('hidden'); 
+                    setPool('personality', [], personalities[0], `${pPoolTitle} - ${t(personalities[0])}`, pPoolBtn); 
+                    updatePersonalityBtns(personalities[0]); 
+                };
+                poolBtnContainer.appendChild(pPoolBtn);
             
             personalities.forEach(p => {
             const btn = document.createElement('button'); btn.className = 'p-sub-btn px-2 py-1 rounded border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-xs font-bold';
