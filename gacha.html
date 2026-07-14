@@ -85,6 +85,28 @@
             transition: transform 0.2s, background-color 0.3s;
             font-size: 20px; display: flex; align-items: center; justify-content: center;
             }
+            /* 🌈 流動彩虹邊框動畫 */
+@keyframes rainbowMove {
+    0% { background-position: 0 0; }
+    100% { background-position: 400% 0; }
+}
+
+.rainbow-wrapper {
+    position: relative;
+    padding: 4px; /* 控制邊框粗細 */
+    border-radius: 12px;
+    background: linear-gradient(45deg, #ff0000, #ff7300, #ffeb00, #47e247, #00bbff, #0055ff, #8800ff, #ff0000);
+    background-size: 400%;
+    animation: rainbowMove 5s linear infinite;
+    display: inline-block;
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+}
+
+.rainbow-content {
+    display: block;
+    border-radius: 8px; /* 內層圓角 */
+    overflow: hidden;
+}
             #backToTop:hover { background-color: #d97706; transform: translateY(-5px); }
         </style>
     </head>
@@ -308,32 +330,28 @@
                 const sizeClass = isLarge ? "w-[58px] h-[58px] sm:w-[76px] sm:h-[76px]" : "w-10 h-10"; 
                 const bgScaleClass = isLarge ? "scale-[0.52] sm:scale-[0.6]" : "scale-[0.45]"; 
                 const charScaleClass = isLarge ? "scale-[0.45] sm:scale-[0.55]" : "scale-[0.35]";
-                
-                // (前略... 保持上方變數宣告不變)
-                
+                                
                 const innerHTML = `
                     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 sprite-base sprite-common ${bgSprite} ${bgScaleClass} z-0 opacity-90"></div>
                     <div class="absolute inset-0 bg-white/20 dark:bg-black/20 backdrop-blur-[1px] z-[5]"></div>
                     <div class="absolute inset-0 flex items-center justify-center z-10"><div class="sprite-base ${charSpriteBase} ${charSpriteClass} shrink-0 ${charScaleClass} origin-center"></div></div>
                 `;
-
-                if (isLarge && isRateUp) {
-                    return `
-                        <!-- 🌟 將 p-[3px] 改為 p-[4px] 或 p-[5px] 來加粗彩虹框 -->
-                        <div class="${sizeClass} rounded-lg relative shrink-0 p-[4px] z-10" style="box-shadow: 0 0 15px ${pColorHex};">
-                            <div class="absolute inset-0 rounded-lg z-0" style="background: linear-gradient(45deg, #ff0000, #ff7300, #ffeb00, #47e247, #00bbff, #0055ff, #8800ff, #ff0000); background-size: 400%; animation: rainbowMove 3s linear infinite;"></div>
-                            <!-- 🌟 這裡的 inset-[3px] 也要跟著改成 inset-[4px] 才能完美貼合 -->
-                            <div class="absolute inset-[4px] rounded-[4px] overflow-hidden bg-[#fcf8f2] dark:bg-gray-800 z-10">
-                                ${innerHTML}
-                            </div>
-                        </div>`;
-                } else {
-                    return `
-                        <!-- 🌟 將 border-2 改為 border-[3px] 或 border-4 來加粗一般框 -->
-                        <div class="${sizeClass} rounded-lg border-[3px] ${borderColor} shadow-inner bg-[#fcf8f2] dark:bg-gray-800 relative overflow-hidden shrink-0">
-                            ${innerHTML}
-                        </div>`;
-                }
+                // 在 getGachaCharIconHTML 函數內
+if (isLarge && isRateUp) {
+    return `
+        <div class="rainbow-wrapper ${sizeClass} shadow-lg" style="filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));">
+            <div class="rainbow-content w-full h-full bg-[#fcf8f2] dark:bg-gray-800">
+                ${innerHTML}
+            </div>
+        </div>`;
+} else {
+    // 一般角色的外框
+    return `
+        <div class="${sizeClass} rounded-lg border-[3px] ${borderColor} shadow-inner bg-[#fcf8f2] dark:bg-gray-800 relative overflow-hidden shrink-0">
+            ${innerHTML}
+        </div>`;
+}
+                
             }
             
             function showRealGachaResults() {
