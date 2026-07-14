@@ -250,7 +250,7 @@ const PRESENT_MAP = {
         url: "https://i.postimg.cc/tCSLysY2/Present-List-Taida.png",
         name: { "zh-TW": "偷懶專用睡袋", "ja": "サボり用の寝袋", "en": "Sleeping Bag for Skipping Work" }
     },
-    "Dig": { 
+    "Tig": { 
         url: "",
         name: { "zh-TW": "", "ja": "", "en": "" }
     },
