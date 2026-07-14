@@ -265,10 +265,10 @@
                     poolBtnContainer.appendChild(btn); 
                     if (!firstBtn) firstBtn = { btn, type: 'rateup', args: [[charName], null, poolTitle] };
                 });
-                
+
                 // 2. 普通招募按鈕 (維持純文字，調整高度 h-[45px] 以對齊圖片按鈕)
                 const normalBtn = document.createElement('button'); 
-                normalBtn.className = 'pool-btn px-4 py-2 rounded-xl border-4 border-transparent bg-gray-200 dark:bg-gray-700 shadow-sm font-bold text-sm text-gray-700 dark:text-gray-200 h-[45px] flex items-center justify-center transition-all';
+                normalBtn.className = 'pool-btn px-4 py-2 rounded-xl border-4 border-transparent hover:border-amber-400 bg-transparent font-bold text-sm text-gray-700 dark:text-gray-200 h-[45px] flex items-center justify-center min-w-[120px] transition-all';
                 normalBtn.innerText = t('gacha_normal'); 
                 normalBtn.onclick = () => setPool('normal', [], null, normalBtn.innerText, normalBtn);
                 poolBtnContainer.appendChild(normalBtn); 
