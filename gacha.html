@@ -90,20 +90,27 @@
             0% { background-position: 0 0; }
             100% { background-position: 400% 0; }
             }
+            /* 🌈 流動彩虹邊框動畫 */
             .rainbow-wrapper {
             position: relative;
             padding: 4px; /* 控制邊框粗細 */
-            border-radius: 12px;
+            border-radius: 12px; /* 🌟 圓角加大，對應 Tailwind 的 rounded-xl */
             background: linear-gradient(45deg, #ff0000, #ff7300, #ffeb00, #47e247, #00bbff, #0055ff, #8800ff, #ff0000);
             background-size: 400%;
             animation: rainbowMove 5s linear infinite;
-            display: inline-block;
+            /* 🌟 改用 Flex，確保內容在各裝置上完美置中且不被擠壓 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
             filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
             }
             .rainbow-content {
             display: block;
-            border-radius: 8px; /* 內層圓角 */
+            width: 100%;
+            height: 100%;
+            border-radius: 8px; /* 🌟 內層圓角縮小，完美貼合邊框不突出 (相當於 rounded-lg) */
             overflow: hidden;
+            position: relative;
             }
             #backToTop:hover { background-color: #d97706; transform: translateY(-5px); }
         </style>
@@ -113,17 +120,24 @@
             <header class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-2xl p-4 sm:p-6 shadow border-2 border-amber-200/80 dark:border-gray-700 flex flex-col sm:flex-row justify-between items-center gap-4">
                 <h1 class="text-2xl sm:text-3xl font-bold text-amber-900 dark:text-amber-400 flex items-center gap-2">
                     <div class="sprite-base sprite-common sprite-Title_Rim shrink-0 scale-[0.5] sm:scale-[0.6] origin-left -ml-1"></div>
-                    <span class="-ml-2">嘟嘟臉角色招募模擬器</span>
+                    <span id="ui_title" class="-ml-2">嘟嘟臉角色招募模擬器</span>
                 </h1>
-                <button onclick="window.close()" class="px-4 py-1.5 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg text-sm font-bold transition-colors shrink-0">
-                返回記事本
-                </button>
+                <div class="flex gap-2">
+                    <select id="langSelect" onchange="changeLang(this.value)" class="px-3 py-1.5 bg-gray-200 dark:bg-gray-700 rounded-lg text-sm font-bold border-none outline-none cursor-pointer">
+                        <option value="zh-TW">繁中</option>
+                        <option value="ja">日本語</option>
+                        <option value="en">English</option>
+                    </select>
+                    <button onclick="window.close()" id="ui_back" class="px-4 py-1.5 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg text-sm font-bold transition-colors shrink-0">
+                    返回記事本
+                    </button>
+                </div>
             </header>
             <section class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-2xl p-4 shadow border-2 border-amber-200/80 dark:border-gray-700">
-                <h2 class="text-sm font-bold text-gray-500 dark:text-gray-400 mb-3">📍 選擇招募池</h2>
+                <h2 id="ui_select_pool" class="text-sm font-bold text-gray-500 dark:text-gray-400 mb-3">📍 選擇招募池</h2>
                 <div id="poolButtons" class="flex flex-wrap gap-2 mb-3"></div>
                 <div id="personalitySubMenu" class="hidden border-t border-dashed border-gray-300 dark:border-gray-600 pt-3 mt-1">
-                    <span class="text-xs font-bold text-gray-500 dark:text-gray-400 mr-2">🔮 指定性格：</span>
+                    <span id="ui_personality_hint" class="text-xs font-bold text-gray-500 dark:text-gray-400 mr-2">🔮 指定性格：</span>
                     <div class="inline-flex flex-wrap gap-2" id="personalityButtons"></div>
                 </div>
             </section>
@@ -132,13 +146,13 @@
                     <div class="absolute left-3 flex items-center justify-center pointer-events-none">
                         <span id="iconGacha1" class="sprite-base sprite-common sprite-Icon_GachaTicketHero scale-[0.4] origin-center"></span>
                     </div>
-                    <span class="ml-10">1次招募</span>
+                    <span id="ui_pull_1" class="ml-10">1次招募</span>
                 </button>
                 <button onclick="performGacha(10)" class="btn-gacha px-6 py-3 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl shadow-lg border-b-4 border-amber-700 flex items-center gap-2 relative h-[50px]">
                     <div class="absolute left-3 flex items-center justify-center pointer-events-none">
                         <span id="iconGacha10" class="sprite-base sprite-common sprite-Icon_GachaTicketHero_10 scale-[0.4] origin-center"></span>
                     </div>
-                    <span class="ml-10">10次招募</span>
+                    <span id="ui_pull_10" class="ml-10">10次招募</span>
                 </button>
             </section>
             <div class="relative w-full max-w-4xl mx-auto mb-6 aspect-video bg-white/90 dark:bg-gray-800/90 rounded-2xl shadow-xl border-4 border-amber-300 dark:border-gray-600 overflow-hidden">
@@ -150,16 +164,36 @@
                 </section>
                 <section id="resultArea" class="absolute inset-0 w-full h-full bg-gradient-to-b from-white/95 to-amber-50/95 dark:from-gray-800/95 dark:to-gray-900/95 backdrop-blur-md p-2 sm:p-6 flex flex-col items-center justify-start overflow-y-auto transition-opacity duration-500 z-20">
                     <div class="h-full w-full flex items-center justify-center min-h-[250px]">
-                        <p class="text-gray-400 dark:text-gray-500 font-bold">等待招募中...</p>
+                        <p id="ui_waiting" class="text-gray-400 dark:text-gray-500 font-bold">等待招募中...</p>
                     </div>
                 </section>
             </div>
             <section class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-2xl p-4 shadow border-2 border-gray-200/80 dark:border-gray-700">
-                <h3 class="text-sm font-bold text-gray-500 dark:text-gray-400 mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">📜 招募紀錄</h3>
+                <h3 id="ui_history_title" class="text-sm font-bold text-gray-500 dark:text-gray-400 mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">📜 招募紀錄</h3>
                 <div id="historyArea" class="space-y-4 max-h-[500px] overflow-y-auto pr-2"></div>
             </section>
         </div>
         <script>
+            // 🌟 處理語言切換
+            function changeLang(lang) {
+            localStorage.setItem('user_lang', lang);
+            location.reload();
+            }
+            
+            // 初始化多語系 UI
+            function initLangUI() {
+            const lang = localStorage.getItem('user_lang') || 'zh-TW';
+            document.getElementById('langSelect').value = lang;
+            document.title = t('gacha_simulator');
+            document.getElementById('ui_title').innerText = t('gacha_simulator');
+            document.getElementById('ui_back').innerText = t('ui_back');
+            document.getElementById('ui_select_pool').innerText = t('gacha_select_pool');
+            document.getElementById('ui_personality_hint').innerText = t('gacha_personality_hint');
+            document.getElementById('ui_pull_1').innerText = t('gacha_1_pull');
+            document.getElementById('ui_pull_10').innerText = t('gacha_10_pull');
+            document.getElementById('ui_waiting').innerText = t('gacha_waiting');
+            document.getElementById('ui_history_title').innerText = t('gacha_history');
+            }
             // ==========================
             // 系統與 Firebase 初始化
             // ==========================
@@ -204,25 +238,30 @@
                     currentRateUps = [...new Set(currentRateUps)];
                 }
                 let firstBtn = null;
-                currentRateUps.forEach(charName => {
-                    const btn = document.createElement('button'); btn.className = 'pool-btn px-3 py-1.5 rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 font-bold text-sm text-gray-700 dark:text-gray-200';
-                    btn.innerText = `🎯 特選招募 - ${charName}`; btn.onclick = () => setPool('rateup', [charName], null, btn.innerText, btn);
-                    poolBtnContainer.appendChild(btn); if (!firstBtn) firstBtn = { btn, type: 'rateup', args: [[charName], null, btn.innerText] };
-                });
-                const normalBtn = document.createElement('button'); normalBtn.className = 'pool-btn px-3 py-1.5 rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 font-bold text-sm text-gray-700 dark:text-gray-200';
-                normalBtn.innerText = `🌟 普通招募`; normalBtn.onclick = () => setPool('normal', [], null, normalBtn.innerText, normalBtn);
-                poolBtnContainer.appendChild(normalBtn); if (!firstBtn) firstBtn = { btn: normalBtn, type: 'normal', args: [[], null, normalBtn.innerText] };
-                
-                const pPoolBtn = document.createElement('button'); pPoolBtn.className = 'pool-btn px-3 py-1.5 rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 font-bold text-sm text-gray-700 dark:text-gray-200';
-                pPoolBtn.innerText = `🔮 性格選擇招募`;
-                pPoolBtn.onclick = () => { document.getElementById('personalitySubMenu').classList.remove('hidden'); setPool('personality', [], personalities[0], `🔮 性格選擇招募 - ${personalities[0]}`, pPoolBtn); updatePersonalityBtns(personalities[0]); };
-                poolBtnContainer.appendChild(pPoolBtn);
-                personalities.forEach(p => {
-                    const btn = document.createElement('button'); btn.className = 'p-sub-btn px-2 py-1 rounded border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-xs font-bold';
-                    btn.innerText = p; btn.onclick = () => { setPool('personality', [], p, `🔮 性格選擇招募 - ${p}`, pPoolBtn); updatePersonalityBtns(p); };
-                    pBtnContainer.appendChild(btn);
-                });
-                if (firstBtn) { setPool(firstBtn.type, firstBtn.args[0], firstBtn.args[1], firstBtn.args[2], firstBtn.btn); }
+            currentRateUps.forEach(charName => {
+            const btn = document.createElement('button'); btn.className = 'pool-btn px-3 py-1.5 rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 font-bold text-sm text-gray-700 dark:text-gray-200';
+            btn.innerText = `${t('gacha_rate_up')} - ${t(charName)}`; 
+            btn.onclick = () => setPool('rateup', [charName], null, btn.innerText, btn);
+            poolBtnContainer.appendChild(btn); if (!firstBtn) firstBtn = { btn, type: 'rateup', args: [[charName], null, btn.innerText] };
+            });
+            
+            const normalBtn = document.createElement('button'); normalBtn.className = 'pool-btn px-3 py-1.5 rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 font-bold text-sm text-gray-700 dark:text-gray-200';
+            normalBtn.innerText = t('gacha_normal'); 
+            normalBtn.onclick = () => setPool('normal', [], null, normalBtn.innerText, normalBtn);
+            poolBtnContainer.appendChild(normalBtn); if (!firstBtn) firstBtn = { btn: normalBtn, type: 'normal', args: [[], null, normalBtn.innerText] };
+            
+            const pPoolBtn = document.createElement('button'); pPoolBtn.className = 'pool-btn px-3 py-1.5 rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 font-bold text-sm text-gray-700 dark:text-gray-200';
+            pPoolBtn.innerText = t('gacha_personality_pool');
+            pPoolBtn.onclick = () => { document.getElementById('personalitySubMenu').classList.remove('hidden'); setPool('personality', [], personalities[0], `${t('gacha_personality_pool')} - ${t(personalities[0])}`, pPoolBtn); updatePersonalityBtns(personalities[0]); };
+            poolBtnContainer.appendChild(pPoolBtn);
+            
+            personalities.forEach(p => {
+            const btn = document.createElement('button'); btn.className = 'p-sub-btn px-2 py-1 rounded border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-xs font-bold';
+            btn.innerText = t(p); // 翻譯性格名稱
+            btn.onclick = () => { setPool('personality', [], p, `${t('gacha_personality_pool')} - ${t(p)}`, pPoolBtn); updatePersonalityBtns(p); };
+            pBtnContainer.appendChild(btn);
+            });
+            if (firstBtn) { setPool(firstBtn.type, firstBtn.args[0], firstBtn.args[1], firstBtn.args[2], firstBtn.btn); }
             }
             
             function setPool(type, rateUpChars, personality, poolName, activeElement) {
@@ -337,10 +376,10 @@
                 // 在 getGachaCharIconHTML 函數內
             if (isLarge && isRateUp) {
             return `
-            <div class="rainbow-wrapper ${sizeClass} shadow-lg" style="filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));">
-            <div class="rainbow-content w-full h-full bg-[#fcf8f2] dark:bg-gray-800">
-                ${innerHTML}
-            </div>
+            <div class="rainbow-wrapper shrink-0 ${sizeClass} shadow-lg rounded-xl" style="filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));">
+                <div class="rainbow-content w-full h-full bg-[#fcf8f2] dark:bg-gray-800 rounded-lg relative overflow-hidden">
+                    ${innerHTML}
+                </div>
             </div>`;
             } else {
             // 一般角色的外框
@@ -358,10 +397,10 @@
                     ? "grid grid-cols-5 gap-x-1 gap-y-3 sm:gap-x-4 sm:gap-y-4 w-full max-w-3xl mx-auto justify-items-center" 
                     : "flex justify-center w-full";
             
-                resultArea.innerHTML = `
-                    <h3 class="text-xl sm:text-2xl font-bold text-amber-900 dark:text-amber-400 mt-2 sm:mt-0 mb-4 w-full text-center drop-shadow-sm">🎉 招募結果 🎉</h3>
-                    <div id="gachaResultsGrid" class="${gridClass}"></div>
-                `;
+               resultArea.innerHTML = `
+            <h3 class="text-xl sm:text-2xl font-bold text-amber-900 dark:text-amber-400 mt-2 sm:mt-0 mb-4 w-full text-center drop-shadow-sm">${t('gacha_result_title')}</h3>
+            <div id="gachaResultsGrid" class="${gridClass}"></div>
+            `;
                 
                 const container = document.getElementById('gachaResultsGrid');
                 pendingGachaResults.forEach((result, idx) => {
@@ -447,10 +486,11 @@
             const paginationDiv = document.createElement('div');
             paginationDiv.className = 'flex justify-center items-center gap-4 mt-4 py-2 border-t border-gray-200 dark:border-gray-700';
             
+            let pageText = t('gacha_page').replace('{current}', currentHistoryPage).replace('{total}', totalPages);
             paginationDiv.innerHTML = `
-            <button onclick="changePage(-1)" ${currentHistoryPage === 1 ? 'disabled' : ''} class="px-3 py-1 bg-amber-500 text-white rounded disabled:opacity-30 transition-opacity">上一頁</button>
-            <span class="text-sm font-bold text-gray-600 dark:text-gray-300">第 ${currentHistoryPage} / ${totalPages} 頁</span>
-            <button onclick="changePage(1)" ${currentHistoryPage === totalPages ? 'disabled' : ''} class="px-3 py-1 bg-amber-500 text-white rounded disabled:opacity-30 transition-opacity">下一頁</button>
+            <button onclick="changePage(-1)" ${currentHistoryPage === 1 ? 'disabled' : ''} class="px-3 py-1 bg-amber-500 text-white rounded disabled:opacity-30 transition-opacity">${t('gacha_prev_page')}</button>
+            <span class="text-sm font-bold text-gray-600 dark:text-gray-300">${pageText}</span>
+            <button onclick="changePage(1)" ${currentHistoryPage === totalPages ? 'disabled' : ''} class="px-3 py-1 bg-amber-500 text-white rounded disabled:opacity-30 transition-opacity">${t('gacha_next_page')}</button>
             `;
             historyArea.appendChild(paginationDiv);
             }
@@ -471,8 +511,8 @@
             const poolBadge = document.createElement('div');
             poolBadge.className = 'text-[10px] font-bold text-white bg-gray-500 rounded px-1.5 py-0.5 self-start shadow-sm';
             
-            let timeStr = record.timestamp ? new Date(record.timestamp).toLocaleString() : (record.time || "未知時間");
-            let pName = record.poolName || record.pool || "未知招募";
+            let timeStr = record.timestamp ? new Date(record.timestamp).toLocaleString() : (record.time || t('gacha_unknown_time'));
+            let pName = record.poolName || record.pool || t('gacha_unknown_pool');
             poolBadge.innerText = `${timeStr} - ${pName}`;
             
             const iconRow = document.createElement('div');
@@ -746,60 +786,84 @@
             }
             
             function setupCheekDragInteraction(player) {
-                const canvas = document.querySelector('#gachaSpineContainerErpin canvas'); if (!canvas) return;
-                canvas.style.touchAction = 'none';
-                let activeInteractBone = null; let initialBoneX = 0, initialBoneY = 0; let initialBoneWorldX = 0, initialBoneWorldY = 0;
-                let isDragging = false; let startX = 0, startY = 0, lastMouseX = 0, lastMouseY = 0, dragDistance = 0; let hasTriggeredPull = false;
-                player._customDragTargetX = null; player._customDragTargetY = null; player._bouncingBone = null; player._bounceX = null; player._bounceY = null;
-                const origUpdateWorldTransform = player.skeleton.updateWorldTransform;
-                player.skeleton.updateWorldTransform = function () {
-                    if (activeInteractBone && player._customDragTargetX !== null) { activeInteractBone.x = player._customDragTargetX; activeInteractBone.y = player._customDragTargetY; }
-                    else if (player._bouncingBone) { player._bouncingBone.x = player._bounceX; player._bouncingBone.y = player._bounceY; }
-                    origUpdateWorldTransform.call(this);
-                };
-                function checkHitCheek(mouseX, mouseY) {
-                    const rect = canvas.getBoundingClientRect(); const camera = player.camera || (player.sceneRenderer && player.sceneRenderer.camera);
-                    let camX = camera ? camera.position.x - (camera.viewportWidth * camera.zoom) / 2 : SPINE_CONFIG.viewport.x;
-                    let camY = camera ? camera.position.y - (camera.viewportHeight * camera.zoom) / 2 : SPINE_CONFIG.viewport.y;
-                    let camW = camera ? camera.viewportWidth * camera.zoom : SPINE_CONFIG.viewport.width; let camH = camera ? camera.viewportHeight * camera.zoom : SPINE_CONFIG.viewport.height;
-                    const bone = player.skeleton.findBone("Character_Ball_Move");
-                    if (bone) {
-                        const boneCanvasX = ((bone.worldX - camX) / camW) * rect.width; const boneCanvasY = rect.height - ((bone.worldY - camY) / camH) * rect.height;
-                        if (Math.hypot(mouseX - boneCanvasX, mouseY - boneCanvasY) < 150) return bone;
-                    } return null;
-                }
-                canvas.addEventListener('pointerdown', (e) => {
-                    if (currentGachaState !== GachaState.ERPIN_IDLE) return;
-                    const rect = canvas.getBoundingClientRect(); const hitBone = checkHitCheek(e.clientX - rect.left, e.clientY - rect.top);
-                    if (hitBone) {
-                        isDragging = true; activeInteractBone = hitBone; startX = lastMouseX = e.clientX; startY = lastMouseY = e.clientY;
-                        dragDistance = 0; hasTriggeredPull = false; initialBoneX = activeInteractBone.x; initialBoneY = activeInteractBone.y;
-                        initialBoneWorldX = activeInteractBone.worldX; initialBoneWorldY = activeInteractBone.worldY; canvas.setPointerCapture(e.pointerId);
-                        playGachaSound('SFX_Gacha_PullCheek');
-                        const animNames = player.skeleton.data.animations.map(a => a.name); if (animNames.includes("Touch")) player.animationState.setAnimation(0, "Touch", true);
-                    }
-                });
-                canvas.addEventListener('pointermove', (e) => {
-                    if (!isDragging || !player.skeleton || !activeInteractBone) return;
-                    const rect = canvas.getBoundingClientRect(); const dx = e.clientX - lastMouseX; const dy = e.clientY - lastMouseY; dragDistance += Math.hypot(dx, dy);
-                    const camera = player.camera || (player.sceneRenderer && player.sceneRenderer.camera);
-                    let camW = camera ? camera.viewportWidth * camera.zoom : SPINE_CONFIG.viewport.width; let camH = camera ? camera.viewportHeight * camera.zoom : SPINE_CONFIG.viewport.height;
-                    let worldDx = (e.clientX - startX) * (camW / rect.width) * 1.3; let worldDy = -(e.clientY - startY) * (camH / rect.height) * 1.3; if (worldDx > 0) worldDx *= 0.1;
-                    let targetWorld = { x: initialBoneWorldX + worldDx, y: initialBoneWorldY + worldDy }; if (activeInteractBone.parent) activeInteractBone.parent.worldToLocal(targetWorld);
-                    let localDx = targetWorld.x - initialBoneX; let localDy = targetWorld.y - initialBoneY; let rawDistance = Math.hypot(localDx, localDy); const MAX_RADIUS = 55;
-                    if (rawDistance > 0) { let elasticDist = MAX_RADIUS * (1 - Math.exp(-rawDistance / (MAX_RADIUS * 1.2))); localDx = (localDx / rawDistance) * elasticDist; localDy = (localDy / rawDistance) * elasticDist; }
-                    player._customDragTargetX = initialBoneX + localDx; player._customDragTargetY = initialBoneY + localDy;
-                    if (dragDistance > 30) hasTriggeredPull = true; lastMouseX = e.clientX; lastMouseY = e.clientY;
-                });
-                const stopDrag = (e) => {
-                    if (!isDragging) return; isDragging = false; canvas.releasePointerCapture(e.pointerId);
-                    playGachaSound('SFX_Gacha_PullCheekEnd');
-                    if (hasTriggeredPull) { triggerDropAndEnd1(); } else { player._bouncingBone = activeInteractBone; player.animationState.setAnimation(0, "Idle", true); }
-                    activeInteractBone = null;
-                }; canvas.addEventListener('pointerup', stopDrag); canvas.addEventListener('pointercancel', stopDrag);
+            const canvas = document.querySelector('#gachaSpineContainerErpin canvas'); if (!canvas) return;
+            canvas.style.touchAction = 'none';
+            let activeInteractBone = null; let initialBoneX = 0, initialBoneY = 0; let initialBoneWorldX = 0, initialBoneWorldY = 0;
+            let isDragging = false; let startX = 0, startY = 0, lastMouseX = 0, lastMouseY = 0, dragDistance = 0; let hasTriggeredPull = false;
+            
+            // 初始化自訂目標
+            player._customDragTargetX = null; player._customDragTargetY = null; player._bouncingBone = null;
+            
+            const origUpdateWorldTransform = player.skeleton.updateWorldTransform;
+            player.skeleton.updateWorldTransform = function () {
+            if (activeInteractBone && player._customDragTargetX !== null) { 
+            activeInteractBone.x = player._customDragTargetX; 
+            activeInteractBone.y = player._customDragTargetY; 
+            }
+            origUpdateWorldTransform.call(this);
+            };
+            
+            function checkHitCheek(mouseX, mouseY) {
+            const rect = canvas.getBoundingClientRect(); const camera = player.camera || (player.sceneRenderer && player.sceneRenderer.camera);
+            let camX = camera ? camera.position.x - (camera.viewportWidth * camera.zoom) / 2 : SPINE_CONFIG.viewport.x;
+            let camY = camera ? camera.position.y - (camera.viewportHeight * camera.zoom) / 2 : SPINE_CONFIG.viewport.y;
+            let camW = camera ? camera.viewportWidth * camera.zoom : SPINE_CONFIG.viewport.width; let camH = camera ? camera.viewportHeight * camera.zoom : SPINE_CONFIG.viewport.height;
+            const bone = player.skeleton.findBone("Character_Ball_Move");
+            if (bone) {
+            const boneCanvasX = ((bone.worldX - camX) / camW) * rect.width; 
+            const boneCanvasY = rect.height - ((bone.worldY - camY) / camH) * rect.height;
+            // 🌟 修正 1：將判定半徑從 150 大幅縮小到 80，精準鎖定臉頰
+            if (Math.hypot(mouseX - boneCanvasX, mouseY - boneCanvasY) < 80) return bone;
+            } return null;
             }
             
-            window.addEventListener('load', () => { initUI(); });
+            canvas.addEventListener('pointerdown', (e) => {
+            if (currentGachaState !== GachaState.ERPIN_IDLE) return;
+            const rect = canvas.getBoundingClientRect(); const hitBone = checkHitCheek(e.clientX - rect.left, e.clientY - rect.top);
+            if (hitBone) {
+            isDragging = true; activeInteractBone = hitBone; startX = lastMouseX = e.clientX; startY = lastMouseY = e.clientY;
+            dragDistance = 0; hasTriggeredPull = false; initialBoneX = activeInteractBone.x; initialBoneY = activeInteractBone.y;
+            initialBoneWorldX = activeInteractBone.worldX; initialBoneWorldY = activeInteractBone.worldY; canvas.setPointerCapture(e.pointerId);
+            
+            // 🌟 修正 2：每次點擊時，強制清空殘留的拉扯目標，防止臉頰無故掉落
+            player._customDragTargetX = null; player._customDragTargetY = null;
+            
+            playGachaSound('SFX_Gacha_PullCheek');
+            const animNames = player.skeleton.data.animations.map(a => a.name); 
+            if (animNames.includes("Touch")) player.animationState.setAnimation(0, "Touch", true);
+            }
+            });
+            
+            canvas.addEventListener('pointermove', (e) => {
+            if (!isDragging || !player.skeleton || !activeInteractBone) return;
+            const rect = canvas.getBoundingClientRect(); const dx = e.clientX - lastMouseX; const dy = e.clientY - lastMouseY; dragDistance += Math.hypot(dx, dy);
+            const camera = player.camera || (player.sceneRenderer && player.sceneRenderer.camera);
+            let camW = camera ? camera.viewportWidth * camera.zoom : SPINE_CONFIG.viewport.width; let camH = camera ? camera.viewportHeight * camera.zoom : SPINE_CONFIG.viewport.height;
+            let worldDx = (e.clientX - startX) * (camW / rect.width) * 1.3; let worldDy = -(e.clientY - startY) * (camH / rect.height) * 1.3; if (worldDx > 0) worldDx *= 0.1;
+            let targetWorld = { x: initialBoneWorldX + worldDx, y: initialBoneWorldY + worldDy }; if (activeInteractBone.parent) activeInteractBone.parent.worldToLocal(targetWorld);
+            let localDx = targetWorld.x - initialBoneX; let localDy = targetWorld.y - initialBoneY; let rawDistance = Math.hypot(localDx, localDy); const MAX_RADIUS = 55;
+            if (rawDistance > 0) { let elasticDist = MAX_RADIUS * (1 - Math.exp(-rawDistance / (MAX_RADIUS * 1.2))); localDx = (localDx / rawDistance) * elasticDist; localDy = (localDy / rawDistance) * elasticDist; }
+            
+            player._customDragTargetX = initialBoneX + localDx; player._customDragTargetY = initialBoneY + localDy;
+            if (dragDistance > 30) hasTriggeredPull = true; lastMouseX = e.clientX; lastMouseY = e.clientY;
+            });
+            
+            const stopDrag = (e) => {
+            if (!isDragging) return; isDragging = false; canvas.releasePointerCapture(e.pointerId);
+            playGachaSound('SFX_Gacha_PullCheekEnd');
+            if (hasTriggeredPull) { triggerDropAndEnd1(); } else { player._bouncingBone = activeInteractBone; player.animationState.setAnimation(0, "Idle", true); }
+            
+            // 🌟 修正 3：放開臉頰時，也確保清空目標
+            player._customDragTargetX = null; player._customDragTargetY = null;
+            activeInteractBone = null;
+            }; 
+            canvas.addEventListener('pointerup', stopDrag); canvas.addEventListener('pointercancel', stopDrag);
+            }
+            
+            window.addEventListener('load', () => { 
+                initLangUI(); 
+                initUI(); 
+            });
             window.onscroll = function() {
                 const btn = document.getElementById("backToTop");
                 if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) btn.style.display = "flex"; else btn.style.display = "none";
