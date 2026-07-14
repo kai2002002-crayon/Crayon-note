@@ -248,14 +248,14 @@
                 // 1. 特選招募按鈕 (讀取 gacha/ 資料夾下的專屬圖片)
                 currentRateUps.forEach(charName => {
                     const btn = document.createElement('button'); 
-                    // 修改樣式：加高按鈕、移除內距，讓圖片完美填滿
-                    btn.className = 'pool-btn rounded-xl border-4 border-transparent hover:border-amber-400 overflow-hidden transition-all p-0 h-[60px] sm:h-[80px] bg-white dark:bg-gray-800 flex items-center justify-center min-w-[120px] shadow-sm';
+                    // 🌟 修改高度：h-[45px]
+                    btn.className = 'pool-btn rounded-xl border-4 border-transparent hover:border-amber-400 overflow-hidden transition-all p-0 h-[45px] bg-white dark:bg-gray-800 flex items-center justify-center min-w-[120px] shadow-sm';
                     
                     // 獲取 Spine 名稱以對應圖片檔名
                     const spineName = typeof SPINE_MAP !== 'undefined' && SPINE_MAP[charName] ? SPINE_MAP[charName] : charName;
                     const poolTitle = `${t('gacha_rate_up')} - ${t(charName)}`;
                     
-                    // 插入圖片，並設定 onerror 備用方案 (若圖片遺失或讀取失敗，則自動顯示文字)
+                    // 插入圖片，並設定 onerror 備用方案
                     btn.innerHTML = `
                         <img src="gacha/Gacha_PickupTitleImg_${spineName}_${langSuffix}.png" class="h-full w-auto object-contain" alt="${poolTitle}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                         <span style="display:none;" class="px-3 font-bold text-sm text-gray-700 dark:text-gray-200">${poolTitle}</span>
@@ -266,9 +266,9 @@
                     if (!firstBtn) firstBtn = { btn, type: 'rateup', args: [[charName], null, poolTitle] };
                 });
                 
-                // 2. 普通招募按鈕 (維持純文字，但調整高度與排版以對齊圖片按鈕)
+                // 2. 普通招募按鈕 (維持純文字，調整高度 h-[45px] 以對齊圖片按鈕)
                 const normalBtn = document.createElement('button'); 
-                normalBtn.className = 'pool-btn px-4 py-2 rounded-xl border-4 border-transparent bg-gray-200 dark:bg-gray-700 shadow-sm font-bold text-sm text-gray-700 dark:text-gray-200 h-[60px] sm:h-[80px] flex items-center justify-center transition-all';
+                normalBtn.className = 'pool-btn px-4 py-2 rounded-xl border-4 border-transparent bg-gray-200 dark:bg-gray-700 shadow-sm font-bold text-sm text-gray-700 dark:text-gray-200 h-[45px] flex items-center justify-center transition-all';
                 normalBtn.innerText = t('gacha_normal'); 
                 normalBtn.onclick = () => setPool('normal', [], null, normalBtn.innerText, normalBtn);
                 poolBtnContainer.appendChild(normalBtn); 
@@ -276,7 +276,8 @@
                 
                 // 3. 性格招募按鈕 (讀取 event/ 資料夾下的專屬圖片)
                 const pPoolBtn = document.createElement('button'); 
-                pPoolBtn.className = 'pool-btn rounded-xl border-4 border-transparent hover:border-amber-400 overflow-hidden transition-all p-0 h-[60px] sm:h-[80px] bg-white dark:bg-gray-800 flex items-center justify-center min-w-[120px] shadow-sm';
+                // 🌟 修改高度：h-[45px]
+                pPoolBtn.className = 'pool-btn rounded-xl border-4 border-transparent hover:border-amber-400 overflow-hidden transition-all p-0 h-[45px] bg-white dark:bg-gray-800 flex items-center justify-center min-w-[120px] shadow-sm';
                 const pPoolTitle = t('gacha_personality_pool');
                 
                 // 插入性格招募的專屬圖，並設有 onerror 防錯機制
