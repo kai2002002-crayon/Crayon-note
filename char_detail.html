@@ -1413,8 +1413,8 @@
                     return arrObj[lang] || arrObj['zh'] || []; 
                 };
                 
-                const isUpcoming = ['Sylla', 'Alice'].includes(charName) || ['Sylla', 'Alice'].includes(spineKey);
-                const releaseTime = new Date('2026-07-09T04:00:00+09:00').getTime(); 
+                const isUpcoming = ['Rude'].includes(charName) || ['Rude'].includes(spineKey);
+                const releaseTime = new Date('2026-07-23T04:00:00+09:00').getTime(); 
                 const now = new Date().getTime();
                 
                 if (!data && !isUpcoming) {
@@ -1426,9 +1426,9 @@
                 
                 if (isUpcoming && now < releaseTime) {
                     const upcomingMsg = {
-                        zh: "此坨坨的願像系統將於 2026/07/09 04:00 (JST) 實裝解鎖",
-                        ja: "この使徒のアサイドシステムは 2026/07/09 04:00 (JST) に実装されます",
-                        en: "This Apostle's Yearning system will be unlocked on 2026/07/09 04:00 (JST)"
+                        zh: "此坨坨的願像系統將於 2026/07/23 04:00 (JST) 實裝解鎖",
+                        ja: "この使徒のアサイドシステムは 2026/07/23 04:00 (JST) に実装されます",
+                        en: "This Apostle's Yearning system will be unlocked on 2026/07/23 04:00 (JST)"
                     };
                     
                     asideContainer.innerHTML = `
