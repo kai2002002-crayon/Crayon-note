@@ -3,17 +3,17 @@
     background-repeat: no-repeat;
     display: block;
 }
-.sprite-common { background-image: url('common_icon.png'); }
-.sprite-char-composed { background-image: url('char_composed.png'); }
-.sprite-char-depressed { background-image: url('char_depressed.png'); }
-.sprite-char-innocence { background-image: url('char_innocence.png'); }
-.sprite-char-madness { background-image: url('char_madness.png'); }
-.sprite-char-vivacious { background-image: url('char_vivacious.png'); }
-.sprite-ult-composed { background-image: url('ultimate_composed.png'); }
-.sprite-ult-depressed { background-image: url('ultimate_depressed.png'); }
-.sprite-ult-innocence { background-image: url('ultimate_innocence.png'); }
-.sprite-ult-madness { background-image: url('ultimate_madness.png'); }
-.sprite-ult-vivacious { background-image: url('ultimate_vivacious.png'); }
+.sprite-common { background-image: url('char_sprites/common_icon.png'); }
+.sprite-char-composed { background-image: url('char_sprites/char_composed.png'); }
+.sprite-char-depressed { background-image: url('char_sprites/char_depressed.png'); }
+.sprite-char-innocence { background-image: url('char_sprites/char_innocence.png'); }
+.sprite-char-madness { background-image: url('char_sprites/char_madness.png'); }
+.sprite-char-vivacious { background-image: url('char_sprites/char_vivacious.png'); }
+.sprite-ult-composed { background-image: url('char_sprites/ultimate_composed.png'); }
+.sprite-ult-depressed { background-image: url('char_sprites/ultimate_depressed.png'); }
+.sprite-ult-innocence { background-image: url('char_sprites/ultimate_innocence.png'); }
+.sprite-ult-madness { background-image: url('char_sprites/ultimate_madness.png'); }
+.sprite-ult-vivacious { background-image: url('char_sprites/ultimate_vivacious.png'); }
 
 /* =======================================
    🌟 通用圖示 (common_icon.png)
