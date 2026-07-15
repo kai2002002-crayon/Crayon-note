@@ -602,7 +602,7 @@ const WORK_URL = {
     "Rude": "https://youtu.be/mh-UMouGGcs",
     "Rufo": "https://youtu.be/LVocNQWYRuM",
     "Sari": "https://youtu.be/mRU5nRoA3g0",
-    "Selline": "",
+    "Selline": "https://youtu.be/Yn53p8bsBb0",
     "Shady": "https://youtu.be/1siB-6t2eL0",
     "Shoupan": "https://youtu.be/su0DhWANaeg",
     "Silphir": "https://youtu.be/dPklHe2kZhs",
