@@ -104,7 +104,7 @@ const ASIDE_DATA = {
     },
     "Daya": { 
         asideIcon: "", 
-        totalName: { zh: "", ja: "", en: "" }, 
+        totalName: { zh: "鑽石戒指", ja: "ダイヤモンドの指輪", en: "Diamond Ring" }, 
         stars: {
             1: { 
                 icon: "", 
