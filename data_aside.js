@@ -579,7 +579,7 @@ const ASIDE_DATA = {
     },
     "Tig": { 
         asideIcon: "", 
-        totalName: { zh: "", ja: "", en: "" }, 
+        totalName: { zh: "謙遜的蒂亞娜", ja: "礼儀正しいディアナ", en: "Polite Diana" }, 
         stars: {
             1: { 
                 icon: "", 
