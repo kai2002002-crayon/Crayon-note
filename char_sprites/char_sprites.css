@@ -74,6 +74,7 @@
 [class*="_Speaki"] { background-image: url('Speakisheet.png'); }
 [class*="_Sylla"] { background-image: url('Syllasheet.png'); }
 [class*="_Taida"] { background-image: url('Taidasheet.png'); }
+[class*="_Tig"] { background-image: url('Tigsheet.png'); }
 [class*="_Ui"] { background-image: url('Uisheet.png'); }
 [class*="_Velvet"] { background-image: url('Velvetsheet.png'); }
 [class*="_Veroo"] { background-image: url('Veroosheet.png'); }
@@ -648,6 +649,16 @@
 .sprite-Icon_NormalSkill_Taida { width: 64px; height: 64px; background-position: -5px -525px; }
 .sprite-Icon_PassiveSkill_Taida { width: 64px; height: 64px; background-position: -5px -599px; }
 .sprite-PresentList_Taida { width: 235px; height: 217px; background-position: -5px -673px; }
+
+/* --- Tig --- */
+.sprite-AsideIcon_Tig { width: 256px; height: 256px; background-position: -5px -5px; }
+.sprite-Aside_Skill_Tig_1 { width: 64px; height: 64px; background-position: -5px -271px; }
+.sprite-Aside_Skill_Tig_2 { width: 64px; height: 64px; background-position: -5px -345px; }
+.sprite-Aside_Skill_Tig_3 { width: 64px; height: 64px; background-position: -5px -419px; }
+.sprite-CG_Schedule_Tig { width: 1020px; height: 510px; background-position: -5px -493px; }
+.sprite-Icon_NormalSkill_Tig { width: 64px; height: 64px; background-position: -5px -1015px; }
+.sprite-Icon_PassiveSkill_Tig { width: 64px; height: 64px; background-position: -5px -1089px; }
+.sprite-PresentList_Tig { width: 146px; height: 225px; background-position: -5px -1163px; }
 
 /* --- Ui --- */
 .sprite-AsideIcon_Ui { width: 256px; height: 256px; background-position: -5px -5px; }
