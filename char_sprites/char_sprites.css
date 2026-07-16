@@ -24,6 +24,7 @@
 [class*="_Chloe"] { background-image: url('Chloesheet.png'); }
 [class*="_Chopi"] { background-image: url('Chopisheet.png'); }
 [class*="_Cuee"] { background-image: url('Cueesheet.png'); }
+[class*="_Daya"] { background-image: url('Dayasheet.png'); }
 [class*="_Diana"] { background-image: url('Dianasheet.png'); }
 [class*="_Ed"] { background-image: url('Edsheet.png'); }
 [class*="_Elena"] { background-image: url('Elenasheet.png'); }
@@ -225,14 +226,24 @@
 .sprite-Icon_PassiveSkill_Cuee { width: 64px; height: 64px; background-position: -5px -79px; }
 
 /* --- Diana --- */
+.sprite-AsideIcon_Daya { width: 256px; height: 256px; background-position: -5px -5px; }
+.sprite-Aside_Skill_Daya_1 { width: 64px; height: 64px; background-position: -5px -271px; }
+.sprite-Aside_Skill_Daya_2 { width: 64px; height: 64px; background-position: -5px -345px; }
+.sprite-Aside_Skill_Daya_3 { width: 64px; height: 64px; background-position: -5px -419px; }
+.sprite-CG_Schedule_Daya { width: 1020px; height: 510px; background-position: -5px -493px; }
+.sprite-Icon_NormalSkill_Daya { width: 64px; height: 64px; background-position: -5px -1013px; }
+.sprite-Icon_PassiveSkill_Daya { width: 64px; height: 64px; background-position: -5px -1087px; }
+.sprite-PresentList_Daya { width: 201px; height: 220px; background-position: -5px -1161px; }
+
+/* --- Daya --- */
 .sprite-AsideIcon_Diana { width: 256px; height: 256px; background-position: -5px -5px; }
 .sprite-Aside_Skill_Diana_1 { width: 64px; height: 64px; background-position: -5px -271px; }
 .sprite-Aside_Skill_Diana_2 { width: 64px; height: 64px; background-position: -5px -345px; }
 .sprite-Aside_Skill_Diana_3 { width: 64px; height: 64px; background-position: -5px -419px; }
 .sprite-CG_Schedule_Diana { width: 1020px; height: 510px; background-position: -5px -493px; }
-.sprite-Icon_NormalSkill_Diana { width: 64px; height: 64px; background-position: -5px -1013px; }
-.sprite-Icon_PassiveSkill_Diana { width: 64px; height: 64px; background-position: -5px -1087px; }
-.sprite-PresentList_Diana { width: 201px; height: 220px; background-position: -5px -1161px; }
+.sprite-Icon_NormalSkill_Diana { width: 64px; height: 64px; background-position: -5px -1015px; }
+.sprite-Icon_PassiveSkill_Diana { width: 64px; height: 64px; background-position: -5px -1089px; }
+.sprite-PresentList_Diana { width: 201px; height: 220px; background-position: -5px -1163px; }
 
 /* --- Ed --- */
 .sprite-AsideIcon_Ed { width: 256px; height: 256px; background-position: -5px -5px; }
