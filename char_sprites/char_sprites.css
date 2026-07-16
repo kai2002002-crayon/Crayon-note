@@ -241,10 +241,10 @@
 .sprite-Aside_Skill_Diana_1 { width: 64px; height: 64px; background-position: -5px -271px; }
 .sprite-Aside_Skill_Diana_2 { width: 64px; height: 64px; background-position: -5px -345px; }
 .sprite-Aside_Skill_Diana_3 { width: 64px; height: 64px; background-position: -5px -419px; }
-.sprite-CG_Schedule_Diana { width: 1020px; height: 510px; background-position: -5px -493px; }
+.sprite-CG_Schedule_Diana { width: 1024px; height: 512px; background-position: -5px -493px; }
 .sprite-Icon_NormalSkill_Diana { width: 64px; height: 64px; background-position: -5px -1015px; }
 .sprite-Icon_PassiveSkill_Diana { width: 64px; height: 64px; background-position: -5px -1089px; }
-.sprite-PresentList_Diana { width: 201px; height: 220px; background-position: -5px -1163px; }
+.sprite-PresentList_Diana { width: 164px; height: 240px; background-position: -5px -1163px; }
 
 /* --- Ed --- */
 .sprite-AsideIcon_Ed { width: 256px; height: 256px; background-position: -5px -5px; }
@@ -655,10 +655,10 @@
 .sprite-Aside_Skill_Tig_1 { width: 64px; height: 64px; background-position: -5px -271px; }
 .sprite-Aside_Skill_Tig_2 { width: 64px; height: 64px; background-position: -5px -345px; }
 .sprite-Aside_Skill_Tig_3 { width: 64px; height: 64px; background-position: -5px -419px; }
-.sprite-CG_Schedule_Tig { width: 1020px; height: 510px; background-position: -5px -493px; }
+.sprite-CG_Schedule_Tig { width: 1024px; height: 512px; background-position: -5px -493px; }
 .sprite-Icon_NormalSkill_Tig { width: 64px; height: 64px; background-position: -5px -1015px; }
 .sprite-Icon_PassiveSkill_Tig { width: 64px; height: 64px; background-position: -5px -1089px; }
-.sprite-PresentList_Tig { width: 146px; height: 225px; background-position: -5px -1163px; }
+.sprite-PresentList_Tig { width: 239px; height: 142px; background-position: -5px -1163px; }
 
 /* --- Ui --- */
 .sprite-AsideIcon_Ui { width: 256px; height: 256px; background-position: -5px -5px; }
