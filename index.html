@@ -950,18 +950,28 @@
             
                 const personalityColors = { "天真": "border-green-400 text-green-400", "冷靜": "border-blue-400 text-blue-400", "狂亂": "border-red-400 text-red-400", "活潑": "border-yellow-400 text-yellow-400", "憂鬱": "border-purple-400 text-purple-400" };
             
-                activeChars.forEach(charName => {
-                    const charData = INITIAL_DATA.find(c => c.name === charName); if (!charData) return;
-                    const iconUrl = typeof SKILL_ICONS !== 'undefined' ? SKILL_ICONS['skill_passive_' + charName] : null; const pColorClass = personalityColors[charData.personality] || "border-gray-400 text-gray-400";
-                    const iconWrapper = document.createElement('div');
-                    iconWrapper.className = `w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 ${pColorClass} bg-white dark:bg-gray-800 flex items-center justify-center relative pickup-sparkle shrink-0 cursor-pointer transition-transform`;
-                
-                    const prefix = localTooltipTexts[window.currentLang] || localTooltipTexts["zh-TW"]; iconWrapper.title = `${prefix}${t(charName)}`;
-                    iconWrapper.onclick = () => window.open(`char_detail.html?char=${encodeURIComponent(charName)}`, '_blank');
-                    if (iconUrl) { iconWrapper.innerHTML = `<img src="${iconUrl}" class="w-full h-full object-cover rounded-[5px]" alt="${t(charName)}">`; } 
-                    else { iconWrapper.innerHTML = `<span class="text-[10px] font-bold text-gray-800 dark:text-gray-200">${t(charName).charAt(0)}</span>`; }
-                    container.appendChild(iconWrapper);
-                });
+                        activeChars.forEach(charName => {
+            const charData = INITIAL_DATA.find(c => c.name === charName); if (!charData) return;
+            
+            const pColorClass = personalityColors[charData.personality] || "border-gray-400 text-gray-400";
+            const iconWrapper = document.createElement('div');
+            // 🌟 這裡新增了 overflow-hidden，防止雪碧圖超出框線破版
+            iconWrapper.className = `w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 ${pColorClass} bg-white dark:bg-gray-800 flex items-center justify-center relative pickup-sparkle shrink-0 cursor-pointer transition-transform overflow-hidden`;
+        
+            const prefix = localTooltipTexts[window.currentLang] || localTooltipTexts["zh-TW"]; iconWrapper.title = `${prefix}${t(charName)}`;
+            iconWrapper.onclick = () => window.open(`char_detail.html?char=${encodeURIComponent(charName)}`, '_blank');
+            
+            // 🌟 取得雪碧圖所需的名稱與 Class
+            const spineName = typeof SPINE_MAP !== 'undefined' && SPINE_MAP[charName] ? SPINE_MAP[charName] : charName;
+            const charSpriteBase = CHAR_SPRITE_MAP[charData.personality] || "";
+            const charSpriteClass = `sprite-${spineName}`;
+            
+            // 🌟 替換為雪碧圖結構 (移除原本的 img 標籤)
+            iconWrapper.innerHTML = `<div class="sprite-base ${charSpriteBase} ${charSpriteClass} shrink-0 scale-[0.25] sm:scale-[0.3] origin-center"></div>`;
+            
+            container.appendChild(iconWrapper);
+        });
+
             }
             
             function getActiveEvents() {
