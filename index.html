@@ -1562,9 +1562,10 @@ const ultSpriteClass = `sprite-Icon_UltimateSkill_${spineName}`;
             
             ${isUnreleased ? '' : `
             <!-- 👇 2. 大絕頭像輪播：同樣改用絕對定位死釘在正中央，再縮放 0.75 倍 -->
-            <div class="avatar-alt absolute inset-0 z-20 bg-[#fcf8f2] dark:bg-gray-800 transition-opacity duration-300">
-                <div class="${ultSpriteBase} ${ultSpriteClass} absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-[0.75] bg-no-repeat origin-center block"></div>
-            </div>`}
+            <!-- 👇 改這裡：確保將 性格類別 與 角色圖示類別 分開 -->
+<div class="avatar-alt absolute inset-0 z-20 bg-[#fcf8f2] dark:bg-gray-800 transition-opacity duration-300">
+    <div class="${ULT_SPRITE_MAP[char.personality]} sprite-Icon_UltimateSkill_${spineName} absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-[0.75] bg-no-repeat origin-center block"></div>
+</div>`}
             
         </div>
         
