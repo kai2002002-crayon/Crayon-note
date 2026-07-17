@@ -1551,25 +1551,34 @@ const ultSpriteClass = `sprite-Icon_UltimateSkill_${spineName}`; // 例: sprite-
                             </div>`;
             
                         nameCol.innerHTML = `
-                            <div class="relative shrink-0 w-12 h-12" ${isUnreleased ? '' : `onclick="toggleOwnership('${char.name}')"`}>
-                                <div id="avatar_container_${char.name}" class="char-avatar-container w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-inner ${avatarClass} ${isUnreleased ? 'pointer-events-none' : ''} bg-[#fcf8f2] dark:bg-gray-800 relative overflow-hidden">
-                                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 sprite-base sprite-common ${bgSprite} scale-[0.45] z-0 opacity-90"></div>
-                                    <div class="absolute inset-0 bg-white/20 dark:bg-black/20 backdrop-blur-[1px] z-[5]"></div>
-                                    <div class="absolute inset-0 flex items-center justify-center z-10 ${isUnreleased ? 'silhouette-mode' : ''}">
-                                        <div class="sprite-base ${charSpriteBase} ${charSpriteClass} shrink-0 scale-[0.375] origin-center"></div>
-                                    </div>
-                                    ${isUnreleased ? '' : `
-                                    <div class="avatar-alt absolute inset-0 z-20 flex items-center justify-center bg-[#fcf8f2] dark:bg-gray-800 transition-opacity duration-300">
-                                        <div class="sprite-base ${ultSpriteBase} ${ultSpriteClass} shrink-0 scale-[0.75] origin-center"></div>
-                                    </div>`}
-                                </div>
-                                <div id="fall_av_${char.name}" class="hidden char-avatar-container w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-sm flex items-center justify-center font-bold text-amber-900 text-lg ${avatarClass} ${isUnreleased ? 'silhouette-mode' : ''}">${isUnreleased ? '?' : t(char.name).charAt(0)}</div>
-                            </div>
-                            <div class="flex flex-col gap-0.5 w-full overflow-hidden">
-                                <div class="marquee-box text-sm sm:text-base font-bold text-gray-900 dark:text-gray-100" title="${displayName}"><span class="marquee-content">${displayName}</span></div>
-                                ${traitsHtml}
-                            </div>
-                        `;
+    <div class="relative shrink-0 w-12 h-12" ${isUnreleased ? '' : `onclick="toggleOwnership('${char.name}')"`}>
+        <div id="avatar_container_${char.name}" class="char-avatar-container w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-inner ${avatarClass} ${isUnreleased ? 'pointer-events-none' : ''} bg-[#fcf8f2] dark:bg-gray-800 relative overflow-hidden">
+            
+            <!-- 背景特效 -->
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 sprite-base sprite-common ${bgSprite} scale-[0.45] z-0 opacity-90 block bg-no-repeat"></div>
+            <div class="absolute inset-0 bg-white/20 dark:bg-black/20 backdrop-blur-[1px] z-[5]"></div>
+            
+            <!-- 👇 1. 普通頭像：放棄 flex，改用絕對定位死釘在正中央，再縮放 0.38 倍 -->
+            <div class="absolute inset-0 z-10 ${isUnreleased ? 'silhouette-mode' : ''}">
+                <div class="${charSpriteBase} ${charSpriteClass} absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-[0.38] bg-no-repeat origin-center block"></div>
+            </div>
+            
+            ${isUnreleased ? '' : `
+            <!-- 👇 2. 大絕頭像輪播：同樣改用絕對定位死釘在正中央，再縮放 0.75 倍 -->
+            <div class="avatar-alt absolute inset-0 z-20 bg-[#fcf8f2] dark:bg-gray-800 transition-opacity duration-300">
+                <div class="${ultSpriteBase} ${ultSpriteClass} absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-[0.75] bg-no-repeat origin-center block"></div>
+            </div>`}
+            
+        </div>
+        
+        <!-- 備用文字頭像 -->
+        <div id="fall_av_${char.name}" class="hidden char-avatar-container w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-sm flex items-center justify-center font-bold text-amber-900 text-lg ${avatarClass} ${isUnreleased ? 'silhouette-mode' : ''}">${isUnreleased ? '?' : t(char.name).charAt(0)}</div>
+    </div>
+    <div class="flex flex-col gap-0.5 w-full overflow-hidden">
+        <div class="marquee-box text-sm sm:text-base font-bold text-gray-900 dark:text-gray-100" title="${displayName}"><span class="marquee-content">${displayName}</span></div>
+        ${traitsHtml}
+    </div>
+`;
                         cardInner.appendChild(nameCol);
             
                         const layersContainer = document.createElement('div'); layersContainer.className = "flex flex-col sm:flex-row gap-3 w-full md:flex-1 relative";
