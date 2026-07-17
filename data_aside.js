@@ -579,26 +579,26 @@ const ASIDE_DATA = {
     },
     "Tig": { 
         asideIcon: "", 
-        totalName: { zh: "謙遜的蒂亞娜", ja: "礼儀正しいディアナ", en: "Polite Diana" }, 
+        totalName: { zh: "謙遜的蒂亞娜", ja: "礼儀正しいティアナ", en: "Polite Diana" }, 
         stars: {
             1: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "" }, 
-                effects: { zh: [""], ja: [""], en: [""] } 
+                name: { zh: "蒂亞娜的掌門弟子", ja: "ディアナの一番弟子", en: "Diana's Disciple" }, 
+                desc: { zh: "穿戴者的最大HP、物理攻擊力、爆擊、爆擊傷害增加。", ja: "着用者の最大HP、物理攻撃力、会心、会心ダメージが増加する。", en: "Increases the bearer's Max HP, Physical ATK, CRIT Hit, and CRIT DMG." }, 
+                effects: { zh: ["最大HP增加:6%", "理攻擊力增加:6%", "爆擊增加:6%", "爆擊傷害增加:6%"], ja: ["最大HP增加:6%", "物理攻擊力增加:6%", "会心增加:6%", "会心ダメージ増加:6%"], en: ["Max HP Increase: 6%", "Physical ATK Increase: 6%", "CRIT Increase: 6%", "CRIT DMG Increase: 6%"] } 
             },
             2: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "" }, 
-                effects: { zh: [""], ja: [""], en: [""] } 
+                name: { zh: "恩師蒂亞娜", ja: "真の師匠ディアナ", en: "Diana, the True Mentor" }, 
+                desc: { zh: "增加提格、虛波、班尼對敵人造成的傷害量與攻擊速度。發動超載時,於一定時間內進入無敵狀態。", ja: "ティグ、ルボ、ペニーの敵への与ダメージ量と攻撃速度が増加する。オーバードライブ発動時、一定時間無敵になる。", en: "Increases Outgoing Damage and Attack Speed of Tig, Rufo, and Beni. When Overdrive activates, becomes Invincible for a set period of time." }, 
+                effects: { zh: ["無敵:對所有傷害和減益效果免疫。", "造成的傷害量增加:30%", "攻擊速度提升:25%", "無敵持續時間:3秒"], ja: ["無敵: 全てのダメージ及びテバフに免疫を得る。", "ダメージ量増加:30%", "攻擊速度增加:25%", "無敵の持続時間:3秒"], en: ["Invincible: Immune to all damage and debuffs.", "DMG Increase: 30%", "ATK SPD Increase: 25%", "Invincible Duration: 3s"] } 
             },
             3: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "" }, 
-                effects: { zh: [""], ja: [""], en: [""] }, 
-                globalEffects: { zh: ["全體 %", "全體 %"], ja: ["全体 %", "全体 %"], en: ["All %", "All %"] } 
+                name: { zh: "下任村長提格", ja: "次期村長ティグ", en: "Tig, Future Chief" }, 
+                desc: { zh: "增加前排友軍對敵人造成的傷害量,並提升前排友軍的攻擊速度。", ja: "前列の味方が敵に与えるダメージ量を増加させ、前列の味方の攻撃速度を増加させる。", en: "Increases Front Row allies Outgoing DMG to enemies and Increases Front Row allies Attack Speed," }, 
+                effects: { zh: ["造成的傷害量增加:14%", "攻擊速度提升:5%"], ja: ["与ダメージ量増加:14%", "攻擊速度增加:5%"], en: ["Outgoing DMG Increase: 14%", "ATK SPD Increase: 5%"] }, 
+                globalEffects: { zh: ["全體物理攻擊力 3%", "全體物理防禦力 3%"], ja: ["全体物理攻擊力 3%", "全体物理防御力 3%"], en: ["All Physical ATK 3%", "All Physical DEF 3%"] } 
             }
         }
     },
