@@ -58,7 +58,7 @@ const characterSkills = [
         },
         "passiveSkill": {
           "desc": "攻撃速度が増加する。",
-          "stats": ["攻撃速度:42%"]
+          "stats": ["攻撃速度増加:42%"]
         }
       },
       "en": {
