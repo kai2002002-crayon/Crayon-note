@@ -1495,18 +1495,15 @@
                         }
                         
                         // 🌟 準備 Sprite 類別與底圖
+// 🌟 準備 Sprite 類別
 const spineName = typeof SPINE_MAP !== 'undefined' && SPINE_MAP[char.name] ? SPINE_MAP[char.name] : char.name;
 
-// 將角色性格轉為小寫，以對應 CSS (例如 Composed -> composed)
-const pKey = char.personality ? char.personality.toLowerCase() : "composed"; 
+// 👇 刪掉原本的字串組合，改回用你原本寫好的 Map 來抓取對應的英文 Class
+const charSpriteBase = CHAR_SPRITE_MAP[char.personality] || "";
+const ultSpriteBase = ULT_SPRITE_MAP[char.personality] || "";
 
-// 對應 background-image 的 Class
-const charSpriteBase = `sprite-char-${pKey}`; // 例: sprite-char-composed
-const ultSpriteBase = `sprite-ult-${pKey}`;   // 例: sprite-ult-composed
-
-// 對應 background-position 與寬高的 Class
-const charSpriteClass = `sprite-${spineName}`; // 例: sprite-Amelia
-const ultSpriteClass = `sprite-Icon_UltimateSkill_${spineName}`; // 例: sprite-Icon_UltimateSkill_Amelia
+const charSpriteClass = `sprite-${spineName}`;
+const ultSpriteClass = `sprite-Icon_UltimateSkill_${spineName}`;
             
                         let raceIconName = char.race; if (char.race === "???") raceIconName = "unknown";
                         const pSprite = SPRITE_CLASS_MAP[`personality_${char.personality}`] || "";
