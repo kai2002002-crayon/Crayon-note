@@ -411,7 +411,7 @@ const FOOD_MAP = {
     "Chloe": { super: "愛心扭結麵包", special: ["扭結麵包", "檸檬茶", "有機檸檬茶"] },
     "Chopi": { super: "烤海賊漫畫肉", special: ["烤漫畫肉", "獸糧罐頭", "高級獸糧罐頭"] },
     "Cuee": "無",
-	"Daya": "無",
+	"Daya": { super: "寶石蛋塔", special: ["寶石塔", "檸檬茶", "有機檸檬茶"] },
     "Diana": { super: "烤海賊漫畫肉", special: ["烤漫畫肉", "扭結麵包", "愛心扭結麵包"] },
     "Ed": { super: "一級祕密葡萄汁", special: ["祕密葡萄汁", "UFC炸胡蘿蔔", "UFC炸蔬菜"] },
     "Elena": { super: "滾燙的冰美式咖啡", special: ["溫熱的冰美式咖啡", "太空食品", "ANSA太空食品"] },
