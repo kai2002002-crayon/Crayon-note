@@ -1974,7 +1974,7 @@ const interactClass = isHasPresent ? 'hover:scale-110 transition-transform durat
 
 // 🌟 新增：依照是否有珍藏品，動態調整垂直位置
 // -translate-y-1/2 是絕對置中，數字越小（如 35%）圖片位置就會越往下
-const verticalPos = isHasPresent ? "-translate-y-1/2" : "-translate-y-[35%]";
+const verticalPos = isHasPresent ? "-translate-y-1/2" : "-translate-y-[5%]";
 
 presentContainer.innerHTML = `
     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 ${verticalPos} flex items-center justify-center pointer-events-none w-full h-full">
