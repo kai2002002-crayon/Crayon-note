@@ -9,11 +9,11 @@
 .sprite-char-innocence { background-image: url('char_sprites/char_innocence.png'); }
 .sprite-char-madness { background-image: url('char_sprites/char_madness.png'); }
 .sprite-char-vivacious { background-image: url('char_sprites/char_vivacious.png'); }
-.sprite-ult-composed { background-image: url('char_sprites/ultimate_composed.png'); }
-.sprite-ult-depressed { background-image: url('char_sprites/ultimate_depressed.png'); }
-.sprite-ult-innocence { background-image: url('char_sprites/ultimate_innocence.png'); }
-.sprite-ult-madness { background-image: url('char_sprites/ultimate_madness.png'); }
-.sprite-ult-vivacious { background-image: url('char_sprites/ultimate_vivacious.png'); }
+.sprite-ult-composed { background-image: url('char_sprites/ultimate_composed.png')!important; }
+.sprite-ult-depressed { background-image: url('char_sprites/ultimate_depressed.png')!important; }
+.sprite-ult-innocence { background-image: url('char_sprites/ultimate_innocence.png')!important; }
+.sprite-ult-madness { background-image: url('char_sprites/ultimate_madness.png')!important; }
+.sprite-ult-vivacious { background-image: url('char_sprites/ultimate_vivacious.png')!important; }
 
 /* =======================================
    🌟 通用圖示 (common_icon.png)
