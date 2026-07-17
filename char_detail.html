@@ -1969,20 +1969,20 @@
                             `;
                         } else {
                             // 設定正確安全的縮放比例，防止雪碧圖超出原本容器邊界
+// 這裡保留您的動態縮放與位置調整
 const baseScaleVal = isHasPresent ? 0.65 : 0.75; 
 const interactClass = isHasPresent ? 'hover:scale-110 transition-transform duration-300 drop-shadow-md cursor-pointer' : 'opacity-90 drop-shadow-sm transition-transform duration-300';
-
-// 🌟 新增：依照是否有珍藏品，動態調整垂直位置
-// -translate-y-1/2 是絕對置中，數字越小（如 35%）圖片位置就會越往下
 const verticalPos = isHasPresent ? "-translate-y-1/2" : "-translate-y-[35%]";
 
+// ✨ 修正重點：移除 w-full h-full 與 flex 的壓縮限制，並加上 shrink-0
 presentContainer.innerHTML = `
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 ${verticalPos} flex items-center justify-center pointer-events-none w-full h-full">
-        <div style="transform: scale(${baseScaleVal}); transform-origin: center;" class="pointer-events-auto flex items-center justify-center">
-            <div class="${finalImgUrl} ${interactClass}" title="${altText}"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 ${verticalPos} pointer-events-none">
+        <div style="transform: scale(${baseScaleVal}); transform-origin: center;" class="pointer-events-auto shrink-0 flex items-center justify-center">
+            <div class="${finalImgUrl} ${interactClass} shrink-0 max-w-none max-h-none block" title="${altText}"></div>
         </div>
     </div>
 `;
+
                         }
                     }
             
