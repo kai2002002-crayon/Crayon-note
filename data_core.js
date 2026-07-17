@@ -924,19 +924,9 @@ const PICKUP_SCHEDULE = [
 // 🎪 遊戲內活動排程表
 const EVENT_SCHEDULE = [
     {
-        start: "2026-07-17T17:00:00+09:00",
+        start: "2026-07-16T17:00:00+09:00",
         end: "2026-07-30T10:59:59+09:00",
         eventId: "Theme002" 
-    },
-    {
-        start: "2026-06-18T17:00:00+09:00",
-        end: "2026-07-16T10:59:59+09:00",
-        eventId: "SelectPickPersonality" 
-    },
-	    {
-        start: "2026-07-02T17:00:00+09:00",
-        end: "2026-07-16T10:59:59+09:00",
-        eventId: "Theme020" 
     }
 ];
 
