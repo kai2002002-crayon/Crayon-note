@@ -108,22 +108,22 @@ const ASIDE_DATA = {
         stars: {
             1: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "" }, 
-                effects: { zh: [""], ja: [""], en: [""] } 
+                name: { zh: "鑽石的閃耀", ja: "ダイヤの輝き", en: "Diamond's Sparkle" }, 
+                desc: { zh: "穿戴者的最大HP、魔法攻擊力、爆擊、爆擊傷害增加。", ja: "着用者の最大HP、魔法攻撃力、会心、会心ダメージが増加する。", en: "Increases bearer's Max HP, Magical ATK, CRIT, and CRIT DMG." }, 
+                effects: { zh: ["最大HP增加:6%", "魔法攻擊力增加:6%", "爆擊增加:6%", "爆擊傷害增加:6%"], ja: ["最大HP增加:6%", "魔法攻擊力增加:6%", "会心增加:6%", "会心ダメージ増加:6%"], en: ["Max HP Increase: 6%", "Magical ATK Increase: 6%", "CRIT Increase: 6%", "CRIT DMG Increase: 6%"] } 
             },
             2: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "" }, 
-                effects: { zh: [""], ja: [""], en: [""] } 
+                name: { zh: "鑽石･･････啾！", ja: "ダイヤ･･････くちゅ!", en: "Daya-choo!" }, 
+                desc: { zh: "普通技能命中時恢復100%SP。(最多觸發2次) 高級技能冷卻時間減少，並追加昏迷效果。", ja: "低学年スキルが命中すると、SPを100%回復する。(最大連続使用回数:2回)高学年スキルのクールタイムが減少し、気絶効果が追加される。", en: "Recovers 100% SP when Freshman Skill hits. (Max repeat uses: 2) Reduces Senior Skill Cooldown and adds Stun," }, 
+                effects: { zh: ["昏迷:無法進行任何行動。", "冷卻時間減少:10秒", "昏迷持續時間:2.5秒"], ja: ["気絕:行動不能状態になる。", "クールタイム減少:10秒", "気絶の持続時間:2.5秒"], en: ["Stun: Becomes unable to act.", "Cooldown Reduction: 10s", "Stun Duration: 2.5s"] } 
             },
             3: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "" }, 
-                effects: { zh: [""], ja: [""], en: [""] }, 
-                globalEffects: { zh: ["全體 %", "全體 %"], ja: ["全体 %", "全体 %"], en: ["All %", "All %"] } 
+                name: { zh: "魔戒遠征隊", ja: "指輪遠征隊", en: "Ring Expedition" }, 
+                desc: { zh: "所有友軍對敵人造成的傷害量增加。", ja: "味方全員の敵への与えるダメージ量を増加させる。", en: "Increases all allies' Outgoing Damage to enemies." }, 
+                effects: { zh: ["造成的傷害量增加:15%"], ja: ["ダメージ量増加:15%"], en: ["DMG Increase: 15%"] }, 
+                globalEffects: { zh: ["全體魔法攻擊力 3%", "全體爆擊 3%"], ja: ["全体魔法攻撃力 3%", "全体会心 3%"], en: ["All Magical ATK 3%", "All CRIT Hit 3%"] } 
             }
         }
     },
