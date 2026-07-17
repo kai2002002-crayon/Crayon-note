@@ -64,7 +64,7 @@ const PRESENT_MAP = {
     },
 	"Daya": { 
         url: "",
-        name: { "zh-TW": "", "ja": "", "en": "" }
+        name: { "zh-TW": "達雅的珍藏品", "ja": "", "en": "" }
     },
     "Diana": { 
         url: "https://i.postimg.cc/RF7kzGH6/Present-List-Diana.png",
