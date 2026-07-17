@@ -15,140 +15,140 @@ const CHAR_BACKGROUNDS = {
 
 
 const characterSkills = [
-   {
+    {
     "name": "提格",
     "attribute": "物理",
     "skills": {
       "zh-TW": {
         "normalAttack": {
-          "basic": " []",
-          "enhanced": " []"
+          "basic": "對目標快速揮動雙劍、造成2次物理傷害，第二次攻擊造成更高額的傷害。 [物理傷害:40%] [第2擊物理傷害:60%]",
+          "enhanced": "每三次攻擊後，對目標擊敲雙劍向周圍揮舞，造成範圍物理傷害並恢復SP,最後一次攻擊造成更高額的傷害。 [物理傷害:60%] [第2次物理傷害:90%] [每命中1名敵人的SP恢復量:120]"
         },
         "normalSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""]
+          "name": "音速斬擊",
+          "desc": "瞬間向前突進並造成範圍物理傷害後，回到原位。 若目標為使者，則追加依最大HP比例計算的額外傷害。",
+          "stats": ["物理傷害:672%", "使者最大HP比例傷害:最大HP的20%"]
         },
         "ultimateSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""],
-          "cooldown": "秒"
+          "name": "超載",
+          "desc": "對敵人揮出劍氣,造成範圍物理傷害。在一定時間內，攻擊速度與普通攻擊的傷害增加。此效果無法解除。",
+          "stats": ["物理傷害:1260%", "攻擊速度提升:150%", "普通攻擊傷害增加:100%", "攻擊速度提升持續時間:10秒"],
+          "cooldown": "20秒"
         },
         "passiveSkill": {
-          "desc": "",
-          "stats": [""]
+          "desc": "提升攻擊速度。",
+          "stats": ["攻擊速度提升:42%"]
         }
       },
       "ja": {
         "normalAttack": {
-          "basic": " []",
-          "enhanced": "[]"
+          "basic": "双剣で敵を素早く薙ぎ払い、物理ダメージを2回与える。2回目の攻撃はより高いダメージを与える。 [物理ダメージ: 40%] [2回目の物理ダメージ: 60%]",
+          "enhanced": "3回攻撃することに、双剣で周囲を薙ぎ払って範囲物理ダメージを与え、SPを回復する。最後の一撃ではより高いダメージを与える。[物理ダメージ:60%] [2回目の物理ダメージ: 90%] [敵1体撃破あたりのSP回復量: 120]"
         },
         "normalSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""]
+          "name": "ソニックフレイド",
+          "desc": "前方へ撥時に移動しながら囲物理ダメージを与えた後、元の位置に戻る。",
+          "stats": ["物理ダメージ:672%"]
         },
         "ultimateSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""],
-          "cooldown": "s"
+          "name": "オーバードライブ",
+          "desc": "剣の気を放って固囲に範囲物理ダメージを与え、一定時間、攻撃速度と基本攻撃の与ダメージを増加させる。この効果は解除できない。",
+          "stats": ["物理ダメージ: 1260%", "攻擊速度增加:150%", "普通攻撃ダメージ增加: 100%", "攻撃速度増加の持続時間: 10秒"],
+          "cooldown": "20秒"
         },
         "passiveSkill": {
-          "desc": "",
-          "stats": [""]
+          "desc": "攻撃速度が増加する。",
+          "stats": ["攻撃速度:42%"]
         }
       },
       "en": {
         "normalAttack": {
-          "basic": " []",
-          "enhanced": " []"
+          "basic": "Swiftly swings her dual swords and deals Physical Damage to an enemy. [Physical DMG: 40%] [Two-Hit Physical DMG: 60%]",
+          "enhanced": "Strikes down with her dual swords, swings them around her, and deals AoE Physical Damage. Recovers SP proportionally to the number of enemies that have taken damage. [Physical DMG: 60%] [Two-Hit Physical DMG: 90%] [SP Recovery per Enemy: 120]"
         },
         "normalSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""]
+          "name": "Sonic Blade",
+          "desc": "Instantly advances forward, deals AoE Physical Damage, then returns to her original position.",
+          "stats": ["Physical DMG: 672%"]
         },
         "ultimateSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""],
-          "cooldown": "s"
+          "name": "Overdrive",
+          "desc": "Unleashes sword energy to the enemy, deals AoE Physical Damage nearby, and increases Attack Speed, Normal Attack, and Enhanced Attack Damage for a set period of time. This effect cannot be removed.",
+          "stats": ["Physical DMG: 1260%", "ATK SPD Increase: 150%", "Normal Attack DMG: 100%", "ATK SPD Increase Duration: 10s"],
+          "cooldown": "20s"
         },
         "passiveSkill": {
-          "desc": "",
-          "stats": [""]
+          "desc": "ATK SPD Increase",
+          "stats": ["ATK SPD Increase: 42%"]
         }
       },
     }
   },
-   {
+  {
     "name": "達雅",
     "attribute": "魔法",
     "skills": {
       "zh-TW": {
         "normalAttack": {
-          "basic": " []",
-          "enhanced": " []"
+          "basic": "對敵人投擲3顆鑽石造成魔法傷害,最後一擊將造成更大的傷害。 [魔法傷害:72%] [最後一擊魔法傷害:48%]",
+          "enhanced": "以一定機率對敵人投擲巨型鑽石，造成魔法傷害並給予灼痛效果。 [灼痛:每秒受到傷害，並使恢復量減少。] [魔法傷害:240%] [灼痛持續時間:4秒。]"
         },
         "normalSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""]
+          "name": "鑽石穿刺",
+          "desc": "對3名敵人突起尖銳的鑽石，造成魔法傷害並給予灼痛效果。",
+          "stats": ["灼痛:每秒受到傷害，並使恢復量減少。", "魔法傷害:475%", "灼痛持續時間:8秒。"]
         },
         "ultimateSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""],
-          "cooldown": "秒"
+          "name": "達雅哈………哈啾!",
+          "desc": "對敵人打噴哩，造成範圍魔法傷害。",
+          "stats": ["魔法傷害:1050%。"],
+          "cooldown": "40秒"
         },
         "passiveSkill": {
-          "desc": "",
-          "stats": [""]
+          "desc": "增加友軍後排使者的技能傷害量。 (該效果即使達雅不在場上也會觸發。)",
+          "stats": ["技能傷害量增加:34%"]
         }
       },
       "ja": {
         "normalAttack": {
-          "basic": " []",
-          "enhanced": "[]"
+          "basic": "ダイヤを3個飛ばして敵に魔法ダメージを与える。最後の一撃はより高いダメージを与える。 [魔法ダメージ: 72%] [最後の一撃の魔法ダメージ: 48%]",
+          "enhanced": "一定確率で大きなダイヤを飛ばして魔法ダメージを与え、苦痛を付与する[苦痛:1ごとにダメージを受け、回復量が減少する} [魔法ダメージ: 240%] [苦痛の持続時間:4秒]"
         },
         "normalSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""]
+          "name": "ダイヤモンドピアス",
+          "desc": "尖ったダイヤを突き出し、敵3名に魔法ダメージを与え、苦痛を付与する。",
+          "stats": ["苦痛:1ごとにダメージを受け、回復量が減少する", "魔法ダメージ: 475%", "苦痛の持続時間:8秒"]
         },
         "ultimateSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""],
-          "cooldown": "s"
+          "name": "ダイヤブレ･･･くちゅ!",
+          "desc": "くしゃみで敵に範囲魔法ダメージを与える。",
+          "stats": ["魔法ダメージ: 1050%"],
+          "cooldown": "40秒"
         },
         "passiveSkill": {
-          "desc": "",
-          "stats": [""]
+          "desc": "味方後列の使徒へスキルダメージ量が増加する。",
+          "stats": ["スキルダメージ量が増加:34%"]
         }
       },
       "en": {
         "normalAttack": {
-          "basic": " []",
-          "enhanced": " []"
+          "basic": "Throws 3 diamonds, dealing Magical Damage to the enemy. The final hit deals greater damage. [Magical DMG: 72%] [Final Hit Magical DMG: 48%]",
+          "enhanced": "At a set chance, throws a big diamond, dealing Magical Damage to the enemy and applying the Stinging debuff on them. [Stinging: Reduces Recovery Amount and applies damage every second] [Magical DMG: 240%] [Stinging Duration: 4s]"
         },
         "normalSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""]
+          "name": "Diamond Pierce",
+          "desc": "Calls forth sharp diamonds targeting 3 enemies, deals Magical Damage and applies the Stinging debuff on them.",
+          "stats": ["Stinging: Reduces Recovery Amount and applies damage every second.", "Magical DMG: 475%", "Stinging Duration: 8s"]
         },
         "ultimateSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""],
-          "cooldown": "s"
+          "name": "Daya-choo!",
+          "desc": "Sneezes and deals AoE Magical Damage to enemies,",
+          "stats": ["Magical DMG: 1050%"],
+          "cooldown": "40s"
         },
         "passiveSkill": {
-          "desc": "",
-          "stats": [""]
+          "desc": "Increase Skill Damage of Back Row allies",
+          "stats": ["Increase Skill Damage: 34%"]
         }
       },
     }
