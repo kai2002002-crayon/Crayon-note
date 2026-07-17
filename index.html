@@ -34,6 +34,7 @@
         <link rel="stylesheet" href="https://unpkg.com/@esotericsoftware/spine-player@4.1/dist/spine-player.css">
         <script defer src="https://unpkg.com/@esotericsoftware/spine-player@4.1/dist/iife/spine-player.js"></script>
         <link rel="stylesheet" href="sprites.css">
+        <link rel="stylesheet" href="char_sprites/char_sprites.css">
         <style>
             /* =======================================
             🌟 系統與佈局 CSS
@@ -955,19 +956,20 @@
             
             const pColorClass = personalityColors[charData.personality] || "border-gray-400 text-gray-400";
             const iconWrapper = document.createElement('div');
-            // 🌟 這裡新增了 overflow-hidden，防止雪碧圖超出框線破版
+            // 加入 overflow-hidden 確保圖示不會超出圓角邊框
             iconWrapper.className = `w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 ${pColorClass} bg-white dark:bg-gray-800 flex items-center justify-center relative pickup-sparkle shrink-0 cursor-pointer transition-transform overflow-hidden`;
         
             const prefix = localTooltipTexts[window.currentLang] || localTooltipTexts["zh-TW"]; iconWrapper.title = `${prefix}${t(charName)}`;
             iconWrapper.onclick = () => window.open(`char_detail.html?char=${encodeURIComponent(charName)}`, '_blank');
             
-            // 🌟 取得雪碧圖所需的名稱與 Class
+            // 🌟 取得角色的英文/Spine名稱 (對應 CSS 裡的名稱如 Alice, Butter 等)
             const spineName = typeof SPINE_MAP !== 'undefined' && SPINE_MAP[charName] ? SPINE_MAP[charName] : charName;
-            const charSpriteBase = CHAR_SPRITE_MAP[charData.personality] || "";
-            const charSpriteClass = `sprite-${spineName}`;
             
-            // 🌟 替換為雪碧圖結構 (移除原本的 img 標籤)
-            iconWrapper.innerHTML = `<div class="sprite-base ${charSpriteBase} ${charSpriteClass} shrink-0 scale-[0.25] sm:scale-[0.3] origin-center"></div>`;
+            // 🌟 組合出 PassiveSkill 的 class 名稱
+            const passiveSkillClass = `sprite-Icon_PassiveSkill_${spineName}`;
+            
+            // 🌟 套用被動技能的雪碧圖，調整縮放以適應外框
+            iconWrapper.innerHTML = `<div class="${passiveSkillClass} shrink-0 scale-[0.4] sm:scale-[0.45] origin-center"></div>`;
             
             container.appendChild(iconWrapper);
         });
