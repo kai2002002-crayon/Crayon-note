@@ -1495,11 +1495,14 @@
                         }
                         
                         // 🌟 準備 Sprite 類別
-                        const spineName = typeof SPINE_MAP !== 'undefined' && SPINE_MAP[char.name] ? SPINE_MAP[char.name] : char.name;
-                        const charSpriteBase = CHAR_SPRITE_MAP[char.personality] || "";
-                        const ultSpriteBase = ULT_SPRITE_MAP[char.personality] || "";
-                        const charSpriteClass = `sprite-${spineName}`;
-                        const ultSpriteClass = `sprite-Icon_UltimateSkill_${spineName}`;
+const spineName = typeof SPINE_MAP !== 'undefined' && SPINE_MAP[char.name] ? SPINE_MAP[char.name] : char.name;
+const charSpriteBase = CHAR_SPRITE_MAP[char.personality] || "";
+const ultSpriteBase = ULT_SPRITE_MAP[char.personality] || "";
+
+// 👇 確認這裡使用的是 sprite- 
+const charSpriteClass = `sprite-${spineName}`;
+// 👇 確認這裡使用的是 sprite-Icon_UltimateSkill_ (如果變成 NormalSkill 請改回這個)
+const ultSpriteClass = `sprite-Icon_UltimateSkill_${spineName}`;
             
                         let raceIconName = char.race; if (char.race === "???") raceIconName = "unknown";
                         const pSprite = SPRITE_CLASS_MAP[`personality_${char.personality}`] || "";
@@ -1545,17 +1548,21 @@
             
                         nameCol.innerHTML = `
                             <div class="relative shrink-0 w-12 h-12" ${isUnreleased ? '' : `onclick="toggleOwnership('${char.name}')"`}>
-                                <div id="avatar_container_${char.name}" class="char-avatar-container w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-inner ${avatarClass} ${isUnreleased ? 'pointer-events-none' : ''} bg-[#fcf8f2] dark:bg-gray-800 relative overflow-hidden">
-                                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 sprite-base sprite-common ${bgSprite} scale-[0.45] z-0 opacity-90"></div>
-                                    <div class="absolute inset-0 bg-white/20 dark:bg-black/20 backdrop-blur-[1px] z-[5]"></div>
-                                    <div class="absolute inset-0 flex items-center justify-center z-10 ${isUnreleased ? 'silhouette-mode' : ''}">
-                                        <div class="sprite-base ${charSpriteBase} ${charSpriteClass} shrink-0 scale-[0.375] origin-center"></div>
-                                    </div>
-                                    ${isUnreleased ? '' : `
-                                    <div class="avatar-alt absolute inset-0 z-20 flex items-center justify-center bg-[#fcf8f2] dark:bg-gray-800 transition-opacity duration-300">
-                                        <div class="sprite-base ${ultSpriteBase} ${ultSpriteClass} shrink-0 scale-[0.75] origin-center"></div>
-                                    </div>`}
-                                </div>
+                                <div id="avatar_container_${char.name}" class="char-avatar-container w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-inner ${avatarClass}${isUnreleased ? 'pointer-events-none' : ''} bg-[#fcf8f2] dark:bg-gray-800 relative overflow-hidden">
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 sprite-base sprite-common ${bgSprite} scale-[0.45] z-0 opacity-90"></div>
+    <div class="absolute inset-0 bg-white/20 dark:bg-black/20 backdrop-blur-[1px] z-[5]"></div>
+    
+    <div class="absolute inset-0 flex items-center justify-center z-10 ${isUnreleased ? 'silhouette-mode' : ''}">
+        <!-- 👇 這裡是普通頭像：確認有 ${charSpriteBase} 和 scale-[0.375] -->
+        <div class="sprite-base ${charSpriteBase}${charSpriteClass} shrink-0 scale-[0.375] origin-center"></div>
+    </div>
+    
+    ${isUnreleased ? '' : `
+    <div class="avatar-alt absolute inset-0 z-20 flex items-center justify-center bg-[#fcf8f2] dark:bg-gray-800 transition-opacity duration-300">
+        <!-- 👇 這裡是輪播的大絕頭像：確認有 ${ultSpriteBase} 和 scale-[0.75] -->
+        <div class="sprite-base ${ultSpriteBase} ${ultSpriteClass} shrink-0 scale-[0.75] origin-center"></div>
+    </div>`}
+</div>
                                 <div id="fall_av_${char.name}" class="hidden char-avatar-container w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-sm flex items-center justify-center font-bold text-amber-900 text-lg ${avatarClass} ${isUnreleased ? 'silhouette-mode' : ''}">${isUnreleased ? '?' : t(char.name).charAt(0)}</div>
                             </div>
                             <div class="flex flex-col gap-0.5 w-full overflow-hidden">
