@@ -391,7 +391,7 @@ const GRADE_MAP = {
 };
 
 const BOSS_LIST = ['R41雷內瓦', '蠟筆勇士-天真', '蠟筆勇士-冷靜', '蠟筆勇士-狂亂', '蠟筆勇士-活潑', '蠟筆勇士-憂鬱', '莉1莉', '克魯布魯斯', 'M.E.O.W.'];
-
+const BOSS_SPINE = {"R41雷內瓦": "R41_Renewa", "蠟筆勇士-天真": "CrayonKnightNaive", "蠟筆勇士-冷靜": "CrayonKnightCool", "蠟筆勇士-狂亂": "CrayonKnightMad", "蠟筆勇士-活潑": "CrayonKnightJolly", "蠟筆勇士-憂鬱": "CrayonKnightGloomy", "莉1莉": "Lil1li", "克魯布魯斯": "Curburus", "M.E.O.W.": "MEOW"};
 
 const ELDAIN_LIST = ['綾', '庫洛艾', '艾皮卡', '伊德', '羽伊', '薇薇', 'x乂錫安乂x', '優米', '雷內瓦'];
 
