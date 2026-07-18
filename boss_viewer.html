@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Boss 動態展示器 (偵錯模式)</title>
+        <link rel="stylesheet" href="sprites.css">
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link id="dynamicFavicon" rel="icon" href="https://i.postimg.cc/mkfSTq5k/Favicon.png" type="image/png">
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@esotericsoftware/spine-player@4.1.23/dist/spine-player.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/@esotericsoftware/spine-player@4.1.23/dist/iife/spine-player.min.js"></script>
+        <script>
+            tailwind.config = { darkMode: 'class', }
+            const isDarkMode = localStorage.getItem('theme') === 'dark' || 
+                               (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            if (isDarkMode) { document.documentElement.classList.add('dark'); }
+        </script>
+        <style>
+            body { font-family: 'Noto Sans TC', sans-serif; }
+            /* ⚠️ 移除了隱藏原生選單的 CSS，讓你可以使用官方的 Skin 切換器 */
+            #spineCanvasContainer canvas {
+                width: 100% !important; height: 100% !important;
+                display: block !important; touch-action: none;
+            }
+            .spine-player-loading-custom {
+                position: absolute; top: 50%; left: 50%;
+                width: 80px; height: 80px; margin: -40px 0 0 -40px;
+                background: url('https://i.postimg.cc/qvjNxZzg/golden-crayon.png') no-repeat center center;
+                background-size: contain;
+                animation: crayonFloat 1.5s ease-in-out infinite;
+                z-index: 10;
+            }
+            @keyframes crayonFloat {
+                0%, 100% { transform: translateY(0) scale(1); filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.5)); }
+                50% { transform: translateY(-10px) scale(1.05); filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.9)); }
+            }
+            ::-webkit-scrollbar { width: 6px; height: 6px; }
+            ::-webkit-scrollbar-track { background: transparent; }
+            ::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 10px; }
+            .dark ::-webkit-scrollbar-thumb { background-color: #475569; }
+            
+            @keyframes raceBgPan {
+                0%   { background-position: 0px 0px; }
+                25%  { background-position: -200px 200px; }
+                50%  { background-position: 0px 400px; }
+                75%  { background-position: 200px 200px; }
+                100% { background-position: 0px 0px; }
+            }
+            .animated-bg {
+                background-repeat: repeat !important;
+                background-size: 200px !important; 
+                animation: raceBgPan 40s linear infinite;
+            }
+            .dark .animated-bg { opacity: 0.8; }
+        </style>
+    </head>
+    <body class="p-2 sm:p-6 bg-[#fcf8f2] dark:bg-slate-900 text-gray-800 dark:text-gray-200 min-h-screen transition-colors duration-300">
+        <div class="max-w-[1400px] mx-auto space-y-4">
+        
+        <header class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md p-4 sm:p-5 rounded-2xl shadow-md border-4 border-red-500 dark:border-red-900 flex justify-between items-center relative z-10">
+            <div>
+                <h1 class="text-xl sm:text-2xl font-black text-red-700 dark:text-red-500 mb-0.5 flex items-center gap-2">
+                    <span>👹 Boss 動態展示器 (偵錯版)</span>
+                </h1>
+            </div>
+            <button onclick="window.close()" class="px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm bg-gray-500 text-white font-bold rounded-xl shadow hover:bg-gray-600 transition shrink-0">
+            ⬅️ 返回
+            </button>
+        </header>
+
+        <section class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md p-4 sm:p-5 rounded-2xl shadow-md border border-gray-200 dark:border-slate-700 transition-all">
+            <h2 class="text-base sm:text-lg font-bold text-gray-900 dark:text-gray-300 mb-3 border-b border-gray-200 dark:border-slate-700 pb-2">⚔️ 選擇 Boss</h2>
+            <div id="bossGridContainer" class="flex flex-wrap gap-2"></div>
+        </section>
+
+        <section id="spineViewerSection" class="hidden bg-white/90 dark:bg-slate-800/90 backdrop-blur-md p-4 sm:p-5 rounded-2xl shadow-md border-4 border-red-500 dark:border-slate-600 transition-all">
+            <div class="flex justify-between items-center mb-4 border-b border-gray-100 dark:border-slate-700 pb-3">
+                <div class="flex items-center gap-3">
+                    <h2 id="activeCharName" class="text-lg sm:text-xl font-black text-red-700 dark:text-red-400">請先選擇 Boss</h2>
+                </div>
+                
+                <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+                    <button id="btnARMode" onclick="toggleARMode()" class="px-3 py-1.5 bg-purple-500 hover:bg-purple-600 text-white text-[10px] sm:text-sm font-bold rounded-lg shadow transition-colors whitespace-nowrap">
+                        📷 開啟AR
+                    </button>
+                    
+                    <div id="pixelSettings" class="hidden items-center gap-1 bg-white dark:bg-slate-800 px-1.5 py-0.5 rounded-lg border border-gray-300 dark:border-slate-600 shadow-sm">
+                        <span class="text-[10px] sm:text-xs font-bold">顆粒</span>
+                        <span id="pixelScaleValue" class="text-[10px] sm:text-xs font-bold text-amber-600 w-3 text-center">5</span>
+                        <div class="flex flex-col">
+                            <button onclick="adjustPixelScale(1)" class="text-[8px] text-gray-500 hover:text-amber-600 leading-none p-[1.5px]">▲</button>
+                            <button onclick="adjustPixelScale(-1)" class="text-[8px] text-gray-500 hover:text-amber-600 leading-none p-[1.5px]">▼</button>
+                        </div>
+                    </div>
+
+                    <button onclick="togglePixelMode()" class="px-2 py-1.5 sm:px-3 sm:py-1.5 bg-green-500 hover:bg-green-600 text-white text-[10px] sm:text-xs font-bold rounded-lg shadow transition-colors whitespace-nowrap">
+                        👾 像素
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-3 min-w-0 relative z-10 w-full lg:w-3/4 mx-auto">
+                <div id="spineCanvasContainer" class="w-full h-[65vh] sm:h-[700px] rounded-xl border-2 border-dashed border-red-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50 relative overflow-hidden flex items-center justify-center animated-bg" style="background-image: url('https://i.postimg.cc/x8wY5V8Q/Monster-Slot-Property-Tile.png');">
+                    <video id="arVideoBg" class="absolute inset-0 w-full h-full object-cover hidden pointer-events-none z-0" autoplay playsinline muted></video>
+                    <canvas id="pixelOverlay" class="absolute inset-0 w-full h-full pointer-events-none z-10 hidden" style="image-rendering: pixelated; image-rendering: crisp-edges;"></canvas>
+                </div>
+                
+                <div id="arControlsBar" class="hidden bg-slate-800/90 dark:bg-slate-900/90 backdrop-blur-md p-3 rounded-xl border-2 border-slate-600 shadow-lg relative z-20 flex justify-center items-center gap-3 transition-all duration-300">
+                    <span class="text-xs sm:text-sm font-bold text-amber-400 flex-shrink-0 tracking-widest">📷 相機面板</span>
+                    <button onclick="switchCamera()" class="px-4 py-2 bg-teal-500 hover:bg-teal-600 text-white text-xs sm:text-sm font-bold rounded-lg shadow transition-colors flex-1 max-w-[140px]">
+                    🔄 翻轉鏡頭
+                    </button>
+                    <button onclick="captureARPhoto()" class="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white text-xs sm:text-sm font-bold rounded-lg shadow transition-colors flex-1 max-w-[140px]">
+                    📸 拍照儲存
+                    </button>
+                </div>
+            </div>
+        </section>
+        </div>
+
+        <script>
+            const BOSS_LIST = ['R41雷內瓦', '蠟筆勇士-天真', '蠟筆勇士-冷靜', '蠟筆勇士-狂亂', '蠟筆勇士-活潑', '蠟筆勇士-憂鬱', '莉1莉', '克魯布魯斯', 'M.E.O.W.'];
+            const BOSS_SPINE = {
+                "R41雷內瓦": "R41_Renewa", 
+                "蠟筆勇士-天真": "CrayonKnightNaive", 
+                "蠟筆勇士-冷靜": "CrayonKnightCool", 
+                "蠟筆勇士-狂亂": "CrayonKnightMad", 
+                "蠟筆勇士-活潑": "CrayonKnightJolly", 
+                "蠟筆勇士-憂鬱": "CrayonKnightGloomy", 
+                "莉1莉": "Lil1li", 
+                "克魯布魯斯": "Curburus", 
+                "M.E.O.W.": "MEOW"
+            };
+
+            let globalPlayer = null;
+
+            window.onload = function() {
+                initBossGrid();
+            };
+
+            function initBossGrid() {
+                const container = document.getElementById('bossGridContainer');
+                BOSS_LIST.forEach(bossName => {
+                    const btn = document.createElement('button');
+                    btn.className = "px-4 py-2 text-sm sm:text-base font-bold bg-white dark:bg-slate-700 text-gray-800 dark:text-gray-200 border-2 border-gray-300 dark:border-slate-600 rounded-xl hover:border-red-500 hover:text-red-600 dark:hover:border-red-400 shadow-sm transition-all";
+                    btn.innerText = bossName;
+                    btn.onclick = () => loadBoss(bossName);
+                    container.appendChild(btn);
+                });
+            }
+
+            function loadBoss(bossName) {
+                const spineName = BOSS_SPINE[bossName];
+                document.getElementById('activeCharName').innerText = bossName;
+                document.getElementById('spineViewerSection').classList.remove('hidden');
+                
+                const container = document.getElementById('spineCanvasContainer');
+                if (globalPlayer) { globalPlayer.dispose(); globalPlayer = null; }
+
+                const existingVideo = document.getElementById('arVideoBg');
+                const existingPixelOverlay = document.getElementById('pixelOverlay');
+                container.innerHTML = '<div class="spine-player-loading-custom"></div>';
+                if (existingVideo) container.appendChild(existingVideo);
+                if (existingPixelOverlay) container.appendChild(existingPixelOverlay);
+
+                // 強制保留像素緩衝，給拍照和像素模式用
+                const originalGetContext = HTMLCanvasElement.prototype.getContext;
+                HTMLCanvasElement.prototype.getContext = function(type, options) {
+                    if (type === 'webgl' || type === 'webgl2' || type === 'experimental-webgl') {
+                        options = options || {};
+                        options.preserveDrawingBuffer = true;
+                    }
+                    return originalGetContext.call(this, type, options);
+                };
+
+                // Boss 的 Spine 預設通常比較大，這裡調整了 viewport 來容納
+                globalPlayer = new spine.SpinePlayer(container, {
+                    skelUrl: `./spine_sd_assets/${spineName}.skel.bytes`,
+                    atlasUrl: `./spine_sd_assets/${spineName}.atlas.txt`,
+                    premultipliedAlpha: true,
+                    backgroundColor: "#00000000",
+                    alpha: true,
+                    showControls: true, // 🌟 關鍵：開啟官方控制器
+                    showLoading: false,
+                    viewport: { x: -750, y: -200, width: 1500, height: 2500 },
+                    success: function (player) {
+                        const loader = container.querySelector('.spine-player-loading-custom');
+                        if (loader) loader.remove();
+                        
+                        if (isPixelMode) {
+                            const originalCanvas = container.querySelector('canvas:not(#pixelOverlay)');
+                            if (originalCanvas) originalCanvas.style.opacity = '0.001';
+                        }
+                        
+                        // 修復乘法模式陰影破洞
+                        fixSpineMultiplyHole(player);
+                    },
+                    error: function () {
+                        container.innerHTML = `<div class="text-red-500 font-bold text-base text-center p-4">載入失敗：${spineName} 檔案可能不存在於 spine_sd_assets 資料夾中。</div>`;
+                    }
+                });
+
+                HTMLCanvasElement.prototype.getContext = originalGetContext;
+            }
+
+            function fixSpineMultiplyHole(player) {
+                if (!player || !player.skeleton) return;
+                player.skeleton.slots.forEach(slot => {
+                   if (slot.data.blendMode === spine.BlendMode.Multiply || slot.data.name.toLowerCase().includes('shadow')) {
+                       slot.data.blendMode = spine.BlendMode.Normal;
+                       slot.color.a = Math.min(slot.color.a, 0.6);
+                    }
+                });
+            }
+
+            // ==========================================
+            // 像素化與 AR 系統保留原本邏輯
+            // ==========================================
+            let isPixelMode = false;
+            let pixelAnimationFrame = null;
+            let currentPixelScale = 5; 
+
+            function adjustPixelScale(delta) {
+                currentPixelScale += delta;
+                if (currentPixelScale < 2) currentPixelScale = 2;
+                if (currentPixelScale > 10) currentPixelScale = 10;
+                document.getElementById('pixelScaleValue').innerText = currentPixelScale;
+            }
+
+            function togglePixelMode() {
+                isPixelMode = !isPixelMode;
+                const overlay = document.getElementById('pixelOverlay');
+                const container = document.getElementById('spineCanvasContainer');
+                const originalCanvas = container.querySelector('canvas:not(#pixelOverlay)'); 
+                const settingsUI = document.getElementById('pixelSettings');
+
+                if (pixelAnimationFrame) { cancelAnimationFrame(pixelAnimationFrame); pixelAnimationFrame = null; }
+
+                if (isPixelMode) {
+                    overlay.style.setProperty('display', 'block', 'important');
+                    if (originalCanvas) originalCanvas.style.opacity = '0.001'; 
+                    if (settingsUI) { settingsUI.classList.remove('hidden'); settingsUI.classList.add('flex'); }
+                    startPixelLoop();
+                } else {
+                    overlay.style.setProperty('display', 'none', 'important');
+                    if (originalCanvas) originalCanvas.style.opacity = '1'; 
+                    if (settingsUI) { settingsUI.classList.add('hidden'); settingsUI.classList.remove('flex'); }
+                }
+            }
+
+            function startPixelLoop() {
+                if (!isPixelMode) return;
+                const container = document.getElementById('spineCanvasContainer');
+                const webglCanvas = container.querySelector('canvas:not(#pixelOverlay)');
+                const overlay = document.getElementById('pixelOverlay');
+                
+                if (webglCanvas && overlay) {
+                    const ctx = overlay.getContext('2d');
+                    overlay.width = Math.floor(container.clientWidth / currentPixelScale);
+                    overlay.height = Math.floor(container.clientHeight / currentPixelScale);
+                    ctx.clearRect(0, 0, overlay.width, overlay.height);
+                    ctx.imageSmoothingEnabled = false; 
+                    ctx.drawImage(webglCanvas, 0, 0, overlay.width, overlay.height);
+                }
+                pixelAnimationFrame = requestAnimationFrame(startPixelLoop);
+            }
+
+            // AR 系統
+            let arStream = null;
+            let useFrontCamera = false;
+
+            async function toggleARMode() {
+                const video = document.getElementById('arVideoBg');
+                const container = document.getElementById('spineCanvasContainer');
+                const btn = document.getElementById('btnARMode');
+                const arControlsBar = document.getElementById('arControlsBar');
+            
+                if (arStream) {
+                    arControlsBar.classList.add('hidden');
+                    arStream.getTracks().forEach(track => track.stop());
+                    arStream = null;
+                    video.classList.add('hidden');
+                    btn.innerHTML = '📷 開啟AR';
+                    btn.classList.replace('bg-red-500', 'bg-purple-500');
+                    btn.classList.replace('hover:bg-red-600', 'hover:bg-purple-600');
+                    container.classList.add('animated-bg');
+                } else {
+                    try {
+                        arStream = await navigator.mediaDevices.getUserMedia({ 
+                            video: { facingMode: useFrontCamera ? "user" : { ideal: "environment" } } 
+                        });
+                        video.srcObject = arStream;
+                        video.classList.remove('hidden');
+                        container.style.backgroundImage = "none";
+                        container.classList.remove('animated-bg');
+                        
+                        btn.innerHTML = '❌ 關閉AR';
+                        btn.classList.replace('bg-purple-500', 'bg-red-500');
+                        btn.classList.replace('hover:bg-purple-600', 'hover:bg-red-600');
+                        arControlsBar.classList.remove('hidden');
+                    } catch (err) {
+                        console.error("相機開啟失敗:", err);
+                        arControlsBar.classList.add('hidden'); 
+                        alert(`相機開啟失敗 😢`);
+                    }
+                }
+            }
+
+            async function switchCamera() {
+                if (!arStream) return;
+                arStream.getTracks().forEach(track => track.stop());
+                useFrontCamera = !useFrontCamera;
+                try {
+                    arStream = await navigator.mediaDevices.getUserMedia({ 
+                        video: { facingMode: useFrontCamera ? "user" : { ideal: "environment" } } 
+                    });
+                    document.getElementById('arVideoBg').srcObject = arStream;
+                } catch (err) { alert("切換鏡頭失敗 😢"); toggleARMode(); }
+            }
+
+            async function captureARPhoto() {
+                try {
+                    const video = document.getElementById('arVideoBg');
+                    const pixelOverlay = document.getElementById('pixelOverlay');
+                    const isPixel = pixelOverlay && !pixelOverlay.classList.contains('hidden');
+                    const canvas = isPixel ? pixelOverlay : document.querySelector('#spineCanvasContainer canvas:not(#pixelOverlay)');
+                    
+                    if (!video || !canvas) return alert("找不到畫面！");
+            
+                    const captureCanvas = document.createElement('canvas');
+                    captureCanvas.width = canvas.width || video.videoWidth;
+                    captureCanvas.height = canvas.height || video.videoHeight;
+                    const ctx = captureCanvas.getContext('2d');
+                    
+                    ctx.drawImage(video, 0, 0, captureCanvas.width, captureCanvas.height);
+                    if (isPixel) ctx.imageSmoothingEnabled = false;
+                    ctx.drawImage(canvas, 0, 0, captureCanvas.width, captureCanvas.height);
+                    
+                    const dataURL = captureCanvas.toDataURL('image/png');
+                    const link = document.createElement('a');
+                    link.download = `AR_Boss_${new Date().getTime()}.png`;
+                    link.href = dataURL;
+                    document.body.appendChild(link); 
+                    link.click();
+                    document.body.removeChild(link);
+                } catch (err) { alert("拍照失敗: " + err.message); }
+            }
+        </script>
+    </body>
+</html>
