@@ -85,7 +85,8 @@
                         📷 開啟AR
                     </button>
                     <!-- 🌟 新增：Skin (服裝/性格) 選擇器 -->
-                    <select id="bossSkinSelect" onchange="changeBossSkin(this.value)" class="bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-[10px] sm:text-xs font-bold rounded-lg px-2 py-1.5 outline-none focus:ring-2 focus:ring-red-500 min-w-[90px] shadow-sm hidden">
+                    <!-- 🌟 統一的性格/服裝選擇器 -->
+                    <select id="bossSkinSelect" onchange="changeBossOption(this.value)" class="bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-[10px] sm:text-xs font-bold rounded-lg px-2 py-1.5 outline-none focus:ring-2 focus:ring-red-500 min-w-[90px] shadow-sm hidden">
                         <option value="default">預設服裝</option>
                     </select>
                     <div id="pixelSettings" class="hidden items-center gap-1 bg-white dark:bg-slate-800 px-1.5 py-0.5 rounded-lg border border-gray-300 dark:border-slate-600 shadow-sm">
@@ -123,82 +124,151 @@
         </div>
 
         <script>
-            const BOSS_LIST = ['R41雷內瓦', '蠟筆勇士-天真', '蠟筆勇士-冷靜', '蠟筆勇士-狂亂', '蠟筆勇士-活潑', '蠟筆勇士-憂鬱', '莉1莉', '克魯布魯斯', 'M.E.O.W.'];
-            
-            const BOSS_SPINE = {
-                "R41雷內瓦": "R41_Renewa", 
-                "蠟筆勇士-天真": "CrayonKnightNaive", 
-                "蠟筆勇士-冷靜": "CrayonKnightCool", 
-                "蠟筆勇士-狂亂": "CrayonKnightMad", 
-                "蠟筆勇士-活潑": "CrayonKnightJolly", 
-                "蠟筆勇士-憂鬱": "CrayonKnightGloomy", 
-                "莉1莉": "Lil1li", 
-                "克魯布魯斯": "Curburus", 
-                "M.E.O.W.": "MEOW"
+            // 🌟 1. 重新設計的 Boss 資料庫
+            // 將蠟筆勇士整合為一個選項，並透過 options 控制性格
+            const BOSS_LIST = ['R41雷內瓦', '蠟筆勇士', '莉1莉', '克魯布魯斯', 'M.E.O.W.'];
+
+            const BOSS_INFO = {
+                "R41雷內瓦": {
+                    icon: "sprite-Icon_R41_Renewa",
+                    type: "single", // 單一檔案
+                    spine: "R41_Renewa",
+                    options: ["default"]
+                },
+                "M.E.O.W.": {
+                    icon: "sprite-Icon_MEOW",
+                    type: "single",
+                    spine: "MEOW",
+                    options: ["default"]
+                },
+                "克魯布魯斯": {
+                    icon: "sprite-Icon_Curburus",
+                    type: "skin",   // 透過切換 Skin 來換性格
+                    spine: "Curburus",
+                    options: ["Skin_Naive", "Skin_Cool", "Skin_Mad", "Skin_Jolly", "Skin_Gloomy"] // 預設放第一位
+                },
+                "莉1莉": {
+                    icon: "sprite-Icon_Lil1li",
+                    type: "skin",
+                    spine: "Lil1li",
+                    options: ["Skin_Naive", "Skin_Cool", "Skin_Mad", "Skin_Jolly", "Skin_Gloomy"]
+                },
+                "蠟筆勇士": {
+                    icon: "sprite-Icon_CrayonKnight",
+                    type: "file",   // 透過讀取不同檔案來換性格
+                    spineBase: "CrayonKnight", 
+                    options: ["Naive", "Cool", "Mad", "Jolly", "Gloomy"]
+                }
             };
 
-            // 🌟 新增：每個 Boss 擁有的 Skin 列表
-            const BOSS_SKINS = {
-                "R41雷內瓦": ["default"],
-                "M.E.O.W.": ["default"],
-                "克魯布魯斯": ["Skin_Naive", "Skin_Cool", "Skin_Mad", "Skin_Jolly", "Skin_Gloomy"],
-                "莉1莉": ["Skin_Naive", "Skin_Cool", "Skin_Mad", "Skin_Jolly", "Skin_Gloomy"],
-                "蠟筆勇士-天真": ["default"],
-                "蠟筆勇士-冷靜": ["default"],
-                "蠟筆勇士-狂亂": ["default"],
-                "蠟筆勇士-活潑": ["default"],
-                "蠟筆勇士-憂鬱": ["default"]
-            };
-
-            // 🌟 新增：Skin 名稱的中文顯示對照
-            const SKIN_TRANSLATION = {
+            const OPTION_TRANSLATION = {
                 "default": "預設",
-                "Skin_Naive": "天真",
-                "Skin_Cool": "冷靜",
-                "Skin_Mad": "狂亂",
-                "Skin_Jolly": "活潑",
-                "Skin_Gloomy": "憂鬱"
+                "Skin_Naive": "天真 (Naive)",
+                "Skin_Cool": "冷靜 (Cool)",
+                "Skin_Mad": "狂亂 (Mad)",
+                "Skin_Jolly": "活潑 (Jolly)",
+                "Skin_Gloomy": "憂鬱 (Gloomy)",
+                "Naive": "天真 (Naive)",
+                "Cool": "冷靜 (Cool)",
+                "Mad": "狂亂 (Mad)",
+                "Jolly": "活潑 (Jolly)",
+                "Gloomy": "憂鬱 (Gloomy)"
             };
 
             let globalPlayer = null;
-            let currentBoss = ""; // 紀錄目前選擇的 Boss
+            let currentBoss = ""; 
+            let currentBossOption = "";
+
             window.onload = function() {
                 initBossGrid();
             };
 
+            // 🌟 2. 使用 Icon 渲染 Boss 選擇列表
             function initBossGrid() {
                 const container = document.getElementById('bossGridContainer');
+                container.innerHTML = '';
+                
                 BOSS_LIST.forEach(bossName => {
+                    const info = BOSS_INFO[bossName];
                     const btn = document.createElement('button');
-                    btn.className = "px-4 py-2 text-sm sm:text-base font-bold bg-white dark:bg-slate-700 text-gray-800 dark:text-gray-200 border-2 border-gray-300 dark:border-slate-600 rounded-xl hover:border-red-500 hover:text-red-600 dark:hover:border-red-400 shadow-sm transition-all";
-                    btn.innerText = bossName;
+                    // 美化按鈕與動態效果
+                    btn.className = "group flex flex-col items-center gap-1.5 w-16 sm:w-20 focus:outline-none";
                     btn.onclick = () => loadBoss(bossName);
+                    
+                    // 利用 63x63 容器與 scale(0.5) 將 126px 的原圖完美縮放
+                    btn.innerHTML = `
+                        <div class="w-16 h-16 sm:w-20 sm:h-20 bg-white dark:bg-slate-700 border-2 border-gray-200 dark:border-slate-600 rounded-2xl flex items-center justify-center shadow-sm group-hover:border-red-500 dark:group-hover:border-red-400 group-hover:shadow-md transition-all overflow-hidden relative">
+                            <div class="relative w-[63px] h-[63px]">
+                                <div class="sprite-boss ${info.icon} absolute top-0 left-0 drop-shadow-sm" style="transform: scale(0.5); transform-origin: top left;"></div>
+                            </div>
+                        </div>
+                        <span class="text-xs sm:text-sm font-bold text-gray-600 dark:text-gray-300 group-hover:text-red-600 dark:group-hover:text-red-400 text-center w-full truncate leading-tight">${bossName}</span>
+                    `;
                     container.appendChild(btn);
                 });
             }
 
+            // 🌟 3. 處理下拉選單更新與初始讀取
             function loadBoss(bossName) {
                 currentBoss = bossName;
-                const spineName = BOSS_SPINE[bossName];
-                const availableSkins = BOSS_SKINS[bossName] || ["default"];
+                const info = BOSS_INFO[bossName];
+                
+                // 強制預設為陣列的第一個選項 (對於性格怪就是 天真 Naive)
+                currentBossOption = info.options[0];
                 
                 document.getElementById('activeCharName').innerText = bossName;
                 document.getElementById('spineViewerSection').classList.remove('hidden');
                 
-                // 🌟 更新下拉選單
+                // 更新下拉選單
                 const skinSelect = document.getElementById('bossSkinSelect');
                 skinSelect.innerHTML = '';
-                if (availableSkins.length > 1) {
+                if (info.options.length > 1) {
                     skinSelect.classList.remove('hidden');
-                    availableSkins.forEach(skin => {
-                        const opt = document.createElement('option');
-                        opt.value = skin;
-                        opt.text = SKIN_TRANSLATION[skin] || skin;
-                        skinSelect.appendChild(opt);
+                    info.options.forEach(opt => {
+                        const el = document.createElement('option');
+                        el.value = opt;
+                        el.text = OPTION_TRANSLATION[opt] || opt;
+                        skinSelect.appendChild(el);
                     });
+                    skinSelect.value = currentBossOption;
                 } else {
-                    // 只有 default 時隱藏選單
                     skinSelect.classList.add('hidden');
+                }
+
+                executeLoadSpine();
+            }
+
+            // 🌟 4. 智慧判斷切換方式：換 Skin 還是 換檔案
+            function changeBossOption(val) {
+                currentBossOption = val;
+                const info = BOSS_INFO[currentBoss];
+                
+                if (info.type === 'skin') {
+                    // 如果是莉1莉或克魯布魯斯，直接切換內部 Skin，不用重讀
+                    if (!globalPlayer || !globalPlayer.skeleton) return;
+                    globalPlayer.skeleton.setSkinByName(val);
+                    globalPlayer.skeleton.setToSetupPose();
+                    fixSpineMultiplyHole(globalPlayer);
+                } else if (info.type === 'file') {
+                    // 如果是蠟筆勇士，代表要讀取另一個實體檔案，重新呼叫載入
+                    executeLoadSpine();
+                }
+            }
+
+            // 🌟 5. 核心：執行 Spine 讀取
+            function executeLoadSpine() {
+                const info = BOSS_INFO[currentBoss];
+                let spineName = "";
+                let targetSkin = "default";
+
+                // 根據 type 決定要讀取的檔名與 Skin
+                if (info.type === 'single') {
+                    spineName = info.spine;
+                } else if (info.type === 'skin') {
+                    spineName = info.spine;
+                    targetSkin = currentBossOption; // 套用 Skin_Naive 等等
+                } else if (info.type === 'file') {
+                    spineName = info.spineBase + currentBossOption; // 組合出 CrayonKnightNaive
                 }
 
                 const container = document.getElementById('spineCanvasContainer');
@@ -237,17 +307,15 @@
                             if (originalCanvas) originalCanvas.style.opacity = '0.001';
                         }
                         
-                        // 🌟 1. 載入時自動設定選單上選擇的 Skin
-                        const targetSkin = skinSelect.value || availableSkins[0];
-                        if (targetSkin && targetSkin !== 'default') {
+                        // 設定正確的 Skin (如果有要求的話)
+                        if (targetSkin !== 'default' && player.skeleton.data.findSkin(targetSkin)) {
                             player.skeleton.setSkinByName(targetSkin);
-                        } else if (targetSkin === 'default' && player.skeleton.data.skins.length > 0) {
-                            // 確保設定回 default
+                        } else if (player.skeleton.data.skins.length > 0) {
                             player.skeleton.setSkinByName(player.skeleton.data.skins[0].name);
                         }
                         player.skeleton.setToSetupPose();
 
-                        // 🌟 2. 載入完成後自動播放 Idle
+                        // 自動播放 Idle
                         const anims = player.skeleton.data.animations.map(a => a.name);
                         if (anims.includes('Idle')) {
                             player.animationState.setAnimation(0, 'Idle', true);
@@ -263,25 +331,6 @@
                 });
 
                 HTMLCanvasElement.prototype.getContext = originalGetContext;
-            }
-
-            // 🌟 新增：透過下拉選單切換 Spine 的 Skin
-            function changeBossSkin(skinName) {
-                if (!globalPlayer || !globalPlayer.skeleton) return;
-                
-                // 設定新的 Skin
-                if (skinName === 'default') {
-                    const defaultSkin = globalPlayer.skeleton.data.skins[0].name;
-                    globalPlayer.skeleton.setSkinByName(defaultSkin);
-                } else {
-                    globalPlayer.skeleton.setSkinByName(skinName);
-                }
-                
-                // 恢復骨架預設姿勢以正確套用新 Skin 的屬性
-                globalPlayer.skeleton.setToSetupPose();
-                
-                // 重新補強陰影防破洞 (因為換 Skin 可能會重置插槽設定)
-                fixSpineMultiplyHole(globalPlayer);
             }
             function fixSpineMultiplyHole(player) {
                 if (!player || !player.skeleton) return;
