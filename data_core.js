@@ -932,6 +932,11 @@ const EVENT_SCHEDULE = [
         start: "2026-07-07T12:00:00+09:00",
         end: "2026-07-10T03:59:59+09:00",
         eventId: "TowerBattle" 
+    },
+	{
+        start: "2026-07-17T12:00:00+09:00",
+        end: "2026-07-20T03:59:59+09:00",
+        eventId: "WWE" 
     }
 ];
 
