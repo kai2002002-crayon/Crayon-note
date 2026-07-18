@@ -237,14 +237,14 @@
 .sprite-PresentList_Daya { width: 201px; height: 220px; background-position: -5px -1161px; }
 
 /* --- Daya --- */
-.sprite-AsideIcon_Diana { width: 256px; height: 256px; background-position: -5px -5px; }
-.sprite-Aside_Skill_Diana_1 { width: 64px; height: 64px; background-position: -5px -271px; }
-.sprite-Aside_Skill_Diana_2 { width: 64px; height: 64px; background-position: -5px -345px; }
-.sprite-Aside_Skill_Diana_3 { width: 64px; height: 64px; background-position: -5px -419px; }
-.sprite-CG_Schedule_Diana { width: 1024px; height: 512px; background-position: -5px -493px; }
-.sprite-Icon_NormalSkill_Diana { width: 64px; height: 64px; background-position: -5px -1015px; }
-.sprite-Icon_PassiveSkill_Diana { width: 64px; height: 64px; background-position: -5px -1089px; }
-.sprite-PresentList_Diana { width: 164px; height: 240px; background-position: -5px -1163px; }
+.sprite-AsideIcon_Diana { width: 256px; height: 256px; background-position: -5px -255px; }
+.sprite-Aside_Skill_Diana_1 { width: 64px; height: 64px; background-position: -5px -521px; }
+.sprite-Aside_Skill_Diana_2 { width: 64px; height: 64px; background-position: -5px -595px; }
+.sprite-Aside_Skill_Diana_3 { width: 64px; height: 64px; background-position: -5px -669px; }
+.sprite-CG_Schedule_Diana { width: 1024px; height: 512px; background-position: -5px -743px; }
+.sprite-Icon_NormalSkill_Diana { width: 64px; height: 64px; background-position: -5px -1265px; }
+.sprite-Icon_PassiveSkill_Diana { width: 64px; height: 64px; background-position: -5px -1339px; }
+.sprite-PresentList_Diana { width: 164px; height: 240px; background-position: -5px -5px; }
 
 /* --- Ed --- */
 .sprite-AsideIcon_Ed { width: 256px; height: 256px; background-position: -5px -5px; }
