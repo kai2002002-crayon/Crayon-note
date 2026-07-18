@@ -444,6 +444,62 @@
             
                     row.appendChild(header); row.appendChild(iconContainer); container.appendChild(row);
                 });
+                // --- 原本的 personalities.forEach 迴圈結束後，加入以下這段 ---
+
+                // 🌟 獨立渲染 NPC 區域
+                const npcGroupId = "group_npc";
+                const npcBtnId = "btn_npc";
+                
+                const npcRow = document.createElement('div');
+                npcRow.className = "flex flex-col bg-gray-50/50 dark:bg-slate-800/50 p-2 rounded-xl border border-dashed border-gray-300 dark:border-slate-600 mt-3";
+                
+                const npcHeader = document.createElement('div');
+                npcHeader.className = "flex justify-between items-center cursor-pointer hover:bg-gray-200/50 dark:hover:bg-slate-700/50 p-1.5 rounded-lg transition";
+                npcHeader.onclick = () => togglePersonalityGroup(npcGroupId, npcBtnId);
+                
+                npcHeader.innerHTML = `
+                    <div class="flex items-center gap-1">
+                        <div class="sprite-base sprite-common sprite-Bg_Unknown shrink-0 scale-[0.35] origin-left -ml-2"></div>
+                        <h3 class="text-xs sm:text-sm font-black text-gray-700 dark:text-gray-400 border-l-4 border-gray-400 pl-1 -ml-3">特別訪客 (NPC)</h3>
+                    </div>
+                    <span id="${npcBtnId}" class="text-xs text-gray-400">🔼</span>
+                `;
+                
+                const npcIconContainer = document.createElement('div');
+                npcIconContainer.id = npcGroupId; 
+                npcIconContainer.className = "flex flex-wrap gap-1.5 pt-2 pl-1 collapsible-content";
+                npcIconContainer.style.maxHeight = "1000px"; 
+                npcIconContainer.style.opacity = "1";
+        
+                NPC_LIST.forEach(npcName => {
+                    const spineName = NPC_SPINE[npcName];
+                    const displayName = getI18n(npcName); // 如果沒翻譯會直接顯示原名
+                    
+                    const btn = document.createElement('button');
+                    btn.className = "group flex flex-col items-center gap-0.5 transition-transform hover:scale-110 active:scale-95 w-12 sm:w-14";
+                    
+                    // 建立一個假的 charObj 讓系統能順利接軌
+                    const fakeCharObj = { name: npcName, personality: 'NPC', race: 'unknown' };
+                    btn.onclick = () => selectCharacter(fakeCharObj, spineName, '');
+        
+                    const charSpriteClass = `sprite-${spineName}`;
+                    
+                    btn.innerHTML = `
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl border-2 border-gray-400 overflow-hidden shadow-sm group-hover:shadow-md transition-all relative flex items-center justify-center">
+                            <div class="absolute inset-0 flex items-center justify-center opacity-80">
+                                <div class="sprite-base sprite-common sprite-Bg_Unknown shrink-0 scale-[0.6]"></div>
+                            </div>
+                            <div class="w-full h-full bg-white/20 dark:bg-black/20 backdrop-blur-[1px] absolute inset-0"></div>
+                            <div class="sprite-base sprite-char-innocence ${charSpriteClass} shrink-0 scale-[0.35] relative z-10"></div>
+                        </div>
+                        <span class="text-[9px] sm:text-[10px] font-bold text-gray-600 dark:text-gray-300 group-hover:text-gray-800 dark:group-hover:text-white text-center w-full truncate leading-tight">${displayName}</span>
+                    `;
+                    npcIconContainer.appendChild(btn);
+                });
+        
+                npcRow.appendChild(npcHeader); 
+                npcRow.appendChild(npcIconContainer); 
+                container.appendChild(npcRow);
             }
             
             function applyRaceBackground(charName) {
@@ -458,7 +514,29 @@
                 }
             }
             
+            // 🌟 1. 新增 NPC 資料庫 (已修正 Costume 的陣列語法)
+            const NPC_LIST = ['雷內瓦(NPC)', '可愛餅', '高蒂', '榮春'];
+            const NPC_SPINE = { 
+                "雷內瓦(NPC)": "Renewa", 
+                "可愛餅": "Crepe", 
+                "高蒂": "Goldy", 
+                "榮春": "Youngchun"
+            };
+            const NPC_COSTUME = { 
+                "雷內瓦(NPC)": ["Renewa"], 
+                "可愛餅": ["Crepe", "CrepeSkin1"], 
+                "高蒂": ["Goldy"], 
+                "榮春": ["Youngchun", "YoungchunSkin1"] 
+            };
+
+            // 🌟 2. 取代原本的 getCostumeList 函數
             function getCostumeList(charName, mode) {
+                // 如果是 NPC，直接回傳 NPC 的服裝陣列
+                if (NPC_LIST.includes(charName)) {
+                    return NPC_COSTUME[charName] || [];
+                }
+                
+                // 原本的角色邏輯
                 if (mode === 'lobby') {
                     return (typeof COSTUME_MAP !== 'undefined' && COSTUME_MAP[charName]) ? COSTUME_MAP[charName] : [];
                 } else {
@@ -504,11 +582,27 @@
                 const nameEl = document.getElementById('activeCharName');
                 nameEl.innerText = getI18n(charObj.name); nameEl.className = `text-lg sm:text-xl font-black ${textClass}`;
             
-                document.getElementById('animList').classList.add('hidden'); document.getElementById('slotList').classList.add('hidden');
+                document.getElementById('animList').classList.add('hidden'); 
+                document.getElementById('slotList').classList.add('hidden');
                 slotVisibilityMap = {};
                 
                 applyRaceBackground(charObj.name);
                 document.getElementById('spineViewerSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                
+                // 🌟 新增：如果是 NPC，強制設為大廳模式，並隱藏切換按鈕
+                const btnMode = document.getElementById('btnModeSwitch');
+                if (NPC_LIST.includes(charObj.name)) {
+                    currentMode = 'lobby'; 
+                    btnMode.style.display = 'none'; // 隱藏按鈕
+                } else {
+                    btnMode.style.display = 'inline-block'; // 顯示按鈕
+                    // 恢復按鈕文字與樣式
+                    btnMode.innerHTML = currentMode === 'lobby' ? getI18n('ui_mode_lobby') : getI18n('ui_mode_battle');
+                    btnMode.className = currentMode === 'lobby' 
+                        ? "px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs sm:text-sm font-bold rounded-lg shadow transition-colors whitespace-nowrap"
+                        : "px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-xs sm:text-sm font-bold rounded-lg shadow transition-colors whitespace-nowrap";
+                }
+
                 refreshCostumeDropdownAndLoad();
             }
             
