@@ -497,10 +497,16 @@
                 }
             
                 const starClass = `sprite-${grade}STAR`;
-                // 建立一個實際大小為 115x28px 的相對定位外框，阻絕 478px 原始寬度對 flex 居中排版的影響
+                
+                // 動態計算對應的縮小後寬度 (原寬度 * 0.24)
+                let wrapperWidth = 71; // 3星: 296 * 0.24 ≈ 71
+                if (grade === "1") wrapperWidth = 28; // 1星: 116 * 0.24 ≈ 28
+                if (grade === "2") wrapperWidth = 49; // 2星: 206 * 0.24 ≈ 49
+
+                // 建立與實際縮小後寬度相符的外框，讓 flex 置中能正確運作
                 starsContainer.innerHTML = `
-                    <div class="relative" style="width: 115px; height: 28px;">
-                        <div class="sprite-base sprite-common ${starClass} drop-shadow-md absolute top-0 left-0" style="width: 478px; height: 116px; transform: scale(0.24); transform-origin: top left;"></div>
+                    <div class="relative" style="width: ${wrapperWidth}px; height: 28px;">
+                        <div class="sprite-base sprite-common ${starClass} drop-shadow-md absolute top-0 left-0" style="transform: scale(0.24); transform-origin: top left;"></div>
                     </div>
                 `;
             }
@@ -1418,8 +1424,24 @@
                 const releaseTime = new Date('2026-07-23T04:00:00+09:00').getTime(); 
                 const now = new Date().getTime();
                 
+                // 無論是否有願像，都強制顯示願像區塊，由內部判斷內容
+                asideSection.classList.remove('hidden');
+                
                 if (!data && !isUpcoming) {
-                    asideSection.classList.add('hidden');
+                    // 🌟 加入未知願像的顯示
+                    const unknownMsg = {
+                        zh: "未知的願像...",
+                        ja: "未知の願像...",
+                        en: "Unknown Yearning..."
+                    };
+                    
+                    asideContainer.innerHTML = `
+                    <div class="py-8 px-4 bg-gray-50/80 dark:bg-slate-800/50 text-gray-500 dark:text-gray-400 font-bold border border-dashed border-gray-300 dark:border-slate-600 rounded-xl text-center shadow-sm flex flex-col items-center justify-center gap-3">
+                        <div class="flex justify-center items-center h-[100px]">
+                            <div class="sprite-base sprite-common sprite-no_aside drop-shadow-sm opacity-50 grayscale" style="transform: scale(0.6);"></div>
+                        </div>
+                        <span class="text-sm tracking-widest">${unknownMsg[lang] || unknownMsg['zh']}</span>
+                    </div>`;
                     return;
                 }
                 
