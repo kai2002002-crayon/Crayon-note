@@ -14,6 +14,7 @@
 .sprite-ult-innocence { background-image: url('char_sprites/ultimate_innocence.png')!important; }
 .sprite-ult-madness { background-image: url('char_sprites/ultimate_madness.png')!important; }
 .sprite-ult-vivacious { background-image: url('char_sprites/ultimate_vivacious.png')!important; }
+.sprite-boss { background-image: url('char_sprites/bosssheet.png'); }
 
 /* =======================================
    🌟 通用圖示 (common_icon.png)
@@ -244,3 +245,12 @@
 .sprite-Icon_UltimateSkill_Taida { width: 64px; height: 64px; background-position: -5px -967px; }
 .sprite-Icon_UltimateSkill_Ui { width: 64px; height: 64px; background-position: -5px -1041px; }
 .sprite-Icon_UltimateSkill_Tig { width: 64px; height: 64px; background-position: -5px -1115px; }
+
+/* =======================================
+   🌟 Boss圖示 (bosssheet.png)
+   ======================================= */
+.sprite-Icon_CrayonKnight { width: 126px; height: 126px; background-position: -5px -5px; }
+.sprite-Icon_Curburus { width: 126px; height: 126px; background-position: -5px -141px; }
+.sprite-Icon_Lil1li { width: 126px; height: 126px; background-position: -5px -277px; }
+.sprite-Icon_MEOW { width: 126px; height: 126px; background-position: -5px -413px; }
+.sprite-Icon_R41_Renewa { width: 126px; height: 126px; background-position: -5px -549px; }
