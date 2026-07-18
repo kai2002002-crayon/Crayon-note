@@ -392,7 +392,9 @@ const GRADE_MAP = {
 
 const BOSS_LIST = ['R41 雷內瓦', '蠟筆勇士-天真', '蠟筆勇士-冷靜', '蠟筆勇士-狂亂', '蠟筆勇士-活潑', '蠟筆勇士-憂鬱', '莉1莉', '克魯布魯斯', 'M.E.O.W.', 'exM.E.O.W.', 'R41 M.E.O.W.'];
 const BOSS_SPINE = {"R41 雷內瓦": "R41_Renewa", "蠟筆勇士-天真": "CrayonKnightNaive", "蠟筆勇士-冷靜": "CrayonKnightCool", "蠟筆勇士-狂亂": "CrayonKnightMad", "蠟筆勇士-活潑": "CrayonKnightJolly", "蠟筆勇士-憂鬱": "CrayonKnightGloomy", "莉1莉": "Lil1li", "克魯布魯斯": "Curburus", "M.E.O.W.": "MEOW", "exM.E.O.W.": "exMEOW", "R41 M.E.O.W.": "MEOW_Renewa"};
-
+const NPC_LIST = ['雷內瓦\(NPC)', '可愛餅', '高蒂', '榮春'];
+const NPC_SPINE = { "雷內瓦\(NPC)": "Renewa", "可愛餅": "Crepe", "高蒂": "Goldy", "榮春": "Youngchun"};
+const NPC_COSTUME = { "雷內瓦(NPC)": ["Renewa"], "可愛餅": ["Crepe", "CrepeSkin1"], "高蒂": ["Goldy"], "榮春": ["Youngchun", "YoungchunSkin1"] };
 const ELDAIN_LIST = ['綾', '庫洛艾', '艾皮卡', '伊德', '羽伊', '薇薇', 'x乂錫安乂x', '優米', '雷內瓦'];
 
 const FOOD_MAP = {
