@@ -246,7 +246,15 @@
                 if (typeof LANG_DICT !== 'undefined' && LANG_DICT[safeLang] && LANG_DICT[safeLang][key]) return LANG_DICT[safeLang][key];
                 return key; 
             }
-            
+            // 🌟 新增：Boss 資料庫
+            const BOSS_LIST = ['R41雷內瓦', '蠟筆勇士', '莉1莉', '克魯布魯斯', 'M.E.O.W.'];
+            const BOSS_INFO = {
+                "R41雷內瓦": { icon: "sprite-Icon_R41_Renewa", type: "single", spine: "R41_Renewa", options: ["default"] },
+                "M.E.O.W.": { icon: "sprite-Icon_MEOW", type: "single", spine: "MEOW", options: ["default"] },
+                "克魯布魯斯": { icon: "sprite-Icon_Curburus", type: "skin", spine: "Curburus", options: ["Skin_Naive", "Skin_Cool", "Skin_Mad", "Skin_Jolly", "Skin_Gloomy"] },
+                "莉1莉": { icon: "sprite-Icon_Lil1li", type: "skin", spine: "Lil1li", options: ["Skin_Naive", "Skin_Cool", "Skin_Mad", "Skin_Jolly", "Skin_Gloomy"] },
+                "蠟筆勇士": { icon: "sprite-Icon_CrayonKnight", type: "file", spineBase: "CrayonKnight", options: ["Naive", "Cool", "Mad", "Jolly", "Gloomy"] }
+            };
             const personalityColors = { 
                 "天真": "border-green-400 text-green-400", 
                 "冷靜": "border-blue-400 text-blue-400", 
@@ -499,6 +507,55 @@
                 npcRow.appendChild(npcHeader); 
                 npcRow.appendChild(npcIconContainer); 
                 container.appendChild(npcRow);
+
+                // --- 原本 NPC 區域結束的下一行加入 ---
+                // 🌟 獨立渲染 Boss 區域
+                const bossGroupId = "group_boss";
+                const bossBtnId = "btn_boss";
+                
+                const bossRow = document.createElement('div');
+                bossRow.className = "flex flex-col bg-red-50/50 dark:bg-slate-800/50 p-2 rounded-xl border border-dashed border-red-300 dark:border-slate-600 mt-3";
+                
+                const bossHeader = document.createElement('div');
+                bossHeader.className = "flex justify-between items-center cursor-pointer hover:bg-red-100/50 dark:hover:bg-slate-700/50 p-1.5 rounded-lg transition";
+                bossHeader.onclick = () => togglePersonalityGroup(bossGroupId, bossBtnId);
+                
+                bossHeader.innerHTML = `
+                    <div class="flex items-center gap-1">
+                        <h3 class="text-xs sm:text-sm font-black text-red-700 dark:text-red-400 border-l-4 border-red-500 pl-2 ml-1">👹 世界 Boss</h3>
+                    </div>
+                    <span id="${bossBtnId}" class="text-xs text-gray-400">🔼</span>
+                `;
+                
+                const bossIconContainer = document.createElement('div');
+                bossIconContainer.id = bossGroupId; 
+                bossIconContainer.className = "flex flex-wrap gap-1.5 pt-2 pl-1 collapsible-content";
+                bossIconContainer.style.maxHeight = "1000px"; 
+                bossIconContainer.style.opacity = "1";
+        
+                BOSS_LIST.forEach(bossName => {
+                    const info = BOSS_INFO[bossName];
+                    const displayName = getI18n(bossName);
+                    const iconClass = info.icon;
+                    
+                    const btn = document.createElement('button');
+                    btn.className = "group flex flex-col items-center gap-0.5 transition-transform hover:scale-110 active:scale-95 w-12 sm:w-14";
+                    
+                    const fakeCharObj = { name: bossName, personality: 'Boss', race: 'unknown' };
+                    btn.onclick = () => selectCharacter(fakeCharObj, info.spine || info.spineBase, '');
+        
+                    btn.innerHTML = `
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl border-2 border-red-400 overflow-hidden shadow-sm group-hover:shadow-md transition-all relative flex items-center justify-center bg-white dark:bg-slate-700">
+                            <div class="sprite-boss ${iconClass} shrink-0 scale-[0.32] sm:scale-[0.38] relative z-10"></div>
+                        </div>
+                        <span class="text-[9px] sm:text-[10px] font-bold text-gray-600 dark:text-gray-300 group-hover:text-red-600 dark:group-hover:text-red-400 text-center w-full truncate leading-tight">${displayName}</span>
+                    `;
+                    bossIconContainer.appendChild(btn);
+                });
+        
+                bossRow.appendChild(bossHeader); 
+                bossRow.appendChild(bossIconContainer); 
+                container.appendChild(bossRow);
             }
             
             function applyRaceBackground(charName) {
@@ -537,12 +594,9 @@
 
             // 🌟 2. 取代原本的 getCostumeList 函數
             function getCostumeList(charName, mode) {
-                // 如果是 NPC，直接回傳 NPC 的服裝陣列
-                if (NPC_LIST.includes(charName)) {
-                    return NPC_COSTUME[charName] || [];
-                }
+                if (typeof NPC_LIST !== 'undefined' && NPC_LIST.includes(charName)) return NPC_COSTUME[charName] || [];
+                if (typeof BOSS_LIST !== 'undefined' && BOSS_LIST.includes(charName)) return BOSS_INFO[charName].options || ["default"];
                 
-                // 原本的角色邏輯
                 if (mode === 'lobby') {
                     return (typeof COSTUME_MAP !== 'undefined' && COSTUME_MAP[charName]) ? COSTUME_MAP[charName] : [];
                 } else {
@@ -567,11 +621,15 @@
                 activeCharData = { ...charObj, spineName: spineName };
                 document.getElementById('spineViewerSection').classList.remove('hidden');
                 
-                // 判斷是否為 NPC
-                const isNPC = NPC_LIST.includes(charObj.name);
+                const isNPC = typeof NPC_LIST !== 'undefined' && NPC_LIST.includes(charObj.name);
+                const isBoss = typeof BOSS_LIST !== 'undefined' && BOSS_LIST.includes(charObj.name);
                 
-                // NPC 使用灰底框，一般角色維持性格顏色
-                const pColors = isNPC ? "border-gray-400 text-gray-700 dark:text-gray-300" : (personalityColors[charObj.personality] || "border-amber-400 text-amber-900");
+                // 動態決定框線與文字顏色
+                let pColors = "border-amber-400 text-amber-900";
+                if (isNPC) pColors = "border-gray-400 text-gray-700 dark:text-gray-300";
+                else if (isBoss) pColors = "border-red-500 text-red-700 dark:text-red-400";
+                else pColors = personalityColors[charObj.personality] || pColors;
+                
                 const borderClass = pColors.split(' ')[0]; 
                 const textClass = pColors.split(' ')[1];  
                 
@@ -579,24 +637,25 @@
                 let raceKey = charObj.race; if (raceKey === "???") raceKey = "unknown";
                 const raceSprite = SPRITE_CLASS_MAP[`race_${raceKey}`] || "sprite-Bg_Unknown";
                 
+                // 動態更換左上角頭像內容
                 if (isNPC) {
-                    // 🌟 NPC 左上角頭像渲染
                     const iconClass = NPC_ICON[charObj.name];
                     iconEl.innerHTML = `
-                        <div class="absolute inset-0 flex items-center justify-center opacity-80">
-                            <div class="sprite-base sprite-common ${raceSprite} shrink-0 scale-[0.45]"></div>
-                        </div>
+                        <div class="absolute inset-0 flex items-center justify-center opacity-80"><div class="sprite-base sprite-common ${raceSprite} shrink-0 scale-[0.45]"></div></div>
                         <div class="w-full h-full bg-white/20 dark:bg-black/20 backdrop-blur-[1px] absolute inset-0"></div>
                         <div class="sprite-NPC ${iconClass} shrink-0 scale-[0.35] sm:scale-[0.45] relative z-10"></div>
                     `;
+                } else if (isBoss) {
+                    const iconClass = BOSS_INFO[charObj.name].icon;
+                    iconEl.innerHTML = `
+                        <div class="w-full h-full bg-white dark:bg-slate-700 absolute inset-0"></div>
+                        <div class="sprite-boss ${iconClass} shrink-0 scale-[0.32] sm:scale-[0.45] relative z-10"></div>
+                    `;
                 } else {
-                    // 🌟 一般角色左上角頭像渲染
                     const charSpriteBase = CHAR_SPRITE_MAP[charObj.personality] || "sprite-char-innocence";
                     const charSpriteClass = `sprite-${spineName}`;
                     iconEl.innerHTML = `
-                        <div class="absolute inset-0 flex items-center justify-center opacity-80">
-                            <div class="sprite-base sprite-common ${raceSprite} shrink-0 scale-[0.45]"></div>
-                        </div>
+                        <div class="absolute inset-0 flex items-center justify-center opacity-80"><div class="sprite-base sprite-common ${raceSprite} shrink-0 scale-[0.45]"></div></div>
                         <div class="w-full h-full bg-white/20 dark:bg-black/20 backdrop-blur-[1px] absolute inset-0"></div>
                         <div class="sprite-base ${charSpriteBase} ${charSpriteClass} shrink-0 scale-[0.36] sm:scale-[0.72] relative z-10"></div>
                     `;
@@ -615,52 +674,97 @@
                 applyRaceBackground(charObj.name);
                 document.getElementById('spineViewerSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
                 
-                // 🌟 新增：如果是 NPC，強制設為大廳模式，並隱藏切換按鈕
+                // 🌟 新增：如果是 NPC，強制大廳模式；如果是 Boss，強制戰鬥模式 (因為 Boss 檔案放在 sd 槽)，並隱藏切換按鈕
                 const btnMode = document.getElementById('btnModeSwitch');
-                if (NPC_LIST.includes(charObj.name)) {
+                if (isNPC) {
                     currentMode = 'lobby'; 
-                    btnMode.style.display = 'none'; // 隱藏按鈕
+                    btnMode.style.display = 'none';
+                } else if (isBoss) {
+                    currentMode = 'battle'; 
+                    btnMode.style.display = 'none';
                 } else {
-                    btnMode.style.display = 'inline-block'; // 顯示按鈕
-                    // 恢復按鈕文字與樣式
+                    btnMode.style.display = 'inline-block';
                     btnMode.innerHTML = currentMode === 'lobby' ? getI18n('ui_mode_lobby') : getI18n('ui_mode_battle');
                     btnMode.className = currentMode === 'lobby' 
                         ? "px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs sm:text-sm font-bold rounded-lg shadow transition-colors whitespace-nowrap"
                         : "px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-xs sm:text-sm font-bold rounded-lg shadow transition-colors whitespace-nowrap";
                 }
-
+            
                 refreshCostumeDropdownAndLoad();
             }
             
+            function getCostumeList(charName, mode) {
+                if (typeof NPC_LIST !== 'undefined' && NPC_LIST.includes(charName)) return NPC_COSTUME[charName] || [];
+                if (typeof BOSS_LIST !== 'undefined' && BOSS_LIST.includes(charName)) return BOSS_INFO[charName].options || ["default"];
+                
+                if (mode === 'lobby') {
+                    return (typeof COSTUME_MAP !== 'undefined' && COSTUME_MAP[charName]) ? COSTUME_MAP[charName] : [];
+                } else {
+                    return (typeof SD_COSTUME !== 'undefined' && SD_COSTUME[charName]) ? SD_COSTUME[charName] : 
+                           ((typeof COSTUME_MAP !== 'undefined' && COSTUME_MAP[charName]) ? COSTUME_MAP[charName] : []);
+                }
+            }
+
             function refreshCostumeDropdownAndLoad() {
-            const costumes = getCostumeList(activeCharData.name, currentMode);
-            const fallbackKey = costumes.length > 0 ? costumes[0] : activeCharData.spineName;
-            const selectEl = document.getElementById('costumeSelect');
-            const currentSelection = selectEl.value;
-            let targetCostume = costumes.includes(currentSelection) ? currentSelection : fallbackKey;
+                const costumes = getCostumeList(activeCharData.name, currentMode);
+                const fallbackKey = costumes.length > 0 ? costumes[0] : activeCharData.spineName;
+                const selectEl = document.getElementById('costumeSelect');
+                const currentSelection = selectEl.value;
+                let targetCostume = costumes.includes(currentSelection) ? currentSelection : fallbackKey;
+                
+                selectEl.innerHTML = '';
+                const isBoss = typeof BOSS_LIST !== 'undefined' && BOSS_LIST.includes(activeCharData.name);
+                const isNPC = typeof NPC_LIST !== 'undefined' && NPC_LIST.includes(activeCharData.name);
             
-            selectEl.innerHTML = '';
-            if (costumes.length > 0) {
-            costumes.forEach((costume, idx) => {
-            const opt = document.createElement('option');
-            // 🌟 關鍵修正：將陣列中的 Spine 檔名設定為選項的值
-            opt.value = costume; 
-            opt.text = idx === 0 ? getI18n('ui_default_costume') : `${getI18n('ui_costume')} ${idx}`;
-            if (costume === targetCostume) opt.selected = true;
-            selectEl.appendChild(opt);
-            });
-            } else {
-            const opt = document.createElement('option'); 
-            // 🌟 針對沒有額外服裝的角色也補上 value
-            opt.value = targetCostume; 
-            opt.text = getI18n('ui_default_model'); 
-            selectEl.appendChild(opt);
+                if (costumes.length > 0) {
+                    costumes.forEach((costume, idx) => {
+                        const opt = document.createElement('option');
+                        opt.value = costume; 
+                        
+                        if (isBoss) {
+                            // 動態套用現有的性格翻譯
+                            let optName = costume;
+                            if (costume.includes('Naive')) optName = getI18n('天真');
+                            else if (costume.includes('Cool')) optName = getI18n('冷靜');
+                            else if (costume.includes('Mad')) optName = getI18n('狂亂');
+                            else if (costume.includes('Jolly')) optName = getI18n('活潑');
+                            else if (costume.includes('Gloomy')) optName = getI18n('憂鬱');
+                            else if (costume === 'default') optName = getI18n('ui_default_costume') || "預設外觀";
+                            opt.text = optName;
+                        } else if (isNPC) {
+                            opt.text = costume === activeCharData.spineName ? "預設外觀" : costume;
+                        } else {
+                            opt.text = idx === 0 ? getI18n('ui_default_costume') : `${getI18n('ui_costume')} ${idx}`;
+                        }
+            
+                        if (costume === targetCostume) opt.selected = true;
+                        selectEl.appendChild(opt);
+                    });
+                    
+                    // 如果是 Boss/NPC 且只有預設外觀，自動隱藏下拉選單
+                    if ((isBoss || isNPC) && costumes.length <= 1) {
+                        selectEl.style.display = 'none';
+                    } else {
+                        selectEl.style.display = 'inline-block';
+                    }
+                }
+                loadSpine(activeCharData.spineName, targetCostume, currentMode);
             }
-            loadSpine(activeCharData.spineName, targetCostume, currentMode);
-            }
+
             function changeSpineCostume(costumeKey) {
                 if(!costumeKey || !activeCharData) return;
-                loadSpine(activeCharData.spineName, costumeKey, currentMode);
+                
+                const isBoss = typeof BOSS_LIST !== 'undefined' && BOSS_LIST.includes(activeCharData.name);
+                // 🌟 Boss 快速切換 Skin 邏輯：不重讀檔案，直接秒切換！
+                if (isBoss && BOSS_INFO[activeCharData.name].type === 'skin') {
+                    if (globalPlayer && globalPlayer.skeleton) {
+                        globalPlayer.skeleton.setSkinByName(costumeKey === 'default' ? globalPlayer.skeleton.data.skins[0].name : costumeKey);
+                        globalPlayer.skeleton.setToSetupPose();
+                        fixSpineMultiplyHole(globalPlayer);
+                    }
+                } else {
+                    loadSpine(activeCharData.spineName, costumeKey, currentMode);
+                }
             }
             
             function loadSpine(baseFolderKey, costumeKey, mode) {
@@ -668,27 +772,54 @@
                VoiceManager.init(baseFolderKey, costumeKey);
                if (globalPlayer) { globalPlayer.dispose(); globalPlayer = null; }
             
-               // 保留 AR Video 與 Pixel 畫布標籤，只修改內部其他元素
-                const existingVideo = document.getElementById('arVideoBg');
-                const existingPixelOverlay = document.getElementById('pixelOverlay'); // 🌟 新增這行
-                container.innerHTML = '<div class="spine-player-loading-custom"></div>';
-                if (existingVideo) container.appendChild(existingVideo);
-                if (existingPixelOverlay) container.appendChild(existingPixelOverlay); // 🌟 新增這行
+               const existingVideo = document.getElementById('arVideoBg');
+               const existingPixelOverlay = document.getElementById('pixelOverlay');
+               container.innerHTML = '<div class="spine-player-loading-custom"></div>';
+               if (existingVideo) container.appendChild(existingVideo);
+               if (existingPixelOverlay) container.appendChild(existingPixelOverlay); 
                
                document.getElementById('playerControls').classList.add('opacity-50', 'pointer-events-none');
                document.getElementById('slotsContainerInner').innerHTML = '<div class="p-3 text-center text-xs font-bold text-gray-400" data-i18n="ui_loading_data">讀取資料中...</div>';
             
-               currentZoom = mode === 'battle' ? 2.5 : 1.0; 
-               const skelUrl = mode === 'lobby' ? `./spine_assets/${baseFolderKey}/${costumeKey}.skel.bytes` : `./spine_sd_assets/${costumeKey}.skel.bytes`;
-               const atlasUrl = mode === 'lobby' ? `./spine_assets/${baseFolderKey}/${costumeKey}.atlas.txt` : `./spine_sd_assets/${costumeKey}.atlas.txt`;
-               const baseViewport = mode === 'lobby' ? { x: -400, y: 0, width: 800, height: 1000 } : { x: -750, y: -150, width: 1500, height: 3000 };
-            
-               // 🌟 核心修復：攔截畫布建立，強制 WebGL 保留像素 (新增 webgl2 支援)
+               const isNPC = typeof NPC_LIST !== 'undefined' && NPC_LIST.includes(activeCharData.name);
+               const isBoss = typeof BOSS_LIST !== 'undefined' && BOSS_LIST.includes(activeCharData.name);
+               
+               let skelUrl, atlasUrl;
+               let targetSkin = "default";
+               let targetZoom = 1.0;
+               let baseViewport = { x: -400, y: 0, width: 800, height: 1000 };
+               
+               // 🌟 智慧判斷 Spine 路徑與設定
+               if (isBoss) {
+                   const info = BOSS_INFO[activeCharData.name];
+                   let fileName = info.spine;
+                   if (info.type === 'file') {
+                       fileName = info.spineBase + (costumeKey === 'default' ? 'Naive' : costumeKey);
+                   } else if (info.type === 'skin') {
+                       targetSkin = costumeKey;
+                   }
+                   skelUrl = `./spine_sd_assets/${fileName}.skel.bytes`;
+                   atlasUrl = `./spine_sd_assets/${fileName}.atlas.txt`;
+                   targetZoom = 2.5; 
+                   baseViewport = { x: -750, y: -200, width: 1500, height: 2500 }; // 擴大 Boss 的視野框
+               } else if (isNPC) {
+                   skelUrl = `./spine_assets/${baseFolderKey}/${costumeKey}.skel.bytes`;
+                   atlasUrl = `./spine_assets/${baseFolderKey}/${costumeKey}.atlas.txt`;
+                   targetZoom = 1.0;
+               } else {
+                   skelUrl = mode === 'lobby' ? `./spine_assets/${baseFolderKey}/${costumeKey}.skel.bytes` : `./spine_sd_assets/${costumeKey}.skel.bytes`;
+                   atlasUrl = mode === 'lobby' ? `./spine_assets/${baseFolderKey}/${costumeKey}.atlas.txt` : `./spine_sd_assets/${costumeKey}.atlas.txt`;
+                   targetZoom = mode === 'battle' ? 2.5 : 1.0;
+                   baseViewport = mode === 'lobby' ? { x: -400, y: 0, width: 800, height: 1000 } : { x: -750, y: -150, width: 1500, height: 3000 };
+               }
+               
+               currentZoom = targetZoom;
+
                const originalGetContext = HTMLCanvasElement.prototype.getContext;
                HTMLCanvasElement.prototype.getContext = function(type, options) {
                    if (type === 'webgl' || type === 'webgl2' || type === 'experimental-webgl') {
                        options = options || {};
-                       options.preserveDrawingBuffer = true; // 強制保留緩衝區！
+                       options.preserveDrawingBuffer = true;
                    }
                    return originalGetContext.call(this, type, options);
                };
@@ -702,61 +833,65 @@
                        const loader = container.querySelector('.spine-player-loading-custom');
                        if (loader) loader.remove();
         
-        // 🌟 新增：換角色/服裝/模式時，如果目前是像素風，自動將新畫布變透明
-        if (isPixelMode) {
-            const originalCanvas = container.querySelector('canvas:not(#pixelOverlay)');
-            if (originalCanvas) originalCanvas.style.opacity = '0.001';
-        }
+                       if (isPixelMode) {
+                           const originalCanvas = container.querySelector('canvas:not(#pixelOverlay)');
+                           if (originalCanvas) originalCanvas.style.opacity = '0.001';
+                       }
 
-        document.getElementById('playerControls').classList.remove('opacity-50', 'pointer-events-none');
-        setSpeed(1);
                        document.getElementById('playerControls').classList.remove('opacity-50', 'pointer-events-none');
                        setSpeed(1);
-                       setTimeout(() => {
-                           if (player.sceneRenderer) {
-                               player.sceneRenderer.debugRendering = true;
-                               player.sceneRenderer.debugBones = true;     
-                               player.sceneRenderer.debugRegions = false;  
-                               player.sceneRenderer.debugMeshes = false;   
-                               player.skeleton.updateWorldTransform();
+                       
+                       // 🌟 套用 Skin
+                       if (isBoss) {
+                           if (targetSkin !== 'default' && player.skeleton.data.findSkin(targetSkin)) {
+                               player.skeleton.setSkinByName(targetSkin);
+                           } else if (player.skeleton.data.skins.length > 0) {
+                               player.skeleton.setSkinByName(player.skeleton.data.skins[0].name);
                            }
-                       }, 200);
-            
-                       const skins = player.skeleton.data.skins;
-                       if (skins && skins.length > 0) {
-                           const targetSkin = skins.find(s => s.name === 'Normal') || skins.find(s => s.name !== 'default') || skins[0];
-                           if (targetSkin) { player.skeleton.setSkinByName(targetSkin.name); }
+                       } else {
+                           const skins = player.skeleton.data.skins;
+                           if (skins && skins.length > 0) {
+                               const tSkin = skins.find(s => s.name === 'Normal') || skins.find(s => s.name !== 'default') || skins[0];
+                               if (tSkin) { player.skeleton.setSkinByName(tSkin.name); }
+                           }
                        }
                        
                        player.skeleton.scaleX = currentZoom; player.skeleton.scaleY = currentZoom;
                        player.skeleton.setToSetupPose(); 
-
                        fixSpineMultiplyHole(player);
-            
                        player.skeleton.updateWorldTransform();
-                       buildAnimationDropdown(player); buildSlotsPanel(player);
+                       
+                       buildAnimationDropdown(player); 
+                       buildSlotsPanel(player);
             
                        setTimeout(() => {
                            const anims = player.skeleton.data.animations.map(a => a.name);
-                           const fallbackAnim = mode === 'lobby' ? 'Idle_1' : 'Idle';
-                           let startAnim = anims.includes(fallbackAnim) ? fallbackAnim : (anims.includes('idle') ? 'idle' : anims[0]);
+                           let startAnim;
+                           
+                           // 智慧判斷起手動作
+                           if (isBoss) {
+                               startAnim = anims.includes('Idle') ? 'Idle' : (anims.includes('idle') ? 'idle' : anims[0]);
+                           } else {
+                               const fallbackAnim = mode === 'lobby' ? 'Idle_1' : 'Idle';
+                               startAnim = anims.includes(fallbackAnim) ? fallbackAnim : (anims.includes('idle') ? 'idle' : anims[0]);
+                           }
+
                            if (startAnim) {
                                player.animationState.setAnimation(0, startAnim, true);
                                document.getElementById('animSelectText').innerText = startAnim;
                                document.getElementById('btnPlayPause').innerText = '⏸️';
                            }
                            player.play();
-                           if (mode === 'lobby') VoiceManager.playSpawn();
+                           if (mode === 'lobby' && !isBoss && !isNPC) VoiceManager.playSpawn();
                            setupComplexInteractions(player, container);
                            window.dispatchEvent(new Event('resize'));
                        }, 50);
                    },
                    error: function () {
-                       container.innerHTML = `<div class="text-red-500 font-bold text-sm text-center p-4">載入失敗：${mode === 'lobby' ? '大廳' : '戰鬥'}檔案可能不存在</div>`;
+                       container.innerHTML = `<div class="text-red-500 font-bold text-sm text-center p-4">載入失敗：檔案可能不存在</div>`;
                    }
                });
             
-               // 建立完成後立刻恢復原狀，避免影響網頁上的其他功能
                HTMLCanvasElement.prototype.getContext = originalGetContext;
             }
             // ==========================================
