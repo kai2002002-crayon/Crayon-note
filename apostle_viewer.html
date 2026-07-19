@@ -568,9 +568,6 @@
                 activeCharData = { ...charObj, spineName: spineName };
                 document.getElementById('spineViewerSection').classList.remove('hidden');
                 
-                const pColors = personalityColors[charObj.personality] || "border-amber-400 text-amber-900";
-                const borderClass = pColors.split(' ')[0]; const textClass = pColors.split(' ')[1];  
-                
                 // 判斷是否為 NPC
                 const isNPC = NPC_LIST.includes(charObj.name);
                 
