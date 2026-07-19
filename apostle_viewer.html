@@ -473,24 +473,24 @@
         
                 NPC_LIST.forEach(npcName => {
                     const spineName = NPC_SPINE[npcName];
-                    const displayName = getI18n(npcName); // 如果沒翻譯會直接顯示原名
+                    const displayName = getI18n(npcName); 
+                    const iconClass = NPC_ICON[npcName]; // 🌟 取得對應的圖示
                     
                     const btn = document.createElement('button');
                     btn.className = "group flex flex-col items-center gap-0.5 transition-transform hover:scale-110 active:scale-95 w-12 sm:w-14";
                     
-                    // 建立一個假的 charObj 讓系統能順利接軌
                     const fakeCharObj = { name: npcName, personality: 'NPC', race: 'unknown' };
                     btn.onclick = () => selectCharacter(fakeCharObj, spineName, '');
         
-                    const charSpriteClass = `sprite-${spineName}`;
-                    
                     btn.innerHTML = `
                         <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl border-2 border-gray-400 overflow-hidden shadow-sm group-hover:shadow-md transition-all relative flex items-center justify-center">
                             <div class="absolute inset-0 flex items-center justify-center opacity-80">
                                 <div class="sprite-base sprite-common sprite-Bg_Unknown shrink-0 scale-[0.6]"></div>
                             </div>
                             <div class="w-full h-full bg-white/20 dark:bg-black/20 backdrop-blur-[1px] absolute inset-0"></div>
-                            <div class="sprite-base sprite-char-innocence ${charSpriteClass} shrink-0 scale-[0.35] relative z-10"></div>
+                            
+                            <!-- 🌟 換成專屬的 sprite-NPC 與圖示 class，調整縮放比例以適應框框 -->
+                            <div class="sprite-NPC ${iconClass} shrink-0 scale-[0.35] sm:scale-[0.38] relative z-10"></div>
                         </div>
                         <span class="text-[9px] sm:text-[10px] font-bold text-gray-600 dark:text-gray-300 group-hover:text-gray-800 dark:group-hover:text-white text-center w-full truncate leading-tight">${displayName}</span>
                     `;
@@ -514,7 +514,6 @@
                 }
             }
             
-            // 🌟 1. 新增 NPC 資料庫 (已修正 Costume 的陣列語法)
             const NPC_LIST = ['雷內瓦(NPC)', '可愛餅', '高蒂', '榮春'];
             const NPC_SPINE = { 
                 "雷內瓦(NPC)": "Renewa", 
@@ -523,10 +522,18 @@
                 "榮春": "Youngchun"
             };
             const NPC_COSTUME = { 
-                "雷內瓦(NPC)": ["Renewa", "RenewaNPC"], 
+                "雷內瓦(NPC)": ["Renewa"], 
                 "可愛餅": ["Crepe", "CrepeSkin1", "CrepeSkin2"], 
                 "高蒂": ["Goldy"], 
                 "榮春": ["Youngchun", "YoungchunSkin1"] 
+            };
+
+            // 🌟 新增：NPC 專屬的 Icon Class 對應表
+            const NPC_ICON = {
+                "雷內瓦(NPC)": "sprite-RenewaNPC",
+                "可愛餅": "sprite-Crepe",
+                "高蒂": "sprite-Goldy",
+                "榮春": "sprite-Youngchun"
             };
 
             // 🌟 2. 取代原本的 getCostumeList 函數
@@ -564,23 +571,46 @@
                 const pColors = personalityColors[charObj.personality] || "border-amber-400 text-amber-900";
                 const borderClass = pColors.split(' ')[0]; const textClass = pColors.split(' ')[1];  
                 
+                // 判斷是否為 NPC
+                const isNPC = NPC_LIST.includes(charObj.name);
+                
+                // NPC 使用灰底框，一般角色維持性格顏色
+                const pColors = isNPC ? "border-gray-400 text-gray-700 dark:text-gray-300" : (personalityColors[charObj.personality] || "border-amber-400 text-amber-900");
+                const borderClass = pColors.split(' ')[0]; 
+                const textClass = pColors.split(' ')[1];  
+                
                 const iconEl = document.getElementById('activeCharIconContainer');
-                const charSpriteBase = CHAR_SPRITE_MAP[charObj.personality] || "sprite-char-innocence";
-                const charSpriteClass = `sprite-${spineName}`;
                 let raceKey = charObj.race; if (raceKey === "???") raceKey = "unknown";
                 const raceSprite = SPRITE_CLASS_MAP[`race_${raceKey}`] || "sprite-Bg_Unknown";
                 
-                iconEl.innerHTML = `
-                    <div class="absolute inset-0 flex items-center justify-center opacity-80">
-                        <div class="sprite-base sprite-common ${raceSprite} shrink-0 scale-[0.45]"></div>
-                    </div>
-                    <div class="w-full h-full bg-white/20 dark:bg-black/20 backdrop-blur-[1px] absolute inset-0"></div>
-                    <div class="sprite-base ${charSpriteBase} ${charSpriteClass} shrink-0 scale-[0.36] sm:scale-[0.72] relative z-10"></div>
-                `;
+                if (isNPC) {
+                    // 🌟 NPC 左上角頭像渲染
+                    const iconClass = NPC_ICON[charObj.name];
+                    iconEl.innerHTML = `
+                        <div class="absolute inset-0 flex items-center justify-center opacity-80">
+                            <div class="sprite-base sprite-common ${raceSprite} shrink-0 scale-[0.45]"></div>
+                        </div>
+                        <div class="w-full h-full bg-white/20 dark:bg-black/20 backdrop-blur-[1px] absolute inset-0"></div>
+                        <div class="sprite-NPC ${iconClass} shrink-0 scale-[0.35] sm:scale-[0.45] relative z-10"></div>
+                    `;
+                } else {
+                    // 🌟 一般角色左上角頭像渲染
+                    const charSpriteBase = CHAR_SPRITE_MAP[charObj.personality] || "sprite-char-innocence";
+                    const charSpriteClass = `sprite-${spineName}`;
+                    iconEl.innerHTML = `
+                        <div class="absolute inset-0 flex items-center justify-center opacity-80">
+                            <div class="sprite-base sprite-common ${raceSprite} shrink-0 scale-[0.45]"></div>
+                        </div>
+                        <div class="w-full h-full bg-white/20 dark:bg-black/20 backdrop-blur-[1px] absolute inset-0"></div>
+                        <div class="sprite-base ${charSpriteBase} ${charSpriteClass} shrink-0 scale-[0.36] sm:scale-[0.72] relative z-10"></div>
+                    `;
+                }
+                
                 iconEl.className = `w-10 h-10 sm:w-12 sm:h-12 rounded-lg border-2 ${borderClass} shadow-sm overflow-hidden bg-white dark:bg-slate-700 flex items-center justify-center shrink-0 relative`;
                 
                 const nameEl = document.getElementById('activeCharName');
-                nameEl.innerText = getI18n(charObj.name); nameEl.className = `text-lg sm:text-xl font-black ${textClass}`;
+                nameEl.innerText = getI18n(charObj.name); 
+                nameEl.className = `text-lg sm:text-xl font-black ${textClass}`;
             
                 document.getElementById('animList').classList.add('hidden'); 
                 document.getElementById('slotList').classList.add('hidden');
