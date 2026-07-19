@@ -15,7 +15,7 @@
 .sprite-ult-madness { background-image: url('char_sprites/ultimate_madness.png')!important; }
 .sprite-ult-vivacious { background-image: url('char_sprites/ultimate_vivacious.png')!important; }
 .sprite-boss { background-image: url('char_sprites/bosssheet.png'); }
-
+.sprite-NPC { background-image: url('char_sprites/NPCsheet.png'); }
 /* =======================================
    🌟 通用圖示 (common_icon.png)
    ======================================= */
@@ -254,3 +254,12 @@
 .sprite-Icon_Lil1li { width: 126px; height: 126px; background-position: -5px -277px; }
 .sprite-Icon_MEOW { width: 126px; height: 126px; background-position: -5px -413px; }
 .sprite-Icon_R41_Renewa { width: 126px; height: 126px; background-position: -5px -549px; }
+
+/* =======================================
+   🌟 NPC圖示 (NPCsheet.png)
+   ======================================= */
+.sprite-Crepe { width: 126px; height: 126px; background-position: -5px -5px; }
+.sprite-Goldy { width: 126px; height: 126px; background-position: -5px -141px; }
+.sprite-RenewaNPC { width: 126px; height: 126px; background-position: -5px -277px; }
+.sprite-Youngchun { width: 126px; height: 126px; background-position: -5px -413px; }
+
