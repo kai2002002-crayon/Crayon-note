@@ -882,7 +882,7 @@
                                document.getElementById('btnPlayPause').innerText = '⏸️';
                            }
                            player.play();
-                           if (mode === 'lobby' && !isBoss && !isNPC) VoiceManager.playSpawn();
+                           if (mode === 'lobby' && !isBoss) VoiceManager.playSpawn();
                            setupComplexInteractions(player, container);
                            window.dispatchEvent(new Event('resize'));
                        }, 50);
