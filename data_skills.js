@@ -78,7 +78,7 @@ const characterSkills = [
           "cooldown": "20s"
         },
         "passiveSkill": {
-          "desc": "ATK SPD Increase",
+          "desc": "Increases Attack Speed.",
           "stats": ["ATK SPD Increase: 42%"]
         }
       },
@@ -147,8 +147,8 @@ const characterSkills = [
           "cooldown": "40s"
         },
         "passiveSkill": {
-          "desc": "Increase Skill Damage of Back Row allies",
-          "stats": ["Increase Skill Damage: 34%"]
+          "desc": "Increases Skill Damage of allied back row Apostles. (This effect activates even if Daya is not on the field.)",
+          "stats": ["Skill DMG Increase: 34%"]
         }
       },
     }
