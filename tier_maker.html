@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>坨坨排行榜生成器</title>
+    <!-- 引入你的資料庫與 CSS -->
+    <script src="data_core.js"></script>
+    <link rel="stylesheet" href="sprites.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <!-- 拖曳功能套件 -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <!-- 截圖匯出套件 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <script>
+        tailwind.config = { darkMode: 'class', }
+        const isDarkMode = localStorage.getItem('theme') === 'dark' || 
+                           (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        if (isDarkMode) { document.documentElement.classList.add('dark'); }
+    </script>
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; }
+        
+        /* 滾動條美化 */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 10px; }
+        .dark ::-webkit-scrollbar-thumb { background-color: #475569; }
+
+        /* 排行榜截圖時，隱藏設定按鈕 */
+        .exporting .hide-on-export { display: none !important; }
+        
+        /* 確保截圖時背景色正確 */
+        .tier-board { background-color: #1e293b; border-radius: 12px; overflow: hidden; }
+
+        /* 顏色選擇器美化 */
+        input[type="color"] {
+            -webkit-appearance: none;
+            border: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            padding: 0;
+            overflow: hidden;
+        }
+        input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+        input[type="color"]::-webkit-color-swatch { border: none; border-radius: 50%; border: 2px solid rgba(255,255,255,0.3); }
+    </style>
+</head>
+<body class="p-2 sm:p-6 bg-[#fcf8f2] dark:bg-slate-900 text-gray-800 dark:text-gray-200 min-h-screen transition-colors duration-300">
+    <div class="max-w-[1200px] mx-auto space-y-4">
+        
+        <!-- 頂部控制列 -->
+        <header class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md p-4 rounded-2xl shadow-md border-4 border-amber-400 dark:border-slate-600 flex justify-between items-center relative z-10 flex-wrap gap-2">
+            <div>
+                <h1 class="text-xl sm:text-2xl font-black text-amber-950 dark:text-amber-400 flex items-center gap-2">
+                    👑 排行榜生成器
+                </h1>
+            </div>
+            <div class="flex items-center gap-2">
+                <button onclick="addTierRow()" class="px-3 py-1.5 bg-green-500 hover:bg-green-600 text-white font-bold rounded-xl shadow transition text-sm">
+                    ➕ 新增級別
+                </button>
+                <button onclick="resetBoard()" class="px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl shadow transition text-sm">
+                    🗑️ 重置所有
+                </button>
+                <button onclick="exportImage()" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl shadow transition text-sm flex items-center gap-1">
+                    📸 輸出圖片
+                </button>
+            </div>
+        </header>
+
+        <!-- 🌟 排行榜主要截圖區域 🌟 -->
+        <div id="captureArea" class="bg-slate-900 p-4 sm:p-6 rounded-2xl shadow-xl border-4 border-slate-700">
+            <!-- 標題輸入區 (可編輯) -->
+            <input type="text" id="tierTitle" value="我的最愛排行榜" class="w-full bg-transparent text-center text-2xl sm:text-4xl font-black text-white mb-6 outline-none border-b-2 border-transparent hover:border-slate-600 focus:border-amber-400 transition-colors pb-2">
+            
+            <!-- 級別列容器 -->
+            <div id="tierContainer" class="flex flex-col gap-1 border-2 border-slate-950 bg-slate-950 rounded-lg overflow-hidden shadow-inner">
+                <!-- Javascript 會在這裡動態插入 Row -->
+            </div>
+        </div>
+
+        <!-- 🌟 角色選擇池 🌟 -->
+        <section class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md p-4 rounded-2xl shadow-md border border-gray-200 dark:border-slate-700 mt-4">
+            <h2 class="text-lg font-bold text-gray-900 dark:text-gray-300 mb-3 border-b border-gray-200 dark:border-slate-700 pb-2">👥 角色池 (拖曳至上方排行榜)</h2>
+            <div id="characterPool" class="flex flex-col gap-3">
+                <!-- Javascript 會在這裡動態插入分類與角色 -->
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // 🌟 1. 定義顏色與樣式對應
+        const personalityColors = { 
+            "天真": "border-green-400 text-green-400", 
+            "冷靜": "border-blue-400 text-blue-400", 
+            "狂亂": "border-red-400 text-red-400", 
+            "活潑": "border-yellow-400 text-yellow-400", 
+            "憂鬱": "border-purple-400 text-purple-400",
+            "NPC": "border-gray-400 text-gray-400"
+        };
+        const SPRITE_CLASS_MAP = {
+            race_龍族: "sprite-Bg_Dragon", race_精靈: "sprite-Bg_Elf", race_妖精: "sprite-Bg_Sprite",
+            race_幽靈: "sprite-Bg_Phantom", race_魔靈: "sprite-Bg_Elemental", race_不明: "sprite-Bg_Unknown",
+            race_獸人: "sprite-Bg_Werebeast", race_魔女: "sprite-Bg_Witch", race_unknown: "sprite-Bg_Unknown"
+        };
+        const CHAR_SPRITE_MAP = {
+            "冷靜": "sprite-char-composed", "憂鬱": "sprite-char-depressed",
+            "天真": "sprite-char-innocence", "狂亂": "sprite-char-madness", "活潑": "sprite-char-vivacious",
+            "NPC": "sprite-char-innocence" // NPC 預設基底
+        };
+
+        // NPC 資料庫
+        const NPC_LIST = ['雷內瓦(NPC)', '可愛餅', '高蒂', '榮春'];
+        const NPC_SPINE = { "雷內瓦(NPC)": "Renewa", "可愛餅": "Crepe", "高蒂": "Goldy", "榮春": "Youngchun" };
+        const NPC_ICON = { "雷內瓦(NPC)": "sprite-RenewaNPC", "可愛餅": "sprite-Crepe", "高蒂": "sprite-Goldy", "榮春": "sprite-Youngchun" };
+
+        // 預設的級別與顏色
+        const DEFAULT_TIERS = [
+            { label: "S", color: "#ef4444" }, // 紅
+            { label: "A", color: "#f97316" }, // 橘
+            { label: "B", color: "#eab308" }, // 黃
+            { label: "C", color: "#22c55e" }, // 綠
+            { label: "D", color: "#3b82f6" }, // 藍
+        ];
+
+        let sortableInstances = [];
+
+        window.onload = function() {
+            initTiers();
+            initCharacterPool();
+            initSortable();
+        };
+
+        // 🌟 2. 初始化排行榜列
+        function initTiers() {
+            const container = document.getElementById('tierContainer');
+            container.innerHTML = '';
+            DEFAULT_TIERS.forEach(tier => createTierRow(tier.label, tier.color));
+        }
+
+        function createTierRow(labelText = "New", color = "#8b5cf6") {
+            const container = document.getElementById('tierContainer');
+            const rowId = 'tier_' + Date.now();
+            
+            const row = document.createElement('div');
+            row.className = "flex bg-slate-800 border-b border-slate-950 min-h-[90px] relative group";
+            
+            // 左側標籤區
+            row.innerHTML = `
+                <div class="w-20 sm:w-28 flex items-center justify-center border-r border-slate-950 relative" style="background-color: ${color};">
+                    <input type="text" value="${labelText}" class="w-full bg-transparent text-center font-black text-xl sm:text-2xl text-slate-900 outline-none px-1">
+                    
+                    <!-- 隱藏控制項 (截圖時隱藏) -->
+                    <div class="hide-on-export absolute left-1 top-1 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <input type="color" value="${color}" onchange="this.parentElement.parentElement.style.backgroundColor = this.value" title="更改顏色">
+                    </div>
+                </div>
+                
+                <!-- 拖曳放置區 -->
+                <div id="${rowId}" class="tier-dropzone flex-1 flex flex-wrap content-start gap-2 p-2 min-h-[90px]"></div>
+                
+                <!-- 刪除按鈕 (截圖時隱藏) -->
+                <div class="hide-on-export w-8 flex flex-col items-center justify-center bg-slate-800/50 hover:bg-red-500/20 transition cursor-pointer" onclick="this.parentElement.remove()">
+                    <span class="text-gray-500 hover:text-red-500">✖</span>
+                </div>
+            `;
+            container.appendChild(row);
+
+            // 實例化該列的拖曳功能
+            setTimeout(() => {
+                const dropzone = document.getElementById(rowId);
+                const instance = new Sortable(dropzone, {
+                    group: 'shared',
+                    animation: 150,
+                    ghostClass: 'opacity-50'
+                });
+                sortableInstances.push(instance);
+            }, 0);
+        }
+
+        function addTierRow() {
+            createTierRow("Rank", "#94a3b8");
+        }
+
+        // 🌟 3. 初始化角色池
+        function initCharacterPool() {
+            const container = document.getElementById('characterPool');
+            container.innerHTML = '';
+            
+            const personalities = ["天真", "冷靜", "狂亂", "活潑", "憂鬱"];
+            
+            // 處理一般角色
+            if (typeof INITIAL_DATA !== 'undefined' && INITIAL_DATA) {
+                personalities.forEach(p => {
+                    const chars = INITIAL_DATA.filter(c => c.personality === p);
+                    if (chars.length > 0) {
+                        createPoolSection(container, p, chars, false);
+                    }
+                });
+            }
+
+            // 處理 NPC
+            createPoolSection(container, "NPC", NPC_LIST, true);
+        }
+
+        function createPoolSection(container, title, charList, isNPC) {
+            const section = document.createElement('div');
+            section.className = "flex flex-col bg-slate-100 dark:bg-slate-800/50 p-2 rounded-xl border border-dashed border-gray-300 dark:border-slate-700";
+            
+            const pColors = personalityColors[title] || "border-gray-400 text-gray-500";
+            const borderClass = pColors.split(' ')[0];
+            
+            section.innerHTML = `<h3 class="text-xs sm:text-sm font-black border-l-4 ${borderClass} pl-2 mb-2 ml-1 text-gray-700 dark:text-gray-300">${title}</h3>`;
+            
+            const dropzoneId = 'pool_' + title;
+            const dropzone = document.createElement('div');
+            dropzone.id = dropzoneId;
+            dropzone.className = "tier-dropzone flex flex-wrap gap-2 p-1 min-h-[60px]";
+            
+            charList.forEach(char => {
+                const charEl = createCharIcon(char, isNPC, borderClass);
+                dropzone.appendChild(charEl);
+            });
+
+            section.appendChild(dropzone);
+            container.appendChild(section);
+
+            // 加入 Sortable
+            setTimeout(() => {
+                const instance = new Sortable(document.getElementById(dropzoneId), {
+                    group: 'shared',
+                    animation: 150,
+                    ghostClass: 'opacity-50',
+                    sort: false // 角色池內部不排序，只能拖出去或拖回來
+                });
+                sortableInstances.push(instance);
+            }, 0);
+        }
+
+        // 🌟 4. 生成精美的角色 Icon (與 spine_viewer 完全一致)
+        function createCharIcon(charData, isNPC, fallbackBorder) {
+            const el = document.createElement('div');
+            el.className = "cursor-grab active:cursor-grabbing w-12 sm:w-14 flex flex-col items-center gap-0.5 group";
+            
+            // 資料處理
+            let charName = isNPC ? charData : charData.name;
+            let spineName = isNPC ? NPC_SPINE[charName] : (typeof SPINE_MAP !== 'undefined' && SPINE_MAP[charName] ? SPINE_MAP[charName] : charName);
+            let displayName = getI18n(charName).replace('(NPC)', '').trim();
+            
+            let raceKey = isNPC ? "unknown" : (charData.race === "???" ? "unknown" : charData.race);
+            const raceSprite = SPRITE_CLASS_MAP[`race_${raceKey}`] || "sprite-Bg_Unknown";
+            
+            // 決定邊框顏色
+            let borderClass = fallbackBorder;
+            if (!isNPC && personalityColors[charData.personality]) {
+                borderClass = personalityColors[charData.personality].split(' ')[0];
+            }
+
+            let innerHtml = '';
+            if (isNPC) {
+                const iconClass = NPC_ICON[charName];
+                innerHtml = `
+                    <div class="absolute inset-0 flex items-center justify-center opacity-80"><div class="sprite-base sprite-common ${raceSprite} shrink-0 scale-[0.6]"></div></div>
+                    <div class="w-full h-full bg-white/20 dark:bg-black/20 backdrop-blur-[1px] absolute inset-0"></div>
+                    <div class="sprite-NPC ${iconClass} shrink-0 scale-[0.38] relative z-10"></div>
+                `;
+            } else {
+                const charSpriteBase = CHAR_SPRITE_MAP[charData.personality] || "sprite-char-innocence";
+                const charSpriteClass = `sprite-${spineName}`;
+                innerHtml = `
+                    <div class="absolute inset-0 flex items-center justify-center opacity-80"><div class="sprite-base sprite-common ${raceSprite} shrink-0 scale-[0.6]"></div></div>
+                    <div class="w-full h-full bg-white/20 dark:bg-black/20 backdrop-blur-[1px] absolute inset-0"></div>
+                    <div class="sprite-base ${charSpriteBase} ${charSpriteClass} shrink-0 scale-[0.35] relative z-10"></div>
+                `;
+            }
+
+            el.innerHTML = `
+                <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl border-2 ${borderClass} overflow-hidden shadow-sm hover:shadow-md transition-all relative flex items-center justify-center pointer-events-none">
+                    ${innerHtml}
+                </div>
+                <!-- 名字隱藏，以免截圖太擠， hover 時才顯示 -->
+                <span class="text-[9px] sm:text-[10px] font-bold text-gray-500 text-center w-full truncate leading-tight pointer-events-none">${displayName}</span>
+            `;
+
+            return el;
+        }
+
+        // 翻譯輔助函數
+        function getI18n(key) {
+            if (!key) return key;
+            const lang = localStorage.getItem('user_lang') || 'zh-TW';
+            if (typeof LANG_DICT !== 'undefined' && LANG_DICT[lang] && LANG_DICT[lang][key]) return LANG_DICT[lang][key];
+            return key; 
+        }
+
+        // 🌟 5. 重置所有 (將角色丟回池子，恢復預設層級)
+        function resetBoard() {
+            if(confirm("確定要重置整個排行榜並將所有角色放回角色池嗎？")) {
+                initTiers();
+                initCharacterPool();
+            }
+        }
+
+        // 🌟 6. 匯出圖片 (html2canvas)
+        function exportImage() {
+            const captureArea = document.getElementById('captureArea');
+            
+            // 加入 exporting class 來隱藏控制項
+            captureArea.classList.add('exporting');
+            
+            // 替換 Title 為純文字 (避免 input 框框被截進去)
+            const titleInput = document.getElementById('tierTitle');
+            const titleValue = titleInput.value;
+            const tempTitleSpan = document.createElement('h1');
+            tempTitleSpan.className = "w-full text-center text-3xl sm:text-5xl font-black text-white mb-6 tracking-wide drop-shadow-md";
+            tempTitleSpan.innerText = titleValue;
+            titleInput.style.display = 'none';
+            titleInput.parentNode.insertBefore(tempTitleSpan, titleInput);
+
+            // 確保文字框失去焦點
+            document.activeElement.blur();
+
+            html2canvas(captureArea, {
+                backgroundColor: "#0f172a", // slate-900
+                scale: 2, // 提高解析度
+                useCORS: true,
+                logging: false
+            }).then(canvas => {
+                // 恢復 UI 狀態
+                captureArea.classList.remove('exporting');
+                tempTitleSpan.remove();
+                titleInput.style.display = 'block';
+
+                // 下載圖片
+                const link = document.createElement('a');
+                link.download = `Trickcal_TierList_${new Date().getTime()}.png`;
+                link.href = canvas.toDataURL('image/png');
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }).catch(err => {
+                console.error("匯出失敗", err);
+                alert("匯出圖片失敗，請檢查瀏覽器控制台錯誤。");
+                captureArea.classList.remove('exporting');
+                tempTitleSpan.remove();
+                titleInput.style.display = 'block';
+            });
+        }
+    </script>
+</body>
+</html>
