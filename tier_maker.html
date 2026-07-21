@@ -88,18 +88,22 @@
         <!-- 頂部控制列 -->
         <header class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md p-4 rounded-2xl shadow-md border-4 border-amber-400 dark:border-slate-600 flex justify-between items-center relative z-10 flex-wrap gap-2">
             <div>
-                <h1 class="text-xl sm:text-2xl font-black text-amber-950 dark:text-amber-400 flex items-center gap-2">
+                <!-- 🌟 加上 id="pageTitle" -->
+                <h1 id="pageTitle" class="text-xl sm:text-2xl font-black text-amber-950 dark:text-amber-400 flex items-center gap-2">
                     👑 排行榜生成器
                 </h1>
             </div>
             <div class="flex items-center gap-2">
-                <button onclick="addTierRow()" class="px-3 py-1.5 bg-green-500 hover:bg-green-600 text-white font-bold rounded-xl shadow transition text-sm">
+                <!-- 🌟 加上 id="btnAddRow" -->
+                <button id="btnAddRow" onclick="addTierRow()" class="px-3 py-1.5 bg-green-500 hover:bg-green-600 text-white font-bold rounded-xl shadow transition text-sm">
                     ➕ 新增級別
                 </button>
-                <button onclick="resetBoard()" class="px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl shadow transition text-sm">
+                <!-- 🌟 加上 id="btnReset" -->
+                <button id="btnReset" onclick="resetBoard()" class="px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl shadow transition text-sm">
                     🗑️ 重置所有
                 </button>
-                <button onclick="exportImage()" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl shadow transition text-sm flex items-center gap-1">
+                <!-- 🌟 加上 id="btnExport" -->
+                <button id="btnExport" onclick="exportImage()" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl shadow transition text-sm flex items-center gap-1">
                     📸 輸出圖片
                 </button>
             </div>
@@ -118,7 +122,8 @@
 
         <!-- 🌟 角色選擇池 🌟 -->
         <section class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md p-4 rounded-2xl shadow-md border border-gray-200 dark:border-slate-700 mt-4">
-            <h2 class="text-lg font-bold text-gray-900 dark:text-gray-300 mb-3 border-b border-gray-200 dark:border-slate-700 pb-2">👥 角色池 (拖曳至上方排行榜)</h2>
+            <!-- 🌟 加上 id="poolTitle" -->
+            <h2 id="poolTitle" class="text-lg font-bold text-gray-900 dark:text-gray-300 mb-3 border-b border-gray-200 dark:border-slate-700 pb-2">👥 角色池 (拖曳至上方排行榜)</h2>
             <div id="characterPool" class="flex flex-col gap-3">
                 <!-- Javascript 會在這裡動態插入分類與角色 -->
             </div>
@@ -446,14 +451,11 @@
             }
         }
 
-        // 🌟 6. 匯出圖片 (html2canvas)
+        // 🌟 6. 完美匯出圖片 (強制過濾叉叉)
         function exportImage() {
             const captureArea = document.getElementById('captureArea');
             
-            // 加入 exporting class 來隱藏控制項
-            captureArea.classList.add('exporting');
-            
-            // 替換 Title 為純文字 (避免 input 框框被截進去)
+            // 替換 Title 為純文字
             const titleInput = document.getElementById('tierTitle');
             const titleValue = titleInput.value;
             const tempTitleSpan = document.createElement('h1');
@@ -462,34 +464,46 @@
             titleInput.style.display = 'none';
             titleInput.parentNode.insertBefore(tempTitleSpan, titleInput);
 
-            // 確保文字框失去焦點
             document.activeElement.blur();
 
-            html2canvas(captureArea, {
-                backgroundColor: "#0f172a", // slate-900
-                scale: 2, // 提高解析度
-                useCORS: true,
-                logging: false
-            }).then(canvas => {
-                // 恢復 UI 狀態
-                captureArea.classList.remove('exporting');
-                tempTitleSpan.remove();
-                titleInput.style.display = 'block';
+            // 🌟 物理強制隱藏所有不需要入鏡的控制項
+            const removeBtns = captureArea.querySelectorAll('.remove-btn');
+            const hideOnExport = captureArea.querySelectorAll('.hide-on-export');
+            removeBtns.forEach(b => b.style.display = 'none');
+            hideOnExport.forEach(b => b.style.display = 'none');
 
-                // 下載圖片
-                const link = document.createElement('a');
-                link.download = `Trickcal_TierList_${new Date().getTime()}.png`;
-                link.href = canvas.toDataURL('image/png');
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            }).catch(err => {
-                console.error("匯出失敗", err);
-                alert("匯出圖片失敗，請檢查瀏覽器控制台錯誤。");
-                captureArea.classList.remove('exporting');
-                tempTitleSpan.remove();
-                titleInput.style.display = 'block';
-            });
+            // 延遲 50 毫秒讓瀏覽器確實隱藏按鈕後再拍照
+            setTimeout(() => {
+                html2canvas(captureArea, {
+                    backgroundColor: "#0f172a", 
+                    scale: 2, 
+                    useCORS: true,
+                    logging: false
+                }).then(canvas => {
+                    // 恢復所有 UI 狀態
+                    tempTitleSpan.remove();
+                    titleInput.style.display = 'block';
+                    removeBtns.forEach(b => b.style.display = '');
+                    hideOnExport.forEach(b => b.style.display = '');
+
+                    // 下載圖片
+                    const link = document.createElement('a');
+                    link.download = `Trickcal_TierList_${new Date().getTime()}.png`;
+                    link.href = canvas.toDataURL('image/png');
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }).catch(err => {
+                    console.error("匯出失敗", err);
+                    alert(getI18n('ui_tier_export_error') || "匯出圖片失敗，請檢查瀏覽器控制台錯誤。");
+                    
+                    // 發生錯誤也要恢復 UI
+                    tempTitleSpan.remove();
+                    titleInput.style.display = 'block';
+                    removeBtns.forEach(b => b.style.display = '');
+                    hideOnExport.forEach(b => b.style.display = '');
+                });
+            }, 50);
         }
     </script>
 </body>
