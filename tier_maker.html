@@ -60,6 +60,26 @@
         /* 開合動畫設定 */
         .collapsible-content { transition: max-height 0.3s ease-out, opacity 0.3s ease-out; overflow: hidden; }
         .collapsed { max-height: 0; opacity: 0; margin-top: 0 !important; overflow: hidden; padding-top: 0; padding-bottom: 0; border: none; }
+        /* 🌟 控制 Rank 區內的圖示放大與名字隱藏 🌟 */
+        /* 1. 隱藏 Rank 區的角色名字 */
+        .tier-dropzone[id^="tier_"] .char-name { display: none !important; }
+
+        /* 2. 放大 Rank 區的角色圖示外框 (放大約 150%) */
+        .tier-dropzone[id^="tier_"] .char-icon-box {
+            width: 4.5rem !important; /* 相當於 w-18 */
+            height: 4.5rem !important;
+        }
+        @media (min-width: 640px) {
+            .tier-dropzone[id^="tier_"] .char-icon-box {
+                width: 5.25rem !important; /* 相當於 w-21 */
+                height: 5.25rem !important;
+            }
+        }
+        
+        /* 3. 同步放大內部的 Sprite 圖片 (覆寫 Tailwind 的 inline scale) */
+        .tier-dropzone[id^="tier_"] .char-sprite { transform: scale(0.52) !important; }
+        .tier-dropzone[id^="tier_"] .npc-sprite { transform: scale(0.57) !important; }
+        .tier-dropzone[id^="tier_"] .race-bg { transform: scale(0.9) !important; }
     </style>
 </head>
 <body class="p-2 sm:p-6 bg-[#fcf8f2] dark:bg-slate-900 text-gray-800 dark:text-gray-200 min-h-screen transition-colors duration-300">
@@ -144,9 +164,24 @@
         let sortableInstances = [];
 
         window.onload = function() {
+            applyTranslations(); // 🌟 套用多國語言
             initTiers();
             initCharacterPool();
         };
+
+        // 🌟 新增：套用介面翻譯
+        function applyTranslations() {
+            document.getElementById('pageTitle').innerHTML = `👑 ${getI18n('ui_tier_title') || '排行榜生成器'}`;
+            document.getElementById('btnAddRow').innerHTML = `➕ ${getI18n('ui_tier_add_row') || '新增級別'}`;
+            document.getElementById('btnReset').innerHTML = `🗑️ ${getI18n('ui_tier_reset') || '重置所有'}`;
+            document.getElementById('btnExport').innerHTML = `📸 ${getI18n('ui_tier_export') || '輸出圖片'}`;
+            document.getElementById('poolTitle').innerText = `👥 ${getI18n('ui_tier_pool_title') || '角色池 (拖曳至上方排行榜)'}`;
+            
+            const titleInput = document.getElementById('tierTitle');
+            if (titleInput.value === '我的最愛排行榜') {
+                titleInput.value = getI18n('ui_tier_default_title') || '我的最愛排行榜';
+            }
+        }
         // 🌟 新增：處理性格區域的開合
         function togglePoolGroup(id, btnId) {
             const group = document.getElementById(id);
@@ -323,14 +358,14 @@
             }, 0);
         }
 
-        // 🌟 4. 生成精美的角色 Icon (與 spine_viewer 完全一致)
+        // 🌟 修改：產生角色圖示 (加上了 css classes 用於放大判斷)
         function createCharIcon(charData, isNPC, fallbackBorder) {
             const el = document.createElement('div');
             let charName = isNPC ? charData : charData.name;
             
-            // 🌟 記錄角色的唯一 ID
             el.setAttribute('data-char-id', charName);
-            el.className = "cursor-grab active:cursor-grabbing w-12 sm:w-14 flex flex-col items-center gap-0.5 group relative transition-all duration-300";
+            // 外層容器不寫死寬度，由內部決定
+            el.className = "cursor-grab active:cursor-grabbing flex flex-col items-center gap-0.5 group relative transition-all duration-300";
             
             let spineName = isNPC ? NPC_SPINE[charName] : (typeof SPINE_MAP !== 'undefined' && SPINE_MAP[charName] ? SPINE_MAP[charName] : charName);
             let displayName = getI18n(charName).replace('(NPC)', '').trim();
@@ -347,32 +382,33 @@
             if (isNPC) {
                 const iconClass = NPC_ICON[charName];
                 innerHtml = `
-                    <div class="absolute inset-0 flex items-center justify-center opacity-80"><div class="sprite-base sprite-common ${raceSprite} shrink-0 scale-[0.6]"></div></div>
+                    <div class="absolute inset-0 flex items-center justify-center opacity-80"><div class="sprite-base sprite-common ${raceSprite} shrink-0 scale-[0.6] race-bg transition-transform"></div></div>
                     <div class="w-full h-full bg-white/20 dark:bg-black/20 backdrop-blur-[1px] absolute inset-0"></div>
-                    <div class="sprite-NPC ${iconClass} shrink-0 scale-[0.38] relative z-10"></div>
+                    <div class="sprite-NPC ${iconClass} shrink-0 scale-[0.38] npc-sprite relative z-10 transition-transform"></div>
                 `;
             } else {
                 const charSpriteBase = CHAR_SPRITE_MAP[charData.personality] || "sprite-char-innocence";
                 const charSpriteClass = `sprite-${spineName}`;
                 innerHtml = `
-                    <div class="absolute inset-0 flex items-center justify-center opacity-80"><div class="sprite-base sprite-common ${raceSprite} shrink-0 scale-[0.6]"></div></div>
+                    <div class="absolute inset-0 flex items-center justify-center opacity-80"><div class="sprite-base sprite-common ${raceSprite} shrink-0 scale-[0.6] race-bg transition-transform"></div></div>
                     <div class="w-full h-full bg-white/20 dark:bg-black/20 backdrop-blur-[1px] absolute inset-0"></div>
-                    <div class="sprite-base ${charSpriteBase} ${charSpriteClass} shrink-0 scale-[0.35] relative z-10"></div>
+                    <div class="sprite-base ${charSpriteBase} ${charSpriteClass} shrink-0 scale-[0.35] char-sprite relative z-10 transition-transform"></div>
                 `;
             }
 
-            // 🌟 修復交叉置中：加入 flex、leading-none 以及 pb-[1px] 微調視覺中心
             const removeBtn = `
-                <button onclick="returnToPool(this, '${charName}')" class="remove-btn absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center shadow shadow-black/50 text-[10px] font-black leading-none pb-[2px] hover:bg-red-600 hover:scale-110 transition z-50 pointer-events-auto">
+                <button onclick="returnToPool(this, '${charName}')" class="remove-btn absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center shadow shadow-black/50 text-[10px] font-black leading-none pb-[1px] hover:bg-red-600 hover:scale-110 transition z-50 pointer-events-auto">
                     ✕
                 </button>
             `;
 
             el.innerHTML = `
-                <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl border-2 ${borderClass} overflow-hidden shadow-sm hover:shadow-md transition-all relative flex items-center justify-center pointer-events-none">
+                <!-- 🌟 加上了 char-icon-box，讓 CSS 能夠抓到並在 Rank 區放大 -->
+                <div class="char-icon-box w-12 h-12 sm:w-14 sm:h-14 rounded-xl border-2 ${borderClass} overflow-hidden shadow-sm hover:shadow-md transition-all relative flex items-center justify-center pointer-events-none">
                     ${innerHtml}
                 </div>
-                <span class="text-[9px] sm:text-[10px] font-bold text-gray-500 text-center w-full truncate leading-tight pointer-events-none">${displayName}</span>
+                <!-- 🌟 加上了 char-name，讓 CSS 能夠抓到並在 Rank 區隱藏 -->
+                <span class="char-name text-[9px] sm:text-[10px] font-bold text-gray-500 text-center w-full truncate leading-tight pointer-events-none mt-0.5">${displayName}</span>
                 ${removeBtn}
             `;
 
@@ -399,13 +435,12 @@
             return key; 
         }
 
-        // 🌟 5. 重置所有 (將角色丟回池子，恢復預設層級)
+        // 修改原本的 resetBoard 讓它支援翻譯提示
         function resetBoard() {
-            if(confirm("確定要重置整個排行榜並將所有角色放回角色池嗎？")) {
-                // 🌟 核心修復：重置前必須先銷毀所有舊的拖曳實例，避免衝突
+            const confirmMsg = getI18n('ui_tier_reset_confirm') || "確定要重置整個排行榜並將所有角色放回角色池嗎？";
+            if(confirm(confirmMsg)) {
                 sortableInstances.forEach(inst => inst.destroy());
                 sortableInstances = [];
-                
                 initTiers();
                 initCharacterPool();
             }
