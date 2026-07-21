@@ -183,16 +183,13 @@
                 const dropzone = document.getElementById(rowId);
                 const instance = new Sortable(dropzone, {
                     group: { name: 'shared', pull: true, put: true },
-                    animation: 200,
+                    animation: 150,
                     ghostClass: 'opacity-30',
                     dragClass: 'scale-105',
-                    forceFallback: true,
-                    fallbackOnBody: true,
-                    fallbackTolerance: 3,
-                    emptyInsertThreshold: 30, // 🌟 擴大空區塊的感應範圍，非常重要！讓你更容易放進去
+                    emptyInsertThreshold: 50, // 🌟 大幅擴大空區塊的感應判定範圍
                     delay: 150,
                     delayOnTouchOnly: true,
-                    filter: '.remove-btn'     // 點擊 X 按鈕時不會觸發拖曳
+                    filter: '.remove-btn'
                 });
                 sortableInstances.push(instance);
             }, 0);
@@ -247,31 +244,40 @@
             section.appendChild(dropzone);
             container.appendChild(section);
 
-            // 加入 Sortable
+            // 加入 Sortable (支援灰階留底功能)
             setTimeout(() => {
                 const instance = new Sortable(document.getElementById(dropzoneId), {
-                    group: { name: 'shared', pull: true, put: false }, // 🌟 put: false：禁止玩家把角色拖回來！
-                    animation: 200,
+                    group: { name: 'shared', pull: 'clone', put: false }, // 🌟 pull: 'clone' 代表拖曳時會複製一個出去
+                    animation: 150,
                     ghostClass: 'opacity-30',
                     dragClass: 'scale-105',
-                    forceFallback: true,
-                    fallbackOnBody: true,
-                    fallbackTolerance: 3,
                     delay: 150,
                     delayOnTouchOnly: true,
-                    sort: false
+                    sort: false,
+                    onEnd: function(evt) {
+                        if (evt.to !== evt.from) {
+                            // 🌟 拖曳成功放入 Rank 區
+                            const charId = evt.item.getAttribute('data-char-id');
+                            // evt.clone 是留在池子裡的那一個本體，加上灰階與無法點擊的 CSS
+                            evt.clone.classList.add('grayscale', 'opacity-40', 'pointer-events-none');
+                            // 給他一個專屬 ID，方便打 ✕ 的時候找回他
+                            evt.clone.id = 'pool_orig_' + charId;
+                        }
+                    }
                 });
                 sortableInstances.push(instance);
             }, 0);
         }
 
         // 🌟 4. 生成精美的角色 Icon (與 spine_viewer 完全一致)
-        // 🌟 傳入 originPoolId 紀錄角色的家
-        function createCharIcon(charData, isNPC, fallbackBorder, originPoolId) {
+        function createCharIcon(charData, isNPC, fallbackBorder) {
             const el = document.createElement('div');
-            el.className = "cursor-grab active:cursor-grabbing w-12 sm:w-14 flex flex-col items-center gap-0.5 group relative";
-            
             let charName = isNPC ? charData : charData.name;
+            
+            // 🌟 記錄角色的唯一 ID
+            el.setAttribute('data-char-id', charName);
+            el.className = "cursor-grab active:cursor-grabbing w-12 sm:w-14 flex flex-col items-center gap-0.5 group relative transition-all duration-300";
+            
             let spineName = isNPC ? NPC_SPINE[charName] : (typeof SPINE_MAP !== 'undefined' && SPINE_MAP[charName] ? SPINE_MAP[charName] : charName);
             let displayName = getI18n(charName).replace('(NPC)', '').trim();
             
@@ -301,9 +307,9 @@
                 `;
             }
 
-            // 🌟 建立紅色叉叉按鈕
+            // 🌟 點擊 X 時，呼叫 returnToPool 並傳入這個角色的專屬 ID (charName)
             const removeBtn = `
-                <button onclick="returnToPool(this, '${originPoolId}')" class="remove-btn absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 text-white rounded-full items-center justify-center shadow shadow-black/50 text-[10px] font-black hover:bg-red-600 hover:scale-110 transition z-50 pointer-events-auto">
+                <button onclick="returnToPool(this, '${charName}')" class="remove-btn absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 text-white rounded-full items-center justify-center shadow shadow-black/50 text-[10px] font-black hover:bg-red-600 hover:scale-110 transition z-50 pointer-events-auto">
                     ✕
                 </button>
             `;
@@ -319,15 +325,16 @@
             return el;
         }
 
-        // 🌟 新增：將角色送回家
-        function returnToPool(btnEl, poolId) {
-            // 取得整個角色 Icon 的 DOM
-            const charEl = btnEl.parentElement;
-            const targetPool = document.getElementById(poolId);
+        // 🌟 新增：點擊紅色 ✕ 將角色從 Rank 區刪除，並解鎖下方池子的原版
+        function returnToPool(btnEl, charId) {
+            // 1. 直接移除 Rank 區域裡的這個角色 Icon
+            btnEl.parentElement.remove();
             
-            // 將角色移回原本的池子
-            if (targetPool) {
-                targetPool.appendChild(charEl);
+            // 2. 找回池子裡的灰階本體，並恢復色彩與點擊能力
+            const origEl = document.getElementById('pool_orig_' + charId);
+            if (origEl) {
+                origEl.classList.remove('grayscale', 'opacity-40', 'pointer-events-none');
+                origEl.removeAttribute('id'); // 清除 ID，讓他可以再次被拖曳
             }
         }
         // 翻譯輔助函數
