@@ -639,7 +639,8 @@ const SPINE_BACKGROUNDS = {
 "幽靈":"https://i.postimg.cc/ygSTzvP0/Gacha-Pattern-Bg-Ghost.png",
 "???":"https://i.postimg.cc/kR3vMK1D/Gacha-Pattern-Bg-Mystic.png",
 "魔靈":"https://i.postimg.cc/BP9BZHYb/Gacha-Pattern-Bg-Spirit.png",
-"魔女":"https://i.postimg.cc/zHZFDKtL/Gacha-Pattern-Bg-Witch.png"
+"魔女":"https://i.postimg.cc/zHZFDKtL/Gacha-Pattern-Bg-Witch.png",
+"NPC":"https://i.postimg.cc/q703FkG3/Gacha-Characterpattern.png"
 }; 
 const ICON_MAP = {
     "personality_天真": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/personality%2FPickUpPersonality_Naive.webp?alt=media&token=5439c0fb-4c8e-4097-a868-5534180db07f", "personality_活潑": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/personality%2FPickUpPersonality_Jolly.webp?alt=media&token=701ad789-557c-4de7-ac4d-fc42e6b82cfb", "personality_冷靜": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/personality%2FPickUpPersonality_Cool.webp?alt=media&token=d93be2cb-d36b-4923-badd-5c16557cb844", "personality_狂亂": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/personality%2FPickUpPersonality_Mad.webp?alt=media&token=47f62ae9-38a3-489d-92fc-f034b6249cbe", "personality_憂鬱": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/personality%2FPickUpPersonality_Gloomy.webp?alt=media&token=e22b91ef-4364-4055-986b-bad568c484c2",
