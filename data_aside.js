@@ -429,7 +429,7 @@ const ASIDE_DATA = {
     },
     "Rude": { 
         asideIcon: "", 
-        totalName: { zh: "", ja: "", en: "" }, 
+        totalName: { zh: "紅寶石啞鈴", ja: "ルビーのダンベル", en: "Ruby Dumbbell" }, 
         stars: {
             1: { 
                 icon: "", 
