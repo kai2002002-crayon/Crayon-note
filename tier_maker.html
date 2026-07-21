@@ -56,6 +56,10 @@
         .tier-dropzone[id^="tier_"] .remove-btn { display: flex !important; }
         /* 截圖時強制隱藏移除按鈕 */
         .exporting .remove-btn { display: none !important; }
+
+        /* 開合動畫設定 */
+        .collapsible-content { transition: max-height 0.3s ease-out, opacity 0.3s ease-out; overflow: hidden; }
+        .collapsed { max-height: 0; opacity: 0; margin-top: 0 !important; overflow: hidden; padding-top: 0; padding-bottom: 0; border: none; }
     </style>
 </head>
 <body class="p-2 sm:p-6 bg-[#fcf8f2] dark:bg-slate-900 text-gray-800 dark:text-gray-200 min-h-screen transition-colors duration-300">
@@ -143,7 +147,22 @@
             initTiers();
             initCharacterPool();
         };
-
+        // 🌟 新增：處理性格區域的開合
+        function togglePoolGroup(id, btnId) {
+            const group = document.getElementById(id);
+            const btn = document.getElementById(btnId);
+            if (group.classList.contains('collapsed')) {
+                group.classList.remove('collapsed');
+                group.style.maxHeight = '2000px';
+                group.style.opacity = '1';
+                btn.innerHTML = btn.innerHTML.replace('🔽', '🔼');
+            } else {
+                group.classList.add('collapsed');
+                group.style.maxHeight = '0px';
+                group.style.opacity = '0';
+                btn.innerHTML = btn.innerHTML.replace('🔼', '🔽');
+            }
+        }
         // 🌟 2. 初始化排行榜列
         function initTiers() {
             const container = document.getElementById('tierContainer');
@@ -188,8 +207,9 @@
                     animation: 150,
                     ghostClass: 'opacity-30',
                     dragClass: 'scale-105',
-                    emptyInsertThreshold: 50,
-                    forceFallback: true,      // 🌟 強制使用 JS 拖曳，極大提升手機與網頁滑順度
+                    emptyInsertThreshold: 15, // 🌟 從 50 降為 15，減少誤吸附
+                    swapThreshold: 0.65,      // 🌟 新增：滑鼠要進入目標區域 65% 的深度才會判定移動，防止邊緣過度靈敏
+                    forceFallback: true,
                     fallbackOnBody: true,
                     fallbackTolerance: 3,
                     delay: 150,
@@ -232,9 +252,28 @@
             const pColors = personalityColors[title] || "border-gray-400 text-gray-500";
             const borderClass = pColors.split(' ')[0];
             
-            section.innerHTML = `<h3 class="text-xs sm:text-sm font-black border-l-4 ${borderClass} pl-2 mb-2 ml-1 text-gray-700 dark:text-gray-300">${title}</h3>`;
-            
+            // 產生專屬 ID
+            const groupId = 'pool_group_' + (isNPC ? 'NPC' : title);
+            const btnId = 'pool_btn_' + (isNPC ? 'NPC' : title);
             const dropzoneId = 'pool_' + (isNPC ? 'NPC' : title);
+            
+            // 🌟 建立可點擊的開合標題區塊
+            const header = document.createElement('div');
+            header.className = "flex justify-between items-center cursor-pointer hover:bg-slate-200/50 dark:hover:bg-slate-700/50 p-1.5 rounded-lg transition mb-1";
+            header.onclick = () => togglePoolGroup(groupId, btnId);
+            
+            header.innerHTML = `
+                <h3 class="text-xs sm:text-sm font-black border-l-4 ${borderClass} pl-2 ml-1 text-gray-700 dark:text-gray-300">${title}</h3>
+                <span id="${btnId}" class="text-xs text-gray-400">🔼</span>
+            `;
+            
+            // 🌟 將 dropzone 包在一個負責開合的容器內
+            const wrapper = document.createElement('div');
+            wrapper.id = groupId;
+            wrapper.className = "collapsible-content";
+            wrapper.style.maxHeight = "2000px";
+            wrapper.style.opacity = "1";
+
             const dropzone = document.createElement('div');
             dropzone.id = dropzoneId;
             dropzone.className = "tier-dropzone flex flex-wrap gap-2 p-1 min-h-[60px]";
@@ -244,13 +283,16 @@
                 dropzone.appendChild(charEl);
             });
 
-            section.appendChild(dropzone);
+            // 組裝 DOM
+            wrapper.appendChild(dropzone);
+            section.appendChild(header);
+            section.appendChild(wrapper);
             container.appendChild(section);
 
-            // 加入 Sortable (支援灰階留底，以及丟回來的自動歸位)
+            // 加入 Sortable
             setTimeout(() => {
                 const instance = new Sortable(document.getElementById(dropzoneId), {
-                    group: { name: 'shared', pull: 'clone', put: true }, // 🌟 允許玩家將角色丟回池子區
+                    group: { name: 'shared', pull: 'clone', put: true }, 
                     animation: 150,
                     ghostClass: 'opacity-30',
                     dragClass: 'scale-105',
@@ -259,9 +301,8 @@
                     fallbackTolerance: 3,
                     delay: 150,
                     delayOnTouchOnly: true,
-                    sort: false, // 池子內不允許亂排順序
+                    sort: false, 
                     onEnd: function(evt) {
-                        // 🌟 拖曳出池子並成功放入 Rank 區
                         if (evt.to !== evt.from && evt.to.id.startsWith('tier_')) {
                             const charId = evt.item.getAttribute('data-char-id');
                             evt.clone.classList.add('grayscale', 'opacity-40', 'pointer-events-none');
@@ -269,13 +310,8 @@
                         }
                     },
                     onAdd: function(evt) {
-                        // 🌟 玩家把角色從 Rank 區拖回「任何一個」性格池區
                         const charId = evt.item.getAttribute('data-char-id');
-                        
-                        // 1. 直接把玩家拖過來的這個圖示刪掉 (不需要留著)
                         evt.item.remove();
-                        
-                        // 2. 靠著專屬 ID，直接找到他原本的家裡那隻「灰階本體」，把顏色亮回來！
                         const origEl = document.getElementById('pool_orig_' + charId);
                         if (origEl) {
                             origEl.classList.remove('grayscale', 'opacity-40', 'pointer-events-none');
