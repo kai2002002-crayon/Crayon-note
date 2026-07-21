@@ -76,10 +76,18 @@
             }
         }
         
-        /* 3. 同步放大內部的 Sprite 圖片 (覆寫 Tailwind 的 inline scale) */
-        .tier-dropzone[id^="tier_"] .char-sprite { transform: scale(0.75) !important; }
-        .tier-dropzone[id^="tier_"] .npc-sprite { transform: scale(0.75) !important; }
-        .tier-dropzone[id^="tier_"] .race-bg { transform: scale(0.9) !important; }
+        /* 🌟 將 Rank 區域內的圖示與角色全面放大塞滿 */
+.tier-dropzone[id^="tier_"] .race-bg { 
+    transform: scale(1.0) !important; /* 底圖放大到 1.0 */
+}
+.tier-dropzone[id^="tier_"] .char-sprite,
+.tier-dropzone[id^="tier_"] .sprite-base.z-10 { 
+    transform: scale(0.9) !important; /* 一般角色圖放大到 0.9 (可依視覺效果改 0.95 或 1.0) */
+}
+.tier-dropzone[id^="tier_"] .npc-sprite,
+.tier-dropzone[id^="tier_"] .sprite-NPC { 
+    transform: scale(0.9) !important; /* NPC角色圖放大到 0.9 */
+}
     </style>
 </head>
 <body class="p-2 sm:p-6 bg-[#fcf8f2] dark:bg-slate-900 text-gray-800 dark:text-gray-200 min-h-screen transition-colors duration-300">
