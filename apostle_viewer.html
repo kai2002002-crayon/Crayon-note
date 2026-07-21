@@ -492,7 +492,7 @@
                     btn.innerHTML = `
                         <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl border-2 border-gray-400 overflow-hidden shadow-sm group-hover:shadow-md transition-all relative flex items-center justify-center">
                             <div class="absolute inset-0 flex items-center justify-center opacity-80">
-                                <div class="sprite-base sprite-common sprite-Bg_Unknown shrink-0 scale-[0.6]"></div>
+                            <div class="sprite-base sprite-common sprite-Bg_NPC shrink-0 scale-[0.6]"></div>
                             </div>
                             <div class="w-full h-full bg-white/20 dark:bg-black/20 backdrop-blur-[1px] absolute inset-0"></div>
                             
@@ -561,7 +561,13 @@
             function applyRaceBackground(charName) {
                 const container = document.getElementById('spineCanvasContainer');
                 const char = INITIAL_DATA.find(c => c.name === charName);
-                if (char && typeof SPINE_BACKGROUNDS !== 'undefined' && SPINE_BACKGROUNDS[char.race]) {
+                const isNPC = typeof NPC_LIST !== 'undefined' && NPC_LIST.includes(charName);
+                
+                if (isNPC) {
+                    // 🌟 NPC 專屬動態背景圖
+                    container.style.backgroundImage = `url('https://i.postimg.cc/q703FkG3/Gacha-Characterpattern.png')`;
+                    container.classList.add('animated-bg');
+                } else if (char && typeof SPINE_BACKGROUNDS !== 'undefined' && SPINE_BACKGROUNDS[char.race]) {
                     container.style.backgroundImage = `url('${SPINE_BACKGROUNDS[char.race]}')`;
                     container.classList.add('animated-bg');
                 } else {
@@ -637,11 +643,13 @@
                 let raceKey = charObj.race; if (raceKey === "???") raceKey = "unknown";
                 const raceSprite = SPRITE_CLASS_MAP[`race_${raceKey}`] || "sprite-Bg_Unknown";
                 
-                // 動態更換左上角頭像內容
                 if (isNPC) {
                     const iconClass = NPC_ICON[charObj.name];
                     iconEl.innerHTML = `
-                        <div class="absolute inset-0 flex items-center justify-center opacity-80"><div class="sprite-base sprite-common ${raceSprite} shrink-0 scale-[0.45]"></div></div>
+                        <div class="absolute inset-0 flex items-center justify-center opacity-80">
+                            <!-- 🌟 換成專屬 NPC 背景 sprite-Bg_NPC -->
+                            <div class="sprite-base sprite-common sprite-Bg_NPC shrink-0 scale-[0.45]"></div>
+                        </div>
                         <div class="w-full h-full bg-white/20 dark:bg-black/20 backdrop-blur-[1px] absolute inset-0"></div>
                         <div class="sprite-NPC ${iconClass} shrink-0 scale-[0.35] sm:scale-[0.45] relative z-10"></div>
                     `;
