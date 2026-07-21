@@ -64,6 +64,7 @@ const LANG_DICT = {
         alert_comment_too_long: "評價內容太長囉，請縮減至 500 字以內！", alert_comment_failed: "留言失敗，請稍後再試！", error_load_comment: "讀取留言失敗，請確認資料庫權限設定。",
 		ui_title: "坨坨動態展示器", ui_back: "⬅️ 返回", ui_select_char: "👥 選擇坨坨", ui_show_all: "顯示全部", ui_hide_all: "隱藏全部", ui_please_select: "請先選擇坨坨", ui_camera: "🔄 重置", ui_waiting: "等待載入...", ui_mode_lobby: "🔄 模式: 大廳", ui_mode_battle: "⚔️ 模式: 戰鬥", ui_ar_open: "📷 開啟AR", ui_ar_close: "❌ 關閉AR", ui_ar_panel: "📷 相機面板", ui_ar_flip: "🔄 翻轉鏡頭", ui_ar_capture: "📸 拍照儲存", ui_costume: "服裝", ui_default_costume: "預設服裝", ui_default_model: "預設模型", ui_select_anim: "選擇動作", ui_slots: "🧩 外觀插槽", ui_show_slots: "全顯", ui_hide_slots: "全隱", ui_loading_data: "讀取資料中...",
 		gacha_simulator: "嘟嘟臉角色招募模擬器", gacha_select_pool: "📍 選擇招募池", gacha_personality_hint: "🔮 指定性格：", gacha_1_pull: "1次招募", gacha_10_pull: "10次招募", gacha_waiting: "等待招募中...", gacha_history: "📜 招募紀錄", gacha_rate_up: "🎯 特選招募", gacha_normal: "🌟 普通招募", gacha_personality_pool: "🔮 性格選擇招募", gacha_result_title: "🎉 招募結果 🎉", gacha_prev_page: "上一頁", gacha_next_page: "下一頁", gacha_page: "第 {current} / {total} 頁", gacha_unknown_time: "未知時間", gacha_unknown_pool: "未知招募",
+		ui_tier_title: "排行榜生成器", ui_tier_add_row: "新增級別", ui_tier_reset: "全部重置", ui_tier_export: "輸出圖片", ui_tier_pool_title: "選擇角色 (拖曳至上方排行榜)", ui_tier_default_title: "我的最愛排行榜", ui_tier_reset_confirm: "確定要重置整個排行榜並將所有角色放回角色池嗎？", ui_tier_export_error: "匯出圖片失敗",
     },
     "ja": {
         app_title: "トリッカル特級クレヨンノート", app_subtitle: "教主が毎日特級クレヨンを受け取れますように", stats_title: "📊 統計とボーナス情報",
