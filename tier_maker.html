@@ -49,6 +49,12 @@
         }
         input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
         input[type="color"]::-webkit-color-swatch { border: none; border-radius: 50%; border: 2px solid rgba(255,255,255,0.3); }
+
+        /* 隱藏/顯示移除按鈕：在角色池裡隱藏，在 Rank 區塊裡顯示 */
+        .tier-dropzone[id^="pool_"] .remove-btn { display: none !important; }
+        .tier-dropzone[id^="tier_"] .remove-btn { display: flex !important; }
+        /* 截圖時強制隱藏移除按鈕 */
+        .exporting .remove-btn { display: none !important; }
     </style>
 </head>
 <body class="p-2 sm:p-6 bg-[#fcf8f2] dark:bg-slate-900 text-gray-800 dark:text-gray-200 min-h-screen transition-colors duration-300">
