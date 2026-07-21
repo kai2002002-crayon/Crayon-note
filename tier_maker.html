@@ -153,7 +153,8 @@
 
         function createTierRow(labelText = "New", color = "#8b5cf6") {
             const container = document.getElementById('tierContainer');
-            const rowId = 'tier_' + Date.now();
+            // 🌟 核心修復：加入 Math.random() 確保同時生成的 Row 不會撞名
+            const rowId = 'tier_' + Date.now() + '_' + Math.floor(Math.random() * 10000);
             
             const row = document.createElement('div');
             row.className = "flex bg-slate-800 border-b border-slate-950 min-h-[90px] relative group";
@@ -187,7 +188,10 @@
                     animation: 150,
                     ghostClass: 'opacity-30',
                     dragClass: 'scale-105',
-                    emptyInsertThreshold: 50, // 🌟 大幅擴大空區塊的感應判定範圍
+                    emptyInsertThreshold: 50,
+                    forceFallback: true,      // 🌟 強制使用 JS 拖曳，極大提升手機與網頁滑順度
+                    fallbackOnBody: true,
+                    fallbackTolerance: 3,
                     delay: 150,
                     delayOnTouchOnly: true,
                     filter: '.remove-btn'
@@ -230,39 +234,52 @@
             
             section.innerHTML = `<h3 class="text-xs sm:text-sm font-black border-l-4 ${borderClass} pl-2 mb-2 ml-1 text-gray-700 dark:text-gray-300">${title}</h3>`;
             
-            // 🌟 確保 ID 唯一
             const dropzoneId = 'pool_' + (isNPC ? 'NPC' : title);
             const dropzone = document.createElement('div');
             dropzone.id = dropzoneId;
             dropzone.className = "tier-dropzone flex flex-wrap gap-2 p-1 min-h-[60px]";
             
             charList.forEach(char => {
-                // 將 dropzoneId 傳給 Icon，讓它知道自己的「家」在哪裡
-                const charEl = createCharIcon(char, isNPC, borderClass, dropzoneId);
+                const charEl = createCharIcon(char, isNPC, borderClass);
                 dropzone.appendChild(charEl);
             });
 
             section.appendChild(dropzone);
             container.appendChild(section);
 
-            // 加入 Sortable (支援灰階留底功能)
+            // 加入 Sortable (支援灰階留底，以及丟回來的自動歸位)
             setTimeout(() => {
                 const instance = new Sortable(document.getElementById(dropzoneId), {
-                    group: { name: 'shared', pull: 'clone', put: false }, // 🌟 pull: 'clone' 代表拖曳時會複製一個出去
+                    group: { name: 'shared', pull: 'clone', put: true }, // 🌟 允許玩家將角色丟回池子區
                     animation: 150,
                     ghostClass: 'opacity-30',
                     dragClass: 'scale-105',
+                    forceFallback: true,
+                    fallbackOnBody: true,
+                    fallbackTolerance: 3,
                     delay: 150,
                     delayOnTouchOnly: true,
-                    sort: false,
+                    sort: false, // 池子內不允許亂排順序
                     onEnd: function(evt) {
-                        if (evt.to !== evt.from) {
-                            // 🌟 拖曳成功放入 Rank 區
+                        // 🌟 拖曳出池子並成功放入 Rank 區
+                        if (evt.to !== evt.from && evt.to.id.startsWith('tier_')) {
                             const charId = evt.item.getAttribute('data-char-id');
-                            // evt.clone 是留在池子裡的那一個本體，加上灰階與無法點擊的 CSS
                             evt.clone.classList.add('grayscale', 'opacity-40', 'pointer-events-none');
-                            // 給他一個專屬 ID，方便打 ✕ 的時候找回他
                             evt.clone.id = 'pool_orig_' + charId;
+                        }
+                    },
+                    onAdd: function(evt) {
+                        // 🌟 玩家把角色從 Rank 區拖回「任何一個」性格池區
+                        const charId = evt.item.getAttribute('data-char-id');
+                        
+                        // 1. 直接把玩家拖過來的這個圖示刪掉 (不需要留著)
+                        evt.item.remove();
+                        
+                        // 2. 靠著專屬 ID，直接找到他原本的家裡那隻「灰階本體」，把顏色亮回來！
+                        const origEl = document.getElementById('pool_orig_' + charId);
+                        if (origEl) {
+                            origEl.classList.remove('grayscale', 'opacity-40', 'pointer-events-none');
+                            origEl.removeAttribute('id'); 
                         }
                     }
                 });
@@ -349,6 +366,10 @@
         // 🌟 5. 重置所有 (將角色丟回池子，恢復預設層級)
         function resetBoard() {
             if(confirm("確定要重置整個排行榜並將所有角色放回角色池嗎？")) {
+                // 🌟 核心修復：重置前必須先銷毀所有舊的拖曳實例，避免衝突
+                sortableInstances.forEach(inst => inst.destroy());
+                sortableInstances = [];
+                
                 initTiers();
                 initCharacterPool();
             }
