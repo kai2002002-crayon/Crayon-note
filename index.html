@@ -36,9 +36,6 @@
         <link rel="stylesheet" href="sprites.css">
         <link rel="stylesheet" href="char_sprites/char_sprites.css">
         <style>
-            /* =======================================
-            🌟 系統與佈局 CSS
-            ======================================= */
             .spine-loader-crayon {
             position: absolute;
             top: 50%; left: 50%;
@@ -64,7 +61,6 @@
             display: block !important; z-index: 105 !important; 
             pointer-events: none; overflow: visible !important; 
             }
-            /* 💥 受擊震動特效 */
             @keyframes shakeEffect {
             0%, 100% { transform: translateX(0); filter: brightness(1); }
             20%, 60% { transform: translateX(-15px) rotate(-2deg); filter: brightness(1.2) drop-shadow(0 0 10px rgba(255,0,0,0.6)); }
@@ -77,7 +73,6 @@
             40%, 80% { transform: translateX(25px) rotate(4deg) scale(1.05); filter: brightness(1.5); }
             }
             .shake-strong-anim { animation: shakeStrongEffect 0.5s ease-in-out; }
-            /* 🚀 效能優化 4：合併投擲物與爆破特效的共用 CSS 屬性 */
             .projectile-crayon, .burst-crayon {
             position: absolute;
             background: url('https://i.postimg.cc/qvjNxZzg/golden-crayon.png') no-repeat center center; 
@@ -120,7 +115,6 @@
             .google-login-btn { box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.15); transition: all 0.15s ease; }
             .google-login-btn:hover { box-shadow: 0 3px 6px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.12); background-color: #fcfcfc; }
             .unowned-avatar { opacity: 0.35; filter: grayscale(100%); }
-            /* 🌟 神秘剪影專用特效 */
             .silhouette-mode {
             filter: brightness(0) contrast(0) drop-shadow(0 0 3px rgba(0,0,0,0.4)) !important;
             opacity: 0.7;
@@ -170,7 +164,6 @@
             opacity: 0 !important; filter: drop-shadow(0 0 15px rgba(251, 191, 36, 1));
             }
             @keyframes crayonIdle { 0%, 100% { transform: translateY(0) rotate(-5deg); } 50% { transform: translateY(-10px) rotate(5deg); filter: drop-shadow(0 8px 6px rgba(0,0,0,0.2)); } }
-            /* 🌟 Pickup 閃閃發光特效 */
             @keyframes pickupGlow {
             0%, 100% { filter: drop-shadow(0 0 3px currentColor); transform: scale(1); }
             50% { filter: drop-shadow(0 0 8px currentColor); transform: scale(1.05); }
@@ -186,12 +179,12 @@
             pointer-events: none; z-index: 20; animation: starRunAround 3s linear infinite;
             }
             .card-artifact {
-            border-color: #00f0ff !important; /* 螢光藍 */
+            border-color: #00f0ff !important;
             color: #00f0ff !important;
             filter: drop-shadow(0 0 4px rgba(0, 240, 255, 0.8));
             }
             .card-rune {
-            border-color: #ff00ff !important; /* 螢光粉紅 */
+            border-color: #ff00ff !important;
             color: #ff00ff !important;
             filter: drop-shadow(0 0 4px rgba(255, 0, 255, 0.8));
             }
@@ -202,13 +195,11 @@
             75%  { top: calc(100% - 6px); left: -6px; transform: rotate(270deg) scale(1.3); }
             100% { top: -6px; left: -6px; transform: rotate(360deg) scale(0.9); }
             }
-            /* 🌟 Banner 輪播淡入特效 */
             @keyframes fadeInBanner { 
             0% { opacity: 0; transform: translateY(3px); } 
             100% { opacity: 1; transform: translateY(0); } 
             }
             .animate-banner-fade { animation: fadeInBanner 0.4s ease-out forwards; }
-            /* 🌈 外層：彩虹流動邊框容器 */
             .rainbow-wrapper {
             position: relative;
             padding: 2px;
@@ -237,16 +228,13 @@
             transform: scale(1.30);
             filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
             }
-            /* ------------------------------------------------------------
-            🌟 Banner 滑鼠移入自動展開特製 CSS (縱向展開版)
-            ------------------------------------------------------------ */
             #bannerDisplayArea {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             width: max-content; 
             max-width: 100%;
             }
             #bannerDisplayArea.banner-expanded {
-            position: relative; /* 確保 z-index 生效 */
+            position: relative;
             height: auto !important;
             min-height: 44px;
             display: flex !important; 
@@ -258,7 +246,7 @@
             background: rgba(255, 255, 255, 0.95);
             border-color: #fbbf24;
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-            z-index: 100 !important; /* 確保懸浮在最上層 */
+            z-index: 100 !important;
             }
             .dark #bannerDisplayArea.banner-expanded {
             background: rgba(31, 41, 55, 0.95);
@@ -300,7 +288,6 @@
             transform: translateX(-50%);
             z-index: 9999;
             display: none;
-            /* 調整大小為 20px */
             width: 20px;
             height: 20px;
             border-radius: 50%;
@@ -308,9 +295,8 @@
             color: white;
             border: none;
             cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* 陰影也跟著稍微縮小 */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             transition: transform 0.2s, background-color 0.3s;
-            /* 調整字體大小以適應小按鈕 */
             font-size: 10px; 
             display: flex;
             align-items: center;
@@ -318,7 +304,6 @@
             }
             #backToTop:hover { 
             background-color: #d97706; 
-            /* 保持置中並微微上浮 */
             transform: translateX(-50%) translateY(-5px); 
             }
         </style>
@@ -386,6 +371,12 @@
                         <div class="sprite-base sprite-common sprite-Album_Icon_Skin shrink-0 scale-[0.6] group-hover:scale-[0.7] drop-shadow-sm transition-transform origin-center"></div>
                     </div>
                     <span class="font-bold text-sm text-amber-900 dark:text-gray-200" data-lang-key="menu_viewer">前往動態展示器</span>
+                </a>
+                <a href="tier_maker.html" target="_blank" class="flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-gray-800 border border-amber-200 dark:border-gray-600 shadow-sm hover:bg-amber-50 dark:hover:bg-gray-700 transition group">
+                    <div class="w-10 h-10 flex items-center justify-center bg-amber-100 dark:bg-gray-700 rounded-lg shrink-0 overflow-hidden text-xl drop-shadow-sm group-hover:scale-110 transition-transform">
+                        👑
+                    </div>
+                    <span class="font-bold text-sm text-amber-900 dark:text-gray-200" data-lang-key="menu_tier_maker">前往排行榜生成器</span>
                 </a>
                 <button onclick="toggleAnimation()" class="hidden md:flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-gray-800 border border-amber-200 dark:border-gray-600 shadow-sm hover:bg-amber-50 dark:hover:bg-gray-700 transition group text-left w-full">
                     <div class="w-10 h-10 flex items-center justify-center bg-amber-100 dark:bg-gray-700 rounded-lg shrink-0 overflow-hidden">
@@ -508,13 +499,11 @@
                         <span data-lang-key="quick_action_title">⚡ 快捷操作</span> <span id="quickActionToggleIcon" class="text-[10px] ml-1 opacity-80">▶</span>
                         </span>
                         <div id="quickActionBody" class="hidden flex-col gap-2 flex-1 w-full">
-                            <!-- 全體角色 -->
                             <div class="flex flex-wrap items-center gap-1.5 w-full">
                                 <span class="text-[11px] text-gray-400 dark:text-gray-500 font-medium bg-gray-50 dark:bg-gray-700 px-1 rounded whitespace-nowrap mt-0.5" data-lang-key="quick_action_all_chars">全體角色:</span>
                                 <button onclick="toggleAllCharacters(true)" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-bold transition bg-green-500 text-white border-green-600 hover:bg-green-600 shadow-sm" data-lang-key="quick_action_own_all">一鍵全部擁有</button>
                                 <button onclick="toggleAllCharacters(false)" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-bold transition bg-gray-400 text-white border-gray-500 hover:bg-gray-500 shadow-sm" data-lang-key="quick_action_cancel_all">一鍵全部取消</button>
                             </div>
-                            <!-- 填滿蠟筆 -->
                             <div class="flex flex-wrap items-center gap-1.5 w-full">
                                 <span class="text-[11px] text-gray-400 dark:text-gray-500 font-medium bg-gray-50 dark:bg-gray-700 px-1 rounded whitespace-nowrap mt-0.5" data-lang-key="quick_action_fill_crayons">填滿蠟筆:</span>
                                 <button onclick="toggleAllGrids('all', true)" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-bold transition bg-amber-500 text-white border-amber-600 hover:bg-amber-600 shadow-sm" data-lang-key="quick_action_fill_all">填滿全層</button>
@@ -522,7 +511,6 @@
                                 <button onclick="toggleAllGrids(2, true)" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-bold transition bg-orange-100 text-orange-800 border-orange-300 hover:bg-orange-200 shadow-sm" data-lang-key="quick_action_layer_2">第二層</button>
                                 <button onclick="toggleAllGrids(3, true)" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-bold transition bg-red-100 text-red-800 border-red-300 hover:bg-red-200 shadow-sm" data-lang-key="quick_action_layer_3">第三層</button>
                             </div>
-                            <!-- 清空蠟筆 -->
                             <div class="flex flex-wrap items-center gap-1.5 w-full mt-1">
                                 <span class="text-[11px] text-gray-400 dark:text-gray-500 font-medium bg-gray-50 dark:bg-gray-700 px-1 rounded whitespace-nowrap mt-0.5" data-lang-key="quick_action_clear_crayons">清空蠟筆:</span>
                                 <button onclick="toggleAllGrids('all', false)" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-bold transition bg-gray-500 text-white border-gray-600 hover:bg-gray-600 shadow-sm" data-lang-key="quick_action_clear_all">清空全層</button>
@@ -584,7 +572,7 @@
                 <div class="flex flex-col gap-1 text-[11px] text-gray-500 dark:text-gray-400 opacity-80">
                     <p data-lang-key="footer_author">📝 記事本製作者: 冷笑話幽靈</p>
                     <p data-lang-key="footer_copyright">© 遊戲版權: EpidGames & Bilibili</p>
-                    <p data-lang-key="footer_lastupdate">最後更新日期：06/06/2026</p>
+                    <p data-lang-key="footer_lastupdate">最後更新日期：16/07/2026</p>
                 </div>
             </footer>
         </div>
@@ -595,7 +583,6 @@
             <button class="bg-black text-white w-10 h-10 rounded-full shadow-xl flex items-center justify-center font-bold text-sm">X</button>
         </div>
         <div id="rim-live-container"></div>
-        <!-- 🌟 路徑圖彈出視窗 (Tooltip 懸浮版) -->
         <div id="pathImageModal" class="fixed z-[4000] hidden opacity-0 transition-opacity duration-200 pointer-events-none" style="top: 0; left: 0;">
             <div class="relative bg-[#fcf8f2] dark:bg-gray-800 rounded-xl p-1.5 shadow-[0_10px_40px_rgba(0,0,0,0.3)] border-2 border-amber-300 dark:border-gray-600 pointer-events-auto">
                 <button class="absolute -top-3 -right-3 bg-red-500 hover:bg-red-600 transition-colors text-white rounded-full w-6 h-6 font-bold text-xs border-2 border-white shadow-md flex items-center justify-center z-50" onclick="closePathImage()">X</button>
@@ -613,30 +600,20 @@
             </div>
         </div>
         <script>
-            // ------------------------------------------------------------
-            // 全域變數與常數宣告
-            // ------------------------------------------------------------
             let currentRunnerPlayer = null, currentBossPlayer = null, chaseLoopId = null;
             let noticeIconEl = null, noticeIconTimeout = null;
             let db = null, auth = null, currentUser = null;
             let activeCrayons = [];
             let crayonCollisionLoopId = null; 
-            
             let isBannerHovered = false; 
-            
-            // 🌟 新增：動畫開關設定 (預設改為 false 不顯示)
             let isAnimationEnabled = localStorage.getItem('trickcal_anim_enabled') === 'true';
             let spawnCrayonTimer = null;
-            
             const storageKey = 'trickcal_matrix_saved_states_iron_v26';
             let savedStates = {};
             try { savedStates = JSON.parse(localStorage.getItem(storageKey)) || {}; } catch(e) { savedStates = {}; }
-            
             let activeFilters = { personality: [], race: [], position: [], job: [], type: [], gridLayer: "all", gridType: [], gridStatus: "all", search: "", displayMode: "all" };
-            
             let isFilterOpen = true;
             let isStatsOpen = window.innerWidth >= 768;
-            
             const LAYER_RULES = { 1: { name: "🥇 第一層", crayon: 2, bonus: 3 }, 2: { name: "🥈 第二層", crayon: 4, bonus: 4 }, 3: { name: "🥉 第三層", crayon: 6, bonus: 5 } };
             const ATTR_PRIORITY = ["攻擊", "防禦", "血量", "爆擊", "爆抗"];
             const ATTR_MAP = { "攻擊": "attack", "防禦": "def", "血量": "hp", "爆擊": "crit", "爆抗": "crit_res" };
@@ -650,10 +627,7 @@
             const btnActiveStyle = "whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-bold transition bg-amber-500 text-white border-amber-600 shadow-sm";
             const btnInactiveStyle = "whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-medium transition bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600";
             const btnDispActiveStyle = "whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-bold transition bg-blue-500 text-white border-blue-600 shadow-sm";
-            
-            // 🌟 CSS Sprite 屬性映射表
             const SPRITE_CLASS_MAP = {
-                // 種族與背景
                 race_龍族: "sprite-Race_Dragon", bg_龍族: "sprite-Bg_Dragon",
                 race_精靈: "sprite-Race_Elf", bg_精靈: "sprite-Bg_Elf",
                 race_妖精: "sprite-Race_Sprite", bg_妖精: "sprite-Bg_Sprite",
@@ -662,31 +636,20 @@
                 race_unknown: "sprite-Race_Unknown", bg_unknown: "sprite-Bg_Unknown",
                 race_魔靈: "sprite-Race_Elemental", bg_魔靈: "sprite-Bg_Elemental",
                 race_魔女: "sprite-Race_Witch", bg_魔女: "sprite-Bg_Witch",
-                
-                // 性格
                 personality_天真: "sprite-Personality_Innocence",
                 personality_冷靜: "sprite-Personality_Composed",
                 personality_狂亂: "sprite-Personality_Madness",
                 personality_活潑: "sprite-Personality_Vivacious",
                 personality_憂鬱: "sprite-Personality_Depressed",
-            
-                // 站位
                 position_前排: "sprite-Position_Front",
                 position_中排: "sprite-Position_Middle",
                 position_後排: "sprite-Position_Back",
-            
-                // 職業
                 job_輸出: "sprite-Job_DPS", job_肉盾: "sprite-Job_Tank", job_輔助: "sprite-Job_Support",
-            
-                // 攻擊類型
                 type_物理: "sprite-Type_Physic", type_魔法: "sprite-Type_Magic",
-            
-                // 金蠟筆屬性
                 boardon_攻擊: "sprite-boardon_ATK", boardon_防禦: "sprite-boardon_DEF",
                 boardon_血量: "sprite-boardon_HP", boardon_爆擊: "sprite-boardon_CRI",
                 boardon_爆抗: "sprite-boardon_RES"
             };
-            
             const CHAR_SPRITE_MAP = {
                 "冷靜": "sprite-char-composed",
                 "憂鬱": "sprite-char-depressed",
@@ -694,7 +657,6 @@
                 "狂亂": "sprite-char-madness",
                 "活潑": "sprite-char-vivacious"
             };
-            
             const ULT_SPRITE_MAP = {
                 "冷靜": "sprite-ult-composed",
                 "憂鬱": "sprite-ult-depressed",
@@ -703,9 +665,6 @@
                 "活潑": "sprite-ult-vivacious"
             };
             
-            // ------------------------------------------------------------
-            // 基本工具函式 (開關動畫、翻譯、側邊欄、主題、資料預載)
-            // ------------------------------------------------------------
             function toggleSidebar() {
                 const menu = document.getElementById('sidebarMenu');
                 const overlay = document.getElementById('sidebarOverlay');
@@ -737,31 +696,27 @@
                 isAnimationEnabled = !isAnimationEnabled;
                 localStorage.setItem('trickcal_anim_enabled', isAnimationEnabled);
                 updateAnimToggleUI();
-            
                 const area = document.getElementById('runnerArea');
                 if (isAnimationEnabled) {
-                    area.style.display = ''; // 恢復 CSS 控制 (hidden md:block)
+                    area.style.display = '';
                     initTopRunner();
                     checkCrayonCollision();
                     spawnCrayonOnTrack();
                 } else {
-                    area.style.display = 'none'; // 強制隱藏
-                    
+                    area.style.display = 'none';
                     if (chaseLoopId) cancelAnimationFrame(chaseLoopId);
                     if (crayonCollisionLoopId) cancelAnimationFrame(crayonCollisionLoopId);
                     if (spawnCrayonTimer) clearTimeout(spawnCrayonTimer);
-                    
                     activeCrayons.forEach(c => c.remove());
                     activeCrayons = [];
-                    
                     if (currentRunnerPlayer) { try { currentRunnerPlayer.dispose(); } catch(e){} currentRunnerPlayer = null; }
                     if (currentBossPlayer) { try { currentBossPlayer.dispose(); } catch(e){} currentBossPlayer = null; }
                     document.getElementById('topRunnerContainer').innerHTML = '';
                     document.getElementById('bossRunnerContainer').innerHTML = '';
                 }
             }
+            const preloadedSpines = new Set();
             
-            const preloadedSpines = new Set(); 
             function preloadSpineAssets(charName) {
                 if (preloadedSpines.has(charName)) return;
                 const spineKey = typeof SPINE_MAP !== 'undefined' ? SPINE_MAP[charName] : null; 
@@ -781,7 +736,6 @@
                 if (browserLang.includes('zh')) return 'zh-TW';
                 return 'en';
             }
-            
             window.currentLang = detectDefaultLanguage();
             document.getElementById('langSelect').value = window.currentLang;
             
@@ -798,49 +752,38 @@
                 window.currentLang = lang; localStorage.setItem('user_lang', lang);
                 document.documentElement.lang = lang === "ja" ? "ja" : "zh-TW"; 
                 const selectEl = document.getElementById('langSelect'); if (selectEl) selectEl.value = lang;
-                
-                // 🌟 更新頂部列顯示的當前語文文字
                 const langTextMap = { "zh-TW": "繁中", "ja": "日文", "en": "EN" };
                 const langTextEl = document.getElementById('currentLangText');
                 if (langTextEl) langTextEl.innerText = langTextMap[lang] || "繁中";
-            
                 const safeLang = (typeof LANG_DICT !== 'undefined' && LANG_DICT[lang]) ? lang : 'zh-TW';
                 const dict = typeof LANG_DICT !== 'undefined' ? LANG_DICT[safeLang] : {};
-                
                 const statusText = document.getElementById('authStatusText');
                 if (statusText) statusText.innerText = t("auth_online_title");
                 document.title = t('app_title') || dict.app_title || "嘟嘟臉金蠟筆記事本";
-                
                 document.querySelectorAll('[data-lang-key]').forEach(el => {
                     const key = el.getAttribute('data-lang-key');
                     if (dict[key]) el.innerText = dict[key];
                 });
-            
                 const searchInput = document.getElementById('searchInput');
                 if (searchInput) searchInput.placeholder = t('filter_search_placeholder') || dict.filter_search_placeholder || "搜尋坨坨...";
-            
                 const xLink = document.getElementById('dynamicXLink');
                 if (xLink) { xLink.href = dict.official_x_url || "https://x.com/trickcal_TW"; xLink.innerText = dict.x_label || "台港澳服官方X"; }
-            
                 if (typeof INITIAL_DATA !== 'undefined') { buildFilterPanel(); renderMatrix(); calculateStats(); }
                 if (typeof updateAuthButtonUI === 'function' && typeof currentUser !== 'undefined') updateAuthButtonUI(currentUser);
                 if (typeof renderPickupBanner === 'function') renderPickupBanner();
                 if (typeof renderCardBanner === 'function') renderCardBanner();
                 if (typeof updateEventBanner === 'function') updateEventBanner();
             }
-            
             let isDarkMode = localStorage.getItem('theme') === 'dark';
             if (isDarkMode) { document.documentElement.classList.add('dark'); } 
             else if (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) {
                 document.documentElement.classList.add('dark'); isDarkMode = true;
             }
-            
             function toggleDarkMode() {
                 document.documentElement.classList.toggle('dark');
                 isDarkMode = document.documentElement.classList.contains('dark');
                 localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
             }
-            
             window.onerror = function(message, source, lineno, colno, error) {
                 const banner = document.getElementById('errorBanner');
                 if (banner) {
@@ -850,82 +793,57 @@
                 return false;
             }
             
-            // ------------------------------------------------------------
-            // 顯示與關閉路徑圖的函數
-            // ------------------------------------------------------------
-            // ------------------------------------------------------------
-            // 顯示與關閉路徑圖的函數 (懸浮 Tooltip 版)
-            // ------------------------------------------------------------
             function showPathImage(race, version, layer, event) {
-            if (event) event.stopPropagation();
-            
-            if (!PATH_IMAGES || !PATH_IMAGES[race] || !PATH_IMAGES[race][version]) {
-            alert("目前尚無此版本的路徑圖資料！");
-            return;
-            }
+                if (event) event.stopPropagation();
+                if (!PATH_IMAGES || !PATH_IMAGES[race] || !PATH_IMAGES[race][version]) {
+                    alert("目前尚無此版本的路徑圖資料！");
+                    return;
+                }
             const url = PATH_IMAGES[race][version][layer];
             if (!url) {
-            alert("找不到該層數的圖片！");
-            return;
+                alert("找不到該層數的圖片！");
+                return;
             }
-            
             const modal = document.getElementById('pathImageModal');
             const img = document.getElementById('pathImageEl');
             const loader = document.getElementById('pathImageLoading');
-            
             img.classList.add('hidden');
             loader.classList.remove('hidden');
             img.src = url;
-            
-            // 智慧定位邏輯
             if (event) {
-            const rect = event.currentTarget.getBoundingClientRect();
-            let leftPos = rect.right + 15; // 預設顯示在按鈕右側
-            let topPos = rect.top;
-            
-            // 預設視窗向上生長，底部切齊按鈕
-            modal.style.transform = `translateY(calc(-100% + 20px))`;
-            
-            // 如果右側空間不足 (預估寬度 240px)，改顯示在左側
-            if (leftPos + 240 > window.innerWidth) {
-            leftPos = Math.max(10, rect.left - 240 - 15);
+                const rect = event.currentTarget.getBoundingClientRect();
+                let leftPos = rect.right + 15;
+                let topPos = rect.top;
+                modal.style.transform = `translateY(calc(-100% + 20px))`;
+                if (leftPos + 240 > window.innerWidth) {
+                    leftPos = Math.max(10, rect.left - 240 - 15);
+                }
+                if (rect.top - 200 < 0) {
+                    topPos = rect.bottom + 10;
+                    modal.style.transform = `translateY(0)`; 
+                }
+                modal.style.left = `${leftPos}px`;
+                modal.style.top = `${topPos}px`;
             }
-            
-            // 如果上方空間不足，改為向下展開
-            if (rect.top - 200 < 0) {
-            topPos = rect.bottom + 10;
-            modal.style.transform = `translateY(0)`; 
-            }
-            
-            modal.style.left = `${leftPos}px`;
-            modal.style.top = `${topPos}px`;
-            }
-            
-            modal.classList.remove('hidden');
-            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+                modal.classList.remove('hidden');
+                setTimeout(() => modal.classList.remove('opacity-0'), 10);
             }
             
             function closePathImage() {
-            const modal = document.getElementById('pathImageModal');
-            modal.classList.add('opacity-0');
-            setTimeout(() => {
-            modal.classList.add('hidden');
-            document.getElementById('pathImageEl').src = "";
-            }, 200);
+                const modal = document.getElementById('pathImageModal');
+                modal.classList.add('opacity-0');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    document.getElementById('pathImageEl').src = "";
+                }, 200);
             }
-            
-            // 新增：點擊畫面空白處自動關閉懸浮窗
             document.addEventListener('click', function(e) {
-            const modal = document.getElementById('pathImageModal');
-            // 判斷如果點擊的位置不是彈出窗內部，也不是觸發按鈕本身，就自動關閉
-            if (modal && !modal.classList.contains('hidden') && !modal.contains(e.target) && !e.target.closest('.path-btn')) {
-            closePathImage();
-            }
+                const modal = document.getElementById('pathImageModal');
+                if (modal && !modal.classList.contains('hidden') && !modal.contains(e.target) && !e.target.closest('.path-btn')) {
+                    closePathImage();
+                }
             });
             
-            // ------------------------------------------------------------
-            // 面板與矩陣渲染邏輯
-            // ------------------------------------------------------------
             function getActivePickupChars() {
                 if (typeof PICKUP_SCHEDULE === 'undefined') return [];
                 const now = new Date();
@@ -940,40 +858,25 @@
             function renderPickupBanner() {
                 const container = document.getElementById('pickupIconsContainer');
                 const activeChars = getActivePickupChars(); 
-            
                 if (!container || activeChars.length === 0) return;
-            
                 container.innerHTML = '';
                 const localRecruitTexts = { "zh-TW": "🎯 特選使者招募", "ja": "🎯 ピックアップ使徒ガチャ", "en": "🎯 Pick Up Apostles" };
                 const localTooltipTexts = { "zh-TW": "特選招募中：", "ja": "ピックアップ中：", "en": "Pickup Rate Up: " };
                 const titleEl = document.getElementById('pickupTitleText');
-                if (titleEl) titleEl.innerText = localRecruitTexts[window.currentLang] || localRecruitTexts["zh-TW"];
-            
+                if (titleEl) titleEl.innerText = localRecruitTexts[window.currentLang] || localRecruitTexts["zh-TW"];            
                 const personalityColors = { "天真": "border-green-400 text-green-400", "冷靜": "border-blue-400 text-blue-400", "狂亂": "border-red-400 text-red-400", "活潑": "border-yellow-400 text-yellow-400", "憂鬱": "border-purple-400 text-purple-400" };
-            
                         activeChars.forEach(charName => {
-            const charData = INITIAL_DATA.find(c => c.name === charName); if (!charData) return;
-            
-            const pColorClass = personalityColors[charData.personality] || "border-gray-400 text-gray-400";
-            const iconWrapper = document.createElement('div');
-            // 加入 overflow-hidden 確保圖示不會超出圓角邊框
-            iconWrapper.className = `w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 ${pColorClass} bg-white dark:bg-gray-800 flex items-center justify-center relative pickup-sparkle shrink-0 cursor-pointer transition-transform overflow-hidden`;
-        
-            const prefix = localTooltipTexts[window.currentLang] || localTooltipTexts["zh-TW"]; iconWrapper.title = `${prefix}${t(charName)}`;
-            iconWrapper.onclick = () => window.open(`char_detail.html?char=${encodeURIComponent(charName)}`, '_blank');
-            
-            // 🌟 取得角色的英文/Spine名稱 (對應 CSS 裡的名稱如 Alice, Butter 等)
-            const spineName = typeof SPINE_MAP !== 'undefined' && SPINE_MAP[charName] ? SPINE_MAP[charName] : charName;
-            
-            // 🌟 組合出 PassiveSkill 的 class 名稱
-            const passiveSkillClass = `sprite-Icon_PassiveSkill_${spineName}`;
-            
-            // 🌟 套用被動技能的雪碧圖，調整縮放以適應外框
-            iconWrapper.innerHTML = `<div class="${passiveSkillClass} shrink-0 scale-[0.4] sm:scale-[0.45] origin-center"></div>`;
-            
-            container.appendChild(iconWrapper);
-        });
-
+                            const charData = INITIAL_DATA.find(c => c.name === charName); if (!charData) return;
+                            const pColorClass = personalityColors[charData.personality] || "border-gray-400 text-gray-400";
+                            const iconWrapper = document.createElement('div');
+                            iconWrapper.className = `w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 ${pColorClass} bg-white dark:bg-gray-800 flex items-center justify-center relative pickup-sparkle shrink-0 cursor-pointer transition-transform overflow-hidden`;
+                            const prefix = localTooltipTexts[window.currentLang] || localTooltipTexts["zh-TW"]; iconWrapper.title = `${prefix}${t(charName)}`;
+                            iconWrapper.onclick = () => window.open(`char_detail.html?char=${encodeURIComponent(charName)}`, '_blank');
+                            const spineName = typeof SPINE_MAP !== 'undefined' && SPINE_MAP[charName] ? SPINE_MAP[charName] : charName;
+                            const passiveSkillClass = `sprite-Icon_PassiveSkill_${spineName}`;
+                            iconWrapper.innerHTML = `<div class="${passiveSkillClass} shrink-0 scale-[0.4] sm:scale-[0.45] origin-center"></div>`;
+                            container.appendChild(iconWrapper);
+                        });
             }
             
             function getActiveEvents() {
@@ -985,43 +888,33 @@
                     return now.getTime() >= startDate.getTime() && now.getTime() <= endDate.getTime();
                 });
             }
-            
             let currentEventIndex = 0;
             
             function updateEventBanner() {
                 const container = document.getElementById('eventBannersContainer');
                 const activeEvents = getActiveEvents();
                 if (!container) return;
-                
                 const titleEl = document.getElementById('eventTitleText');
                 if (titleEl) titleEl.innerText = t("event_title") || "🎪 今期活動";
-            
                 if (activeEvents.length === 0) {
                     container.innerHTML = '';
                     return;
                 }
-            
                 if (currentEventIndex >= activeEvents.length) currentEventIndex = 0;
-            
                 const langSuffix = { "zh-TW": "ZH", "ja": "JA", "en": "EN" }[window.currentLang] || "ZH";
-            
                 container.innerHTML = '';
-            
                 activeEvents.forEach((evt, idx) => {
                     const wrapper = document.createElement('div');
                     wrapper.className = "rainbow-wrapper h-7 sm:h-8 w-auto shrink-0 transition-all duration-300";
-                    
                     if (!isBannerHovered && idx !== currentEventIndex) {
                         wrapper.style.display = 'none';
                     } else {
                         wrapper.style.display = 'inline-block';
                     }
-                
                     const imgEl = document.createElement('img');
                     imgEl.src = `event/${evt.eventId}_${langSuffix}.png`;
                     imgEl.alt = evt.eventId;
                     imgEl.className = "rainbow-content";
-                
                     wrapper.appendChild(imgEl);
                     container.appendChild(wrapper);
                 });
@@ -1041,41 +934,33 @@
                 const container = document.getElementById('cardIconsContainer');
                 const activeCards = getActiveCards();
                 if (!container || activeCards.length === 0) return;
-            
                 container.innerHTML = '';
                 const localTexts = { "zh-TW": "🃏 特選卡片抽取", "ja": "🃏 ピックガチャ", "en": "🃏 Pick Up Card" };
                 const titleEl = document.getElementById('cardTitleText');
                 if (titleEl) titleEl.innerText = localTexts[window.currentLang] || localTexts["zh-TW"];
-            
                 activeCards.forEach(card => {
                     const borderClass = card.type === "Artifact" ? "card-artifact" : "card-rune";
                     const iconWrapper = document.createElement('div');
                     iconWrapper.className = `w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 bg-white dark:bg-gray-800 flex items-center justify-center relative pickup-sparkle shrink-0 transition-transform ${borderClass}`;
-                    
                     const iconUrl = `event/${card.id}.png`;
                     iconWrapper.innerHTML = `<img src="${iconUrl}" class="w-full h-full object-cover rounded-[5px]" alt="${card.id}" onerror="this.style.display='none'">`;
                     container.appendChild(iconWrapper);
                 });
             }
-            
             let bannerRotationTimer = null;
             let rotationSequence = [];
             let currentSequenceIndex = 0;
             
             function startBannerRotation() {
                 if (bannerRotationTimer) clearInterval(bannerRotationTimer);
-            
                 const hasPickup = getActivePickupChars().length > 0;
                 const hasEvent = getActiveEvents().length > 0;
                 const hasCard = getActiveCards().length > 0; 
-            
                 const displayArea = document.getElementById('bannerDisplayArea');
                 const pickupPanel = document.getElementById('pickupPanel');
                 const eventPanel = document.getElementById('eventPanel');
                 const cardPanel = document.getElementById('cardPanel'); 
-            
                 if (!displayArea || !pickupPanel || !eventPanel || !cardPanel) return;
-            
                 if (!hasPickup && !hasEvent && !hasCard) {
                     displayArea.style.display = 'grid';
                     const maintenanceMsg = t('maintenance_msg') !== 'maintenance_msg' ? t('maintenance_msg') : '🔧 維護更新中...';
@@ -1089,7 +974,6 @@
                     eventPanel.classList.remove('hidden');
                     cardPanel.classList.remove('hidden');
                 }
-            
                 rotationSequence = [];
                 if (hasPickup && hasEvent && hasCard) { rotationSequence = ['pickup', 'event', 'card', 'event']; } 
                 else if (hasPickup && hasEvent && !hasCard) { rotationSequence = ['pickup', 'event']; } 
@@ -1098,9 +982,7 @@
                 else if (hasPickup) { rotationSequence = ['pickup']; } 
                 else if (hasEvent)  { rotationSequence = ['event']; } 
                 else if (hasCard)   { rotationSequence = ['card']; }
-            
                 const panels = { 'pickup': pickupPanel, 'event': eventPanel, 'card': cardPanel };
-            
                 const showPanel = (panelId) => {
                     panels[panelId].classList.remove('opacity-0', 'pointer-events-none', 'z-0');
                     panels[panelId].classList.add('opacity-100', 'pointer-events-auto', 'z-10');
@@ -1111,20 +993,15 @@
                         panel.classList.add('opacity-0', 'pointer-events-none', 'z-0');
                     });
                 };
-            
                 currentSequenceIndex = 0;
                 hideAllPanels();
                 showPanel(rotationSequence[0]);
-            
                 if (rotationSequence.length <= 1) return;
-            
                 bannerRotationTimer = setInterval(() => {
                     hideAllPanels();
                     currentSequenceIndex = (currentSequenceIndex + 1) % rotationSequence.length;
                     const nextPanelId = rotationSequence[currentSequenceIndex];
-                    
                     showPanel(nextPanelId);
-            
                     if (nextPanelId === 'event') {
                         const activeEvents = getActiveEvents();
                         if (activeEvents.length > 0) {
@@ -1138,9 +1015,7 @@
             function handleBannerHover(isHover) {
                 isBannerHovered = isHover;
                 const displayArea = document.getElementById('bannerDisplayArea');
-                
                 if (getActivePickupChars().length === 0 && getActiveEvents().length === 0 && getActiveCards().length === 0) return;
-            
                 if (isHover) {
                     if (bannerRotationTimer) clearInterval(bannerRotationTimer);
                     displayArea.classList.add('banner-expanded');
@@ -1151,22 +1026,18 @@
                     updateEventBanner(); 
                 }
             }
-            
             document.addEventListener('click', function(event) {
                 const displayArea = document.getElementById('bannerDisplayArea');
                 if (isBannerHovered && displayArea && !displayArea.contains(event.target)) {
                     handleBannerHover(false);
                 }
             });
-            
             document.addEventListener('touchstart', function(event) {
                 const displayArea = document.getElementById('bannerDisplayArea');
                 if (isBannerHovered && displayArea && !displayArea.contains(event.target)) {
                     handleBannerHover(false);
                 }
             }, { passive: true }); 
-            
-            // 🌟 【修改】這段加入了陣列次序無痛繼承的邏輯
             function initStates() {
                 INITIAL_DATA.forEach(char => {
                     if (savedStates['owned_' + char.name] === undefined) savedStates['owned_' + char.name] = false;
@@ -1175,13 +1046,12 @@
                         layerData.forEach((attr, idx) => {
                             const newKey = `${char.name}_l${l}_${attr}_${idx}`;
                             if (savedStates[newKey] === undefined) {
-                                // 🌟 舊存檔無痛轉移邏輯：不看次序，只要同一層有同名屬性已解鎖就繼承
                                 let foundOld = false;
                                 for(let oldIdx=0; oldIdx<5; oldIdx++) {
                                     const oldKey = `${char.name}_l${l}_${attr}_${oldIdx}`;
                                     if(savedStates[oldKey] === true) {
                                         savedStates[newKey] = true;
-                                        delete savedStates[oldKey]; // 清除舊鑰匙避免殘留
+                                        delete savedStates[oldKey];
                                         foundOld = true;
                                         break;
                                     }
@@ -1213,12 +1083,9 @@
                 [1, 2, 3].forEach(l => { ATTR_PRIORITY.forEach(a => { layerTotals[l][a] = 0; layerOpened[l][a] = 0; layerBonus[l][a] = 0; }); });
                 let globalUsedCrayons = 0, globalNeededCrayons = 0, attrs = { attack: 0, def: 0, hp: 0, crit: 0, crit_res: 0 }, ownedCount = 0;
                 let validCharCount = 0;
-            
                 const nowTime = Date.now();
-            
                 INITIAL_DATA.forEach(char => {
                     if (char.releaseDate && new Date(char.releaseDate).getTime() > nowTime) return;
-            
                     validCharCount++;
                     if (savedStates['owned_' + char.name]) ownedCount++;
                     [1, 2, 3].forEach(l => {
@@ -1232,14 +1099,11 @@
                         });
                     });
                 });
-            
                 document.getElementById('total_char_count').innerText = validCharCount;
                 document.getElementById('owned_char_count').innerText = ownedCount;
                 document.getElementById('total_used_crayon').innerText = globalUsedCrayons;
                 document.getElementById('total_needed_crayon').innerText = globalNeededCrayons;
-            
                 Object.keys(attrs).forEach(k => { const el = document.getElementById(`attr_${k}`); if (el) el.innerText = `+${attrs[k]}%`; });
-                
                 [1, 2, 3].forEach(l => {
                     let html = '<div><div class="grid grid-cols-2 gap-x-2 gap-y-1 mt-1">';
                     ATTR_PRIORITY.forEach(attr => { if(layerTotals[l][attr] > 0) html += `<div class="flex justify-between border-b border-gray-100 dark:border-gray-700 pb-0.5"><span>${t(attr)}: ${layerOpened[l][attr]}/${layerTotals[l][attr]}</span><span class="font-bold text-amber-600 dark:text-amber-400">+${layerBonus[l][attr]}%</span></div>`; });
@@ -1247,7 +1111,6 @@
                     html += `<div class="mt-2 pt-1 border-t border-gray-100 dark:border-gray-700 flex justify-end"><span class="bg-red-50 dark:bg-gray-700 text-red-600 dark:text-red-400 px-1.5 py-0.5 rounded text-[10px] font-bold border border-red-100 dark:border-gray-600">${t('stats_need_more_prefix')}${layerMissingCrayons[l]}${t('stats_need_more_suffix')}</span></div>`;
                     const layerStatBox = document.getElementById(`stat_layer_${l}`); if (layerStatBox) layerStatBox.innerHTML = html;
                 });
-            
                 try { localStorage.setItem(storageKey, JSON.stringify(savedStates)); } catch(e) {}
                 if (currentUser && db) db.collection("player_boards").doc(currentUser.uid).set({ states: savedStates, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }).catch(e => {});
                 applyFilterUI();
@@ -1257,17 +1120,15 @@
                 isFilterOpen = !isFilterOpen; const body = document.getElementById("filterPanelBody"); const icon = document.getElementById("filterToggleIcon");
                 if(isFilterOpen) { body.classList.remove("hidden"); icon.innerText = "▼"; } else { body.classList.add("hidden"); icon.innerText = "▶"; }
             }
-            // ⚡ 控制「快捷操作」面板的開關狀態 (預設 false = 收起)
             let isQuickActionOpen = false;
             
             function toggleQuickAction() {
                 isQuickActionOpen = !isQuickActionOpen; 
                 const body = document.getElementById("quickActionBody"); 
                 const icon = document.getElementById("quickActionToggleIcon");
-            
                 if(isQuickActionOpen) { 
                     body.classList.remove("hidden"); 
-                    body.classList.add("flex"); // 展開時恢復原本的 flex 排版
+                    body.classList.add("flex");
                     icon.innerText = "▼"; 
                 } else { 
                     body.classList.add("hidden"); 
@@ -1276,6 +1137,7 @@
                 }
             }
             function handleSearch() { activeFilters.search = document.getElementById("searchInput").value.trim().toLowerCase(); applyFilterUI(); }
+            
             function setDisplayMode(mode) { activeFilters.displayMode = mode; ["all", "1", "2", "3"].forEach(m => { const btn = document.getElementById(`btn_disp_${m}`); if(btn) btn.className = (mode === m) ? btnDispActiveStyle : btnInactiveStyle; }); applyFilterUI(); }
             
             function buildFilterPanel() {
@@ -1289,7 +1151,6 @@
                         let keyName = val; if (category === 'race' && val === '???') keyName = 'unknown';
                         const mapKey = `${category}_${keyName}`; 
                         const spriteClass = SPRITE_CLASS_MAP[mapKey];
-                        
                         if(spriteClass) {
                             btn.innerHTML = `<div class="w-3.5 h-3.5 flex items-center justify-center shrink-0"><div class="sprite-base sprite-common ${spriteClass} scale-[0.25] origin-center shrink-0"></div></div><span>${t(val)}</span>`;
                         } else {
@@ -1298,13 +1159,11 @@
                         container.appendChild(btn);
                     });
                 });
-            
                 const layerContainer = document.getElementById("filter_gridLayer");
                 if(layerContainer){
                     layerContainer.innerHTML = ""; const layers = [ {v:"all", n: t("全部")}, {v:"1", n:`🥇 ${t("level_1st")}`}, {v:"2", n:`🥈 ${t("level_2nd")}`}, {v:"3", n:`🥉 ${t("level_3rd")}`} ];
                     layers.forEach(ly => { const btn = document.createElement("button"); btn.innerText = ly.n; btn.id = `btn_filter_gridLayer_${ly.v}`; btn.className = ly.v === "all" ? btnActiveStyle : btnInactiveStyle; btn.onclick = () => selectGridLayerFilter(ly.v); layerContainer.appendChild(btn); });
                 }
-            
                 const typeContainer = document.getElementById("filter_gridType");
                 if(typeContainer){
                     typeContainer.innerHTML = ""; const types = ["攻擊", "防禦", "血量", "爆擊", "爆抗"];
@@ -1372,39 +1231,30 @@
                 selectFilter("personality", ""); selectFilter("race", ""); selectFilter("position", ""); selectFilter("job", ""); selectFilter("type", ""); selectGridLayerFilter("all"); selectGridTypeFilter(""); selectGridStatusFilter("all");
                 document.getElementById("searchInput").value = ""; activeFilters.search = ""; setDisplayMode('all');
             }
+            
             function toggleAllCharacters(own) {
-            // 角色狀態防呆 - 加入多國語系處理
-            const actionName = own ? (t('quick_action_own') || '擁有') : (t('quick_action_cancel') || '取消擁有');
-            
-            // 從字典讀取模板後，將 {action} 替換掉
-            let confirmMsg = t('quick_action_confirm_chars') || `確定要一鍵「{action}」所有角色嗎？\n(此操作會覆蓋所有角色的擁有狀態！)`;
-            confirmMsg = confirmMsg.replace('{action}', actionName);
-            
-            if (!confirm(confirmMsg)) return;
-            
-            INITIAL_DATA.forEach(char => {
-            savedStates['owned_' + char.name] = own;
-            updateOwnershipUI(char.name); // 更新單一角色的頭像暗化狀態
-            });
-            calculateStats(); // 重新計算全體屬性並自動觸發存檔
+                const actionName = own ? (t('quick_action_own') || '擁有') : (t('quick_action_cancel') || '取消擁有');
+                let confirmMsg = t('quick_action_confirm_chars') || `確定要一鍵「{action}」所有角色嗎？\n(此操作會覆蓋所有角色的擁有狀態！)`;
+                confirmMsg = confirmMsg.replace('{action}', actionName);
+                if (!confirm(confirmMsg)) return;
+                INITIAL_DATA.forEach(char => {
+                    savedStates['owned_' + char.name] = own;
+                    updateOwnershipUI(char.name);
+                });
+                calculateStats();
             }
             
             function toggleAllGrids(layer, open) {
-            // 蠟筆狀態全面防呆 - 加入多國語系處理
             const actionName = open ? (t('quick_action_fill') || '填滿') : (t('quick_action_clear') || '清空');
             let layerName = layer === 'all' 
             ? (t('quick_action_all_layers') || '所有層數') 
             : (t('quick_action_layer_n') || '第 {n} 層').replace('{n}', layer);
-            
             let confirmMsg = t('quick_action_confirm_grids') || `確定要「{action}」全體角色【{layer}】的蠟筆格子嗎？\n(⚠️ 警告：此操作會直接覆蓋目前的紀錄，且無法復原！)`;
             confirmMsg = confirmMsg.replace('{action}', actionName).replace('{layer}', layerName);
-            
             if (!confirm(confirmMsg)) {
             return;
             }
-            
             const targetLayers = layer === 'all' ? [1, 2, 3] : [parseInt(layer)];
-            
             INITIAL_DATA.forEach(char => {
             targetLayers.forEach(l => {
             const layerData = char[`layer${l}`] || [];
@@ -1417,7 +1267,6 @@
             });
             });
             });
-            
             renderMatrix();   
             calculateStats(); 
             }
@@ -1430,30 +1279,24 @@
                     const matchJ = activeFilters.job.length === 0 || activeFilters.job.includes(char.job);
                     const matchT = activeFilters.type.length === 0 || activeFilters.type.includes(char.type);
                     let matchGrid = true;
-                    
                     if (activeFilters.gridType.length > 0 || activeFilters.gridStatus !== "all") {
                         const layersToSearch = activeFilters.gridLayer === "all" ? [1,2,3] : [parseInt(activeFilters.gridLayer)];
-                        
                         matchGrid = layersToSearch.some(l => {
                             const layerData = char[`layer${l}`] || [];
                             return layerData.some((attr, originalIdx) => {
                                 const typeMatches = activeFilters.gridType.length === 0 || activeFilters.gridType.includes(attr);
-                                
                                 let statusMatches = true;
                                 if (activeFilters.gridStatus !== "all") {
                                     const stateKey = `${char.name}_l${l}_${attr}_${originalIdx}`;
                                     const isOpened = !!savedStates[stateKey];
-                                    
                                     if (activeFilters.gridStatus === "opened") statusMatches = isOpened;
                                     if (activeFilters.gridStatus === "unopened") statusMatches = !isOpened;
                                 }
-                                
                                 return typeMatches && statusMatches;
                             });
                         });
                     }
                     const matchSearch = !activeFilters.search || t(char.name).toLowerCase().includes(activeFilters.search) || char.name.toLowerCase().includes(activeFilters.search);
-            
                     const cardElement = document.getElementById(`char_card_${char.name}`);
                     if (cardElement) {
                         if (matchP && matchR && matchPos && matchJ && matchT && matchGrid && matchSearch) cardElement.classList.remove("hidden"); else cardElement.classList.add("hidden");
@@ -1463,48 +1306,35 @@
                         });
                     }
                 });
-            
                 const personalities = ["天真", "冷靜", "狂亂", "活潑", "憂鬱"];
                 personalities.forEach(pName => {
                     const pSection = document.getElementById(`section_p_${pName}`);
                     if (pSection) { const visibleInSec = pSection.querySelectorAll("[id^='char_card_']:not(.hidden)").length; if (visibleInSec === 0) pSection.classList.add("hidden"); else pSection.classList.remove("hidden"); }
                 });
             }
-            
             function renderMatrix() {
                 const container = document.getElementById('matrixContainer'); if(!container) return; container.innerHTML = '';
                 const personalities = ["天真", "冷靜", "狂亂", "活潑", "憂鬱"];
                 const personalityBorderColors = { "天真": "border-green-500", "冷靜": "border-blue-500", "狂亂": "border-red-500", "活潑": "border-yellow-400", "憂鬱": "border-purple-500" };
-            
                 const nowTime = Date.now();
-            
                 personalities.forEach(pName => {
                     const pChars = INITIAL_DATA.filter(c => c.personality === pName); if (pChars.length === 0) return;
                     const pSection = document.createElement('section'); pSection.id = `section_p_${pName}`; pSection.className = "bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-2xl p-4 sm:p-6 shadow-sm border-2 border-amber-100/70 dark:border-gray-700 mb-6 transition-colors";
                     pSection.innerHTML = `<div class="border-b-2 border-amber-400 dark:border-gray-600 pb-2.5 mb-4 flex justify-between items-center flex-wrap gap-2"><h2 class="text-lg sm:text-xl font-extrabold text-amber-955 dark:text-amber-400 flex items-center">📂 ${t(pName)}${t('stats_character')}</h2></div>`;
                     const charListContainer = document.createElement('div'); charListContainer.className = "space-y-4";
-            
                     pChars.forEach(char => {
                         const isUnreleased = char.releaseDate && new Date(char.releaseDate).getTime() > nowTime;
                         
                         const charCard = document.createElement('div'); charCard.id = `char_card_${char.name}`; charCard.className = "char-card-wrapper bg-white/50 dark:bg-gray-750/50 rounded-xl border border-gray-200/60 dark:border-gray-600 flex flex-row items-stretch transition-all duration-200 overflow-hidden";
-                        
                         if (!isUnreleased) {
                             charCard.setAttribute('onmouseenter', `checkMarquee(this, true); preloadSpineAssets('${char.name}');`); 
                             charCard.setAttribute('onmouseleave', 'checkMarquee(this, false)');
                         }
-                        
-                        // 🌟 準備 Sprite 類別與底圖
-// 🌟 準備 Sprite 類別
-const spineName = typeof SPINE_MAP !== 'undefined' && SPINE_MAP[char.name] ? SPINE_MAP[char.name] : char.name;
-
-// 👇 刪掉原本的字串組合，改回用你原本寫好的 Map 來抓取對應的英文 Class
-const charSpriteBase = CHAR_SPRITE_MAP[char.personality] || "";
-const ultSpriteBase = ULT_SPRITE_MAP[char.personality] || "";
-
-const charSpriteClass = `sprite-${spineName}`;
-const ultSpriteClass = `sprite-Icon_UltimateSkill_${spineName}`;
-            
+            const spineName = typeof SPINE_MAP !== 'undefined' && SPINE_MAP[char.name] ? SPINE_MAP[char.name] : char.name;
+            const charSpriteBase = CHAR_SPRITE_MAP[char.personality] || "";
+            const ultSpriteBase = ULT_SPRITE_MAP[char.personality] || "";
+            const charSpriteClass = `sprite-${spineName}`;
+            const ultSpriteClass = `sprite-Icon_UltimateSkill_${spineName}`;
                         let raceIconName = char.race; if (char.race === "???") raceIconName = "unknown";
                         const pSprite = SPRITE_CLASS_MAP[`personality_${char.personality}`] || "";
                         const rSprite = SPRITE_CLASS_MAP[`race_${raceIconName}`] || "";
@@ -1514,10 +1344,8 @@ const ultSpriteClass = `sprite-Icon_UltimateSkill_${spineName}`;
                         const bgSprite = SPRITE_CLASS_MAP[`bg_${raceIconName}`] || "sprite-Bg_Unknown";
                         const borderColorClass = personalityBorderColors[char.personality] || "border-gray-300"; 
                         const isOwned = savedStates['owned_' + char.name]; 
-            
                         const avatarClass = isOwned && !isUnreleased ? "" : "unowned-avatar";
                         const displayName = isUnreleased ? "???" : t(char.name);
-                        
                         const detailBtn = document.createElement('button'); 
                         detailBtn.onclick = () => window.open(`char_detail.html?char=${encodeURIComponent(char.name)}`, '_blank');
                         const displayClass = isUnreleased ? 'hidden' : 'flex';
@@ -1525,10 +1353,8 @@ const ultSpriteClass = `sprite-Icon_UltimateSkill_${spineName}`;
                         detailBtn.title = (window.currentLang === 'en') ? `View details for ${t(char.name)}` : ((window.currentLang === 'ja') ? `${t(char.name)}の詳細データを見る` : `查看 ${t(char.name)} 的詳細資料`);
                         detailBtn.innerHTML = `<div class="w-full h-full flex items-center justify-center"><div class="sprite-base sprite-common sprite-Album_Icon_Info shrink-0 scale-[0.35] sm:scale-[0.4] opacity-70 group-hover:opacity-100 group-hover:scale-[0.45] sm:group-hover:scale-[0.5] transition-all duration-200 origin-center"></div></div>`;
                         charCard.appendChild(detailBtn);
-            
                         const cardInner = document.createElement('div'); cardInner.className = "flex-1 p-3 sm:p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-4 w-full overflow-hidden";
                         const nameCol = document.createElement('div'); nameCol.className = "flex flex-row items-center justify-start gap-3 min-w-[210px] w-full md:w-auto border-b md:border-b-0 pb-2 md:pb-0 border-gray-200/50 dark:border-gray-700";
-                        
                         const createTraitNode = (sprite, fallbackId, fallbackText, titleTxt) => {
                             if (sprite) {
                                 return `<div class="flex items-center hover-scale cursor-help" title="${titleTxt}"><div class="w-4 h-4 flex items-center justify-center shrink-0"><div class="sprite-base sprite-common ${sprite} scale-[0.25] origin-center shrink-0"></div></div></div>`;
@@ -1536,7 +1362,6 @@ const ultSpriteClass = `sprite-Icon_UltimateSkill_${spineName}`;
                                 return `<span id="${fallbackId}" class="bg-gray-100 dark:bg-gray-700 px-1 rounded text-[9px] text-gray-500 dark:text-gray-400 font-medium whitespace-nowrap">${fallbackText}</span>`;
                             }
                         };
-            
                         const traitsHtml = isUnreleased ? 
                             `<div class="flex items-center gap-1.5 pt-1 border-t border-dashed border-gray-100 dark:border-gray-700 text-gray-400 dark:text-gray-500 text-[10px] font-bold tracking-widest">DATA CLASSIFIED</div>` :
                             `<div class="flex items-center gap-1.5 pt-1 border-t border-dashed border-gray-100 dark:border-gray-700">
@@ -1546,50 +1371,34 @@ const ultSpriteClass = `sprite-Icon_UltimateSkill_${spineName}`;
                                 ${createTraitNode(jSprite, `fall_j_${char.name}`, t(char.job), `${t('stats_job')} ${t(char.job)}`)}
                                 ${createTraitNode(tSprite, `fall_t_${char.name}`, t(char.type), `💥 類型： ${t(char.type)}`)}
                             </div>`;
-            
                         nameCol.innerHTML = `
-    <div class="relative shrink-0 w-12 h-12" ${isUnreleased ? '' : `onclick="toggleOwnership('${char.name}')"`}>
-        <div id="avatar_container_${char.name}" class="char-avatar-container w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-inner ${avatarClass} ${isUnreleased ? 'pointer-events-none' : ''} bg-[#fcf8f2] dark:bg-gray-800 relative overflow-hidden">
-            
-            <!-- 背景特效 -->
+            <div class="relative shrink-0 w-12 h-12" ${isUnreleased ? '' : `onclick="toggleOwnership('${char.name}')"`}>
+            <div id="avatar_container_${char.name}" class="char-avatar-container w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-inner ${avatarClass} ${isUnreleased ? 'pointer-events-none' : ''} bg-[#fcf8f2] dark:bg-gray-800 relative overflow-hidden">
             <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 sprite-base sprite-common ${bgSprite} scale-[0.45] z-0 opacity-90 block bg-no-repeat"></div>
             <div class="absolute inset-0 bg-white/20 dark:bg-black/20 backdrop-blur-[1px] z-[5]"></div>
-            
-            <!-- 👇 1. 普通頭像：放棄 flex，改用絕對定位死釘在正中央，再縮放 0.38 倍 -->
             <div class="absolute inset-0 z-10 ${isUnreleased ? 'silhouette-mode' : ''}">
                 <div class="${charSpriteBase} ${charSpriteClass} absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-[0.38] bg-no-repeat origin-center block"></div>
             </div>
-            
             ${isUnreleased ? '' : `
-            <!-- 👇 2. 大絕頭像輪播：同樣改用絕對定位死釘在正中央，再縮放 0.75 倍 -->
-            <!-- 👇 改這裡：確保將 性格類別 與 角色圖示類別 分開 -->
-<div class="avatar-alt absolute inset-0 z-20 bg-[#fcf8f2] dark:bg-gray-800 transition-opacity duration-300">
-    <div class="${ULT_SPRITE_MAP[char.personality]} sprite-Icon_UltimateSkill_${spineName} absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-[0.75] bg-no-repeat origin-center block"></div>
-</div>`}
-            
-        </div>
-        
-        <!-- 備用文字頭像 -->
-        <div id="fall_av_${char.name}" class="hidden char-avatar-container w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-sm flex items-center justify-center font-bold text-amber-900 text-lg ${avatarClass} ${isUnreleased ? 'silhouette-mode' : ''}">${isUnreleased ? '?' : t(char.name).charAt(0)}</div>
-    </div>
-    <div class="flex flex-col gap-0.5 w-full overflow-hidden">
-        <div class="marquee-box text-sm sm:text-base font-bold text-gray-900 dark:text-gray-100" title="${displayName}"><span class="marquee-content">${displayName}</span></div>
-        ${traitsHtml}
-    </div>
-`;
+            <div class="avatar-alt absolute inset-0 z-20 bg-[#fcf8f2] dark:bg-gray-800 transition-opacity duration-300">
+            <div class="${ULT_SPRITE_MAP[char.personality]} sprite-Icon_UltimateSkill_${spineName} absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-[0.75] bg-no-repeat origin-center block"></div>
+            </div>`}
+            </div>
+            <div id="fall_av_${char.name}" class="hidden char-avatar-container w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-sm flex items-center justify-center font-bold text-amber-900 text-lg ${avatarClass} ${isUnreleased ? 'silhouette-mode' : ''}">${isUnreleased ? '?' : t(char.name).charAt(0)}</div>
+            </div>
+            <div class="flex flex-col gap-0.5 w-full overflow-hidden">
+            <div class="marquee-box text-sm sm:text-base font-bold text-gray-900 dark:text-gray-100" title="${displayName}"><span class="marquee-content">${displayName}</span></div>
+            ${traitsHtml}
+            </div>
+            `;
                         cardInner.appendChild(nameCol);
-            
                         const layersContainer = document.createElement('div'); layersContainer.className = "flex flex-col sm:flex-row gap-3 w-full md:flex-1 relative";
-                        
                         if (isUnreleased) {
                             const releaseDateObj = new Date(char.releaseDate);
-                            
                             const localeFormat = window.currentLang === 'en' ? 'en-US' : (window.currentLang === 'ja' ? 'ja-JP' : 'zh-TW');
                             const dateStr = releaseDateObj.toLocaleString(localeFormat, { month: 'numeric', day: 'numeric', hour: '2-digit', minute:'2-digit' });
-                            
                             const localComingSoon = { "zh-TW": "即將登場", "ja": "近日登場", "en": "Coming Soon" }[window.currentLang] || "即將登場";
                             const localUnlock = { "zh-TW": "解禁", "ja": "解禁", "en": "Unlocks" }[window.currentLang] || "解禁";
-                            
                             layersContainer.innerHTML = `
                                 <div class="absolute inset-0 bg-gray-100/80 dark:bg-gray-800/80 backdrop-blur-[2px] rounded-xl flex flex-col items-center justify-center z-10 border border-dashed border-gray-300 dark:border-gray-600 shadow-sm">
                                     <span class="text-2xl mb-1 drop-shadow-md">🔒</span>
@@ -1604,14 +1413,11 @@ const ultSpriteClass = `sprite-Icon_UltimateSkill_${spineName}`;
                                 let bgStyle = "bg-amber-50/40 border-amber-100/60 dark:border-amber-900/40", badgeText = `🥇 ${t("level_1st")}`, gridCols = "grid-cols-2", flexWeight = "2";
                                 if (l === 2) { bgStyle = "bg-orange-50/40 border-orange-100/60 dark:border-orange-900/40"; badgeText = `🥈 ${t("level_2nd")}`; gridCols = "grid-cols-3"; flexWeight = "3"; }
                                 else if (l === 3) { bgStyle = "bg-red-50/40 border-red-100/60 dark:border-red-900/40"; badgeText = `🥉 ${t("level_3rd")}`; gridCols = "grid-cols-4"; flexWeight = "4"; }
-                                
                                 layerBox.className = `${bgStyle} p-2 rounded-xl border flex-col justify-between backdrop-blur-sm`;
                                 layerBox.style.flex = flexWeight; 
-                                
                                 let pathBtnHTML = '';
             
             if (char.race && char.pathVersion) {
-            // 有資料時顯示正常按鈕
             pathBtnHTML = `
             <div onclick="showPathImage('${char.race}', '${char.pathVersion}', ${l}, event)" 
              class="path-btn cursor-pointer hover:scale-125 transition-transform flex items-center justify-center shrink-0 w-5 h-5 group" 
@@ -1621,7 +1427,6 @@ const ultSpriteClass = `sprite-Icon_UltimateSkill_${spineName}`;
             </div>
             `;
             } else {
-            // 缺乏資料時顯示反灰不可點擊的按鈕
             pathBtnHTML = `
             <div class="path-btn flex items-center justify-center shrink-0 w-5 h-5 cursor-not-allowed opacity-30" 
              data-lang-key="path_unknown"
@@ -1637,26 +1442,20 @@ const ultSpriteClass = `sprite-Icon_UltimateSkill_${spineName}`;
             ${pathBtnHTML}
             </div>
             `;
-            
                                 const btnGroup = document.createElement('div'); 
                                 btnGroup.className = `grid ${gridCols} gap-1.5 h-full content-start`;
-                
                                 const layerData = char[`layer${l}`] || [];
-                                
                                 if (layerData.length === 0) {
                                     btnGroup.innerHTML = `<div class="col-span-full flex items-center justify-center h-[45px] sm:h-[50px] bg-gray-100/50 dark:bg-gray-700/30 rounded-lg border border-dashed border-gray-300 dark:border-gray-600"><span class="text-[10px] text-gray-400 font-bold tracking-widest">DATA PENDING</span></div>`;
                                 } else {
                                     const sortedAttrs = layerData.slice().sort((a, b) => ATTR_PRIORITY.indexOf(a) - ATTR_PRIORITY.indexOf(b));
-                    
                                     sortedAttrs.forEach((attr, idx) => {
                                         const originalIdx = layerData.indexOf(attr); 
                                         const stateKey = `${char.name}_l${l}_${attr}_${originalIdx}`;
                                         const isOpened = savedStates[stateKey]; 
                                         const btnId = `btn_${char.name}_l${l}_${attr}_${originalIdx}`;
-                        
                                         const btn = document.createElement('button'); 
                                         btn.id = btnId;
-                        
                                         const attrClasses = {
                                             "攻擊": { off: "bg-orange-50 dark:bg-gray-700 border-orange-400 dark:border-orange-500 opacity-60 hover:opacity-80 shadow-sm", on: "bg-orange-500 dark:bg-orange-600 border-orange-600 dark:border-orange-500 shadow-md opacity-100" },
                                             "防禦": { off: "bg-blue-50 dark:bg-gray-700 border-blue-400 dark:border-blue-500 opacity-60 hover:opacity-80 shadow-sm", on: "bg-blue-500 dark:bg-blue-600 border-blue-600 dark:border-blue-500 shadow-md opacity-100" },
@@ -1664,7 +1463,6 @@ const ultSpriteClass = `sprite-Icon_UltimateSkill_${spineName}`;
                                             "爆擊": { off: "bg-red-50 dark:bg-gray-700 border-red-400 dark:border-red-500 opacity-60 hover:opacity-80 shadow-sm", on: "bg-red-500 dark:bg-red-600 border-red-600 dark:border-red-500 shadow-md opacity-100" },
                                             "爆抗": { off: "bg-purple-50 dark:bg-gray-700 border-purple-400 dark:border-purple-500 opacity-60 hover:opacity-80 shadow-sm", on: "bg-purple-500 dark:bg-purple-600 border-purple-600 dark:border-purple-500 shadow-md opacity-100" }
                                         };
-                        
                                         const attrTextColors = {
                                             "攻擊": { off: "text-orange-600 dark:text-orange-400", on: "text-white drop-shadow-sm" },
                                             "防禦": { off: "text-blue-600 dark:text-blue-400",  on: "text-white drop-shadow-sm" },
@@ -1672,20 +1470,15 @@ const ultSpriteClass = `sprite-Icon_UltimateSkill_${spineName}`;
                                             "爆擊": { off: "text-red-600 dark:text-red-400",     on: "text-white drop-shadow-sm" },
                                             "爆抗": { off: "text-purple-600 dark:text-purple-400", on: "text-white drop-shadow-sm" }
                                         };
-                        
                                         const baseClass = "char-btn hover-scale flex items-center justify-center w-full h-[45px] sm:h-[50px] rounded-lg border transition-all duration-200 overflow-hidden cursor-pointer";
-                        
                                         const openClass = attrClasses[attr]?.on || "bg-gray-400 text-white shadow-md opacity-100";
                                         const closeClass = attrClasses[attr]?.off || "bg-gray-100 border-gray-300 opacity-60";
                                         btn.className = `${baseClass} ${isOpened ? openClass : closeClass}`;
-                        
                                         const spriteClass = SPRITE_CLASS_MAP[`boardon_${attr}`] || "";
-                        
                                         const textColor = isOpened 
                                         ? (attrTextColors[attr]?.on || "text-white drop-shadow-sm") 
                                         : (attrTextColors[attr]?.off || "text-gray-500 dark:text-gray-400");
                                         const spriteShadow = isOpened ? "drop-shadow-sm" : "";
-                        
                                         btn.innerHTML = `
                                         <div class="w-full h-full flex flex-col items-center justify-center gap-0.5">
                                             <div class="w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center shrink-0">
@@ -1694,7 +1487,6 @@ const ultSpriteClass = `sprite-Icon_UltimateSkill_${spineName}`;
                                             <span class="text-[9px] sm:text-[10px] font-bold ${textColor} transition-all duration-200 leading-none">${t(attr) || "未知"}</span>
                                         </div>
                                         `;
-                        
                                         btn.onclick = () => {
                                             savedStates[stateKey] = !savedStates[stateKey];
                                             if(savedStates[stateKey] && !savedStates['owned_' + char.name]) { 
@@ -1702,12 +1494,10 @@ const ultSpriteClass = `sprite-Icon_UltimateSkill_${spineName}`;
                                                 updateOwnershipUI(char.name); 
                                             }
                                             btn.className = `${baseClass} ${savedStates[stateKey] ? openClass : closeClass}`;
-                            
                                             const newTextColor = savedStates[stateKey] 
                                                 ? (attrTextColors[attr]?.on || "text-white drop-shadow-sm") 
                                                 : (attrTextColors[attr]?.off || "text-gray-500 dark:text-gray-400");
                                             const newSpriteShadow = savedStates[stateKey] ? "drop-shadow-sm" : "";
-                            
                                             btn.innerHTML = `
                                                 <div class="w-full h-full flex flex-col items-center justify-center gap-0.5">
                                                     <div class="w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center shrink-0">
@@ -1718,11 +1508,9 @@ const ultSpriteClass = `sprite-Icon_UltimateSkill_${spineName}`;
                                             `;
                                             calculateStats();
                                         };
-                        
                                         btnGroup.appendChild(btn);
                                     });
                                 }
-                
                                 layerBox.appendChild(btnGroup); 
                                 layersContainer.appendChild(layerBox);
                             });
@@ -1735,20 +1523,15 @@ const ultSpriteClass = `sprite-Icon_UltimateSkill_${spineName}`;
                 });
                 applyFilterUI();
             }
-            
             setInterval(() => { document.body.classList.toggle('swap-avatars'); }, 3000);
+            
             function checkMarquee(card, isHover) { const box = card.querySelector('.marquee-box'); const content = card.querySelector('.marquee-content'); if (box && content) { if (isHover && box.scrollWidth > box.clientWidth) content.style.animation = 'text-marquee 3.5s linear infinite alternate'; else content.style.animation = 'none'; } }
             
-            // ------------------------------------------------------------
-            // Spine 動畫與小遊戲邏輯
-            // ------------------------------------------------------------
             function getLaunchTimes(player, animName, charName, defaultMs = 500) {
                 if (!player || !player.skeleton.data) return [defaultMs];
                 const anim = player.skeleton.data.animations.find(a => a.name === animName);
                 if (!anim) return [defaultMs];
-            
                 const totalDurMs = anim.duration * 1000; let validEventTimes = []; let foundEvents = [];
-            
                 for (let i = 0; i < anim.timelines.length; i++) {
                     const timeline = anim.timelines[i];
                     if (timeline.events) { 
@@ -1763,13 +1546,11 @@ const ultSpriteClass = `sprite-Icon_UltimateSkill_${spineName}`;
                 }
                 validEventTimes.sort((a, b) => a - b);
                 let realHits = validEventTimes.filter(t => t > 200 && t < totalDurMs - 50);
-            
                 let finalHits = [];
                 realHits.forEach(t => {
                     if (finalHits.length === 0) finalHits.push(t);
                     else { let lastHit = finalHits[finalHits.length - 1]; if (t - lastHit > 150) finalHits.push(t); }
                 });
-            
                 let isMultiHitDesc = false;
                 try {
                     if (typeof characterSkills !== 'undefined' && characterSkills[charName]) {
@@ -1779,12 +1560,10 @@ const ultSpriteClass = `sprite-Icon_UltimateSkill_${spineName}`;
                         isMultiHitDesc = descText.includes("總");
                     }
                 } catch(e) { console.warn(`⚠️ 讀取 ${charName} 的技能文本失敗，將使用預設判斷。`); }
-            
                 if (!isMultiHitDesc && finalHits.length > 1) {
                     console.log(`📖 文本判定：${charName} 的 [${animName}] 無「總」字，強制轉為單發判定。`);
                     finalHits = [finalHits[0]]; 
                 }
-            
                 if (finalHits.length > 0) return finalHits; 
                 else if (validEventTimes.length > 0) return [validEventTimes[validEventTimes.length - 1]];
                 return [defaultMs];
@@ -1821,7 +1600,6 @@ const ultSpriteClass = `sprite-Icon_UltimateSkill_${spineName}`;
                 const startX = rRect.left -80; const startY = rRect.top + (rRect.height * 0.5) + 1; 
                 const endX = bRect.left + bRect.width * 0.5 - 30; const endY = bRect.top + bRect.height * 0.5;
                 const burstTime = Math.max(customLaunchDelay + 100, attackDurationMs - 800);
-            
                 if (isRanged) {
                     setTimeout(() => {
                         const proj = document.createElement('div'); proj.className = 'projectile-crayon'; proj.style.left = `${startX}px`; proj.style.top = `${startY}px`;
@@ -1837,25 +1615,19 @@ const ultSpriteClass = `sprite-Icon_UltimateSkill_${spineName}`;
                 if (!isAnimationEnabled) return;
                 if (window.innerWidth <= 768) return; 
                 if (typeof INITIAL_DATA === 'undefined' || INITIAL_DATA.length === 0) return;
-            
                 const container = document.getElementById('topRunnerContainer'); const track = document.getElementById('runnerTrack');
                 const bossContainer = document.getElementById('bossRunnerContainer'); const bossTrack = document.getElementById('bossTrack');
-                
                 const trackRightOffset = '-110px'; const bossRightOffset = '-410px'; 
                 track.style.right = trackRightOffset; bossTrack.style.right = bossRightOffset; 
                 const endLeftPosNum = 110; const endLeftPos = `${endLeftPosNum}px`; 
-            
                 cancelAnimationFrame(chaseLoopId);
                 track.style.opacity = '0'; track.style.transition = 'none'; track.getAnimations().forEach(anim => anim.cancel()); track.style.transform = 'translateX(0) scaleX(1)';              
                 container.style.transform = 'scaleX(1) translateX(0)'; 
                 bossTrack.style.opacity = '0'; bossTrack.style.transition = 'none'; bossTrack.style.pointerEvents = 'none'; bossTrack.getAnimations().forEach(anim => anim.cancel()); bossTrack.style.transform = 'translateX(0) scaleX(1)';
-            
                 if (currentRunnerPlayer) { try { currentRunnerPlayer.dispose(); } catch(e){} currentRunnerPlayer = null; }
                 if (currentBossPlayer) { try { currentBossPlayer.dispose(); } catch(e){} currentBossPlayer = null; }
                 container.innerHTML = ''; bossContainer.innerHTML = ''; track.onclick = null; bossTrack.onclick = null;
-                
                 if (noticeIconEl) { noticeIconEl.remove(); noticeIconEl = null; } clearTimeout(noticeIconTimeout); 
-            
                 const isBossEvent = Math.random() < 0.7; 
                 let isCaught = false, isEscaped = false, hasNoticed = false, chasePhase = 1, isBossKnockedBack = false, hasReachedEnd = false; 
                 const runDuration = 14000; let charRunAnimation = null, bossRunAnimation = null;
@@ -2061,9 +1833,6 @@ const ultSpriteClass = `sprite-Icon_UltimateSkill_${spineName}`;
                 }
             }
             
-            // ------------------------------------------------------------
-            // Firebase 與全域系統初始化
-            // ------------------------------------------------------------
             function updateVisitCount() {
                 if (!db) return;
                 const hostname = window.location.hostname;
@@ -2093,12 +1862,10 @@ const ultSpriteClass = `sprite-Icon_UltimateSkill_${spineName}`;
                 if (user) { 
                     if (svgLogo) svgLogo.classList.add('hidden'); 
                     if (logoutText) logoutText.classList.remove('hidden'); 
-                    // 登入後：只顯示「登出」文字，不帶方框與背景，加入 hover 漸層變色
                     btn.className = "p-1 flex items-center justify-center transition hover:opacity-70 shrink-0 whitespace-nowrap"; 
                 } else { 
                     if (svgLogo) svgLogo.classList.remove('hidden'); 
                     if (logoutText) logoutText.classList.add('hidden'); 
-                    // 登出時：只顯示 Google Icon，不帶方框與背景
                     btn.className = "p-1 flex items-center justify-center transition hover:opacity-70 shrink-0"; 
                 }
             }
@@ -2107,8 +1874,6 @@ const ultSpriteClass = `sprite-Icon_UltimateSkill_${spineName}`;
             function spawnCrayonOnTrack() {
                 if (!isAnimationEnabled) return;
                 if (window.innerWidth <= 768) return; 
-                
-                // 🌟 防掛機：如果網頁被切換到背景，或是畫面上累積超過 5 支蠟筆，就暫停生成，保護記憶體
                 if (document.hidden || activeCrayons.length >= 5) {
                     spawnCrayonTimer = setTimeout(spawnCrayonOnTrack, 5000);
                     return;
@@ -2148,7 +1913,6 @@ const ultSpriteClass = `sprite-Icon_UltimateSkill_${spineName}`;
             rimContainer.appendChild(loader);
             
             new spine.SpinePlayer("rim-live-container", { 
-            // 🌟 這裡改成 ./spine_assets/Rim/
             skelUrl: "./spine_assets/Rim/RimSkin2.skel.bytes", 
             atlasUrl: "./spine_assets/Rim/RimSkin2.atlas.txt", 
             alpha: true, 
@@ -2175,15 +1939,11 @@ const ultSpriteClass = `sprite-Icon_UltimateSkill_${spineName}`;
             } 
             }); 
             }
-            
-            // 🌟 合併所有 Load 事件，交錯延遲載入 (Staggered Loading) 大幅提升體感速度
             window.addEventListener('load', () => {
                 document.getElementById('loader').style.display = 'none';
             
                 try {
                     if (typeof INITIAL_DATA === 'undefined') throw new Error("找不到 INITIAL_DATA，請確認 data_core.js 是否載入成功！");
-                    
-                    // 🌟 【新增】將 pathVersion 轉換為對應的 layer1, layer2, layer3 以確保相容性
                     if (typeof CRAYON_PATH_CONFIG !== 'undefined') {
                         INITIAL_DATA.forEach(char => {
                             if (char.pathVersion && CRAYON_PATH_CONFIG[char.race] && CRAYON_PATH_CONFIG[char.race][char.pathVersion]) {
@@ -2194,33 +1954,26 @@ const ultSpriteClass = `sprite-Icon_UltimateSkill_${spineName}`;
                             }
                         });
                     }
-                    
-                    // 🌟 【最終解決版】搜尋整個結構匹配 name 欄位
                     if (typeof characterSkills !== 'undefined') {
-                        // 如果 characterSkills 是一個陣列，或者是包了一層的物件
                         const skillsArray = Array.isArray(characterSkills) ? characterSkills : Object.values(characterSkills);
                         
                         INITIAL_DATA.forEach(char => {
-                            // 找到那個 name 屬性與我們目標相符的資料項
                             const skillData = skillsArray.find(item => item.name === char.name);
                             
                             if (skillData && skillData.attribute) {
-                                // 根據 attribute 內容判定
                                 if (String(skillData.attribute).includes("魔")) {
                                     char.type = "魔法";
                                 } else {
                                     char.type = "物理";
                                 }
                             } else {
-                                char.type = "物理"; // 找不到時的防呆
+                                char.type = "物理";
                             }
                         });
                     }
                     renderPickupBanner(); renderCardBanner(); updateEventBanner(); startBannerRotation(); initStates(); changeLanguage(currentLang); updateAnimToggleUI();
                     if (!isStatsOpen) { const body = document.getElementById("statsPanelBody"); const icon = document.getElementById("statsToggleIcon"); if(body) { body.classList.add("hidden"); body.classList.remove("grid"); icon.innerText = "▶"; } }
                 } catch (e) { const errBanner = document.getElementById('errorBanner'); if(errBanner) { errBanner.innerHTML = `⚠️ 畫面繪製失敗: ${e.message}`; errBanner.classList.remove('hidden'); } }
-            
-                // 啟動 Firebase
                 try {
                     if (typeof firebase !== 'undefined') {
                         const firebaseConfig = { apiKey: "AIzaSyDhv8D2pY_0M56UJrDTQw0RGPHA-BkXU8Y", authDomain: "crayon-note.firebaseapp.com", projectId: "crayon-note", storageBucket: "crayon-note.firebasestorage.app", messagingSenderId: "210614088940", appId: "1:210614088940:web:7addbdc7c466eeb05421c9", measurementId: "G-M1EJPE12TE" };
@@ -2240,8 +1993,6 @@ const ultSpriteClass = `sprite-Icon_UltimateSkill_${spineName}`;
                         });
                     }
                 } catch (e) { }
-            
-                // 錯開重度渲染，讓主畫面先出現，不會白畫面卡死
                 setTimeout(() => {
                     if (isAnimationEnabled) {
                         initTopRunner();
@@ -2257,11 +2008,8 @@ const ultSpriteClass = `sprite-Icon_UltimateSkill_${spineName}`;
                     }, 300);
                 }, 100);
             });
-            
-            // 偵測捲動距離以顯示/隱藏按鈕
             window.onscroll = function() {
                 const btn = document.getElementById("backToTop");
-                // 只有在 btn 確實存在於頁面上時，才執行後續邏輯
                 if (btn) {
                     if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
                         btn.style.display = "flex";
@@ -2271,7 +2019,6 @@ const ultSpriteClass = `sprite-Icon_UltimateSkill_${spineName}`;
                 }
             };
             
-            // 執行平滑滾動至頂部
             function scrollToTop() {
                 window.scrollTo({
                     top: 0,
