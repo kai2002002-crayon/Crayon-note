@@ -573,7 +573,7 @@ const WORK_URL = {
     "Erpin": "https://youtu.be/rgbOtvbLdB0",
     "Espi": "https://youtu.be/hTyUw7ZfI28",
     "Festa": "",
-    "Fricle": "",
+    "Fricle": "https://youtu.be/6dxpDLKWzJI",
     "Gabia": "",
     "Haley": "https://youtu.be/u6mmhB-zY3Y",
     "Hilde": "https://youtu.be/rLfss0AWKtA",
