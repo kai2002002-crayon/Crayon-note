@@ -387,7 +387,10 @@
             if (isNPC) {
                 const iconClass = NPC_ICON[charName];
                 innerHtml = `
-                    <div class="absolute inset-0 flex items-center justify-center opacity-80"><div class="sprite-base sprite-common ${raceSprite} shrink-0 scale-[0.6] race-bg transition-transform"></div></div>
+                    <div class="absolute inset-0 flex items-center justify-center opacity-80">
+                        <!-- 🌟 這裡換成你新增的 sprite-Bg_NPC -->
+                        <div class="sprite-base sprite-common sprite-Bg_NPC shrink-0 scale-[0.6] race-bg transition-transform"></div>
+                    </div>
                     <div class="w-full h-full bg-white/20 dark:bg-black/20 backdrop-blur-[1px] absolute inset-0"></div>
                     <div class="sprite-NPC ${iconClass} shrink-0 scale-[0.38] npc-sprite relative z-10 transition-transform"></div>
                 `;
