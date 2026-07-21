@@ -173,13 +173,19 @@
             `;
             container.appendChild(row);
 
-            // 實例化該列的拖曳功能
+            // 實例化該列的拖曳功能 (優化版)
             setTimeout(() => {
                 const dropzone = document.getElementById(rowId);
                 const instance = new Sortable(dropzone, {
                     group: 'shared',
-                    animation: 150,
-                    ghostClass: 'opacity-50'
+                    animation: 200,             // 動畫時間稍微拉長一點點，看起來更順
+                    ghostClass: 'opacity-30',   // 留在原地的影子透明度
+                    dragClass: 'scale-105',     // 抓起來的時候稍微放大
+                    forceFallback: true,        // 🌟 核心：強制關閉 HTML5 原生拖曳，改用 JS 渲染，極大提升滑順度
+                    fallbackOnBody: true,       // 確保拖曳的元素不會被原本的 div 裁切
+                    fallbackTolerance: 3,       // 滑鼠/手指移動 3px 才判定為拖曳 (防誤觸)
+                    delay: 150,                 // 延遲 150ms 
+                    delayOnTouchOnly: true      // 🌟 核心：只在手機觸控時延遲，讓手機玩家可以正常上下滑動頁面
                 });
                 sortableInstances.push(instance);
             }, 0);
@@ -232,13 +238,19 @@
             section.appendChild(dropzone);
             container.appendChild(section);
 
-            // 加入 Sortable
+            // 加入 Sortable (優化版)
             setTimeout(() => {
                 const instance = new Sortable(document.getElementById(dropzoneId), {
                     group: 'shared',
-                    animation: 150,
-                    ghostClass: 'opacity-50',
-                    sort: false // 角色池內部不排序，只能拖出去或拖回來
+                    animation: 200,
+                    ghostClass: 'opacity-30',
+                    dragClass: 'scale-105',
+                    forceFallback: true,        // 🌟 核心：強制關閉 HTML5 原生拖曳
+                    fallbackOnBody: true,
+                    fallbackTolerance: 3,
+                    delay: 150,                 
+                    delayOnTouchOnly: true,     // 🌟 核心：防手機滑動誤觸
+                    sort: false                 // 角色池內部不排序，只能拖出去或拖回來
                 });
                 sortableInstances.push(instance);
             }, 0);
