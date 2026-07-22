@@ -112,64 +112,90 @@
             const el = document.createElement('div');
             const charName = charData.name;
             const spineName = (typeof SPINE_MAP !== 'undefined' && SPINE_MAP[charName]) ? SPINE_MAP[charName] : charName;
+            
             const displayName = (typeof getI18n === 'function' ? getI18n(charName) : charName);
+
             let raceKey = charData.race === "???" ? "unknown" : charData.race;
             const raceSprite = SPRITE_CLASS_MAP[`race_${raceKey}`] || "sprite-Bg_Unknown";
             const borderClass = personalityColors[charData.personality] ? personalityColors[charData.personality].split(' ')[0] : "border-gray-400";
+            
             const charSpriteBase = CHAR_SPRITE_MAP[charData.personality] || "sprite-char-innocence";
             const charSpriteClass = `sprite-${spineName}`;
-            const isChecked = checkedCharacters[charName] === true;
-            const checkHiddenClass = isChecked ? "" : "hidden";
-            const grayscaleClass = ""; // 🌟 取消灰階，未打勾時也保持原色
+
+            // 🌟 1. 把這段貼在這裡 (原本寫 isChecked 的地方可以整段替換掉)
+            const currentState = checkedCharacters[charName] || 0;
+            const checkHiddenClass = currentState === 0 ? "hidden" : "";
+            
+            let symbolText = "";
+            let symbolClass = "text-red-500 drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] text-4xl sm:text-5xl font-black";
+            if (currentState === 1) {
+                symbolText = "✔";
+            } else if (currentState === 2) {
+                symbolText = "❌";
+                symbolClass = "text-red-600 drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] text-4xl sm:text-5xl font-black";
+            }
+
             el.className = "flex flex-col items-center gap-1 group relative transition-all duration-300 no-context-menu cursor-pointer hover:scale-105";
+            
             el.innerHTML = `
-                <!-- Icon 邊框與底圖 -->
-                <div class="char-icon-box w-16 h-16 sm:w-20 sm:h-20 rounded-2xl border-4 ${borderClass} overflow-hidden shadow-md relative flex items-center justify-center ${grayscaleClass} transition-all duration-300" id="box_${charName}">
+                <div class="char-icon-box w-16 h-16 sm:w-20 sm:h-20 rounded-2xl border-4 ${borderClass} overflow-hidden shadow-md relative flex items-center justify-center transition-all duration-300" id="box_${charName}">
                     
-                    <!-- 背景圖 -->
                     <div class="absolute inset-0 flex items-center justify-center opacity-80">
                         <div class="sprite-base sprite-common ${raceSprite} shrink-0 scale-[0.8] sm:scale-[1.0]"></div>
                     </div>
                     <div class="w-full h-full bg-white/20 dark:bg-black/20 backdrop-blur-[1px] absolute inset-0 pointer-events-none"></div>
                     
-                    <!-- 角色圖 -->
                     <div class="absolute inset-0 flex items-center justify-center z-10">
                         <div class="sprite-base ${charSpriteBase} ${charSpriteClass} shrink-0 scale-[0.7] sm:scale-[0.85]"></div>
                     </div>
 
-                    <!-- 🌟 紅色剔號 (打勾遮罩) 🌟 -->
+                    <!-- 🌟 2. 確保遮罩內的 span 有對應到 id="symbol_${charName}" -->
                     <div id="check_${charName}" class="absolute inset-0 bg-black/40 z-20 flex items-center justify-center ${checkHiddenClass} transition-opacity duration-200">
-                        <!-- 可以用文字或 SVG 畫一個勾勾 -->
-                        <span class="text-red-500 drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] text-4xl sm:text-5xl font-black">✔</span>
+                        <span id="symbol_${charName}" class="${symbolClass}">${symbolText}</span>
                     </div>
                 </div>
-                <!-- 角色名字 -->
                 <span class="text-[10px] sm:text-xs font-bold text-gray-600 dark:text-gray-300 text-center w-full truncate leading-tight">${displayName}</span>
             `;
+
             el.addEventListener('contextmenu', function(e) {
-                e.preventDefault(); // 阻止瀏覽器預設的右鍵選單出現
+                e.preventDefault();
                 toggleCheck(charName);
             });
+
             el.addEventListener('click', function(e) {
                 toggleCheck(charName);
             });
+
             return el;
         }
 
+        // 🌟 切換狀態：無 ➔ 剔號 ✔ ➔ 交叉 ❌ ➔ 無
         function toggleCheck(charName) {
             const checkOverlay = document.getElementById(`check_${charName}`);
-            const iconBox = document.getElementById(`box_${charName}`);
-            if (checkOverlay.classList.contains('hidden')) {
-                // 打勾
-                checkOverlay.classList.remove('hidden');
-                iconBox.classList.remove('grayscale-[50%]', 'opacity-80');
-                checkedCharacters[charName] = true;
-            } else {
-                // 取消打勾
+            const checkSymbol = document.getElementById(`symbol_${charName}`);
+            
+            // 取得目前的狀態 (若沒有則預設為 0)
+            let currentState = checkedCharacters[charName] || 0;
+            currentState = (currentState + 1) % 3; // 0 -> 1 -> 2 -> 0
+            
+            checkedCharacters[charName] = currentState;
+
+            if (currentState === 0) {
+                // 狀態 0：無標記
                 checkOverlay.classList.add('hidden');
-                iconBox.classList.add('grayscale-[50%]', 'opacity-80');
-                checkedCharacters[charName] = false;
+            } else if (currentState === 1) {
+                // 狀態 1：打勾 ✔
+                checkOverlay.classList.remove('hidden');
+                checkSymbol.className = "text-red-500 drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] text-4xl sm:text-5xl font-black";
+                checkSymbol.innerText = "✔";
+            } else if (currentState === 2) {
+                // 狀態 2：打叉 ❌
+                checkOverlay.classList.remove('hidden');
+                checkSymbol.className = "text-red-600 drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] text-4xl sm:text-5xl font-black";
+                checkSymbol.innerText = "❌";
             }
+            
+            // 儲存進度
             localStorage.setItem('trickcal_checklist', JSON.stringify(checkedCharacters));
         }
 
