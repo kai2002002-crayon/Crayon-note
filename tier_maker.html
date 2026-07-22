@@ -469,7 +469,7 @@
             }
         }
 
-        // 🌟 6. 完美匯出圖片
+        // 🌟 6. 完美匯出圖片 (安全過濾版，修復背景消失問題)
         function exportImage() {
             const captureArea = document.getElementById('captureArea');
             
@@ -484,16 +484,13 @@
 
             document.activeElement.blur();
 
-            // 🌟 物理強制隱藏：抓出 captureArea 裡面所有的按鈕、絕對定位的刪除鈕、叉叉
-            const allButtonsAndDeletes = captureArea.querySelectorAll('button, .remove-btn, .delete-btn, [class*="absolute"], [class*="delete"], [class*="remove"]');
+            // 🌟 修正關鍵：拿掉危險的 [class*="absolute"]，只精準隱藏移除按鈕與系統按鈕
+            const allButtonsAndDeletes = captureArea.querySelectorAll('button, .remove-btn, .hide-on-export');
             
             const savedStyles = [];
             allButtonsAndDeletes.forEach(el => {
-                // 排除掉可能是角色主體本身，只針對按鈕或右上角小圖示
-                if (el.tagName === 'BUTTON' || el.classList.length > 0) {
-                    savedStyles.push({ el: el, display: el.style.display });
-                    el.style.setProperty('display', 'none', 'important');
-                }
+                savedStyles.push({ el: el, display: el.style.display });
+                el.style.setProperty('display', 'none', 'important');
             });
 
             // 延遲 50 毫秒讓瀏覽器確實隱藏按鈕後再拍照
@@ -504,10 +501,10 @@
                     useCORS: true,
                     logging: false,
                     ignoreElements: (element) => {
-                        // 任何含有按鈕或刪除性質的標籤直接忽略
+                        // 雙重保險：只忽略按鈕或有 remove-btn class 的元素
                         return element.tagName === 'BUTTON' || 
                                element.classList.contains('remove-btn') || 
-                               element.classList.contains('delete-btn');
+                               element.classList.contains('hide-on-export');
                     }
                 }).then(canvas => {
                     // 恢復所有 UI 狀態
