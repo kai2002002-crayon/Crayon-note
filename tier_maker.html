@@ -75,33 +75,11 @@
                 height: 5.25rem !important;
             }
         }
-        
-        /* 🌟 修正 html2canvas 截圖偏移 Bug：改用 margin: auto 置中，避開會壞掉的 translate */
-.tier-dropzone[id^="tier_"] .race-bg { 
-    position: absolute !important;
-    top: 0 !important;
-    bottom: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    margin: auto !important; /* 絕對置中大法，截圖套件不會算錯 */
-    transform: scale(1.0) !important; 
-    transform-origin: center !important;
-}
-
-/* 確保一般角色與 NPC 圖死死釘在正中央 */
-.tier-dropzone[id^="tier_"] .sprite-base.z-10,
-.tier-dropzone[id^="tier_"] .char-sprite,
-.tier-dropzone[id^="tier_"] .sprite-NPC,
-.tier-dropzone[id^="tier_"] .npc-sprite { 
-    position: absolute !important;
-    top: 0 !important;
-    bottom: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    margin: auto !important; /* 絕對置中大法，截圖套件不會算錯 */
-    transform: scale(0.9) !important; 
-    transform-origin: center !important;
-}
+        /* 🌟 安全放大法：針對 Wrapper 放大，完美避開截圖套件的定位 Bug */
+        .tier-dropzone[id^="tier_"] .scale-wrapper {
+            transform: scale(1.4) !important; /* 覺得不夠滿可以改 1.45 或 1.5 */
+            transform-origin: center center !important;
+        }
     </style>
 </head>
 <body class="p-2 sm:p-6 bg-[#fcf8f2] dark:bg-slate-900 text-gray-800 dark:text-gray-200 min-h-screen transition-colors duration-300">
@@ -409,20 +387,35 @@
             if (isNPC) {
                 const iconClass = NPC_ICON[charName];
                 innerHtml = `
-                    <div class="absolute inset-0 flex items-center justify-center opacity-80">
-                        <!-- 🌟 這裡換成你新增的 sprite-Bg_NPC -->
-                        <div class="sprite-base sprite-common sprite-Bg_NPC shrink-0 scale-[0.6] race-bg transition-transform"></div>
+                    <!-- 🌟 底圖 Wrapper -->
+                    <div class="absolute inset-0 flex items-center justify-center opacity-80 scale-wrapper">
+                        <div class="sprite-base sprite-common sprite-Bg_NPC shrink-0 scale-[0.6] race-bg"></div>
                     </div>
                     <div class="w-full h-full bg-white/20 dark:bg-black/20 backdrop-blur-[1px] absolute inset-0"></div>
-                    <div class="sprite-NPC ${iconClass} shrink-0 scale-[0.5] npc-sprite relative z-10 transition-transform"></div>
+                    
+                    <!-- 🌟 角色 Wrapper (我們把 z-10 移到外層，並加上 scale-wrapper) -->
+                    <div class="absolute inset-0 flex items-center justify-center z-10 scale-wrapper">
+                        <div class="sprite-NPC ${iconClass} shrink-0 scale-[0.48] npc-sprite"></div>
+                    </div>
                 `;
             } else {
-                const charSpriteBase = CHAR_SPRITE_MAP[charData.personality] || "sprite-char-innocence";
+                const charSpriteBase = CHAR_SPRITE_MAP[char.personality] || "sprite-char-innocence";
                 const charSpriteClass = `sprite-${spineName}`;
+                let raceKey = char.race;
+                if (raceKey === "???") raceKey = "unknown";
+                const raceSprite = SPRITE_CLASS_MAP[`race_${raceKey}`] || "sprite-Bg_Unknown";
+
                 innerHtml = `
-                    <div class="absolute inset-0 flex items-center justify-center opacity-80"><div class="sprite-base sprite-common ${raceSprite} shrink-0 scale-[0.6] race-bg transition-transform"></div></div>
+                    <!-- 🌟 底圖 Wrapper -->
+                    <div class="absolute inset-0 flex items-center justify-center opacity-80 scale-wrapper">
+                        <div class="sprite-base sprite-common ${raceSprite} shrink-0 scale-[0.6] race-bg"></div>
+                    </div>
                     <div class="w-full h-full bg-white/20 dark:bg-black/20 backdrop-blur-[1px] absolute inset-0"></div>
-                    <div class="sprite-base ${charSpriteBase} ${charSpriteClass} shrink-0 scale-[0.5] relative z-10 transition-transform"></div>
+                    
+                    <!-- 🌟 角色 Wrapper -->
+                    <div class="absolute inset-0 flex items-center justify-center z-10 scale-wrapper">
+                        <div class="sprite-base ${charSpriteBase} ${charSpriteClass} shrink-0 scale-[0.45] char-sprite"></div>
+                    </div>
                 `;
             }
 
