@@ -4,14 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>我的自訂角色清單</title>
-    
-    <!-- 引入你的資料庫與 CSS -->
     <script src="data_core.js"></script>
     <link rel="stylesheet" href="sprites.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" href="https://i.postimg.cc/mkfSTq5k/Favicon.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
-    
     <script>
         tailwind.config = { darkMode: 'class', }
         const isDarkMode = localStorage.getItem('theme') === 'dark' || 
@@ -20,43 +17,36 @@
     </script>
     <style>
         body { font-family: 'Noto Sans TC', sans-serif; }
-        
-        /* 隱藏預設右鍵選單的輔助 */
         .no-context-menu { -webkit-touch-callout: none; }
     </style>
 </head>
 <body class="p-4 sm:p-8 bg-[#fcf8f2] dark:bg-slate-900 text-gray-800 dark:text-gray-200 min-h-screen transition-colors duration-300">
     <div class="max-w-[1200px] mx-auto space-y-6">
-        
-        <!-- 頂部控制列 -->
         <header class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md p-4 sm:px-6 rounded-2xl shadow-md border-4 border-amber-400 dark:border-slate-600 flex flex-col sm:flex-row justify-between items-center gap-4 relative z-10">
-            <div>
-                <h1 class="text-2xl sm:text-3xl font-black text-amber-950 dark:text-amber-400 flex items-center gap-2">
-                    ⭐ 你的自訂標題
-                </h1>
-                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">在這裡寫上你想要的自訂說明文字...</p>
+            <div class="w-full sm:w-auto flex-1 space-y-1">
+                <input type="text" id="customTitle" value="⭐ 我的自訂角色清單" 
+                    oninput="saveCustomHeader()"
+                    class="w-full bg-transparent text-xl sm:text-2xl font-black text-amber-950 dark:text-amber-400 outline-none border-b-2 border-transparent hover:border-amber-300 focus:border-amber-500 transition-colors px-1 py-0.5">
+                <input type="text" id="customDesc" value="在頭像上點擊即可標記狀態！" 
+                    oninput="saveCustomHeader()"
+                    class="w-full bg-transparent text-xs sm:text-sm text-gray-500 dark:text-gray-400 outline-none border-b-2 border-transparent hover:border-gray-300 focus:border-amber-500 transition-colors px-1 py-0.5">
             </div>
-            
-            <div class="flex items-center gap-3">
-                <label for="sortSelect" class="font-bold text-gray-700 dark:text-gray-300">排序方式：</label>
-                <select id="sortSelect" onchange="renderChecklist()" class="bg-gray-100 dark:bg-slate-700 border-2 border-gray-300 dark:border-slate-600 rounded-xl px-3 py-2 font-bold outline-none focus:border-amber-500 transition-colors cursor-pointer">
+            <div class="flex items-center gap-3 shrink-0">
+                <label for="sortSelect" class="font-bold text-gray-700 dark:text-gray-300 text-sm">排序方式：</label>
+                <select id="sortSelect" onchange="renderChecklist()" class="bg-gray-100 dark:bg-slate-700 border-2 border-gray-300 dark:border-slate-600 rounded-xl px-3 py-2 font-bold outline-none focus:border-amber-500 transition-colors cursor-pointer text-sm">
                     <option value="name">英文字首 (A-Z)</option>
                     <option value="personality">性格</option>
                     <option value="race">種族</option>
                 </select>
-                <button onclick="clearAllChecks()" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl shadow transition text-sm">
+                <button onclick="clearAllChecks()" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl shadow transition text-sm whitespace-nowrap">
                     清除全部 ✔
                 </button>
             </div>
         </header>
-
-        <!-- 角色列表容器 -->
         <div id="checklistContainer" class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-3 sm:gap-4 p-4 bg-white/50 dark:bg-slate-800/50 rounded-2xl border border-gray-200 dark:border-slate-700">
             <!-- JavaScript 將會在這裡動態渲染角色 -->
         </div>
-
     </div>
-
     <script>
         // 🌟 1. 定義顏色與樣式對應 (與 Tier Maker 相同)
         const personalityColors = { 
@@ -75,10 +65,7 @@
             "冷靜": "sprite-char-composed", "憂鬱": "sprite-char-depressed",
             "天真": "sprite-char-innocence", "狂亂": "sprite-char-madness", "活潑": "sprite-char-vivacious"
         };
-
-        // 載入進度記錄
         let checkedCharacters = JSON.parse(localStorage.getItem('trickcal_checklist')) || {};
-
         window.onload = function() {
             renderChecklist();
         };
@@ -88,12 +75,9 @@
             const container = document.getElementById('checklistContainer');
             const sortType = document.getElementById('sortSelect').value;
             container.innerHTML = '';
-
             if (typeof INITIAL_DATA === 'undefined' || !INITIAL_DATA) return;
-
             // 複製一份資料來進行排序
             let data = [...INITIAL_DATA];
-
             data.sort((a, b) => {
                 if (sortType === 'name') {
                     let nameA = (typeof SPINE_MAP !== 'undefined' && SPINE_MAP[a.name]) ? SPINE_MAP[a.name] : a.name;
@@ -116,7 +100,6 @@
                     return a.race.localeCompare(b.race);
                 }
             });
-
             // 產生每一個角色的圖示
             data.forEach(char => {
                 const el = createChecklistIcon(char);
@@ -138,9 +121,7 @@
             const isChecked = checkedCharacters[charName] === true;
             const checkHiddenClass = isChecked ? "" : "hidden";
             const grayscaleClass = ""; // 🌟 取消灰階，未打勾時也保持原色
-
             el.className = "flex flex-col items-center gap-1 group relative transition-all duration-300 no-context-menu cursor-pointer hover:scale-105";
-            
             el.innerHTML = `
                 <!-- Icon 邊框與底圖 -->
                 <div class="char-icon-box w-16 h-16 sm:w-20 sm:h-20 rounded-2xl border-4 ${borderClass} overflow-hidden shadow-md relative flex items-center justify-center ${grayscaleClass} transition-all duration-300" id="box_${charName}">
@@ -165,27 +146,19 @@
                 <!-- 角色名字 -->
                 <span class="text-[10px] sm:text-xs font-bold text-gray-600 dark:text-gray-300 text-center w-full truncate leading-tight">${displayName}</span>
             `;
-
-            // 🌟 註冊右鍵點擊事件 (contextmenu)
             el.addEventListener('contextmenu', function(e) {
                 e.preventDefault(); // 阻止瀏覽器預設的右鍵選單出現
                 toggleCheck(charName);
             });
-
-            // 如果要在手機上也能方便使用，通常會綁定普通的點擊事件（左鍵），這裡也一併幫你加上
-            // 如果你只想要純右鍵，把這行註解掉即可
             el.addEventListener('click', function(e) {
                 toggleCheck(charName);
             });
-
             return el;
         }
 
-        // 🌟 4. 切換打勾狀態並儲存至 localStorage
         function toggleCheck(charName) {
             const checkOverlay = document.getElementById(`check_${charName}`);
             const iconBox = document.getElementById(`box_${charName}`);
-            
             if (checkOverlay.classList.contains('hidden')) {
                 // 打勾
                 checkOverlay.classList.remove('hidden');
@@ -197,12 +170,9 @@
                 iconBox.classList.add('grayscale-[50%]', 'opacity-80');
                 checkedCharacters[charName] = false;
             }
-            
-            // 儲存進度
             localStorage.setItem('trickcal_checklist', JSON.stringify(checkedCharacters));
         }
 
-        // 🌟 5. 一鍵清除所有打勾
         function clearAllChecks() {
             if(confirm("確定要清除所有的收集進度嗎？")) {
                 checkedCharacters = {};
@@ -210,6 +180,20 @@
                 renderChecklist();
             }
         }
+
+        function saveCustomHeader() {
+            const titleVal = document.getElementById('customTitle').value;
+            const descVal = document.getElementById('customDesc').value;
+            localStorage.setItem('trickcal_custom_title', titleVal);
+            localStorage.setItem('trickcal_custom_desc', descVal);
+        }
+        window.onload = function() {
+            const savedTitle = localStorage.getItem('trickcal_custom_title');
+            const savedDesc = localStorage.getItem('trickcal_custom_desc');        
+            if (savedTitle !== null) document.getElementById('customTitle').value = savedTitle;
+            if (savedDesc !== null) document.getElementById('customDesc').value = savedDesc;
+            renderChecklist();
+        };
     </script>
 </body>
 </html>
