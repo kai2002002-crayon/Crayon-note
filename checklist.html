@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>角色收集圖鑑 (Checklist)</title>
+    <title>我的自訂角色清單</title>
     
     <!-- 引入你的資料庫與 CSS -->
     <script src="data_core.js"></script>
@@ -32,9 +32,9 @@
         <header class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md p-4 sm:px-6 rounded-2xl shadow-md border-4 border-amber-400 dark:border-slate-600 flex flex-col sm:flex-row justify-between items-center gap-4 relative z-10">
             <div>
                 <h1 class="text-2xl sm:text-3xl font-black text-amber-950 dark:text-amber-400 flex items-center gap-2">
-                    ✅ 角色收集圖鑑
+                    ⭐ 你的自訂標題
                 </h1>
-                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">在頭像上點擊「右鍵」即可標記收集狀態！</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">在這裡寫上你想要的自訂說明文字...</p>
             </div>
             
             <div class="flex items-center gap-3">
@@ -140,10 +140,9 @@
             const charSpriteBase = CHAR_SPRITE_MAP[charData.personality] || "sprite-char-innocence";
             const charSpriteClass = `sprite-${spineName}`;
 
-            // 確認該角色是否已被記錄為打勾
             const isChecked = checkedCharacters[charName] === true;
             const checkHiddenClass = isChecked ? "" : "hidden";
-            const grayscaleClass = isChecked ? "" : "grayscale-[50%] opacity-80"; // 沒收集時稍微灰階，可自行拿掉
+            const grayscaleClass = "";
 
             el.className = "flex flex-col items-center gap-1 group relative transition-all duration-300 no-context-menu cursor-pointer hover:scale-105";
             
