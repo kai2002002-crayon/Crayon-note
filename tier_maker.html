@@ -76,23 +76,31 @@
             }
         }
         
-        /* 🌟 修正 html2canvas 截圖偏移 Bug：改用絕對定位強制置中並放大 */
+        /* 🌟 修正 html2canvas 截圖偏移 Bug：改用 margin: auto 置中，避開會壞掉的 translate */
 .tier-dropzone[id^="tier_"] .race-bg { 
     position: absolute !important;
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%) scale(1.0) !important; 
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    margin: auto !important; /* 絕對置中大法，截圖套件不會算錯 */
+    transform: scale(1.0) !important; 
+    transform-origin: center !important;
 }
 
-/* 確保一般角色與 NPC 圖在截圖時，死死釘在正中央 */
+/* 確保一般角色與 NPC 圖死死釘在正中央 */
 .tier-dropzone[id^="tier_"] .sprite-base.z-10,
 .tier-dropzone[id^="tier_"] .char-sprite,
 .tier-dropzone[id^="tier_"] .sprite-NPC,
 .tier-dropzone[id^="tier_"] .npc-sprite { 
     position: absolute !important;
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%) scale(0.9) !important; 
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    margin: auto !important; /* 絕對置中大法，截圖套件不會算錯 */
+    transform: scale(0.9) !important; 
+    transform-origin: center !important;
 }
     </style>
 </head>
