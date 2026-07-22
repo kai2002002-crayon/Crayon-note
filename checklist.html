@@ -124,25 +124,20 @@
             });
         }
 
-        // 🌟 3. 創建帶有打勾功能的角色圖示
+
         function createChecklistIcon(charData) {
             const el = document.createElement('div');
             const charName = charData.name;
             const spineName = (typeof SPINE_MAP !== 'undefined' && SPINE_MAP[charName]) ? SPINE_MAP[charName] : charName;
-            
-            // 嘗試取得翻譯名稱，如果沒有 getI18n 函式則顯示預設名稱
             const displayName = (typeof getI18n === 'function' ? getI18n(charName) : charName);
-
             let raceKey = charData.race === "???" ? "unknown" : charData.race;
             const raceSprite = SPRITE_CLASS_MAP[`race_${raceKey}`] || "sprite-Bg_Unknown";
             const borderClass = personalityColors[charData.personality] ? personalityColors[charData.personality].split(' ')[0] : "border-gray-400";
-            
             const charSpriteBase = CHAR_SPRITE_MAP[charData.personality] || "sprite-char-innocence";
             const charSpriteClass = `sprite-${spineName}`;
-
             const isChecked = checkedCharacters[charName] === true;
             const checkHiddenClass = isChecked ? "" : "hidden";
-            const grayscaleClass = "";
+            const grayscaleClass = ""; // 🌟 取消灰階，未打勾時也保持原色
 
             el.className = "flex flex-col items-center gap-1 group relative transition-all duration-300 no-context-menu cursor-pointer hover:scale-105";
             
