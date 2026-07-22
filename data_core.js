@@ -617,7 +617,7 @@ const WORK_URL = {
     "Taida": "https://youtu.be/ZAJztHqI7uA",
     "Tig": "",
 	"Ui": "https://youtu.be/sen1414Z3Rw",
-    "Velvet": "",
+    "Velvet": "https://youtu.be/uiyfp0lMa7E",
     "Vivi": "https://youtu.be/Bi_Hi3PfTjU",
     "xXionx": "https://youtu.be/1VLD414k_kk",
     "Yomi": "https://youtu.be/nBco3aJoSUw",
