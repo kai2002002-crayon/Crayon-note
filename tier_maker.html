@@ -399,9 +399,9 @@
                     </div>
                 `;
             } else {
-                const charSpriteBase = CHAR_SPRITE_MAP[char.personality] || "sprite-char-innocence";
+                const charSpriteBase = CHAR_SPRITE_MAP[charData.personality] || "sprite-char-innocence";
                 const charSpriteClass = `sprite-${spineName}`;
-                let raceKey = char.race;
+                let raceKey = charData.race;
                 if (raceKey === "???") raceKey = "unknown";
                 const raceSprite = SPRITE_CLASS_MAP[`race_${raceKey}`] || "sprite-Bg_Unknown";
 
