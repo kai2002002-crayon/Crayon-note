@@ -462,11 +462,11 @@
             }
         }
 
-        // 🌟 6. 匯出圖片
+        // 🌟 6. 完美匯出圖片
         function exportImage() {
             const captureArea = document.getElementById('captureArea');
             
-
+            // 替換 Title 為純文字
             const titleInput = document.getElementById('tierTitle');
             const titleValue = titleInput.value;
             const tempTitleSpan = document.createElement('h1');
@@ -477,43 +477,40 @@
 
             document.activeElement.blur();
 
-
-            const removeBtns = captureArea.querySelectorAll('.remove-btn, .delete-btn, button[title*="刪除"], .close-btn');
-            const hideOnExport = captureArea.querySelectorAll('.hide-on-export');
+            // 🌟 物理強制隱藏：抓出 captureArea 裡面所有的按鈕、絕對定位的刪除鈕、叉叉
+            const allButtonsAndDeletes = captureArea.querySelectorAll('button, .remove-btn, .delete-btn, [class*="absolute"], [class*="delete"], [class*="remove"]');
             
-
             const savedStyles = [];
-            removeBtns.forEach(b => {
-                savedStyles.push({ el: b, display: b.style.display });
-                b.style.setProperty('display', 'none', 'important');
-            });
-            hideOnExport.forEach(b => {
-                savedStyles.push({ el: b, display: b.style.display });
-                b.style.setProperty('display', 'none', 'important');
+            allButtonsAndDeletes.forEach(el => {
+                // 排除掉可能是角色主體本身，只針對按鈕或右上角小圖示
+                if (el.tagName === 'BUTTON' || el.classList.length > 0) {
+                    savedStyles.push({ el: el, display: el.style.display });
+                    el.style.setProperty('display', 'none', 'important');
+                }
             });
 
-
+            // 延遲 50 毫秒讓瀏覽器確實隱藏按鈕後再拍照
             setTimeout(() => {
                 html2canvas(captureArea, {
                     backgroundColor: "#0f172a", 
                     scale: 2, 
                     useCORS: true,
                     logging: false,
-
                     ignoreElements: (element) => {
-                        return element.classList.contains('remove-btn') || 
-                               element.classList.contains('delete-btn') ||
-                               element.classList.contains('hide-on-export');
+                        // 任何含有按鈕或刪除性質的標籤直接忽略
+                        return element.tagName === 'BUTTON' || 
+                               element.classList.contains('remove-btn') || 
+                               element.classList.contains('delete-btn');
                     }
                 }).then(canvas => {
-
+                    // 恢復所有 UI 狀態
                     tempTitleSpan.remove();
                     titleInput.style.display = 'block';
                     savedStyles.forEach(item => {
                         item.el.style.display = item.display;
                     });
 
-
+                    // 下載圖片
                     const link = document.createElement('a');
                     link.download = `Trickcal_TierList_${new Date().getTime()}.png`;
                     link.href = canvas.toDataURL('image/png');
@@ -524,7 +521,7 @@
                     console.error("匯出失敗", err);
                     alert(getI18n('ui_tier_export_error') || "匯出圖片失敗，請檢查瀏覽器控制台錯誤。");
                     
-
+                    // 發生錯誤也要恢復 UI
                     tempTitleSpan.remove();
                     titleInput.style.display = 'block';
                     savedStyles.forEach(item => {
