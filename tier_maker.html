@@ -51,35 +51,26 @@
         input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
         input[type="color"]::-webkit-color-swatch { border: none; border-radius: 50%; border: 2px solid rgba(255,255,255,0.3); }
 
-        /* 隱藏/顯示移除按鈕：在角色池裡隱藏，在 Rank 區塊裡顯示 */
-        .tier-dropzone[id^="pool_"] .remove-btn { display: none !important; }
-        .tier-dropzone[id^="tier_"] .remove-btn { display: flex !important; }
-        /* 截圖時強制隱藏移除按鈕 */
-        .exporting .remove-btn { display: none !important; }
-
         /* 開合動畫設定 */
         .collapsible-content { transition: max-height 0.3s ease-out, opacity 0.3s ease-out; overflow: hidden; }
         .collapsed { max-height: 0; opacity: 0; margin-top: 0 !important; overflow: hidden; padding-top: 0; padding-bottom: 0; border: none; }
         /* 🌟 控制 Rank 區內的圖示放大與名字隱藏 🌟 */
         /* 1. 隱藏 Rank 區的角色名字 */
+        /* 1. 隱藏 Rank 區的角色名字 */
         .tier-dropzone[id^="tier_"] .char-name { display: none !important; }
 
-        /* 2. 放大 Rank 區的角色圖示外框 (放大約 150%) */
+        /* 2. 放大 Rank 區的角色圖示外框 */
         .tier-dropzone[id^="tier_"] .char-icon-box {
-            width: 4.5rem !important; /* 相當於 w-18 */
+            width: 4.5rem !important;
             height: 4.5rem !important;
         }
         @media (min-width: 640px) {
             .tier-dropzone[id^="tier_"] .char-icon-box {
-                width: 5.25rem !important; /* 相當於 w-21 */
+                width: 5.25rem !important;
                 height: 5.25rem !important;
             }
         }
-        /* 🌟 安全放大法：針對 Wrapper 放大，完美避開截圖套件的定位 Bug */
-        .tier-dropzone[id^="tier_"] .scale-wrapper {
-            transform: scale(1.4) !important; /* 覺得不夠滿可以改 1.45 或 1.5 */
-            transform-origin: center center !important;
-        }
+
     </style>
 </head>
 <body class="p-2 sm:p-6 bg-[#fcf8f2] dark:bg-slate-900 text-gray-800 dark:text-gray-200 min-h-screen transition-colors duration-300">
@@ -364,12 +355,12 @@
         }
 
         // 🌟 修改：產生角色圖示 (加上了 css classes 用於放大判斷)
+        // 🌟 產生角色圖示 (點擊退回版，無叉叉)
         function createCharIcon(charData, isNPC, fallbackBorder) {
             const el = document.createElement('div');
             let charName = isNPC ? charData : charData.name;
             
             el.setAttribute('data-char-id', charName);
-            // 外層容器不寫死寬度，由內部決定
             el.className = "cursor-grab active:cursor-grabbing flex flex-col items-center gap-0.5 group relative transition-all duration-300";
             
             let spineName = isNPC ? NPC_SPINE[charName] : (typeof SPINE_MAP !== 'undefined' && SPINE_MAP[charName] ? SPINE_MAP[charName] : charName);
@@ -387,67 +378,54 @@
             if (isNPC) {
                 const iconClass = NPC_ICON[charName];
                 innerHtml = `
-                    <!-- 🌟 底圖 Wrapper -->
-                    <div class="absolute inset-0 flex items-center justify-center opacity-80 scale-wrapper">
-                        <div class="sprite-base sprite-common sprite-Bg_NPC shrink-0 scale-[0.6] race-bg"></div>
+                    <div class="absolute inset-0 flex items-center justify-center opacity-80">
+                        <div class="sprite-base sprite-common sprite-Bg_NPC shrink-0 scale-[0.7] sm:scale-[0.8]"></div>
                     </div>
-                    <div class="w-full h-full bg-white/20 dark:bg-black/20 backdrop-blur-[1px] absolute inset-0"></div>
-                    
-                    <!-- 🌟 角色 Wrapper (我們把 z-10 移到外層，並加上 scale-wrapper) -->
-                    <div class="absolute inset-0 flex items-center justify-center z-10 scale-wrapper">
-                        <div class="sprite-NPC ${iconClass} shrink-0 scale-[0.48] npc-sprite"></div>
+                    <div class="w-full h-full bg-white/20 dark:bg-black/20 backdrop-blur-[1px] absolute inset-0 pointer-events-none"></div>
+                    <div class="absolute inset-0 flex items-center justify-center z-10">
+                        <div class="sprite-NPC ${iconClass} shrink-0 scale-[0.55] sm:scale-[0.65]"></div>
                     </div>
                 `;
             } else {
                 const charSpriteBase = CHAR_SPRITE_MAP[charData.personality] || "sprite-char-innocence";
                 const charSpriteClass = `sprite-${spineName}`;
-                let raceKey = charData.race;
-                if (raceKey === "???") raceKey = "unknown";
-                const raceSprite = SPRITE_CLASS_MAP[`race_${raceKey}`] || "sprite-Bg_Unknown";
-
+                
                 innerHtml = `
-                    <!-- 🌟 底圖 Wrapper -->
-                    <div class="absolute inset-0 flex items-center justify-center opacity-80 scale-wrapper">
-                        <div class="sprite-base sprite-common ${raceSprite} shrink-0 scale-[0.6] race-bg"></div>
+                    <div class="absolute inset-0 flex items-center justify-center opacity-80">
+                        <div class="sprite-base sprite-common ${raceSprite} shrink-0 scale-[0.7] sm:scale-[0.8]"></div>
                     </div>
-                    <div class="w-full h-full bg-white/20 dark:bg-black/20 backdrop-blur-[1px] absolute inset-0"></div>
-                    
-                    <!-- 🌟 角色 Wrapper -->
-                    <div class="absolute inset-0 flex items-center justify-center z-10 scale-wrapper">
-                        <div class="sprite-base ${charSpriteBase} ${charSpriteClass} shrink-0 scale-[0.45] char-sprite"></div>
+                    <div class="w-full h-full bg-white/20 dark:bg-black/20 backdrop-blur-[1px] absolute inset-0 pointer-events-none"></div>
+                    <div class="absolute inset-0 flex items-center justify-center z-10">
+                        <div class="sprite-base ${charSpriteBase} ${charSpriteClass} shrink-0 scale-[0.55] sm:scale-[0.65]"></div>
                     </div>
                 `;
             }
 
-            const removeBtn = `
-                <button onclick="returnToPool(this, '${charName}')" class="remove-btn absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center shadow shadow-black/50 text-[10px] font-black leading-none pb-[1px] hover:bg-red-600 hover:scale-110 transition z-50 pointer-events-auto">
-                    ✕
-                </button>
-            `;
+            // 🌟 點擊事件：如果角色在 Rank 區 (父元素 ID 包含 tier_)，點擊就退回下方角色池
+            el.onclick = function() {
+                if (this.parentElement && this.parentElement.id.startsWith('tier_')) {
+                    returnToPool(this, charName);
+                }
+            };
 
             el.innerHTML = `
-                <!-- 🌟 加上了 char-icon-box，讓 CSS 能夠抓到並在 Rank 區放大 -->
                 <div class="char-icon-box w-12 h-12 sm:w-14 sm:h-14 rounded-xl border-2 ${borderClass} overflow-hidden shadow-sm hover:shadow-md transition-all relative flex items-center justify-center pointer-events-none">
                     ${innerHtml}
                 </div>
-                <!-- 🌟 加上了 char-name，讓 CSS 能夠抓到並在 Rank 區隱藏 -->
                 <span class="char-name text-[9px] sm:text-[10px] font-bold text-gray-500 text-center w-full truncate leading-tight pointer-events-none mt-0.5">${displayName}</span>
-                ${removeBtn}
             `;
 
             return el;
         }
 
-        // 🌟 新增：點擊紅色 ✕ 將角色從 Rank 區刪除，並解鎖下方池子的原版
-        function returnToPool(btnEl, charId) {
-            // 1. 直接移除 Rank 區域裡的這個角色 Icon
-            btnEl.parentElement.remove();
+        // 🌟 點擊將角色從 Rank 區刪除，並解鎖下方池子的原版
+        function returnToPool(el, charId) {
+            el.remove(); // 直接移除點擊的整個角色元素
             
-            // 2. 找回池子裡的灰階本體，並恢復色彩與點擊能力
             const origEl = document.getElementById('pool_orig_' + charId);
             if (origEl) {
                 origEl.classList.remove('grayscale', 'opacity-40', 'pointer-events-none');
-                origEl.removeAttribute('id'); // 清除 ID，讓他可以再次被拖曳
+                origEl.removeAttribute('id');
             }
         }
         // 翻譯輔助函數
@@ -469,7 +447,7 @@
             }
         }
 
-        // 🌟 6. 完美匯出圖片 (安全過濾版，修復背景消失問題)
+        // 🌟 6. 完美匯出圖片 (最單純、最標準的寫法)
         function exportImage() {
             const captureArea = document.getElementById('captureArea');
             
@@ -484,35 +462,22 @@
 
             document.activeElement.blur();
 
-            // 🌟 修正關鍵：拿掉危險的 [class*="absolute"]，只精準隱藏移除按鈕與系統按鈕
-            const allButtonsAndDeletes = captureArea.querySelectorAll('button, .remove-btn, .hide-on-export');
-            
-            const savedStyles = [];
-            allButtonsAndDeletes.forEach(el => {
-                savedStyles.push({ el: el, display: el.style.display });
-                el.style.setProperty('display', 'none', 'important');
-            });
+            // 稍微把調色盤控制項藏起來
+            const colorPickers = captureArea.querySelectorAll('input[type="color"]');
+            colorPickers.forEach(el => el.style.display = 'none');
 
-            // 延遲 50 毫秒讓瀏覽器確實隱藏按鈕後再拍照
+            // 延遲 50 毫秒確保 DOM 更新後拍照
             setTimeout(() => {
                 html2canvas(captureArea, {
                     backgroundColor: "#0f172a", 
                     scale: 2, 
                     useCORS: true,
-                    logging: false,
-                    ignoreElements: (element) => {
-                        // 雙重保險：只忽略按鈕或有 remove-btn class 的元素
-                        return element.tagName === 'BUTTON' || 
-                               element.classList.contains('remove-btn') || 
-                               element.classList.contains('hide-on-export');
-                    }
+                    logging: false
                 }).then(canvas => {
-                    // 恢復所有 UI 狀態
+                    // 恢復 UI
                     tempTitleSpan.remove();
                     titleInput.style.display = 'block';
-                    savedStyles.forEach(item => {
-                        item.el.style.display = item.display;
-                    });
+                    colorPickers.forEach(el => el.style.display = '');
 
                     // 下載圖片
                     const link = document.createElement('a');
@@ -525,12 +490,9 @@
                     console.error("匯出失敗", err);
                     alert(getI18n('ui_tier_export_error') || "匯出圖片失敗，請檢查瀏覽器控制台錯誤。");
                     
-                    // 發生錯誤也要恢復 UI
                     tempTitleSpan.remove();
                     titleInput.style.display = 'block';
-                    savedStyles.forEach(item => {
-                        item.el.style.display = item.display;
-                    });
+                    colorPickers.forEach(el => el.style.display = '');
                 });
             }, 50);
         }
