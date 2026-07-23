@@ -433,22 +433,22 @@ const ASIDE_DATA = {
         stars: {
             1: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "" }, 
-                effects: { zh: [""], ja: [""], en: [""] } 
+                name: { zh: "防止肌肉流失", ja: "", en: "" }, 
+                desc: { zh: "穿載者的最大HP、物理防禦力與魔法防禦力增加。", ja: "", en: "" }, 
+                effects: { zh: ["最大HP增加:12%", "物理防禦力增加:12%", "魔法防禦力增加:12%"], ja: [""], en: [""] } 
             },
             2: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "" }, 
-                effects: { zh: [""], ja: [""], en: [""] } 
+                name: { zh: "補充蛋白質", ja: "", en: "" }, 
+                desc: { zh: "最大HP增加。普通攻擊命中時，目前高級技能的冷卻時間會立即減少。普通技能的HP恢復比例變為2倍。", ja: "", en: "" }, 
+                effects: { zh: ["最大HP增加:30%", "冷卻時間立即減少:1秒"], ja: [""], en: [""] } 
             },
             3: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "" }, 
-                effects: { zh: [""], ja: [""], en: [""] }, 
-                globalEffects: { zh: ["全體 %", "全體 %"], ja: ["全体 %", "全体 %"], en: ["All %", "All %"] } 
+                name: { zh: "肌肉先遣隊", ja: "", en: "" }, 
+                desc: { zh: "增加前排友軍的每秒SP恢復量。", ja: "", en: "" }, 
+                effects: { zh: ["每秒SP恢復量:4"], ja: [""], en: [""] }, 
+                globalEffects: { zh: ["全體物理防禦力 3%", "全體爆擊傷害抵抗 3%"], ja: ["全体 %", "全体 %"], en: ["All %", "All %"] } 
             }
         }
     },
