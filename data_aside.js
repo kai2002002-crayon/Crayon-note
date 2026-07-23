@@ -433,22 +433,22 @@ const ASIDE_DATA = {
         stars: {
             1: { 
                 icon: "", 
-                name: { zh: "防止肌肉流失", ja: "", en: "Prevent Muscle Loss" }, 
-                desc: { zh: "穿載者的最大HP、物理防禦力與魔法防禦力增加。", ja: "", en: "Increases the bearer's Max HP, Physical Defense and Magical Defense." }, 
-                effects: { zh: ["最大HP增加:12%", "物理防禦力增加:12%", "魔法防禦力增加:12%"], ja: [""], en: ["Max HP Increase: 12%", "Physical DEF Increase: 12%", "Magical DEF Increase: 12%"] } 
+                name: { zh: "防止肌肉流失", ja: "筋肉減少防止", en: "Prevent Muscle Loss" }, 
+                desc: { zh: "穿載者的最大HP、物理防禦力與魔法防禦力增加。", ja: "着用者の最大HP、物理防御力、魔法防御力が増加する。", en: "Increases the bearer's Max HP, Physical Defense and Magical Defense." }, 
+                effects: { zh: ["最大HP增加:12%", "物理防禦力增加:12%", "魔法防禦力增加:12%"], ja: ["最大HP增加:12%", "物理防御力增加:12%", "魔法防御力增加:12%"], en: ["Max HP Increase: 12%", "Physical DEF Increase: 12%", "Magical DEF Increase: 12%"] } 
             },
             2: { 
                 icon: "", 
-                name: { zh: "補充蛋白質", ja: "", en: "Protein Supplement" }, 
-                desc: { zh: "最大HP增加。普通攻擊命中時，目前高級技能的冷卻時間會立即減少。普通技能的HP恢復比例變為2倍。", ja: "", en: "Increases Max HP. When a Normal Attack hits, instantly reduces current Senior Skill Cooldown. Freshman Skill's HP Recovery Ratio is doubled." }, 
-                effects: { zh: ["最大HP增加:30%", "冷卻時間立即減少:1秒"], ja: [""], en: ["Max HP Increase: 30%", "Instant Cooldown Reduction: 1s"] } 
+                name: { zh: "補充蛋白質", ja: "たんぱく質補給", en: "Protein Supplement" }, 
+                desc: { zh: "最大HP增加。普通攻擊命中時，目前高級技能的冷卻時間會立即減少。普通技能的HP恢復比例變為2倍。", ja: "最大HPが増加する。普通攻撃命中時に、現在高学年スキルのワールタイムが即時減少する。低学年スキルのHP回復割合が2倍になる。", en: "Increases Max HP. When a Normal Attack hits, instantly reduces current Senior Skill Cooldown. Freshman Skill's HP Recovery Ratio is doubled." }, 
+                effects: { zh: ["最大HP增加:30%", "冷卻時間立即減少:1秒"], ja: ["最大HP增加:30%", "クールタイム即時減少:1秒"], en: ["Max HP Increase: 30%", "Instant Cooldown Reduction: 1s"] } 
             },
             3: { 
                 icon: "", 
-                name: { zh: "肌肉先遣隊", ja: "", en: "Muscle Vanguard" }, 
-                desc: { zh: "增加前排友軍的每秒SP恢復量。", ja: "", en: "Increases front row allies' SP recovery per second." }, 
-                effects: { zh: ["每秒SP恢復量:4"], ja: [""], en: ["SP Recovery per second: 4"] }, 
-                globalEffects: { zh: ["全體物理防禦力 3%", "全體爆擊傷害抵抗 3%"], ja: ["全体 %", "全体 %"], en: ["All Physical DEF 3%", "All CRIT DMG RES 3%"] } 
+                name: { zh: "肌肉先遣隊", ja: "筋肉先発隊", en: "Muscle Vanguard" }, 
+                desc: { zh: "增加前排友軍的每秒SP恢復量。", ja: "前列の味方の1秒ごとのSP回復量が増加する。", en: "Increases front row allies' SP recovery per second." }, 
+                effects: { zh: ["每秒SP恢復量:4"], ja: ["1秒ごとのSP回復量:4"], en: ["SP Recovery per second: 4"] }, 
+                globalEffects: { zh: ["全體物理防禦力 3%", "全體爆擊傷害抵抗 3%"], ja: ["全体物理防御力 3%", "全体会ダメージ抵抗 3%"], en: ["All Physical DEF 3%", "All CRIT DMG RES 3%"] } 
             }
         }
     },
