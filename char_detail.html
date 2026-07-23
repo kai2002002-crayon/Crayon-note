@@ -716,13 +716,28 @@
                 );
             };
             
-            const updateRaceBackground = (raceName) => {
+            const updateRaceBackground = (raceName, personalityName) => {
+                console.log("目前的種族是：", raceName);
+                console.log("目前的性格是：", personalityName);
                 const bgDiv = document.getElementById('raceBackground');
-                if (bgDiv && typeof CHAR_BACKGROUNDS !== 'undefined' && CHAR_BACKGROUNDS[raceName]) {
-                    const bgUrl = CHAR_BACKGROUNDS[raceName];
-                    bgDiv.style.backgroundImage = "url('" + bgUrl + "')";
+                if (!bgDiv) return;
+
+                let bgImages = [];
+
+                // 1. 先放種族圖 (在上層)
+                if (raceName && CHAR_BACKGROUNDS[raceName]) {
+                    bgImages.push(`url('${CHAR_BACKGROUNDS[raceName]}')`);
+                }
+                
+                // 2. 再放性格圖 (在下層打底)
+                if (personalityName && PERSONALITY_BACKGROUNDS[personalityName]) {
+                    bgImages.push(`url('${PERSONALITY_BACKGROUNDS[personalityName]}')`);
+                }
+
+                if (bgImages.length > 0) {
+                    bgDiv.style.backgroundImage = bgImages.join(', ');
                 } else {
-                    if(bgDiv) bgDiv.style.backgroundImage = "none";
+                    bgDiv.style.backgroundImage = "none";
                 }
             };
             
@@ -1910,7 +1925,16 @@
             updateTag('charPosition', posLabel, currentCharData.position, 'position');
             updateTag('charJob', jLabel, currentCharData.job, 'job');
             updateTag('charAttribute', aLabel, currentAttribute, 'attribute');
-            updateRaceBackground(currentCharData.race);
+            
+            // 1. 直接從網址列解析出所有的參數（改成檢查或直接用新的變數名稱，避免衝突）
+            const queryParams = new URLSearchParams(window.location.search);
+
+            // 2. 抓取種族與性格（如果網址沒有，就從 currentCharData 拿來當備用）
+            const currentRace = currentCharData.race || queryParams.get('race');
+            const currentPersonality = queryParams.get('personality') || currentCharData.personality;
+
+            // 3. 傳入這兩個確定有值的變數！
+            updateRaceBackground(currentRace, currentPersonality);
                 
                 renderStars(currentTargetName);
                 renderExtraInfo(currentTargetName);
