@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的自訂角色清單</title>
+    <title>自訂角色清單 | Custom Checklist</title>
     <script src="data_core.js"></script>
     <link rel="stylesheet" href="sprites.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" href="https://i.postimg.cc/mkfSTq5k/Favicon.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
     
-    <!-- 引入 Firebase v8 Compat SDK (最適合單檔 HTML 使用) -->
+    <!-- 引入 Firebase v8 Compat SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
@@ -24,8 +24,6 @@
     <style>
         body { font-family: 'Noto Sans TC', sans-serif; }
         .no-context-menu { -webkit-touch-callout: none; }
-        
-        /* 隱藏捲軸但可滾動 (美化 Modal) */
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
@@ -36,27 +34,27 @@
         <!-- 頂部功能區 -->
         <header class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md p-4 sm:px-6 rounded-2xl shadow-md border-4 border-amber-400 dark:border-slate-600 flex flex-col xl:flex-row justify-between items-center gap-4 relative z-10">
             <div class="w-full xl:w-auto flex-1 space-y-1">
-                <input type="text" id="customTitle" value="⭐ 我的自訂角色清單" 
+                <input type="text" id="customTitle" value="" 
                     oninput="saveCustomHeader()"
                     class="w-full bg-transparent text-xl sm:text-2xl font-black text-amber-950 dark:text-amber-400 outline-none border-b-2 border-transparent hover:border-amber-300 focus:border-amber-500 transition-colors px-1 py-0.5">
-                <input type="text" id="customDesc" value="在頭像上點擊即可標記狀態！" 
+                <input type="text" id="customDesc" value="" 
                     oninput="saveCustomHeader()"
                     class="w-full bg-transparent text-xs sm:text-sm text-gray-500 dark:text-gray-400 outline-none border-b-2 border-transparent hover:border-gray-300 focus:border-amber-500 transition-colors px-1 py-0.5">
             </div>
             
             <div class="flex flex-wrap items-center gap-3 shrink-0">
                 <div class="flex items-center gap-2 mr-2">
-                    <label for="sortSelect" class="font-bold text-gray-700 dark:text-gray-300 text-sm">排序：</label>
+                    <label for="sortSelect" id="lbl_sort" class="font-bold text-gray-700 dark:text-gray-300 text-sm">排序：</label>
                     <select id="sortSelect" onchange="renderChecklist()" class="bg-gray-100 dark:bg-slate-700 border-2 border-gray-300 dark:border-slate-600 rounded-xl px-2 py-2 font-bold outline-none focus:border-amber-500 transition-colors cursor-pointer text-sm">
-                        <option value="name">字首 (A-Z)</option>
-                        <option value="personality">性格</option>
-                        <option value="race">種族</option>
+                        <option value="name" id="opt_name">字首 (A-Z)</option>
+                        <option value="personality" id="opt_personality">性格</option>
+                        <option value="race" id="opt_race">種族</option>
                     </select>
                 </div>
 
                 <!-- 雲端與本機控制按鈕 -->
                 <button onclick="clearAllChecks()" class="px-3 py-2 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl shadow transition text-sm whitespace-nowrap">
-                    清除 ✔
+                    <span id="btn_clear_text">清除 ✔</span>
                 </button>
                 
                 <div class="w-[2px] h-8 bg-gray-300 dark:bg-gray-600 mx-1 hidden sm:block"></div>
@@ -64,18 +62,18 @@
                 <!-- 尚未登入顯示 -->
                 <button id="loginBtn" onclick="loginGoogle()" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-xl shadow transition text-sm whitespace-nowrap flex items-center gap-2">
                     <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12.24 10.285V14.4h6.806c-.275 1.765-2.056 5.174-6.806 5.174-4.095 0-7.439-3.389-7.439-7.574s3.345-7.574 7.439-7.574c2.33 0 3.891.989 4.785 1.849l3.254-3.138C18.189 1.186 15.479 0 12.24 0c-6.635 0-12 5.365-12 12s5.365 12 12 12c6.926 0 11.52-4.869 11.52-11.726 0-.788-.085-1.39-.189-1.989H12.24z"/></svg>
-                    登入 Google
+                    <span id="btn_login_text">登入 Google</span>
                 </button>
 
-                <!-- 已登入顯示 (預設隱藏) -->
+                <!-- 已登入顯示 -->
                 <div id="cloudActionGroup" class="hidden flex items-center gap-2">
                     <button onclick="saveToCloudNew()" class="px-3 py-2 bg-green-500 hover:bg-green-600 text-white font-bold rounded-xl shadow transition text-sm whitespace-nowrap">
-                        ☁️ 另存新檔
+                        <span id="btn_save_text">☁️ 另存新檔</span>
                     </button>
                     <button onclick="openCloudManager()" class="px-3 py-2 bg-indigo-500 hover:bg-indigo-600 text-white font-bold rounded-xl shadow transition text-sm whitespace-nowrap">
-                        📂 讀取/管理清單
+                        <span id="btn_manage_text">📂 讀取/管理清單</span>
                     </button>
-                    <img id="userAvatar" src="" class="w-9 h-9 rounded-full border-2 border-amber-400 cursor-pointer" onclick="logoutGoogle()" title="點擊登出" alt="User Avatar">
+                    <img id="userAvatar" src="" class="w-9 h-9 rounded-full border-2 border-amber-400 cursor-pointer" onclick="logoutGoogle()" title="Logout" alt="Avatar">
                 </div>
             </div>
         </header>
@@ -85,44 +83,136 @@
         </div>
     </div>
 
-    <!-- 雲端清單管理 Modal (彈跳視窗) -->
+    <!-- 雲端清單管理 Modal -->
     <div id="cloudModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm transition-opacity">
         <div class="bg-white dark:bg-slate-800 w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
             <div class="p-5 border-b border-gray-200 dark:border-slate-700 flex justify-between items-center bg-amber-50 dark:bg-slate-900">
-                <h2 class="text-xl font-black text-amber-900 dark:text-amber-400 flex items-center gap-2">
+                <h2 id="modal_title_text" class="text-xl font-black text-amber-900 dark:text-amber-400 flex items-center gap-2">
                     📂 雲端自訂清單 (最多 10 個)
                 </h2>
                 <button onclick="closeCloudManager()" class="text-gray-500 hover:text-red-500 font-bold text-2xl leading-none">&times;</button>
             </div>
             
             <div id="cloudListContainer" class="p-5 overflow-y-auto hide-scrollbar flex-1 space-y-3 bg-gray-50 dark:bg-slate-800/50">
-                <!-- 雲端清單項目會渲染在這裡 -->
-                <div class="text-center text-gray-500 py-8 font-bold">載入中...</div>
+                <!-- 雲端清單項目 -->
             </div>
         </div>
     </div>
 
     <script>
         // ==========================================
-        // 🌟 Firebase 雲端設定 (請替換為你的專案設定)
+        // 🌟 1. i18n 多國語言翻譯系統
+        // ==========================================
+        const UI_DICT = {
+            'zh-TW': {
+                default_title: "⭐ 我的自訂角色清單",
+                default_desc: "在頭像上點擊即可標記狀態！",
+                sort_label: "排序：", sort_name: "字首 (A-Z)", sort_personality: "性格", sort_race: "種族",
+                btn_clear: "清除 ✔", btn_login: "登入 Google", btn_save: "☁️ 另存新檔", btn_manage: "📂 讀取/管理清單",
+                modal_title: "雲端自訂清單 (最多 10 個)",
+                loading: "資料載入中... 🔄",
+                no_data: "☁️ 雲端上目前沒有任何儲存的清單。",
+                btn_load: "讀取", btn_overwrite: "覆寫",
+                alert_logout: "確定要登出 Google 帳號嗎？",
+                alert_clear: "確定要清除畫面上的收集進度嗎？",
+                alert_login_first: "請先登入 Google 帳號！",
+                alert_limit: "❌ 您的雲端清單已達 10 個上限！請點擊「讀取/管理清單」刪除或覆寫現有進度。",
+                alert_save_ok: "✅ 成功另存新檔：【{0}】！",
+                alert_save_fail: "儲存失敗，請檢查權限或網路連線。",
+                alert_load_fail: "載入失敗，可能是由於 Firestore 索引建立中或規則受限。",
+                alert_load_ok: "✅ 已成功讀取清單：【{0}】", alert_read_fail: "讀取失敗！",
+                alert_overwrite_confirm: "⚠️ 確定要用「當前畫面上的進度」覆蓋掉這個雲端存檔嗎？",
+                alert_overwrite_ok: "✅ 覆寫成功！", alert_overwrite_fail: "覆寫失敗！",
+                alert_delete_confirm: "🗑️ 確定要永久刪除這個雲端清單嗎？(無法復原)", alert_delete_fail: "刪除失敗！",
+                desc_label: "📝 說明:", marked_label: "🏷️ 已標記: {0} 隻"
+            },
+            'en': {
+                default_title: "⭐ My Custom Checklist",
+                default_desc: "Click on the avatar to mark the status!",
+                sort_label: "Sort:", sort_name: "Name (A-Z)", sort_personality: "Personality", sort_race: "Race",
+                btn_clear: "Clear ✔", btn_login: "Login Google", btn_save: "☁️ Save New", btn_manage: "📂 Manage Lists",
+                modal_title: "Cloud Lists (Max 10)",
+                loading: "Loading data... 🔄",
+                no_data: "☁️ No saved lists in the cloud.",
+                btn_load: "Load", btn_overwrite: "Overwrite",
+                alert_logout: "Are you sure you want to log out of Google?",
+                alert_clear: "Clear all progress on the screen?",
+                alert_login_first: "Please log in to Google first!",
+                alert_limit: "❌ Cloud limit (10) reached! Please delete or overwrite an existing list.",
+                alert_save_ok: "✅ Successfully saved: [{0}]!",
+                alert_save_fail: "Save failed. Check permissions or network.",
+                alert_load_fail: "Load failed. Firestore index building or restricted.",
+                alert_load_ok: "✅ Successfully loaded: [{0}]", alert_read_fail: "Load failed!",
+                alert_overwrite_confirm: "⚠️ Overwrite this cloud save with your current progress?",
+                alert_overwrite_ok: "✅ Overwrite successful!", alert_overwrite_fail: "Overwrite failed!",
+                alert_delete_confirm: "🗑️ Permanently delete this list? (Cannot be undone)", alert_delete_fail: "Delete failed!",
+                desc_label: "📝 Desc:", marked_label: "🏷️ Marked: {0}"
+            },
+            'ja': {
+                default_title: "⭐ マイカスタムリスト",
+                default_desc: "アイコンをクリックして状態をマーク！",
+                sort_label: "並替：", sort_name: "名前 (A-Z)", sort_personality: "性格", sort_race: "種族",
+                btn_clear: "クリア ✔", btn_login: "ログイン", btn_save: "☁️ 新規保存", btn_manage: "📂 リスト管理",
+                modal_title: "クラウトリスト (最大10個)",
+                loading: "データ読み込み中... 🔄",
+                no_data: "☁️ クラウドに保存されたリストはありません。",
+                btn_load: "読込", btn_overwrite: "上書き",
+                alert_logout: "ログアウトしますか？",
+                alert_clear: "画面上の進行状況をすべてクリアしますか？",
+                alert_login_first: "先にGoogleにログインしてください！",
+                alert_limit: "❌ リストの上限(10個)に達しました！既存のリストを削除か上書きしてください。",
+                alert_save_ok: "✅ 保存しました：【{0}】！",
+                alert_save_fail: "保存失敗。権限やネットワークを確認してください。",
+                alert_load_fail: "読み込み失敗。インデックス構築中か制限が原因です。",
+                alert_load_ok: "✅ 読み込みました：【{0}】", alert_read_fail: "読み込み失敗！",
+                alert_overwrite_confirm: "⚠️ 現在の進行状況でこのクラウド保存を上書きしますか？",
+                alert_overwrite_ok: "✅ 上書き成功！", alert_overwrite_fail: "上書き失敗！",
+                alert_delete_confirm: "🗑️ このリストを完全に削除しますか？(復元不可)", alert_delete_fail: "削除失敗！",
+                desc_label: "📝 説明:", marked_label: "🏷️ マーク済み: {0}体"
+            }
+        };
+
+        // 偵測語言
+        let rawLang = localStorage.getItem('lang') || localStorage.getItem('trickcal_lang') || 'zh-TW';
+        if (rawLang.includes('en')) rawLang = 'en';
+        if (rawLang.includes('ja')) rawLang = 'ja';
+        const currentLang = ['zh-TW', 'en', 'ja'].includes(rawLang) ? rawLang : 'zh-TW';
+        
+        function t(key, arg = '') {
+            const dict = UI_DICT[currentLang] || UI_DICT['zh-TW'];
+            let str = dict[key] || UI_DICT['zh-TW'][key] || key;
+            return str.replace('{0}', arg);
+        }
+
+        function applyUITranslation() {
+            document.getElementById('lbl_sort').innerText = t('sort_label');
+            document.getElementById('opt_name').innerText = t('sort_name');
+            document.getElementById('opt_personality').innerText = t('sort_personality');
+            document.getElementById('opt_race').innerText = t('sort_race');
+            document.getElementById('btn_clear_text').innerText = t('btn_clear');
+            document.getElementById('btn_login_text').innerText = t('btn_login');
+            document.getElementById('btn_save_text').innerText = t('btn_save');
+            document.getElementById('btn_manage_text').innerText = t('btn_manage');
+            document.getElementById('modal_title_text').innerHTML = `📂 ${t('modal_title')}`;
+        }
+
+        // ==========================================
+        // 🌟 Firebase 雲端設定 (記得換回你的 KEY)
         // ==========================================
         const firebaseConfig = {
-            apiKey: "AIzaSyDhv8D2pY_0M56UJrDTQw0RGPHA-BkXU8Y",
-            authDomain: "crayon-note.firebaseapp.com",
-            projectId: "crayon-note",
-            storageBucket: "crayon-note.firebasestorage.app",
-            messagingSenderId: "210614088940",
-            appId: "1:210614088940:web:7addbdc7c466eeb05421c9"
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
         };
-        
-        // 初始化 Firebase
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
         const provider = new firebase.auth.GoogleAuthProvider();
         let currentUser = null;
 
-        // 監聽登入狀態
         auth.onAuthStateChanged(user => {
             currentUser = user;
             if (user) {
@@ -135,22 +225,15 @@
             }
         });
 
-        function loginGoogle() { 
-            auth.signInWithPopup(provider).catch(error => alert("登入失敗: " + error.message)); 
-        }
-        function logoutGoogle() { 
-            if(confirm("確定要登出 Google 帳號嗎？")) auth.signOut(); 
-        }
+        function loginGoogle() { auth.signInWithPopup(provider).catch(e => alert(e.message)); }
+        function logoutGoogle() { if(confirm(t('alert_logout'))) auth.signOut(); }
 
         // ==========================================
-        // 🌟 角色清單核心邏輯 (保留原功能)
+        // 🌟 角色清單核心邏輯
         // ==========================================
         const personalityColors = { 
-            "天真": "border-green-400 text-green-400", 
-            "冷靜": "border-blue-400 text-blue-400", 
-            "狂亂": "border-red-400 text-red-400", 
-            "活潑": "border-yellow-400 text-yellow-400", 
-            "憂鬱": "border-purple-400 text-purple-400"
+            "天真": "border-green-400 text-green-400", "冷靜": "border-blue-400 text-blue-400", 
+            "狂亂": "border-red-400 text-red-400", "活潑": "border-yellow-400 text-yellow-400", "憂鬱": "border-purple-400 text-purple-400"
         };
         const SPRITE_CLASS_MAP = {
             race_龍族: "sprite-Bg_Dragon", race_精靈: "sprite-Bg_Elf", race_妖精: "sprite-Bg_Sprite",
@@ -164,10 +247,13 @@
         let checkedCharacters = JSON.parse(localStorage.getItem('trickcal_checklist')) || {};
 
         window.onload = function() {
+            applyUITranslation(); // 套用多國語言 UI
+            
             const savedTitle = localStorage.getItem('trickcal_custom_title');
             const savedDesc = localStorage.getItem('trickcal_custom_desc');        
-            if (savedTitle !== null) document.getElementById('customTitle').value = savedTitle;
-            if (savedDesc !== null) document.getElementById('customDesc').value = savedDesc;
+            document.getElementById('customTitle').value = savedTitle !== null ? savedTitle : t('default_title');
+            document.getElementById('customDesc').value = savedDesc !== null ? savedDesc : t('default_desc');
+            
             renderChecklist();
         };
 
@@ -269,7 +355,7 @@
         }
 
         function clearAllChecks() {
-            if(confirm("確定要清除畫面上的收集進度嗎？")) {
+            if(confirm(t('alert_clear'))) {
                 checkedCharacters = {};
                 localStorage.removeItem('trickcal_checklist');
                 renderChecklist();
@@ -277,39 +363,34 @@
         }
 
         // ==========================================
-        // 🌟 雲端存取管理系統 (Firebase Firestore)
+        // 🌟 雲端存取管理系統
         // ==========================================
-
         async function saveToCloudNew() {
-            if (!currentUser) return alert("請先登入 Google 帳號！");
+            if (!currentUser) return alert(t('alert_login_first'));
             
             try {
-                // 檢查是否超過 10 個
                 const snapshot = await db.collection('checklists').where('uid', '==', currentUser.uid).get();
-                if (snapshot.size >= 10) {
-                    return alert("❌ 您的雲端清單已達 10 個上限！請點擊「讀取/管理清單」刪除或覆寫現有進度。");
-                }
+                if (snapshot.size >= 10) return alert(t('alert_limit'));
 
                 const title = document.getElementById('customTitle').value;
                 const desc = document.getElementById('customDesc').value;
                 
                 await db.collection('checklists').add({
                     uid: currentUser.uid,
-                    title: title || "未命名清單",
+                    title: title || t('default_title'),
                     desc: desc,
                     data: checkedCharacters,
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 });
                 
-                alert(`✅ 成功另存新檔：【${title}】！`);
+                alert(t('alert_save_ok', title));
             } catch (error) {
-                console.error(error);
-                alert("儲存失敗，請檢查權限或網路連線。");
+                alert(t('alert_save_fail'));
             }
         }
 
         function openCloudManager() {
-            if (!currentUser) return alert("請先登入 Google 帳號！");
+            if (!currentUser) return alert(t('alert_login_first'));
             document.getElementById('cloudModal').classList.remove('hidden');
             fetchCloudLists();
         }
@@ -320,7 +401,7 @@
 
         async function fetchCloudLists() {
             const container = document.getElementById('cloudListContainer');
-            container.innerHTML = '<div class="text-center text-gray-500 py-8 font-bold">資料載入中... 🔄</div>';
+            container.innerHTML = `<div class="text-center text-gray-500 py-8 font-bold">${t('loading')}</div>`;
             
             try {
                 const snapshot = await db.collection('checklists')
@@ -331,32 +412,31 @@
                 container.innerHTML = '';
                 
                 if (snapshot.empty) {
-                    container.innerHTML = '<div class="text-center text-gray-400 py-8 font-bold">☁️ 雲端上目前沒有任何儲存的清單。</div>';
+                    container.innerHTML = `<div class="text-center text-gray-400 py-8 font-bold">${t('no_data')}</div>`;
                     return;
                 }
 
                 snapshot.forEach(doc => {
                     const data = doc.data();
-                    const dateStr = data.timestamp ? new Date(data.timestamp.toDate()).toLocaleString() : "剛才";
-                    // 計算目前有幾個標記
+                    const dateStr = data.timestamp ? new Date(data.timestamp.toDate()).toLocaleString() : "";
                     const markedCount = Object.values(data.data || {}).filter(v => v > 0).length;
 
                     const itemHtml = `
                         <div class="bg-white dark:bg-slate-700 p-4 rounded-xl shadow-sm border-2 border-transparent hover:border-amber-300 transition-colors flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                             <div>
                                 <h3 class="font-bold text-lg text-slate-800 dark:text-slate-100">${data.title}</h3>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">📝 說明: ${data.desc}</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">${t('desc_label')} ${data.desc}</p>
                                 <div class="text-xs text-blue-600 dark:text-blue-400 font-bold mt-1">
-                                    🕒 ${dateStr} ｜ 🏷️ 已標記: ${markedCount} 隻
+                                    🕒 ${dateStr} ｜ ${t('marked_label', markedCount)}
                                 </div>
                             </div>
                             
                             <div class="flex items-center gap-2 w-full sm:w-auto">
                                 <button onclick="loadCloudList('${doc.id}')" class="flex-1 sm:flex-none px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white font-bold rounded-lg transition text-sm">
-                                    讀取
+                                    ${t('btn_load')}
                                 </button>
                                 <button onclick="overwriteCloudList('${doc.id}')" class="flex-1 sm:flex-none px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-lg transition text-sm">
-                                    覆寫
+                                    ${t('btn_overwrite')}
                                 </button>
                                 <button onclick="deleteCloudList('${doc.id}')" class="px-3 py-2 bg-red-100 hover:bg-red-500 text-red-600 hover:text-white font-bold rounded-lg transition text-sm">
                                     🗑️
@@ -367,8 +447,7 @@
                     container.insertAdjacentHTML('beforeend', itemHtml);
                 });
             } catch (error) {
-                console.error(error);
-                container.innerHTML = '<div class="text-center text-red-500 py-8 font-bold">載入失敗，可能是由於 Firestore 索引建立中或規則受限。</div>';
+                container.innerHTML = `<div class="text-center text-red-500 py-8 font-bold">${t('alert_load_fail')}</div>`;
             }
         }
 
@@ -377,45 +456,41 @@
                 const docRef = await db.collection('checklists').doc(docId).get();
                 if (docRef.exists) {
                     const data = docRef.data();
-                    
-                    // 覆蓋本地資料
                     checkedCharacters = data.data || {};
                     document.getElementById('customTitle').value = data.title;
                     document.getElementById('customDesc').value = data.desc;
                     
-                    // 儲存至 localStorage 並重新渲染
                     saveCustomHeader();
                     localStorage.setItem('trickcal_checklist', JSON.stringify(checkedCharacters));
                     renderChecklist();
                     
                     closeCloudManager();
-                    alert(`✅ 已成功讀取清單：【${data.title}】`);
+                    alert(t('alert_load_ok', data.title));
                 }
-            } catch (e) { alert("讀取失敗！"); }
+            } catch (e) { alert(t('alert_read_fail')); }
         }
 
         async function overwriteCloudList(docId) {
-            if(!confirm("⚠️ 確定要用「當前畫面上的進度」覆蓋掉這個雲端存檔嗎？")) return;
+            if(!confirm(t('alert_overwrite_confirm'))) return;
             
             try {
                 await db.collection('checklists').doc(docId).update({
-                    title: document.getElementById('customTitle').value || "未命名清單",
+                    title: document.getElementById('customTitle').value || t('default_title'),
                     desc: document.getElementById('customDesc').value,
                     data: checkedCharacters,
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 });
-                alert("✅ 覆寫成功！");
-                fetchCloudLists(); // 重新整理清單
-            } catch (e) { alert("覆寫失敗！"); }
+                alert(t('alert_overwrite_ok'));
+                fetchCloudLists();
+            } catch (e) { alert(t('alert_overwrite_fail')); }
         }
 
         async function deleteCloudList(docId) {
-            if(!confirm("🗑️ 確定要永久刪除這個雲端清單嗎？(無法復原)")) return;
-            
+            if(!confirm(t('alert_delete_confirm'))) return;
             try {
                 await db.collection('checklists').doc(docId).delete();
-                fetchCloudLists(); // 重新整理清單
-            } catch (e) { alert("刪除失敗！"); }
+                fetchCloudLists();
+            } catch (e) { alert(t('alert_delete_fail')); }
         }
     </script>
 </body>
