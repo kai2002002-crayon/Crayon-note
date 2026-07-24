@@ -189,16 +189,25 @@
 
         function changeLanguage(lang) {
             if (!['zh-TW', 'en', 'ja'].includes(lang)) return;
+
             uiLang = lang;
             window.currentLang = lang;
+            window.lang = lang;
+            window.trickcal_lang = lang;
+
             applyUITranslation();
+
             const titleInput = document.getElementById('customTitle');
             const descInput = document.getElementById('customDesc');
+            
             const isDefaultTitle = ['⭐ 我的自訂角色清單', '⭐ My Custom Checklist', '⭐ マイカスタムリスト'].includes(titleInput.value);
             if (isDefaultTitle) titleInput.value = t('default_title');
+            
             const isDefaultDesc = ['在頭像上點擊即可標記狀態！', 'Click on the avatar to mark the status!', 'アイコンをクリックして状態をマーク！'].includes(descInput.value);
             if (isDefaultDesc) descInput.value = t('default_desc');
+
             renderChecklist();
+            
             if (!document.getElementById('cloudModal').classList.contains('hidden') && currentUser) {
                 fetchCloudLists();
             }
@@ -261,10 +270,10 @@
 
 
         window.addEventListener('storage', (e) => {
-                if (e.key === 'user_lang' && e.newValue && e.newValue !== window.currentLang) {
-                    console.log(`📡 偵測到主頁將語言切換至 ${e.newValue}，自動同步更新！`);
-                    changeLanguage(e.newValue);
-                }
+            if ((e.key === 'user_lang' || e.key === 'lang' || e.key === 'trickcal_lang') && e.newValue && e.newValue !== window.currentLang) {
+                console.log(`📡 偵測到主頁將語言切換至 ${e.newValue}，自動同步更新！`);
+                changeLanguage(e.newValue);
+            }
 
                 if (e.key === 'theme') {
                     console.log(`🌗 偵測到主頁將主題切換至 ${e.newValue}，自動同步更新！`);
@@ -309,7 +318,7 @@
             const el = document.createElement('div');
             const charName = charData.name;
             const spineName = (typeof SPINE_MAP !== 'undefined' && SPINE_MAP[charName]) ? SPINE_MAP[charName] : charName;
-            const displayName = (typeof getI18n === 'function' ? getI18n(charName) : charName);
+            const displayName = (typeof getI18n === 'function' ? (getI18n(charName, uiLang) || getI18n(charName)) : charName);
 
             let raceKey = charData.race === "???" ? "unknown" : charData.race;
             const raceSprite = SPRITE_CLASS_MAP[`race_${raceKey}`] || "sprite-Bg_Unknown";
