@@ -433,7 +433,7 @@ const ASIDE_DATA = {
         stars: {
             1: { 
                 icon: "", 
-                name: { zh: "", ja: ", en: "" }, 
+                name: { zh: "", ja: "", en: "" }, 
                 desc: { zh: "", ja: "", en: "" }, 
                 effects: { zh: [""], ja: [""], en: [""] } 
             },
