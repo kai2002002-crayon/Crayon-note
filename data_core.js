@@ -891,7 +891,7 @@ const COSTUME_MAP = {
     "愛麗絲": ["Alice", "AliceSkin1", "AliceSkin2", "AliceSkin3"], "艾蜜莉雅": ["Amelia", "AmeliaSkin1", "AmeliaSkin2", "AmeliaSkin3"], "綾": ["Aya", "AyaSkin1", "AyaSkin2", "AyaSkin3"], "庫洛艾": ["Chloe", "ChloeSkin1", "ChloeSkin2", "ChloeSkin3"], "蒂亞娜": ["Diana", "DianaSkin1", "DianaSkin2", "DianaSkin3"], "桃桃": ["Momo", "MomoSkin1", "MomoSkin2", "MomoSkin3"], "瑟琳娜": ["Selline", "SellineSkin1", "SellineSkin2", "SellineSkin3"], "羽伊": ["Ui", "UiSkin1", "UiSkin2", "UiSkin3"], "薇薇": ["Vivi", "ViviSkin1", "ViviSkin2", "ViviSkin3"], "x乂錫安乂x": ["xXionx", "xXionxSkin1", "xXionxSkin2", "xXionxSkin3"],
     "艾爾芬": ["Erpin", "ErpinSkin1", "ErpinSkin2", "ErpinSkin3", "ErpinSkin4"], "莉絲蒂": ["Risty", "RistySkin1", "RistySkin2"], "雷內瓦": ["RenewaAwaken", "RenewaAwakenSkin1", "RenewaAwakenSkin2"],
 	"芭瓏": ["Barong", "BarongSkin1", "BarongSkin2", "BarongSkin3"], "達雅": ["Daya", "DayaSkin1", "DayaSkin2"], "提格": ["Tig", "TigSkin1", "TigSkin2"],
-	"羅萊特": ["Rollett", "RollettSkin2"], "琵拉": ["Pira", "PiraSkin1", "PiraSkin2"]
+	"羅萊特": ["Rollett", "RollettSkin1", "RollettSkin2"], "琵拉": ["Pira", "PiraSkin1", "PiraSkin2"]
 };
 
 const SD_COSTUME = {
