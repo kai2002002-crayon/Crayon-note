@@ -242,11 +242,21 @@
         };
 
 
-        window.addEventListener('storage', function(e) {
-            if (e.key === 'lang' || e.key === 'trickcal_lang') {
-                window.location.reload();
-            }
-        });
+        window.addEventListener('storage', (e) => {
+                if (e.key === 'user_lang' && e.newValue && e.newValue !== window.currentLang) {
+                    console.log(`📡 偵測到主頁將語言切換至 ${e.newValue}，自動同步更新！`);
+                    changeLanguage(e.newValue);
+                }
+
+                if (e.key === 'theme') {
+                    console.log(`🌗 偵測到主頁將主題切換至 ${e.newValue}，自動同步更新！`);
+                    if (e.newValue === 'dark') {
+                        document.documentElement.classList.add('dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                    }
+                }
+            });
 
         function saveCustomHeader() {
             localStorage.setItem('trickcal_custom_title', document.getElementById('customTitle').value);
