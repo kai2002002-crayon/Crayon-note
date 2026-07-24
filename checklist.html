@@ -315,7 +315,14 @@
             const el = document.createElement('div');
             const charName = charData.name;
             const spineName = (typeof SPINE_MAP !== 'undefined' && SPINE_MAP[charName]) ? SPINE_MAP[charName] : charName;
-            const displayName = (typeof getI18n === 'function' ? (getI18n(charName, uiLang) || getI18n(charName)) : charName);
+            let displayName = charName;
+            const currentLang = window.currentLang || localStorage.getItem('user_lang') || 'zh-TW';
+            
+            if (typeof LANG_DICT !== 'undefined' && LANG_DICT[currentLang] && LANG_DICT[currentLang][charName]) {
+                displayName = LANG_DICT[currentLang][charName];
+            } else if (typeof getI18n === 'function') {
+                displayName = getI18n(charName) || charName;
+            }
 
             let raceKey = charData.race === "???" ? "unknown" : charData.race;
             const raceSprite = SPRITE_CLASS_MAP[`race_${raceKey}`] || "sprite-Bg_Unknown";
