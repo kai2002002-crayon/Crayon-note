@@ -62,6 +62,7 @@
 [class*="_Rim"] { background-image: url('Rimsheet.png'); }
 [class*="_Risty"] { background-image: url('Ristysheet.png'); }
 [class*="_Rohne"] { background-image: url('Rohnesheet.png'); }
+[class*="_Rollett"] { background-image: url('Rollettsheet.png'); }
 [class*="_Rude"] { background-image: url('Rudesheet.png'); }
 [class*="_Rufo"] { background-image: url('Rufosheet.png'); }
 [class*="_Sari"] { background-image: url('Sarisheet.png'); }
@@ -545,6 +546,16 @@
 .sprite-Icon_NormalSkill_Rohne { width: 64px; height: 64px; background-position: -5px -525px; }
 .sprite-Icon_PassiveSkill_Rohne { width: 64px; height: 64px; background-position: -5px -599px; }
 .sprite-PresentList_Rohne { width: 236px; height: 148px; background-position: -5px -673px; }
+
+/* --- Rollett --- */
+.sprite-AsideIcon_Rollett { width: 256px; height: 256px; background-position: -5px -5px; }
+.sprite-Aside_Skill_Rollett_1 { width: 64px; height: 64px; background-position: -5px -271px; }
+.sprite-Aside_Skill_Rollett_2 { width: 64px; height: 64px; background-position: -5px -345px; }
+.sprite-Aside_Skill_Rollett_3 { width: 64px; height: 64px; background-position: -5px -419px; }
+.sprite-CG_Schedule_Rollett { width: 1024px; height: 512px; background-position: -5px -493px; }
+.sprite-Icon_NormalSkill_Rollett { width: 64px; height: 64px; background-position: -5px -1015px; }
+.sprite-Icon_PassiveSkill_Rollett { width: 64px; height: 64px; background-position: -5px -1089px; }
+.sprite-PresentList_Rollett { width: 231px; height: 180px; background-position: -5px -1163px; }
 
 /* --- Rude --- */
 .sprite-AsideIcon_Rude { width: 256px; height: 256px; background-position: -5px -5px; }
