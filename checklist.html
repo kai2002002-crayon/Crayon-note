@@ -174,10 +174,6 @@
             }
         };
 
-        let rawLang = localStorage.getItem('user_lang') || localStorage.getItem('lang') || localStorage.getItem('trickcal_lang') || 'zh-TW';
-        if (rawLang.includes('en')) rawLang = 'en';
-        if (rawLang.includes('ja')) rawLang = 'ja';
-        let uiLang = ['zh-TW', 'en', 'ja'].includes(rawLang) ? rawLang : 'zh-TW';
         window.currentLang = uiLang; 
 
         function t(key, arg = '') {
