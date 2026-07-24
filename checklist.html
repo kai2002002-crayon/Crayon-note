@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>自訂角色清單 | Custom Checklist</title>
-    
-    <!-- 🌟 關鍵修改：在載入任何外部 js 之前，先設定好全域語言與主題！ -->
     <script>
         // 1. 優先設定全域語言，讓後面的 data_core.js 一載入就能抓到正確語言
         let rawLang = localStorage.getItem('user_lang') || localStorage.getItem('lang') || localStorage.getItem('trickcal_lang') || 'zh-TW';
@@ -19,16 +17,12 @@
                            (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
         if (isDarkMode) { document.documentElement.classList.add('dark'); }
     </script>
-    
-    <!-- 🌟 確保 data_core.js 放在我們設定好 window.currentLang 之後 -->
+
     <script src="data_core.js"></script>
-    
     <link rel="stylesheet" href="sprites.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" href="https://i.postimg.cc/mkfSTq5k/Favicon.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
-    
-    <!-- 引入 Firebase v8 Compat SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
@@ -272,14 +266,12 @@
 
 
         window.addEventListener('storage', (e) => {
-            // 🌐 監聽語言切換
+
             if (e.key === 'user_lang' && e.newValue && e.newValue !== window.currentLang) {
                 console.log(`📡 偵測到主頁將語言切換至 ${e.newValue}，正在重新整理以套用新語言！`);
-                // 🔥 終極大絕招：因為進度都存在 localStorage，直接重新載入頁面，保證所有外部 js 都切換為新語言！
                 window.location.reload(); 
             }
 
-            // 🌗 監聽主題切換 (主題切換不需要重新整理，維持即時變換即可)
             if (e.key === 'theme') {
                 console.log(`🌗 偵測到主頁將主題切換至 ${e.newValue}，同步更新 checklist！`);
                 if (e.newValue === 'dark') {
