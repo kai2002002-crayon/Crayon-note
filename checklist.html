@@ -177,7 +177,8 @@
         window.currentLang = uiLang; 
 
         function t(key, arg = '') {
-            const dict = UI_DICT[uiLang] || UI_DICT['zh-TW'];
+            const currentLang = window.currentLang || 'zh-TW';
+            const dict = UI_DICT[currentLang] || UI_DICT['zh-TW'];
             let str = dict[key] || UI_DICT['zh-TW'][key] || key;
             return str.replace('{0}', arg);
         }
@@ -196,8 +197,6 @@
 
         function changeLanguage(lang) {
             if (!['zh-TW', 'en', 'ja'].includes(lang)) return;
-
-            uiLang = lang;
             window.currentLang = lang;
 
             applyUITranslation();
