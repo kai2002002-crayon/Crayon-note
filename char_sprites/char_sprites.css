@@ -57,6 +57,7 @@
 [class*="_Ner"] { background-image: url('Nersheet.png'); }
 [class*="_Patula"] { background-image: url('Patulasheet.png'); }
 [class*="_Picora"] { background-image: url('Picorasheet.png'); }
+[class*="_Pira"] { background-image: url('Pirasheet.png'); }
 [class*="_Posher"] { background-image: url('Poshersheet.png'); }
 [class*="_RenewaAwaken"] { background-image: url('RenewaAwakensheet.png'); }
 [class*="_Rim"] { background-image: url('Rimsheet.png'); }
@@ -500,6 +501,16 @@
 .sprite-Icon_NormalSkill_Picora { width: 64px; height: 64px; background-position: -5px -1015px; }
 .sprite-Icon_PassiveSkill_Picora { width: 64px; height: 64px; background-position: -5px -1089px; }
 .sprite-PresentList_Picora { width: 242px; height: 153px; background-position: -5px -1163px; }
+
+/* --- Pira --- */
+.sprite-AsideIcon_Pira { width: 256px; height: 256px; background-position: -5px -5px; }
+.sprite-Aside_Skill_Pira_1 { width: 64px; height: 64px; background-position: -5px -271px; }
+.sprite-Aside_Skill_Pira_2 { width: 64px; height: 64px; background-position: -5px -345px; }
+.sprite-Aside_Skill_Pira_3 { width: 64px; height: 64px; background-position: -5px -419px; }
+.sprite-CG_Schedule_Pira { width: 1024px; height: 512px; background-position: -5px -493px; }
+.sprite-Icon_NormalSkill_Pira { width: 64px; height: 64px; background-position: -5px -1015px; }
+.sprite-Icon_PassiveSkill_Pira { width: 64px; height: 64px; background-position: -5px -1089px; }
+.sprite-PresentList_Pira { width: 242px; height: 153px; background-position: -5px -1163px; }
 
 /* --- Posher --- */
 .sprite-AsideIcon_Posher { width: 256px; height: 256px; background-position: -5px -5px; }
