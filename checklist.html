@@ -30,8 +30,7 @@
 </head>
 <body class="p-4 sm:p-8 bg-[#fcf8f2] dark:bg-slate-900 text-gray-800 dark:text-gray-200 min-h-screen transition-colors duration-300">
     <div class="max-w-[1200px] mx-auto space-y-6 relative">
-        
-        <!-- 頂部功能區 -->
+
         <header class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md p-4 sm:px-6 rounded-2xl shadow-md border-4 border-amber-400 dark:border-slate-600 flex flex-col xl:flex-row justify-between items-center gap-4 relative z-10">
             <div class="w-full xl:w-auto flex-1 space-y-1">
                 <input type="text" id="customTitle" value="" 
@@ -52,20 +51,17 @@
                     </select>
                 </div>
 
-                <!-- 雲端與本機控制按鈕 -->
                 <button onclick="clearAllChecks()" class="px-3 py-2 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl shadow transition text-sm whitespace-nowrap">
                     <span id="btn_clear_text">清除 ✔</span>
                 </button>
                 
                 <div class="w-[2px] h-8 bg-gray-300 dark:bg-gray-600 mx-1 hidden sm:block"></div>
 
-                <!-- 尚未登入顯示 -->
                 <button id="loginBtn" onclick="loginGoogle()" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-xl shadow transition text-sm whitespace-nowrap flex items-center gap-2">
                     <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12.24 10.285V14.4h6.806c-.275 1.765-2.056 5.174-6.806 5.174-4.095 0-7.439-3.389-7.439-7.574s3.345-7.574 7.439-7.574c2.33 0 3.891.989 4.785 1.849l3.254-3.138C18.189 1.186 15.479 0 12.24 0c-6.635 0-12 5.365-12 12s5.365 12 12 12c6.926 0 11.52-4.869 11.52-11.726 0-.788-.085-1.39-.189-1.989H12.24z"/></svg>
                     <span id="btn_login_text">登入 Google</span>
                 </button>
 
-                <!-- 已登入顯示 -->
                 <div id="cloudActionGroup" class="hidden flex items-center gap-2">
                     <button onclick="saveToCloudNew()" class="px-3 py-2 bg-green-500 hover:bg-green-600 text-white font-bold rounded-xl shadow transition text-sm whitespace-nowrap">
                         <span id="btn_save_text">☁️ 另存新檔</span>
@@ -79,11 +75,9 @@
         </header>
 
         <div id="checklistContainer" class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-3 sm:gap-4 p-4 bg-white/50 dark:bg-slate-800/50 rounded-2xl border border-gray-200 dark:border-slate-700">
-            <!-- JavaScript 將會在這裡動態渲染角色 -->
         </div>
     </div>
 
-    <!-- 雲端清單管理 Modal -->
     <div id="cloudModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm transition-opacity">
         <div class="bg-white dark:bg-slate-800 w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
             <div class="p-5 border-b border-gray-200 dark:border-slate-700 flex justify-between items-center bg-amber-50 dark:bg-slate-900">
@@ -94,15 +88,12 @@
             </div>
             
             <div id="cloudListContainer" class="p-5 overflow-y-auto hide-scrollbar flex-1 space-y-3 bg-gray-50 dark:bg-slate-800/50">
-                <!-- 雲端清單項目 -->
+
             </div>
         </div>
     </div>
 
     <script>
-        // ==========================================
-        // 🌟 1. i18n 多國語言翻譯系統
-        // ==========================================
         const UI_DICT = {
             'zh-TW': {
                 default_title: "⭐ 我的自訂角色清單",
@@ -172,7 +163,6 @@
             }
         };
 
-        // 偵測語言 (修改變數名稱為 uiLang，避免與 data_core.js 衝突)
         let rawLang = localStorage.getItem('lang') || localStorage.getItem('trickcal_lang') || 'zh-TW';
         if (rawLang.includes('en')) rawLang = 'en';
         if (rawLang.includes('ja')) rawLang = 'ja';
@@ -196,9 +186,6 @@
             document.getElementById('modal_title_text').innerHTML = `📂 ${t('modal_title')}`;
         }
 
-        // ==========================================
-        // 🌟 Firebase 雲端設定 (記得換回你的 KEY)
-        // ==========================================
         const firebaseConfig = {
             apiKey: "AIzaSyDhv8D2pY_0M56UJrDTQw0RGPHA-BkXU8Y",
             authDomain: "crayon-note.firebaseapp.com",
@@ -228,9 +215,6 @@
         function loginGoogle() { auth.signInWithPopup(provider).catch(e => alert(e.message)); }
         function logoutGoogle() { if(confirm(t('alert_logout'))) auth.signOut(); }
 
-        // ==========================================
-        // 🌟 角色清單核心邏輯
-        // ==========================================
         const personalityColors = { 
             "天真": "border-green-400 text-green-400", "冷靜": "border-blue-400 text-blue-400", 
             "狂亂": "border-red-400 text-red-400", "活潑": "border-yellow-400 text-yellow-400", "憂鬱": "border-purple-400 text-purple-400"
@@ -247,7 +231,7 @@
         let checkedCharacters = JSON.parse(localStorage.getItem('trickcal_checklist')) || {};
 
         window.onload = function() {
-            applyUITranslation(); // 套用多國語言 UI
+            applyUITranslation();
             
             const savedTitle = localStorage.getItem('trickcal_custom_title');
             const savedDesc = localStorage.getItem('trickcal_custom_desc');        
@@ -256,6 +240,13 @@
             
             renderChecklist();
         };
+
+
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'lang' || e.key === 'trickcal_lang') {
+                window.location.reload();
+            }
+        });
 
         function saveCustomHeader() {
             localStorage.setItem('trickcal_custom_title', document.getElementById('customTitle').value);
@@ -362,9 +353,6 @@
             }
         }
 
-        // ==========================================
-        // 🌟 雲端存取管理系統
-        // ==========================================
         async function saveToCloudNew() {
             if (!currentUser) return alert(t('alert_login_first'));
             
