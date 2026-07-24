@@ -427,6 +427,31 @@ const ASIDE_DATA = {
             }
         }
     },
+    "Rollett": { 
+        asideIcon: "", 
+        totalName: { zh: "", ja: "", en: "" }, 
+        stars: {
+            1: { 
+                icon: "", 
+                name: { zh: "", ja: ", en: "" }, 
+                desc: { zh: "", ja: "", en: "" }, 
+                effects: { zh: [""], ja: [""], en: [""] } 
+            },
+            2: { 
+                icon: "", 
+                name: { zh: "", ja: "", en: "!" }, 
+                desc: { zh: "", ja: "", en: "" }, 
+                effects: { zh: [""], ja: [""], en: [""] } 
+            },
+            3: { 
+                icon: "", 
+                name: { zh: "", ja: "", en: "" }, 
+                desc: { zh: "", ja: "", en: "" }, 
+                effects: { zh: [""], ja: [""], en: [""] }, 
+                globalEffects: { zh: ["全體 %", "全體 %"], ja: ["全体%", "全体%"], en: ["All%"] } 
+            }
+        }
+    },
     "Rude": { 
         asideIcon: "", 
         totalName: { zh: "紅寶石啞鈴", ja: "ルビーのダンベル", en: "Ruby Dumbbell" }, 
