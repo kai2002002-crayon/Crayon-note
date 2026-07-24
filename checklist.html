@@ -167,8 +167,8 @@
         if (rawLang.includes('en')) rawLang = 'en';
         if (rawLang.includes('ja')) rawLang = 'ja';
         let uiLang = ['zh-TW', 'en', 'ja'].includes(rawLang) ? rawLang : 'zh-TW';
-        window.currentLang = uiLang;
-        
+        window.currentLang = uiLang; 
+
         function t(key, arg = '') {
             const dict = UI_DICT[uiLang] || UI_DICT['zh-TW'];
             let str = dict[key] || UI_DICT['zh-TW'][key] || key;
@@ -192,17 +192,13 @@
 
             uiLang = lang;
             window.currentLang = lang;
-            window.lang = lang;
-            window.trickcal_lang = lang;
 
             applyUITranslation();
 
             const titleInput = document.getElementById('customTitle');
             const descInput = document.getElementById('customDesc');
-            
             const isDefaultTitle = ['⭐ 我的自訂角色清單', '⭐ My Custom Checklist', '⭐ マイカスタムリスト'].includes(titleInput.value);
             if (isDefaultTitle) titleInput.value = t('default_title');
-            
             const isDefaultDesc = ['在頭像上點擊即可標記狀態！', 'Click on the avatar to mark the status!', 'アイコンをクリックして状態をマーク！'].includes(descInput.value);
             if (isDefaultDesc) descInput.value = t('default_desc');
 
@@ -270,20 +266,20 @@
 
 
         window.addEventListener('storage', (e) => {
-            if ((e.key === 'user_lang' || e.key === 'lang' || e.key === 'trickcal_lang') && e.newValue && e.newValue !== window.currentLang) {
-                console.log(`📡 偵測到主頁將語言切換至 ${e.newValue}，自動同步更新！`);
+            if (e.key === 'user_lang' && e.newValue && e.newValue !== window.currentLang) {
+                console.log(`📡 偵測到主頁將語言切換至 ${e.newValue}，同步更新 checklist！`);
                 changeLanguage(e.newValue);
             }
 
-                if (e.key === 'theme') {
-                    console.log(`🌗 偵測到主頁將主題切換至 ${e.newValue}，自動同步更新！`);
-                    if (e.newValue === 'dark') {
-                        document.documentElement.classList.add('dark');
-                    } else {
-                        document.documentElement.classList.remove('dark');
-                    }
+            if (e.key === 'theme') {
+                console.log(`🌗 偵測到主頁將主題切換至 ${e.newValue}，同步更新 checklist！`);
+                if (e.newValue === 'dark') {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
                 }
-            });
+            }
+        });
 
         function saveCustomHeader() {
             localStorage.setItem('trickcal_custom_title', document.getElementById('customTitle').value);
