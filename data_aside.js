@@ -439,7 +439,7 @@ const ASIDE_DATA = {
             },
             2: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "!" }, 
+                name: { zh: "", ja: "", en: "" }, 
                 desc: { zh: "", ja: "", en: "" }, 
                 effects: { zh: [""], ja: [""], en: [""] } 
             },
