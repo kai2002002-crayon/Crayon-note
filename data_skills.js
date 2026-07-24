@@ -94,6 +94,75 @@ const characterSkills = [
     }
   },
     {
+    "name": "琵拉",
+    "attribute": "物理",
+    "skills": {
+      "zh-TW": {
+        "normalAttack": {
+          "basic": " []",
+          "enhanced": " []"
+        },
+        "normalSkill": {
+          "name": "",
+          "desc": "",
+          "stats": [""]
+        },
+        "ultimateSkill": {
+          "name": "",
+          "desc": "",
+          "stats": [""],
+          "cooldown": "秒"
+        },
+        "passiveSkill": {
+          "desc": "",
+          "stats": [""]
+        }
+      },
+      "ja": {
+        "normalAttack": {
+          "basic": "[]",
+          "enhanced": "[]"
+        },
+        "normalSkill": {
+          "name": "",
+          "desc": "",
+          "stats": [""]
+        },
+        "ultimateSkill": {
+          "name": "",
+          "desc": "",
+          "stats": [""],
+          "cooldown": "秒"
+        },
+        "passiveSkill": {
+          "desc": "",
+          "stats": [""]
+        }
+      },
+      "en": {
+        "normalAttack": {
+          "basic": "[]",
+          "enhanced": "[]"
+        },
+        "normalSkill": {
+          "name": "",
+          "desc": "",
+          "stats": [""]
+        },
+        "ultimateSkill": {
+          "name": "",
+          "desc": "",
+          "stats": [""],
+          "cooldown": "s"
+        },
+        "passiveSkill": {
+          "desc": "",
+          "stats": ["%"]
+        }
+      },
+    }
+  },
+    {
     "name": "提格",
     "attribute": "物理",
     "skills": {
