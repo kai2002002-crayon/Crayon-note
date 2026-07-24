@@ -9,6 +9,12 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" href="https://i.postimg.cc/mkfSTq5k/Favicon.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <!-- 引入 Firebase v8 Compat SDK (最適合單檔 HTML 使用) -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
     <script>
         tailwind.config = { darkMode: 'class', }
         const isDarkMode = localStorage.getItem('theme') === 'dark' || 
@@ -18,12 +24,18 @@
     <style>
         body { font-family: 'Noto Sans TC', sans-serif; }
         .no-context-menu { -webkit-touch-callout: none; }
+        
+        /* 隱藏捲軸但可滾動 (美化 Modal) */
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 <body class="p-4 sm:p-8 bg-[#fcf8f2] dark:bg-slate-900 text-gray-800 dark:text-gray-200 min-h-screen transition-colors duration-300">
-    <div class="max-w-[1200px] mx-auto space-y-6">
-        <header class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md p-4 sm:px-6 rounded-2xl shadow-md border-4 border-amber-400 dark:border-slate-600 flex flex-col sm:flex-row justify-between items-center gap-4 relative z-10">
-            <div class="w-full sm:w-auto flex-1 space-y-1">
+    <div class="max-w-[1200px] mx-auto space-y-6 relative">
+        
+        <!-- 頂部功能區 -->
+        <header class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md p-4 sm:px-6 rounded-2xl shadow-md border-4 border-amber-400 dark:border-slate-600 flex flex-col xl:flex-row justify-between items-center gap-4 relative z-10">
+            <div class="w-full xl:w-auto flex-1 space-y-1">
                 <input type="text" id="customTitle" value="⭐ 我的自訂角色清單" 
                     oninput="saveCustomHeader()"
                     class="w-full bg-transparent text-xl sm:text-2xl font-black text-amber-950 dark:text-amber-400 outline-none border-b-2 border-transparent hover:border-amber-300 focus:border-amber-500 transition-colors px-1 py-0.5">
@@ -31,24 +43,108 @@
                     oninput="saveCustomHeader()"
                     class="w-full bg-transparent text-xs sm:text-sm text-gray-500 dark:text-gray-400 outline-none border-b-2 border-transparent hover:border-gray-300 focus:border-amber-500 transition-colors px-1 py-0.5">
             </div>
-            <div class="flex items-center gap-3 shrink-0">
-                <label for="sortSelect" class="font-bold text-gray-700 dark:text-gray-300 text-sm">排序方式：</label>
-                <select id="sortSelect" onchange="renderChecklist()" class="bg-gray-100 dark:bg-slate-700 border-2 border-gray-300 dark:border-slate-600 rounded-xl px-3 py-2 font-bold outline-none focus:border-amber-500 transition-colors cursor-pointer text-sm">
-                    <option value="name">英文字首 (A-Z)</option>
-                    <option value="personality">性格</option>
-                    <option value="race">種族</option>
-                </select>
-                <button onclick="clearAllChecks()" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl shadow transition text-sm whitespace-nowrap">
-                    清除全部 ✔
+            
+            <div class="flex flex-wrap items-center gap-3 shrink-0">
+                <div class="flex items-center gap-2 mr-2">
+                    <label for="sortSelect" class="font-bold text-gray-700 dark:text-gray-300 text-sm">排序：</label>
+                    <select id="sortSelect" onchange="renderChecklist()" class="bg-gray-100 dark:bg-slate-700 border-2 border-gray-300 dark:border-slate-600 rounded-xl px-2 py-2 font-bold outline-none focus:border-amber-500 transition-colors cursor-pointer text-sm">
+                        <option value="name">字首 (A-Z)</option>
+                        <option value="personality">性格</option>
+                        <option value="race">種族</option>
+                    </select>
+                </div>
+
+                <!-- 雲端與本機控制按鈕 -->
+                <button onclick="clearAllChecks()" class="px-3 py-2 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl shadow transition text-sm whitespace-nowrap">
+                    清除 ✔
                 </button>
+                
+                <div class="w-[2px] h-8 bg-gray-300 dark:bg-gray-600 mx-1 hidden sm:block"></div>
+
+                <!-- 尚未登入顯示 -->
+                <button id="loginBtn" onclick="loginGoogle()" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-xl shadow transition text-sm whitespace-nowrap flex items-center gap-2">
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12.24 10.285V14.4h6.806c-.275 1.765-2.056 5.174-6.806 5.174-4.095 0-7.439-3.389-7.439-7.574s3.345-7.574 7.439-7.574c2.33 0 3.891.989 4.785 1.849l3.254-3.138C18.189 1.186 15.479 0 12.24 0c-6.635 0-12 5.365-12 12s5.365 12 12 12c6.926 0 11.52-4.869 11.52-11.726 0-.788-.085-1.39-.189-1.989H12.24z"/></svg>
+                    登入 Google
+                </button>
+
+                <!-- 已登入顯示 (預設隱藏) -->
+                <div id="cloudActionGroup" class="hidden flex items-center gap-2">
+                    <button onclick="saveToCloudNew()" class="px-3 py-2 bg-green-500 hover:bg-green-600 text-white font-bold rounded-xl shadow transition text-sm whitespace-nowrap">
+                        ☁️ 另存新檔
+                    </button>
+                    <button onclick="openCloudManager()" class="px-3 py-2 bg-indigo-500 hover:bg-indigo-600 text-white font-bold rounded-xl shadow transition text-sm whitespace-nowrap">
+                        📂 讀取/管理清單
+                    </button>
+                    <img id="userAvatar" src="" class="w-9 h-9 rounded-full border-2 border-amber-400 cursor-pointer" onclick="logoutGoogle()" title="點擊登出" alt="User Avatar">
+                </div>
             </div>
         </header>
+
         <div id="checklistContainer" class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-3 sm:gap-4 p-4 bg-white/50 dark:bg-slate-800/50 rounded-2xl border border-gray-200 dark:border-slate-700">
             <!-- JavaScript 將會在這裡動態渲染角色 -->
         </div>
     </div>
+
+    <!-- 雲端清單管理 Modal (彈跳視窗) -->
+    <div id="cloudModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm transition-opacity">
+        <div class="bg-white dark:bg-slate-800 w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+            <div class="p-5 border-b border-gray-200 dark:border-slate-700 flex justify-between items-center bg-amber-50 dark:bg-slate-900">
+                <h2 class="text-xl font-black text-amber-900 dark:text-amber-400 flex items-center gap-2">
+                    📂 雲端自訂清單 (最多 10 個)
+                </h2>
+                <button onclick="closeCloudManager()" class="text-gray-500 hover:text-red-500 font-bold text-2xl leading-none">&times;</button>
+            </div>
+            
+            <div id="cloudListContainer" class="p-5 overflow-y-auto hide-scrollbar flex-1 space-y-3 bg-gray-50 dark:bg-slate-800/50">
+                <!-- 雲端清單項目會渲染在這裡 -->
+                <div class="text-center text-gray-500 py-8 font-bold">載入中...</div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // 🌟 1. 定義顏色與樣式對應 (與 Tier Maker 相同)
+        // ==========================================
+        // 🌟 Firebase 雲端設定 (請替換為你的專案設定)
+        // ==========================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyDhv8D2pY_0M56UJrDTQw0RGPHA-BkXU8Y",
+            authDomain: "crayon-note.firebaseapp.com",
+            projectId: "crayon-note",
+            storageBucket: "crayon-note.firebasestorage.app",
+            messagingSenderId: "210614088940",
+            appId: "1:210614088940:web:7addbdc7c466eeb05421c9"
+        };
+        
+        // 初始化 Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        const provider = new firebase.auth.GoogleAuthProvider();
+        let currentUser = null;
+
+        // 監聽登入狀態
+        auth.onAuthStateChanged(user => {
+            currentUser = user;
+            if (user) {
+                document.getElementById('loginBtn').classList.add('hidden');
+                document.getElementById('cloudActionGroup').classList.remove('hidden');
+                document.getElementById('userAvatar').src = user.photoURL;
+            } else {
+                document.getElementById('loginBtn').classList.remove('hidden');
+                document.getElementById('cloudActionGroup').classList.add('hidden');
+            }
+        });
+
+        function loginGoogle() { 
+            auth.signInWithPopup(provider).catch(error => alert("登入失敗: " + error.message)); 
+        }
+        function logoutGoogle() { 
+            if(confirm("確定要登出 Google 帳號嗎？")) auth.signOut(); 
+        }
+
+        // ==========================================
+        // 🌟 角色清單核心邏輯 (保留原功能)
+        // ==========================================
         const personalityColors = { 
             "天真": "border-green-400 text-green-400", 
             "冷靜": "border-blue-400 text-blue-400", 
@@ -66,53 +162,48 @@
             "天真": "sprite-char-innocence", "狂亂": "sprite-char-madness", "活潑": "sprite-char-vivacious"
         };
         let checkedCharacters = JSON.parse(localStorage.getItem('trickcal_checklist')) || {};
+
         window.onload = function() {
+            const savedTitle = localStorage.getItem('trickcal_custom_title');
+            const savedDesc = localStorage.getItem('trickcal_custom_desc');        
+            if (savedTitle !== null) document.getElementById('customTitle').value = savedTitle;
+            if (savedDesc !== null) document.getElementById('customDesc').value = savedDesc;
             renderChecklist();
         };
 
-        // 🌟 2. 排序並渲染列表
+        function saveCustomHeader() {
+            localStorage.setItem('trickcal_custom_title', document.getElementById('customTitle').value);
+            localStorage.setItem('trickcal_custom_desc', document.getElementById('customDesc').value);
+        }
+
         function renderChecklist() {
             const container = document.getElementById('checklistContainer');
             const sortType = document.getElementById('sortSelect').value;
             container.innerHTML = '';
             if (typeof INITIAL_DATA === 'undefined' || !INITIAL_DATA) return;
-            // 複製一份資料來進行排序
+            
             let data = [...INITIAL_DATA];
             data.sort((a, b) => {
-                if (sortType === 'name') {
-                    let nameA = (typeof SPINE_MAP !== 'undefined' && SPINE_MAP[a.name]) ? SPINE_MAP[a.name] : a.name;
-                    let nameB = (typeof SPINE_MAP !== 'undefined' && SPINE_MAP[b.name]) ? SPINE_MAP[b.name] : b.name;
-                    return nameA.localeCompare(nameB);
-                } else if (sortType === 'personality') {
-                    // 如果性格相同，用名字排序當第二條件
-                    if (a.personality === b.personality) {
-                        let nameA = (typeof SPINE_MAP !== 'undefined' && SPINE_MAP[a.name]) ? SPINE_MAP[a.name] : a.name;
-                        let nameB = (typeof SPINE_MAP !== 'undefined' && SPINE_MAP[b.name]) ? SPINE_MAP[b.name] : b.name;
-                        return nameA.localeCompare(nameB);
-                    }
+                let nameA = (typeof SPINE_MAP !== 'undefined' && SPINE_MAP[a.name]) ? SPINE_MAP[a.name] : a.name;
+                let nameB = (typeof SPINE_MAP !== 'undefined' && SPINE_MAP[b.name]) ? SPINE_MAP[b.name] : b.name;
+                if (sortType === 'name') return nameA.localeCompare(nameB);
+                if (sortType === 'personality') {
+                    if (a.personality === b.personality) return nameA.localeCompare(nameB);
                     return a.personality.localeCompare(b.personality);
-                } else if (sortType === 'race') {
-                    if (a.race === b.race) {
-                        let nameA = (typeof SPINE_MAP !== 'undefined' && SPINE_MAP[a.name]) ? SPINE_MAP[a.name] : a.name;
-                        let nameB = (typeof SPINE_MAP !== 'undefined' && SPINE_MAP[b.name]) ? SPINE_MAP[b.name] : b.name;
-                        return nameA.localeCompare(nameB);
-                    }
+                } 
+                if (sortType === 'race') {
+                    if (a.race === b.race) return nameA.localeCompare(nameB);
                     return a.race.localeCompare(b.race);
                 }
             });
-            // 產生每一個角色的圖示
-            data.forEach(char => {
-                const el = createChecklistIcon(char);
-                container.appendChild(el);
-            });
-        }
 
+            data.forEach(char => container.appendChild(createChecklistIcon(char)));
+        }
 
         function createChecklistIcon(charData) {
             const el = document.createElement('div');
             const charName = charData.name;
             const spineName = (typeof SPINE_MAP !== 'undefined' && SPINE_MAP[charName]) ? SPINE_MAP[charName] : charName;
-            
             const displayName = (typeof getI18n === 'function' ? getI18n(charName) : charName);
 
             let raceKey = charData.race === "???" ? "unknown" : charData.race;
@@ -122,34 +213,27 @@
             const charSpriteBase = CHAR_SPRITE_MAP[charData.personality] || "sprite-char-innocence";
             const charSpriteClass = `sprite-${spineName}`;
 
-            // 🌟 1. 把這段貼在這裡 (原本寫 isChecked 的地方可以整段替換掉)
             const currentState = checkedCharacters[charName] || 0;
             const checkHiddenClass = currentState === 0 ? "hidden" : "";
             
             let symbolText = "";
             let symbolClass = "text-red-500 drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] text-4xl sm:text-5xl font-black";
-            if (currentState === 1) {
-                symbolText = "✔";
-            } else if (currentState === 2) {
+            if (currentState === 1) symbolText = "✔";
+            else if (currentState === 2) {
                 symbolText = "❌";
                 symbolClass = "text-red-600 drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] text-4xl sm:text-5xl font-black";
             }
 
             el.className = "flex flex-col items-center gap-1 group relative transition-all duration-300 no-context-menu cursor-pointer hover:scale-105";
-            
             el.innerHTML = `
                 <div class="char-icon-box w-16 h-16 sm:w-20 sm:h-20 rounded-2xl border-4 ${borderClass} overflow-hidden shadow-md relative flex items-center justify-center transition-all duration-300" id="box_${charName}">
-                    
                     <div class="absolute inset-0 flex items-center justify-center opacity-80">
                         <div class="sprite-base sprite-common ${raceSprite} shrink-0 scale-[0.8] sm:scale-[1.0]"></div>
                     </div>
                     <div class="w-full h-full bg-white/20 dark:bg-black/20 backdrop-blur-[1px] absolute inset-0 pointer-events-none"></div>
-                    
                     <div class="absolute inset-0 flex items-center justify-center z-10">
                         <div class="sprite-base ${charSpriteBase} ${charSpriteClass} shrink-0 scale-[0.7] sm:scale-[0.85]"></div>
                     </div>
-
-                    <!-- 🌟 2. 確保遮罩內的 span 有對應到 id="symbol_${charName}" -->
                     <div id="check_${charName}" class="absolute inset-0 bg-black/40 z-20 flex items-center justify-center ${checkHiddenClass} transition-opacity duration-200">
                         <span id="symbol_${charName}" class="${symbolClass}">${symbolText}</span>
                     </div>
@@ -157,69 +241,182 @@
                 <span class="text-[10px] sm:text-xs font-bold text-gray-600 dark:text-gray-300 text-center w-full truncate leading-tight">${displayName}</span>
             `;
 
-            el.addEventListener('contextmenu', function(e) {
-                e.preventDefault();
-                toggleCheck(charName);
-            });
-
-            el.addEventListener('click', function(e) {
-                toggleCheck(charName);
-            });
-
+            el.addEventListener('contextmenu', e => { e.preventDefault(); toggleCheck(charName); });
+            el.addEventListener('click', () => toggleCheck(charName));
             return el;
         }
 
-        // 🌟 切換狀態：無 ➔ 剔號 ✔ ➔ 交叉 ❌ ➔ 無
         function toggleCheck(charName) {
             const checkOverlay = document.getElementById(`check_${charName}`);
             const checkSymbol = document.getElementById(`symbol_${charName}`);
             
-            // 取得目前的狀態 (若沒有則預設為 0)
             let currentState = checkedCharacters[charName] || 0;
-            currentState = (currentState + 1) % 3; // 0 -> 1 -> 2 -> 0
-            
+            currentState = (currentState + 1) % 3; 
             checkedCharacters[charName] = currentState;
 
             if (currentState === 0) {
-                // 狀態 0：無標記
                 checkOverlay.classList.add('hidden');
             } else if (currentState === 1) {
-                // 狀態 1：打勾 ✔
                 checkOverlay.classList.remove('hidden');
                 checkSymbol.className = "text-red-500 drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] text-4xl sm:text-5xl font-black";
                 checkSymbol.innerText = "✔";
             } else if (currentState === 2) {
-                // 狀態 2：打叉 ❌
                 checkOverlay.classList.remove('hidden');
                 checkSymbol.className = "text-red-600 drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] text-4xl sm:text-5xl font-black";
                 checkSymbol.innerText = "❌";
             }
-            
-            // 儲存進度
             localStorage.setItem('trickcal_checklist', JSON.stringify(checkedCharacters));
         }
 
         function clearAllChecks() {
-            if(confirm("確定要清除所有的收集進度嗎？")) {
+            if(confirm("確定要清除畫面上的收集進度嗎？")) {
                 checkedCharacters = {};
                 localStorage.removeItem('trickcal_checklist');
                 renderChecklist();
             }
         }
 
-        function saveCustomHeader() {
-            const titleVal = document.getElementById('customTitle').value;
-            const descVal = document.getElementById('customDesc').value;
-            localStorage.setItem('trickcal_custom_title', titleVal);
-            localStorage.setItem('trickcal_custom_desc', descVal);
+        // ==========================================
+        // 🌟 雲端存取管理系統 (Firebase Firestore)
+        // ==========================================
+
+        async function saveToCloudNew() {
+            if (!currentUser) return alert("請先登入 Google 帳號！");
+            
+            try {
+                // 檢查是否超過 10 個
+                const snapshot = await db.collection('checklists').where('uid', '==', currentUser.uid).get();
+                if (snapshot.size >= 10) {
+                    return alert("❌ 您的雲端清單已達 10 個上限！請點擊「讀取/管理清單」刪除或覆寫現有進度。");
+                }
+
+                const title = document.getElementById('customTitle').value;
+                const desc = document.getElementById('customDesc').value;
+                
+                await db.collection('checklists').add({
+                    uid: currentUser.uid,
+                    title: title || "未命名清單",
+                    desc: desc,
+                    data: checkedCharacters,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                alert(`✅ 成功另存新檔：【${title}】！`);
+            } catch (error) {
+                console.error(error);
+                alert("儲存失敗，請檢查權限或網路連線。");
+            }
         }
-        window.onload = function() {
-            const savedTitle = localStorage.getItem('trickcal_custom_title');
-            const savedDesc = localStorage.getItem('trickcal_custom_desc');        
-            if (savedTitle !== null) document.getElementById('customTitle').value = savedTitle;
-            if (savedDesc !== null) document.getElementById('customDesc').value = savedDesc;
-            renderChecklist();
-        };
+
+        function openCloudManager() {
+            if (!currentUser) return alert("請先登入 Google 帳號！");
+            document.getElementById('cloudModal').classList.remove('hidden');
+            fetchCloudLists();
+        }
+
+        function closeCloudManager() {
+            document.getElementById('cloudModal').classList.add('hidden');
+        }
+
+        async function fetchCloudLists() {
+            const container = document.getElementById('cloudListContainer');
+            container.innerHTML = '<div class="text-center text-gray-500 py-8 font-bold">資料載入中... 🔄</div>';
+            
+            try {
+                const snapshot = await db.collection('checklists')
+                                     .where('uid', '==', currentUser.uid)
+                                     .orderBy('timestamp', 'desc')
+                                     .get();
+                
+                container.innerHTML = '';
+                
+                if (snapshot.empty) {
+                    container.innerHTML = '<div class="text-center text-gray-400 py-8 font-bold">☁️ 雲端上目前沒有任何儲存的清單。</div>';
+                    return;
+                }
+
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    const dateStr = data.timestamp ? new Date(data.timestamp.toDate()).toLocaleString() : "剛才";
+                    // 計算目前有幾個標記
+                    const markedCount = Object.values(data.data || {}).filter(v => v > 0).length;
+
+                    const itemHtml = `
+                        <div class="bg-white dark:bg-slate-700 p-4 rounded-xl shadow-sm border-2 border-transparent hover:border-amber-300 transition-colors flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                            <div>
+                                <h3 class="font-bold text-lg text-slate-800 dark:text-slate-100">${data.title}</h3>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">📝 說明: ${data.desc}</p>
+                                <div class="text-xs text-blue-600 dark:text-blue-400 font-bold mt-1">
+                                    🕒 ${dateStr} ｜ 🏷️ 已標記: ${markedCount} 隻
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center gap-2 w-full sm:w-auto">
+                                <button onclick="loadCloudList('${doc.id}')" class="flex-1 sm:flex-none px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white font-bold rounded-lg transition text-sm">
+                                    讀取
+                                </button>
+                                <button onclick="overwriteCloudList('${doc.id}')" class="flex-1 sm:flex-none px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-lg transition text-sm">
+                                    覆寫
+                                </button>
+                                <button onclick="deleteCloudList('${doc.id}')" class="px-3 py-2 bg-red-100 hover:bg-red-500 text-red-600 hover:text-white font-bold rounded-lg transition text-sm">
+                                    🗑️
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    container.insertAdjacentHTML('beforeend', itemHtml);
+                });
+            } catch (error) {
+                console.error(error);
+                container.innerHTML = '<div class="text-center text-red-500 py-8 font-bold">載入失敗，可能是由於 Firestore 索引建立中或規則受限。</div>';
+            }
+        }
+
+        async function loadCloudList(docId) {
+            try {
+                const docRef = await db.collection('checklists').doc(docId).get();
+                if (docRef.exists) {
+                    const data = docRef.data();
+                    
+                    // 覆蓋本地資料
+                    checkedCharacters = data.data || {};
+                    document.getElementById('customTitle').value = data.title;
+                    document.getElementById('customDesc').value = data.desc;
+                    
+                    // 儲存至 localStorage 並重新渲染
+                    saveCustomHeader();
+                    localStorage.setItem('trickcal_checklist', JSON.stringify(checkedCharacters));
+                    renderChecklist();
+                    
+                    closeCloudManager();
+                    alert(`✅ 已成功讀取清單：【${data.title}】`);
+                }
+            } catch (e) { alert("讀取失敗！"); }
+        }
+
+        async function overwriteCloudList(docId) {
+            if(!confirm("⚠️ 確定要用「當前畫面上的進度」覆蓋掉這個雲端存檔嗎？")) return;
+            
+            try {
+                await db.collection('checklists').doc(docId).update({
+                    title: document.getElementById('customTitle').value || "未命名清單",
+                    desc: document.getElementById('customDesc').value,
+                    data: checkedCharacters,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                alert("✅ 覆寫成功！");
+                fetchCloudLists(); // 重新整理清單
+            } catch (e) { alert("覆寫失敗！"); }
+        }
+
+        async function deleteCloudList(docId) {
+            if(!confirm("🗑️ 確定要永久刪除這個雲端清單嗎？(無法復原)")) return;
+            
+            try {
+                await db.collection('checklists').doc(docId).delete();
+                fetchCloudLists(); // 重新整理清單
+            } catch (e) { alert("刪除失敗！"); }
+        }
     </script>
 </body>
 </html>
