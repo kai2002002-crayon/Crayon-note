@@ -193,6 +193,7 @@ const currentLang = localStorage.getItem('user_lang') || 'zh-TW';
 function t(key) { return LANG_DICT[currentLang][key] || key; }
 
 const INITIAL_DATA = [
+	{ name: "羅萊特", personality: "狂亂", race: "魔女", position: "後排", job: "輸出", pathVersion: "", releaseDate: "2026-07-30T17:00:00+09:00" },
     { name: "洛涅", personality: "天真", race: "精靈", position: "前排", job: "肉盾", pathVersion: "V4" },
     { name: "薇薇", personality: "天真", race: "龍族", position: "前排", job: "肉盾", pathVersion: "V4" },
     { name: "卡洛特", personality: "天真", race: "妖精", position: "後排", job: "輔助", pathVersion: "V3" },
@@ -266,8 +267,7 @@ const INITIAL_DATA = [
     { name: "雷內瓦", personality: "狂亂", race: "精靈", position: "中排", job: "輸出", pathVersion: "V3", releaseDate: "2026-06-18T17:00:00+09:00" },
     { name: "芭瓏", personality: "冷靜", race: "幽靈", position: "前排", job: "輸出", pathVersion: "V3", releaseDate: "2026-07-02T17:00:00+09:00" },
 	{ name: "達雅", personality: "天真", race: "龍族", position: "後排", job: "輸出", pathVersion: "V2", releaseDate: "2026-07-16T19:00:00+09:00" },
-	{ name: "提格", personality: "活潑", race: "獸人", position: "前排", job: "輸出", pathVersion: "V2", releaseDate: "2026-07-16T19:00:00+09:00" },
-	{ name: "羅萊特", personality: "狂亂", race: "魔女", position: "後排", job: "輸出", pathVersion: "", releaseDate: "2026-07-30T17:00:00+09:00" }
+	{ name: "提格", personality: "活潑", race: "獸人", position: "前排", job: "輸出", pathVersion: "V2", releaseDate: "2026-07-16T19:00:00+09:00" }
 ];
 
 const CRAYON_PATH_CONFIG = {
