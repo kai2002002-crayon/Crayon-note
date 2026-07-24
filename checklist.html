@@ -163,10 +163,11 @@
             }
         };
 
-        let rawLang = localStorage.getItem('lang') || localStorage.getItem('trickcal_lang') || 'zh-TW';
+        let rawLang = localStorage.getItem('user_lang') || localStorage.getItem('lang') || localStorage.getItem('trickcal_lang') || 'zh-TW';
         if (rawLang.includes('en')) rawLang = 'en';
         if (rawLang.includes('ja')) rawLang = 'ja';
-        const uiLang = ['zh-TW', 'en', 'ja'].includes(rawLang) ? rawLang : 'zh-TW';
+        let uiLang = ['zh-TW', 'en', 'ja'].includes(rawLang) ? rawLang : 'zh-TW';
+        window.currentLang = uiLang;
         
         function t(key, arg = '') {
             const dict = UI_DICT[uiLang] || UI_DICT['zh-TW'];
@@ -186,6 +187,23 @@
             document.getElementById('modal_title_text').innerHTML = `📂 ${t('modal_title')}`;
         }
 
+        function changeLanguage(lang) {
+            if (!['zh-TW', 'en', 'ja'].includes(lang)) return;
+            uiLang = lang;
+            window.currentLang = lang;
+            applyUITranslation();
+            const titleInput = document.getElementById('customTitle');
+            const descInput = document.getElementById('customDesc');
+            const isDefaultTitle = ['⭐ 我的自訂角色清單', '⭐ My Custom Checklist', '⭐ マイカスタムリスト'].includes(titleInput.value);
+            if (isDefaultTitle) titleInput.value = t('default_title');
+            const isDefaultDesc = ['在頭像上點擊即可標記狀態！', 'Click on the avatar to mark the status!', 'アイコンをクリックして状態をマーク！'].includes(descInput.value);
+            if (isDefaultDesc) descInput.value = t('default_desc');
+            renderChecklist();
+            if (!document.getElementById('cloudModal').classList.contains('hidden') && currentUser) {
+                fetchCloudLists();
+            }
+        }
+        
         const firebaseConfig = {
             apiKey: "AIzaSyDhv8D2pY_0M56UJrDTQw0RGPHA-BkXU8Y",
             authDomain: "crayon-note.firebaseapp.com",
