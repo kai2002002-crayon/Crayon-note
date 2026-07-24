@@ -4,7 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>自訂角色清單 | Custom Checklist</title>
+    
+    <!-- 🌟 關鍵修改：在載入任何外部 js 之前，先設定好全域語言與主題！ -->
+    <script>
+        // 1. 優先設定全域語言，讓後面的 data_core.js 一載入就能抓到正確語言
+        let rawLang = localStorage.getItem('user_lang') || localStorage.getItem('lang') || localStorage.getItem('trickcal_lang') || 'zh-TW';
+        if (rawLang.includes('en')) rawLang = 'en';
+        if (rawLang.includes('ja')) rawLang = 'ja';
+        window.currentLang = ['zh-TW', 'en', 'ja'].includes(rawLang) ? rawLang : 'zh-TW';
+
+        // 2. 設定 Tailwind 主題
+        tailwind = { config: { darkMode: 'class' } };
+        const isDarkMode = localStorage.getItem('theme') === 'dark' || 
+                           (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        if (isDarkMode) { document.documentElement.classList.add('dark'); }
+    </script>
+    
+    <!-- 🌟 確保 data_core.js 放在我們設定好 window.currentLang 之後 -->
     <script src="data_core.js"></script>
+    
     <link rel="stylesheet" href="sprites.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" href="https://i.postimg.cc/mkfSTq5k/Favicon.png" type="image/png">
@@ -14,13 +32,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
-    <script>
-        tailwind.config = { darkMode: 'class', }
-        const isDarkMode = localStorage.getItem('theme') === 'dark' || 
-                           (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
-        if (isDarkMode) { document.documentElement.classList.add('dark'); }
-    </script>
     <style>
         body { font-family: 'Noto Sans TC', sans-serif; }
         .no-context-menu { -webkit-touch-callout: none; }
