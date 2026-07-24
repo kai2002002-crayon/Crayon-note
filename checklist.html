@@ -172,14 +172,14 @@
             }
         };
 
-        // 偵測語言
+        // 偵測語言 (修改變數名稱為 uiLang，避免與 data_core.js 衝突)
         let rawLang = localStorage.getItem('lang') || localStorage.getItem('trickcal_lang') || 'zh-TW';
         if (rawLang.includes('en')) rawLang = 'en';
         if (rawLang.includes('ja')) rawLang = 'ja';
-        const currentLang = ['zh-TW', 'en', 'ja'].includes(rawLang) ? rawLang : 'zh-TW';
+        const uiLang = ['zh-TW', 'en', 'ja'].includes(rawLang) ? rawLang : 'zh-TW';
         
         function t(key, arg = '') {
-            const dict = UI_DICT[currentLang] || UI_DICT['zh-TW'];
+            const dict = UI_DICT[uiLang] || UI_DICT['zh-TW'];
             let str = dict[key] || UI_DICT['zh-TW'][key] || key;
             return str.replace('{0}', arg);
         }
