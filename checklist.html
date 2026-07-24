@@ -266,11 +266,14 @@
 
 
         window.addEventListener('storage', (e) => {
+            // 🌐 監聽語言切換
             if (e.key === 'user_lang' && e.newValue && e.newValue !== window.currentLang) {
-                console.log(`📡 偵測到主頁將語言切換至 ${e.newValue}，同步更新 checklist！`);
-                changeLanguage(e.newValue);
+                console.log(`📡 偵測到主頁將語言切換至 ${e.newValue}，正在重新整理以套用新語言！`);
+                // 🔥 終極大絕招：因為進度都存在 localStorage，直接重新載入頁面，保證所有外部 js 都切換為新語言！
+                window.location.reload(); 
             }
 
+            // 🌗 監聽主題切換 (主題切換不需要重新整理，維持即時變換即可)
             if (e.key === 'theme') {
                 console.log(`🌗 偵測到主頁將主題切換至 ${e.newValue}，同步更新 checklist！`);
                 if (e.newValue === 'dark') {
