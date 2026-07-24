@@ -167,8 +167,8 @@
                 desc_label: "📝 説明:", marked_label: "🏷️ マーク済み: {0}体"
             }
         };
-
-        window.currentLang = lang; 
+        let uiLang = window.currentLang || localStorage.getItem('user_lang') || 'zh-TW';
+        window.currentLang = uiLang; 
 
         function t(key, arg = '') {
             const currentLang = window.currentLang || 'zh-TW';
