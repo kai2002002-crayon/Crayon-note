@@ -202,6 +202,10 @@ const PRESENT_MAP = {
         url: "https://i.postimg.cc/fTT66cTs/Present-List-Rohne.png",
         name: { "zh-TW": "教主觀察日記", "ja": "教主観察日誌", "en": "Master Observation Journal" }
     },
+	"Rollett": { 
+        url: "",
+        name: { "zh-TW": "", "ja": "", "en": "" }
+    },
     "Rude": { 
         url: "https://i.postimg.cc/yYYwwmY6/Present-List-Rude.png",
         name: { "zh-TW": "莫納蒂姆健身房高級會員卡", "ja": "モナティアムジムのプレミアム会員券", "en": "Monatium Gym Premium Membership" }
