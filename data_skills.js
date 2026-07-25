@@ -25,7 +25,7 @@ const PERSONALITY_BACKGROUNDS = {
 
 const characterSkills = [
     {
-    "name": "羅萊特",
+    "name": "羅蕾特",
     "attribute": "魔法",
     "skills": {
       "zh-TW": {
