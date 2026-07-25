@@ -46,7 +46,7 @@ const LANG_DICT = {
         "艾斯皮": "艾斯皮", "艾琳娜": "艾琳娜", "艾皮卡": "艾皮卡", "艾舒爾": "艾舒爾", "艾蜜莉雅": "艾蜜莉雅", "芙莉可": "芙莉可", "茱蜜": "茱蜜", "莉茲": "莉茲",
         "莎莉": "莎莉", "萊薇": "萊薇", "蒂亞娜": "蒂亞娜", "謝蒂": "謝蒂", "貝魯": "貝魯", "貝麗塔": "貝麗塔", "路德": "路德", "路易": "路易",
         "阿萊特": "阿萊特", "雷吉": "雷吉", "馬爾": "馬爾", "泰達": "泰達", "寧琉": "寧琉", "莉絲蒂": "莉絲蒂", "雷內瓦": "雷內瓦", "芭瓏": "芭瓏", "達雅": "達雅", "提格": "提格",
-		"羅萊特": "羅萊特", "琵拉": "琵拉",
+		"羅蕾特": "羅蕾特", "琵拉": "琵拉",
 		"克魯布魯斯": "克魯布魯斯", "蠟筆勇士": "蠟筆勇士", "R41雷內瓦": "R41雷內瓦", "莉1莉": "莉1莉", "M.E.O.W.": "M.E.O.W.", "雷內瓦(NPC)": "雷內瓦", "榮春": "榮春", "高蒂": "高蒂", "可麗餅": "可麗餅",
         page_title_char_detail: "坨坨詳細資料", btn_close_page: "⬅️ 關閉此頁", loading: "載入中...",
         crayon_detail_title: "🖍️ 金蠟筆分佈詳情", layer_1_stats: "🥇 第一層屬性", layer_2_stats: "🥈 第二層屬性", layer_3_stats: "🥉 第三層屬性",
@@ -106,7 +106,7 @@ const LANG_DICT = {
         "艾斯皮": "エスピー", "艾琳娜": "エレナ", "艾皮卡": "エピカ", "艾舒爾": "エシュール", "艾蜜莉雅": "アメリア", "芙莉可": "フリックル", "茱蜜": "ジュビー", "莉茲": "リッツ",
         "莎莉": "サリー", "萊薇": "レヴィ", "蒂亞娜": "ディアナ", "謝蒂": "シェイディ", "貝魯": "ベル", "貝麗塔": "ベリータ", "路德": "ルード", "路易": "キュウイ",
         "阿萊特": "アレット", "雷吉": "レイジー", "馬爾": "マーゴ", "泰達": "タイダー", "寧琉": "ネル", "莉絲蒂": "リスティ", "雷內瓦": "リニュア", "芭瓏": "バロン", "達雅": "ダーヤ", "提格": "提格",
-		"羅萊特": "羅萊特", "琵拉": "琵拉",
+		"羅蕾特": "ロレット", "琵拉": "琵拉",
 		"克魯布魯斯": "ケルベロス", "蠟筆勇士": "イサムレヨン", "R41雷內瓦": "R41 リニュア", "莉1莉": "リリー", "M.E.O.W.": "M.E.O.W.", "雷內瓦(NPC)": "リニュア", "榮春": "ブルミ", "高蒂": "ゴールディ", "可麗餅": "クレープ",
         page_title_char_detail: "使徒詳細データ", btn_close_page: "⬅️ 閉じる", loading: "読み込み中...",
         crayon_detail_title: "🖍️ 特級クレヨン分布詳細", layer_1_stats: "🥇 1段階目ステータス", layer_2_stats: "🥈 2段階目ステータス", layer_3_stats: "🥉 3段階目ステータス",
@@ -166,7 +166,7 @@ const LANG_DICT = {
         "艾斯皮": "Espi", "艾琳娜": "Elena", "艾皮卡": "Epica", "艾舒爾": "Ashur", "艾蜜莉雅": "Amelia", "芙莉可": "Fricle", "茱蜜": "Jubee", "莉茲": "Leets",
         "莎莉": "Sari", "萊薇": "Levi", "蒂亞娜": "Diana", "謝蒂": "Shaydi", "貝魯": "Veroo", "貝麗塔": "Belita", "路德": "Rudd", "路易": "Kyuri",
         "阿萊特": "Allet", "雷吉": "Layze", "馬爾": "Mago", "泰達": "Taida", "寧琉": "Ner", "莉絲蒂": "Risty", "雷內瓦": "Renewa", "芭瓏": "Barong", "達雅": "Daya", "提格": "Tig",
-        "羅萊特": "Rollett", "琵拉": "Pira",
+        "羅蕾特": "Rollett", "琵拉": "Pira",
 		"克魯布魯斯": "Cerberus", "蠟筆勇士": "Super Crayon", "R41雷內瓦": "R41 Renewa", "莉1莉": "L1ly", "M.E.O.W.": "M.E.O.W.", "雷內瓦(NPC)": "Renewa", "榮春": "Youngchun", "高蒂": "Goldy", "可麗餅": "Crepe",
 		page_title_char_detail: "Apostle Details", btn_close_page: "⬅️ Close", loading: "Loading...",
         crayon_detail_title: "🖍️ Ultra Crayon Details", layer_1_stats: "🥇 Board 1 Stats", layer_2_stats: "🥈 Board 2 Stats", layer_3_stats: "🥉 Board 3 Stats",
@@ -193,7 +193,7 @@ const currentLang = localStorage.getItem('user_lang') || 'zh-TW';
 function t(key) { return LANG_DICT[currentLang][key] || key; }
 
 const INITIAL_DATA = [
-	{ name: "羅萊特", personality: "狂亂", race: "魔女", position: "後排", job: "輸出", pathVersion: "V4", releaseDate: "2026-07-30T17:00:00+09:00" },
+	{ name: "羅蕾特", personality: "狂亂", race: "魔女", position: "後排", job: "輸出", pathVersion: "V4", releaseDate: "2026-07-30T17:00:00+09:00" },
 	// { name: "琵拉", personality: "狂亂", race: "龍族", position: "後排", job: "輔助", pathVersion: "V3", releaseDate: "2026-07-30T17:00:00+09:00" }, //
     { name: "洛涅", personality: "天真", race: "精靈", position: "前排", job: "肉盾", pathVersion: "V4" },
     { name: "薇薇", personality: "天真", race: "龍族", position: "前排", job: "肉盾", pathVersion: "V4" },
@@ -387,7 +387,7 @@ const CV_MAP = {
     "艾斯皮": "內海まり", "艾琳娜": "塚田悠衣", "艾皮卡": "日高里菜", "艾舒爾": "長尾玲奈", "艾蜜莉雅": "中林新夏", "芙莉可": "百瀨帆南", "茱蜜": "山田聖奈", "莉茲": "藤本侑里",
     "莎莉": "漆山ゆうき", "萊薇": "上永紗也華", "蒂亞娜": "立花日菜", "謝蒂": "山城リアン", "貝魯": "若山なつみ", "貝麗塔": "松岡美里", "路德": "渡部惠子", "路易": "兼田めぐみ",
     "阿萊特": "若山なつみ", "雷吉": "大園朱花子", "馬爾": "花咲心優", "泰達": "赤堀実華琉", "寧琉": "アンデルソンゆり子", "莉絲蒂": "黒沢ともよ", "雷內瓦": "花守ゆみり", "芭瓏": "橋本千波", "達雅": "羊宮妃那", "提格": "篠田南",
-	"羅萊特": "", "琵拉": ""
+	"羅蕾特": "日野麻里", "琵拉": ""
 };
 
 const GRADE_MAP = {
@@ -399,7 +399,7 @@ const GRADE_MAP = {
     "瑟琳娜": "3", "瑪約": "3", "瑪麗": "2", "皮可菈": "3", "盧波": "3", "米雪": "1", "綾": "3", "羽伊": "3",
     "艾斯皮": "2", "艾琳娜": "3", "艾皮卡": "3", "艾舒爾": "3", "艾蜜莉雅": "3", "芙莉可": "3", "茱蜜": "2", "莉茲": "3",
     "莎莉": "2", "萊薇": "3", "蒂亞娜": "3", "謝蒂": "3", "貝魯": "1", "貝麗塔": "3", "路德": "3", "路易": "1",
-    "阿萊特": "2", "雷吉": "2", "馬爾": "3", "泰達": "2", "寧琉": "3", "莉絲蒂": "3", "雷內瓦": "3", "芭瓏": "3", "達雅": "3", "提格": "3", "羅萊特": "3", "琵拉": "3"
+    "阿萊特": "2", "雷吉": "2", "馬爾": "3", "泰達": "2", "寧琉": "3", "莉絲蒂": "3", "雷內瓦": "3", "芭瓏": "3", "達雅": "3", "提格": "3", "羅蕾特": "3", "琵拉": "3"
 };
 
 const ELDAIN_LIST = ['綾', '庫洛艾', '艾皮卡', '伊德', '羽伊', '薇薇', 'x乂錫安乂x', '優米', '雷內瓦'];
@@ -881,7 +881,7 @@ const SPINE_MAP = {
     "艾斯皮": "Espi", "艾琳娜": "Elena", "艾皮卡": "Epica", "艾舒爾": "Ashur", "艾蜜莉雅": "Amelia", "芙莉可": "Fricle", "茱蜜": "Jubee", "莉茲": "Leets",
     "莎莉": "Sari", "萊薇": "Levi", "蒂亞娜": "Diana", "謝蒂": "Shady", "貝魯": "Veroo", "貝麗塔": "Belita", "路德": "Rude", "路易": "Cuee",
     "阿萊特": "Allet", "雷吉": "Lazy", "馬爾": "Mago", "泰達": "Taida", "寧琉": "Ner", "莉絲蒂": "Risty", "R41雷內瓦": "R41_Renewa", "雷內瓦": "RenewaAwaken", "芭瓏": "Barong", "達雅": "Daya", "提格": "Tig",
-	"羅萊特": "Rollett", "琵拉": "Pira"
+	"羅蕾特": "Rollett", "琵拉": "Pira"
 };
 
 const COSTUME_MAP = {
@@ -891,7 +891,7 @@ const COSTUME_MAP = {
     "愛麗絲": ["Alice", "AliceSkin1", "AliceSkin2", "AliceSkin3"], "艾蜜莉雅": ["Amelia", "AmeliaSkin1", "AmeliaSkin2", "AmeliaSkin3"], "綾": ["Aya", "AyaSkin1", "AyaSkin2", "AyaSkin3"], "庫洛艾": ["Chloe", "ChloeSkin1", "ChloeSkin2", "ChloeSkin3"], "蒂亞娜": ["Diana", "DianaSkin1", "DianaSkin2", "DianaSkin3"], "桃桃": ["Momo", "MomoSkin1", "MomoSkin2", "MomoSkin3"], "瑟琳娜": ["Selline", "SellineSkin1", "SellineSkin2", "SellineSkin3"], "羽伊": ["Ui", "UiSkin1", "UiSkin2", "UiSkin3"], "薇薇": ["Vivi", "ViviSkin1", "ViviSkin2", "ViviSkin3"], "x乂錫安乂x": ["xXionx", "xXionxSkin1", "xXionxSkin2", "xXionxSkin3"],
     "艾爾芬": ["Erpin", "ErpinSkin1", "ErpinSkin2", "ErpinSkin3", "ErpinSkin4"], "莉絲蒂": ["Risty", "RistySkin1", "RistySkin2"], "雷內瓦": ["RenewaAwaken", "RenewaAwakenSkin1", "RenewaAwakenSkin2"],
 	"芭瓏": ["Barong", "BarongSkin1", "BarongSkin2", "BarongSkin3"], "達雅": ["Daya", "DayaSkin1", "DayaSkin2"], "提格": ["Tig", "TigSkin1", "TigSkin2"],
-	"羅萊特": ["Rollett", "RollettSkin2"], "琵拉": ["Pira", "PiraSkin1", "PiraSkin2"]
+	"羅蕾特": ["Rollett", "RollettSkin2"], "琵拉": ["Pira", "PiraSkin1", "PiraSkin2"]
 };
 
 const SD_COSTUME = {
@@ -901,7 +901,7 @@ const SD_COSTUME = {
     "愛麗絲": ["Alice", "AliceSkin1", "AliceSkin2"], "艾蜜莉雅": ["Amelia", "AmeliaSkin1", "AmeliaSkin2"], "綾": ["Aya", "AyaSkin1", "AyaSkin2", "AyaSkin3"], "庫洛艾": ["Chloe", "ChloeSkin1", "ChloeSkin2", "ChloeSkin3", "ChloeSkin4"], "蒂亞娜": ["Diana", "DianaSkin1", "DianaSkin2", "DianaSkin3"], "桃桃": ["Momo", "MomoSkin1", "MomoSkin3"], "瑟琳娜": ["Selline", "SellineSkin1", "SellineSkin2"], "羽伊": ["Ui", "UiSkin1", "UiSkin2", "UiSkin3", "UiSkin4"], "薇薇": ["Vivi", "ViviSkin1", "ViviSkin2", "ViviSkin3", "ViviSkin4"], "x乂錫安乂x": ["xXionx", "xXionxSkin1", "xXionxSkin2", "xXionxSkin3", "xXionxSkin4"],
     "艾爾芬": ["Erpin", "ErpinSkin1", "ErpinSkin2", "ErpinSkin3"], "莉絲蒂": ["Risty", "RistySkin1"], "雷內瓦": ["RenewaAwaken", "RenewaAwakenSkin1", "RenewaAwakenSkin2"],
 	"芭瓏": ["Barong", "BarongSkin1", "BarongSkin2", "BarongSkin3"], "達雅": ["Daya", "DayaSkin1"], "提格": ["Tig", "TigSkin1"],
-	"羅萊特": ["Rollett", "RollettSkin2"], "琵拉": ["Pira", "PiraSkin1", "PiraSkin2"]
+	"羅蕾特": ["Rollett", "RollettSkin2"], "琵拉": ["Pira", "PiraSkin1", "PiraSkin2"]
 };
 //迷你坨坨SPINE NAME
 const MINI_SPINE = {
@@ -914,7 +914,7 @@ const MINI_SPINE = {
     "艾斯皮": "Mini_Espi", "艾琳娜": "Mini_Elena", "艾皮卡": "Mini_Epica", "艾舒爾": "Mini_Ashur", "艾蜜莉雅": "Mini_Amelia", "芙莉可": "Mini_Fricle", "茱蜜": "Mini_Jubee", "莉茲": "Mini_Leets",
     "莎莉": "Mini_Sari", "萊薇": "Mini_Levi", "蒂亞娜": "Mini_Diana", "謝蒂": "Mini_Shady", "貝魯": "Mini_Veroo", "貝麗塔": "Mini_Belita", "路德": "Mini_Rude", "路易": "Mini_Cuee",
     "阿萊特": "Mini_Allet", "雷吉": "Mini_Lazy", "馬爾": "Mini_Mago", "泰達": "Mini_Taida", "寧琉": "Mini_Ner", "莉絲蒂": "Mini_Risty",  "雷內瓦": "Mini_RenewaAwaken", "芭瓏": "Mini_Barong", "達雅": "Mini_Daya", "提格": "Mini_Tig",
-	"羅萊特": "Mini_Rollett", "琵拉": "Mini_Pira"
+	"羅蕾特": "Mini_Rollett", "琵拉": "Mini_Pira"
 };
 
 // ------------------------------------------
@@ -931,7 +931,7 @@ const PICKUP_SCHEDULE = [
 	{
         start: "2026-07-30T17:00:00+09:00",
         end: "2026-07-13T10:59:59+09:00",
-        chars: ["羅萊特", "琵拉"],
+        chars: ["羅蕾特", "琵拉"],
         note: "Rollett, Pira"
     }
 ];
