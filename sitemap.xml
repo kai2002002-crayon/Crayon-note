@@ -229,9 +229,18 @@
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E6%8F%90%E6%A0%BC</loc>
     </url>
     <url>
+        <loc>https://crayon-note.vercel.app/char_detail.html?char=%E7%BE%85%E8%95%BE%E7%89%B9</loc>
+    </url>
+    <url>
         <loc>https://crayon-note.vercel.app/apostle_viewer.html</loc>
     </url>
     <url>
         <loc>https://crayon-note.vercel.app/gacha.html</loc>
+    </url>
+    <url>
+        <loc>https://crayon-note.vercel.app/tier_maker.html</loc>
+    </url>
+    <url>
+        <loc>https://crayon-note.vercel.app/checklist.html</loc>
     </url>
 </urlset>
