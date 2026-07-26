@@ -64,7 +64,7 @@ const PRESENT_MAP = {
     },
 	"Daya": { 
         url: "",
-        name: { "zh-TW": "銀鏡", "ja": "", "en": "" }
+        name: { "zh-TW": "銀鏡", "ja": "銀細工の鏡", "en": "Silver-crafted Mirror" }
     },
     "Diana": { 
         url: "https://i.postimg.cc/RF7kzGH6/Present-List-Diana.png",
@@ -374,7 +374,8 @@ const THOUGHT_MAP = {
             "Carren": "キャロットの庭園で盗んできた種のようだ。教団の庭に植えてほしいというメモがあったがネルが睨みそうにしていたのでやめておいた。",
             "Chloe": "自分が住んでいる妖精王国を刺繍で編んだ大型のタペストリー。世界樹教団も描写されている。",
             "Chopi": "照れながら私のサインをもらいに来たチョッピーが慌てて逃げた時に忘れたサインブック。",
-            "Diana": "ディアナが時間がある時に私のために作ったという揺り椅子。疲れた時は、ここに座ってゆったり休もう。",
+            "Daya": "ダーヤが姿を見ながら化粧を直していた高級鏡。昔ヴィヴィがプレゼントしたという噂がある。",
+			"Diana": "ディアナが時間がある時に私のために作ったという揺り椅子。疲れた時は、ここに座ってゆったり休もう。",
             "Ed": "イードの夢の中、美しい一つのシーンをナタが印刷してくれた絵。どこかぼんやりするような気分になる。",
             "Elena": "現代のものを思い出すんじゃないかと私にプレゼントしてくれたものだが……盗聴機能はないのかな？",
             "Epica": "エピカが私の歩みを小説として書いた本。少し誇張されてる部分があるが面白い。",
@@ -445,7 +446,8 @@ const THOUGHT_MAP = {
             "Carren": "A seed package that seems to have been stolen from Kyarot's garden. There was a note asking me to plant them in the Order garden, but I couldn't do it under Ner's watchful eyes.",
             "Chloe": "A large tapestry embroidered with the Sprite Kingdom where Chloe lives. The Yggdrasil Order is also depicted.",
             "Chopi": "An autograph book of Chopi. Acting shy, she came to get my autograph earlier, but panicked and ran away, leaving it behind.",
-            "Diana": "A rocking chair that Diana worked on for me whenever she had free time. She told me to sit here and relax when I'm tired.",
+            "Daya": "A luxurious mirror that Doya used to check her appearance and maintain her looks. There's a rumor that it was a gift from Vivi in the past.",
+			"Diana": "A rocking chair that Diana worked on for me whenever she had free time. She told me to sit here and relax when I'm tired.",
             "Ed": "A picture capturing a beautiful scene from ED's dream that Nata printed for her. It leaves me with a bittersweet feeling for some reason.",
             "Elena": "A laptop that she gifted to me, saying I probably miss modern products and culture... I hope it hasn't been bugged.",
             "Epica": "An epic novel written by Epica, based on my adventures. It's slightly exaggerated, but still fun to read.",
@@ -591,7 +593,8 @@ const LETTER_MAP = {
             "Carren": "こんにちは、教主様。「元」生食家のカレンです。この前はお見苦しい姿を見せましたね。最近はエルチューブへの未練を捨て、平凡な妖精として元気に過ごしていますので、ご安心ください。今度、キャロット姉さんの庭に遊びに行って、美味しいコーヒーを飲みましょう。この前、約束したとおり美味しい野菜をご馳走します。では、また会うその日まで……ニンジン。",
             "Chloe": "教主、仕立て屋にはいつ来てくれる？実はね、この前やってもらったぬいぐるみのアルバイトをまたお願いしたいの。うん、でも、あちしの仕事を手伝ってくれるなら、ぬいぐるみのアルバイトじゃなくてもいいの！それから、セバスチャンも教主に会いたいんだって！一緒に過ごした時のことが懐かしいみたい。仕事が終わったら服屋以外にも遊びに行こっ！教主と遊ぶのはいつも楽しいから！",
             "Chopi": "こんにちは、教主様！いつも村の平和のために頑張ってくださってありがとうございます！私も獣人の村の立派な「師匠」として、村の優秀な戦士育成のために頑張ります！それから……スーパージェネラルキングゴッドエンペラーマジェスティ強靭な眼差し伝説の剣を操る獣人の村の永遠ナンバーワン剣士ティグ様に会ったら、私は立派な戦士になったと伝えてもらえるとうれしいです！チョッピーの成長を、これからも見守ってください！では！",
-            "Diana": "美味しい料理をたくさん作りましたよ。甘くないものを中心に作ったら簡単なメニューになりましたが、種類より量ですからねぇ。長持ちするとは思いますが、やはり出来立てが美味しいから、こうして手紙を書いています。手紙はすぐに届くでしょうかねぇ？デザートもたっぷり用意しましたので、ゆったりした服でいらしてくださいねぇ。",
+            "Daya": "教主、宴会場でも教団でも、変わらず気遣っていただき感謝するわ。いつか故郷に帰るかもしれないと言ったことがあったわね? 本当にその日が来たらどうすればいいのかしら? あなたのいないエーリアスなんて想像したくもないわ。もしその日が訪れたら、わたくしも必ず連れていって。あなたと一緒なら異世界でも幸せだから･･････。",
+			"Diana": "美味しい料理をたくさん作りましたよ。甘くないものを中心に作ったら簡単なメニューになりましたが、種類より量ですからねぇ。長持ちするとは思いますが、やはり出来立てが美味しいから、こうして手紙を書いています。手紙はすぐに届くでしょうかねぇ？デザートもたっぷり用意しましたので、ゆったりした服でいらしてくださいねぇ。",
             "Ed": "たった数文字書くだけで、何か変わるのでしょうか……まだよく分かりませんが、ナタから、夢に大きな意味を持たせられるから、手紙を書くようにと言われました。教主様……あなたと一緒に過ごした時間が、夢でなかったらいいなと思いました。私の理解者はナタだけだと思っていましたが、今は違います。私は教主様が、この夢の中に永遠にいてくれたらいいと思っています。ナタと私と一緒に、夢を見続けましょう。",
             "Elena": "おい、人間。見直したよ！正直、やらかしたのはあたしたちなのに、思ったよりよくしてくれて驚いてるんだ。てことは、これからはもっと暴れてもいいってことだな？なんて、冗談だよ。あたしだって空気くらい読めるぞ？まぁ、これからは控えてみる。モナティアムの全市民をコントロールできるか分からないが、なるべく角をたてないように尽力してみる。ありがとう。まあ、そんなところだ。",
             "Epica": "教主様、今日は特別な感謝の気持ちを伝えるため、手紙を送ります。私が吟遊詩人を名乗り放浪しているのは、教主様もご存知のことでしょう。さまざまな物語があり、たくさんの主人公たちと出会う中で、私は主人公たちを引き立てる詩人で十分だと思っておりました。ですが、あなたは違いました。語り手に過ぎない私を見てくださり、教主様の物語を共に紡いでいけるよう、配慮してくださったのです。ありがとうございます。教主様の物語が幕を下ろすまで、ご一緒させていただきます。",
@@ -662,7 +665,8 @@ const LETTER_MAP = {
             "Carren": "Hello, Master. This is Carren, the former radical raw foodist. I'm sorry for behaving disgracefully in front of you last time, Master. These days, I'm no longer obsessed with ElfTube and have been living an ordinary life as a sprite. So, no need to worry about me anymore. Let's visit Kyarot's garden for some coffee next time. I'll treat you to those vegetables I promised last time, too. Until we meet again... Yours carrotly, Carren",
             "Chloe": "Master, when do you plan on visiting my tailor shop again? Oh, it's nothing serious... I just thought maybe you could give the animal costume gig another go. Or, actually, forget the animal costume thing! It'd be amazing if you could lend a hand here, no matter the task. Also, Sebastian misses you very much, Master! You did spend all that time with her, after all. Let's make plans to hang out somewhere fun after work! I always enjoy spending time with you!",
             "Chopi": "Hello, Master! As always, thank you for your efforts to keep our village peaceful! As a full-fledged teacher of Werebeast Village, I will work hard to train the best warriors. Also... If you happen to meet the one and only Super-General-King-God-Emperor-Majesty-Fierce-Gaze-Number One-Legendary-Werebeast Blade Master Tig, could you please let her know that I'm becoming a great warrior? I'd really appreciate it! Please keep watching over me as I grow. See you soon!",
-            "Diana": "I've prepared plenty of delicious food. I focused on making dishes that were low in sugar, so the selection might be a bit modest. Still, having an abundance should make up for the lack of variety, don't you think? Even though it'll last longer thanks to being low-sugar, it's still best eaten fresh, which is why I'm writing to you now. This should reach you soon, I hope. I have desserts ready, too, so make sure to come in comfortable clothes.",
+            "Daya": "Master, I thank thee for always looking after me and showing me kindness, whether in the Banquet Hall or at the Order. Dost thou recall that time when thou didst mention, quite by chance, that thou might one day return to thy homeland? If that day truly comes... what am I to do? I cannot bear the thought of Elias without thee. If thou must return to thy homeland, please do not forget to take me with thee. Even if it is another world, I know I would be happy if I could stay by thy side...",
+			"Diana": "I've prepared plenty of delicious food. I focused on making dishes that were low in sugar, so the selection might be a bit modest. Still, having an abundance should make up for the lack of variety, don't you think? Even though it'll last longer thanks to being low-sugar, it's still best eaten fresh, which is why I'm writing to you now. This should reach you soon, I hope. I have desserts ready, too, so make sure to come in comfortable clothes.",
             "Ed": "I'm not sure if writing a few words like this will make a difference... but Nata says that dreams may carry great meaning and insisted I write this letter to you. Master... I found myself wishing that the time I spent with you wasn't just a dream. At first, I thought only Nata would understand me, but not anymore. I wish that your presence could continue forever within this dream. Please continue to dream with Nata and with me. Always.",
             "Elena": "Hey, human. We meet again, huh? Honestly, considering what we have done, I didn't expect you to take such good care of us. Does that mean we can go even wilder now? Just kidding. I do have some sense, you know? Well, I will try to rein it in a little from now on. I can't promise I will be able to keep all the Monatium Denizens in check, but I will do my best to keep things from getting too chaotic. Thanks. Yeah, that's all.",
             "Epica": "Master, today I wanted to express my gratitude. You already know that I have traveled far and wide, calling myself a storyteller. I have encountered countless stories and countless protagonists. For the longest time, I believed my role was only to make those protagonists shine. But you were different. You saw me, just a mere storyteller. You allowed me to be part of your story, to write it together with you. Thank you, Master. I will stay by your side until the very last page of your story.",
