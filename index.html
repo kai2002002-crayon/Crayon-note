@@ -758,7 +758,7 @@
                 window.currentLang = lang; localStorage.setItem('user_lang', lang);
                 document.documentElement.lang = lang === "ja" ? "ja" : "zh-TW"; 
                 const selectEl = document.getElementById('langSelect'); if (selectEl) selectEl.value = lang;
-                const langTextMap = { "zh-TW": "繁中", "ja": "日文", "en": "EN" };
+                const langTextMap = { "zh-TW": "繁中", "ja": "日本語", "en": "EN" };
                 const langTextEl = document.getElementById('currentLangText');
                 if (langTextEl) langTextEl.innerText = langTextMap[lang] || "繁中";
                 const safeLang = (typeof LANG_DICT !== 'undefined' && LANG_DICT[lang]) ? lang : 'zh-TW';
