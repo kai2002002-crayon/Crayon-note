@@ -627,7 +627,7 @@ const WORK_URL = {
     "Speaki": "https://youtu.be/N1tmPLmZoXQ",
     "Sylla": "",
     "Taida": "https://youtu.be/ZAJztHqI7uA",
-    "Tig": "",
+    "Tig": "https://youtu.be/Xb3_b3sjcm0",
 	"Ui": "https://youtu.be/sen1414Z3Rw",
     "Velvet": "https://youtu.be/uiyfp0lMa7E",
     "Vivi": "https://youtu.be/Bi_Hi3PfTjU",
