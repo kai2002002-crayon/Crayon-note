@@ -256,7 +256,7 @@ const PRESENT_MAP = {
     },
     "Tig": { 
         url: "",
-        name: { "zh-TW": "隊長的頭帶", "ja": "", "en": "" }
+        name: { "zh-TW": "隊長的頭帶", "ja": "隊長のカチューシャ", "en": "Captain's Headband" }
     },
 	"Ui": { 
         url: "https://i.postimg.cc/y8D2N7ZT/Present-List-Ui.png",
@@ -422,7 +422,7 @@ const THOUGHT_MAP = {
             "Speaki": "かぼちゃ、かぼちゃの花、かぼちゃの石、かぼちゃの水飴など、かぼちゃと関係のあるものがいっぱい入っている箱。",
             "Sylla": "モナティアムで風と関係あるものだと聞いて大金を叩いて買ったらしいが詐欺にあったみたいだ。大事なのは心だよ！",
             "Taida": "アーバンカモフラージュ柄の寝袋。教団の近くでこの寝袋に入っていると仕事をサボって昼寝ができるそうだ。",
-            "Tig": "",
+            "Tig": "私のことを隊長だと認めるから、ずっとこれを頭に巻いておいてくれ、ということらしい。ちょっと困る。",
 			"Ui": "ウイが住んでる蓮池にたまに花咲く綺麗な蓮。ウイの願望で枯れないようだ。",
             "Velvet": "将来、自分がどこかの女王になれると信じ、前もって作っておいた魔女様式の王冠。女王になる前まで預かって欲しいという。",
             "Vivi": "ヴィヴィが飲み物を飲む時よく使う高級なコップ。私を思いながら作ったらしい。",
@@ -494,7 +494,7 @@ const THOUGHT_MAP = {
             "Speaki": "A box filled with various pumpkin-related items, such as pumpkins, pumpkin soup, pumpkin spice, and pumpkin bread.",
             "Sylla": "She spent a fortune on a fan in Monatium that she had heard was a wind-related item, but it turns out she was cheated. It's the thought that counts!",
             "Taida": "A sleeping bag with an urban camouflage pattern. Rumor has it that if she crawls inside near the Order, she can sneak in a nap and avoid work.",
-            "Tig": "",
+            "Tig": "A band that Tig gave me to wear around my head, as proof that she takes me as her leader. It's a bit embarrassing to wear. though.",
 			"Ui": "A pretty lotus flower that blooms in Ui's pond from time to time. It seems to never wither, perhaps due to her wish.",
             "Velvet": "A witch-style crown that she made in preparation, as she believed she would become a queen sometime in the future. She asked me to take care of it until she becomes a queen.",
             "Vivi": "Vivi's favorite elegant cup for drinking beverages. She said that she made it while thinking of me.",
@@ -641,7 +641,7 @@ const LETTER_MAP = {
             "Speaki": "教主様！昨日と一昨日、スピッキーという使徒から教主様によろしく伝えて欲しいって頼まれたから、今からネルがお伝えします！教主様！スピッキーとかぼちゃを大切にしてくれてありがとうございます！スピッキーはいつも感謝してます！幽霊の沼に来る時は、エスピーやアリスにいじめられないように、スピッキーのかぼちゃたちが教主様を守ってくれますよ。だから、いつでも安心して遊びに来てくださいね！",
             "Sylla": "教主、手紙は無事に届いたか？風に乗せて飛ばしたんだ、きっと問題ないだろう。教主にはいつも感謝している。私はもちろん他の精霊たちにも親切にしてくれているのをよく見かけるからな。精霊たちと他種族が以前より仲良くなれたのは教主のおかげだろう。風の上位精霊であり、精霊たちの代表として礼を言いたかった。今日もお前に心地よい風が吹きますように。",
             "Taida": "教主様、こんにちは。業務中に手が空いたので手紙を書いています。決して給料泥棒とかサボりが目的ではありませんからね？モナティアムで会う度に、挨拶をしてくださるのは嬉しく思っています。ですが勤務時間外は、公務員としてのタイダーではなく、ただ遊んで暮らしたいだけの一個人として接していただきたいんです。なので……雑用は別の方に頼んでいただきたく……コホン。では、またお会いしましょう。",
-            "Tig": "",
+            "Tig": "おい! 教主のせいで、ババァに怒られたじゃねぇか! もらったもんにはちゃんとお返ししろって、村長に杖で叩かれたんだぞ!? こんなことが起こらねぇように、ちゃんとババァを見とけってんだ!俺にケンカ売ってんのか? 後で宴会場の屋上に来いよ!まぁ、教主には感謝してるんだ。でもさ、なんでババァの顔色を窺いながら言わねぇといけねぇんだよ。俺には俺のやり方があるんだよ!だから、後で「感謝パンチ」をくらう覚悟しとけよ、いいな?",
 			"Ui": "いつもウイと一緒にいてくれてありがとう☆教主ちゃん！教主ちゃんに会うまで、ウイの友達はエルだけだったけど、今は教主ちゃんのおかげで友達がいっぱい！ウイは教主ちゃんがだ〜いすき！教主ちゃんはウイにとってサイコーの友達☆これからもウイと友達でいてくれる？ずぅ〜っと友達だからね☆いつもサイコーの友達の教主ちゃんにウイより☆",
             "Velvet": "おい、教主！王国作りのとっておきの作戦を思いついたんだけどさ、あんたも一緒にどうだ？成功すりゃ、俺の側近にしてやんよ！あんたのことは信用できそうだからな。今度は裏切らないからさ、どうだ？読むのはめんどくさそうだし、返信はいらねぇよ。今度、会って話そうぜ！",
             "Vivi": "教主様へ。ごきげんいかが？わたくしの気持ちを伝えるために手紙を送りますわ。もうこんなに時間が経ちましたのね。初めてお会いした時、冷たい態度を取ったのは謝りますわ。だけど高貴な存在同士は惹かれ合うもの。教主様が親切に接してくださったように、わたくしも教主様の価値を理解し受け入れましたの。これからもわたくしのことをよろしくお願いしますわ。教主様と世界のためにやるべきことをやりますわ。ヴィヴィアーナ・アルゲントゥムより。",
@@ -713,7 +713,7 @@ const LETTER_MAP = {
             "Speaki": "Master! Not sure if it was yesterday or the day before, but an Apostle called Speaki asked Ner to pass along her regards to you! Ner is delivering this message word for word! Master, I am always grateful for how you've taken care of me and my pumpkin friends! If you ever visit Phantom Marsh, my pumpkin friends will look out for you and keep you safe. They'll even make sure Espi and Alice don't mess with you! You're always invited to my home anytime!",
             "Sylla": "Master, I hope you got this letter okay. I entrusted it to the wind, so I trust it found its way safely. I'm always grateful to you, Master. I've often seen how considerate you are toward me and the other elementals. It's clear that your efforts have also helped foster better harmony between elementals and other races. As the noble wind elemental, and a representative of our kind, I wanted to extend my gratitude. May a soothing wind grace you today.",
             "Taida": "Hello, Master! I'm writing this to you during a brief break at work. And no, I'm definitely not avoiding my responsibilities or slacking off, okay? I appreciate how you always greet me and ask about my well-being whenever we run into each other in Monatium. But outside of work, I'd like you to see me as Taida, the one who wants to rest and enjoy some time off, not Taida the civil servant. Basically... ask someone else to take care of your busy work... ahem. See you soon.",
-            "Tig": "",
+            "Tig": "Listen, I got an earful from the old hag because of you! Chief kept going on about how I should show some gratitude when someone gives me something and then started thwacking me with her staff! You seriously need to keep that old lady in check so this doesn't happen again, got it?! Or are you trying to pick a fight with me? Meet me on the Banquet Hall rooftop later. I'll give you a proper thrashing! Don't get me wrong... I AM grateful. But I shouldn't have to say it just because she's forcing me to! I've got my own way of doing things! So get ready I'm paying you back with a gratitude punch!",
 			"Ui": "Master, thank you for always staying by my side! Before I met you, Croakie was my only friend. But now, because of you, I've made so many new friends! I like you so much, Master! You're the best friend I could ever ask for! Will you promise that this will never change and you will always be my friend? We'll be friends forever! Your good friend, Ui✩",
             "Velvet": "Hey, Master! I've cooked up a genius plan to start my kingdom. Wanna join me? If it works, I'll make you my most trusted underling. You seem like someone I can count on. This time, I promise I won't betray you. I swear! Don't waste time replying: it's a pain to read. Catch you face-to-face soon.",
             "Vivi": "Dear Master, How are you? I've mustered the courage to send this letter in an attempt to convey my feelings. How swiftly the time has passed! I must offer my sincerest apologies for my coldness at the beginning. However, noble souls are bound to recognize each other and as such, I soon came to grasp thy true worth, just as thou hast seen mine. Please continue to watch over me, and I shall do my utmost for thee and this world. Yours, Viviana Argentum.",
