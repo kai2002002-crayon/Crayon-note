@@ -931,8 +931,8 @@ const PICKUP_SCHEDULE = [
 	{
         start: "2026-07-30T17:00:00+09:00",
         end: "2026-07-13T10:59:59+09:00",
-        chars: ["羅蕾特", "琵拉"],
-        note: "Rollett, Pira"
+        chars: ["羅蕾特"],
+        note: "Rollett"
     }
 ];
 
@@ -942,6 +942,11 @@ const EVENT_SCHEDULE = [
         start: "2026-07-16T17:00:00+09:00",
         end: "2026-07-30T10:59:59+09:00",
         eventId: "Theme002" 
+    },
+	{
+        start: "2026-07-30T17:00:00+09:00",
+        end: "2026-08-13T10:59:59+09:00",
+        eventId: "Theme00" 
     },
 	{
         start: "2026-07-07T12:00:00+09:00",
