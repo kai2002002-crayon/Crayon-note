@@ -986,6 +986,12 @@ const CARD_SCHEDULE = [
         type: "Artifact"
     },
 	{
+        start: "2026-07-30T17:00:00+09:00",
+        end: "2026-08-13T10:59:59+09:00",
+        id: "Artifact98",
+        type: "Artifact"
+    },
+	{
         start: "2026-08-06T04:00:00+09:00",
         end: "2026-08-13T10:59:59+09:00",
         id: "Artifact97",
