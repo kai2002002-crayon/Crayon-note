@@ -946,7 +946,7 @@ const EVENT_SCHEDULE = [
 	{
         start: "2026-07-30T17:00:00+09:00",
         end: "2026-08-13T10:59:59+09:00",
-        eventId: "Theme00" 
+        eventId: "Theme014" 
     },
 	{
         start: "2026-07-07T12:00:00+09:00",
