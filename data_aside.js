@@ -454,7 +454,7 @@ const ASIDE_DATA = {
     },
     "Rollett": { 
         asideIcon: "", 
-        totalName: { zh: "", ja: "", en: "" }, 
+        totalName: { zh: "羅蕾特的黃金門票", ja: "ロレットの黄金チケット", en: "Rollett's Golden Ticket" }, 
         stars: {
             1: { 
                 icon: "", 
