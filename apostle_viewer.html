@@ -117,7 +117,9 @@
                 <button onclick="adjustPixelScale(-1)" class="text-[8px] text-gray-500 hover:text-amber-600 leading-none p-[1.5px]">▼</button>
             </div>
         </div>
-
+        <button id="btnToggleBg" onclick="toggleBackground()" class="px-2 py-1.5 sm:px-3 sm:py-1.5 bg-indigo-500 hover:bg-indigo-600 text-white text-[10px] sm:text-xs font-bold rounded-lg shadow transition-colors whitespace-nowrap">
+            🖼️ 背景: 開
+        </button>
         <button onclick="togglePixelMode()" class="px-2 py-1.5 sm:px-3 sm:py-1.5 bg-green-500 hover:bg-green-600 text-white text-[10px] sm:text-xs font-bold rounded-lg shadow transition-colors whitespace-nowrap">
             👾 像素
         </button>
@@ -329,6 +331,7 @@
             let activeCharData = null; 
             let currentMode = 'lobby'; 
             let currentZoom = 1.0;
+            let isBgEnabled = true;
             let isDragging = false;
             let lastMouseX = 0, lastMouseY = 0;
             let hitZoneOnDown = null;
@@ -560,11 +563,19 @@
             
             function applyRaceBackground(charName) {
                 const container = document.getElementById('spineCanvasContainer');
+                
+                // 🌟 新增：如果手動關閉背景，就直接清空並退出函數
+                if (!isBgEnabled) {
+                    container.style.backgroundImage = 'none';
+                    container.classList.remove('animated-bg');
+                    return;
+                }
+
                 const char = INITIAL_DATA.find(c => c.name === charName);
                 const isNPC = typeof NPC_LIST !== 'undefined' && NPC_LIST.includes(charName);
                 
                 if (isNPC) {
-                    // 🌟 NPC 專屬動態背景圖
+                    // NPC 專屬動態背景圖
                     container.style.backgroundImage = `url('https://i.postimg.cc/q703FkG3/Gacha-Characterpattern.png')`;
                     container.classList.add('animated-bg');
                 } else if (char && typeof SPINE_BACKGROUNDS !== 'undefined' && SPINE_BACKGROUNDS[char.race]) {
@@ -621,6 +632,25 @@
                     ? "px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs sm:text-sm font-bold rounded-lg shadow transition-colors whitespace-nowrap"
                     : "px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-xs sm:text-sm font-bold rounded-lg shadow transition-colors whitespace-nowrap";
                 refreshCostumeDropdownAndLoad();
+            }
+
+            function toggleBackground() {
+                isBgEnabled = !isBgEnabled;
+                const btn = document.getElementById('btnToggleBg');
+                
+                if (isBgEnabled) {
+                    btn.innerHTML = '🖼️ 背景: 開';
+                    btn.classList.replace('bg-slate-500', 'bg-indigo-500');
+                    btn.classList.replace('hover:bg-slate-600', 'hover:bg-indigo-600');
+                } else {
+                    btn.innerHTML = '🖼️ 背景: 關';
+                    btn.classList.replace('bg-indigo-500', 'bg-slate-500');
+                    btn.classList.replace('hover:bg-indigo-600', 'hover:bg-slate-600');
+                }
+                
+                if (activeCharData) {
+                    applyRaceBackground(activeCharData.name);
+                }
             }
             
             function selectCharacter(charObj, spineName, iconUrl) {
