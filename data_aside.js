@@ -508,22 +508,22 @@ const ASIDE_DATA = {
         stars: {
             1: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "" }, 
-                effects: { zh: [""], ja: [""], en: [""] } 
+                name: { zh: "最棒的娛樂", ja: "最高のエンターテインメント", en: "The Greatest Entertainment" }, 
+                desc: { zh: "穿戴者的最大HP、魔法攻擊力、爆擊、爆擊傷害增加。", ja: "着用者の最大HP、魔法攻擊力、会心、会心ダメージが増加する。", en: "Increases bearer's Max HP, Magical ATK, CRIT, and CRIT DMG." }, 
+                effects: { zh: ["最大HP增加:6%", "魔法攻擊力增加:6%", "爆擊增加:6%", "爆擊傷害增加:6%"], ja: ["最大HP增加:6%", "魔法攻擊力增加:6%", "会心增加:6%", "会やダメージ増加:6%"], en: ["Max HP Increase: 6%", "Magical ATK Increase: 6%", "CRIT Increase: 6%", "CRIT DMG Increase: 6%"] } 
             },
             2: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "" }, 
-                effects: { zh: [""], ja: [""], en: [""] } 
+                name: { zh: "掌控舞台的幻術師", ja: "舞台を掌握するイリュージョニスト", en: "The Stage-Dominating Illusionist" }, 
+                desc: { zh: "技能傷害量增加。回合開始時，恢復自身SP。對被普通技能命中的敵人，發動以下其中一項效果。- 給予2名隨機敵人變異效果。- 暫停其每秒SP恢復。- 減少其攻擊力。", ja: "スキルダメージ量が増加する。 ウェーブ開始時、自身のSPを回復する。低学年スキルが命中した敵へ以下の効果のうち一つを発動する。- ランダムな敵2体に変異を付与する。-1秒ごとのSP回復を中断させる。- 攻撃力を減少させる。", en: "Increases Skill Damage. At the start of a wave, recovers own SP. Triggers one of the following effects on enemies hit by Freshman Skill. Applies Mutate to 2 random enemies. Halts SP Recovery per second. Reduces Attack." }, 
+                effects: { zh: ["變異:使目標變成物品並且無法進行任何行動。", "技能傷害量增加:50%", "SP恢復:100%", "變異持續時間:3秒", "暂停每秒SP恢復持續時間:10秒", "攻擊力減少:30%", "攻擊力減少持續時間:10秒"], ja: ["変異:物体に変化し、行動不能になる。", "スキルダメージ量増加:50%", "SP回復:100%", "変異の持続時間:3秒", "1種ごとのSP回復中断の持続時間:10秒", "攻擊力減少:30%", "攻撃力減少の持続時間:10秒"], en: ["Mutate: Turns into an inanimate object and becomes unable to act.", "Skill DMG Increase: 50%", "SP Recovery: 100%", "Mutate Duration: 3s", "SP Recovery per second Halt Duration: 10s", "Reduced ATK: 30%", "ATK Reduction Duration: 10s"] } 
             },
             3: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "" }, 
-                effects: { zh: [""], ja: [""], en: [""] }, 
-                globalEffects: { zh: ["全體 %", "全體 %"], ja: ["全体%", "全体%"], en: ["All%"] } 
+                name: { zh: "謝幕演出", ja: "フィナーレ", en: "Finale" }, 
+                desc: { zh: "提升後排友軍對敵人造成的傷害量,並減少後排友軍受到的傷害量。", ja: "後列の味方の敵への与ダメージ量を増加させ、 後列の味方の敵からの被ダメージ量を減少させる。", en: "Increases Outgoing Damage and reduces Incoming Damage of Back Row allies." }, 
+                effects: { zh: ["傷害量增加:13.6%", "受到的傷害量減少:5.9%"], ja: ["ダメージ量増加:13.6%", "被ダメージ量減少:5.9%"], en: ["DMG Increase: 13,6%", "Incoming DMG Reduction: 5.9%"] }, 
+                globalEffects: { zh: ["全體魔法攻擊力 3%", "全體魔法防禦力 3%"], ja: ["全体魔法攻撃力 3%", "全体魔法防御力 3%"], en: ["All Magical ATK 3%", "All Magical DEF 3%"] } 
             }
         }
     },
