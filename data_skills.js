@@ -30,65 +30,65 @@ const characterSkills = [
     "skills": {
       "zh-TW": {
         "normalAttack": {
-          "basic": " []",
-          "enhanced": " []"
+          "basic": "對指定範圍內最遠的敵人投擲火球，造成魔法傷害。 [魔法傷害:90%]",
+          "enhanced": "以一定機率對指定範圍內最遠的敵人投擲火球，造成範圖魔法傷害，並給予損傷效果。 [燒傷:每秒造成傷害。] [魔法傷害:120%] [燒傷持續時間:4秒]"
         },
         "normalSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""]
+          "name": "獲得掌聲的藝人",
+          "desc": "放出鴿子後，展現鴿子復活魔術。鴿子會飛向指定範圍內距離最造的敵人，造成範圍魔法傷害。",
+          "stats": ["魔法傷害:525%"]
         },
         "ultimateSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""],
-          "cooldown": "秒"
+          "name": "吸引觀眾的戲法師",
+          "desc": "取出箱子並將其送往指定範圍內最遠的敵人。箱子經過時對周圍敵人施加好奇，到達目標地點後爆炸，造成範圍魔法傷害，並給予昏迷效果。昏迷及傷害最多影響6人。",
+          "stats": ["好奇:向敵人緩慢移動。", "昏迷:無法進行任何行動。", "魔法傷害:723%", "好奇持續時間:4秒", "昏迷持續時間:3秒"],
+          "cooldown": "32秒"
         },
         "passiveSkill": {
-          "desc": "",
-          "stats": [""]
+          "desc": "使用普通技能展現鸽子復活魔術時，立即減少自身以外隨機1名友軍目前的高級技能冷卻時間。",
+          "stats": ["友軍冷卻時間立即減少:7.5秒"]
         }
       },
       "ja": {
         "normalAttack": {
-          "basic": "[]",
-          "enhanced": "[]"
+          "basic": "指定範囲内で最も遠い敵に火の玉を飛ばして魔法ダメージを与える。 [魔法ダメージ:90%]",
+          "enhanced": "一定確率で、指定範囲内で最も遠い敵に火の玉を飛ばして範囲魔法ダメージを与え、火傷を付与する。 [火傷:1部ごとにダメージを受ける。] [魔法ダメージ:120%] [火傷の持続時間:4秒]"
         },
         "normalSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""]
+          "name": "喝采を浴びるエンターテイナー",
+          "desc": "黒を飛ばした後、鳩の復活マシックを披露する。鶏は指定範囲内で最も遠い敵に飛んでいき、範囲魔法ダメージを与える。",
+          "stats": ["魔法ダメージ:525%"]
         },
         "ultimateSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""],
-          "cooldown": "秒"
+          "name": "観客を魅了するトリックスター",
+          "desc": "箱を取り出して指定範囲内で最も遠い敵に届ける。箱は通り過ぎながら周囲の敵に好奇心を付与する。箱が目標地点に到着すると、爆発し、範囲魔法ダメージを与え、気絶を付与する。気絶とダメージは最大6名に適用される。",
+          "stats": ["好奇心: 敵にゆっくり移動する。", "気絶: 行動不能になる。", "魔法ダメージ:723%", "好奇心の持続時間:4秒", "気絶の持続時間:3秒"],
+          "cooldown": "32秒"
         },
         "passiveSkill": {
-          "desc": "",
-          "stats": [""]
+          "desc": "低学年スキルを使用して鳴の復活マジックを披露すると、自身を除くランダムな味方1名の現在の高学年スキルのクールタイムを即時減少させる。",
+          "stats": ["味方のクールタイム即時減少:7.5秒"]
         }
       },
       "en": {
         "normalAttack": {
-          "basic": "[]",
-          "enhanced": "[]"
+          "basic": "Throws a fireball and deals Magical Damage to the furthest enemy within the designated range. [Magical DMG: 90%]",
+          "enhanced": "At a set chance, throws a fireball at the furthest target within the designated range, dealing AoE Magical Damage, and applies the Scorchon them. Scorch: Applies damage every second. [Magical DMG: 120%] [Scorch Duration: 4s]"
         },
         "normalSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""]
+          "name": "Applause Loving Entertainer",
+          "desc": "Releases a Dove, then performs the Dove Magic Trick. The Dove flies to the farthest enemy within the designated range, dealing AoE Magical Damage. Dove Magic enemy AoE",
+          "stats": ["Magical DMG: 525%"]
         },
         "ultimateSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""],
-          "cooldown": "s"
+          "name": "Audience-Captivating Trickster",
+          "desc": "Pulls out a chest which runs towards the furthest target within the designated range. The chest periodically applies Curiosity to surrounding targets. The chest explodes when it reaches the target, dealing AoE Magical Damage and applies Stun. Stun and damage are applied to a maximum of 6.",
+          "stats": ["Curiosity: Moves slowly towards the target's location.", "Stun: Becomes unable to act.", "Magical Damage: 723%", "Curiosity Duration: 4s", "Stun Duration: 3s"],
+          "cooldown": "32s"
         },
         "passiveSkill": {
-          "desc": "",
-          "stats": ["%"]
+          "desc": "After using her Freshman Skill to perform a Dove Magic Trick, immediately reducing the current Senior Skill Cooldown of 1 random ally other than herself.",
+          "stats": ["Ally Cooldown Instant Reduction: 7.5s"]
         }
       },
     }
