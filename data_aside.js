@@ -77,6 +77,31 @@ const ASIDE_DATA = {
             }
         }
     },
+    "Canna": { 
+        asideIcon: "", 
+        totalName: { zh: "", ja: "", en: "" }, 
+        stars: {
+            1: { 
+                icon: "g", 
+                name: { zh: "", ja: "", en: "" }, 
+                desc: { zh: "", ja: "", en: "." }, 
+                effects: { zh: [""], ja: [""], en: [""] } 
+            },
+            2: { 
+                icon: "", 
+                name: { zh: "", ja: "", en: "" }, 
+                desc: { zh: "", ja: "", en: "" }, 
+                effects: { zh: [""], ja: [""], en: [""] } 
+            },
+            3: { 
+                icon: "", 
+                name: { zh: "", ja: "", en: "" }, 
+                desc: { zh: "", ja: "", en: "" }, 
+                effects: { zh: [""], ja: [""], en: [""] }, 
+                globalEffects: { zh: ["全體 %", "全 4%"], ja: ["全体 %", "全体 %"], en: ["All %", "All %"] } 
+            }
+        }
+    },
     "Chloe": { 
         asideIcon: "https://i.postimg.cc/tYsYyHLT/Aside-Icon-Chloe.png", 
         totalName: { zh: "時尚封面庫洛艾", ja: "ファッションカバークロエ", en: "Fashion Cover Chloe" }, 
@@ -274,6 +299,31 @@ const ASIDE_DATA = {
                 desc: { zh: "所有友軍對敵人造成的傷害量增加。敵人對所有友軍造成的傷害量減少。", ja: "味方全員の敵への与ダメージ量が増加し、味方全員の敵からの被ダメージ量が減少する。", en: "Increases Outgoing Damage to enemies for all allies. Reduces Incoming Damage from enemies for all allies." }, 
                 effects: { zh: ["傷害量增加:10.5%", "受到的傷害量減少:4.5%"], ja: ["ダメージ量増加: 10.5%", "被ダメージ量減少: 4.5%"], en: ["DMG Increase: 10.5%", "Incoming DMG Reduction: 4.5%"] }, 
                 globalEffects: { zh: ["全體魔法攻撃力 3%", "全體爆擊傷害 3%"], ja: ["全体魔法攻撃力 3%", "全体会心ダメージ: 3%"], en: ["All Magical ATK 3%", "All CRIT DMG 3%"] } 
+            }
+        }
+    },
+    "Naia": { 
+        asideIcon: "", 
+        totalName: { zh: "", ja: "", en: "" }, 
+        stars: {
+            1: { 
+                icon: "g", 
+                name: { zh: "", ja: "", en: "" }, 
+                desc: { zh: "", ja: "", en: "." }, 
+                effects: { zh: [""], ja: [""], en: [""] } 
+            },
+            2: { 
+                icon: "", 
+                name: { zh: "", ja: "", en: "" }, 
+                desc: { zh: "", ja: "", en: "" }, 
+                effects: { zh: [""], ja: [""], en: [""] } 
+            },
+            3: { 
+                icon: "", 
+                name: { zh: "", ja: "", en: "" }, 
+                desc: { zh: "", ja: "", en: "" }, 
+                effects: { zh: [""], ja: [""], en: [""] }, 
+                globalEffects: { zh: ["全體 %", "全 4%"], ja: ["全体 %", "全体 %"], en: ["All %", "All %"] } 
             }
         }
     },
