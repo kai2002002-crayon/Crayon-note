@@ -98,7 +98,7 @@ const ASIDE_DATA = {
                 name: { zh: "", ja: "", en: "" }, 
                 desc: { zh: "", ja: "", en: "" }, 
                 effects: { zh: [""], ja: [""], en: [""] }, 
-                globalEffects: { zh: ["全體 %", "全 4%"], ja: ["全体 %", "全体 %"], en: ["All %", "All %"] } 
+                globalEffects: { zh: ["全體 %", "全 %"], ja: ["全体 %", "全体 %"], en: ["All %", "All %"] } 
             }
         }
     },
@@ -323,7 +323,7 @@ const ASIDE_DATA = {
                 name: { zh: "", ja: "", en: "" }, 
                 desc: { zh: "", ja: "", en: "" }, 
                 effects: { zh: [""], ja: [""], en: [""] }, 
-                globalEffects: { zh: ["全體 %", "全 4%"], ja: ["全体 %", "全体 %"], en: ["All %", "All %"] } 
+                globalEffects: { zh: ["全體 %", "全 %"], ja: ["全体 %", "全体 %"], en: ["All %", "All %"] } 
             }
         }
     },
