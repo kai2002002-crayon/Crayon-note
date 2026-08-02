@@ -79,7 +79,7 @@ const ASIDE_DATA = {
     },
     "Canna": { 
         asideIcon: "", 
-        totalName: { zh: "", ja: "", en: "" }, 
+        totalName: { zh: "日光浴康娜", ja: "日光浴カンナ", en: "Sunbathing Canna" }, 
         stars: {
             1: { 
                 icon: "g", 
