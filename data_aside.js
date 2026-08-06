@@ -83,22 +83,22 @@ const ASIDE_DATA = {
         stars: {
             1: { 
                 icon: "", 
-                name: { zh: "完美休假", ja: "", en: "" }, 
-                desc: { zh: "穿戴使者的最大 HP、物理攻擊力、爆擊、爆擊傷害增加", ja: "", en: "." }, 
-                effects: { zh: ["最大HP增加：6%", "物理攻擊力增加：6%", "爆擊增加：6%", "爆擊傷害增加：6%"], ja: [""], en: [""] } 
+                name: { zh: "完美休假", ja: "完璧な休暇", en: "Perfect Vacation" }, 
+                desc: { zh: "穿戴使者的最大 HP、物理攻擊力、爆擊、爆擊傷害增加", ja: "着用者の最大HP、物理攻撃力、会心、会心ダメージが増加する。", en: "Increases the bearer's Max HP, Physical ATK, CRIT Hit, and CRIT DMG." }, 
+                effects: { zh: ["最大HP增加：6%", "物理攻擊力增加：6%", "爆擊增加：6%", "爆擊傷害增加：6%"], ja: ["最大HP增加:6%", "物理攻擊力增加:6%", "会心增加:6%", "会ダメージ增加:6%"], en: ["Max HP Increase: 6%", "Physical ATK Increase: 6%", "CRIT Increase: 6%" "CRIT DMG Increase: 6%"] } 
             },
             2: { 
                 icon: "", 
-                name: { zh: "神射手康娜", ja: "", en: "" }, 
-                desc: { zh: "強化攻擊施放機率增加。使用普通技能後，攻擊速度提升", ja: "", en: "" }, 
-                effects: { zh: ["強化攻擊施放機率增加：15%", "攻擊速度提升：60%", "攻擊速度提升持續時間：8秒"], ja: [""], en: [""] } 
+                name: { zh: "神射手康娜", ja: "腕利き砲手のカンナ", en: "Canna, the Sharpshooter" }, 
+                desc: { zh: "強化攻擊施放機率增加。使用普通技能後，攻擊速度提升", ja: "強化攻撃発動確率が増加する。 低学年スキル使用後、攻撃速度が増加する。", en: "Increases Enhanced Attack Cast Rate. After using Freshman Skill, increases Attack Speed." }, 
+                effects: { zh: ["強化攻擊施放機率增加：15%", "攻擊速度提升：60%", "攻擊速度提升持續時間：8秒"], ja: ["強化攻撃発動確率增加:15%", "攻擊速度增加:60%", "攻撃速度増加の持続時間:8秒"], en: ["Chance of Enhanced Attack Increase: 15%", "ATK SPD Increase: 60%", "ATK SPD Increase Duration: 8s"] } 
             },
             3: { 
                 icon: "", 
-                name: { zh: "請求後援隊支援", ja: "", en: "" }, 
-                desc: { zh: "敵人對後排友軍造成的傷害量減少", ja: "", en: "" }, 
-                effects: { zh: ["受到的傷害量減少：9.7%"], ja: [""], en: [""] }, 
-                globalEffects: { zh: ["全體HP 3%", "全體爆擊傷害 3%"], ja: ["全体 %", "全体 %"], en: ["All %", "All %"] } 
+                name: { zh: "請求後援隊支援", ja: "後衛隊援護要請", en: "Rear Guard, Help me!" }, 
+                desc: { zh: "敵人對後排友軍造成的傷害量減少", ja: "後列の味方の敵からの被ダメージ量を減少させる。", en: "Reduces Incoming Damage for Back Row allies." }, 
+                effects: { zh: ["受到的傷害量減少：9.7%"], ja: ["被ダメージ屋減少:9.7%"], en: ["Incoming DMG Reduction: 9.7%"] }, 
+                globalEffects: { zh: ["全體HP 3%", "全體爆擊傷害 3%"], ja: ["全体HP 3%", "全体会心ダメージ 3%"], en: ["All HP 3%", "All CRIT DMG 3%"] } 
             }
         }
     },
@@ -304,26 +304,26 @@ const ASIDE_DATA = {
     },
     "Naia": { 
         asideIcon: "", 
-        totalName: { zh: "碎碎念龍族希菲爾", ja: "", en: "" }, 
+        totalName: { zh: "碎碎念龍族希菲爾", ja: "説教の竜族シルフィール", en: "Silphir, the Dragon of Nagging" }, 
         stars: {
             1: { 
                 icon: "", 
-                name: { zh: "只聽見你碎碎念", ja: "", en: "" }, 
-                desc: { zh: "穿戴者的最大HP、物理防禦力、魔法防禦力、爆擊抵抗、爆擊傷害抵抗增加。", ja: "", en: "." }, 
-                effects: { zh: ["最大HP增加:6%", "物理防禦力增加:6%", "魔法防禦力增加:6%", "爆擊抵抗增加:6%", "爆擊傷害抵抗增加:6%"], ja: [""], en: [""] } 
+                name: { zh: "只聽見你碎碎念", ja: "あなたの説教だけ聞こえる", en: "All I Hear Is Your Nagging" }, 
+                desc: { zh: "穿戴者的最大HP、物理防禦力、魔法防禦力、爆擊抵抗、爆擊傷害抵抗增加。", ja: "着用者の最大HP、物理防御力、魔法防御力、 会心抵抗、会心ダメージ抵抗が増加する。", en: "Increases the bearer's Max HP, Physical Defense, Magical Defense, Critical Hit Resistance, and Critical Damage Resistance." }, 
+                effects: { zh: ["最大HP增加:6%", "物理防禦力增加:6%", "魔法防禦力增加:6%", "爆擊抵抗增加:6%", "爆擊傷害抵抗增加:6%"], ja: ["最大HP增加:6%", "物理防御力增加:6%", "魔法防御力增加:6%", "会心抵抗增加:6%", "会心ダメージ抵抗增加:6%"], en: ["Max HP Increase: 6%", "Physical DEF Increase: 6%", "Magical DEF Increase: 6%", "CRIT Resistance Increase: 6%", "CRIT DMG Resistance Increase: 6%"] } 
             },
             2: { 
                 icon: "", 
-                name: { zh: "洗洗刷刷", ja: "", en: "" }, 
-                desc: { zh: "對昏迷與擊退免疫。召喚2次高級技能的前進波浪。", ja: "", en: "" }, 
-                effects: { zh: ["昏迷:無法進行任何行動。", "擊退:進入無法行動的狀態並被向後推。"], ja: [""], en: [""] } 
+                name: { zh: "洗洗刷刷", ja: "キュッキュッと洗うよ", en: "Let's Wash Up, Scrub-a-dub-dub!" }, 
+                desc: { zh: "對昏迷與擊退免疫。召喚2次高級技能的前進波浪。", ja: "気絶とノックバックに免疫を持つ。 高学年スキルの前進する液を2回召喚する。", en: "Grants Immunity to Stun and Knockback. Summons the Senior Skill's advancing wave twice." }, 
+                effects: { zh: ["昏迷:無法進行任何行動。", "擊退:進入無法行動的狀態並被向後推。"], ja: ["気絕:行動不能状態になる。", "ノックバック: 行動不能状態になり後ろへ押し戻される。"], en: ["Stun: Becomes unable to act.", "Knockback: Is pushed back, becoming unable to act."] } 
             },
             3: { 
                 icon: "", 
-                name: { zh: "來自水的訊息", ja: "", en: "" }, 
-                desc: { zh: "增加所有友軍的最大HP，並減少所有友軍受到敵人的傷害量", ja: "", en: "" }, 
-                effects: { zh: ["最大 HP 增加：7.2%", "受到傷害量減少：4.5%"], ja: [""], en: [""] }, 
-                globalEffects: { zh: ["全體爆擊傷害 3%", "全體爆擊抵抗 3%"], ja: ["全体 %", "全体 %"], en: ["All %", "All %"] } 
+                name: { zh: "來自水的訊息", ja: "水が伝えるメッセージ", en: "Message from the Water" }, 
+                desc: { zh: "增加所有友軍的最大HP，並減少所有友軍受到敵人的傷害量", ja: "味方全員の最大HPを増加させ、味方全員の敵からの被ダメージ量を減少させる。", en: "Increases all allies' Max HP and reduces all allies Incoming Damage from enemies." }, 
+                effects: { zh: ["最大 HP 增加：7.2%", "受到傷害量減少：4.5%"], ja: ["最大HP增加:7.2%", "被ダメージ量減少:4.5%"], en: ["Max HP Increase: 7.2%", "Incoming DMG Reduction: 4.5%"] }, 
+                globalEffects: { zh: ["全體爆擊傷害 3%", "全體爆擊抵抗 3%"], ja: ["全体会ダメージ 3%", "全体会心抵抗 3%"], en: ["All CRIT DMG 3%", "All CRIT Resistance 3%"] } 
             }
         }
     },
