@@ -82,23 +82,23 @@ const ASIDE_DATA = {
         totalName: { zh: "日光浴康娜", ja: "日光浴カンナ", en: "Sunbathing Canna" }, 
         stars: {
             1: { 
-                icon: "g", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "." }, 
-                effects: { zh: [""], ja: [""], en: [""] } 
+                icon: "", 
+                name: { zh: "完美休假", ja: "", en: "" }, 
+                desc: { zh: "穿戴使者的最大 HP、物理攻擊力、爆擊、爆擊傷害增加", ja: "", en: "." }, 
+                effects: { zh: ["最大HP增加：6%", "物理攻擊力增加：6%", "爆擊增加：6%", "爆擊傷害增加：6%"], ja: [""], en: [""] } 
             },
             2: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "" }, 
-                effects: { zh: [""], ja: [""], en: [""] } 
+                name: { zh: "神射手康娜", ja: "", en: "" }, 
+                desc: { zh: "強化攻擊施放機率增加。使用普通技能後，攻擊速度提升", ja: "", en: "" }, 
+                effects: { zh: ["強化攻擊施放機率增加：15%", "攻擊速度提升：60%", "攻擊速度提升持續時間：8秒"], ja: [""], en: [""] } 
             },
             3: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "" }, 
-                effects: { zh: [""], ja: [""], en: [""] }, 
-                globalEffects: { zh: ["全體 %", "全 %"], ja: ["全体 %", "全体 %"], en: ["All %", "All %"] } 
+                name: { zh: "請求後援隊支援", ja: "", en: "" }, 
+                desc: { zh: "敵人對後排友軍造成的傷害量減少", ja: "", en: "" }, 
+                effects: { zh: ["受到的傷害量減少：9.7%"], ja: [""], en: [""] }, 
+                globalEffects: { zh: ["全體HP 3%", "全體爆擊傷害 3%"], ja: ["全体 %", "全体 %"], en: ["All %", "All %"] } 
             }
         }
     },
@@ -304,26 +304,26 @@ const ASIDE_DATA = {
     },
     "Naia": { 
         asideIcon: "", 
-        totalName: { zh: "", ja: "", en: "" }, 
+        totalName: { zh: "碎碎念龍族希菲爾", ja: "", en: "" }, 
         stars: {
             1: { 
-                icon: "g", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "." }, 
-                effects: { zh: [""], ja: [""], en: [""] } 
+                icon: "", 
+                name: { zh: "只聽見你碎碎念", ja: "", en: "" }, 
+                desc: { zh: "穿戴者的最大HP、物理防禦力、魔法防禦力、爆擊抵抗、爆擊傷害抵抗增加。", ja: "", en: "." }, 
+                effects: { zh: ["最大HP增加:6%", "物理防禦力增加:6%", "魔法防禦力增加:6%", "爆擊抵抗增加:6%", "爆擊傷害抵抗增加:6%"], ja: [""], en: [""] } 
             },
             2: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "" }, 
-                effects: { zh: [""], ja: [""], en: [""] } 
+                name: { zh: "洗洗刷刷", ja: "", en: "" }, 
+                desc: { zh: "對昏迷與擊退免疫。召喚2次高級技能的前進波浪。", ja: "", en: "" }, 
+                effects: { zh: ["昏迷:無法進行任何行動。", "擊退:進入無法行動的狀態並被向後推。"], ja: [""], en: [""] } 
             },
             3: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "" }, 
-                effects: { zh: [""], ja: [""], en: [""] }, 
-                globalEffects: { zh: ["全體 %", "全 %"], ja: ["全体 %", "全体 %"], en: ["All %", "All %"] } 
+                name: { zh: "來自水的訊息", ja: "", en: "" }, 
+                desc: { zh: "增加所有友軍的最大HP，並減少所有友軍受到敵人的傷害量", ja: "", en: "" }, 
+                effects: { zh: ["最大 HP 增加：7.2%", "受到傷害量減少：4.5%"], ja: [""], en: [""] }, 
+                globalEffects: { zh: ["全體爆擊傷害 3%", "全體爆擊抵抗 3%"], ja: ["全体 %", "全体 %"], en: ["All %", "All %"] } 
             }
         }
     },
