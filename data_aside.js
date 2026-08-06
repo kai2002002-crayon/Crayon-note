@@ -85,7 +85,7 @@ const ASIDE_DATA = {
                 icon: "", 
                 name: { zh: "完美休假", ja: "完璧な休暇", en: "Perfect Vacation" }, 
                 desc: { zh: "穿戴使者的最大 HP、物理攻擊力、爆擊、爆擊傷害增加", ja: "着用者の最大HP、物理攻撃力、会心、会心ダメージが増加する。", en: "Increases the bearer's Max HP, Physical ATK, CRIT Hit, and CRIT DMG." }, 
-                effects: { zh: ["最大HP增加：6%", "物理攻擊力增加：6%", "爆擊增加：6%", "爆擊傷害增加：6%"], ja: ["最大HP增加:6%", "物理攻擊力增加:6%", "会心增加:6%", "会ダメージ增加:6%"], en: ["Max HP Increase: 6%", "Physical ATK Increase: 6%", "CRIT Increase: 6%" "CRIT DMG Increase: 6%"] } 
+                effects: { zh: ["最大HP增加：6%", "物理攻擊力增加：6%", "爆擊增加：6%", "爆擊傷害增加：6%"], ja: ["最大HP增加:6%", "物理攻擊力增加:6%", "会心增加:6%", "会ダメージ增加:6%"], en: ["Max HP Increase: 6%", "Physical ATK Increase: 6%", "CRIT Increase: 6%", "CRIT DMG Increase: 6%"] } 
             },
             2: { 
                 icon: "", 
