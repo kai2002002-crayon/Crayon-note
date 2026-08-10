@@ -614,7 +614,7 @@ const WORK_URL = {
     "Rim": "https://youtu.be/0dde_RrWSGE",
     "Risty": "",
     "Rohne": "",
-	"Rollett": "",
+	"Rollett": "https://youtu.be/wa7nDhnh9O0",
     "Rude": "https://youtu.be/mh-UMouGGcs",
     "Rufo": "https://youtu.be/LVocNQWYRuM",
     "Sari": "https://youtu.be/mRU5nRoA3g0",
