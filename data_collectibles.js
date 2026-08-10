@@ -204,7 +204,7 @@ const PRESENT_MAP = {
     },
 	"Rollett": { 
         url: "",
-        name: { "zh-TW": "鍍金橡木手杖", "ja": "", "en": "" }
+        name: { "zh-TW": "鍍金橡木手杖", "ja": "金箔オークケイン", "en": "Gilded Oak Cane" }
     },
     "Rude": { 
         url: "https://i.postimg.cc/yYYwwmY6/Present-List-Rude.png",
@@ -409,7 +409,7 @@ const THOUGHT_MAP = {
             "Rim": "リムがぎこちない感じで私にプレゼントした茶器セット。私の部屋に来る度これで一緒にお茶を飲みたいという。",
             "Risty": "自分はもう大人だからやらないと言いながらいっぱい持って来たが、今は普通に自分のゲーム機を持って毎日遊びにくる。",
             "Rohne": "エレナに渡そうか悩んだ挙句、私に渡すのだそうだ。本物のトンカツを作ってくれということだけが十数回書かれている。",
-        	"Rollett": "",    
+        	"Rollett": "自分の杖をくれた。ロレットのポーズを真似ようとして床に倒れた。どこかで口レットが見守っているような気分になる。",    
 			"Rude": "ルードが一緒に運動するメンバーが必要だということで、私に送った定期会員券。行かないといけないのかな？",
             "Rufo": "投げるといつも自分の好きな数字が出せるインチキ用のサイコロ。ティグにバレたら怒られるということで私に預けたみたいだ。",
             "Sari": "サリー手作りのリアクションカード。両手でカードを持ち上げると、カードに書いてある内容に合わせて反応する。",
@@ -481,7 +481,7 @@ const THOUGHT_MAP = {
             "Rim": "A teacup set that Rim gifted to me shyly. She said she wants to drink tea together every time she visits my room.",
             "Risty": "Risty gave it to me, saying that she's all grown up now and doesn't need it anymore. But now she comes over to play with her game console every day.",
             "Rohne": "A journal that Rohne passed to me, saying she once wondered about handing it to Elena. The only thing written in it are requests for real cutlet.",
-            "Rollett": "",
+            "Rollett": "Rollett's staff - She gave me her own. I tried copying her signature pose but ended up falling flat on the floor, I feel like she is watching me from somewhere.",
 			"Rude": "Premium membership access that Rudd sent me, saying that she needs a training buddy. Should I go?",
             "Rufo": "A cheating dice that always shows the number she wants. She probably entrusted it to me, not to be caught and hit by Tig.",
             "Sari": "A reaction card crafted by Sari herself. When I hold up the card with both hands, she reacts according to the card.",
@@ -628,7 +628,7 @@ const LETTER_MAP = {
 			"Rim": "丘の上に独りで暮らしていた私にも……宴会場でたくさんの友達ができました。私のギャグを気に入ってくれる友達もいて嬉しいです。レモンティーを好きな人がいたら……いつか私の家に招待したいなと思っています。教主のおかげで、たくさんの使徒と出会えました……ありがとうございます。",
             "Risty": "Hi! 教主! 私がよく遊んでるゲームにログインしてくれたらゲーム内からチャットを送るんだけど、全然ログインしてくれないから手紙を書いてるんだ。まぁ、大したことじゃないんだけど･･････この前は部屋を掃除してくれて、宴会場でも色々気を遣ってくれてありがとう。お礼を言うにも会いに行くのは遠いから手紙にしてみたんだ。いいよね? これからは、ちょいちょいログインしてよね。一緒にやろうよ。手を貸してやるからさ! わかった? 約束だよ!",
             "Rohne": "親切なスパイ、有能なスパイ！出されたものは残さず平らげるスパイ、ローネです！教主さんと色んな話をしていると、職場のストレスが発散できてうれしいです。教主さんも私と話すのは楽しいでしょうか？機密情報をペラペラ喋っていないかなと不安ですが、いっぱい楽しんでもらえたらうれしいです！そうそう！私が頻繁に宴会場へ行っているのはアメリアさんには内緒ですよ！",
-            "Rollett": "",
+            "Rollett": "ボンジュール!\n妖精王国に来てから、ずいぶん経ったねぇ。私が妖精王国に馴染めるように世話を焼いてくれて感謝するよぉ。君の助けがなかったら厳しかったと思うからねぇ。本当に感謝しているんだよ。そんなわけで、ティータイムはどうだい?\n君が好きそうな紅茶とお菓子を用意したからさぁ、 茶葉の香りが薄くなる前に来てくれるとうれしいねぇ。",
 			"Rude": "よう、教主。言葉ではなく手紙で伝えるのは初めてだから、少し照れ臭いな。いつも宴会場で体にいいものをごちそうになってるから、礼を言いたかった。最近、体はちゃんと鍛えているか？会う度に聞かれてうんざりするかもしれんが、オレなりの好意だと思ってもらえるとうれしい。次はオレの竜の巣にあるトレーニングルームで会おう。新しいトレーニングコースを用意したからな。",
             "Rufo": "ご機嫌うるわしゅう！反アニマル缶戦線のブレインであるルボから教主に手紙を送るのだ。どうやって書けばいいのかよくわからないのだ。ルボは忙しいのに、ティグ隊長が自分の分まで書けと言うのだ！教主はどこからあんなにたくさんの食材を持ってくるのだ？ベニーにバレないように気をつけなければいけないのだ。教主とボードゲームがしたいのだ。教主がサイコロをうまく振れるようにエルフの特別装置を貸してやろう。ティグ隊長には内緒なのだ。",
             "Sari": "ハロー、教主様！やっと会えたね！手紙って相手の言葉や行動が見えないから難しいよね。だから今はね、サリーの頭の中にいる教主様がお話してくれるのを想像しながら書いてるの！今は、昨日食べたクレームブリュレのお話をしてくれてるの！わぁ〜、すご〜い！おいしそ〜う！教主様ってね、説明がとっても上手なのよ！う〜ん、でも頭の中の教主様とお話するのってやっぱり変な感じ。早く会いに来て、またおもしろいお話を聞かせてね、教主様！約束だからね！",
@@ -700,7 +700,7 @@ const LETTER_MAP = {
             "Rim": "I used to live alone in a secluded house on a hill, but coming to the banquet hall has allowed me to make many friends. I'm tickled pink that there seem to be some who like my jokes. Are there more who are about that lemon tea life? I can't wait for my friends to come by my house someday. I'm grateful that the Master allowed me to meet many Apostles at the banquet hall.",
             "Risty": "O/ 07! Sup, Master! I would've just sent you a message through the in-game chat, but you don't hop into my games very often, so I'm writing this as a letter instead. It's nothing big. Just wanted to say thanks for cleaning my room that one time and taking care of me at the Banquet Hall. But going all the way to see you for real is way too far and too much of a hassle, so a letter it is. That's okay, right? Come online more often from now on. Let's get into a match together. I'll carry you! Promise! Got it? That's a promise!",
             "Rohne": "It's me, Rohne, the kind, capable spy who never wastes a crumb! I'm so glad I can de-stress from work by talking about all kinds of things with you. I hope you feel the same even though I worry I might be blurting out classified secrets all the time! All I want is for you to have a great time, Master! Oh, and one more thing, my frequent trips to the Banquet Hall? Let's keep that a secret from Amelia, okay?",
-            "Rollett": "",
+            "Rollett": "Bonjour!\nIt's been quite some time since my arrival in Sprite Kingdom. Thank you for helping me settle in here up to now. Without your support, adapting to this place would have been far more difficult for me. I really appreciate it, which is why I'd love to invite you to tea.\nI've prepared some tea and treats tailored perfectly to your taste. Do hurry over before the aroma of these tea leaves fades!",
 			"Rude": "Hey there, Master. I'm not very used to communicating through letters, so this feels strange. I just wanted to express my thanks for all the healthy meals you've made for me at the Banquet Hall. Have you been keeping up with your training lately? I know I always bring it up, but it's just my way of showing I care. Next time, let's meet in the training room in my roost. I've got a new workout course ready for you.",
             "Rufo": "It's me, Rufo, the brains of the Chow Rebels. I am most eager to believe that this written word finds you amidst circumstances of the most exquisite health and unparalleled joy. Master, I'm not exactly sure how to write this. Captain Tig told me to include hers as well, but I'm busy! Master, where exactly do you manage to get your ingredients? Make sure Beni doesn't find out. I would like to play board games with you. I will lend you a special elven device to help you make good rolls. Just don't tell Captain Tig.",
             "Sari": "Hi there, Master! What a pleasure! Writing letters is so difficult when I can't see your reactions to what I'm saying. But right now, I'm imagining a conversation with you while I write! Oh, now you're talking about that crème brûlée you had yesterday. Wow, amazing! That must have been SO good! You're so good at explaining things. Hmm, still... it is a bit awkward having a conversation with the imaginary version of you. I would much prefer to meet you face to face as usual! Come back soon and share some fun stories, okay?",
