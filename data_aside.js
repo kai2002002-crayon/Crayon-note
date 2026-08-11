@@ -2,6 +2,31 @@
 // 🔮 願像系統 (Aside) 資料庫 - 多語系版本 (zh: 中文, ja: 日文, en: 英文)
 
 const ASIDE_DATA = {
+    "": { 
+        asideIcon: "", 
+        totalName: { zh: "", ja: "", en: "" }, 
+        stars: {
+            1: { 
+                icon: "", 
+                name: { zh: "", ja: "", en: "" }, 
+                desc: { zh: "", ja: "", en: "." }, 
+                effects: { zh: [""], ja: [""], en: [""] } 
+            },
+            2: { 
+                icon: "", 
+                name: { zh: "", ja: "", en: "" }, 
+                desc: { zh: "", ja: "", en: "" }, 
+                effects: { zh: [""], ja: [""], en: [""] } 
+            },
+            3: { 
+                icon: "", 
+                name: { zh: "", ja: "", en: "" }, 
+                desc: { zh: "", ja: "", en: "" }, 
+                effects: { zh: [""], ja: [""], en: ["%"] }, 
+                globalEffects: { zh: ["全體 %", "全體 %"], ja: ["全体 %", "全体 %"], en: ["All %", "All %"] } 
+            }
+        }
+    },
     "Alice": { 
         asideIcon: "", 
         totalName: { zh: "最強幸運卡", ja: "最高の吉のカード", en: "The Ultimate Lucky Card" }, 
@@ -49,6 +74,31 @@ const ASIDE_DATA = {
                 desc: { zh: "增加後排友軍的每秒SP恢復量。", ja: "後列の味方の1秒ごとのSP回復量を増加させる。", en: "Increases SP Recovery per second for Back Row allies." }, 
                 effects: { zh: ["每秒SP恢復量:4"], ja: ["1秒ごとのSP回復量: 4"], en: ["SP Recovery per second: 4"] }, 
                 globalEffects: { zh: ["全體物理攻擊力 3%", "全體爆擊 3%"], ja: ["全体物理攻撃力 3%", "全体会心 3%"], en: ["All Physical ATK 3%", "All CRIT Hit 3%"] } 
+            }
+        }
+    },
+    "Aya": { 
+        asideIcon: "", 
+        totalName: { zh: "", ja: "", en: "" }, 
+        stars: {
+            1: { 
+                icon: "", 
+                name: { zh: "", ja: "", en: "" }, 
+                desc: { zh: "", ja: "", en: "." }, 
+                effects: { zh: [""], ja: [""], en: [""] } 
+            },
+            2: { 
+                icon: "", 
+                name: { zh: "", ja: "", en: "" }, 
+                desc: { zh: "", ja: "", en: "" }, 
+                effects: { zh: [""], ja: [""], en: [""] } 
+            },
+            3: { 
+                icon: "", 
+                name: { zh: "", ja: "", en: "" }, 
+                desc: { zh: "", ja: "", en: "" }, 
+                effects: { zh: [""], ja: [""], en: ["%"] }, 
+                globalEffects: { zh: ["全體 %", "全體 %"], ja: ["全体 %", "全体 %"], en: ["All %", "All %"] } 
             }
         }
     },
@@ -199,6 +249,31 @@ const ASIDE_DATA = {
                 desc: { zh: "增加所有友軍的最大HP。", ja: "味方全員の最大HPを増加させる。", en: "Increases Max HP of all allies." }, 
                 effects: { zh: ["最大HP增加:18%"], ja: ["最大HP増加: 18%"], en: ["Max HP Increase: 18%"] }, 
                 globalEffects: { zh: ["全體 HP 4%", "全體爆擊抵抗 4%"], ja: ["全体HP 4%","全体会心抵抗 4%"], en: ["All HP 4%", "All CRIT Resistance 4%"] } 
+            }
+        }
+    },
+    "Fricle": { 
+        asideIcon: "", 
+        totalName: { zh: "", ja: "", en: "" }, 
+        stars: {
+            1: { 
+                icon: "", 
+                name: { zh: "", ja: "", en: "" }, 
+                desc: { zh: "", ja: "", en: "." }, 
+                effects: { zh: [""], ja: [""], en: [""] } 
+            },
+            2: { 
+                icon: "", 
+                name: { zh: "", ja: "", en: "" }, 
+                desc: { zh: "", ja: "", en: "" }, 
+                effects: { zh: [""], ja: [""], en: [""] } 
+            },
+            3: { 
+                icon: "", 
+                name: { zh: "", ja: "", en: "" }, 
+                desc: { zh: "", ja: "", en: "" }, 
+                effects: { zh: [""], ja: [""], en: ["%"] }, 
+                globalEffects: { zh: ["全體 %", "全體 %"], ja: ["全体 %", "全体 %"], en: ["All %", "All %"] } 
             }
         }
     },
