@@ -950,6 +950,11 @@ const EVENT_SCHEDULE = [
         eventId: "Theme012" 
     },
 	{
+        start: "2026-08-13T17:00:00+09:00",
+        end: "2026-08-27T10:59:59+09:00",
+        eventId: "PickComposed" 
+    },
+	{
         start: "2026-07-30T17:00:00+09:00",
         end: "2026-08-13T10:59:59+09:00",
         eventId: "Theme014" 
