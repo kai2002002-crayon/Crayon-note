@@ -965,8 +965,8 @@ const EVENT_SCHEDULE = [
         eventId: "TowerBattle" 
     },
 	{
-        start: "2026-07-07T12:00:00+09:00",
-        end: "2026-07-10T03:59:59+09:00",
+        start: "2026-08-14T12:00:00+09:00",
+        end: "2026-08-17T03:59:59+09:00",
         eventId: "Playground" 
     },
 	{
