@@ -127,10 +127,14 @@
 .sprite-PresentList_Ashur { width: 238px; height: 208px; background-position: -5px -1161px; }
 
 /* --- Aya --- */
-.sprite-CG_Schedule_Aya { width: 1020px; height: 510px; background-position: -5px -5px; }
-.sprite-Icon_NormalSkill_Aya { width: 64px; height: 64px; background-position: -5px -525px; }
-.sprite-Icon_PassiveSkill_Aya { width: 64px; height: 64px; background-position: -5px -599px; }
-.sprite-PresentList_Aya { width: 175px; height: 212px; background-position: -5px -673px; }
+.sprite-AsideIcon_Aya { width: 256px; height: 256px; background-position: -5px -5px; }
+.sprite-Aside_Skill_Aya_1 { width: 64px; height: 64px; background-position: -5px -271px; }
+.sprite-Aside_Skill_Aya_2 { width: 64px; height: 64px; background-position: -5px -345px; }
+.sprite-Aside_Skill_Aya_3 { width: 64px; height: 64px; background-position: -5px -419px; }
+.sprite-CG_Schedule_Aya { width: 1020px; height: 510px; background-position: -5px -493px; }
+.sprite-Icon_NormalSkill_Aya { width: 64px; height: 64px; background-position: -5px -1013px; }
+.sprite-Icon_PassiveSkill_Aya { width: 64px; height: 64px; background-position: -5px -1087px; }
+.sprite-PresentList_Aya { width: 175px; height: 212px; background-position: -5px -1161px; }
 
 /* --- Barong --- */
 .sprite-AsideIcon_Barong { width: 256px; height: 256px; background-position: -5px -5px; }
