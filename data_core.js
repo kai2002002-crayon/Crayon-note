@@ -570,7 +570,7 @@ const WORK_URL = {
     "Aya": "https://youtu.be/2VlyNDZ28Mc",
     "Barong": "https://youtu.be/riScYcKvJvE",
     "Belita": "",
-    "Beni": "",
+    "Beni": "https://youtu.be/rqTyjkBImFg",
     "BigWood": "https://youtu.be/tU7HeiZoPkc",
     "Blanchet": "https://youtu.be/iTCr6Gd0ArY",
     "Butter": "https://youtu.be/oapwQXy4f1g",
