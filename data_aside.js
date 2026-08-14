@@ -83,22 +83,22 @@ const ASIDE_DATA = {
         stars: {
             1: { 
                 icon: "", 
-                name: { zh: "潔白的雪花", ja: "真っ白な雪の結晶", en: "" }, 
-                desc: { zh: "穿戴者的最大HP、魔法攻擊力、爆擊、爆擊傷害增加。", ja: "着用者の最大HP、魔法攻撃力、会心、会心夕メージが増加する。", en: "." }, 
-                effects: { zh: ["最大HP增加:6%", "魔法攻擊力增加:6%", "爆擊增加:6%", "爆擊傷害增加:6%"], ja: ["最大HP增加:6%", "魔法攻擊力增加:6%", "会心增加:6%", "会心ダメージ増加:6%"], en: [""] } 
+                name: { zh: "潔白的雪花", ja: "真っ白な雪の結晶", en: "Pure White Snowflake" }, 
+                desc: { zh: "穿戴者的最大HP、魔法攻擊力、爆擊、爆擊傷害增加。", ja: "着用者の最大HP、魔法攻撃力、会心、会心夕メージが増加する。", en: "Increases bearer's Max HP, Magical ATK, CRIT, and CRIT DMG." }, 
+                effects: { zh: ["最大HP增加:6%", "魔法攻擊力增加:6%", "爆擊增加:6%", "爆擊傷害增加:6%"], ja: ["最大HP增加:6%", "魔法攻擊力增加:6%", "会心增加:6%", "会心ダメージ増加:6%"], en: ["Max HP Increase: 6%", "Magical ATK Increase: 6%", "CRIT Increase: 6%", "CRIT DMG Increase: 6%"] } 
             },
             2: { 
                 icon: ""，
-                name: { zh: "雪花紛飛", ja: "雪の花が舞い散り", en: "" }, 
-                desc: { zh: "每4秒充能一次雪花盛開效果。充能完成時，下一次普通攻擊將追加範圍魔法傷害，並給予昏迷效果。普通技能的蝴蝶撞擊敵人時將給予凍傷效果。蝴蝶飛回時、恢復自身HP。", ja: "4ごとに雪の花満開の効果ガチャージされる。チャージ完了時、次の普通攻撃に追加で範回魔法ダメージを与え、気絶を付与する。低学年スキルの蝶が敵に衝突すると凍傷を付与する、腺が戻ってくると、自身のHPを回復する。", en: "" }, 
-                effects: { zh: ["凍傷:每秒造成傷害，且受到冷靜性格使者的傷客量增加。", "昏迷:無法進行任何行動。", "雪花盛開魔法傷害:650%", "昏迷持續時間:1.5秒", "凍傷時受到冷靜性格使者傷害量增加:8%", "凍傷持續時間:10秒", "HP恢復:最大HP的20%"], ja: ["原備:1酔ごとにダメージを受け、性格が冷静の使徒からの被ダメージ量が増加する。", "気絕:行動不能状態になる。", "雪の花満開のダメージ: 650%", "気絶の持続時間:15秒", "凍傷時、冷静の使徒がら受けるダメージ増加:8%", "凍傷の持続時間:10秒", "HP回復:最大HPの20%"], en: [""] } 
+                name: { zh: "雪花紛飛", ja: "雪の花が舞い散り", en: "Fluttering Snowflake" }, 
+                desc: { zh: "每4秒充能一次雪花盛開效果。充能完成時，下一次普通攻擊將追加範圍魔法傷害，並給予昏迷效果。普通技能的蝴蝶撞擊敵人時將給予凍傷效果。蝴蝶飛回時、恢復自身HP。", ja: "4ごとに雪の花満開の効果ガチャージされる。チャージ完了時、次の普通攻撃に追加で範回魔法ダメージを与え、気絶を付与する。低学年スキルの蝶が敵に衝突すると凍傷を付与する、腺が戻ってくると、自身のHPを回復する。", en: "Charges Snowflake Blossom Effect every 4 seconds. When fully charged, the next Normal Attack additionally deals AoE Magical Damage and applies Stun. When the butterfly from the Freshman Skill collides with an enemy, it applies Freeze. The butterfly returns and recovers her own HP." }, 
+                effects: { zh: ["凍傷:每秒造成傷害，且受到冷靜性格使者的傷客量增加。", "昏迷:無法進行任何行動。", "雪花盛開魔法傷害:650%", "昏迷持續時間:1.5秒", "凍傷時受到冷靜性格使者傷害量增加:8%", "凍傷持續時間:10秒", "HP恢復:最大HP的20%"], ja: ["原備:1酔ごとにダメージを受け、性格が冷静の使徒からの被ダメージ量が増加する。", "気絕:行動不能状態になる。", "雪の花満開のダメージ: 650%", "気絶の持続時間:15秒", "凍傷時、冷静の使徒がら受けるダメージ増加:8%", "凍傷の持続時間:10秒", "HP回復:最大HPの20%"], en: ["Freeze: Applies Damage every second and increases Incoming Damage from", "Composed Apostles. Stun: Becomes unable to act.", "Snowflake Blossom Magical DMG: 650%", "Stun Duration: 1.5s", "Incoming DMG Increase from Composed Apostles while Frozen: 8%", "Freeze Duration: 10s", "HP Recovery: 20% of Max HP"] } 
             },
             3: { 
                 icon: "", 
-                name: { zh: "萬年雪的賢者!", ja: "万年雪の賢者様!", en: "" }, 
-                desc: { zh: "增加中排友軍對敵人造成的傷害量，並減少中排友軍受到的傷害量。", ja: "中列の味方の敵への与えるダメージ量を増加させ、中列の味方の敵からの被ダメージ量を減少させる。", en: "" }, 
-                effects: { zh: ["傷害量增加:19.5%", "受到的傷害量減少:8.8%"], ja: ["ダメージ量増加:19.5%", "被ダメージ量減少:8.8%"], en: ["%"] }, 
-                globalEffects: { zh: ["全體HP 4%", "全體爆擊傷害 4%"], ja: ["全体HP 4%", "全体会ダメージ 4%"], en: ["All %", "All %"] } 
+                name: { zh: "萬年雪的賢者!", ja: "万年雪の賢者様!", en: "Sage of Perpetual Snow!" }, 
+                desc: { zh: "增加中排友軍對敵人造成的傷害量，並減少中排友軍受到的傷害量。", ja: "中列の味方の敵への与えるダメージ量を増加させ、中列の味方の敵からの被ダメージ量を減少させる。", en: "Increases Outgoing Damage and reduces Incoming Damage for Middle Row allies." }, 
+                effects: { zh: ["傷害量增加:19.5%", "受到的傷害量減少:8.8%"], ja: ["ダメージ量増加:19.5%", "被ダメージ量減少:8.8%"], en: ["DMG Increase: 19.5%", "Incoming DMG Reduction: 8.8%"] }, 
+                globalEffects: { zh: ["全體HP 4%", "全體爆擊傷害 4%"], ja: ["全体HP 4%", "全体会ダメージ 4%"], en: ["All HP 4%", "All CRIT DMG 4%"] } 
             }
         }
     },
