@@ -581,7 +581,7 @@ const WORK_URL = {
 	"Daya": "https://youtu.be/B-oalCgpSOs",
     "Diana": "",
     "Ed": "https://youtu.be/HFj4FtrvjqI",
-    "Elena": "",
+    "Elena": "https://youtu.be/eyxQQ3LSL1A",
     "Epica": "https://youtu.be/6dxpDLKWzJI",
     "Erpin": "https://youtu.be/rgbOtvbLdB0",
     "Espi": "https://youtu.be/hTyUw7ZfI28",
