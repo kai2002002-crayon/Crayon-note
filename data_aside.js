@@ -78,7 +78,7 @@ const ASIDE_DATA = {
         }
     },
     "Aya": { 
-        asideIcon: "", 
+        asideIcon: "",
         totalName: { zh: "試煉中的雪花", ja: "試練の中の雪の花", en: "Trial's Snowflake" }, 
         stars: {
             1: { 
