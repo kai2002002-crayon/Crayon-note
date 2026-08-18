@@ -254,7 +254,7 @@ const ASIDE_DATA = {
     },
     "Fricle": { 
         asideIcon: "", 
-        totalName: { zh: "", ja: "", en: "" }, 
+        totalName: { zh: "高階魔女皮可蒞", ja: "上位魔女ピコラ", en: "High Witch Picora" },
         stars: {
             1: { 
                 icon: "", 
