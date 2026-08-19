@@ -127,6 +127,31 @@ const ASIDE_DATA = {
             }
         }
     },
+    "Blanchet": { 
+        asideIcon: "", 
+        totalName: { zh: "百萬朵藍玫瑰", ja: "百万本の青い薔薇", en: "A Million Blue Roses" }, 
+        stars: {
+            1: { 
+                icon: "", 
+                name: { zh: "", ja: "", en: "" }, 
+                desc: { zh: "", ja: "", en: "." }, 
+                effects: { zh: [""], ja: [""], en: [""] } 
+            },
+            2: { 
+                icon: "", 
+                name: { zh: "", ja: "", en: "" }, 
+                desc: { zh: "", ja: "", en: "" }, 
+                effects: { zh: [""], ja: [""], en: [""] } 
+            },
+            3: { 
+                icon: "", 
+                name: { zh: "", ja: "", en: "" }, 
+                desc: { zh: "", ja: "", en: "" }, 
+                effects: { zh: [""], ja: [""], en: ["%"] }, 
+                globalEffects: { zh: ["全體 %", "全體 %"], ja: ["全体 %", "全体 %"], en: ["All %", "All %"] } 
+            }
+        }
+    },
     "Canna": { 
         asideIcon: "", 
         totalName: { zh: "日光浴康娜", ja: "日光浴カンナ", en: "Sunbathing Canna" }, 
