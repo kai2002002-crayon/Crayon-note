@@ -1,5 +1,5 @@
 ChloeSkin4.png
-size:2048,2048
+size:2048,1828
 filter:Linear,Linear
 pma:true
 Ball_L
