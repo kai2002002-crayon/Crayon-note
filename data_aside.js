@@ -283,22 +283,22 @@ const ASIDE_DATA = {
         stars: {
             1: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "." }, 
-                effects: { zh: [""], ja: [""], en: [""] } 
+                name: { zh: "我的愛徒皮可菈", ja: "", en: "" }, 
+                desc: { zh: "穿戴者的最大HP、魔法攻擊力、爆擊、爆擊傷害增加。", ja: "", en: "." }, 
+                effects: { zh: ["最大HP增加:6%", "魔法攻擊力增加:6%", "爆擊增加:6%", "爆擊傷害增加:6%"], ja: [""], en: [""] } 
             },
             2: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "" }, 
-                effects: { zh: [""], ja: [""], en: [""] } 
+                name: { zh: "魔女的力量非同凡響!", ja: "", en: "" }, 
+                desc: { zh: "強化攻擊召喚出的觸手傷害變為2倍，且施放機率增加。高級技能將追加減少防禦力效果。", ja: "", en: "" }, 
+                effects: { zh: ["強化攻擊施展機率增加:7.5%", "防禦力減少:30%", "防禦力減少持續時間:7秒"], ja: [""], en: [""] } 
             },
             3: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "" }, 
-                effects: { zh: [""], ja: [""], en: ["%"] }, 
-                globalEffects: { zh: ["全體 %", "全體 %"], ja: ["全体 %", "全体 %"], en: ["All %", "All %"] } 
+                name: { zh: "師父芙莉可的教誨", ja: "", en: "" }, 
+                desc: { zh: "增加中排友軍的每秒SP恢復量。", ja: "", en: "" }, 
+                effects: { zh: ["每秒SP恢復量:4"], ja: [""], en: ["%"] }, 
+                globalEffects: { zh: ["全體爆擊傷害 3%", "全體爆擊抵抗 3%"], ja: ["全体 %", "全体 %"], en: ["All %", "All %"] } 
             }
         }
     },
