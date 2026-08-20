@@ -133,22 +133,22 @@ const ASIDE_DATA = {
         stars: {
             1: { 
                 icon: "", 
-                name: { zh: "盛開的藍玫瑰", ja: "満開の青い薔薇", en: "" }, 
-                desc: { zh: "穿戴者的最大HP、魔法攻擊力、爆擊、爆擊傷害增加。", ja: "着用者の最大HP、魔法攻撃力、会心、会心ダメージが増加する。", en: "." }, 
-                effects: { zh: ["最大HP增加:6%", "魔法攻擊力增加:6%", "爆擊增加:6%", "爆擊傷害增加:6%"], ja: ["最大HP增加:6%", "魔法攻擊力增加:6%", "会心增加:6%", "会心ダメージ増加:6%"], en: [""] } 
+                name: { zh: "盛開的藍玫瑰", ja: "満開の青い薔薇", en: "A Blue Rose in Full Bloom" }, 
+                desc: { zh: "穿戴者的最大HP、魔法攻擊力、爆擊、爆擊傷害增加。", ja: "着用者の最大HP、魔法攻撃力、会心、会心ダメージが増加する。", en: "Increases bearer's Max HP, Magical ATK, CRIT, and CRIT DMG." }, 
+                effects: { zh: ["最大HP增加:6%", "魔法攻擊力增加:6%", "爆擊增加:6%", "爆擊傷害增加:6%"], ja: ["最大HP增加:6%", "魔法攻擊力增加:6%", "会心增加:6%", "会心ダメージ増加:6%"], en: ["Max HP Increase: 6%", "Magical ATK Increase: 6%", "CRIT Increase: 6%", "CRIT DMG Increase: 6%"] } 
             },
             2: { 
                 icon: "", 
-                name: { zh: "百萬繁花綻放", ja: "咲きほこる百万本の花", en: "" }, 
-                desc: { zh: "強化攻擊傷害量增加，且強化攻擊的目標將追加一名隨機敵人。高級技能變更。同步玫瑰會留下標記，於最後一擊時爆炸造成魔法傷害。根據疊加的標記數量將追加爆炸傷害。", ja: "強化攻撃のダメージ量が増加し、強化攻撃の目標対象にランダムな敵が追加される。高学年スキルが変化する。シンクローズがマークを付与し、最後の一撃時に爆発して魔法ダメージを与える。スタックしたマーク敵に応じて爆発ダメージが追加される。", en: "" }, 
-                effects: { zh: ["強化攻擊傷害量增加:240%", "標記爆炸傷害:700%", "標記最大疊加密數:10個", "每要加1層標記追加傷害:16%"], ja: ["強化攻撃のダメージ量増加: 240%", "マーク爆発ダメージ: 700%", "マークの最大スタック数:10個", "マークスタックごとのダメージ追加:16%"], en: [""] } 
+                name: { zh: "百萬繁花綻放", ja: "咲きほこる百万本の花", en: "A Million in Bloom" }, 
+                desc: { zh: "強化攻擊傷害量增加，且強化攻擊的目標將追加一名隨機敵人。高級技能變更。同步玫瑰會留下標記，於最後一擊時爆炸造成魔法傷害。根據疊加的標記數量將追加爆炸傷害。", ja: "強化攻撃のダメージ量が増加し、強化攻撃の目標対象にランダムな敵が追加される。高学年スキルが変化する。シンクローズがマークを付与し、最後の一撃時に爆発して魔法ダメージを与える。スタックしたマーク敵に応じて爆発ダメージが追加される。", en: "Increases Enhanced Attack Damage, and targets one additional random enemy. Senior Skill is changed. Sync Rose leaves a Mark, which explodes on the final hit to deal Magical Damage. Additional explosive Damage is added based on the number of stacked Marks." }, 
+                effects: { zh: ["強化攻擊傷害量增加:240%", "標記爆炸傷害:700%", "標記最大疊加密數:10個", "每要加1層標記追加傷害:16%"], ja: ["強化攻撃のダメージ量増加: 240%", "マーク爆発ダメージ: 700%", "マークの最大スタック数:10個", "マークスタックごとのダメージ追加:16%"], en: ["Enhanced ATK DMG Increase: 240%", "Mark Explosion DMG: 700%", "Max Mark Stacks: 10", "Additional DMG per Mark Stack: 16%"] } 
             },
             3: { 
                 icon: "", 
-                name: { zh: "藍色花香的力量", ja: "青い花の香りのカ", en: "" }, 
-                desc: { zh: "使所有友軍爆擊及爆擊傷害增加。", ja: "味方全員の会心と会心ダメージを増加させる。", en: "" }, 
-                effects: { zh: ["爆擊增加:6%", "爆擊傷害增加:6%"], ja: ["会心增加:6%", "会心ダメージ増加:6%"], en: ["%"] }, 
-                globalEffects: { zh: ["全體魔法攻擊力 3%", "全體爆擊傷害抵抗 3%"], ja: ["全体魔法攻擊力 3%", "全体会ダメージ抵抗 3%"], en: ["All %", "All %"] } 
+                name: { zh: "藍色花香的力量", ja: "青い花の香りのカ", en: "Power of the Blue Floral Scent" }, 
+                desc: { zh: "使所有友軍爆擊及爆擊傷害增加。", ja: "味方全員の会心と会心ダメージを増加させる。", en: "Increases Critical Hit and Critical Damage of all allies." }, 
+                effects: { zh: ["爆擊增加:6%", "爆擊傷害增加:6%"], ja: ["会心增加:6%", "会心ダメージ増加:6%"], en: ["CRIT Increase: 6%", "CRIT DMG Increase: 6%"] }, 
+                globalEffects: { zh: ["全體魔法攻擊力 3%", "全體爆擊傷害抵抗 3%"], ja: ["全体魔法攻擊力 3%", "全体会ダメージ抵抗 3%"], en: ["All Magical ATK 3%", "All CRIT DMG RES 3%"] } 
             }
         }
     },
