@@ -980,7 +980,7 @@ const EVENT_SCHEDULE = [
 const CARD_SCHEDULE = [
 	{
         start: "2026-08-20T04:00:00+09:00",
-        end: "2026-08-17T10:59:59+09:00",
+        end: "2026-08-27T10:59:59+09:00",
         id: "Artifact95",
         type: "Artifact"
     },
