@@ -601,7 +601,7 @@ const WORK_URL = {
     "Levi": "https://youtu.be/79nJ7h2hnc0",
     "MaestroMK2": "https://youtu.be/IDJxotfwcx8",
     "Mago": "https://youtu.be/S8HF0T-C8gc",
-    "Marie": "",
+    "Marie": "https://youtu.be/WhHGJSMyc1c",
     "Mayo": "https://youtu.be/7InY25WhPd0",
     "Meluna": "https://youtu.be/-ea50ioN8Gw",
     "Momo": "https://youtu.be/0sjEHtYM_Cg",
