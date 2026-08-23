@@ -352,6 +352,31 @@ const ASIDE_DATA = {
             }
         }
     },
+    "Kidian": { 
+        asideIcon: "", 
+        totalName: { zh: "", ja: "", en: "" }, 
+        stars: {
+            1: { 
+                icon: "", 
+                name: { zh: "", ja: "", en: "" }, 
+                desc: { zh: "", ja: "", en: "." }, 
+                effects: { zh: [""], ja: [""], en: [""] } 
+            },
+            2: { 
+                icon: "", 
+                name: { zh: "", ja: "", en: "" }, 
+                desc: { zh: "", ja: "", en: "" }, 
+                effects: { zh: [""], ja: [""], en: [""] } 
+            },
+            3: { 
+                icon: "", 
+                name: { zh: "", ja: "", en: "" }, 
+                desc: { zh: "", ja: "", en: "" }, 
+                effects: { zh: [""], ja: [""], en: ["%"] }, 
+                globalEffects: { zh: ["全體 %", "全體 %"], ja: ["全体 %", "全体 %"], en: ["All %", "All %"] } 
+            }
+        }
+    },
     "Kyarot": { 
         asideIcon: "https://i.postimg.cc/pp3yL6HW/Aside-Icon-Kyarot.png", 
         totalName: { zh: "小太陽", ja: "おひさま", en: "Sunny" }, 
