@@ -504,7 +504,7 @@ const ASIDE_DATA = {
     },
     "Pira": { 
         asideIcon: "", 
-        totalName: { zh: "", ja: "", en: "" }, 
+        totalName: { zh: "閃亮亮友情項鍊", ja: "キラキラ友情首飾り", en: "Spakling Friendship Necklace" }, 
         stars: {
             1: { 
                 icon: "", 
