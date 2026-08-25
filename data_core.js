@@ -593,7 +593,7 @@ const WORK_URL = {
     "Ifrit": "https://youtu.be/ANWq6bxvkBo",
     "Jade": "https://youtu.be/9zc4o0jcU8g",
     "Jubee": "https://youtu.be/GQNFRFORdB0",
-    "Kidian": "",
+    "Kidian": "https://youtu.be/PcT_8VB1NrQ",
     "Kommy": "https://youtu.be/2qZbcsuXL9U",
     "Kyarot": "https://youtu.be/jDl4YWvYp-U",
     "Lazy": "https://youtu.be/83peJu7yMEU",
