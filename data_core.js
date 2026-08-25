@@ -4,7 +4,7 @@
 // ==========================================
 
 // ------------------------------------------
-// 1. 多語系字典與翻譯系統
+// 多語系字典與翻譯系統
 // ------------------------------------------
 const LANG_DICT = {
     "zh-TW": {
@@ -191,7 +191,9 @@ const LANG_DICT = {
 
 const currentLang = localStorage.getItem('user_lang') || 'zh-TW';
 function t(key) { return LANG_DICT[currentLang][key] || key; }
-
+// ------------------------------------------
+// 坨坨資料
+// ------------------------------------------
 const INITIAL_DATA = [
 	{ name: "琵拉", personality: "狂亂", race: "龍族", position: "後排", job: "輔助", pathVersion: "V3", releaseDate: "2026-08-27T17:00:00+09:00" },
 	{ name: "羅蕾特", personality: "狂亂", race: "魔女", position: "後排", job: "輸出", pathVersion: "V1", releaseDate: "2026-07-30T17:00:00+09:00" },
@@ -404,6 +406,9 @@ const GRADE_MAP = {
 
 const ELDAIN_LIST = ['綾', '庫洛艾', '艾皮卡', '伊德', '羽伊', '薇薇', 'x乂錫安乂x', '優米', '雷內瓦'];
 
+// ------------------------------------------
+// 宴會廳
+// ------------------------------------------
 const FOOD_MAP = {
     "Alice": { super: "有機檸檬茶", special: ["檸檬茶", "幽靈布丁", "惡靈布丁"] },
     "Allet": { super: "ANSA太空食品", special: ["太空食品", "肉桂口味糖球", "肉桂口味健康糖球"] },
@@ -482,7 +487,9 @@ const FOOD_MAP = {
     "Yomi": { super: "燉南瓜", special: ["南瓜濃湯", "一口草生菜包", "兩口草生菜包"] },
     "Yumimi": { super: "兩口草生菜包", special: ["一口草生菜包", "太空食品", "ANSA太空食品"] }
 };
-
+// ------------------------------------------
+// 冒險協會
+// ------------------------------------------
 const REWARD_MAP = {
     "Alice": ["細膩的鐵粉", "尖銳的針", "閃亮的玻璃"],
     "Allet": ["軟棉棉的樹木", "堅硬的石頭", "牛肉"],
@@ -637,7 +644,7 @@ const WORK_URL = {
 };
 
 // ------------------------------------------
-// 3. 圖標與圖片對應表
+// 圖標與圖片對應表
 // ------------------------------------------
 const LOBBY_BACKGROUNDS = [
     "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/lobby%2FLobby-100010-1.webp?alt=media&token=91171715-07aa-4c3d-aee6-0daf8099536c", "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/lobby%2FLobby-10002-1.webp?alt=media&token=e44c4eba-f9b0-4e1e-bd2c-bbcd5891be84", "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/lobby%2FLobby-10003-1.webp?alt=media&token=11071be4-520c-4bd4-ae9d-10aae72e6dd1",
@@ -654,104 +661,6 @@ const SPINE_BACKGROUNDS = {
 "魔女":"https://i.postimg.cc/zHZFDKtL/Gacha-Pattern-Bg-Witch.png",
 "NPC":"https://i.postimg.cc/q703FkG3/Gacha-Characterpattern.png"
 }; 
-const ICON_MAP = {
-    "personality_天真": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/personality%2FPickUpPersonality_Naive.webp?alt=media&token=5439c0fb-4c8e-4097-a868-5534180db07f", "personality_活潑": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/personality%2FPickUpPersonality_Jolly.webp?alt=media&token=701ad789-557c-4de7-ac4d-fc42e6b82cfb", "personality_冷靜": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/personality%2FPickUpPersonality_Cool.webp?alt=media&token=d93be2cb-d36b-4923-badd-5c16557cb844", "personality_狂亂": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/personality%2FPickUpPersonality_Mad.webp?alt=media&token=47f62ae9-38a3-489d-92fc-f034b6249cbe", "personality_憂鬱": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/personality%2FPickUpPersonality_Gloomy.webp?alt=media&token=e22b91ef-4364-4055-986b-bad568c484c2",
-    "race_精靈": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/race%2Fjing-ling.webp?alt=media&token=4d4e6dff-b29c-42ea-a99c-231dd74a8d2c", "race_龍族": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/race%2Flong-zu.webp?alt=media&token=9045bd8a-fd98-412c-a0ef-2fb57678776d", "race_妖精": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/race%2Fyao-jing.webp?alt=media&token=02063405-85bd-48d5-91c3-5581a9e331a2", "race_魔靈": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/race%2Fmo-ling.webp?alt=media&token=e7d63700-cfbe-4c98-8ea5-57ff4bdbe413", "race_獸人": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/race%2Fshou-ren.webp?alt=media&token=dc1ffcdc-3cc6-4e0c-802b-b84cf3880415", "race_幽靈": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/race%2Fyou-ling.webp?alt=media&token=5a07255e-9cc2-4a6e-9b66-9c828cba31c3", "race_魔女": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/race%2Fmo-nu.webp?alt=media&token=f35ec5cd-7f58-4c98-9057-198160095847", "race_???": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/race%2Funknown.webp?alt=media&token=ce9dc20a-eb6c-4030-aa4f-d685ce01b7ee",
-    "position_前排": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/position%2Fqian-pai.webp?alt=media&token=2d783ffa-a9d0-439a-ad9b-6312dd5b7917", "position_中排": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/position%2Fzhong-pai.webp?alt=media&token=80552f69-ee52-48d7-a6b4-9c46e01f545d", "position_後排": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/position%2Fhou-pai.webp?alt=media&token=8a03dca6-bc7f-443d-a0f1-1a193c91e7da",
-    "job_肉盾": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/job%2Frou-dun.webp?alt=media&token=168d2a45-3f81-4deb-a47b-f750404d2428", "job_輔助": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/job%2Ffu-zhu.webp?alt=media&token=8076d16b-716f-4216-bcd4-c1f9930dc1d3", "job_輸出": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/job%2Fshu-chu.webp?alt=media&token=d7bcfc6c-c908-4e6c-86e4-967cc5ba92fe",
-    "grade_3":"https://i.postimg.cc/sDqK3Vk3/3STAR.png", "grade_2":"https://i.postimg.cc/wTZF96Cx/2STAR.png", "grade_1":"https://i.postimg.cc/TYFQTRzd/1STAR.png"
-};
-const IMAGE_MAP = {
-    "personality_天真": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/personality%2FPickUpPersonality_Naive.webp?alt=media&token=5439c0fb-4c8e-4097-a868-5534180db07f", "personality_活潑": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/personality%2FPickUpPersonality_Jolly.webp?alt=media&token=701ad789-557c-4de7-ac4d-fc42e6b82cfb", "personality_冷靜": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/personality%2FPickUpPersonality_Cool.webp?alt=media&token=d93be2cb-d36b-4923-badd-5c16557cb844", "personality_狂亂": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/personality%2FPickUpPersonality_Mad.webp?alt=media&token=47f62ae9-38a3-489d-92fc-f034b6249cbe", "personality_憂鬱": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/personality%2FPickUpPersonality_Gloomy.webp?alt=media&token=e22b91ef-4364-4055-986b-bad568c484c2",
-    "race_精靈": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/race%2Fjing-ling.webp?alt=media&token=4d4e6dff-b29c-42ea-a99c-231dd74a8d2c", "race_龍族": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/race%2Flong-zu.webp?alt=media&token=9045bd8a-fd98-412c-a0ef-2fb57678776d", "race_妖精": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/race%2Fyao-jing.webp?alt=media&token=02063405-85bd-48d5-91c3-5581a9e331a2", "race_魔靈": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/race%2Fmo-ling.webp?alt=media&token=e7d63700-cfbe-4c98-8ea5-57ff4bdbe413", "race_獸人": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/race%2Fshou-ren.webp?alt=media&token=dc1ffcdc-3cc6-4e0c-802b-b84cf3880415", "race_幽靈": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/race%2Fyou-ling.webp?alt=media&token=5a07255e-9cc2-4a6e-9b66-9c828cba31c3", "race_魔女": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/race%2Fmo-nu.webp?alt=media&token=f35ec5cd-7f58-4c98-9057-198160095847", "race_unknown": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/race%2Funknown.webp?alt=media&token=ce9dc20a-eb6c-4030-aa4f-d685ce01b7ee",
-    "position_前排": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/position%2Fqian-pai.webp?alt=media&token=2d783ffa-a9d0-439a-ad9b-6312dd5b7917", "position_中排": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/position%2Fzhong-pai.webp?alt=media&token=80552f69-ee52-48d7-a6b4-9c46e01f545d", "position_後排": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/position%2Fhou-pai.webp?alt=media&token=8a03dca6-bc7f-443d-a0f1-1a193c91e7da",
-    "job_肉盾": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/job%2Frou-dun.webp?alt=media&token=168d2a45-3f81-4deb-a47b-f750404d2428", "job_輔助": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/job%2Ffu-zhu.webp?alt=media&token=8076d16b-716f-4216-bcd4-c1f9930dc1d3", "job_輸出": "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/job%2Fshu-chu.webp?alt=media&token=d7bcfc6c-c908-4e6c-86e4-967cc5ba92fe",
-    "hover_avatar_伊弗利特": "https://i.postimg.cc/zVmkt7qp/yi-fu-li-te2.png", "hover_avatar_伊德": "https://i.postimg.cc/6yshjcB0/yi-de2.png", "hover_avatar_佩佩": "https://i.postimg.cc/jLz4Gf5V/pei-pei2.png", "hover_avatar_佩斯塔": "https://i.postimg.cc/HVQ9fMLf/pei-si-ta2.png", "hover_avatar_修帕": "https://i.postimg.cc/XpwkT5JV/xiu-pa2.png", "hover_avatar_傑德": "https://i.postimg.cc/qN4x07h8/jie-de2.png", "hover_avatar_優米": "https://i.postimg.cc/fVCjbhY4/you-mi2.png", "hover_avatar_劉美美": "https://i.postimg.cc/G4KJp1Gf/liu-mei-mei2.png", "hover_avatar_加薇雅": "https://i.postimg.cc/7fvNs9q5/jia-wei-ya2.png", "hover_avatar_卡洛特": "https://i.postimg.cc/w7Kkf29t/ka-luo-te2.png", "hover_avatar_卡蓮": "https://i.postimg.cc/JGwQ6xRZ/ka-lian2.png", "hover_avatar_喬菲": "https://i.postimg.cc/5XbS1tYB/qiao-fei2.png", "hover_avatar_基狄恩": "https://i.postimg.cc/WdTwj4F3/ji-di-en2.png", "hover_avatar_大師2號": "https://i.postimg.cc/hfF0ysKz/da-shi2hao2.png", "hover_avatar_大木頭": "https://i.postimg.cc/svFJ6m3G/da-mu-tou2.png", "hover_avatar_奈雅": "https://i.postimg.cc/hf91HmGk/nai-ya2.png", "hover_avatar_奶油": "https://i.postimg.cc/XpMgHLnK/nai-you2.png", "hover_avatar_寧琉": "https://i.postimg.cc/hXsbGqT2/ning-liu2.png", "hover_avatar_布蘭切": "https://i.postimg.cc/QHLq4mjc/bu-lan-qie2.png", "hover_avatar_希拉": "https://i.postimg.cc/VdjW3tND/xi-la2.png", "hover_avatar_希爾德": "https://i.postimg.cc/tYhNL6gm/xi-er-de2.png", "hover_avatar_希瑟圖": "https://i.postimg.cc/PPmQBDqV/xi-se-tu2.png", "hover_avatar_希菲爾": "https://i.postimg.cc/svp4tW26/xi-fei-er2.png", "hover_avatar_帕特拉": "https://i.postimg.cc/56wSZz0J/pa-te-la2.png", "hover_avatar_庫洛艾": "https://i.postimg.cc/RW4L906z/ku-luo-ai2.png", "hover_avatar_康娜": "https://i.postimg.cc/87NmDCJj/kang-na2.png", "hover_avatar_愛麗絲": "https://i.postimg.cc/Snd7KpC6/ai-li-si2.png", "hover_avatar_班尼": "https://i.postimg.cc/jDcQjrPw/ban-ni2.png", "hover_avatar_斯皮奇": "https://i.postimg.cc/zy7Sf1KR/si-pi-qi2.png", "hover_avatar_斯諾奇": "https://i.postimg.cc/RWdQ0zKJ/si-nuo-qi2.png", "hover_avatar_柯米": "https://i.postimg.cc/N51kWXMQ/ke-mi2.png", "hover_avatar_桃桃": "https://i.postimg.cc/cv0BZJgS/tao-tao2.png", "hover_avatar_梅森": "https://i.postimg.cc/QFhJsM9F/mei-sen2.png", "hover_avatar_梅露娜": "https://i.postimg.cc/LJ23RsY1/mei-lu-na2.png", "hover_avatar_泰達": "https://i.postimg.cc/18srPznP/tai-da2.png", "hover_avatar_洛涅": "https://i.postimg.cc/N51kWXMj/lu-nie2.png", "hover_avatar_海莉": "https://i.postimg.cc/MnqmxGMz/hai-li2.png", "hover_avatar_珀榭": "https://i.postimg.cc/TprJZbwP/po-xie2.png", "hover_avatar_琳": "https://i.postimg.cc/xX5ydSMH/lin2.png", "hover_avatar_瑟琳娜": "https://i.postimg.cc/hXsbGqT8/se-lin-na2.png", "hover_avatar_瑪約": "https://i.postimg.cc/w12cBdL4/ma-yue2.png", "hover_avatar_瑪麗": "https://i.postimg.cc/pmCYdtz7/ma-li2.png", "hover_avatar_皮可菈": "https://i.postimg.cc/tY0zSk9N/pi-ke-la2.png", "hover_avatar_盧波": "https://i.postimg.cc/zy7Sf1K9/lu-bo2.png", "hover_avatar_米雪": "https://i.postimg.cc/zVmkt7qd/mi-xue2.png", "hover_avatar_綾": "https://i.postimg.cc/68cLQNn1/ling2.png", "hover_avatar_羽伊": "https://i.postimg.cc/Czy4P7wP/yu-yi2.png", "hover_avatar_艾斯皮": "https://i.postimg.cc/nC81R2nw/ai-si-pi2.png", "hover_avatar_艾爾芬": "https://i.postimg.cc/rKSNv4pN/ai-er-fen2.png", "hover_avatar_艾琳娜": "https://i.postimg.cc/BXWCYpJV/ai-lin-na2.png", "hover_avatar_艾皮卡": "https://i.postimg.cc/rK69njqZ/ai-pi-ka2.png", "hover_avatar_艾舒爾": "https://i.postimg.cc/SJWfw9KG/ai-shu-er2.png", "hover_avatar_艾蜜莉雅": "https://i.postimg.cc/ZCrx1Nqw/ai-mi-li-ya2.png", "hover_avatar_芙莉可": "https://i.postimg.cc/crQBV3HS/fu-li-ke2.png", "hover_avatar_茱蜜": "https://i.postimg.cc/nXpGZLjH/zhu-mi2.png", "hover_avatar_莉茲": "https://i.postimg.cc/yDsyBNgg/li-zi2.png", "hover_avatar_莎莉": "https://i.postimg.cc/v4btMmg9/sha-li2.png", "hover_avatar_萊薇": "https://i.postimg.cc/K1frYyBB/lai-wei2.png", "hover_avatar_蒂亞娜": "https://i.postimg.cc/21GF5fhF/di-ya-na2.png", "hover_avatar_薇薇": "https://i.postimg.cc/w12cBdD8/wei-wei2.png", "hover_avatar_謝蒂": "https://i.postimg.cc/McG0Mrm9/xie-di2.png", "hover_avatar_貝魯": "https://i.postimg.cc/3dgFPGwc/bei-lu2.png", "hover_avatar_貝麗塔": "https://i.postimg.cc/QHpJR7Mv/bei-li-ta2.png", "hover_avatar_路德": "https://i.postimg.cc/hXsbGqTr/lu-de2.png", "hover_avatar_路易": "https://i.postimg.cc/TK0qPXgc/lu-yi2.png", "hover_avatar_x乂錫安乂x": "https://i.postimg.cc/sMm92R7k/xi-an2.png", "hover_avatar_阿萊特": "https://i.postimg.cc/crQBV3HZ/a-lai-te2.png", "hover_avatar_雷吉": "https://i.postimg.cc/Wd864PgS/lei-ji2.png", "hover_avatar_馬爾": "https://i.postimg.cc/pmRJxdhd/ma-er2.png", "hover_avatar_莉絲蒂": "https://i.postimg.cc/hhmFm0T6/li-si-di2.png", "hover_avatar_雷內瓦": "https://i.postimg.cc/kVcs6SpW/lei-nei-wa2.png", "hover_avatar_芭瓏": "https://i.postimg.cc/jnW376SS/ba-long2.png",
-    "avatar_洛涅": "https://i.postimg.cc/sBrr9pK0/Rohne.png", 
-    "avatar_薇薇": "https://i.postimg.cc/BLZfR4r6/Vivi.png", 
-    "avatar_艾爾芬": "https://i.postimg.cc/hzCRBNgS/Erpin.png", 
-    "avatar_x乂錫安乂x": "https://i.postimg.cc/DJf3Rn9z/x-Xionx.png", 
-    "avatar_伊弗利特": "https://i.postimg.cc/Fk75sGsr/Ifrit.png", 
-    "avatar_伊德": "https://i.postimg.cc/478RgjZR/Ed.png", 
-    "avatar_佩佩": "https://i.postimg.cc/wtQdW7Gm/Velvet.png", 
-    "avatar_佩斯塔": "https://i.postimg.cc/PvPsrKfg/Festa.png", 
-    "avatar_修帕": "https://i.postimg.cc/yJyzfkbz/Shoupan.png", 
-    "avatar_傑德": "https://i.postimg.cc/4HmkNwNx/Jade.png", 
-    "avatar_優米": "https://i.postimg.cc/7GPrjwFf/Yomi.png", 
-    "avatar_劉美美": "https://i.postimg.cc/WFpcxTBg/Yumimi.png", 
-    "avatar_加薇雅": "https://i.postimg.cc/8fjQPwPV/Gabia.png", 
-    "avatar_卡洛特": "https://i.postimg.cc/YLhKq8qg/Kyarot.png", 
-    "avatar_卡蓮": "https://i.postimg.cc/G8MnC6Rq/Carren.png", 
-    "avatar_喬菲": "https://i.postimg.cc/bD6fh4P6/Chopi.png", 
-    "avatar_基狄恩": "https://i.postimg.cc/q6zVMQMN/Kidian.png", 
-    "avatar_大師2號": "https://i.postimg.cc/xqCSRjGh/Maestro-MK2.png", 
-    "avatar_大木頭": "https://i.postimg.cc/8JkgxN2K/Big-Wood.png", 
-    "avatar_奈雅": "https://i.postimg.cc/186SqW00/Naia.png", 
-    "avatar_奶油": "https://i.postimg.cc/0Mt1shvf/Butter.png", 
-    "avatar_布蘭切": "https://i.postimg.cc/ygfCH2Kh/Blanchet.png", 
-    "avatar_希拉": "https://i.postimg.cc/94Yjxrnf/Sylla.png", 
-    "avatar_希爾德": "https://i.postimg.cc/hQfWPMP4/Hilde.png", 
-    "avatar_希瑟圖": "https://i.postimg.cc/d7jKWLxY/Sist.png", 
-    "avatar_希菲爾": "https://i.postimg.cc/gwHPMnTF/Silphir.png", 
-    "avatar_帕特拉": "https://i.postimg.cc/k28CbjNw/Patula.png", 
-    "avatar_庫洛艾": "https://i.postimg.cc/ZBfzSXmw/Chloe.png", 
-    "avatar_康娜": "https://i.postimg.cc/N9NvcZtD/Canna.png", 
-    "avatar_愛麗絲": "https://i.postimg.cc/dkQcgwby/Alice.png", 
-    "avatar_班尼": "https://i.postimg.cc/bDYf4p7m/Beni.png", 
-    "avatar_斯皮奇": "https://i.postimg.cc/qtxdmz5p/Speaki.png", 
-    "avatar_斯諾奇": "https://i.postimg.cc/bG9j6sBp/Snorky.png", 
-    "avatar_柯米": "https://i.postimg.cc/4HmkNwNh/Kommy.png", 
-    "avatar_桃桃": "https://i.postimg.cc/Hr5myS0c/Momo.png", 
-    "avatar_梅森": "https://i.postimg.cc/w1JzmW5T/Maison.png", 
-    "avatar_梅露娜": "https://i.postimg.cc/gxRpZMyx/Meluna.png", 
-    "avatar_海莉": "https://i.postimg.cc/SYJFNVNy/Haley.png", 
-    "avatar_珀榭": "https://i.postimg.cc/Y4HHf18x/Posher.png", 
-    "avatar_琳": "https://i.postimg.cc/4KggbzwB/Rim.png", 
-    "avatar_瑟琳娜": "https://i.postimg.cc/8FSSBhtD/Selline.png", 
-    "avatar_瑪約": "https://i.postimg.cc/9DT27xPQ/Mayo.png", 
-    "avatar_瑪麗": "https://i.postimg.cc/186SqW0R/Marie.png", 
-    "avatar_皮可菈": "https://i.postimg.cc/2qDDF4TW/Picora.png", 
-    "avatar_盧波": "https://i.postimg.cc/R3BBQcGk/Rufo.png", 
-    "avatar_米雪": "https://i.postimg.cc/0zmvwtGJ/Mynx.png", 
-    "avatar_綾": "https://i.postimg.cc/HcW1Fdq2/Aya.png", 
-    "avatar_羽伊": "https://i.postimg.cc/rdNLhKPd/Ui.png", 
-    "avatar_艾斯皮": "https://i.postimg.cc/hzCRBNgD/Espi.png", 
-    "avatar_艾琳娜": "https://i.postimg.cc/vgPwsCMM/Elena.png", 
-    "avatar_艾皮卡": "https://i.postimg.cc/Vr7P821z/Epica.png", 
-    "avatar_艾舒爾": "https://i.postimg.cc/R6Cx24kL/Ashur.png", 
-    "avatar_艾蜜莉雅": "https://i.postimg.cc/k6MPLq0Q/Amelia.png", 
-    "avatar_芙莉可": "https://i.postimg.cc/PvPsrKrG/Fricle.png", 
-    "avatar_茱蜜": "https://i.postimg.cc/PvPsrKrP/Jubee.png", 
-    "avatar_莉茲": "https://i.postimg.cc/XBpS7x7f/Leets.png", 
-    "avatar_莎莉": "https://i.postimg.cc/gwWWqvN9/Sari.png", 
-    "avatar_萊薇": "https://i.postimg.cc/JtnWq73T/Levi.png", 
-    "avatar_蒂亞娜": "https://i.postimg.cc/Kk9h2CbC/Diana.png", 
-    "avatar_謝蒂": "https://i.postimg.cc/Y4zwXhyT/Shady.png", 
-    "avatar_貝魯": "https://i.postimg.cc/HcW1Fdqn/Veroo.png", 
-    "avatar_貝麗塔": "https://i.postimg.cc/phVM3Rwq/Belita.png", 
-    "avatar_路德": "https://i.postimg.cc/VS88Bj4p/Rude.png", 
-    "avatar_路易": "https://i.postimg.cc/bD6fh4PV/Cuee.png", 
-    "avatar_阿萊特": "https://i.postimg.cc/VrsP2mxt/Allet.png", 
-    "avatar_雷吉": "https://i.postimg.cc/jnL0dvdy/Lazy.png", 
-    "avatar_馬爾": "https://i.postimg.cc/s1XRcfPt/Mago.png", 
-    "avatar_泰達": "https://i.postimg.cc/f3fhHJry/Taida.png", 
-    "avatar_寧琉": "https://i.postimg.cc/9DT27xPZ/Ner.png", 
-    "avatar_莉絲蒂": "https://i.postimg.cc/1gQQcpMM/Risty.png", 
-    "avatar_雷內瓦": "https://i.postimg.cc/bGhhHQLg/Renewa-Awaken.png", 
-    "avatar_芭瓏": "https://i.postimg.cc/cg1GP0p8/barong.png",
-	"avatar_達雅": "https://i.postimg.cc/34LQTzhq/Daya.png"
-    //新坨坨備用https://i.postimg.cc/YG2BTM5N/Arco.png, https://i.postimg.cc/xJjVBnwy/Arnet.png, https://i.postimg.cc/G83n6dWj/Bana.png, https://i.postimg.cc/ftWQ1DG5/Barie.png, https://i.postimg.cc/BLhf0R3c/Beni-Beni.png, https://i.postimg.cc/tZrGj8bD/Canta.png, https://i.postimg.cc/1nW1QbSC/Crepe.png, https://i.postimg.cc/LYyFpGSc/Delia.png, https://i.postimg.cc/MMsJSgx8/Diana-Yester.png, https://i.postimg.cc/XG26bt3b/Eisia.png, https://i.postimg.cc/D48ky5yh/Goldy.png, https://i.postimg.cc/4HmkNwNs/Guin.png, https://i.postimg.cc/m1tf2V2r/Joanne.png, https://i.postimg.cc/Fk75sGsk/Kommy-Swim.png, https://i.postimg.cc/Mfv2KtKQ/Laika.png, https://i.postimg.cc/mhDGwZ3X/Lethe.png, https://i.postimg.cc/yWdzP6hr/Lil1li.png, https://i.postimg.cc/pyTtZVQ3/Lion.png, https://i.postimg.cc/NKTtHN8M/Makasha.png, https://i.postimg.cc/87WG6ydj/Mayo-Cool.png, https://i.postimg.cc/21vYZHdx/Neti.png, https://i.postimg.cc/FYcvLPbV/Opal.png, https://i.postimg.cc/PCZHw6b4/Orr.png, https://i.postimg.cc/t1jjthDW/Pira.png, https://i.postimg.cc/LqppBzvf/Polan.png, https://i.postimg.cc/yJHHXFnX/Ran.png, https://i.postimg.cc/qtTTX8Qx/Renewa.png, https://i.postimg.cc/2qDDF4Tc/Ricota.png, https://i.postimg.cc/xk22yKg6/Rim-Chaos.png, https://i.postimg.cc/qtTTX8Q5/Rohne-Mayor.png, https://i.postimg.cc/gwWWqv47/Rollett.png, https://i.postimg.cc/3yFHLdbc/Shady-Twisted.png, https://i.postimg.cc/wtQdW7br/Shasha.png, https://i.postimg.cc/3yFHLdcM/Sherum.png, https://i.postimg.cc/4KQT8mSx/Speaki-Maid.png, https://i.postimg.cc/QBJr6Hyx/Suro.png, https://i.postimg.cc/Jy5WTG2t/Tig.png, https://i.postimg.cc/yJyzfkbD/Uros.png, https://i.postimg.cc/3yFHLdc0/Vela.png
-};
-
-const SKILL_ICONS = {
-    "attack_物理": "https://i.postimg.cc/7Cng30rY/wu-li-gong-ji.png", "attack_魔法": "https://i.postimg.cc/Nyk16mvM/mo-fa-gong-ji.png",
-    
-    "skill_normal_伊弗利特": "https://i.postimg.cc/cgDH2ngX/yi-fu-li-te3.png", "skill_normal_伊德": "https://i.postimg.cc/njdzgDj3/yi-de3.png", "skill_normal_佩佩": "https://i.postimg.cc/MMsTNQf6/pei-pei3.png", "skill_normal_佩斯塔": "https://i.postimg.cc/478dq9H4/pei-si-ta3.png", "skill_normal_修帕": "https://i.postimg.cc/2LV6DSnj/xiu-pa3.png", "skill_normal_傑德": "https://i.postimg.cc/1VftQ3DG/jie-de3.png", "skill_normal_優米": "https://i.postimg.cc/z3B3W04G/you-mi3.png", "skill_normal_劉美美": "https://i.postimg.cc/vDBD93CG/liu-mei-mei3.png", "skill_normal_加薇雅": "https://i.postimg.cc/CBM5cN1c/jia-wei-ya3.png", "skill_normal_卡洛特": "https://i.postimg.cc/mzZkmwDd/ka-luo-te3.png", "skill_normal_卡蓮": "https://i.postimg.cc/34LRVv4F/ka-lian3.png", "skill_normal_喬菲": "https://i.postimg.cc/4Hmdgxpz/qiao-fei3.png", "skill_normal_基狄恩": "https://i.postimg.cc/D48ZTw1S/ji-di-en3.png", "skill_normal_大師2號": "https://i.postimg.cc/mzZkmwDN/da-shi2hao3.png", "skill_normal_大木頭": "https://i.postimg.cc/sQfxTcXP/da-mu-tou3.png", "skill_normal_奈雅": "https://i.postimg.cc/Cnz1gxbT/nai-ya3.png", "skill_normal_奶油": "https://i.postimg.cc/ZBYnwcRQ/nai-you3.png", "skill_normal_寧琉": "https://i.postimg.cc/2363v2gm/ning-liu3.png", "skill_normal_布蘭切": "https://i.postimg.cc/vgPBkVgX/bu-lan-qie3.png", "skill_normal_希拉": "https://i.postimg.cc/wyWvZmyC/xi-la3.png", "skill_normal_希爾德": "https://i.postimg.cc/njdzgD9p/xi-er-de3.png", "skill_normal_希瑟圖": "https://i.postimg.cc/dkW1pyZv/xi-se-tu3.png", "skill_normal_希菲爾": "https://i.postimg.cc/XG2JmCBb/xi-fei-er3.png", "skill_normal_帕特拉": "https://i.postimg.cc/5Q60V28M/pa-te-la3.png", "skill_normal_庫洛艾": "https://i.postimg.cc/4Hmdgxpx/ku-luo-ai3.png", "skill_normal_康娜": "https://i.postimg.cc/kRB4mgWR/kang-na3.png", "skill_normal_愛麗絲": "https://i.postimg.cc/yWdW9vtG/ai-li-si3.png", "skill_normal_班尼": "https://i.postimg.cc/BPX60n25/ban-ni3.png", "skill_normal_斯皮奇": "https://i.postimg.cc/PvPxj51Q/si-pi-qi3.png", "skill_normal_斯諾奇": "https://i.postimg.cc/s1X1Swq6/si-nuo-qi3.png", "skill_normal_柯米": "https://i.postimg.cc/SYJshxcy/ke-mi3.png", "skill_normal_桃桃": "https://i.postimg.cc/rRKmkw5m/tao-tao3.png", "skill_normal_梅森": "https://i.postimg.cc/V0d68kXb/mei-sen3.png", "skill_normal_梅露娜": "https://i.postimg.cc/XBpJbY9C/mei-lu-na3.png", "skill_normal_泰達": "https://i.postimg.cc/K3Rz28tj/tai-da3.png", "skill_normal_洛涅": "https://i.postimg.cc/ZvCRS56J/luo-nie3.png", "skill_normal_海莉": "https://i.postimg.cc/wR7vpjD3/hai-li3.png", "skill_normal_珀榭": "https://i.postimg.cc/PvPxj51X/po-xie3.png", "skill_normal_琳": "https://i.postimg.cc/dD1Dd4pN/lin3.png", "skill_normal_瑟琳娜": "https://i.postimg.cc/Bt6tDMky/se-lin-na3.png", "skill_normal_瑪約": "https://i.postimg.cc/LhXhfNGS/ma-yue3.png", "skill_normal_瑪麗": "https://i.postimg.cc/3WRWpnzJ/ma-li3.png", "skill_normal_皮可菈": "https://i.postimg.cc/WF93CkF7/pi-ke-la.png", "skill_normal_盧波": "https://i.postimg.cc/rzmzWQ7y/lu-bo3.png", "skill_normal_米雪": "https://i.postimg.cc/9RxMK7RN/mi-xue3.png", "skill_normal_綾": "https://i.postimg.cc/7b6b7mjH/ling3.png", "skill_normal_羽伊": "https://i.postimg.cc/BLh6kKLY/yu-yi3.png", "skill_normal_艾斯皮": "https://i.postimg.cc/62H3gv2m/ai-si-pi3.png", "skill_normal_艾爾芬": "https://i.postimg.cc/wyWvZmyS/ai-er-fen3.png", "skill_normal_艾琳娜": "https://i.postimg.cc/34LRVv4q/ai-lin-na3.png", "skill_normal_艾皮卡": "https://i.postimg.cc/HcSxRycv/ai-pi-ka3.png", "skill_normal_艾舒爾": "https://i.postimg.cc/WF93CkFx/ai-shu-er3.png", "skill_normal_艾蜜莉雅": "https://i.postimg.cc/0MtQFwK1/ai-mi-li-ya3.png", "skill_normal_芙莉可": "https://i.postimg.cc/5Q60V28V/fu-li-ke3.png", "skill_normal_茱蜜": "https://i.postimg.cc/H8VxgkbV/zhu-mi3.png", "skill_normal_莉茲": "https://i.postimg.cc/RJNFBZwf/li-zi3.png", "skill_normal_莎莉": "https://i.postimg.cc/Wqh3v100/sha-li3.png", "skill_normal_萊薇": "https://i.postimg.cc/8s5sWt90/lai-wei3.png", "skill_normal_蒂亞娜": "https://i.postimg.cc/dD1Dd4pg/di-ya-na3.png", "skill_normal_薇薇": "https://i.postimg.cc/DmZmsBRm/wei-wei3.png", "skill_normal_謝蒂": "https://i.postimg.cc/jC5CNZBL/xie-di3.png", "skill_normal_貝魯": "https://i.postimg.cc/7GB6d2J4/bei-lu3.png", "skill_normal_貝麗塔": "https://i.postimg.cc/DJCZHX47/bei-li-ta3.png", "skill_normal_路德": "https://i.postimg.cc/t7T7P28G/lu-de3.png", "skill_normal_路易": "https://i.postimg.cc/Yj9jgbZ5/lu-yi3.png", "skill_normal_x乂錫安乂x": "https://i.postimg.cc/14t46Jb8/xi-an3.png", "skill_normal_阿萊特": "https://i.postimg.cc/XBpJbY93/a-lai-te3.png", "skill_normal_雷吉": "https://i.postimg.cc/dD1Dd4gP/lei-ji3.png", "skill_normal_馬爾": "https://i.postimg.cc/fSJLNRY3/ma-er3.png", "skill_normal_莉絲蒂": "https://i.postimg.cc/N2rqd6K7/li-si-di3.png", "skill_normal_雷內瓦": "https://i.postimg.cc/947VcW8s/lei-nei-wa3.png", "skill_normal_芭瓏": "https://i.postimg.cc/zyTM7kSk/ba-long3.png",
-    
-    "hover_avatar_伊弗利特": "https://i.postimg.cc/zVmkt7qp/yi-fu-li-te2.png", "hover_avatar_伊德": "https://i.postimg.cc/6yshjcB0/yi-de2.png", "hover_avatar_佩佩": "https://i.postimg.cc/jLz4Gf5V/pei-pei2.png", "hover_avatar_佩斯塔": "https://i.postimg.cc/HVQ9fMLf/pei-si-ta2.png", "hover_avatar_修帕": "https://i.postimg.cc/XpwkT5JV/xiu-pa2.png", "hover_avatar_傑德": "https://i.postimg.cc/qN4x07h8/jie-de2.png", "hover_avatar_優米": "https://i.postimg.cc/fVCjbhY4/you-mi2.png", "hover_avatar_劉美美": "https://i.postimg.cc/G4KJp1Gf/liu-mei-mei2.png", "hover_avatar_加薇雅": "https://i.postimg.cc/7fvNs9q5/jia-wei-ya2.png", "hover_avatar_卡洛特": "https://i.postimg.cc/w7Kkf29t/ka-luo-te2.png", "hover_avatar_卡蓮": "https://i.postimg.cc/JGwQ6xRZ/ka-lian2.png", "hover_avatar_喬菲": "https://i.postimg.cc/5XbS1tYB/qiao-fei2.png", "hover_avatar_基狄恩": "https://i.postimg.cc/WdTwj4F3/ji-di-en2.png", "hover_avatar_大師2號": "https://i.postimg.cc/hfF0ysKz/da-shi2hao2.png", "hover_avatar_大木頭": "https://i.postimg.cc/svFJ6m3G/da-mu-tou2.png", "hover_avatar_奈雅": "https://i.postimg.cc/hf91HmGk/nai-ya2.png", "hover_avatar_奶油": "https://i.postimg.cc/XpMgHLnK/nai-you2.png", "hover_avatar_寧琉": "https://i.postimg.cc/hXsbGqT2/ning-liu2.png", "hover_avatar_布蘭切": "https://i.postimg.cc/QHLq4mjc/bu-lan-qie2.png", "hover_avatar_希拉": "https://i.postimg.cc/VdjW3tND/xi-la2.png", "hover_avatar_希爾德": "https://i.postimg.cc/tYhNL6gm/xi-er-de2.png", "hover_avatar_希瑟圖": "https://i.postimg.cc/PPmQBDqV/xi-se-tu2.png", "hover_avatar_希菲爾": "https://i.postimg.cc/svp4tW26/xi-fei-er2.png", "hover_avatar_帕特拉": "https://i.postimg.cc/56wSZz0J/pa-te-la2.png", "hover_avatar_庫洛艾": "https://i.postimg.cc/RW4L906z/ku-luo-ai2.png", "hover_avatar_康娜": "https://i.postimg.cc/87NmDCJj/kang-na2.png", "hover_avatar_愛麗絲": "https://i.postimg.cc/Snd7KpC6/ai-li-si2.png", "hover_avatar_班尼": "https://i.postimg.cc/jDcQjrPw/ban-ni2.png", "hover_avatar_斯皮奇": "https://i.postimg.cc/zy7Sf1KR/si-pi-qi2.png", "hover_avatar_斯諾奇": "https://i.postimg.cc/RWdQ0zKJ/si-nuo-qi2.png", "hover_avatar_柯米": "https://i.postimg.cc/N51kWXMQ/ke-mi2.png", "hover_avatar_桃桃": "https://i.postimg.cc/cv0BZJgS/tao-tao2.png", "hover_avatar_梅森": "https://i.postimg.cc/QFhJsM9F/mei-sen2.png", "hover_avatar_梅露娜": "https://i.postimg.cc/LJ23RsY1/mei-lu-na2.png", "hover_avatar_泰達": "https://i.postimg.cc/18srPznP/tai-da2.png", "hover_avatar_洛涅": "https://i.postimg.cc/N51kWXMj/lu-nie2.png", "hover_avatar_海莉": "https://i.postimg.cc/MnqmxGMz/hai-li2.png", "hover_avatar_珀榭": "https://i.postimg.cc/TprJZbwP/po-xie2.png", "hover_avatar_琳": "https://i.postimg.cc/xX5ydSMH/lin2.png", "hover_avatar_瑟琳娜": "https://i.postimg.cc/hXsbGqT8/se-lin-na2.png", "hover_avatar_瑪約": "https://i.postimg.cc/w12cBdL4/ma-yue2.png", "hover_avatar_瑪麗": "https://i.postimg.cc/pmCYdtz7/ma-li2.png", "hover_avatar_皮可菈": "https://i.postimg.cc/tY0zSk9N/pi-ke-la2.png", "hover_avatar_盧波": "https://i.postimg.cc/zy7Sf1K9/lu-bo2.png", "hover_avatar_米雪": "https://i.postimg.cc/zVmkt7qd/mi-xue2.png", "hover_avatar_綾": "https://i.postimg.cc/68cLQNn1/ling2.png", "hover_avatar_羽伊": "https://i.postimg.cc/Czy4P7wP/yu-yi2.png", "hover_avatar_艾斯皮": "https://i.postimg.cc/nC81R2nw/ai-si-pi2.png", "hover_avatar_艾爾芬": "https://i.postimg.cc/rKSNv4pN/ai-er-fen2.png", "hover_avatar_艾琳娜": "https://i.postimg.cc/BXWCYpJV/ai-lin-na2.png", "hover_avatar_艾皮卡": "https://i.postimg.cc/rK69njqZ/ai-pi-ka2.png", "hover_avatar_艾舒爾": "https://i.postimg.cc/SJWfw9KG/ai-shu-er2.png", "hover_avatar_艾蜜莉雅": "https://i.postimg.cc/ZCrx1Nqw/ai-mi-li-ya2.png", "hover_avatar_芙莉可": "https://i.postimg.cc/crQBV3HS/fu-li-ke2.png", "hover_avatar_茱蜜": "https://i.postimg.cc/nXpGZLjH/zhu-mi2.png", "hover_avatar_莉茲": "https://i.postimg.cc/yDsyBNgg/li-zi2.png", "hover_avatar_莎莉": "https://i.postimg.cc/v4btMmg9/sha-li2.png", "hover_avatar_萊薇": "https://i.postimg.cc/K1frYyBB/lai-wei2.png", "hover_avatar_蒂亞娜": "https://i.postimg.cc/21GF5fhF/di-ya-na2.png", "hover_avatar_薇薇": "https://i.postimg.cc/w12cBdD8/wei-wei2.png", "hover_avatar_謝蒂": "https://i.postimg.cc/McG0Mrm9/xie-di2.png", "hover_avatar_貝魯": "https://i.postimg.cc/3dgFPGwc/bei-lu2.png", "hover_avatar_貝麗塔": "https://i.postimg.cc/QHpJR7Mv/bei-li-ta2.png", "hover_avatar_路德": "https://i.postimg.cc/hXsbGqTr/lu-de2.png", "hover_avatar_路易": "https://i.postimg.cc/TK0qPXgc/lu-yi2.png", "hover_avatar_x乂錫安乂x": "https://i.postimg.cc/sMm92R7k/xi-an2.png", "hover_avatar_阿萊特": "https://i.postimg.cc/crQBV3HZ/a-lai-te2.png", "hover_avatar_雷吉": "https://i.postimg.cc/Wd864PgS/lei-ji2.png", "hover_avatar_馬爾": "https://i.postimg.cc/pmRJxdhd/ma-er2.png", "hover_avatar_莉絲蒂": "https://i.postimg.cc/hhmFm0T6/li-si-di2.png", "hover_avatar_雷內瓦": "https://i.postimg.cc/kVcs6SpW/lei-nei-wa2.png", "hover_avatar_芭瓏": "https://i.postimg.cc/jnW376SS/ba-long2.png",
-    
-    "skill_passive_伊弗利特": "https://i.postimg.cc/wRKb1DXf/yi-fu-li-te4.png", "skill_passive_伊德": "https://i.postimg.cc/hQ9ZThs0/yi-de4.png", "skill_passive_佩佩": "https://i.postimg.cc/grRTfBpx/pei-pei4.png", "skill_passive_佩斯塔": "https://i.postimg.cc/jCNFGkTW/pei-si-ta4.png", "skill_passive_修帕": "https://i.postimg.cc/qgn59ZrZ/xiu-pa4.png", "skill_passive_傑德": "https://i.postimg.cc/ppH6xYXR/jie-de4.png", "skill_passive_優米": "https://i.postimg.cc/ykyrNgkX/you-mi4.png", "skill_passive_劉美美": "https://i.postimg.cc/vctSmgc6/liu-mei-mei4.png", "skill_passive_加薇雅": "https://i.postimg.cc/2LpX1nQ4/jia-wei-ya4.png", "skill_passive_卡洛特": "https://i.postimg.cc/D4VYS1rQ/ka-luo-te4.jpg", "skill_passive_卡蓮": "https://i.postimg.cc/RJrbWw7Q/ka-lian4.png", "skill_passive_喬菲": "https://i.postimg.cc/1fQjPc5S/qiao-fei4.png", "skill_passive_基狄恩": "https://i.postimg.cc/7fkWDMPt/ji-di-en4.png", "skill_passive_大師2號": "https://i.postimg.cc/GT0S4vFF/da-shi2hao4.png", "skill_passive_大木頭": "https://i.postimg.cc/XBMDr9fd/da-mu-tou4.png", "skill_passive_奈雅": "https://i.postimg.cc/grRTfBp6/nai-ya4.png", "skill_passive_奶油": "https://i.postimg.cc/30Mbk2XF/nai-you4.png", "skill_passive_寧琉": "https://i.postimg.cc/mty6rztr/ning-liu4.jpg", "skill_passive_布蘭切": "https://i.postimg.cc/bSXFZ1x3/bu-lan-qie4.png", "skill_passive_希拉": "https://i.postimg.cc/Cnjrkd7W/xi-la4.png", "skill_passive_希爾德": "https://i.postimg.cc/ctQkw6Td/xi-er-de4.png", "skill_passive_希瑟圖": "https://i.postimg.cc/tnhvW7Dj/xi-se-tu4.png", "skill_passive_希菲爾": "https://i.postimg.cc/vxW2fDXw/xi-fei-er4.png", "skill_passive_帕特拉": "https://i.postimg.cc/hhx5H3nQ/pa-te-la4.png", "skill_passive_庫洛艾": "https://i.postimg.cc/7b7WpQ4R/ku-luo-ai4.png", "skill_passive_康娜": "https://i.postimg.cc/BX0VscZV/kang-na4.png", "skill_passive_愛麗絲": "https://i.postimg.cc/MvSFxbKT/ai-li-si4.png", "skill_passive_班尼": "https://i.postimg.cc/LnpbRB6R/ban-ni4.png", "skill_passive_斯皮奇": "https://i.postimg.cc/BX0VscQJ/si-pi-qi4.png", "skill_passive_斯諾奇": "https://i.postimg.cc/crSbZM4C/si-nuo-qi4.jpg", "skill_passive_柯米": "https://i.postimg.cc/Z03M1DmP/ke-mi4.png", "skill_passive_桃桃": "https://i.postimg.cc/w3JGSbzS/tao-tao4.png", "skill_passive_梅森": "https://i.postimg.cc/ppH6xYVg/mei-sen4.png", "skill_passive_梅露娜": "https://i.postimg.cc/crSbZM12/mei-lu-na4.png", "skill_passive_泰達": "https://i.postimg.cc/9zTnvN2S/tai-da4.png", "skill_passive_洛涅": "https://i.postimg.cc/Hj5hfPmt/luo-nie4.png", "skill_passive_海莉": "https://i.postimg.cc/RNBD9QCP/hai-li4.png", "skill_passive_珀榭": "https://i.postimg.cc/MXRFhrwt/po-xie4.png", "skill_passive_琳": "https://i.postimg.cc/PPQFqpPj/lin4.png", "skill_passive_瑟琳娜": "https://i.postimg.cc/YhzySGht/se-lin-na4.jpg", "skill_passive_瑪約": "https://i.postimg.cc/2V7X5bV6/ma-yue4.png", "skill_passive_瑪麗": "https://i.postimg.cc/xc3FdJcH/ma-li4.png", "skill_passive_皮可菈": "https://i.postimg.cc/1VxY8DGB/pi-ke-la4.png", "skill_passive_盧波": "https://i.postimg.cc/PPQFqpPY/lu-bo4.png", "skill_passive_米雪": "https://i.postimg.cc/5QwKLjg8/mi-xue4.png", "skill_passive_綾": "https://i.postimg.cc/ZCxDqBCB/ling4.png", "skill_passive_羽伊": "https://i.postimg.cc/sGpH71mw/yu-yi4.png", "skill_passive_艾斯皮": "https://i.postimg.cc/Zvrsp0Hw/ai-si-pi4.png", "skill_passive_艾爾芬": "https://i.postimg.cc/9wGgZzbS/ai-er-fen4.png", "skill_passive_艾琳娜": "https://i.postimg.cc/BPx7Htp7/ai-lin-na4.png", "skill_passive_艾皮卡": "https://i.postimg.cc/1Vp7w4BB/ai-pi-ka4.png", "skill_passive_艾舒爾": "https://i.postimg.cc/fSxqmkCg/ai-shu-er4.png", "skill_passive_艾蜜莉雅": "https://i.postimg.cc/YL1DYjRT/ai-mi-li-ya4.png", "skill_passive_芙莉可": "https://i.postimg.cc/3WpcPbhg/fu-li-ke4.png", "skill_passive_茱蜜": "https://i.postimg.cc/1fQjPcRB/zhu-mi4.png", "skill_passive_莉茲": "https://i.postimg.cc/bshB8HY7/li-zi4.png", "skill_passive_莎莉": "https://i.postimg.cc/RNBD9QV5/sha-li4.png", "skill_passive_萊薇": "https://i.postimg.cc/JGL2mc4h/lai-wei4.png", "skill_passive_蒂亞娜": "https://i.postimg.cc/gnHB0XnY/di-ya-na4.png", "skill_passive_薇薇": "https://i.postimg.cc/MnZ3f6Qj/wei-wei4.png", "skill_passive_謝蒂": "https://i.postimg.cc/pmVc5WFF/xie-di4.png", "skill_passive_貝魯": "https://i.postimg.cc/FkjC31GQ/bei-lu4.png", "skill_passive_貝麗塔": "https://i.postimg.cc/9wGgZz1W/bei-li-ta4.png", "skill_passive_路德": "https://i.postimg.cc/rKNYp0Kz/lu-de4.png", "skill_passive_路易": "https://i.postimg.cc/crB5Jgrx/lu-yi4.png", "skill_passive_x乂錫安乂x": "https://i.postimg.cc/dLjS0kLj/xi-an4.png", "skill_passive_阿萊特": "https://i.postimg.cc/YjgsJy7Y/a-lai-te4.png", "skill_passive_雷吉": "https://i.postimg.cc/MvmrGMvp/lei-ji4.png", "skill_passive_馬爾": "https://i.postimg.cc/6yXmwL6M/ma-er4.png", "skill_passive_莉絲蒂": "https://i.postimg.cc/YjVtQ9vT/li-si-di4.png", "skill_passive_雷內瓦": "https://i.postimg.cc/HJxHRwXc/lei-nei-wa4.png", "skill_passive_芭瓏": "https://i.postimg.cc/tZB8PCdK/ba-long4.png"
-};
 
 const FOOD_ICON = {
     "草莓蛋糕": { ja: "イチゴケーキ", url: "https://i.postimg.cc/ZWC1KYw9/Icon-Food-1.png" },
@@ -869,7 +778,7 @@ const REWARD_ICON = {
     "可彎曲金屬": { ja: "曲がったもの", url: "https://i.postimg.cc/PPRG15t0/Icon-Furn-Made-Low1.png" }
 };
 // ------------------------------------------
-// 4. Spine 與服裝對應表
+// Spine 與服裝對應表
 // ------------------------------------------
 const SPINE_MAP = {
     "洛涅": "Rohne", "薇薇": "Vivi", "艾爾芬": "Erpin", "x乂錫安乂x": "xXionx", "伊弗利特": "Ifrit", "伊德": "Ed", "佩佩": "Velvet", "佩斯塔": "Festa",
@@ -918,15 +827,15 @@ const MINI_SPINE = {
 };
 
 // ------------------------------------------
-// 5. 特選使者招募schedule
+// 特選使者招募, 活動, 卡片schedule
 // ------------------------------------------
 
 const PICKUP_SCHEDULE = [
 	{
-        start: "2026-08-13T17:00:00+09:00",
-        end: "2026-08-20T03:59:59+09:00",
-        chars: ["綾"],
-        note: "坨格"
+        start: "2026-08-27T17:00:00+09:00",
+        end: "2026-09-03T03:59:59+09:00",
+        chars: ["琵拉"],
+        note: "Pira"
     },
 	{
         start: "2026-08-20T04:00:00+09:00",
@@ -935,10 +844,10 @@ const PICKUP_SCHEDULE = [
         note: "坨格"
     },
 	{
-        start: "2026-08-06T04:00:00+09:00",
-        end: "2026-08-13T10:59:59+09:00",
-        chars: ["羅蕾特", "康娜", "奈雅"],
-        note: "康娜、奈雅坨格"
+        start: "2026-09-03T04:00:00+09:00",
+        end: "2026-09-10T10:59:59+09:00",
+        chars: ["琵拉", "基狄恩", "希菲爾"],
+        note: "小黑龍傲嬌坨格"
     },
 ];
 
@@ -970,8 +879,8 @@ const EVENT_SCHEDULE = [
         eventId: "Playground" 
     },
 	{
-        start: "2026-07-17T12:00:00+09:00",
-        end: "2026-07-20T03:59:59+09:00",
+        start: "2026-08-28T12:00:00+09:00",
+        end: "2026-08-30T03:59:59+09:00",
         eventId: "WWE" 
     }
 ];
