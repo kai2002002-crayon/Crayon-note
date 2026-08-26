@@ -629,10 +629,14 @@
 .sprite-PresentList_Shoupan { width: 206px; height: 188px; background-position: -5px -1163px; }
 
 /* --- Silphir --- */
-.sprite-CG_Schedule_Silphir { width: 1020px; height: 510px; background-position: -5px -5px; }
-.sprite-Icon_NormalSkill_Silphir { width: 64px; height: 64px; background-position: -5px -525px; }
-.sprite-Icon_PassiveSkill_Silphir { width: 64px; height: 64px; background-position: -5px -599px; }
-.sprite-PresentList_Silphir { width: 170px; height: 217px; background-position: -5px -673px; }
+.sprite-AsideIcon_Silphir { width: 256px; height: 256px; background-position: -5px -5px; }
+.sprite-Aside_Skill_Silphir_1 { width: 64px; height: 64px; background-position: -5px -271px; }
+.sprite-Aside_Skill_Silphir_2 { width: 64px; height: 64px; background-position: -5px -345px; }
+.sprite-Aside_Skill_Silphir_3 { width: 64px; height: 64px; background-position: -5px -419px; }
+.sprite-CG_Schedule_Silphir { width: 1020px; height: 510px; background-position: -5px -493px; }
+.sprite-Icon_NormalSkill_Silphir { width: 64px; height: 64px; background-position: -5px -1013px; }
+.sprite-Icon_PassiveSkill_Silphir { width: 64px; height: 64px; background-position: -5px -1087px; }
+.sprite-PresentList_Silphir { width: 170px; height: 217px; background-position: -5px -1161px; }
 
 /* --- Sist --- */
 .sprite-AsideIcon_Sist { width: 256px; height: 256px; background-position: -5px -5px; }
