@@ -354,7 +354,7 @@ const ASIDE_DATA = {
     },
     "Kidian": { 
         asideIcon: "", 
-        totalName: { zh: "", ja: "", en: "" }, 
+        totalName: { zh: "教主的星座", ja: "教主の星座", en: "Master's Constellation" }, 
         stars: {
             1: { 
                 icon: "", 
