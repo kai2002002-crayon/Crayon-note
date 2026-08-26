@@ -859,6 +859,11 @@ const EVENT_SCHEDULE = [
         eventId: "Theme012" 
     },
 	{
+        start: "2026-08-27T17:00:00+09:00",
+        end: "2026-09-10T10:59:59+09:00",
+        eventId: "Theme022" 
+    },
+	{
         start: "2026-08-13T17:00:00+09:00",
         end: "2026-08-27T10:59:59+09:00",
         eventId: "PickPersonalityComposed" 
@@ -900,9 +905,9 @@ const CARD_SCHEDULE = [
         type: "Rune"
     },
 	{
-        start: "2026-08-06T04:00:00+09:00",
-        end: "2026-08-13T10:59:59+09:00",
-        id: "Artifact97",
+        start: "2026-08-27T17:00:00+09:00",
+        end: "2026-09-10T10:59:59+09:00",
+        id: "Artifact22",
         type: "Artifact"
     }
 ];
