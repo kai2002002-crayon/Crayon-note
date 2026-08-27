@@ -90,7 +90,7 @@ const characterSkills = [
           "desc": "",
           "stats": [""]
         }
-      },
+      }
     }
   },
     {
@@ -159,9 +159,10 @@ const characterSkills = [
           "desc": "After using her Freshman Skill to perform a Dove Magic Trick, immediately reducing the current Senior Skill Cooldown of 1 random ally other than herself.",
           "stats": ["Ally Cooldown Instant Reduction: 7.5s"]
         }
-      },
+      }
     }
   },
+    {
     "name": "琵拉",
     "attribute": "物理",
     "skills": {
@@ -228,6 +229,7 @@ const characterSkills = [
           "stats": ["ATK Increase: 21%", "ATK Increase Duration: 5s"]
         }
       }
+    }
     },
     {
     "name": "提格",
