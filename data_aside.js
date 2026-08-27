@@ -504,25 +504,33 @@ const ASIDE_DATA = {
     },
     "Pira": { 
         asideIcon: "", 
-        totalName: { zh: "閃亮亮友情項鍊", ja: "キラキラ友情首飾り", en: "Spakling Friendship Necklace" }, 
+        totalName: { zh: "閃亮亮友情項鍊", ja: "キラキラ友情首飾り", en: "Sparkling Friendship Necklace" }, 
         stars: {
             1: { 
                 icon: "", 
                 name: { zh: "友情的信物", ja: "友情の証", en: "Token of Friendship" }, 
-                desc: { zh: "穿戴者的最大HP、物理防禦力、魔法防禦力、 爆擊抵抗、爆擊傷害抵抗增加。", ja: "着用者の最大HP、物理防御力、魔法防御力、 会心抵抗、会心ダメージ抵抗が増加する。", en: "Increases the bearer's Max HP, Physical DEF, Magical DEF, CRIT Resistance, and CRIT DMG Resistance." }, 
-                effects: { zh: ["最大HP增加:6%", "物理防禦力增加:6%", "魔法防禦力增加:6%", "爆擊抵抗增加:6%", "爆擊傷害抵抗:6%"], ja: ["最大HP增加:6%", "物理防御力增加:6%", "魔法防御力增加:6%", "会心抵抗增加:6%", "会心ダメージ抵抗增加:6%"], en: ["Physical DEF Increase: 6%", "Magical DEF Increase: 6%", "CRIT Resistance Increase: 6%", "CRIT DMG Resistance Increase: 6%"] } 
+                desc: { zh: "穿戴者的最大HP、物理防禦力、魔法防禦力、爆擊抵抗、爆擊傷害抵抗增加。", ja: "着用者の最大HP、物理防御力、魔法防御力、会心抵抗、会心ダメージ抵抗が増加する。", en: "Increases the bearer's Max HP, Physical DEF, Magical DEF, CRIT Resistance, and CRIT DMG Resistance." }, 
+                effects: { 
+                    zh: ["最大HP增加:6%", "物理防禦力增加:6%", "魔法防禦力增加:6%", "爆擊抵抗增加:6%", "爆擊傷害抵抗增加:6%"], 
+                    ja: ["最大HP増加:6%", "物理防御力増加:6%", "魔法防御力増加:6%", "会心抵抗増加:6%", "会心ダメージ抵抗増加:6%"], 
+                    en: ["Max HP Increase: 6%", "Physical DEF Increase: 6%", "Magical DEF Increase: 6%", "CRIT Resistance Increase: 6%", "CRIT DMG Resistance Increase: 6%"] 
+                } 
             },
             2: { 
                 icon: "", 
                 name: { zh: "在陽光下", ja: "太陽の下で", en: "Under the Sunshine" }, 
-                desc: { zh: "普通技能命中時、減少被攻擊敵人的爆擊抵抗。 高級技能冷卻時間減少。使用高級技能後,向剩餘HP比例最低的3名友軍撒出獎品。恢復獲得獎品友軍的HP,並增加其爆擊傷害。", ja: "低学年スキルが命中すると、攻撃した敵の会心抵抗を減少させる。高学年スキルのクールタイムが減少する。 高学年スキル使用後、残りHP割合が最も低い味方3名に景品を配る。景品を受け取った味方のHPを回復させ、会心ダメージを増加させる。", en: "When Freshman Skill hits, reduces the CRIT Resistance of the targeted enemy. Reduces Senior Skill Cooldown, After using Senior Skill, distributes prizes to the 3 allies with the lowest remaining HP Ratio. Recovers HP and Increases CRIT DMG of allies who receive prizes." }, 
-                effects: { zh: ["爆擊抵抗減少:15%", "爆擊抵抗減少持續時間:8秒", "高級技能冷卻時間減少:12秒", "HP恢復:最大HP的45%", "爆擊傷害增加:35%, "爆擊傷害增加持續時間:15秒"], ja: ["会心抵抗減少: 15%", "会心抵抗減少の持続時間:8秒", "高学年スキルのクールタイム減少:12秒", "HP回復:最大HPの45%", "会心ダメージ増加:35%", "会心ダメージ増加の持続時間:15秒"], en: ["CRIT Resistance Reduction: 15%", "CRIT Resistance Reduction Duration: 8s", "Senior Skill Cooldown Reduction: 12s", "HP Recovery: 45% of Max HP", "CRIT DMG Increase: 35%", "CRIT DMG Increase Duration: 15s"] } 
+                desc: { zh: "普通技能命中時，減少被攻擊敵人的爆擊抵抗。高級技能冷卻時間減少。使用高級技能後，向剩餘HP比例最低的3名友軍撒出獎品。恢復獲得獎品友軍的HP，並增加其爆擊傷害。", ja: "低学年スキルが命中すると、攻撃した敵の会心抵抗を減少させる。高学年スキルのクールタイムが減少する。高学年スキル使用後、残りHP割合が最も低い味方3名に景品を配る。景品を受け取った味方のHPを回復させ、会心ダメージを増加させる。", en: "When Freshman Skill hits, reduces the CRIT Resistance of the targeted enemy. Reduces Senior Skill Cooldown. After using Senior Skill, distributes prizes to the 3 allies with the lowest remaining HP Ratio. Recovers HP and Increases CRIT DMG of allies who receive prizes." }, 
+                effects: { 
+                    zh: ["爆擊抵抗減少:15%", "爆擊抵抗減少持續時間:8秒", "高級技能冷卻時間減少:12秒", "HP恢復:最大HP的45%", "爆擊傷害增加:35%", "爆擊傷害增加持續時間:15秒"], 
+                    ja: ["会心抵抗減少: 15%", "会心抵抗減少の持続時間:8秒", "高学年スキルのクールタイム減少:12秒", "HP回復:最大HPの45%", "会心ダメージ増加:35%", "会心ダメージ増加の持続時間:15秒"], 
+                    en: ["CRIT Resistance Reduction: 15%", "CRIT Resistance Reduction Duration: 8s", "Senior Skill Cooldown Reduction: 12s", "HP Recovery: 45% of Max HP", "CRIT DMG Increase: 35%", "CRIT DMG Increase Duration: 15s"] 
+                } 
             },
             3: { 
                 icon: "", 
                 name: { zh: "閃閃發光的我們", ja: "キラキラなウチらの仲", en: "Sparkling Friendship" }, 
                 desc: { zh: "使所有友軍爆擊及爆擊傷害增加。", ja: "味方全員の会心と会心ダメージを増加させる。", en: "Increases Critical Hit and Critical Damage of all allies." }, 
-                effects: { zh: ["爆擊增加:6%", "爆擊傷害增加:6%"], ja: ["会心增加:6%", "会心ダメージ増加:6%"], en: ["CRIT Increase: 6%", "CRIT DMG Increase: 6%"] }, 
+                effects: { zh: ["爆擊增加:6%", "爆擊傷害增加:6%"], ja: ["会心増加:6%", "会心ダメージ増加:6%"], en: ["CRIT Increase: 6%", "CRIT DMG Increase: 6%"] }, 
                 globalEffects: { zh: ["全體爆擊傷害 3%", "全體爆擊抵抗 3%"], ja: ["全体会心ダメージ 3%", "全体会心抵抗 3%"], en: ["All CRIT DMG 3%", "All CRIT Resistance 3%"] } 
             }
         }
