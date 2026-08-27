@@ -508,22 +508,22 @@ const ASIDE_DATA = {
         stars: {
             1: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "" }, 
-                effects: { zh: [""], ja: [""], en: [""] } 
+                name: { zh: "", ja: "", en: "Token of Friendship" }, 
+                desc: { zh: "", ja: "", en: "Increases the bearer's Max HP, Physical DEF, Magical DEF, CRIT Resistance, and CRIT DMG Resistance." }, 
+                effects: { zh: [""], ja: [""], en: ["Physical DEF Increase: 6%", "Magical DEF Increase: 6%", "CRIT Resistance Increase: 6%", "CRIT DMG Resistance Increase: 6%"] } 
             },
             2: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "" }, 
-                effects: { zh: [""], ja: [""], en: [""] } 
+                name: { zh: "", ja: "", en: "Under the Sunshine" }, 
+                desc: { zh: "", ja: "", en: "When Freshman Skill hits, reduces the CRIT Resistance of the targeted enemy. Reduces Senior Skill Cooldown, After using Senior Skill, distributes prizes to the 3 allies with the lowest remaining HP Ratio. Recovers HP and Increases CRIT DMG of allies who receive prizes." }, 
+                effects: { zh: [""], ja: [""], en: ["CRIT Resistance Reduction: 15%", "CRIT Resistance Reduction Duration: 8s", "Senior Skill Cooldown Reduction: 12s", "HP Recovery: 45% of Max HP", "CRIT DMG Increase: 35%", "CRIT DMG Increase Duration: 15s"] } 
             },
             3: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "" }, 
-                effects: { zh: [""], ja: [""], en: [""] }, 
-                globalEffects: { zh: ["全體 %", "全體 %"], ja: ["全体%", "全体%"], en: ["All%"] } 
+                name: { zh: "", ja: "", en: "Sparkling Friendship" }, 
+                desc: { zh: "", ja: "", en: "Increases Critical Hit and Critical Damage of all allies." }, 
+                effects: { zh: [""], ja: [""], en: ["CRIT Increase: 6%", "CRIT DMG Increase: 6%"] }, 
+                globalEffects: { zh: ["全體 %", "全體 %"], ja: ["全体%", "全体%"], en: ["All CRIT DMG 3%", "All CRIT Resistance 3%"] } 
             }
         }
     },
