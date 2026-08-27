@@ -210,23 +210,23 @@ const characterSkills = [
       },
       "en": {
         "normalAttack": {
-          "basic": "[]",
-          "enhanced": "[]"
+          "basic": "Throws a business card, dealing Physical Damage to an enemy and acquires 1 stack of Wealth. [Wealth: Senior Skill Effects are enhanced when there are 30 Stacks.] [Physical DMG: 75%]",
+          "enhanced": "Every third attack, she loses Wealth at random. and throws 2 business cards. The cards deal Physical Damage to random enemies and increase their Incoming Damage. [Wealth: Senior Skill Effects are enhanced when there are 30 Stacks.] [Max Wealth Reduction: 5] [Physical DMG Per Hit: 125%] [Incoming DMG Increase: 22%] [Incoming DMG Increase Duration: 6s]"
         },
         "normalSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""]
+          "name": "It's Collection Time!",
+          "desc": "Breaks a statue and sends debris flying, dealing AoE Physical Damage to enemies hit and reducing their Attack Speed. Obtain a set number of Wealth stacks for each enemy hit.",
+          "stats": ["Wealth: Senior Skill Effects are enhanced when there are 30 Stacks.", "Physical DMG: 435%", "ATK SPD Reduction: 37%", "ATK SPD Reduction Duration: 7s", "Wealth Acquisition: 10"]
         },
         "ultimateSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""],
-          "cooldown": "s"
+          "name": "It's Fever Time!",
+          "desc": "Drops a shower of golden spheres, dealing AoE Physical Damage 9 times and increases all allies Critical Hit rates, If skill is activated with 30 stacks of Wealth, both Physical Damage and Critical Hit rate increases are enhanced. When the skill is finished, lose Wealth at random.",
+          "stats": ["Wealth: Senior Skill Effects are enhanced when there are 30 Stacks.", "Max Wealth Reduction: 30", "Total Physical DMG: 972%", "CRIT Increase: 20%", "Total Physical DMG (30 Wealth Stacks): 1944%", "CRIT Increase (30 Wealth Stacks): 40%", "CRIT Increase Duration: 10s"],
+          "cooldown": "30s"
         },
         "passiveSkill": {
-          "desc": "",
-          "stats": ["%"]
+          "desc": "When gaining Wealth, increases the Attack of Back Row allies.",
+          "stats": ["ATK Increase: 21%", "ATK Increase Duration: 5s"]
         }
       },
     }
