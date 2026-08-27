@@ -162,24 +162,23 @@ const characterSkills = [
       },
     }
   },
-    {
     "name": "琵拉",
     "attribute": "物理",
     "skills": {
       "zh-TW": {
         "normalAttack": {
-          "basic": "投擲名片對敵人造成物理傷害,並獲得1層富裕。[富裕:擁有30層時，強化高級技能效果。] [物理傷害:75%]",
+          "basic": "投擲名片對敵人造成物理傷害，並獲得1層富裕。[富裕:擁有30層時，強化高級技能效果。] [物理傷害:75%]",
           "enhanced": "每3次攻擊會隨機失去富裕並投擲2張名片。名片會對隨機敵人造成物理傷害，並增加其受到的傷害量。[富裕:擁有30層疊加時，強化高級技能效果。] [富裕最大減少:5] [每次物理傷害:125%] [受到的傷害量增加:22%] [受到的傷害量增加持續時間:6秒]"
         },
         "normalSkill": {
           "name": "收款時間到!",
           "desc": "擊碎雕像使碎片飛散，對被碎片擊中的敵人造成範圍物理傷害，並降低其攻擊速度。每命中一名敵人便會獲得一定層數的富裕。",
-          "stats": ["富裕﹕擁有30層時，強化高級技能效果。", "物理傷害:435%", "攻擊速度降低:37%", "攻擊速度降低持續時間:7秒", "富裕獲得數:10"]
+          "stats": ["富裕:擁有30層時，強化高級技能效果。", "物理傷害:435%", "攻擊速度降低:37%", "攻擊速度降低持續時間:7秒", "富裕獲得數:10"]
         },
         "ultimateSkill": {
           "name": "狂熱☆時間!",
           "desc": "灑出金珠，對敵人造成9次範圍物理傷害，並增加所有友軍的爆擊。若在擁有30層富裕的狀態下發動技能，將強化物理傷害及爆擊增加效果。技能結束後，隨機失去富裕。",
-          "stats": ["富裕:擁有30層時,強化高級技能效果。", "富裕最大減少:30", "網物理傷害:972%", "爆擊增加:20%", "富裕30層疊加總物理傷害:1944%", "富裕30層疊加爆擊增加:40%", "爆擊增加持續時間:10秒"],
+          "stats": ["富裕:擁有30層時，強化高級技能效果。", "富裕最大減少:30", "總物理傷害:972%", "爆擊增加:20%", "富裕30層疊加總物理傷害:1944%", "富裕30層疊加爆擊增加:40%", "爆擊增加持續時間:10秒"],
           "cooldown": "30秒"
         },
         "passiveSkill": {
@@ -190,28 +189,28 @@ const characterSkills = [
       "ja": {
         "normalAttack": {
           "basic": "名刺を投げつけ、敵に物理ダメージを与え、富豪を1スタック獲得する。[富豪:30スタック保有すると、高学年スキル効果が強化される。] [物理ダメージ:75%]",
-          "enhanced": "3回目の攻撃ごとに富豪をランダムに失い、名刺を2枚投げつける。名刺はランダムな敵に物理ダメージを与え、被ダメージ量を増加させる。[富豪:30スタック保有すると、高学年スキル効果が強化される。] [富豪最大減少:5] [1回あたりの物理ダメージ: 125%] [被ダメージ量增加:22%] [被ダメージ量増加の持続時間:6秒]"
+          "enhanced": "3回目の攻撃ごとに富豪をランダムに失い、名刺を2枚投げつける。名刺はランダムな敵に物理ダメージを与え、被ダメージ量を増加させる。[富豪:30スタック保有すると、高学年スキル効果が強化される。] [富豪最大減少:5] [1回あたりの物理ダメージ: 125%] [被ダメージ量増加:22%] [被ダメージ量増加の持続時間:6秒]"
         },
         "normalSkill": {
           "name": "集金の時間や~!",
-          "desc": "像を破壊し、破片を飛び散らせて、命中した敵に範囲物理ダメージを与え、攻撃速度を減少させる。敵1体に命中するごとに一定回教富豪を獲得する。",
-          "stats": ["富豪:30スタック保有すると、高学年スキル効果が強化される。", "物理ダメージ:435%", "攻擊速度減少:37%", "攻撃速度減少の持続時間:7秒", "富豪獲得数:10]
+          "desc": "像を破壊し、破片を飛び散らせて、命中した敵に範囲物理ダメージを与え、攻撃速度を減少させる。敵1体に命中するごとに一定数の富豪を獲得する。",
+          "stats": ["富豪:30スタック保有すると、高学年スキル効果が強化される。", "物理ダメージ:435%", "攻撃速度減少:37%", "攻撃速度減少の持続時間:7秒", "富豪獲得数:10"]
         },
         "ultimateSkill": {
           "name": "フィーバー☆タイムや~!",
           "desc": "金の玉を降らせて敵に範囲物理ダメージを9回与え、味方全員の会心を増加させる。富豪を30スタック保有した状態でスキルを発動すると、物理ダメージと会心増加が強化される。スキル終了時、富豪をランダムに失う。",
-          "stats": ["富豪:30スタック保有すると、高学年スキル効果が強化される。", "富豪最大減少:30", "総物理ダメージ: 972%", "会心增加:20%", "富豪30スタック時の総物理ダメージ: 1944%", "富豪30スタック時の会心増加: 40%", "会心増加の持続時間:10秒"],
+          "stats": ["富豪:30スタック保有すると、高学年スキル効果が強化される。", "富豪最大減少:30", "総物理ダメージ: 972%", "会心増加:20%", "富豪30スタック時の総物理ダメージ: 1944%", "富豪30スタック時の会心増加: 40%", "会心増加の持続時間:10秒"],
           "cooldown": "30秒"
         },
         "passiveSkill": {
           "desc": "富豪獲得時、後列の味方の攻撃力を増加させる。",
-          "stats": ["攻擊力增加:21%", "攻撃力増加の持続時間:5秒"]
+          "stats": ["攻撃力増加:21%", "攻撃力増加の持続時間:5秒"]
         }
       },
       "en": {
         "normalAttack": {
           "basic": "Throws a business card, dealing Physical Damage to an enemy and acquires 1 stack of Wealth. [Wealth: Senior Skill Effects are enhanced when there are 30 Stacks.] [Physical DMG: 75%]",
-          "enhanced": "Every third attack, she loses Wealth at random. and throws 2 business cards. The cards deal Physical Damage to random enemies and increase their Incoming Damage. [Wealth: Senior Skill Effects are enhanced when there are 30 Stacks.] [Max Wealth Reduction: 5] [Physical DMG Per Hit: 125%] [Incoming DMG Increase: 22%] [Incoming DMG Increase Duration: 6s]"
+          "enhanced": "Every third attack, she loses Wealth at random and throws 2 business cards. The cards deal Physical Damage to random enemies and increase their Incoming Damage. [Wealth: Senior Skill Effects are enhanced when there are 30 Stacks.] [Max Wealth Reduction: 5] [Physical DMG Per Hit: 125%] [Incoming DMG Increase: 22%] [Incoming DMG Increase Duration: 6s]"
         },
         "normalSkill": {
           "name": "It's Collection Time!",
@@ -220,7 +219,7 @@ const characterSkills = [
         },
         "ultimateSkill": {
           "name": "It's Fever Time!",
-          "desc": "Drops a shower of golden spheres, dealing AoE Physical Damage 9 times and increases all allies Critical Hit rates, If skill is activated with 30 stacks of Wealth, both Physical Damage and Critical Hit rate increases are enhanced. When the skill is finished, lose Wealth at random.",
+          "desc": "Drops a shower of golden spheres, dealing AoE Physical Damage 9 times and increases all allies' Critical Hit rates. If skill is activated with 30 stacks of Wealth, both Physical Damage and Critical Hit rate increases are enhanced. When the skill is finished, lose Wealth at random.",
           "stats": ["Wealth: Senior Skill Effects are enhanced when there are 30 Stacks.", "Max Wealth Reduction: 30", "Total Physical DMG: 972%", "CRIT Increase: 20%", "Total Physical DMG (30 Wealth Stacks): 1944%", "CRIT Increase (30 Wealth Stacks): 40%", "CRIT Increase Duration: 10s"],
           "cooldown": "30s"
         },
@@ -228,9 +227,8 @@ const characterSkills = [
           "desc": "When gaining Wealth, increases the Attack of Back Row allies.",
           "stats": ["ATK Increase: 21%", "ATK Increase Duration: 5s"]
         }
-      },
-    }
-  },
+      }
+    },
     {
     "name": "提格",
     "attribute": "物理",
