@@ -230,7 +230,7 @@ const characterSkills = [
         }
       }
     }
-    },
+  },
     {
     "name": "提格",
     "attribute": "物理",
