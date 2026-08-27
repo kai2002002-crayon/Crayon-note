@@ -508,22 +508,22 @@ const ASIDE_DATA = {
         stars: {
             1: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "Token of Friendship" }, 
-                desc: { zh: "", ja: "", en: "Increases the bearer's Max HP, Physical DEF, Magical DEF, CRIT Resistance, and CRIT DMG Resistance." }, 
-                effects: { zh: [""], ja: [""], en: ["Physical DEF Increase: 6%", "Magical DEF Increase: 6%", "CRIT Resistance Increase: 6%", "CRIT DMG Resistance Increase: 6%"] } 
+                name: { zh: "", ja: "友情の証", en: "Token of Friendship" }, 
+                desc: { zh: "", ja: "着用者の最大HP、物理防御力、魔法防御力、 会心抵抗、会心ダメージ抵抗が増加する。", en: "Increases the bearer's Max HP, Physical DEF, Magical DEF, CRIT Resistance, and CRIT DMG Resistance." }, 
+                effects: { zh: [""], ja: ["最大HP增加:6%", "物理防御力增加:6%", "魔法防御力增加:6%", "会心抵抗增加:6%", "会心ダメージ抵抗增加:6%"], en: ["Physical DEF Increase: 6%", "Magical DEF Increase: 6%", "CRIT Resistance Increase: 6%", "CRIT DMG Resistance Increase: 6%"] } 
             },
             2: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "Under the Sunshine" }, 
-                desc: { zh: "", ja: "", en: "When Freshman Skill hits, reduces the CRIT Resistance of the targeted enemy. Reduces Senior Skill Cooldown, After using Senior Skill, distributes prizes to the 3 allies with the lowest remaining HP Ratio. Recovers HP and Increases CRIT DMG of allies who receive prizes." }, 
-                effects: { zh: [""], ja: [""], en: ["CRIT Resistance Reduction: 15%", "CRIT Resistance Reduction Duration: 8s", "Senior Skill Cooldown Reduction: 12s", "HP Recovery: 45% of Max HP", "CRIT DMG Increase: 35%", "CRIT DMG Increase Duration: 15s"] } 
+                name: { zh: "", ja: "太陽の下で", en: "Under the Sunshine" }, 
+                desc: { zh: "", ja: "低学年スキルが命中すると、攻撃した敵の会心抵抗を減少させる。高学年スキルのクールタイムが減少する。 高学年スキル使用後、残りHP割合が最も低い味方3名に景品を配る。景品を受け取った味方のHPを回復させ、会心ダメージを増加させる。", en: "When Freshman Skill hits, reduces the CRIT Resistance of the targeted enemy. Reduces Senior Skill Cooldown, After using Senior Skill, distributes prizes to the 3 allies with the lowest remaining HP Ratio. Recovers HP and Increases CRIT DMG of allies who receive prizes." }, 
+                effects: { zh: [""], ja: ["会心抵抗減少: 15%", "会心抵抗減少の持続時間:8秒", "高学年スキルのクールタイム減少:12秒", "HP回復:最大HPの45%", "会心ダメージ増加:35%", "会心ダメージ増加の持続時間:15秒"], en: ["CRIT Resistance Reduction: 15%", "CRIT Resistance Reduction Duration: 8s", "Senior Skill Cooldown Reduction: 12s", "HP Recovery: 45% of Max HP", "CRIT DMG Increase: 35%", "CRIT DMG Increase Duration: 15s"] } 
             },
             3: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "Sparkling Friendship" }, 
-                desc: { zh: "", ja: "", en: "Increases Critical Hit and Critical Damage of all allies." }, 
-                effects: { zh: [""], ja: [""], en: ["CRIT Increase: 6%", "CRIT DMG Increase: 6%"] }, 
-                globalEffects: { zh: ["全體 %", "全體 %"], ja: ["全体%", "全体%"], en: ["All CRIT DMG 3%", "All CRIT Resistance 3%"] } 
+                name: { zh: "", ja: "キラキラなウチらの仲", en: "Sparkling Friendship" }, 
+                desc: { zh: "", ja: "味方全員の会心と会心ダメージを増加させる。", en: "Increases Critical Hit and Critical Damage of all allies." }, 
+                effects: { zh: [""], ja: ["会心增加:6%", "会心ダメージ増加:6%"], en: ["CRIT Increase: 6%", "CRIT DMG Increase: 6%"] }, 
+                globalEffects: { zh: ["全體 %", "全體 %"], ja: ["全体会心ダメージ 3%", "全体会心抵抗 3%"], en: ["All CRIT DMG 3%", "All CRIT Resistance 3%"] } 
             }
         }
     },
