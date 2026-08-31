@@ -576,7 +576,7 @@ const WORK_URL = {
     "Ashur": "https://youtu.be/0DhptkL3r1c",
     "Aya": "https://youtu.be/2VlyNDZ28Mc",
     "Barong": "https://youtu.be/riScYcKvJvE",
-    "Belita": "",
+    "Belita": "https://youtu.be/sctRJMHdx6w",
     "Beni": "https://youtu.be/rqTyjkBImFg",
     "BigWood": "https://youtu.be/tU7HeiZoPkc",
     "Blanchet": "https://youtu.be/iTCr6Gd0ArY",
