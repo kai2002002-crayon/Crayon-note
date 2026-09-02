@@ -737,7 +737,7 @@ const ASIDE_DATA = {
     },
     "Silphir": { 
         asideIcon: "", 
-        totalName: { zh: "", ja: "", en: "" }, 
+        totalName: { zh: "藍寶石勳章", ja: "メダル・オブ・サファイア", en: "Medal of Saphhire" }, 
         stars: {
             1: { 
                 icon: "", 
