@@ -372,7 +372,7 @@ const ASIDE_DATA = {
                 icon: "", 
                 name: { zh: "我會讓你閃閃發光的……", ja: "ボクが輝かせてあげるよ･･････。", en: "I'll make you shine..." }, 
                 desc: { zh: "增加所有友軍對敵人造成的傷害量，並減少所有友軍受到敵人的傷害量。", ja: "味方全員の敵への与ダメージ量を増加させ、味方全員の敵からの被ダメージ量を減少させる。", en: "Increases all allies Outgoing Damage and reduces Incoming Damage from enemies for all allies." }, 
-                effects: { zh: ["傷害量增加:10.5%" "受到的傷害量減少:4.5%"], ja: ["ダメージ量増加:10.5%", "被ダメージ量減少:4.5%"], en: ["DMG Increase: 10.5%", "Incoming DMG Reduction: 4,5%"] }, 
+                effects: { zh: ["傷害量增加:10.5%", "受到的傷害量減少:4.5%"], ja: ["ダメージ量増加:10.5%", "被ダメージ量減少:4.5%"], en: ["DMG Increase: 10.5%", "Incoming DMG Reduction: 4.5%"] }, 
                 globalEffects: { zh: ["全體HP 3%", "全體物理攻擊力 3%"], ja: ["全体HP 3%", "全体物理攻擊力 3%"], en: ["All HP 3%", "All Physical ATK 3%"] } 
             }
         }
