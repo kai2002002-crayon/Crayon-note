@@ -741,22 +741,22 @@ const ASIDE_DATA = {
         stars: {
             1: { 
                 icon: "", 
-                name: { zh: "專屬我的藍寶石勳章", ja: "私だけのサファイアメダル", en: "" }, 
-                desc: { zh: "穿載者的最大HP、物理攻擊力、爆擊、爆擊傷害增加。", ja: "着用者の最大HP、物理攻撃力、会心、会心ダメージが増加する。", en: "" }, 
-                effects: { zh: ["最大HP增加:6%", "物理攻擊力增加:6%", "爆擊增加:6%", "爆擊傷害增加:6%"], ja: ["最大HP增加:6%", "物理攻擊力增加:6%", "会心增加:6%", "会心ダメージ増加:6%"], en: [""] } 
+                name: { zh: "專屬我的藍寶石勳章", ja: "私だけのサファイアメダル", en: "My Very Own Sapphire Medal" }, 
+                desc: { zh: "穿載者的最大HP、物理攻擊力、爆擊、爆擊傷害增加。", ja: "着用者の最大HP、物理攻撃力、会心、会心ダメージが増加する。", en: "Increases the bearer's Max HP, Physical ATK, CRIT Hit, and CRIT DMG." }, 
+                effects: { zh: ["最大HP增加:6%", "物理攻擊力增加:6%", "爆擊增加:6%", "爆擊傷害增加:6%"], ja: ["最大HP增加:6%", "物理攻擊力增加:6%", "会心增加:6%", "会心ダメージ増加:6%"], en: ["Max HP Increase: 6%", "Physical ATK Increase: 6%", "CRIT Increase: 6%", "CRIT DMG Increase: 6%"] } 
             },
             2: { 
                 icon: "", 
-                name: { zh: "萬年老三希菲爾", ja: "万年3番手のシルフィール", en: "" }, 
-                desc: { zh: "回合開始時、攻擊速度提升。使用普通技能後，攻擊速度提升。普通攻撃命中敵人4次時，將於一定時間內增加攻擊力。", ja: "ウェーブ開始時に攻撃速度が増加する。低学年スキル使用後、攻撃速度が増加する。普通攻撃が敵に4回命中すると一定時間、攻撃力が増加する。", en: "" }, 
-                effects: { zh: ["回合開始時攻撃速度提升:110%", "回合開始時攻擊速度提升持續時間:8秒", "攻擊速度提升:110%", "攻擊速度提升持續時間:8秒", "攻擊力增加:33%", "攻擊力增加持續時間:6秒"], ja: ["ウェーブ開始時の攻撃連度増加: 110%", "ウェーブ開始時の攻撃連度増加の持続時間:8秒", "攻擊速度增加:110%", "攻撃速度増加の持続時間:8秒", "攻擊力增加:33%", "攻撃力増加の持続時間:6秒"], en: [""] } 
+                name: { zh: "萬年老三希菲爾", ja: "万年3番手のシルフィール", en: "Silphir, Eternal Third Place" }, 
+                desc: { zh: "回合開始時、攻擊速度提升。使用普通技能後，攻擊速度提升。普通攻撃命中敵人4次時，將於一定時間內增加攻擊力。", ja: "ウェーブ開始時に攻撃速度が増加する。低学年スキル使用後、攻撃速度が増加する。普通攻撃が敵に4回命中すると一定時間、攻撃力が増加する。", en: "At the start of a wave, increases Attack Speed. After using Freshman Skill, increases Attack Speed. When Normal Attacks hit an enemy 4 times, increases Attack for a set period of time," }, 
+                effects: { zh: ["回合開始時攻撃速度提升:110%", "回合開始時攻擊速度提升持續時間:8秒", "攻擊速度提升:110%", "攻擊速度提升持續時間:8秒", "攻擊力增加:33%", "攻擊力增加持續時間:6秒"], ja: ["ウェーブ開始時の攻撃連度増加: 110%", "ウェーブ開始時の攻撃連度増加の持続時間:8秒", "攻擊速度增加:110%", "攻撃速度増加の持続時間:8秒", "攻擊力增加:33%", "攻撃力増加の持続時間:6秒"], en: ["ATK SPD Increase at Wave Start: 110%", "ATK SPD Increase Duration at Wave Start: 8s", "ATK SPD Increase: 110%", "ATK SPD Increase Duration: 8s", "ATK Increase: 33%", "ATK Increase Duration: 6s"] } 
             },
             3: { 
                 icon: "", 
-                name: { zh: "依舊自豪的我", ja: "それでも誇らしい私", en: "" }, 
-                desc: { zh: "所有友軍受到敵人的傷害量減少。所有友軍的攻擊速度提升。", ja: "味方全員の敵からの被ダメージ量を減少させる。味方全員の攻撃速度を増加させる。", en: "" }, 
-                effects: { zh: ["受到的傷害量減少:4.5%", "攻擊速度提升:3.5%"], ja: ["被ダメージ量減少:4.5%", "攻擊速度增加:3.5%"], en: ["%"] }, 
-                globalEffects: { zh: ["全體物理攻擊力 3%", "全體物理防禦力 3%"], ja: ["全体物理攻擊力 3%", "全体物理防御力 3%"], en: ["All %", "All %"] } 
+                name: { zh: "依舊自豪的我", ja: "それでも誇らしい私", en: "Still Proud of Myself" }, 
+                desc: { zh: "所有友軍受到敵人的傷害量減少。所有友軍的攻擊速度提升。", ja: "味方全員の敵からの被ダメージ量を減少させる。味方全員の攻撃速度を増加させる。", en: "Reduces Incoming Damage from enemies for all allies, Increases all allies Attack Speed." }, 
+                effects: { zh: ["受到的傷害量減少:4.5%", "攻擊速度提升:3.5%"], ja: ["被ダメージ量減少:4.5%", "攻擊速度增加:3.5%"], en: ["Incoming DMG Reduction: 4.5%", "ATK SPD Increase: 3.5%"] }, 
+                globalEffects: { zh: ["全體物理攻擊力 3%", "全體物理防禦力 3%"], ja: ["全体物理攻擊力 3%", "全体物理防御力 3%"], en: ["All Physical ATK 3%", "All Physical DEF 3%"] } 
             }
         }
     },
