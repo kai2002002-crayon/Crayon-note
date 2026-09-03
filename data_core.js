@@ -572,7 +572,7 @@ const REWARD_MAP = {
 const WORK_URL = {
     "Alice": "https://youtu.be/JY58FJxViTA",
     "Allet": "https://youtu.be/ktkGgvXn-ME",
-    "Amelia": "",
+    "Amelia": "https://youtu.be/MpZsvsuNmqc",
     "Ashur": "https://youtu.be/0DhptkL3r1c",
     "Aya": "https://youtu.be/2VlyNDZ28Mc",
     "Barong": "https://youtu.be/riScYcKvJvE",
