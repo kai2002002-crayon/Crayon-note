@@ -195,6 +195,7 @@ function t(key) { return LANG_DICT[currentLang][key] || key; }
 // 坨坨資料
 // ------------------------------------------
 const INITIAL_DATA = [
+	{ name: "夏樂", personality: "天真", race: "魔女", position: "前排", job: "肉盾", pathVersion: "", releaseDate: "2026-09-10T17:00:00+09:00" },
 	{ name: "琵拉", personality: "狂亂", race: "龍族", position: "後排", job: "輔助", pathVersion: "V1", releaseDate: "2026-08-27T17:00:00+09:00" },
 	{ name: "羅蕾特", personality: "狂亂", race: "魔女", position: "後排", job: "輸出", pathVersion: "V1", releaseDate: "2026-07-30T17:00:00+09:00" },
     { name: "洛涅", personality: "天真", race: "精靈", position: "前排", job: "肉盾", pathVersion: "V4" },
@@ -401,7 +402,7 @@ const GRADE_MAP = {
     "瑟琳娜": "3", "瑪約": "3", "瑪麗": "2", "皮可菈": "3", "盧波": "3", "米雪": "1", "綾": "3", "羽伊": "3",
     "艾斯皮": "2", "艾琳娜": "3", "艾皮卡": "3", "艾舒爾": "3", "艾蜜莉雅": "3", "芙莉可": "3", "茱蜜": "2", "莉茲": "3",
     "莎莉": "2", "萊薇": "3", "蒂亞娜": "3", "謝蒂": "3", "貝魯": "1", "貝麗塔": "3", "路德": "3", "路易": "1",
-    "阿萊特": "2", "雷吉": "2", "馬爾": "3", "泰達": "2", "寧琉": "3", "莉絲蒂": "3", "雷內瓦": "3", "芭瓏": "3", "達雅": "3", "提格": "3", "羅蕾特": "3", "琵拉": "3"
+    "阿萊特": "2", "雷吉": "2", "馬爾": "3", "泰達": "2", "寧琉": "3", "莉絲蒂": "3", "雷內瓦": "3", "芭瓏": "3", "達雅": "3", "提格": "3", "羅蕾特": "3", "琵拉": "3", "夏樂": "3"
 };
 
 const ELDAIN_LIST = ['綾', '庫洛艾', '艾皮卡', '伊德', '羽伊', '薇薇', 'x乂錫安乂x', '優米', '雷內瓦'];
@@ -471,6 +472,7 @@ const FOOD_MAP = {
     "Sari": { super: "皇家蜂蜜大蒜鮭魚", special: ["蜂蜜大蒜鮭魚", "焦糖布丁", "軟軟焦糖布丁"] },
     "Selline": { super: "惡靈布丁", special: ["幽靈布丁", , "一級祕密葡萄汁"] },
     "Shady": { super: "惡靈布丁", special: ["幽靈布丁", "石榴果實", "石榴甜茶"] },
+	"Sherum": "無",
     "Shoupan": { super: "ANSA太空食品", special: ["太空食品", "巧克力冰淇淋", "深黑巧克力冰淇淋"] },
     "Silphir": { super: "白金糖葫蘆", special: ["金糖葫蘆", "幽靈布丁", "惡靈布丁"] },
     "Sist": { super: "麝香甜瓜博孔奇尼起司", special: ["哈密瓜博孔奇尼起司", "溫熱的冰美式咖啡", "滾燙的冰美式咖啡"] },
@@ -552,6 +554,7 @@ const REWARD_MAP = {
     "Sari": ["彩虹花汁", "回收塑膠", "黏膩的黏土"],
     "Selline": ["糖", "皮革樹葉", "堅硬的石頭"],
     "Shady": ["黏膩的黏土", "槭樹樹液", "柔軟的棉花"],
+	"Sherum": [],
     "Shoupan": ["濕潤的紙漿", "各式穀物", "回收塑膠"],
     "Silphir": ["百老師萬能醬料", "牛奶"],
     "Sist": ["睡眠眼罩", "水果", "家禽肉"],
@@ -627,6 +630,7 @@ const WORK_URL = {
     "Sari": "https://youtu.be/mRU5nRoA3g0",
     "Selline": "https://youtu.be/Yn53p8bsBb0",
     "Shady": "https://youtu.be/1siB-6t2eL0",
+	"Sherum": "",
     "Shoupan": "https://youtu.be/su0DhWANaeg",
     "Silphir": "https://youtu.be/dPklHe2kZhs",
     "Sist": "https://youtu.be/j3QVWfLrJUo",
@@ -790,7 +794,7 @@ const SPINE_MAP = {
     "艾斯皮": "Espi", "艾琳娜": "Elena", "艾皮卡": "Epica", "艾舒爾": "Ashur", "艾蜜莉雅": "Amelia", "芙莉可": "Fricle", "茱蜜": "Jubee", "莉茲": "Leets",
     "莎莉": "Sari", "萊薇": "Levi", "蒂亞娜": "Diana", "謝蒂": "Shady", "貝魯": "Veroo", "貝麗塔": "Belita", "路德": "Rude", "路易": "Cuee",
     "阿萊特": "Allet", "雷吉": "Lazy", "馬爾": "Mago", "泰達": "Taida", "寧琉": "Ner", "莉絲蒂": "Risty", "R41雷內瓦": "R41_Renewa", "雷內瓦": "RenewaAwaken", "芭瓏": "Barong", "達雅": "Daya", "提格": "Tig",
-	"羅蕾特": "Rollett", "琵拉": "Pira"
+	"羅蕾特": "Rollett", "琵拉": "Pira", "夏樂": "Sherum"
 };
 
 const COSTUME_MAP = {
@@ -800,7 +804,7 @@ const COSTUME_MAP = {
     "愛麗絲": ["Alice", "AliceSkin1", "AliceSkin2", "AliceSkin3"], "艾蜜莉雅": ["Amelia", "AmeliaSkin1", "AmeliaSkin2", "AmeliaSkin3"], "綾": ["Aya", "AyaSkin1", "AyaSkin2", "AyaSkin3", "AyaSkin4"], "庫洛艾": ["Chloe", "ChloeSkin1", "ChloeSkin2", "ChloeSkin3", "ChloeSkin4"], "蒂亞娜": ["Diana", "DianaSkin1", "DianaSkin2", "DianaSkin3"], "桃桃": ["Momo", "MomoSkin1", "MomoSkin2", "MomoSkin3"], "瑟琳娜": ["Selline", "SellineSkin1", "SellineSkin2", "SellineSkin3"], "羽伊": ["Ui", "UiSkin1", "UiSkin2", "UiSkin3", "UiSkin4"], "薇薇": ["Vivi", "ViviSkin1", "ViviSkin2", "ViviSkin3", "ViviSkin4"], "x乂錫安乂x": ["xXionx", "xXionxSkin1", "xXionxSkin2", "xXionxSkin3", "xXionxSkin4"],
     "艾爾芬": ["Erpin", "ErpinSkin1", "ErpinSkin2", "ErpinSkin3", "ErpinSkin4"], "莉絲蒂": ["Risty", "RistySkin1", "RistySkin2"], "雷內瓦": ["RenewaAwaken", "RenewaAwakenSkin1", "RenewaAwakenSkin2"],
 	"芭瓏": ["Barong", "BarongSkin1", "BarongSkin2", "BarongSkin3"], "達雅": ["Daya", "DayaSkin1", "DayaSkin2"], "提格": ["Tig", "TigSkin1", "TigSkin2"],
-	"羅蕾特": ["Rollett", "RollettSkin2"], "琵拉": ["Pira", "PiraSkin1", "PiraSkin2"]
+	"羅蕾特": ["Rollett", "RollettSkin2"], "琵拉": ["Pira", "PiraSkin1", "PiraSkin2"], "夏樂": ["Sherum", "SherumSkin1", "SherumSkin2"]
 };
 
 const SD_COSTUME = {
@@ -810,7 +814,7 @@ const SD_COSTUME = {
     "愛麗絲": ["Alice", "AliceSkin1", "AliceSkin2"], "艾蜜莉雅": ["Amelia", "AmeliaSkin1", "AmeliaSkin2"], "綾": ["Aya", "AyaSkin1", "AyaSkin2", "AyaSkin3", "AyaSkin4"], "庫洛艾": ["Chloe", "ChloeSkin1", "ChloeSkin2", "ChloeSkin3", "ChloeSkin4"], "蒂亞娜": ["Diana", "DianaSkin1", "DianaSkin2", "DianaSkin3"], "桃桃": ["Momo", "MomoSkin1", "MomoSkin3"], "瑟琳娜": ["Selline", "SellineSkin1", "SellineSkin2"], "羽伊": ["Ui", "UiSkin1", "UiSkin2", "UiSkin3", "UiSkin4"], "薇薇": ["Vivi", "ViviSkin1", "ViviSkin2", "ViviSkin3", "ViviSkin4"], "x乂錫安乂x": ["xXionx", "xXionxSkin1", "xXionxSkin2", "xXionxSkin3", "xXionxSkin4"],
     "艾爾芬": ["Erpin", "ErpinSkin1", "ErpinSkin2", "ErpinSkin3"], "莉絲蒂": ["Risty", "RistySkin1"], "雷內瓦": ["RenewaAwaken", "RenewaAwakenSkin1", "RenewaAwakenSkin2"],
 	"芭瓏": ["Barong", "BarongSkin1", "BarongSkin2", "BarongSkin3"], "達雅": ["Daya", "DayaSkin1"], "提格": ["Tig", "TigSkin1"],
-	"羅蕾特": ["Rollett", "RollettSkin2"], "琵拉": ["Pira", "PiraSkin1", "PiraSkin2"]
+	"羅蕾特": ["Rollett", "RollettSkin2"], "琵拉": ["Pira", "PiraSkin1", "PiraSkin2"], "夏樂": ["Sherum", "SherumSkin1"]
 };
 //迷你坨坨SPINE NAME
 const MINI_SPINE = {
@@ -823,7 +827,7 @@ const MINI_SPINE = {
     "艾斯皮": "Mini_Espi", "艾琳娜": "Mini_Elena", "艾皮卡": "Mini_Epica", "艾舒爾": "Mini_Ashur", "艾蜜莉雅": "Mini_Amelia", "芙莉可": "Mini_Fricle", "茱蜜": "Mini_Jubee", "莉茲": "Mini_Leets",
     "莎莉": "Mini_Sari", "萊薇": "Mini_Levi", "蒂亞娜": "Mini_Diana", "謝蒂": "Mini_Shady", "貝魯": "Mini_Veroo", "貝麗塔": "Mini_Belita", "路德": "Mini_Rude", "路易": "Mini_Cuee",
     "阿萊特": "Mini_Allet", "雷吉": "Mini_Lazy", "馬爾": "Mini_Mago", "泰達": "Mini_Taida", "寧琉": "Mini_Ner", "莉絲蒂": "Mini_Risty",  "雷內瓦": "Mini_RenewaAwaken", "芭瓏": "Mini_Barong", "達雅": "Mini_Daya", "提格": "Mini_Tig",
-	"羅蕾特": "Mini_Rollett", "琵拉": "Mini_Pira"
+	"羅蕾特": "Mini_Rollett", "琵拉": "Mini_Pira", "夏樂": "Mini_Sherum"
 };
 
 // ------------------------------------------
@@ -832,10 +836,10 @@ const MINI_SPINE = {
 
 const PICKUP_SCHEDULE = [
 	{
-        start: "2026-08-27T17:00:00+09:00",
-        end: "2026-09-03T03:59:59+09:00",
-        chars: ["琵拉"],
-        note: "Pira"
+        start: "2026-09-10T17:00:00+09:00",
+        end: "2026-09-17T03:59:59+09:00",
+        chars: ["夏樂"],
+        note: "Sherum"
     },
 	{
         start: "2026-08-20T04:00:00+09:00",
