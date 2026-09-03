@@ -358,22 +358,22 @@ const ASIDE_DATA = {
         stars: {
             1: { 
                 icon: "", 
-                name: { zh: "夜空的星座", ja: "夜空の星座", en: "" }, 
-                desc: { zh: "穿戴者的最大HP、物理攻擊力、爆擊、爆擊傷害增加。", ja: "着用者の最大HP、物理攻撃力、会心、会心ダメージが増加する。", en: "." }, 
-                effects: { zh: ["最大HP增加:6%", "物理攻擊力增加:6%", "爆擊增加:6%", "爆擊傷害增加:6%"], ja: ["最大HP增加:6%", "物理攻擊力增加:6%", "会心增加:6%", "会心ダメージ増加:6%"], en: [""] } 
+                name: { zh: "夜空的星座", ja: "夜空の星座", en: "Night Sky Constellation" }, 
+                desc: { zh: "穿戴者的最大HP、物理攻擊力、爆擊、爆擊傷害增加。", ja: "着用者の最大HP、物理攻撃力、会心、会心ダメージが増加する。", en: "Increases the bearer's Max HP, Physical ATK, CRIT Hit, and CRIT DMG." }, 
+                effects: { zh: ["最大HP增加:6%", "物理攻擊力增加:6%", "爆擊增加:6%", "爆擊傷害增加:6%"], ja: ["最大HP增加:6%", "物理攻擊力增加:6%", "会心增加:6%", "会心ダメージ増加:6%"], en: ["Max HP Increase: 6%", "Physical ATK Increase: 6%", "CRIT Increase: 6%", "CRIT DMG Increase: 6%"] } 
             },
             2: { 
                 icon: "", 
-                name: { zh: "邊緣人頭槌", ja: "異分子ヘディング", en: "" }, 
-                desc: { zh: "普通技能基本攻擊次數增加。當HP低於50%時，給予自身障眼法效果並恢復SP。", ja: "低学年スキルの基本攻撃回数が増加する。 HPが50%以下になると、自身に目くらましを付与し、SPを回復する。", en: "" }, 
-                effects: { zh: ["障眼法:不會成為敵人的攻擊目標，沒有友軍時不會觸發。", "普通技能基本攻擊次數:4次", "障眼法持續時間:5秒", "SP恢復:60%", "障眼法、SP恢復冷卻時間:8秒"], ja: ["目くらまし:敵の目標にならない。他の味方がいない時は発動しない。", "低学年スキルの基本攻撃回数: 4回", "目くらましの持続時間:5秒", "SP回復:60%", "目くらまし、SP回復クールタイム:8秒"], en: [""] } 
+                name: { zh: "邊緣人頭槌", ja: "異分子ヘディング", en: "Outcast Headbutt" }, 
+                desc: { zh: "普通技能基本攻擊次數增加。當HP低於50%時，給予自身障眼法效果並恢復SP。", ja: "低学年スキルの基本攻撃回数が増加する。 HPが50%以下になると、自身に目くらましを付与し、SPを回復する。", en: "Increases Freshman Skill Basic Attack count. When HP drops to 50% or less, applies Trickery to herself and recovers SP." }, 
+                effects: { zh: ["障眼法:不會成為敵人的攻擊目標，沒有友軍時不會觸發。", "普通技能基本攻擊次數:4次", "障眼法持續時間:5秒", "SP恢復:60%", "障眼法、SP恢復冷卻時間:8秒"], ja: ["目くらまし:敵の目標にならない。他の味方がいない時は発動しない。", "低学年スキルの基本攻撃回数: 4回", "目くらましの持続時間:5秒", "SP回復:60%", "目くらまし、SP回復クールタイム:8秒"], en: ["Trickery: Cannot be targeted by enemies. Does not trigger when no allies are present.", "Freshman Skill Basic Attack Count: 4", "Trickery Duration: 5s", "SP Recovery: 60%", "Trickery, SP Recovery Cooldown: 8s"] } 
             },
             3: { 
                 icon: "", 
-                name: { zh: "我會讓你閃閃發光的……", ja: "ボクが輝かせてあげるよ･･････。", en: "" }, 
-                desc: { zh: "增加所有友軍對敵人造成的傷害量，並減少所有友軍受到敵人的傷害量。", ja: "味方全員の敵への与ダメージ量を増加させ、味方全員の敵からの被ダメージ量を減少させる。", en: "" }, 
-                effects: { zh: ["傷害量增加:10.5%" "受到的傷害量減少:4.5%"], ja: ["ダメージ量増加:10.5%", "被ダメージ量減少:4.5%"], en: ["%"] }, 
-                globalEffects: { zh: ["全體HP 3%", "全體物理攻擊力 3%"], ja: ["全体HP 3%", "全体物理攻擊力 3%"], en: ["All %", "All %"] } 
+                name: { zh: "我會讓你閃閃發光的……", ja: "ボクが輝かせてあげるよ･･････。", en: "I'll make you shine..." }, 
+                desc: { zh: "增加所有友軍對敵人造成的傷害量，並減少所有友軍受到敵人的傷害量。", ja: "味方全員の敵への与ダメージ量を増加させ、味方全員の敵からの被ダメージ量を減少させる。", en: "Increases all allies Outgoing Damage and reduces Incoming Damage from enemies for all allies." }, 
+                effects: { zh: ["傷害量增加:10.5%" "受到的傷害量減少:4.5%"], ja: ["ダメージ量増加:10.5%", "被ダメージ量減少:4.5%"], en: ["DMG Increase: 10.5%", "Incoming DMG Reduction: 4,5%"] }, 
+                globalEffects: { zh: ["全體HP 3%", "全體物理攻擊力 3%"], ja: ["全体HP 3%", "全体物理攻擊力 3%"], en: ["All HP 3%", "All Physical ATK 3%"] } 
             }
         }
     },
