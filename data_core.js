@@ -862,9 +862,9 @@ const PICKUP_SCHEDULE = [
 // 🎪 遊戲內活動排程表
 const EVENT_SCHEDULE = [
     {
-        start: "2026-08-13T17:00:00+09:00",
-        end: "2026-08-27T10:59:59+09:00",
-        eventId: "Theme012" 
+        start: "2026-09-10T17:00:00+09:00",
+        end: "2026-09-24T10:59:59+09:00",
+        eventId: "Theme023" 
     },
 	{
         start: "2026-08-27T17:00:00+09:00",
