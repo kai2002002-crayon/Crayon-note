@@ -94,7 +94,76 @@ const characterSkills = [
     }
   },
     {
-    "name": "夏樂",
+    "name": "巴麗葉",
+    "attribute": "魔法",
+    "skills": {
+      "zh-TW": {
+        "normalAttack": {
+          "basic": " []",
+          "enhanced": " []"
+        },
+        "normalSkill": {
+          "name": "",
+          "desc": "",
+          "stats": [""]
+        },
+        "ultimateSkill": {
+          "name": "",
+          "desc": "",
+          "stats": [""],
+          "cooldown": "秒"
+        },
+        "passiveSkill": {
+          "desc": "",
+          "stats": ["秒"]
+        }
+      },
+      "ja": {
+        "normalAttack": {
+          "basic": " []",
+          "enhanced": " []"
+        },
+        "normalSkill": {
+          "name": "",
+          "desc": "",
+          "stats": [""]
+        },
+        "ultimateSkill": {
+          "name": "",
+          "desc": "",
+          "stats": [""],
+          "cooldown": "秒"
+        },
+        "passiveSkill": {
+          "desc": "",
+          "stats": [""]
+        }
+      },
+      "en": {
+        "normalAttack": {
+          "basic": " []",
+          "enhanced": " []"
+        },
+        "normalSkill": {
+          "name": "",
+          "desc": "",
+          "stats": [""]
+        },
+        "ultimateSkill": {
+          "name": "",
+          "desc": "",
+          "stats": [""],
+          "cooldown": "s"
+        },
+        "passiveSkill": {
+          "desc": "",
+          "stats": [""]
+        }
+      }
+    }
+  },
+    {
+    "name": "雪蘭",
     "attribute": "魔法",
     "skills": {
       "zh-TW": {
