@@ -253,9 +253,9 @@
             const BOSS_INFO = {
                 "R41雷內瓦": { icon: "sprite-Icon_R41_Renewa", type: "single", spine: "R41_Renewa", options: ["default"] },
                 "M.E.O.W.": { icon: "sprite-Icon_MEOW", type: "single", spine: "MEOW", options: ["default"] },
-                "克魯布魯斯": { icon: "sprite-Icon_Curburus", type: "skin", spine: "Curburus", options: ["Skin_Naive", "Skin_Cool", "Skin_Mad", "Skin_Jolly", "Skin_Gloomy"] },
-                "莉1莉": { icon: "sprite-Icon_Lil1li", type: "skin", spine: "Lil1li", options: ["Skin_Naive", "Skin_Cool", "Skin_Mad", "Skin_Jolly", "Skin_Gloomy"] },
-                "蠟筆勇士": { icon: "sprite-Icon_CrayonKnight", type: "file", spineBase: "CrayonKnight", options: ["Naive", "Cool", "Mad", "Jolly", "Gloomy"] }
+                "克魯布魯斯": { icon: "sprite-Icon_Curburus", type: "skin", spine: "Curburus", options: ["Skin_Naive", "Skin_Cool", "Skin_Mad", "Skin_Jolly", "Skin_Gloomy", "None"] },
+                "莉1莉": { icon: "sprite-Icon_Lil1li", type: "skin", spine: "Lil1li", options: ["Skin_Naive", "Skin_Cool", "Skin_Mad", "Skin_Jolly", "Skin_Gloomy", "None"] },
+                "蠟筆勇士": { icon: "sprite-Icon_CrayonKnight", type: "file", spineBase: "CrayonKnight", options: ["Naive", "Cool", "Mad", "Jolly", "Gloomy", "None"] }
             };
             const personalityColors = { 
                 "天真": "border-green-400 text-green-400", 
@@ -767,6 +767,7 @@
                             else if (costume.includes('Mad')) optName = getI18n('狂亂');
                             else if (costume.includes('Jolly')) optName = getI18n('活潑');
                             else if (costume.includes('Gloomy')) optName = getI18n('憂鬱');
+                            else if (costume.includes('None')) optName = "無性格"; // 🌟 新增無性格翻譯
                             else if (costume === 'default') optName = getI18n('ui_default_costume') || "預設外觀";
                             opt.text = optName;
                         } else if (isNPC) {
@@ -793,16 +794,24 @@
                 if(!costumeKey || !activeCharData) return;
                 
                 const isBoss = typeof BOSS_LIST !== 'undefined' && BOSS_LIST.includes(activeCharData.name);
-                // 🌟 Boss 快速切換 Skin 邏輯：不重讀檔案，直接秒切換！
-                if (isBoss && BOSS_INFO[activeCharData.name].type === 'skin') {
+                
+                // 🌟 Boss 快速切換 Skin 邏輯
+                if (isBoss && BOSS_INFO[activeCharData.name].type === 'skin' && costumeKey !== 'None') {
                     if (globalPlayer && globalPlayer.skeleton) {
-                        globalPlayer.skeleton.setSkinByName(costumeKey === 'default' ? globalPlayer.skeleton.data.skins[0].name : costumeKey);
-                        globalPlayer.skeleton.setToSetupPose();
-                        fixSpineMultiplyHole(globalPlayer);
+                        const targetSkinName = costumeKey === 'default' ? globalPlayer.skeleton.data.skins[0].name : costumeKey;
+                        // 安全檢查：如果目前的 Spine 檔案裡面找得到這個 Skin，代表可以秒切換
+                        // (如果找不到，代表當前讀取的是 None 的獨立檔案，就跳過此處，往下執行重新載入)
+                        if (globalPlayer.skeleton.data.findSkin(targetSkinName)) {
+                            globalPlayer.skeleton.setSkinByName(targetSkinName);
+                            globalPlayer.skeleton.setToSetupPose();
+                            fixSpineMultiplyHole(globalPlayer);
+                            return; // 成功秒切換，直接結束函數
+                        }
                     }
-                } else {
-                    loadSpine(activeCharData.spineName, costumeKey, currentMode);
                 }
+                
+                // 否則 (包含選了 None，或是從 None 切回 Skin)，重新載入整個 Spine 檔案
+                loadSpine(activeCharData.spineName, costumeKey, currentMode);
             }
             
             function loadSpine(baseFolderKey, costumeKey, mode) {
@@ -831,15 +840,23 @@
                if (isBoss) {
                    const info = BOSS_INFO[activeCharData.name];
                    let fileName = info.spine;
+                   
                    if (info.type === 'file') {
                        fileName = info.spineBase + (costumeKey === 'default' ? 'Naive' : costumeKey);
                    } else if (info.type === 'skin') {
-                       targetSkin = costumeKey;
+                       if (costumeKey === 'None') {
+                           // 🌟 特殊處理：雖然是 skin 類型的 Boss，但 None 有獨立檔案
+                           fileName = info.spine + "None"; 
+                           targetSkin = "default";
+                       } else {
+                           targetSkin = costumeKey;
+                       }
                    }
+                   
                    skelUrl = `./spine_sd_assets/${fileName}.skel.bytes`;
                    atlasUrl = `./spine_sd_assets/${fileName}.atlas.txt`;
                    targetZoom = 2.5; 
-                   baseViewport = { x: -750, y: -200, width: 1500, height: 2500 }; // 擴大 Boss 的視野框
+                   baseViewport = { x: -750, y: -200, width: 1500, height: 2500 }; 
                } else if (isNPC) {
                    skelUrl = `./spine_assets/${baseFolderKey}/${costumeKey}.skel.bytes`;
                    atlasUrl = `./spine_assets/${baseFolderKey}/${costumeKey}.atlas.txt`;
