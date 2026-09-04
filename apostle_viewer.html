@@ -900,8 +900,13 @@
                        if (isBoss) {
                            if (targetSkin !== 'default' && player.skeleton.data.findSkin(targetSkin)) {
                                player.skeleton.setSkinByName(targetSkin);
-                           } else if (player.skeleton.data.skins.length > 0) {
-                               player.skeleton.setSkinByName(player.skeleton.data.skins[0].name);
+                           } else {
+                               // 💡 新增：當沒有指定 Skin 時，自動尋找有衣服的 Skin (優先找 Normal，沒有就找第一個非素體的 Skin)
+                               const skins = player.skeleton.data.skins;
+                               if (skins && skins.length > 0) {
+                                   const tSkin = skins.find(s => s.name === 'Normal') || skins.find(s => s.name !== 'default') || skins[0];
+                                   if (tSkin) { player.skeleton.setSkinByName(tSkin.name); }
+                               }
                            }
                        } else {
                            const skins = player.skeleton.data.skins;
