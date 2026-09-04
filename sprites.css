@@ -114,7 +114,8 @@
 .sprite-Snorky { width: 126px; height: 126px; background-position: -5px -1501px; }
 .sprite-Veroo { width: 126px; height: 126px; background-position: -5px -1637px; }
 .sprite-Yomi { width: 126px; height: 126px; background-position: -5px -1773px; }
-.sprite-xXionx { width: 126px; height: 126px; background-position: -5px -1909px; }
+.sprite-Barie { width: 126px; height: 126px; background-position: -5px -1909px; }
+.sprite-xXionx { width: 126px; height: 126px; background-position: -5px -2045px; }
 /* Innocence */
 .sprite-Allet { width: 126px; height: 126px; background-position: -5px -5px; }
 .sprite-BigWood { width: 126px; height: 126px; background-position: -5px -141px; }
@@ -201,6 +202,7 @@
 .sprite-Icon_UltimateSkill_Veroo { width: 64px; height: 64px; background-position: -5px -893px; }
 .sprite-Icon_UltimateSkill_Yomi { width: 64px; height: 64px; background-position: -5px -967px; }
 .sprite-Icon_UltimateSkill_xXionx { width: 64px; height: 64px; background-position: -5px -1041px; }
+.sprite-Icon_UltimateSkill_Barie { width: 64px; height: 64px; background-position: -5px -1115px; }
 /* Innocence */
 .sprite-Icon_UltimateSkill_Allet { width: 64px; height: 64px; background-position: -5px -5px; }
 .sprite-Icon_UltimateSkill_BigWood { width: 64px; height: 64px; background-position: -5px -79px; }
