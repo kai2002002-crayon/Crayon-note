@@ -196,7 +196,7 @@ function t(key) { return LANG_DICT[currentLang][key] || key; }
 // ------------------------------------------
 const INITIAL_DATA = [
 	{ name: "巴麗葉", personality: "憂鬱", race: "魔女", position: "後排", job: "輔助", pathVersion: "", releaseDate: "2026-09-10T17:00:00+09:00" },
-	{ name: "雪蘭", personality: "天真", race: "魔女", position: "前排", job: "肉盾", pathVersion: "", releaseDate: "2026-09-10T17:00:00+09:00" },
+	{ name: "雪蘭", personality: "天真", race: "魔女", position: "前排", job: "輸出", pathVersion: "", releaseDate: "2026-09-10T17:00:00+09:00" },
 	{ name: "琵拉", personality: "狂亂", race: "龍族", position: "後排", job: "輔助", pathVersion: "V1", releaseDate: "2026-08-27T17:00:00+09:00" },
 	{ name: "羅蕾特", personality: "狂亂", race: "魔女", position: "後排", job: "輸出", pathVersion: "V1", releaseDate: "2026-07-30T17:00:00+09:00" },
     { name: "洛涅", personality: "天真", race: "精靈", position: "前排", job: "肉盾", pathVersion: "V4" },
