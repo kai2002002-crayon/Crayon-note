@@ -6,308 +6,316 @@
         <priority>1.0</priority>
     </url>
     <url>
-        <!-- 洛涅 -->
+        <!--1 洛涅 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E6%B4%9B%E6%B6%85</loc>
     </url>
     <url>
-        <!-- 薇薇 -->
+        <!--2 薇薇 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E8%96%87%E8%96%87</loc>
     </url>
     <url>
-        <!-- 艾爾芬 -->
+        <!--3 艾爾芬 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E8%89%BE%E7%88%BE%E8%8A%AC</loc>
     </url>
     <url>
-        <!-- x乂錫安乂x -->
+        <!--4 x乂錫安乂x -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=x%E4%B9%A2%E9%8C%AB%E5%AE%89%E4%B9%A2x</loc>
     </url>
     <url>
-        <!-- 伊弗利特 -->
+        <!--5 伊弗利特 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E4%BC%8A%E5%BC%97%E5%88%A9%E7%89%B9</loc>
     </url>
     <url>
-        <!-- 伊德 -->
+        <!--6 伊德 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E4%BC%8A%E5%BE%B7</loc>
     </url>
     <url>
-        <!-- 佩佩 -->
+        <!--7 佩佩 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E4%BD%A9%E4%BD%A9</loc>
     </url>
     <url>
-        <!-- 佩斯塔 -->
+        <!--8 佩斯塔 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E4%BD%A9%E6%96%AF%E5%A1%94</loc>
     </url>
     <url>
-        <!-- 修帕 -->
+        <!--9 修帕 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E4%BF%AE%E5%B8%95</loc>
     </url>
     <url>
-        <!-- 傑德 -->
+        <!--10 傑德 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E5%82%91%E5%BE%B7</loc>
     </url>
     <url>
-        <!-- 優米 -->
+        <!--11 優米 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E5%84%AA%E7%B1%B3</loc>
     </url>
     <url>
-        <!-- 劉美美 -->
+        <!--12 劉美美 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E5%8A%89%E7%BE%8E%E7%BE%8E</loc>
     </url>
     <url>
-        <!-- 加薇雅 -->
+        <!--13 加薇雅 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E5%8A%A0%E8%96%87%E9%9B%85</loc>
     </url>
     <url>
-        <!-- 卡洛特 -->
+        <!--14 卡洛特 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E5%8D%A1%E6%B4%9B%E7%89%B9</loc>
     </url>
     <url>
-        <!-- 卡蓮 -->
+        <!--15 卡蓮 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E5%8D%A1%E8%93%AE</loc>
     </url>
     <url>
-        <!-- 喬菲 -->
+        <!--16 喬菲 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E5%96%AC%E8%8F%B2</loc>
     </url>
     <url>
-        <!-- 基狄恩 -->
+        <!--17 基狄恩 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E5%9F%BA%E7%8B%84%E6%81%A9</loc>
     </url>
     <url>
-        <!-- 大師2號 -->
+        <!--18 大師2號 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E5%A4%A7%E5%B8%AB2%E8%99%9F</loc>
     </url>
     <url>
-        <!-- 大木頭 -->
+        <!--19 大木頭 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E5%A4%A7%E6%9C%A8%E9%A0%AD</loc>
     </url>
     <url>
-        <!-- 奈雅 -->
+        <!--20 奈雅 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E5%A5%88%E9%9B%85</loc>
     </url>
     <url>
-        <!-- 奶油 -->
+        <!--21 奶油 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E5%A5%B6%E6%B2%B9</loc>
     </url>
     <url>
-        <!-- 布蘭切 -->
+        <!--22 布蘭切 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E5%B8%83%E8%98%AD%E5%88%87</loc>
     </url>
     <url>
-        <!-- 希拉 -->
+        <!--23 希拉 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E5%B8%8C%E6%8B%89</loc>
     </url>
     <url>
-        <!-- 希爾德 -->
+        <!--24 希爾德 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E5%B8%8C%E7%88%BE%E5%BE%B7</loc>
     </url>
     <url>
-        <!-- 希瑟圖 -->
+        <!--25 希瑟圖 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E5%B8%8C%E7%91%9F%E5%9C%96</loc>
     </url>
     <url>
-        <!-- 希菲爾 -->
+        <!--26 希菲爾 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E5%B8%8C%E8%8F%B2%E7%88%BE</loc>
     </url>
     <url>
-        <!-- 帕特拉 -->
+        <!--27 帕特拉 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E5%B8%95%E7%89%B9%E6%8B%89</loc>
     </url>
     <url>
-        <!-- 庫洛艾 -->
+        <!--28 庫洛艾 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E5%BA%AB%E6%B4%9B%E8%89%BE</loc>
     </url>
     <url>
-        <!-- 康娜 -->
+        <!--29 康娜 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E5%BA%B7%E5%A8%9C</loc>
     </url>
     <url>
-        <!-- 愛麗絲 -->
+        <!--30 愛麗絲 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E6%84%9B%E9%BA%97%E7%B5%B2</loc>
     </url>
     <url>
-        <!-- 斑尼 -->
+        <!--31 斑尼 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E6%96%91%E5%B0%BC</loc>
     </url>
     <url>
-        <!-- 斯皮奇 -->
+        <!--32 斯皮奇 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E6%96%AF%E7%9A%AE%E5%A5%87</loc>
     </url>
     <url>
-        <!-- 斯諾奇 -->
+        <!--33 斯諾奇 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E6%96%AF%E8%AB%BE%E5%A5%87</loc>
     </url>
     <url>
-        <!-- 柯米 -->
+        <!--34 柯米 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E6%9F%AF%E7%B1%B3</loc>
     </url>
     <url>
-        <!-- 桃桃 -->
+        <!--35 桃桃 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E6%A1%83%E6%A1%83</loc>
     </url>
     <url>
-        <!-- 梅森 -->
+        <!--36 梅森 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E6%A2%85%E6%A3%AE</loc>
     </url>
     <url>
-        <!-- 梅露娜 -->
+        <!--37 梅露娜 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E6%A2%85%E9%9C%B2%E5%A8%9C</loc>
     </url>
     <url>
-        <!-- 海莉 -->
+        <!--38 海莉 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E6%B5%B7%E8%8E%89</loc>
     </url>
     <url>
-        <!-- 珀榭 -->
+        <!--39 珀榭 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E7%8F%80%E6%A6%AD</loc>
     </url>
     <url>
-        <!-- 琳 -->
+        <!--40 琳 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E7%90%B3</loc>
     </url>
     <url>
-        <!-- 瑟琳娜 -->
+        <!--41 瑟琳娜 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E7%91%9F%E7%90%B3%E5%A8%9C</loc>
     </url>
     <url>
-        <!-- 瑪約 -->
+        <!--42 瑪約 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E7%91%AA%E7%B4%84</loc>
     </url>
     <url>
-        <!-- 瑪麗 -->
+        <!--43 瑪麗 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E7%91%AA%E9%BA%97</loc>
     </url>
     <url>
-        <!-- 皮可菈 -->
+        <!--44 皮可菈 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E7%9A%AE%E5%8F%AF%E8%8F%88</loc>
     </url>
     <url>
-        <!-- 盧波 -->
+        <!--45 盧波 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E7%9B%A7%E6%B3%A2</loc>
     </url>
     <url>
-        <!-- 米雪 -->
+        <!--46 米雪 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E7%B1%B3%E9%9B%AA</loc>
     </url>
     <url>
-        <!-- 綾 -->
+        <!--47 綾 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E7%B6%BE</loc>
     </url>
     <url>
-        <!-- 羽伊 -->
+        <!--48 羽伊 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E7%BE%BD%E4%BC%8A</loc>
     </url>
     <url>
-        <!-- 艾斯皮 -->
+        <!--49 艾斯皮 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E8%89%BE%E6%96%AF%E7%9A%AE</loc>
     </url>
     <url>
-        <!-- 艾琳娜 -->
+        <!--50 艾琳娜 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E8%89%BE%E7%90%B3%E5%A8%9C</loc>
     </url>
     <url>
-        <!-- 艾皮卡 -->
+        <!--51 艾皮卡 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E8%89%BE%E7%9A%AE%E5%8D%A1</loc>
     </url>
     <url>
-        <!-- 艾舒爾 -->
+        <!--52 艾舒爾 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E8%89%BE%E8%88%92%E7%88%BE</loc>
     </url>
     <url>
-        <!-- 艾蜜莉雅 -->
+        <!--53 艾蜜莉雅 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E8%89%BE%E8%9C%9C%E8%8E%89%E9%9B%85</loc>
     </url>
     <url>
-        <!-- 芙莉可 -->
+        <!--54 芙莉可 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E8%8A%99%E8%8E%89%E5%8F%AF</loc>
     </url>
     <url>
-        <!-- 茱蜜 -->
+        <!--55 茱蜜 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E8%8C%B1%E8%9C%9C</loc>
     </url>
     <url>
-        <!-- 莉茲 -->
+        <!--56 莉茲 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E8%8E%89%E8%8C%B2</loc>
     </url>
     <url>
-        <!-- 莎莉 -->
+        <!--57 莎莉 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E8%8E%8E%E8%8E%89</loc>
     </url>
     <url>
-        <!-- 萊薇 -->
+        <!--58 萊薇 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E8%90%8A%E8%96%87</loc>
     </url>
     <url>
-        <!-- 蒂亞娜 -->
+        <!--59 蒂亞娜 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E8%92%82%E4%BA%9E%E5%A8%9C</loc>
     </url>
     <url>
-        <!-- 謝蒂 -->
+        <!--60 謝蒂 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E8%AC%9D%E8%92%82</loc>
     </url>
     <url>
-        <!-- 貝魯 -->
+        <!--61 貝魯 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E8%B2%9D%E9%AD%AF</loc>
     </url>
     <url>
-        <!-- 貝麗塔 -->
+        <!--62 貝麗塔 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E8%B2%9D%E9%BA%97%E5%A1%94</loc>
     </url>
     <url>
-        <!-- 路德 -->
+        <!--63 路德 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E8%B7%AF%E5%BE%B7</loc>
     </url>
     <url>
-        <!-- 路易 -->
+        <!--64 路易 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E8%B7%AF%E6%98%93</loc>
     </url>
     <url>
-        <!-- 阿萊特 -->
+        <!--65 阿萊特 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E9%98%BF%E8%90%8A%E7%89%B9</loc>
     </url>
     <url>
-        <!-- 雷吉 -->
+        <!--66 雷吉 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E9%9B%B7%E5%90%89</loc>
     </url>
     <url>
-        <!-- 馬爾 -->
+        <!--67 馬爾 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E9%A6%AC%E7%88%BE</loc>
     </url>
     <url>
-        <!-- 泰達 -->
+        <!--68 泰達 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E6%B3%B0%E9%81%94</loc>
     </url>
     <url>
-        <!-- 寧琉 -->
+        <!--69 寧琉 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E5%AF%A7%E7%90%89</loc>
     </url>
     <url>
-        <!-- 莉絲蒂 -->
+        <!--70 莉絲蒂 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E8%8E%89%E7%B5%B2%E8%92%82</loc>
     </url>
     <url>
-        <!-- 雷內瓦 -->
+        <!--71 雷內瓦 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E9%9B%B7%E5%85%A7%E7%93%A6</loc>
     </url>
     <url>
-        <!-- 芭瓅 -->
+        <!--72 芭瓏 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E8%8A%AD%E7%93%8F</loc>
     </url>
     <url>
-        <!-- 達雅 -->
+        <!--73 達雅 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E9%81%94%E9%9B%85</loc>
     </url>
     <url>
-        <!-- 提格 -->
+        <!--74 提格 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E6%8F%90%E6%A0%BC</loc>
     </url>
     <url>
-        <!-- 羅蕾特 -->
+        <!--75 羅蕾特 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E7%BE%85%E8%95%BE%E7%89%B9</loc>
     </url>
     <url>
-        <!-- 琵拉 -->
+        <!--76 琵拉 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E7%90%B5%E6%8B%89</loc>
+    </url>
+    <url>
+        <!--77 雪蘭 -->
+        <loc>https://crayon-note.vercel.app/char_detail.html?char=%E9%9B%AA%E8%98%AD</loc>
+    </url>
+    <url>
+        <!--78 芭莉耶 -->
+        <loc>https://crayon-note.vercel.app/char_detail.html?char=%E8%8A%AD%E8%8E%89%E8%80%B6</loc>
     </url>
     <url>
         <loc>https://crayon-note.vercel.app/apostle_viewer.html</loc>
