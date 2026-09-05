@@ -94,7 +94,7 @@ const characterSkills = [
     }
   },
     {
-    "name": "巴麗葉",
+    "name": "芭莉耶",
     "attribute": "魔法",
     "skills": {
       "zh-TW": {
