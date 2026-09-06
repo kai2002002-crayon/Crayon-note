@@ -622,7 +622,7 @@ const WORK_URL = {
     "Naia": "https://youtu.be/CVmOFWk-Mkk",
     "Ner": "https://youtu.be/yDeHfWHSUt8",
     "Picora": "https://youtu.be/rd9O8naEQZ8",
-	"Pira": "",
+	"Pira": "https://youtu.be/HoF-S_d-7fI",
     "Posher": "https://youtu.be/f00ZKS1IE-g",
     "RenewaAwaken": "https://youtu.be/AXm1PhUQmjE",
     "Rim": "https://youtu.be/0dde_RrWSGE",
