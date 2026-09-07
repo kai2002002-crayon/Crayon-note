@@ -188,7 +188,7 @@ const PRESENT_MAP = {
     },
 	"Pira": { 
         url: "",
-        name: { "zh-TW": "黃鐵礦硬幣", "ja": "", "en": "" }
+        name: { "zh-TW": "黃鐵礦硬幣", "ja": "黄鉄鉱コイン", "en": "Pyrite Coin" }
     },
     "Posher": { 
         url: "https://i.postimg.cc/7YYpp3Pt/Present-List-Posher.png",
@@ -420,7 +420,7 @@ const THOUGHT_MAP = {
             "Naia": "巨大なイルカ大砲の形をした水鉄砲。水大砲を打ちながら悪戯したいナイアの希望が投影されている。",
             "Ner": "エルフィンはもちろん、べリータを初めて担当して教育し育てていた頃の日誌。ネルらしく細かく内容を書き留めてある。",
             "Picora": "ピコラが直接作ったステッカーブック。色んな感情とエモーションを表現したステッカーでいっぱい。",
-			"Pira": "",
+			"Pira": "金じゃない黄鉄鉱で作られたコイン。ビラが自分だけの価値を自ら納得し始めたという意味が込められているようだ。",
             "Posher": "私の健康を考えて送ってくれたブドウジュース。あまりにも頻繁に送ってくるので飲み切れないと思う。",
 			"RenewaAwaken": "リニュアは上映が終わった作品のポスターを集めて持って来てくれる。エーリアスで経験した冒険を元に作った作品のポスター。",
             "Rim": "リムがぎこちない感じで私にプレゼントした茶器セット。私の部屋に来る度これで一緒にお茶を飲みたいという。",
@@ -495,7 +495,7 @@ const THOUGHT_MAP = {
             "Naia": "A giant water gun shaped like a dolphin cannon. It reflects Naia's wish to play with water cannons.",
             "Ner": "A diary of the old days when Ner was taking care of and educating Erpin and Belita. As expected of Ner, it is written meticulously.",
             "Picora": "A sticker book that Picora made by herself. It's full of stickers showing various emotions and emojis.",
-			"Pira": "",
+			"Pira": "A coin made from pyrite instead of gold. It seems Pira has started to find and accept her own worth.",
             "Posher": "Grape juice that Posher sent me, as she worries about my health. She sends it too often, so that I can't finish it all.",
             "RenewaAwaken": "Posters of films based on adventures that took place in Elias. When they finish screening, Renewa collects them and brings them to me.",
             "Rim": "A teacup set that Rim gifted to me shyly. She said she wants to drink tea together every time she visits my room.",
@@ -648,7 +648,7 @@ const LETTER_MAP = {
             "Naia": "教主〜！実は手紙を書くのって初めてなの！誰に書こうかな〜って悩んだんだけど、シルフィールは読んでくれなさそうだから教主にしたんだ！私の初めての手紙をもらえるんだから、光栄に思ってよね。えーっと……それから、この前は悪戯しすぎてごめんね。実は謝りたくてこの手紙を書いてるの。怒ってないよね？怒ってないなら、また一緒に遊ぼう！教主と遊ぶのすっごく楽しいもん！",
 	    	"Ner": "こんにちは、教主様。\n今さらかも知れませんが、私たち世界樹教団の教主様があなたで良かったと思っています。これからも私や女王様のそばにいてくださると嬉しいです。そういえば、昨日の修養録をまだいただいておりませんが、作成中なのでしょうか？お待ちしております。\nネルより。",
             "Picora": "師匠様！こんにちは！師匠様の永遠の弟子、ピコラが手紙を送ります！師匠様との毎日は本当に夢みたいです。師匠様からステッカーや髪飾りの作り方を教えてもらったり、たわいもない話をしたり、それに美味しいものが食べられるなんて！師匠様に恥をかかせない素敵な弟子になれるように、もっと頑張ります！",
-            "Pira": "",
+            "Pira": "やぁやぁ。ピラやで。融資の手紙やないから安心しいや。\n今まで･･････いろいろ世話ぁ焼いてもろうたのがうれしゅうて書いただけやねん、別に気にすることあらへんで。なんで他の連中に慕われてるのか気になっとったんやけど、今は分かる気がすんねん。これからもええビジネスのネタがあったらこっそり連絡入れたるからな。チャンスは掴まなあかんでぇ?\nほなまたな。",
 			"Posher": "教主、新しいポーションを作ったけど味見しに来る？いつも言ってるけど、私のポーションが「良薬口に苦し」ってのは分かってるわよね？だけど教主のためなら……一度くらいは味を考慮したポーションを作ってもいいわ。でも、あまり期待しないでね。味の基準はそれぞれだから。ふふ。暇になったら、遊びに来てね。待ってるわ。",
             "RenewaAwaken": "流れ者だった私が、誰かとプライベートで深い繋がりができるなんて想像したこともなかったです。おかげで今の1秒1秒が特別で、時にはぎこちなくも感じます。いろいろな時代のエーリアスを経験して、さまざまなのものを見てきましたが、教主様には特別な期待を抱いてしまいます。教主様に出会わせてくれたこの時間軸に、少し感謝しています。エーリアスが、教主様にとって幸せな場所でありますように。",
 			"Rim": "丘の上に独りで暮らしていた私にも……宴会場でたくさんの友達ができました。私のギャグを気に入ってくれる友達もいて嬉しいです。レモンティーを好きな人がいたら……いつか私の家に招待したいなと思っています。教主のおかげで、たくさんの使徒と出会えました……ありがとうございます。",
@@ -723,7 +723,7 @@ const LETTER_MAP = {
             "Naia": "Master! This is my first time writing a letter, you know? Consider it an honor to receive my first letter! I was thinking about who to write to, but Silphir probably wouldn't read it even if I sent one, so I'm writing to you, Master! Um... I'm really sorry for being too rough last time! Actually, I'm writing this letter because I wanted to say sorry. You're not too mad, right? If you're not, let's hang out again! Playing with you is super fun, Master!",
             "Ner": "Hello, Master.\nThis may sound a little out of nowhere, but lately I often find myself thinking how fortunate it is that you, and no one else, are the Master of our Yggdrasil Order. I hope you will continue to remain by my side and by Her Majesty's as well. Oh, and before I forget, I did not receive your diary yesterday. You are still working on it, I assume? I shall be waiting.\nSincerely, Ner.",
             "Picora": "Master! Hello! Your eternal disciple, Picora, is writing you a letter! Every single day with you feels like a dream come true. Your teachings don't just become stickers and hairpins for thought, sharing little everyday stories together, and eating delicious food, it brings such great happiness to me! I'll work even harder to become a wonderful disciple who won't be a burden to you, Master!",
-            "Pira": "",
+            "Pira": "Oi, oi, it's me, Pira.\nRelax, this ain't a collection letter. I'm just writing cause I'm grateful for how much you've looked out for me all this time, so don't make a big deal outta it.\nI didn't get why the others were so obsessed with you, but I finally think I get it, yarou. I'll reach out if a sweet business opportunity pops up, so don't miss the boat.\nCatch you later, oyabun.",
 			"Posher": "Hey, Master, I've made a new potion. How about you come and give it a try? I've told you before, just like my potions, things that taste bitter are actually good for you, right? For you, though, I'll try making one that actually tastes pleasant. Don't get your hopes up, though... taste is all relative, after all. Hehe. Drop by when you have time. I'll be waiting.",
             "RenewaAwaken": "I've spent most of my life wandering from place to place, so I never imagined I'd grow so close to someone. That's why every moment feels more precious, and sometimes a little awkward. I've seen many places across countless versions of Elias, but I find myself holding special expectations for you, Master. I'm somewhat grateful to this timeline for allowing me to meet you. I hope Elias brings you nothing but happiness, Master.",
             "Rim": "I used to live alone in a secluded house on a hill, but coming to the banquet hall has allowed me to make many friends. I'm tickled pink that there seem to be some who like my jokes. Are there more who are about that lemon tea life? I can't wait for my friends to come by my house someday. I'm grateful that the Master allowed me to meet many Apostles at the banquet hall.",
