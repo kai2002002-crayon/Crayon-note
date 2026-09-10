@@ -812,26 +812,26 @@ const ASIDE_DATA = {
     },
     "Sherum": { 
         asideIcon: "", 
-        totalName: { zh: "", ja: "", en: "" }, 
+        totalName: { zh: "艾利亞斯紀錄", ja: "", en: "" }, 
         stars: {
             1: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "." }, 
-                effects: { zh: [""], ja: [""], en: [""] } 
+                name: { zh: "書記官的記錄法", ja: "", en: "" }, 
+                desc: { zh: "穿戴者的最大HP、魔法攻擊力、爆擊、爆擊傷害增加。", ja: "", en: "." }, 
+                effects: { zh: ["最大HP增加:6%", "魔法攻擊力增加:6%", "爆擊增加:6%", "爆擊傷害增加:6%"], ja: [""], en: [""] } 
             },
             2: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "" }, 
-                effects: { zh: [""], ja: [""], en: [""] } 
+                name: { zh: "艾利亞斯實錄", ja: "", en: "" }, 
+                desc: { zh: "高級技能的冷卻時間減少。使用高級技能時，恢復自身SP，並使首次受到高級技能傷害的所有敵人受到的傷害增加。", ja: "", en: "" }, 
+                effects: { zh: ["冷卻時間減少:8秒", "SP恢復量:60", "受到的傷害量增加:25%", "受到的傷害量增加持續時間:6秒"], ja: [""], en: [""] } 
             },
             3: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "" }, 
-                effects: { zh: [""], ja: [""], en: ["%"] }, 
-                globalEffects: { zh: ["全體 %", "全體 %"], ja: ["全体 %", "全体 %"], en: ["All %", "All %"] } 
+                name: { zh: "友軍觀察日誌", ja: "", en: "" }, 
+                desc: { zh: "使所有友軍爆擊及爆擊傷害增加。", ja: "", en: "" }, 
+                effects: { zh: ["爆擊增加:6%", "爆擊傷害增加:6%"], ja: [""], en: ["%"] }, 
+                globalEffects: { zh: ["全體魔法攻擊力 3%", "全體爆擊傷害 3%"], ja: ["全体 %", "全体 %"], en: ["All %", "All %"] } 
             }
         }
     },
