@@ -818,20 +818,28 @@ const ASIDE_DATA = {
                 icon: "", 
                 name: { zh: "書記官的記錄法", ja: "書記官の記録法", en: "Scribe's Craft" }, 
                 desc: { zh: "穿戴者的最大HP、魔法攻擊力、爆擊、爆擊傷害增加。", ja: "着用者の最大HP、魔法攻撃力、会心、会心ダメージが増加する。", en: "Increases the bearer's Max HP, Magical Attack, Critical Hit, and Critical Damage." }, 
-                effects: { zh: ["最大HP增加:6%", "魔法攻擊力增加:6%", "爆擊增加:6%", "爆擊傷害增加:6%"], ja: ["最大HP增加:6%", "魔法攻擊力增加:6%", "会心增加:6%", "会心ダメージ增加:6%"], en: ["Max HP Increase: 6%", "Magical ATK Increase: 6%", ""CRIT Increase: 6%", "CRIT DMG Increase: 6%"] } 
+                effects: { 
+                    zh: ["最大HP增加:6%", "魔法攻擊力增加:6%", "爆擊增加:6%", "爆擊傷害增加:6%"], ja: ["最大HP増加:6%", "魔法攻撃力増加:6%", "会心増加:6%", "会心ダメージ増加:6%"], en: ["Max HP Increase: 6%", "Magical ATK Increase: 6%", "CRIT Increase: 6%", "CRIT DMG Increase: 6%"] 
+                } 
             },
             2: { 
                 icon: "", 
                 name: { zh: "艾利亞斯實錄", ja: "エーリアス実録", en: "Annals of Elias" }, 
-                desc: { zh: "高級技能的冷卻時間減少。使用高級技能時，恢復自身SP，並使首次受到高級技能傷害的所有敵人受到的傷害增加。", ja: "高学年スキルのクールタイムが減少する。 高学年スキル使用時、自身のSPを回復し、高学年スキルの最初のダメージを受けた敵全員の被ダメージ量を増加させる。", en: "Reduces Senior Skill Cooldown. When Senior Skill is used, recovers her SP and increases Incoming Damage taken by all enemies hit by the first strike of the Senior Skill." }, 
-                effects: { zh: ["冷卻時間減少:8秒", "SP恢復量:60", "受到的傷害量增加:25%", "受到的傷害量增加持續時間:6秒"], ja: ["クールタイム減少:8秒", "SP回復量:60", "被ダメージ量増增加:25%", "被ダメージ量増加の持続時間:6秒"], en: ["Cooldown Reduction: 8s", "SP Recovery: 60", "Incoming DMG Increase: 25%", "Incoming DMG Increase Duration: 6s"] } 
+                desc: { zh: "高級技能的冷卻時間減少。使用高級技能時，恢復自身SP，並使首次受到高級技能傷害的所有敵人受到的傷害增加。", ja: "高学年スキルのクールタイムが減少する。高学年スキル使用時、自身のSPを回復し、高学年スキルの最初のダメージを受けた敵全員の被ダメージ量を増加させる。", en: "Reduces Senior Skill Cooldown. When Senior Skill is used, recovers her SP and increases Incoming Damage taken by all enemies hit by the first strike of the Senior Skill." }, 
+                effects: { 
+                    zh: ["冷卻時間減少:8秒", "SP恢復量:60", "受到的傷害量增加:25%", "受到的傷害量增加持續時間:6秒"], ja: ["クールタイム減少:8秒", "SP回復量:60", "被ダメージ量増加:25%", "被ダメージ量増加の持続時間:6秒"], en: ["Cooldown Reduction: 8s", "SP Recovery: 60", "Incoming DMG Increase: 25%", "Incoming DMG Increase Duration: 6s"] 
+                } 
             },
             3: { 
                 icon: "", 
                 name: { zh: "友軍觀察日誌", ja: "味方観察日誌", en: "Ally Observation Journal" }, 
                 desc: { zh: "使所有友軍爆擊及爆擊傷害增加。", ja: "味方全員の会心と会心ダメージを増加させる。", en: "Increases Critical Hit and Critical Damage of all allies." }, 
-                effects: { zh: ["爆擊增加:6%", "爆擊傷害增加:6%"], ja: ["会心增加:6%", "会心ダメージ増加:6%"], en: ["CRIT Increase: 6%", "CRIT DMG Increase: 6%"] }, 
-                globalEffects: { zh: ["全體魔法攻擊力 3%", "全體爆擊傷害 3%"], ja: ["全体魔法攻撃力 3%", "全体会心ダメージ 3%"], en: ["All Magical ATK 3%", "All CRIT DMG 3%"] } 
+                effects: { 
+                    zh: ["爆擊增加:6%", "爆擊傷害增加:6%"], ja: ["会心増加:6%", "会心ダメージ増加:6%"], en: ["CRIT Increase: 6%", "CRIT DMG Increase: 6%"] 
+                }, 
+                globalEffects: { 
+                    zh: ["全體魔法攻擊力 3%", "全體爆擊傷害 3%"], ja: ["全体魔法攻撃力 3%", "全体会心ダメージ 3%"], en: ["All Magical ATK 3%", "All CRIT DMG 3%"] 
+                } 
             }
         }
     },
