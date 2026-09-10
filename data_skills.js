@@ -100,7 +100,7 @@ const characterSkills = [
       "zh-TW": {
         "normalAttack": {
           "basic": "向敵人發射墨水並對其造成魔法傷害。 [魔法傷害:120%]",
-          "enhanced": " []"
+          "enhanced": ""
         },
         "normalSkill": {
           "name": "請整理書本",
@@ -121,10 +121,10 @@ const characterSkills = [
       "ja": {
         "normalAttack": {
           "basic": "インクを発射し、敵に魔法ダメージを与える。 [魔法ダメージ:120%]",
-          "enhanced": " []"
+          "enhanced": ""
         },
         "normalSkill": {
-          "name": "本を片付けてくださいい",
+          "name": "本を片付けてください",
           "desc": "ブックカートを引いて攻撃力が最も高い味方にシールドを付与し、SPを回復させて戻ってくる。ブックカートを引いている間は、移動速度が減少する。",
           "stats": ["シールド: 最大HPの42%", "シールドの持続時間:3秒", "SP回復量:60"]
         },
@@ -136,17 +136,17 @@ const characterSkills = [
         },
         "passiveSkill": {
           "desc": "全ての防御力が増加する。",
-          "stats": ["防御力增加:42%"]
+          "stats": ["防御力増加:42%"]
         }
       },
       "en": {
         "normalAttack": {
           "basic": "Shoots ink at enemies, dealing Magical Damage. [Magical DMG: 120%]",
-          "enhanced": " []"
+          "enhanced": ""
         },
         "normalSkill": {
           "name": "Please Organize the Books!",
-          "desc": "Pushes a book cart to grant a Shield and recovers SP to the ally with the highest Attack, Movement Speed is reduced while pushing the book cart.",
+          "desc": "Pushes a book cart to grant a Shield and recovers SP to the ally with the highest Attack. Movement Speed is reduced while pushing the book cart.",
           "stats": ["Shield: 42% of Max HP", "Shield Duration: 3s", "SP Recovery: 60"]
         },
         "ultimateSkill": {
@@ -162,7 +162,7 @@ const characterSkills = [
       }
     }
   },
-    {
+  {
     "name": "雪蘭",
     "attribute": "魔法",
     "skills": {
@@ -173,7 +173,7 @@ const characterSkills = [
         },
         "normalSkill": {
           "name": "魔女檔案庫",
-          "desc": "在自身周围生成持續一定時間的傳承之幕。每秒增加位於傳承之幕上的友軍攻擊力，並對敵人造成7次範圍魔法傷害。若命中的敵人為世界首領怪物，會額外造成魔法傷害。",
+          "desc": "在自身周圍生成持續一定時間的傳承之幕。每秒增加位於傳承之幕上的友軍攻擊力，並對敵人造成7次範圍魔法傷害。若命中的敵人為世界首領怪物，會額外造成魔法傷害。",
           "stats": ["傳承之幕持續時間:6秒", "攻擊力增加:21%", "攻擊力增加持續時間:8秒", "每秒魔法傷害:160%", "世界首領追加魔法傷害:160%"]
         },
         "ultimateSkill": {
@@ -195,12 +195,12 @@ const characterSkills = [
         "normalSkill": {
           "name": "ウィッチ・アーカイブ",
           "desc": "自身の周囲に一定時間、伝承のカーテンを生成する。伝承のカーテン内の味方の攻撃力を1秒ごとに増加させ、敵に7回範囲魔法ダメージを与える。命中した敵がワールドボスモンスターの場合、追加で魔法ダメージを与える。",
-          "stats": ["伝承のカーテンの持続時間:6秒", "攻擊力增加:21%", "攻撃力増加の持続時間:8秒", "1秒ごとの魔法ダメージ: 160%", "ワールドボスへの追加魔法ダメージ: 160%"]
+          "stats": ["伝承のカーテンの持続時間:6秒", "攻撃力増加:21%", "攻撃力増加の持続時間:8秒", "1秒ごとの魔法ダメージ: 160%", "ワールドボスへの追加魔法ダメージ: 160%"]
         },
         "ultimateSkill": {
           "name": "リアルな黒歴史",
-          "desc": "指定範囲内で真ん中にいる敵の位置に、一定時間悔根の領域を生成する。悔根の領域内の敵に範囲魔法ダメージを9回与え、攻撃速度を減少させる",
-          "stats": ["悔根の領域の持続時間:8秒", "1秒ごとの魔法ダメージ: 160%", "攻擊速度減少:37%", "攻撃速度減少の持続時間: 10秒"],
+          "desc": "指定範囲内で真ん中にいる敵の位置に、一定時間悔恨の領域を生成する。悔恨の領域内の敵に範囲魔法ダメージを9回与え、攻撃速度を減少させる。",
+          "stats": ["悔恨の領域の持続時間:8秒", "1秒ごとの魔法ダメージ: 160%", "攻撃速度減少:37%", "攻撃速度減少の持続時間: 10秒"],
           "cooldown": "30秒"
         },
         "passiveSkill": {
@@ -208,7 +208,7 @@ const characterSkills = [
           "stats": ["シールド: 最大HPの68%", "シールドの持続時間:6秒", "シールドのクールタイム: 25秒"]
         }
       },
-        "en": {
+      "en": {
         "normalAttack": {
           "basic": "Swings her Quill, dealing Magical Damage 2 times to the enemy. [Total Magical DMG: 80%]",
           "enhanced": "At a set chance, deals AoE Magical Damage to enemies in front and instantly reduces the remaining cooldown of her Senior Skill. [Magical DMG: 160%] [Cooldown Reduction: 5s]"
