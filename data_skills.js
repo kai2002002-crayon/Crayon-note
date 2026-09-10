@@ -141,23 +141,23 @@ const characterSkills = [
       },
       "en": {
         "normalAttack": {
-          "basic": "Swings her Quill, dealing Magical Damage 2 times to the enemy. [Total Magical DMG: 80%]",
-          "enhanced": "At a set chance, deals AoE Magical Damage to enemies in front and instantly reduces the remaining cooldown of her Senior Skill. [Magical DMG: 160%] [Cooldown Reduction: 5s]"
+          "basic": "Shoots ink at enemies, dealing Magical Damage. [Magical DMG: 120%]",
+          "enhanced": " []"
         },
         "normalSkill": {
-          "name": "Witch Archive",
-          "desc": "Creates a Curtain of Legacy around herself for a set period of time. Increases the Attack of allies within it every second and deals AoE Magical Damage to enemies within it 7 times. If the enemy hit is a World Boss monster, deals additional Magical Damage.",
-          "stats": ["Curtain of Legacy Duration: 6s", "ATK Increase: 21%", "ATK Increase Duration: 8s", "Magical DMG per Second: 160%", "Additional Magical DMG to World Boss: 160%"]
+          "name": "Please Organize the Books!",
+          "desc": "Pushes a book cart to grant a Shield and recovers SP to the ally with the highest Attack, Movement Speed is reduced while pushing the book cart.",
+          "stats": ["Shield: 42% of Max HP", "Shield Duration: 3s", "SP Recovery: 60"]
         },
         "ultimateSkill": {
-          "name": "Vivid Embarrassing Past",
-          "desc": "Creates an Area of Remorse around the enemy at the center of the designated range for a set period of time. Deals AoE Magical Damage to enemies inside the Area of Remorse 9 times and reduces their Attack Speed.",
-          "stats": ["Area of Remorse Duration: 8s", "Magical DMG per Second: 160%", "ATK SPD Reduction: 37%", "ATK SPD Reduction Duration: 10s"],
+          "name": "Please Return Them Today!",
+          "desc": "Lends a book to the ally with the highest Attack, increasing their Attack and Attack Speed. This buff is applied 4 times and can stack.",
+          "stats": ["ATK Increase per Stack: 15%", "ATK SPD Increase per Stack: 9%", "Duration: 15s"],
           "cooldown": "30s"
         },
         "passiveSkill": {
-          "desc": "When her HP drops below 50%, she casts a Shield on herself.",
-          "stats": ["Shield: 68% of Max HP", "Shield Duration: 6s", "Shield Cooldown: 25s"]
+          "desc": "Increases All Defenses.",
+          "stats": ["DEF Increase: 42%"]
         }
       }
     }
@@ -208,25 +208,25 @@ const characterSkills = [
           "stats": ["シールド: 最大HPの68%", "シールドの持続時間:6秒", "シールドのクールタイム: 25秒"]
         }
       },
-      "en": {
+        "en": {
         "normalAttack": {
-          "basic": " []",
-          "enhanced": " []"
+          "basic": "Swings her Quill, dealing Magical Damage 2 times to the enemy. [Total Magical DMG: 80%]",
+          "enhanced": "At a set chance, deals AoE Magical Damage to enemies in front and instantly reduces the remaining cooldown of her Senior Skill. [Magical DMG: 160%] [Cooldown Reduction: 5s]"
         },
         "normalSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""]
+          "name": "Witch Archive",
+          "desc": "Creates a Curtain of Legacy around herself for a set period of time. Increases the Attack of allies within it every second and deals AoE Magical Damage to enemies within it 7 times. If the enemy hit is a World Boss monster, deals additional Magical Damage.",
+          "stats": ["Curtain of Legacy Duration: 6s", "ATK Increase: 21%", "ATK Increase Duration: 8s", "Magical DMG per Second: 160%", "Additional Magical DMG to World Boss: 160%"]
         },
         "ultimateSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""],
-          "cooldown": "s"
+          "name": "Vivid Embarrassing Past",
+          "desc": "Creates an Area of Remorse around the enemy at the center of the designated range for a set period of time. Deals AoE Magical Damage to enemies inside the Area of Remorse 9 times and reduces their Attack Speed.",
+          "stats": ["Area of Remorse Duration: 8s", "Magical DMG per Second: 160%", "ATK SPD Reduction: 37%", "ATK SPD Reduction Duration: 10s"],
+          "cooldown": "30s"
         },
         "passiveSkill": {
-          "desc": "",
-          "stats": [""]
+          "desc": "When her HP drops below 50%, she casts a Shield on herself.",
+          "stats": ["Shield: 68% of Max HP", "Shield Duration: 6s", "Shield Cooldown: 25s"]
         }
       }
     }
