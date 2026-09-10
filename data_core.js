@@ -842,8 +842,8 @@ const PICKUP_SCHEDULE = [
 	{
         start: "2026-09-10T17:00:00+09:00",
         end: "2026-09-17T03:59:59+09:00",
-        chars: ["夏樂", "芭莉耶"],
-        note: "Sherum, Barie"
+        chars: ["夏樂"],
+        note: "Sherum"
     },
 	{
         start: "2026-08-20T04:00:00+09:00",
