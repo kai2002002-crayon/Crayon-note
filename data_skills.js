@@ -111,7 +111,7 @@ const characterSkills = [
           "name": "請當天還書",
           "desc": "拿出一本書，借給攻擊力最高的友軍。增加友軍的攻擊力與攻擊速度，該增益可發動4次，亦可疊加。",
           "stats": ["每層攻擊力增加:15%", "每層攻擊速度提升:9%", "持續時間:15秒"],
-          "cooldown": "秒"
+          "cooldown": "30秒"
         },
         "passiveSkill": {
           "desc": "增加所有防禦力。",
@@ -120,44 +120,44 @@ const characterSkills = [
       },
       "ja": {
         "normalAttack": {
-          "basic": " []",
+          "basic": "インクを発射し、敵に魔法ダメージを与える。 [魔法ダメージ:120%]",
           "enhanced": " []"
         },
         "normalSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""]
+          "name": "本を片付けてくださいい",
+          "desc": "ブックカートを引いて攻撃力が最も高い味方にシールドを付与し、SPを回復させて戻ってくる。ブックカートを引いている間は、移動速度が減少する。",
+          "stats": ["シールド: 最大HPの42%", "シールドの持続時間:3秒", "SP回復量:60"]
         },
         "ultimateSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""],
-          "cooldown": "秒"
+          "name": "当日返却ですっ",
+          "desc": "攻撃力が最も高い味方に本を貸し出し、味方の攻撃力と攻撃速度を増加させる。このバフは4回発動し、スタックできる。",
+          "stats": ["スタックごとの攻撃力増加: 15%", "スタックごとの攻撃速度増加:9%", "持続時間:15秒"],
+          "cooldown": "30秒"
         },
         "passiveSkill": {
-          "desc": "",
-          "stats": [""]
+          "desc": "全ての防御力が増加する。",
+          "stats": ["防御力增加:42%"]
         }
       },
       "en": {
         "normalAttack": {
-          "basic": " []",
-          "enhanced": " []"
+          "basic": "Swings her Quill, dealing Magical Damage 2 times to the enemy. [Total Magical DMG: 80%]",
+          "enhanced": "At a set chance, deals AoE Magical Damage to enemies in front and instantly reduces the remaining cooldown of her Senior Skill. [Magical DMG: 160%] [Cooldown Reduction: 5s]"
         },
         "normalSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""]
+          "name": "Witch Archive",
+          "desc": "Creates a Curtain of Legacy around herself for a set period of time. Increases the Attack of allies within it every second and deals AoE Magical Damage to enemies within it 7 times. If the enemy hit is a World Boss monster, deals additional Magical Damage.",
+          "stats": ["Curtain of Legacy Duration: 6s", "ATK Increase: 21%", "ATK Increase Duration: 8s", "Magical DMG per Second: 160%", "Additional Magical DMG to World Boss: 160%"]
         },
         "ultimateSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""],
-          "cooldown": "s"
+          "name": "Vivid Embarrassing Past",
+          "desc": "Creates an Area of Remorse around the enemy at the center of the designated range for a set period of time. Deals AoE Magical Damage to enemies inside the Area of Remorse 9 times and reduces their Attack Speed.",
+          "stats": ["Area of Remorse Duration: 8s", "Magical DMG per Second: 160%", "ATK SPD Reduction: 37%", "ATK SPD Reduction Duration: 10s"],
+          "cooldown": "30s"
         },
         "passiveSkill": {
-          "desc": "",
-          "stats": [""]
+          "desc": "When her HP drops below 50%, she casts a Shield on herself.",
+          "stats": ["Shield: 68% of Max HP", "Shield Duration: 6s", "Shield Cooldown: 25s"]
         }
       }
     }
