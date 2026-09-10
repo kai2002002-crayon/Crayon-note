@@ -99,23 +99,23 @@ const characterSkills = [
     "skills": {
       "zh-TW": {
         "normalAttack": {
-          "basic": " []",
+          "basic": "向敵人發射墨水並對其造成魔法傷害。 [魔法傷害:120%]",
           "enhanced": " []"
         },
         "normalSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""]
+          "name": "請整理書本",
+          "desc": "拖著書車，賦予攻擊力最高的友軍護盾，並使其恢復SP後返回。拖著書車時，移動速度會減少。",
+          "stats": ["護盾:最大HP的42%", "護盾持續時間:3秒", "SP恢復量:60"]
         },
         "ultimateSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""],
+          "name": "請當天還書",
+          "desc": "拿出一本書，借給攻擊力最高的友軍。增加友軍的攻擊力與攻擊速度，該增益可發動4次，亦可疊加。",
+          "stats": ["每層攻擊力增加:15%", "每層攻擊速度提升:9%", "持續時間:15秒"],
           "cooldown": "秒"
         },
         "passiveSkill": {
-          "desc": "",
-          "stats": ["秒"]
+          "desc": "增加所有防禦力。",
+          "stats": ["防禦力增加:42%"]
         }
       },
       "ja": {
