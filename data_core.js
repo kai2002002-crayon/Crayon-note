@@ -906,27 +906,9 @@ const EVENT_SCHEDULE = [
 // 🃏 特選卡片排程表
 const CARD_SCHEDULE = [
 	{
-        start: "2026-08-20T04:00:00+09:00",
-        end: "2026-08-27T10:59:59+09:00",
-        id: "Artifact95",
-        type: "Artifact"
-    },
-	{
-        start: "2026-08-13T17:00:00+09:00",
-        end: "2026-08-27T10:59:59+09:00",
-        id: "Rune12",
-        type: "Rune"
-    },
-	{
-        start: "2026-08-27T17:00:00+09:00",
-        end: "2026-09-10T10:59:59+09:00",
-        id: "Artifact22",
-        type: "Artifact"
-    },
-	{
-        start: "2026-09-03T04:00:00+09:00",
-        end: "2026-09-10T10:59:59+09:00",
-        id: "Artifact23",
+        start: "2026-09-10T04:00:00+09:00",
+        end: "2026-09-24T10:59:59+09:00",
+        id: "Artifact119",
         type: "Artifact"
     }
 ];
