@@ -354,7 +354,7 @@ const ASIDE_DATA = {
     },
     "Jade": { 
         asideIcon: "", 
-        totalName: { zh: "", ja: "", en: "" }, 
+        totalName: { zh: "完美", ja: "完璧", en: "Perfection" }, 
         stars: {
             1: { 
                 icon: "", 
