@@ -9,8 +9,8 @@ const CHAR_BACKGROUNDS = {
     "精靈": "https://i.postimg.cc/X7z2XDnX/Popup-Gacha-Event-Pattern-Tribe-Elf.png",
     "???": "https://i.postimg.cc/jSfh2x8F/Popup-Gacha-Event-Pattern-Tribe-Mystic.png",
     "幽靈": "https://i.postimg.cc/13FKXmWY/Popup-Gacha-Event-Pattern-Tribe-Phantom.png",
-    "妖精": "https://i.postimg.cc/pX60y1Pm/Popup-Gacha-Event-Pattern-Tribe-Sprite.png",
-    "獸人": "https://i.postimg.cc/L8PV59yC/Popup-Gacha-Event-Pattern-Tribe-Werebeast.png",
+    "妖精": "https://i.postimg.cc/GmS7TWsH/Popup-Gacha-Event-Pattern-Tribe-Sprite.png",
+    "獸人": "https://i.postimg.cc/qvZb6PCg/Popup-Gacha-Event-Pattern-Tribe-Werebeast.png",
     "魔女": "https://i.postimg.cc/C1r8JXPw/Popup-Gacha-Event-Pattern-Tribe-Witch.png"
 };
 
