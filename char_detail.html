@@ -394,7 +394,7 @@
                 window.ICON_MAP['attribute_Magic'] = 'sprite-base sprite-common sprite-Type_Magic';
             
                 // 性格
-                const personalities = { '冷靜': 'Composed', '憂鬱': 'Depressed', '天真': 'Innocence', '狂亂': 'Madness', '活潑': 'Vivacious' };
+                const personalities = { '冷靜': 'Composed', '憂鬱': 'Depressed', '天真': 'Innocence', '狂亂': 'Madness', '活潑': 'Vivacious', '共鳴': 'All' };
                 Object.entries(personalities).forEach(([zh, en]) => {
                     const cls = `sprite-base sprite-common sprite-Personality_${en}`;
                     window.ICON_MAP[`personality_${zh}`] = cls;
@@ -410,7 +410,7 @@
                 });
             
                 // 站位
-                const positions = { '後排': 'Back', '前排': 'Front', '中排': 'Middle' };
+                const positions = { '後排': 'Back', '前排': 'Front', '中排': 'Middle', '全能': 'All' };
                 Object.entries(positions).forEach(([zh, en]) => {
                     const cls = `sprite-base sprite-common sprite-Position_${en}`;
                     window.ICON_MAP[`position_${zh}`] = cls;
