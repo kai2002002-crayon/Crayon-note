@@ -122,6 +122,10 @@ const PRESENT_MAP = {
         url: "https://i.postimg.cc/rsg7Dmj1/Present-List-Jade.png",
         name: { "zh-TW": "高級玉石地板", "ja": "高級翡翠マット", "en": "Premium Jade Electric Blanket" }
     },
+	"Joanne": { 
+        url: "",
+        name: { "zh-TW": "", "ja": "", "en": "" }
+    },
     "Jubee": { 
         url: "https://i.postimg.cc/901sDMbL/Present-List-Jubee.png",
         name: { "zh-TW": "皇家蜂蜜", "ja": "ロイヤルハニー", "en": "Royal Honey" }
