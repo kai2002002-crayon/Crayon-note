@@ -874,7 +874,7 @@
                 const localTooltipTexts = { "zh-TW": "特選招募中：", "ja": "ピックアップ中：", "en": "Pickup Rate Up: " };
                 const titleEl = document.getElementById('pickupTitleText');
                 if (titleEl) titleEl.innerText = localRecruitTexts[window.currentLang] || localRecruitTexts["zh-TW"];            
-                const personalityColors = { "天真": "border-green-400 text-green-400", "冷靜": "border-blue-400 text-blue-400", "狂亂": "border-red-400 text-red-400", "活潑": "border-yellow-400 text-yellow-400", "憂鬱": "border-purple-400 text-purple-400" };
+                const personalityColors = { "天真": "border-green-400 text-green-400", "冷靜": "border-blue-400 text-blue-400", "狂亂": "border-red-400 text-red-400", "活潑": "border-yellow-400 text-yellow-400", "憂鬱": "border-purple-400 text-purple-400", "共鳴": "border-rainbow text-rainbow" };
                         activeChars.forEach(charName => {
                             const charData = INITIAL_DATA.find(c => c.name === charName); if (!charData) return;
                             const pColorClass = personalityColors[charData.personality] || "border-gray-400 text-gray-400";
@@ -1326,7 +1326,7 @@
             function renderMatrix() {
                 const container = document.getElementById('matrixContainer'); if(!container) return; container.innerHTML = '';
                 const personalities = ["共鳴", "天真", "冷靜", "狂亂", "活潑", "憂鬱"];
-                const personalityBorderColors = { "天真": "border-green-500", "冷靜": "border-blue-500", "狂亂": "border-red-500", "活潑": "border-yellow-400", "憂鬱": "border-purple-500" };
+                const personalityBorderColors = { "天真": "border-green-500", "冷靜": "border-blue-500", "狂亂": "border-red-500", "活潑": "border-yellow-400", "憂鬱": "border-purple-500", "共鳴": "border-rainbow" };
                 const nowTime = Date.now();
                 personalities.forEach(pName => {
                     const pChars = INITIAL_DATA.filter(c => c.personality === pName); if (pChars.length === 0) return;
