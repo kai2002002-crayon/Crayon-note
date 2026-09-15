@@ -19,7 +19,8 @@ const PERSONALITY_BACKGROUNDS = {
     "憂鬱": "https://i.postimg.cc/4x0rkxY2/Motion-Experience-Pattern-Bg-Depressed.png",
     "狂亂": "https://i.postimg.cc/5tFDxWzq/Motion-Experience-Pattern-Bg-Madness.png",
     "活潑": "https://i.postimg.cc/q7CWkHKG/Motion-Experience-Pattern-Bg-Vivacious.png",
-    "天真": "https://i.postimg.cc/BQVhtwJ6/Motion-Experience-Pattern-Bg-Innocence.png"
+    "天真": "https://i.postimg.cc/BQVhtwJ6/Motion-Experience-Pattern-Bg-Innocence.png",
+    "共鳴": "https://i.postimg.cc/bJwTwLmc/Motion-Experience-Pattern-Bg-Resonance.png"
 };
 
 
