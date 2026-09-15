@@ -647,9 +647,11 @@
                 personality_狂亂: "sprite-Personality_Madness",
                 personality_活潑: "sprite-Personality_Vivacious",
                 personality_憂鬱: "sprite-Personality_Depressed",
+                personality_共鳴: "sprite-Personality_All",
                 position_前排: "sprite-Position_Front",
                 position_中排: "sprite-Position_Middle",
                 position_後排: "sprite-Position_Back",
+                position_全能: "sprite-Position_All",
                 job_輸出: "sprite-Job_DPS", job_肉盾: "sprite-Job_Tank", job_輔助: "sprite-Job_Support",
                 type_物理: "sprite-Type_Physic", type_魔法: "sprite-Type_Magic",
                 boardon_攻擊: "sprite-boardon_ATK", boardon_防禦: "sprite-boardon_DEF",
@@ -661,7 +663,8 @@
                 "憂鬱": "sprite-char-depressed",
                 "天真": "sprite-char-innocence",
                 "狂亂": "sprite-char-madness",
-                "活潑": "sprite-char-vivacious"
+                "活潑": "sprite-char-vivacious",
+                "共鳴": "sprite-char-all"
             };
             const ULT_SPRITE_MAP = {
                 "冷靜": "sprite-ult-composed",
@@ -669,6 +672,7 @@
                 "天真": "sprite-ult-innocence",
                 "狂亂": "sprite-ult-madness",
                 "活潑": "sprite-ult-vivacious"
+                "共鳴": "sprite-ult-all",
             };
             
             function toggleSidebar() {
@@ -1147,7 +1151,7 @@
             function setDisplayMode(mode) { activeFilters.displayMode = mode; ["all", "1", "2", "3"].forEach(m => { const btn = document.getElementById(`btn_disp_${m}`); if(btn) btn.className = (mode === m) ? btnDispActiveStyle : btnInactiveStyle; }); applyFilterUI(); }
             
             function buildFilterPanel() {
-                const keys = { personality: ["天真", "冷靜", "狂亂", "活潑", "憂鬱"], race: [], position: ["前排", "中排", "後排"], job: [], type: ["物理", "魔法"] };
+                const keys = { personality: ["天真", "冷靜", "狂亂", "活潑", "憂鬱", "共鳴"], race: [], position: ["前排", "中排", "後排", "全能"], job: [], type: ["物理", "魔法"] };
                 INITIAL_DATA.forEach(c => { if (c.race && !keys.race.includes(c.race)) keys.race.push(c.race); if (c.job && !keys.job.includes(c.job)) keys.job.push(c.job); });
                 Object.keys(keys).forEach(category => {
                     const container = document.getElementById(`filter_${category}`); if(!container) return; container.innerHTML = "";
@@ -1279,9 +1283,10 @@
             
             function applyFilterUI() {
                 INITIAL_DATA.forEach(char => {
-                    const matchP = activeFilters.personality.length === 0 || activeFilters.personality.includes(char.personality);
+                    // 修改：只要該角色是共鳴/全能，無論篩選器選了什麼，皆強制為 True。
+                    const matchP = activeFilters.personality.length === 0 || activeFilters.personality.includes(char.personality) || char.personality === "共鳴";
                     const matchR = activeFilters.race.length === 0 || activeFilters.race.includes(char.race);
-                    const matchPos = activeFilters.position.length === 0 || activeFilters.position.includes(char.position);
+                    const matchPos = activeFilters.position.length === 0 || activeFilters.position.includes(char.position) || char.position === "全能";
                     const matchJ = activeFilters.job.length === 0 || activeFilters.job.includes(char.job);
                     const matchT = activeFilters.type.length === 0 || activeFilters.type.includes(char.type);
                     let matchGrid = true;
@@ -1312,7 +1317,7 @@
                         });
                     }
                 });
-                const personalities = ["天真", "冷靜", "狂亂", "活潑", "憂鬱"];
+                const personalities = ["天真", "冷靜", "狂亂", "活潑", "憂鬱", "共鳴"];
                 personalities.forEach(pName => {
                     const pSection = document.getElementById(`section_p_${pName}`);
                     if (pSection) { const visibleInSec = pSection.querySelectorAll("[id^='char_card_']:not(.hidden)").length; if (visibleInSec === 0) pSection.classList.add("hidden"); else pSection.classList.remove("hidden"); }
@@ -1320,7 +1325,7 @@
             }
             function renderMatrix() {
                 const container = document.getElementById('matrixContainer'); if(!container) return; container.innerHTML = '';
-                const personalities = ["天真", "冷靜", "狂亂", "活潑", "憂鬱"];
+                const personalities = ["共鳴", "天真", "冷靜", "狂亂", "活潑", "憂鬱"];
                 const personalityBorderColors = { "天真": "border-green-500", "冷靜": "border-blue-500", "狂亂": "border-red-500", "活潑": "border-yellow-400", "憂鬱": "border-purple-500" };
                 const nowTime = Date.now();
                 personalities.forEach(pName => {
