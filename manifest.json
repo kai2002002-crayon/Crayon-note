@@ -1,6 +1,6 @@
 {
-  "name": "玩具訂單管理系統",
-  "short_name": "玩具訂單",
+  "name": "嘟嘟臉金蠟筆記事本",
+  "short_name": "金蠟筆記事本",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#f3f4f6",
