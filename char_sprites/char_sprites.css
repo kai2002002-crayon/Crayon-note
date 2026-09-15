@@ -39,6 +39,7 @@
 [class*="_Hilde"] { background-image: url('Hildesheet.png'); }
 [class*="_Ifrit"] { background-image: url('Ifritsheet.png'); }
 [class*="_Jade"] { background-image: url('Jadesheet.png'); }
+[class*="_Joanne"] { background-image: url('Joannesheet.png'); }
 [class*="_Jubee"] { background-image: url('Jubeesheet.png'); }
 [class*="_Kidian"] { background-image: url('Kidiansheet.png'); }
 [class*="_Kommy"] { background-image: url('Kommysheet.png'); }
@@ -368,9 +369,19 @@
 .sprite-Aside_Skill_Jade_2 { width: 64px; height: 64px; background-position: -5px -345px; }
 .sprite-Aside_Skill_Jade_3 { width: 64px; height: 64px; background-position: -5px -419px; }
 .sprite-CG_Schedule_Jade { width: 1020px; height: 512px; background-position: -5px -493px; }
-.sprite-Icon_NormalSkill_Jade { width: 64px; height: 64px; background-position: -5px -1013px; }
+.sprite-Icon_NormalSkill_Jade { width: 64px; height: 64px; background-position: -5px -1015px; }
 .sprite-Icon_PassiveSkill_Jade { width: 64px; height: 64px; background-position: -5px -1089px; }
 .sprite-PresentList_Jade { width: 248px; height: 167px; background-position: -5px -1163px; }
+
+/* --- Joanne --- */
+.sprite-AsideIcon_Joanne { width: 256px; height: 256px; background-position: -5px -5px; }
+.sprite-Aside_Skill_Joanne_1 { width: 64px; height: 64px; background-position: -5px -271px; }
+.sprite-Aside_Skill_Joanne_2 { width: 64px; height: 64px; background-position: -5px -345px; }
+.sprite-Aside_Skill_Joanne_3 { width: 64px; height: 64px; background-position: -5px -419px; }
+.sprite-CG_Schedule_Joanne { width: 1024px; height: 512px; background-position: -5px -493px; }
+.sprite-Icon_NormalSkill_Joanne { width: 64px; height: 64px; background-position: -5px -1015px; }
+.sprite-Icon_PassiveSkill_Joanne { width: 64px; height: 64px; background-position: -5px -1089px; }
+.sprite-PresentList_Joanne { width: 177px; height: 216px; background-position: -5px -1163px; }
 
 /* --- Jubee --- */
 .sprite-CG_Schedule_Jubee { width: 1020px; height: 510px; background-position: -5px -5px; }
