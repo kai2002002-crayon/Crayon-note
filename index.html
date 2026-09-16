@@ -28,9 +28,9 @@
             }
         </script>
         <link rel="manifest" href="manifest.json">
-        <!-- 🍎 新增：iOS 專屬桌面圖示 -->
+        <!-- 🍎 iOS 專屬桌面圖示 -->
         <link rel="apple-touch-icon" href="icon.png">
-        <!-- 🎨 新增：讓瀏覽器與手機狀態列知道主題顏色 (可與 manifest 一致) -->
+        <!-- 🎨 讓瀏覽器與手機狀態列知道主題顏色 -->
         <meta name="theme-color" content="#2563eb">
 
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
@@ -2011,7 +2011,7 @@ if (!firebase.apps.length) {
 
 db = firebase.firestore(); 
 
-// 🌟 新增：開啟 Firestore 離線持久化 (自動暫存與同步)
+// 🌟 開啟 Firestore 離線持久化 (自動暫存與同步)
 db.enablePersistence()
   .catch((err) => {
       if (err.code == 'failed-precondition') {
