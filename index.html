@@ -1993,9 +1993,36 @@
                 } catch (e) { const errBanner = document.getElementById('errorBanner'); if(errBanner) { errBanner.innerHTML = `⚠️ 畫面繪製失敗: ${e.message}`; errBanner.classList.remove('hidden'); } }
                 try {
                     if (typeof firebase !== 'undefined') {
-                        const firebaseConfig = { apiKey: "AIzaSyDhv8D2pY_0M56UJrDTQw0RGPHA-BkXU8Y", authDomain: "crayon-note.firebaseapp.com", projectId: "crayon-note", storageBucket: "crayon-note.firebasestorage.app", messagingSenderId: "210614088940", appId: "1:210614088940:web:7addbdc7c466eeb05421c9", measurementId: "G-M1EJPE12TE" };
-                        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig); else firebase.app(); 
-                        db = firebase.firestore(); auth = firebase.auth(); updateVisitCount();
+                        const firebaseConfig = { 
+    apiKey: "AIzaSyDhv8D2pY_0M56UJrDTQw0RGPHA-BkXU8Y", 
+    authDomain: "crayon-note.firebaseapp.com", 
+    projectId: "crayon-note", 
+    storageBucket: "crayon-note.firebasestorage.app", 
+    messagingSenderId: "210614088940", 
+    appId: "1:210614088940:web:7addbdc7c466eeb05421c9", 
+    measurementId: "G-M1EJPE12TE" 
+};
+
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig); 
+} else {
+    firebase.app(); 
+}
+
+db = firebase.firestore(); 
+
+// 🌟 新增：開啟 Firestore 離線持久化 (自動暫存與同步)
+db.enablePersistence()
+  .catch((err) => {
+      if (err.code == 'failed-precondition') {
+          console.warn("⚠️ 多個分頁同時開啟，離線模式只能在單一分頁運作。");
+      } else if (err.code == 'unimplemented') {
+          console.warn("⚠️ 當前瀏覽器不支援 Firebase 離線模式。");
+      }
+  });
+
+auth = firebase.auth(); 
+updateVisitCount();
                         auth.onAuthStateChanged(user => {
                             updateAuthButtonUI(user); 
                             if (user) {
