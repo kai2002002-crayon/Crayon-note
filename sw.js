@@ -10,6 +10,7 @@ const ASSETS_TO_CACHE = [
     './tier_maker.html',
     './apostle_viewer.html',
     './gacha.html',
+    './char_detail.html,
     './data_core.js',
     './data_aside.js,
     './data_skills.js,
