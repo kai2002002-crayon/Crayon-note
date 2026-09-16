@@ -1,5 +1,5 @@
 // 🌟 定義快取名稱與版本號 (每次更新網站內容時，請更改這個 v1 -> v2)
-const CACHE_NAME = 'trickcal-notepad-v1';
+const CACHE_NAME = 'trickcal-notepad-v1.1';
 
 // 🌟 定義需要離線快取的核心檔案
 // 建議把首頁、CSS、主要的 JS 與重要的圖檔都寫進來
