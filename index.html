@@ -2046,20 +2046,77 @@
         <button id="backToTop" onclick="scrollToTop()" title="回頂部">
         ▲
         </button>
-    <!-- 將這段放在 body 最下方 -->
+        <!-- 🌟 新版本提示彈窗 (預設隱藏，帶有滑動動畫) -->
+<div id="updateBanner" class="fixed bottom-4 right-4 sm:bottom-8 sm:right-8 bg-white dark:bg-gray-800 border-2 border-amber-400 shadow-2xl rounded-2xl p-4 z-[9999] hidden flex-col gap-2 transform transition-transform duration-300 translate-y-32">
+    <div class="flex items-center gap-2">
+        <span class="text-xl animate-bounce">✨</span>
+        <p class="text-sm font-bold text-amber-900 dark:text-amber-400">發現新版本！</p>
+    </div>
+    <p class="text-xs text-gray-500 dark:text-gray-400 font-medium pl-1">為了提供更好的體驗，請更新至最新版本。</p>
+    <div class="flex justify-end gap-2 mt-2">
+        <button onclick="hideUpdateBanner()" class="px-3 py-1.5 text-xs font-bold text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition">稍後</button>
+        <button id="btnUpdateNow" class="px-3 py-1.5 text-xs font-bold text-white bg-amber-500 hover:bg-amber-600 rounded-lg shadow transition flex items-center gap-1">
+            🚀 立即更新
+        </button>
+    </div>
+</div>
     <script>
-        // 檢查瀏覽器是否支援 Service Worker
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then((registration) => {
-                        console.log('Service Worker 註冊成功，範圍：', registration.scope);
-                    })
-                    .catch((error) => {
-                        console.log('Service Worker 註冊失敗：', error);
+    let newWorker;
+
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js').then(reg => {
+                
+                // 偵測到有新的 Service Worker 正在安裝
+                reg.addEventListener('updatefound', () => {
+                    newWorker = reg.installing;
+                    
+                    newWorker.addEventListener('statechange', () => {
+                        // 當新版本下載完成，並且進入 installed (等待中) 狀態
+                        // 且舊的 Service Worker 依然在控制網頁時，代表這是一個「更新」
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            showUpdateBanner();
+                        }
                     });
+                });
             });
-        }
-    </script>
+        });
+
+        // 監聽 Controller 改變事件：只要新的 Service Worker 一接管，就強制重新整理網頁
+        let refreshing;
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+            if (refreshing) return;
+            refreshing = true;
+            window.location.reload();
+        });
+    }
+
+    // 顯示提示框並加上動畫
+    function showUpdateBanner() {
+        const banner = document.getElementById('updateBanner');
+        banner.classList.remove('hidden');
+        banner.classList.add('flex');
+        setTimeout(() => banner.classList.remove('translate-y-32'), 50);
+        
+        // 綁定「立即更新」按鈕事件
+        document.getElementById('btnUpdateNow').onclick = () => {
+            if (newWorker) {
+                // 發送指令給 sw.js，叫它立刻跳過等待接管網頁
+                newWorker.postMessage('SKIP_WAITING');
+            }
+        };
+    }
+
+    // 隱藏提示框
+    function hideUpdateBanner() {
+        const banner = document.getElementById('updateBanner');
+        banner.classList.add('translate-y-32');
+        setTimeout(() => {
+            banner.classList.remove('flex');
+            banner.classList.add('hidden');
+        }, 300);
+    }
+</script>
+
 </body>
 </html>
