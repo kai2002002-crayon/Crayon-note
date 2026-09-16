@@ -2046,5 +2046,20 @@
         <button id="backToTop" onclick="scrollToTop()" title="回頂部">
         ▲
         </button>
-    </body>
+    <!-- 將這段放在 body 最下方 -->
+    <script>
+        // 檢查瀏覽器是否支援 Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then((registration) => {
+                        console.log('Service Worker 註冊成功，範圍：', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.log('Service Worker 註冊失敗：', error);
+                    });
+            });
+        }
+    </script>
+</body>
 </html>
