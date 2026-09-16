@@ -85,3 +85,10 @@ self.addEventListener('fetch', (event) => {
         })
     );
 });
+// 4. Message 事件：接收網頁傳來的指令，強制讓新版 Service Worker 立即接管
+self.addEventListener('message', (event) => {
+    if (event.data === 'SKIP_WAITING') {
+        self.skipWaiting();
+    }
+});
+
