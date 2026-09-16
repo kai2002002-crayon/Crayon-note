@@ -8,9 +8,16 @@ const ASSETS_TO_CACHE = [
     './index.html',
     './checklist.html',
     './tier_maker.html',
-    './char_viewer.html',
+    './apostle_viewer.html',
+    './char_detail.html',
     './gacha.html',
     './data_core.js',
+    './data_aside.js,
+    './data_skills.js,
+    './data_intro.js,
+    './data_collectibles.js,
+    './data_aside.js,
+    ,./char_sprites.css,
     './sprites.css',
     './manifest.json',
     './icon.png'
@@ -68,13 +75,10 @@ self.addEventListener('fetch', (event) => {
                     return networkResponse;
                 }
 
-                // (進階選項) 如果你希望使用者瀏覽過的圖片也自動被快取起來，可以開啟以下這段：
-                /*
                 const responseToCache = networkResponse.clone();
                 caches.open(CACHE_NAME).then((cache) => {
                     cache.put(event.request, responseToCache);
                 });
-                */
 
                 return networkResponse;
             }).catch(() => {
