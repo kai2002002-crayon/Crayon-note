@@ -9,15 +9,14 @@ const ASSETS_TO_CACHE = [
     './checklist.html',
     './tier_maker.html',
     './apostle_viewer.html',
-    './char_detail.html',
     './gacha.html',
     './data_core.js',
     './data_aside.js,
     './data_skills.js,
     './data_intro.js,
     './data_collectibles.js,
-    './data_aside.js,
-    ,./char_sprites.css,
+    './char_sprites/char_sprites.css,
+    './char_sprites/common_icon.png',
     './sprites.css',
     './manifest.json',
     './icon.png'
@@ -55,26 +54,28 @@ self.addEventListener('activate', (event) => {
     );
 });
 
-// 3. Fetch 事件：攔截網站發出的所有網路請求
+// 3. Fetch 事件：攔截網站發出的所有網路請求 (動態頁面加強版)
 self.addEventListener('fetch', (event) => {
-    // 略過非 GET 的請求（例如 POST、PUT）與 Chrome 擴充功能的請求
     if (event.request.method !== 'GET' || event.request.url.startsWith('chrome-extension')) return;
 
     event.respondWith(
-        caches.match(event.request).then((cachedResponse) => {
-            // 策略：【快取優先 (Cache First)】
-            // 如果在快取中找到檔案，就直接回傳快取檔案，達到秒開與離線瀏覽的效果
+        // 🌟 升級 1：加入 { ignoreSearch: true } 
+        // 這樣 char_detail.html?name=xxx 就會去抓 char_detail.html 的快取，不會因為問號參數而報錯
+        caches.match(event.request, { ignoreSearch: true }).then((cachedResponse) => {
+            
             if (cachedResponse) {
                 return cachedResponse;
             }
 
             // 如果快取沒有這個檔案，就透過網路去抓取
             return fetch(event.request).then((networkResponse) => {
-                // 如果抓取失敗或非正常回傳，直接回傳
                 if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
                     return networkResponse;
                 }
 
+                // 🌟 升級 2：開啟「邊看邊存」機制 (Runtime Caching)
+                // 這樣只要玩家在有網路時看過「莉1莉」或「克魯布魯斯」的頁面，
+                // 他們的專屬資料、Spine 動畫檔案就會自動被存下來，下次斷網時也能看！
                 const responseToCache = networkResponse.clone();
                 caches.open(CACHE_NAME).then((cache) => {
                     cache.put(event.request, responseToCache);
@@ -82,8 +83,6 @@ self.addEventListener('fetch', (event) => {
 
                 return networkResponse;
             }).catch(() => {
-                // 如果處於離線狀態，且快取裡也沒檔案時的最後防線
-                // 例如：回傳一張「請檢查網路連線」的預設圖片
                 console.log('[Service Worker] 處於離線狀態，無法取得資源:', event.request.url);
             });
         })
