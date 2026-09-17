@@ -9,7 +9,7 @@ const ASIDE_DATA = {
             1: { 
                 icon: "", 
                 name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "." }, 
+                desc: { zh: "", ja: "", en: "" }, 
                 effects: { zh: [""], ja: [""], en: [""] } 
             },
             2: { 
@@ -22,7 +22,7 @@ const ASIDE_DATA = {
                 icon: "", 
                 name: { zh: "", ja: "", en: "" }, 
                 desc: { zh: "", ja: "", en: "" }, 
-                effects: { zh: [""], ja: [""], en: ["%"] }, 
+                effects: { zh: [""], ja: [""], en: [""] }, 
                 globalEffects: { zh: ["全體 %", "全體 %"], ja: ["全体 %", "全体 %"], en: ["All %", "All %"] } 
             }
         }
@@ -277,6 +277,31 @@ const ASIDE_DATA = {
             }
         }
     },
+    "Erpin": { 
+        asideIcon: "", 
+        totalName: { zh: "無限蛋糕", ja: "無限ケーキ", en: "Infinite Cake" }, 
+        stars: {
+            1: { 
+                icon: "", 
+                name: { zh: "甜甜的最棒了!", ja: "甘いもの最高!", en: "Sweets Are The Best!" }, 
+                desc: { zh: "穿戴者的最大HP、魔法攻擊力、爆擊、爆擊傷害增加。", ja: "着用者の最大HP、魔法攻撃力、会心、会心ダメージが増加する。", en: "Increases bearer's Max HP, Magical ATK, CRIT, and CRIT DMG." }, 
+                effects: { zh: ["最大HP增加:6%", "魔法攻擊力增加:6%", "爆擊增加:6%", "爆擊傷害增加:6%"], ja: ["最大HP増加:6%", "魔法攻撃力増加:6%", "会心増加:6%", "会心ダメージ増加:6%"], en: ["Max HP Increase: 6%", "Magical ATK Increase: 6%", "CRIT Increase: 6%", "CRIT DMG Increase: 6%"] } 
+            },
+            2: { 
+                icon: "", 
+                name: { zh: "大口大口發射!!", ja: "パクパク発射!!", en: "Chomp Chomp Fire!" }, 
+                desc: { zh: "攻擊速度提升。強化攻擊後，恢復自身的HP。使用高級技能時，會進入無敵狀態，技能結束後解除無敵狀態。高級技能命中單一敵人時，傷害增加。", ja: "攻撃速度が増加する。強化攻撃後、自身のHPを回復する。高学年スキル使用時、無敵になり、スキル終了時に無敵を解除する。高学年スキルが単体の敵に命中した場合、ダメージが増加する。", en: "Increases Attack Speed. After an Enhanced Attack, recovers own HP. When using a Senior Skill, becomes Invincible, Invincibility ends when the skill is finished. If the Senior Skill hits a single enemy, its Damage increases." }, 
+                effects: { zh: ["無敵:對所有傷害和減益效果免疫。", "攻擊速度提升:25%", "HP恢復:最大HP的15%", "高級技能傷害增加:50%"], ja: ["無敵: すべてのダメージ及びデバフに免疫を得る。", "攻撃速度増加:25%", "HP回復:最大HPの15%", "高学年スキルダメージ増加: 50%"], en: ["Invincibility: Immune to all damage and debuffs.", "ATK SPD Increase: 25%", "HP Recovery: 15% of Max HP", "Senior Skill DMG Increase: 50%"] } 
+            },
+            3: { 
+                icon: "", 
+                name: { zh: "純正蛋糕攻擊!!!", ja: "純粋なケーキ攻撃!!!", en: "Innocent Cake Attack!" }, 
+                desc: { zh: "增加後排友軍對敵人造成的傷害量，並減少後排友軍受到敵人的傷害量。", ja: "後列の味方の敵への与ダメージ量を増加させ、後列の味方の敵からの被ダメージ量を減少させる。", en: "Increases Outgoing Damage and reduces Incoming Damage for Back Row allies." }, 
+                effects: { zh: ["傷害量增加:13.6%", "受到的傷害量減少:5.9%"], ja: ["ダメージ量増加:13.6%", "被ダメージ量減少:5.9%"], en: ["DMG Increase: 13.6%", "Incoming DMG Reduction: 5.9%"] }, 
+                globalEffects: { zh: ["全體魔法攻擊力 3%", "全體魔法防禦力 3%"], ja: ["全体魔法攻撃力 3%", "全体魔法防御力 3%"], en: ["All Magical ATK 3%", "All Magical DEF 3%"] } 
+            }
+        }
+    }
     "Fricle": { 
         asideIcon: "", 
         totalName: { zh: "高階魔女皮可蒞", ja: "上位魔女ピコラ", en: "High Witch Picora" },
@@ -358,25 +383,25 @@ const ASIDE_DATA = {
         stars: {
             1: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "." }, 
-                effects: { zh: [""], ja: [""], en: [""] } 
+                name: { zh: "完美翡翠", ja: "完璧な翡翠", en: "Perfect Jade" }, 
+                desc: { zh: "穿戴者的最大HP、魔法攻擊力、爆擊、爆擊傷害增加。", ja: "着用者の最大HP、魔法攻撃力、会心、会心ダメージが増加する。", en: "Increases the bearer's Max HP, Magical Attack, Critical Hit, and Critical Damage." }, 
+                effects: { zh: ["最大HP增加:6%", "魔法攻擊力增加:6%", "爆擊增加:6%", "爆擊傷害增加:6%"], ja: ["最大HP増加:6%", "魔法攻撃力増加:6%", "会心増加:6%", "会心ダメージ増加:6%"], en: ["Max HP Increase: 6%", "Magical ATK Increase: 6%", "CRIT Increase: 6%", "CRIT DMG Increase: 6%"] } 
             },
             2: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "" }, 
-                effects: { zh: [""], ja: [""], en: [""] } 
+                name: { zh: "錢給你", ja: "私のお金を持ってけ", en: "Take My Money" }, 
+                desc: { zh: "強化攻擊施展機率增加。翡翠玉追加技能傷害量增加、攻擊速度提升、受到的傷害量減少效果。獲得翡翠玉時，若持有的翡翠玉疊加至3層，會召喚魔法書形象，對指定範圍內位於中央的敵人造成範圍魔法傷害。", ja: "強化攻撃の発動確率が増加する。翡翠玉にスキルダメージ量増加、攻撃速度増加、被ダメージ量減少の効果が追加される。翡翠玉を獲得時に所持している翡翠玉が3スタックの場合、魔法書の形象を召喚し、指定範囲内で真ん中にいる敵に範囲魔法ダメージを与える。", en: "Increases Enhanced Attack Cast Rate. JadeForce grants Skill Damage Increase, Attack Speed Increase, and Incoming Damage Reduction. When gaining JadeForce while already at 3 stacks, summons a phantom spellbook to deal AoE Magical Damage to the enemy in the center of the designated range." }, 
+                effects: { zh: ["強化攻擊施展機率增加:9%", "每層疊加時技能傷害量增加:9%", "每層疊加時攻擊速度提升:5%", "每層疊加時受到的傷害量減少:5%", "範圍魔法傷害:250%"], ja: ["強化攻撃の発動確率増加:9%", "1スタック時のスキルダメージ量増加:9%", "1スタック時の攻撃速度増加:5%", "1スタック時の被ダメージ量減少:5%", "範囲魔法ダメージ:250%"], en: ["Enhanced ATK Cast Rate Increase: 9%", "Skill DMG Increase at 1 stack: 9%", "ATK SPD Increase at 1 stack: 5%", "Incoming DMG Reduction at 1 stack: 5%", "AoE Magical DMG: 250%"] } 
             },
             3: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "" }, 
-                effects: { zh: [""], ja: [""], en: ["%"] }, 
-                globalEffects: { zh: ["全體 %", "全體 %"], ja: ["全体 %", "全体 %"], en: ["All %", "All %"] } 
+                name: { zh: "心靈糧食", ja: "心の糧", en: "Food For Thought" }, 
+                desc: { zh: "提升所有友軍的攻擊速度。", ja: "味方全員の攻撃速度を増加させる。", en: "Increases the Attack Speed of all allies." }, 
+                effects: { zh: ["攻擊速度提升:7%"], ja: ["攻撃速度増加:7%"], en: ["ATK SPD Increase: 7%"] }, 
+                globalEffects: { zh: ["全體魔法攻擊力 3%", "全體魔法防禦力 3%"], ja: ["全体魔法攻撃力 3%", "全体魔法防御力 3%"], en: ["All Magical ATK 3%", "All Magical DEF 3%"] } 
             }
         }
-    },
+    }
     "Joanne": { 
         asideIcon: "", 
         totalName: { zh: "", ja: "", en: "" }, 
