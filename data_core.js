@@ -915,6 +915,12 @@ const CARD_SCHEDULE = [
         end: "2026-09-24T10:59:59+09:00",
         id: "Artifact119",
         type: "Artifact"
+    },
+	{
+        start: "2026-09-17T04:00:00+09:00",
+        end: "2026-09-24T10:59:59+09:00",
+        id: "Artifact92",
+        type: "Artifact"
     }
 ];
 console.log("LANG_DICT 內容:", LANG_DICT);
