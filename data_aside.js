@@ -301,7 +301,7 @@ const ASIDE_DATA = {
                 globalEffects: { zh: ["全體魔法攻擊力 3%", "全體魔法防禦力 3%"], ja: ["全体魔法攻撃力 3%", "全体魔法防御力 3%"], en: ["All Magical ATK 3%", "All Magical DEF 3%"] } 
             }
         }
-    }
+    },
     "Fricle": { 
         asideIcon: "", 
         totalName: { zh: "高階魔女皮可蒞", ja: "上位魔女ピコラ", en: "High Witch Picora" },
@@ -401,7 +401,7 @@ const ASIDE_DATA = {
                 globalEffects: { zh: ["全體魔法攻擊力 3%", "全體魔法防禦力 3%"], ja: ["全体魔法攻撃力 3%", "全体魔法防御力 3%"], en: ["All Magical ATK 3%", "All Magical DEF 3%"] } 
             }
         }
-    }
+    },
     "Joanne": { 
         asideIcon: "", 
         totalName: { zh: "", ja: "", en: "" }, 
