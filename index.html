@@ -27,7 +27,29 @@
                 darkMode: 'class',
             }
         </script>
-        <link rel="manifest" href="manifest.json">
+        <script>
+            // 🌟 動態載入對應語言的 PWA Manifest
+            (function() {
+                let lang = localStorage.getItem('user_lang');
+                if (!lang) {
+                    const browserLang = (navigator.language || navigator.userLanguage).toLowerCase();
+                    if (browserLang.includes('ja')) lang = 'ja';
+                    else if (browserLang.includes('zh')) lang = 'zh-TW';
+                    else lang = 'en';
+                }
+                const manifestLink = document.createElement('link');
+                manifestLink.rel = 'manifest';
+                // 根據判斷出的語言載入對應的檔案
+                if (lang === 'ja') {
+                    manifestLink.href = 'manifest_ja.json';
+                } else if (lang === 'en') {
+                    manifestLink.href = 'manifest_en.json';
+                } else {
+                    manifestLink.href = 'manifest.json'; // 預設繁中
+                }
+                document.head.appendChild(manifestLink);
+            })();
+        </script>
         <!-- 🍎 iOS 專屬桌面圖示 -->
         <link rel="apple-touch-icon" href="icon.png">
         <!-- 🎨 讓瀏覽器與手機狀態列知道主題顏色 -->
