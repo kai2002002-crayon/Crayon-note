@@ -585,7 +585,7 @@ const WORK_URL = {
     "Amelia": "https://youtu.be/MpZsvsuNmqc",
     "Ashur": "https://youtu.be/0DhptkL3r1c",
     "Aya": "https://youtu.be/2VlyNDZ28Mc",
-	"Barie": "",
+	"Barie": "https://youtu.be/jHNKv0iYXCs",
     "Barong": "https://youtu.be/riScYcKvJvE",
     "Belita": "https://youtu.be/sctRJMHdx6w",
     "Beni": "https://youtu.be/rqTyjkBImFg",
