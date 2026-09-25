@@ -195,7 +195,7 @@ function t(key) { return LANG_DICT[currentLang][key] || key; }
 // 坨坨資料
 // ------------------------------------------
 const INITIAL_DATA = [
-	{ name: "瓊安", personality: "雙面", race: "妖精", position: "所有排", job: "輔助", pathVersion: "V4", releaseDate: "2026-09-24T17:00:00+09:00" },
+	{ name: "瓊安", personality: "憂鬱, 天真", race: "妖精", position: "所有排", job: "輔助", pathVersion: "V4", releaseDate: "2026-09-24T17:00:00+09:00" },
 	{ name: "芭莉耶", personality: "憂鬱", race: "魔女", position: "後排", job: "輔助", pathVersion: "V4", releaseDate: "2026-09-10T17:00:00+09:00" },
 	{ name: "雪蘭", personality: "天真", race: "魔女", position: "前排", job: "輸出", pathVersion: "V1", releaseDate: "2026-09-10T17:00:00+09:00" },
 	{ name: "琵拉", personality: "狂亂", race: "龍族", position: "後排", job: "輔助", pathVersion: "V1", releaseDate: "2026-08-27T17:00:00+09:00" },
