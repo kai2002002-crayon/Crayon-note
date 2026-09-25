@@ -676,10 +676,11 @@
                 personality_活潑: "sprite-Personality_Vivacious",
                 personality_憂鬱: "sprite-Personality_Depressed",
                 personality_共鳴: "sprite-Personality_Resonance",
+                personality_雙面: "sprite-Personality_Inside", 
                 position_前排: "sprite-Position_Front",
                 position_中排: "sprite-Position_Middle",
                 position_後排: "sprite-Position_Back",
-                position_全能: "sprite-Position_All",
+                position_所有排: "sprite-Position_All",
                 job_輸出: "sprite-Job_DPS", job_肉盾: "sprite-Job_Tank", job_輔助: "sprite-Job_Support",
                 type_物理: "sprite-Type_Physic", type_魔法: "sprite-Type_Magic",
                 boardon_攻擊: "sprite-boardon_ATK", boardon_防禦: "sprite-boardon_DEF",
@@ -692,7 +693,8 @@
                 "天真": "sprite-char-innocence",
                 "狂亂": "sprite-char-madness",
                 "活潑": "sprite-char-vivacious",
-                "共鳴": "sprite-char-resonance"
+                "共鳴": "sprite-char-resonance",
+                "雙面": "sprite-char-inside" 
             };
             const ULT_SPRITE_MAP = {
                 "冷靜": "sprite-ult-composed",
@@ -700,7 +702,8 @@
                 "天真": "sprite-ult-innocence",
                 "狂亂": "sprite-ult-madness",
                 "活潑": "sprite-ult-vivacious",
-                "共鳴": "sprite-ult-resonance"
+                "共鳴": "sprite-ult-resonance",
+                "雙面": "sprite-ult-inside" 
             };
             
             function toggleSidebar() {
@@ -902,10 +905,11 @@
                 const localTooltipTexts = { "zh-TW": "特選招募中：", "ja": "ピックアップ中：", "en": "Pickup Rate Up: " };
                 const titleEl = document.getElementById('pickupTitleText');
                 if (titleEl) titleEl.innerText = localRecruitTexts[window.currentLang] || localRecruitTexts["zh-TW"];            
-                const personalityColors = { "天真": "border-green-400 text-green-400", "冷靜": "border-blue-400 text-blue-400", "狂亂": "border-red-400 text-red-400", "活潑": "border-yellow-400 text-yellow-400", "憂鬱": "border-purple-400 text-purple-400", "共鳴": "border-rainbow text-rainbow" };
+                const personalityColors = { "天真": "border-green-400 text-green-400", "冷靜": "border-blue-400 text-blue-400", "狂亂": "border-red-400 text-red-400", "活潑": "border-yellow-400 text-yellow-400", "憂鬱": "border-purple-400 text-purple-400", "共鳴": "border-rainbow text-rainbow", "雙面": "border-teal-400 text-teal-400" };
                         activeChars.forEach(charName => {
                             const charData = INITIAL_DATA.find(c => c.name === charName); if (!charData) return;
-                            const pColorClass = personalityColors[charData.personality] || "border-gray-400 text-gray-400";
+                            const dispPersonality = charData.personality.includes(',') ? "雙面" : charData.personality;
+                            const pColorClass = personalityColors[dispPersonality] || "border-gray-400 text-gray-400";
                             const iconWrapper = document.createElement('div');
                             iconWrapper.className = `w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 ${pColorClass} bg-white dark:bg-gray-800 flex items-center justify-center relative pickup-sparkle shrink-0 cursor-pointer transition-transform overflow-hidden`;
                             const prefix = localTooltipTexts[window.currentLang] || localTooltipTexts["zh-TW"]; iconWrapper.title = `${prefix}${t(charName)}`;
@@ -1179,7 +1183,7 @@
             function setDisplayMode(mode) { activeFilters.displayMode = mode; ["all", "1", "2", "3"].forEach(m => { const btn = document.getElementById(`btn_disp_${m}`); if(btn) btn.className = (mode === m) ? btnDispActiveStyle : btnInactiveStyle; }); applyFilterUI(); }
             
             function buildFilterPanel() {
-                const keys = { personality: ["天真", "冷靜", "狂亂", "活潑", "憂鬱", "共鳴"], race: [], position: ["前排", "中排", "後排", "全能"], job: [], type: ["物理", "魔法"] };
+                const keys = { personality: ["天真", "冷靜", "狂亂", "活潑", "憂鬱", "共鳴", "雙面"], race: [], position: ["前排", "中排", "後排", "所有排"], job: [], type: ["物理", "魔法"] };
                 INITIAL_DATA.forEach(c => { if (c.race && !keys.race.includes(c.race)) keys.race.push(c.race); if (c.job && !keys.job.includes(c.job)) keys.job.push(c.job); });
                 Object.keys(keys).forEach(category => {
                     const container = document.getElementById(`filter_${category}`); if(!container) return; container.innerHTML = "";
@@ -1311,10 +1315,19 @@
             
             function applyFilterUI() {
                 INITIAL_DATA.forEach(char => {
-                    // 修改：只要該角色是共鳴/全能，無論篩選器選了什麼，皆強制為 True。
-                    const matchP = activeFilters.personality.length === 0 || activeFilters.personality.includes(char.personality) || char.personality === "共鳴";
+                    // 性格判定：如果字串中有逗號，系統將其視為「雙面」
+                    let matchP = activeFilters.personality.length === 0 || char.personality === "共鳴";
+                    if (!matchP) {
+                        matchP = activeFilters.personality.some(selectedP => {
+                            if (selectedP === "雙面" && char.personality.includes(",")) return true;
+                            // 使用 includes() 可以同時達成單一符合條件 (例如點擊「憂鬱」能找到「憂鬱, 天真」)
+                            return char.personality.includes(selectedP);
+                        });
+                    }
+
                     const matchR = activeFilters.race.length === 0 || activeFilters.race.includes(char.race);
-                    const matchPos = activeFilters.position.length === 0 || activeFilters.position.includes(char.position) || char.position === "全能";
+                    // 站位判定：加入「所有排」
+                    const matchPos = activeFilters.position.length === 0 || activeFilters.position.includes(char.position) || char.position === "所有排";
                     const matchJ = activeFilters.job.length === 0 || activeFilters.job.includes(char.job);
                     const matchT = activeFilters.type.length === 0 || activeFilters.type.includes(char.type);
                     let matchGrid = true;
@@ -1345,7 +1358,7 @@
                         });
                     }
                 });
-                const personalities = ["天真", "冷靜", "狂亂", "活潑", "憂鬱", "共鳴"];
+                const personalities = ["天真", "冷靜", "狂亂", "活潑", "憂鬱", "共鳴", "雙面"];
                 personalities.forEach(pName => {
                     const pSection = document.getElementById(`section_p_${pName}`);
                     if (pSection) { const visibleInSec = pSection.querySelectorAll("[id^='char_card_']:not(.hidden)").length; if (visibleInSec === 0) pSection.classList.add("hidden"); else pSection.classList.remove("hidden"); }
@@ -1353,11 +1366,16 @@
             }
             function renderMatrix() {
                 const container = document.getElementById('matrixContainer'); if(!container) return; container.innerHTML = '';
-                const personalities = ["共鳴", "天真", "冷靜", "狂亂", "活潑", "憂鬱"];
-                const personalityBorderColors = { "天真": "border-green-500", "冷靜": "border-blue-500", "狂亂": "border-red-500", "活潑": "border-yellow-400", "憂鬱": "border-purple-500", "共鳴": "border-rainbow" };
+                const personalities = ["共鳴", "雙面", "天真", "冷靜", "狂亂", "活潑", "憂鬱"];
+                const personalityBorderColors = { "天真": "border-green-500", "冷靜": "border-blue-500", "狂亂": "border-red-500", "活潑": "border-yellow-400", "憂鬱": "border-purple-500", "共鳴": "border-rainbow", "雙面": "border-teal-500" };
                 const nowTime = Date.now();
                 personalities.forEach(pName => {
-                    const pChars = INITIAL_DATA.filter(c => c.personality === pName); if (pChars.length === 0) return;
+                    // 在渲染區塊時，判斷是否為「雙面」（有逗號的歸類在這裡）
+                    const pChars = INITIAL_DATA.filter(c => {
+                        if (pName === "雙面") return c.personality.includes(",");
+                        return c.personality === pName;
+                    });
+                    if (pChars.length === 0) return;
                     const pSection = document.createElement('section'); pSection.id = `section_p_${pName}`; pSection.className = "bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-2xl p-4 sm:p-6 shadow-sm border-2 border-amber-100/70 dark:border-gray-700 mb-6 transition-colors";
                     pSection.innerHTML = `<div class="border-b-2 border-amber-400 dark:border-gray-600 pb-2.5 mb-4 flex justify-between items-center flex-wrap gap-2"><h2 class="text-lg sm:text-xl font-extrabold text-amber-955 dark:text-amber-400 flex items-center">📂 ${t(pName)}${t('stats_character')}</h2></div>`;
                     const charListContainer = document.createElement('div'); charListContainer.className = "space-y-4";
@@ -1370,18 +1388,20 @@
                             charCard.setAttribute('onmouseleave', 'checkMarquee(this, false)');
                         }
             const spineName = typeof SPINE_MAP !== 'undefined' && SPINE_MAP[char.name] ? SPINE_MAP[char.name] : char.name;
-            const charSpriteBase = CHAR_SPRITE_MAP[char.personality] || "";
-            const ultSpriteBase = ULT_SPRITE_MAP[char.personality] || "";
+            const dispPersonality = char.personality.includes(",") ? "雙面" : char.personality;
+            
+            const charSpriteBase = CHAR_SPRITE_MAP[dispPersonality] || "";
+            const ultSpriteBase = ULT_SPRITE_MAP[dispPersonality] || "";
             const charSpriteClass = `sprite-${spineName}`;
             const ultSpriteClass = `sprite-Icon_UltimateSkill_${spineName}`;
                         let raceIconName = char.race; if (char.race === "???") raceIconName = "unknown";
-                        const pSprite = SPRITE_CLASS_MAP[`personality_${char.personality}`] || "";
+                        const pSprite = SPRITE_CLASS_MAP[`personality_${dispPersonality}`] || "";
                         const rSprite = SPRITE_CLASS_MAP[`race_${raceIconName}`] || "";
                         const posSprite = SPRITE_CLASS_MAP[`position_${char.position}`] || "";
                         const jSprite = SPRITE_CLASS_MAP[`job_${char.job}`] || "";
                         const tSprite = SPRITE_CLASS_MAP[`type_${char.type}`] || "";
                         const bgSprite = SPRITE_CLASS_MAP[`bg_${raceIconName}`] || "sprite-Bg_Unknown";
-                        const borderColorClass = personalityBorderColors[char.personality] || "border-gray-300"; 
+                        const borderColorClass = personalityBorderColors[dispPersonality] || "border-gray-300"; 
                         const isOwned = savedStates['owned_' + char.name]; 
                         const avatarClass = isOwned && !isUnreleased ? "" : "unowned-avatar";
                         const displayName = isUnreleased ? "???" : t(char.name);
@@ -1404,7 +1424,7 @@
                         const traitsHtml = isUnreleased ? 
                             `<div class="flex items-center gap-1.5 pt-1 border-t border-dashed border-gray-100 dark:border-gray-700 text-gray-400 dark:text-gray-500 text-[10px] font-bold tracking-widest">DATA CLASSIFIED</div>` :
                             `<div class="flex items-center gap-1.5 pt-1 border-t border-dashed border-gray-100 dark:border-gray-700">
-                                ${createTraitNode(pSprite, `fall_p_${char.name}`, t(char.personality), `${t('stats_personality')} ${t(char.personality)}`)}
+                                ${createTraitNode(pSprite, `fall_p_${char.name}`, t(dispPersonality), `${t('stats_personality')} ${t(dispPersonality)}`)}
                                 ${createTraitNode(rSprite, `fall_r_${char.name}`, t(char.race), `${t('stats_race')} ${t(char.race)}`)}
                                 ${createTraitNode(posSprite, `fall_pos_${char.name}`, t(char.position), `${t('stats_position')} ${t(char.position)}`)}
                                 ${createTraitNode(jSprite, `fall_j_${char.name}`, t(char.job), `${t('stats_job')} ${t(char.job)}`)}
@@ -1420,7 +1440,7 @@
             </div>
             ${isUnreleased ? '' : `
             <div class="avatar-alt absolute inset-0 z-20 bg-[#fcf8f2] dark:bg-gray-800 transition-opacity duration-300">
-            <div class="${ULT_SPRITE_MAP[char.personality]} sprite-Icon_UltimateSkill_${spineName} absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-[0.75] bg-no-repeat origin-center block"></div>
+            <div class="${ULT_SPRITE_MAP[dispPersonality]} sprite-Icon_UltimateSkill_${spineName} absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-[0.75] bg-no-repeat origin-center block"></div>
             </div>`}
             </div>
             <div id="fall_av_${char.name}" class="hidden char-avatar-container w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-sm flex items-center justify-center font-bold text-amber-900 text-lg ${avatarClass} ${isUnreleased ? 'silhouette-mode' : ''}">${isUnreleased ? '?' : t(char.name).charAt(0)}</div>
