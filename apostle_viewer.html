@@ -68,6 +68,33 @@
             font-size: 10px; display: flex; align-items: center; justify-content: center;
             }
             #backToTop:hover { background-color: #d97706; transform: translateX(-50%) translateY(-5px); }
+
+            /* 🌟 雙面性格專用：外框呼吸流動與發光 */
+            @keyframes dualColorPulse {
+                0% { border-color: var(--c1); box-shadow: 0 0 6px var(--c1); }
+                50% { border-color: var(--c2); box-shadow: 0 0 6px var(--c2); }
+                100% { border-color: var(--c1); box-shadow: 0 0 6px var(--c1); }
+            }
+            .dual-border-anim {
+                --c1: #c084fc; /* 預設紫 */
+                --c2: #4ade80; /* 預設綠 */
+                animation: dualColorPulse 3s ease-in-out infinite;
+            }
+
+            /* 🌟 雙面性格專用：文字漸層橫向流動 */
+            @keyframes dualTextFlow {
+                0% { background-position: 200% center; }
+                100% { background-position: 0% center; }
+            }
+            .dual-text-anim {
+                --c1: #c084fc; 
+                --c2: #4ade80;
+                background: linear-gradient(90deg, var(--c1), var(--c2), var(--c1));
+                background-size: 200% auto;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                animation: dualTextFlow 3s linear infinite;
+            }
         </style>
     </head>
     <body class="p-2 sm:p-6 bg-[#fcf8f2] dark:bg-slate-900 text-gray-800 dark:text-gray-200 min-h-screen transition-colors duration-300">
@@ -257,12 +284,18 @@
                 "莉1莉": { icon: "sprite-Icon_Lil1li", type: "skin", spine: "Lil1li", options: ["Skin_Naive", "Skin_Cool", "Skin_Mad", "Skin_Jolly", "Skin_Gloomy", "None"] },
                 "蠟筆勇士": { icon: "sprite-Icon_CrayonKnight", type: "file", spineBase: "CrayonKnight", options: ["Naive", "Cool", "Mad", "Jolly", "Gloomy", "None"] }
             };
+            // 🌟 新增對應的 Hex 色碼表，用來動態產生雙面的變數
+            const HEX_COLORS = {
+                "天真": "#4ade80", "冷靜": "#60a5fa", "狂亂": "#f87171", "活潑": "#facc15", "憂鬱": "#c084fc"
+            };
+
             const personalityColors = { 
                 "天真": "border-green-400 text-green-400", 
                 "冷靜": "border-blue-400 text-blue-400", 
                 "狂亂": "border-red-400 text-red-400", 
                 "活潑": "border-yellow-400 text-yellow-400", 
                 "憂鬱": "border-purple-400 text-purple-400",
+                "雙面": "dual-border-anim dual-text-anim", // 🌟 套用流動動畫 Class
                 "共鳴": "border-rainbow text-rainbow"
             };
             const SPRITE_CLASS_MAP = {
@@ -272,7 +305,7 @@
             };
             const CHAR_SPRITE_MAP = {
                 "冷靜": "sprite-char-composed", "憂鬱": "sprite-char-depressed",
-                "天真": "sprite-char-innocence", "狂亂": "sprite-char-madness", "活潑": "sprite-char-vivacious", "共鳴": "sprite-char-resonance"
+                "天真": "sprite-char-innocence", "狂亂": "sprite-char-madness", "活潑": "sprite-char-vivacious", "共鳴": "sprite-char-resonance", "雙面": "sprite-char-multifaceted"
             };
             let globalPlayer = null;
             let slotVisibilityMap = {};
@@ -398,13 +431,19 @@
                 preloadIcons();
                 const container = document.getElementById('charGridContainer');
                 if (typeof INITIAL_DATA === 'undefined' || !INITIAL_DATA) return;
-                const personalities = ["共鳴", "天真", "冷靜", "狂亂", "活潑", "憂鬱"];
+                const personalities = ["共鳴", "雙面", "天真", "冷靜", "狂亂", "活潑", "憂鬱"];
                 
                 personalities.forEach((p, index) => {
-                    const chars = INITIAL_DATA.filter(c => c.personality === p);
+                    const chars = INITIAL_DATA.filter(c => {
+                        if (p === "雙面") return c.personality.includes(","); 
+                        else return c.personality === p;
+                    });
                     if (chars.length === 0) return;
+                    
                     const borderTextClass = personalityColors[p] || "border-gray-400 text-gray-400";
                     const borderClass = borderTextClass.split(' ')[0];
+                    const textClass = borderTextClass.split(' ')[1] || borderClass;
+                    
                     const groupId = `group_${index}`;
                     const btnId = `btn_${index}`;
             
@@ -415,10 +454,15 @@
                     header.className = "flex justify-between items-center cursor-pointer hover:bg-amber-100/50 dark:hover:bg-slate-700/50 p-1.5 rounded-lg transition";
                     header.onclick = () => togglePersonalityGroup(groupId, btnId);
                     const pSprite = SPRITE_CLASS_MAP[`p_${p}`] || "";
+                    
+                    // 🌟 群組標題的文字顏色邏輯
+                    const titleTextClass = (p === "雙面" || p === "共鳴") ? textClass : "text-amber-700 dark:text-amber-500";
+                    const headerStyle = p === "雙面" ? `style="--c1: #c084fc; --c2: #4ade80;"` : ""; // 群組標題預設紫綠流動
+
                     header.innerHTML = `
                         <div class="flex items-center gap-1">
                             <div class="sprite-base sprite-common ${pSprite} shrink-0 scale-[0.35] origin-left -ml-2"></div>
-                            <h3 class="text-xs sm:text-sm font-black text-amber-700 dark:text-amber-500 border-l-4 ${borderClass} pl-1 -ml-3">${getI18n(p)}</h3>
+                            <h3 class="text-xs sm:text-sm font-black border-l-4 ${borderClass} ${titleTextClass} pl-1 -ml-3" ${headerStyle}>${getI18n(p)}</h3>
                         </div>
                         <span id="${btnId}" class="text-xs text-gray-400">🔼</span>
                     `;
@@ -436,13 +480,23 @@
                         btn.className = "group flex flex-col items-center gap-0.5 transition-transform hover:scale-110 active:scale-95 w-12 sm:w-14";
                         btn.onclick = () => selectCharacter(c, spineName, iconUrl);
             
-                        const charSpriteBase = CHAR_SPRITE_MAP[c.personality] || "sprite-char-innocence";
+                        const displayPersonality = c.personality.includes(",") ? "雙面" : c.personality;
+                        const charSpriteBase = CHAR_SPRITE_MAP[displayPersonality] || "sprite-char-innocence";
                         const charSpriteClass = `sprite-${spineName}`;
                         let raceKey = c.race; if (raceKey === "???") raceKey = "unknown";
                         const raceSprite = SPRITE_CLASS_MAP[`race_${raceKey}`] || "sprite-Bg_Unknown";
             
+                        // 🌟 動態解析該角色的雙面顏色
+                        let charStyle = "";
+                        if (displayPersonality === "雙面") {
+                            const parts = c.personality.split(',').map(s => s.trim());
+                            const c1 = HEX_COLORS[parts[0]] || "#c084fc";
+                            const c2 = HEX_COLORS[parts[1]] || "#4ade80";
+                            charStyle = `style="--c1: ${c1}; --c2: ${c2};"`;
+                        }
+
                         btn.innerHTML = `
-                            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl border-2 ${borderClass} overflow-hidden shadow-sm group-hover:shadow-md transition-all relative flex items-center justify-center">
+                            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl border-2 ${borderClass} overflow-hidden shadow-sm group-hover:shadow-md transition-all relative flex items-center justify-center" ${charStyle}>
                                 <div class="absolute inset-0 flex items-center justify-center opacity-80">
                                     <div class="sprite-base sprite-common ${raceSprite} shrink-0 scale-[0.6]"></div>
                                 </div>
@@ -663,12 +717,25 @@
                 
                 // 動態決定框線與文字顏色
                 let pColors = "border-amber-400 text-amber-900";
+                const displayPersonality = charObj.personality.includes(",") ? "雙面" : charObj.personality;
+                
+                let customStyle = ""; // 🌟 用來存放雙色的 inline-style
+
                 if (isNPC) pColors = "border-gray-400 text-gray-700 dark:text-gray-300";
                 else if (isBoss) pColors = "border-red-500 text-red-700 dark:text-red-400";
-                else pColors = personalityColors[charObj.personality] || pColors;
+                else {
+                    pColors = personalityColors[displayPersonality] || pColors;
+                    // 🌟 動態解析選中角色的兩種性格顏色
+                    if (displayPersonality === "雙面") {
+                        const parts = charObj.personality.split(',').map(s => s.trim());
+                        const c1 = HEX_COLORS[parts[0]] || "#c084fc";
+                        const c2 = HEX_COLORS[parts[1]] || "#4ade80";
+                        customStyle = `--c1: ${c1}; --c2: ${c2};`;
+                    }
+                }
                 
                 const borderClass = pColors.split(' ')[0]; 
-                const textClass = pColors.split(' ')[1];  
+                const textClass = pColors.split(' ')[1] || "";  
                 
                 const iconEl = document.getElementById('activeCharIconContainer');
                 let raceKey = charObj.race; if (raceKey === "???") raceKey = "unknown";
@@ -700,11 +767,19 @@
                     `;
                 }
                 
-                iconEl.className = `w-10 h-10 sm:w-12 sm:h-12 rounded-lg border-2 ${borderClass} shadow-sm overflow-hidden bg-white dark:bg-slate-700 flex items-center justify-center shrink-0 relative`;
+                conEl.className = `w-10 h-10 sm:w-12 sm:h-12 rounded-lg border-2 ${borderClass} shadow-sm overflow-hidden bg-white dark:bg-slate-700 flex items-center justify-center shrink-0 relative`;
+                
+                // 🌟 套用 CSS 變數到頭像框
+                if (customStyle) iconEl.setAttribute("style", customStyle);
+                else iconEl.removeAttribute("style");
                 
                 const nameEl = document.getElementById('activeCharName');
                 nameEl.innerText = getI18n(charObj.name); 
                 nameEl.className = `text-lg sm:text-xl font-black ${textClass}`;
+
+                // 🌟 套用 CSS 變數到名字
+                if (customStyle) nameEl.setAttribute("style", customStyle);
+                else nameEl.removeAttribute("style");
             
                 document.getElementById('animList').classList.add('hidden'); 
                 document.getElementById('slotList').classList.add('hidden');
