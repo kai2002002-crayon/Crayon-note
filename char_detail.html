@@ -394,7 +394,10 @@
                 window.ICON_MAP['attribute_Magic'] = 'sprite-base sprite-common sprite-Type_Magic';
             
                 /// 性格
-                const personalities = { '冷靜': 'Composed', '憂鬱': 'Depressed', '天真': 'Innocence', '狂亂': 'Madness', '活潑': 'Vivacious', '共鳴': 'Resonance', '雙面': 'Multifaceted'};
+                const personalities = { 
+    '冷靜': 'Composed', '憂鬱': 'Depressed', '天真': 'Innocence', '狂亂': 'Madness', '活潑': 'Vivacious', '共鳴': 'Resonance', 
+    '雙重性格': 'Multifaceted', '雙重': 'Multifaceted', '雙面': 'Multifaceted' 
+};
                 Object.entries(personalities).forEach(([zh, en]) => {
                     const cls = `sprite-base sprite-common sprite-Personality_${en}`;
                     window.ICON_MAP[`personality_${zh}`] = cls;
@@ -1847,12 +1850,19 @@
             }
             }
             // 處理雙重性格判斷
-                let displayPersonality = currentCharData.personality;
-                if (Array.isArray(displayPersonality)) {
-                    displayPersonality = displayPersonality.length > 1 ? "雙面" : displayPersonality[0];
-                } else if (typeof displayPersonality === 'string' && (displayPersonality.includes('、') || displayPersonality.includes(',') || displayPersonality.includes('/') || displayPersonality.trim().includes(' '))) {
-                    displayPersonality = "雙面";
-                }
+let displayPersonality = currentCharData.personality;
+if (Array.isArray(displayPersonality)) {
+    displayPersonality = displayPersonality.length > 1 ? "雙面" : displayPersonality[0];
+} else if (typeof displayPersonality === 'string') {
+    // 檢查是否包含分隔符號
+    if (displayPersonality.includes('、') || displayPersonality.includes(',') || displayPersonality.includes('/') || displayPersonality.trim().includes(' ')) {
+        displayPersonality = "雙面";
+    } 
+    // 若資料本身寫的是「雙重性格」或「雙重」，統一轉換為「雙面」
+    else if (displayPersonality === "雙重性格" || displayPersonality === "雙重") {
+        displayPersonality = "雙面";
+    }
+}
             // 5. 渲染全部屬性圖示
             updateTag('charIdentity', idLabel, identityValue, 'identity');
             updateTag('charPersonality', pLabel, currentCharData.personality, 'personality');
@@ -1954,12 +1964,19 @@
             }
             }
             // 處理雙重性格判斷
-                let displayPersonality = currentCharData.personality;
-                if (Array.isArray(displayPersonality)) {
-                    displayPersonality = displayPersonality.length > 1 ? "雙面" : displayPersonality[0];
-                } else if (typeof displayPersonality === 'string' && (displayPersonality.includes('、') || displayPersonality.includes(',') || displayPersonality.includes('/') || displayPersonality.trim().includes(' '))) {
-                    displayPersonality = "雙面";
-                }
+let displayPersonality = currentCharData.personality;
+if (Array.isArray(displayPersonality)) {
+    displayPersonality = displayPersonality.length > 1 ? "雙面" : displayPersonality[0];
+} else if (typeof displayPersonality === 'string') {
+    // 檢查是否包含分隔符號
+    if (displayPersonality.includes('、') || displayPersonality.includes(',') || displayPersonality.includes('/') || displayPersonality.trim().includes(' ')) {
+        displayPersonality = "雙面";
+    } 
+    // 若資料本身寫的是「雙重性格」或「雙重」，統一轉換為「雙面」
+    else if (displayPersonality === "雙重性格" || displayPersonality === "雙重") {
+        displayPersonality = "雙面";
+    }
+}
             // 5. 渲染全部屬性圖示
             updateTag('charIdentity', idLabel, identityValue, 'identity');
             updateTag('charPersonality', pLabel, currentCharData.personality, 'personality');
