@@ -404,26 +404,26 @@ const ASIDE_DATA = {
     },
     "Joanne": { 
         asideIcon: "", 
-        totalName: { zh: "", ja: "", en: "" }, 
+        totalName: { zh: "教主的經典著作", ja: "主教の経典", en: "Bishop's Bible" }, 
         stars: {
             1: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "." }, 
-                effects: { zh: [""], ja: [""], en: [""] } 
+                name: { zh: "教主日記", ja: "教主日誌", en: "Master Journal" }, 
+                desc: { zh: "穿戴者的最大HP、物理防禦力、魔法防禦力、爆擊抵抗、爆擊傷害抵抗增加。", ja: "着用者の最大HP、物理防御力、魔法防御力、会心抵抗、会心ダメージ抵抗が増加する。", en: "Increases the bearer's Max HP, Physical DEF, Magical DEF, CRIT Resistance, and CRIT DMG Resistance." }, 
+                effects: { zh: ["最大HP增加:6%", "物理防禦力增加:6%", "魔法防禦力增加:6%", "爆擊抵抗增加:6%", "爆擊傷害抵抗增加:6%"], ja: ["最大HP増加:6%", "物理防御力増加:6%", "魔法防御力増加:6%", "会心抵抗増加:6%", "会心ダメージ抵抗増加:6%"], en: ["Max HP Increase: 6%", "Physical DEF Increase: 6%", "Magical DEF Increase: 6%", "CRIT Resistance Increase: 6%", "CRIT DMG Resistance Increase: 6%"] } 
             },
             2: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "" }, 
-                effects: { zh: [""], ja: [""], en: [""] } 
+                name: { zh: "妖精降臨", ja: "妖精降臨", en: "Here's Your Sprite!" }, 
+                desc: { zh: "最大HP增加。強化攻擊的所受傷害減少量、普通攻擊傷害增加量與技能傷害增加量皆變為2倍。分散效果結束時，恢復所有受到分散效果的友軍HP。透過高年級技能進入夢境形象狀態時，增加自身以外所有友軍的傷害量。處於夢境形象狀態時，自身攻擊速度提升。", ja: "最大HPが増加する。強化攻撃の被ダメージ量減少、普通攻撃のダメージ量増加、スキルダメージ量増加値が2倍になる。分散効果終了時、分散効果を受けた味方全員のHPを回復させる。高学年スキルで夢現の姿状態になる時、自身を除く味方全員のダメージ量を増加させる。夢現の姿状態の時、自身の攻撃速度が増加する。", en: "Increases Max HP. Enhanced Attack's Incoming Damage Reduction, Normal Attack Damage Increase, and Skill Damage Increase values are doubled. When the Disperse effect ends, recovers HP of all allies who received the Disperse effect. When entering Dream Form with the Senior Skill, increases Damage for all allies except herself. While in Dream Form, increases own Attack Speed." }, 
+                effects: { zh: ["最大HP增加:30%", "HP恢復:目標最大HP的30%", "傷害量增加:50%", "傷害量增加持續時間:30秒", "攻擊速度提升:125%"], ja: ["最大HP増加:30%", "HP回復:対象の最大HPの30%", "ダメージ量増加:50%", "ダメージ量増加の持続時間:30秒", "攻撃速度増加:125%"], en: ["Max HP Increase: 30%", "HP Recovery: 30% of the target's Max HP", "DMG Increase: 50%", "DMG Increase Duration: 30s", "ATK SPD Increase: 125%"] } 
             },
             3: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "" }, 
-                effects: { zh: [""], ja: [""], en: ["%"] }, 
-                globalEffects: { zh: ["全體 %", "全體 %"], ja: ["全体 %", "全体 %"], en: ["All %", "All %"] } 
+                name: { zh: "報恩的瓊安", ja: "ジョアンの恩返し", en: "Faithful Joanne" }, 
+                desc: { zh: "所有友軍對敵人造成的傷害量增加，所有友軍受到敵人造成的傷害量減少。", ja: "味方全員の敵への与ダメージ量を増加させ、味方全員の敵からの被ダメージ量を減少させる。", en: "Increases Outgoing Damage and reduces Incoming Damage for all allies." }, 
+                effects: { zh: ["傷害量增加:15%", "受到的傷害量減少:6.7%"], ja: ["ダメージ量増加:15%", "被ダメージ量減少:6.7%"], en: ["DMG Increase: 15%", "Incoming DMG Reduction: 6.7%"] }, 
+                globalEffects: { zh: ["全體HP 4%", "全體物理攻擊力 4%"], ja: ["全体HP 4%", "全体物理攻撃力 4%"], en: ["All HP 4%", "All Physical ATK 4%"] } 
             }
         }
     },
