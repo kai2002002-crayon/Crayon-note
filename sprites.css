@@ -9,12 +9,14 @@
 .sprite-char-innocence { background-image: url('char_sprites/char_innocence.png'); }
 .sprite-char-madness { background-image: url('char_sprites/char_madness.png'); }
 .sprite-char-vivacious { background-image: url('char_sprites/char_vivacious.png'); }
-.sprite-char-resonance { background-image: url('char_sprites/char_resonance.png'); }
+/* .sprite-char-resonance { background-image: url('char_sprites/char_resonance.png'); } */
+.sprite-char-multifaceted { background-image: url('char_sprites/char_multifaceted.png'); }
 .sprite-ult-composed { background-image: url('char_sprites/ultimate_composed.png')!important; }
 .sprite-ult-depressed { background-image: url('char_sprites/ultimate_depressed.png')!important; }
 .sprite-ult-innocence { background-image: url('char_sprites/ultimate_innocence.png')!important; }
 .sprite-ult-madness { background-image: url('char_sprites/ultimate_madness.png')!important; }
 .sprite-ult-vivacious { background-image: url('char_sprites/ultimate_vivacious.png')!important; }
+/* .sprite-ult-resonance { background-image: url('char_sprites/ultimate_resonance.png')!important; } */
 .sprite-ult-multifaceted { background-image: url('char_sprites/ultimate_multifaceted.png')!important; }
 .sprite-boss { background-image: url('char_sprites/bosssheet.png'); }
 .sprite-NPC { background-image: url('char_sprites/NPCsheet.png'); }
@@ -51,7 +53,8 @@
 .sprite-Personality_Innocence { width: 62px; height: 66px; background-position: -297px -572px; }
 .sprite-Personality_Madness { width: 62px; height: 66px; background-position: -369px -572px; }
 .sprite-Personality_Vivacious { width: 62px; height: 66px; background-position: -441px -572px; }
-.sprite-Personality_Multifaceted { width: 62px; height: 66px; background-position: -741px -537px; }
+.sprite-Personality_Resonance { width: 62px; height: 66px; background-position: -741px -537px; }
+.sprite-Personality_Multifaceted { width: 62px; height: 66px; background-position: -421px -292px; }
 .sprite-PickPerconalityIcon_EldainHero { width: 73px; height: 71px; background-position: -513px -572px; }
 .sprite-PickPerconalityIcon_NormalHero { width: 73px; height: 71px; background-position: -596px -572px; }
 .sprite-Position_Back { width: 64px; height: 64px; background-position: -5px -653px; }
