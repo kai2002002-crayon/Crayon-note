@@ -1849,7 +1849,13 @@ const ultFileName = personalityMap[pKey] || "ultimate_composed";
             currentAttribute = skillData.attribute;
             }
             }
-            
+            // 處理雙重性格判斷
+                let displayPersonality = currentCharData.personality;
+                if (Array.isArray(displayPersonality)) {
+                    displayPersonality = displayPersonality.length > 1 ? "雙重" : displayPersonality[0];
+                } else if (typeof displayPersonality === 'string' && (displayPersonality.includes('、') || displayPersonality.includes(',') || displayPersonality.includes('/') || displayPersonality.trim().includes(' '))) {
+                    displayPersonality = "雙重";
+                }
             // 5. 渲染全部屬性圖示
             updateTag('charIdentity', idLabel, identityValue, 'identity');
             updateTag('charPersonality', pLabel, currentCharData.personality, 'personality');
@@ -1950,7 +1956,13 @@ const ultFileName = personalityMap[pKey] || "ultimate_composed";
             currentAttribute = skillData.attribute;
             }
             }
-            
+            // 處理雙重性格判斷
+                let displayPersonality = currentCharData.personality;
+                if (Array.isArray(displayPersonality)) {
+                    displayPersonality = displayPersonality.length > 1 ? "雙重" : displayPersonality[0];
+                } else if (typeof displayPersonality === 'string' && (displayPersonality.includes('、') || displayPersonality.includes(',') || displayPersonality.includes('/') || displayPersonality.trim().includes(' '))) {
+                    displayPersonality = "雙重";
+                }
             // 5. 渲染全部屬性圖示
             updateTag('charIdentity', idLabel, identityValue, 'identity');
             updateTag('charPersonality', pLabel, currentCharData.personality, 'personality');
