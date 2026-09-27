@@ -31,6 +31,18 @@
         .no-context-menu { -webkit-touch-callout: none; }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* 🌟 雙面性格專用：外框呼吸流動與發光 */
+        @keyframes dualColorPulse {
+            0% { border-color: var(--c1); box-shadow: 0 0 8px var(--c1); }
+            50% { border-color: var(--c2); box-shadow: 0 0 8px var(--c2); }
+            100% { border-color: var(--c1); box-shadow: 0 0 8px var(--c1); }
+        }
+        .dual-border-anim {
+            --c1: #c084fc; /* 預設紫 */
+            --c2: #4ade80; /* 預設綠 */
+            animation: dualColorPulse 3s ease-in-out infinite;
+        }
     </style>
 </head>
 <body class="p-4 sm:p-8 bg-[#fcf8f2] dark:bg-slate-900 text-gray-800 dark:text-gray-200 min-h-screen transition-colors duration-300">
@@ -238,9 +250,16 @@
         function loginGoogle() { auth.signInWithPopup(provider).catch(e => alert(e.message)); }
         function logoutGoogle() { if(confirm(t('alert_logout'))) auth.signOut(); }
 
+        // 🌟 新增對應的 Hex 色碼表，用來動態產生雙面的變數
+        const HEX_COLORS = {
+            "天真": "#4ade80", "冷靜": "#60a5fa", "狂亂": "#f87171", "活潑": "#facc15", "憂鬱": "#c084fc"
+        };
+        
         const personalityColors = { 
             "天真": "border-green-400 text-green-400", "冷靜": "border-blue-400 text-blue-400", 
-            "狂亂": "border-red-400 text-red-400", "活潑": "border-yellow-400 text-yellow-400", "憂鬱": "border-purple-400 text-purple-400", "共鳴": "border-rainbow text-rainbow"
+            "狂亂": "border-red-400 text-red-400", "活潑": "border-yellow-400 text-yellow-400", 
+            "憂鬱": "border-purple-400 text-purple-400", "共鳴": "border-rainbow text-rainbow",
+            "雙面": "dual-border-anim" // 🌟 加入雙面動畫 Class
         };
         const SPRITE_CLASS_MAP = {
             race_龍族: "sprite-Bg_Dragon", race_精靈: "sprite-Bg_Elf", race_妖精: "sprite-Bg_Sprite",
@@ -249,7 +268,8 @@
         };
         const CHAR_SPRITE_MAP = {
             "共鳴": "sprite-char-resonance", "冷靜": "sprite-char-composed", "憂鬱": "sprite-char-depressed",
-            "天真": "sprite-char-innocence", "狂亂": "sprite-char-madness", "活潑": "sprite-char-vivacious"
+            "天真": "sprite-char-innocence", "狂亂": "sprite-char-madness", "活潑": "sprite-char-vivacious",
+            "雙面": "sprite-char-resonance" // 🌟 雙面預設使用共鳴的彩虹底圖
         };
         let checkedCharacters = JSON.parse(localStorage.getItem('trickcal_checklist')) || {};
 
@@ -266,7 +286,6 @@
 
 
         window.addEventListener('storage', (e) => {
-
             if (e.key === 'user_lang' && e.newValue && e.newValue !== window.currentLang) {
                 console.log(`📡 偵測到主頁將語言切換至 ${e.newValue}，正在重新整理以套用新語言！`);
                 window.location.reload(); 
@@ -326,9 +345,24 @@
 
             let raceKey = charData.race === "???" ? "unknown" : charData.race;
             const raceSprite = SPRITE_CLASS_MAP[`race_${raceKey}`] || "sprite-Bg_Unknown";
-            const borderClass = personalityColors[charData.personality] ? personalityColors[charData.personality].split(' ')[0] : "border-gray-400";
             
-            const charSpriteBase = CHAR_SPRITE_MAP[charData.personality] || "sprite-char-innocence";
+            // 🌟 處理雙面性格的判斷與變數寫入
+            let displayPersonality = charData.personality;
+            let borderClass = "border-gray-400";
+            let customStyle = "";
+            
+            if (charData.personality && charData.personality.includes(",")) {
+                displayPersonality = "雙面";
+                borderClass = "dual-border-anim";
+                const parts = charData.personality.split(',').map(s => s.trim());
+                const c1 = HEX_COLORS[parts[0]] || "#c084fc"; // 預設紫
+                const c2 = HEX_COLORS[parts[1]] || "#4ade80"; // 預設綠
+                customStyle = `style="--c1: ${c1}; --c2: ${c2};"`;
+            } else {
+                borderClass = personalityColors[charData.personality] ? personalityColors[charData.personality].split(' ')[0] : "border-gray-400";
+            }
+            
+            const charSpriteBase = CHAR_SPRITE_MAP[displayPersonality] || "sprite-char-innocence";
             const charSpriteClass = `sprite-${spineName}`;
 
             const currentState = checkedCharacters[charName] || 0;
@@ -344,7 +378,7 @@
 
             el.className = "flex flex-col items-center gap-1 group relative transition-all duration-300 no-context-menu cursor-pointer hover:scale-105";
             el.innerHTML = `
-                <div class="char-icon-box w-16 h-16 sm:w-20 sm:h-20 rounded-2xl border-4 ${borderClass} overflow-hidden shadow-md relative flex items-center justify-center transition-all duration-300" id="box_${charName}">
+                <div class="char-icon-box w-16 h-16 sm:w-20 sm:h-20 rounded-2xl border-4 ${borderClass} overflow-hidden shadow-md relative flex items-center justify-center transition-all duration-300" id="box_${charName}" ${customStyle}>
                     <div class="absolute inset-0 flex items-center justify-center opacity-80">
                         <div class="sprite-base sprite-common ${raceSprite} shrink-0 scale-[0.8] sm:scale-[1.0]"></div>
                     </div>
