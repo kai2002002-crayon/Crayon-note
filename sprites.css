@@ -15,7 +15,7 @@
 .sprite-ult-innocence { background-image: url('char_sprites/ultimate_innocence.png')!important; }
 .sprite-ult-madness { background-image: url('char_sprites/ultimate_madness.png')!important; }
 .sprite-ult-vivacious { background-image: url('char_sprites/ultimate_vivacious.png')!important; }
-.sprite-ult-resonance { background-image: url('char_sprites/ultimate_resonance.png')!important; }
+.sprite-ult-multifaceted { background-image: url('char_sprites/ultimate_multifaceted.png')!important; }
 .sprite-boss { background-image: url('char_sprites/bosssheet.png'); }
 .sprite-NPC { background-image: url('char_sprites/NPCsheet.png'); }
 /* =======================================
@@ -51,7 +51,7 @@
 .sprite-Personality_Innocence { width: 62px; height: 66px; background-position: -297px -572px; }
 .sprite-Personality_Madness { width: 62px; height: 66px; background-position: -369px -572px; }
 .sprite-Personality_Vivacious { width: 62px; height: 66px; background-position: -441px -572px; }
-.sprite-Personality_Resonance { width: 62px; height: 66px; background-position: -741px -537px; }
+.sprite-Personality_Multifaceted { width: 62px; height: 66px; background-position: -741px -537px; }
 .sprite-PickPerconalityIcon_EldainHero { width: 73px; height: 71px; background-position: -513px -572px; }
 .sprite-PickPerconalityIcon_NormalHero { width: 73px; height: 71px; background-position: -596px -572px; }
 .sprite-Position_Back { width: 64px; height: 64px; background-position: -5px -653px; }
@@ -171,7 +171,7 @@
 .sprite-Taida { width: 126px; height: 126px; background-position: -5px -1773px; }
 .sprite-Ui { width: 126px; height: 126px; background-position: -5px -1909px; }
 .sprite-Tig { width: 126px; height: 126px; background-position: -5px -2045px; }
-/* Resonance */
+/* Multifaceted */
 .sprite-Joanne { width: 126px; height: 126px; background-position: -5px -5px; }
 /* =======================================
    🌟 角色大絕頭像 (ultimate_*.png)
@@ -259,7 +259,7 @@
 .sprite-Icon_UltimateSkill_Taida { width: 64px; height: 64px; background-position: -5px -967px; }
 .sprite-Icon_UltimateSkill_Ui { width: 64px; height: 64px; background-position: -5px -1041px; }
 .sprite-Icon_UltimateSkill_Tig { width: 64px; height: 64px; background-position: -5px -1115px; }
-/* Resonance */
+/* Multifaceted */
 .sprite-Icon_UltimateSkill_Joanne { width: 64px; height: 64px; background-position: -5px -5px; }
 /* =======================================
    🌟 Boss圖示 (bosssheet.png)
