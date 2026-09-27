@@ -394,7 +394,8 @@
                 window.ICON_MAP['attribute_Magic'] = 'sprite-base sprite-common sprite-Type_Magic';
             
                 // 性格
-                const personalities = { '冷靜': 'Composed', '憂鬱': 'Depressed', '天真': 'Innocence', '狂亂': 'Madness', '活潑': 'Vivacious', '共鳴': 'Resonance' };
+                // 性格
+const personalities = { '冷靜': 'Composed', '憂鬱': 'Depressed', '天真': 'Innocence', '狂亂': 'Madness', '活潑': 'Vivacious', '共鳴': 'Resonance', '雙重': 'Multifaceted'};
                 Object.entries(personalities).forEach(([zh, en]) => {
                     const cls = `sprite-base sprite-common sprite-Personality_${en}`;
                     window.ICON_MAP[`personality_${zh}`] = cls;
@@ -1315,12 +1316,14 @@
                         const passiveSkillIcon = `sprite-Icon_PassiveSkill_${spineKey}`;
             
                         const pKey = currentCharData.personality || "冷靜";
-                        const personalityMap = {
-                            "冷靜": "ultimate_composed", "憂鬱": "ultimate_depressed", "天真": "ultimate_innocence", "狂亂": "ultimate_madness", "活潑": "ultimate_vivacious",
-                            "Composed": "ultimate_composed", "Depressed": "ultimate_depressed", "Innocence": "ultimate_innocence", "Madness": "ultimate_madness", "Vivacious": "ultimate_vivacious",
-                            "共鳴": "ultimate_resonance", "Resonance": "ultimate_resonance" // <-- 新增
-                        };
-                        const ultFileName = personalityMap[pKey] || "ultimate_composed";
+                        const pKey = currentCharData.personality || "冷靜";
+const personalityMap = {
+    "冷靜": "ultimate_composed", "憂鬱": "ultimate_depressed", "天真": "ultimate_innocence", "狂亂": "ultimate_madness", "活潑": "ultimate_vivacious",
+    "Composed": "ultimate_composed", "Depressed": "ultimate_depressed", "Innocence": "ultimate_innocence", "Madness": "ultimate_madness", "Vivacious": "ultimate_vivacious",
+    "共鳴": "ultimate_resonance", "Resonance": "ultimate_resonance",
+    "雙重": "ultimate_multifaceted", "Multifaceted": "ultimate_multifaceted" // <-- 新增雙重性格的讀取
+};
+const ultFileName = personalityMap[pKey] || "ultimate_composed";
             
                         const ultSkillIcon = `sprite-Icon_UltimateSkill_${spineKey}`;
                         const ultStyle = `width: 64px; height: 64px; background-image: url('char_sprites/${ultFileName}.png'); background-size: auto; transform: translate(-50%, -50%) scale(0.625);`;
