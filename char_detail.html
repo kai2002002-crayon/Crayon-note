@@ -1314,13 +1314,35 @@
                         const normalSkillIcon = `sprite-Icon_NormalSkill_${spineKey}`;
                         const passiveSkillIcon = `sprite-Icon_PassiveSkill_${spineKey}`;
             
-                        const pKey = currentCharData.personality || "冷靜";
-const personalityMap = {
+                        // 1. 先取得原始性格資料
+                        let rawPersonality = currentCharData.personality;
+                        let pKey = "冷靜"; // 預設值
+                        // 2. 判斷是否有兩種性格 (即雙重性格) 邏輯
+                        if (Array.isArray(rawPersonality)) {
+                            // 如果資料格式是陣列 ["冷靜", "憂鬱"]
+                            if (rawPersonality.length > 1) {
+                                pKey = "雙重";
+                            } else if (rawPersonality.length === 1) {
+                                pKey = rawPersonality[0];
+                            }
+                        } else if (typeof rawPersonality === 'string') {
+                            // 如果資料格式是字串，檢查是否有分隔符號 (這裡涵蓋逗號、頓號、斜線、空白)
+                            if (rawPersonality.includes(',') || rawPersonality.includes('、') || rawPersonality.includes('/') || rawPersonality.trim().includes(' ')) {
+                                pKey = "雙重";
+                            } else {
+                                pKey = rawPersonality;
+                            }
+                        } else if (rawPersonality) {
+                            pKey = rawPersonality; // 其他預料外但有值的狀況
+                        }
+                        // 3. 對應圖片
+                        const personalityMap = {
     "冷靜": "ultimate_composed", "憂鬱": "ultimate_depressed", "天真": "ultimate_innocence", "狂亂": "ultimate_madness", "活潑": "ultimate_vivacious",
     "Composed": "ultimate_composed", "Depressed": "ultimate_depressed", "Innocence": "ultimate_innocence", "Madness": "ultimate_madness", "Vivacious": "ultimate_vivacious",
     "共鳴": "ultimate_resonance", "Resonance": "ultimate_resonance",
-    "雙重": "ultimate_multifaceted", "雙重性格": "ultimate_multifaceted", "Multifaceted": "ultimate_multifaceted" // <-- 新增雙重性格的讀取
+    "雙重": "ultimate_multifaceted", "Multifaceted": "ultimate_multifaceted"
 };
+
 const ultFileName = personalityMap[pKey] || "ultimate_composed";
             
                         const ultSkillIcon = `sprite-Icon_UltimateSkill_${spineKey}`;
