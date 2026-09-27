@@ -394,7 +394,7 @@
                 window.ICON_MAP['attribute_Magic'] = 'sprite-base sprite-common sprite-Type_Magic';
             
                 /// 性格
-                const personalities = { '冷靜': 'Composed', '憂鬱': 'Depressed', '天真': 'Innocence', '狂亂': 'Madness', '活潑': 'Vivacious', '共鳴': 'Resonance', '雙重': 'Multifaceted'};
+                const personalities = { '冷靜': 'Composed', '憂鬱': 'Depressed', '天真': 'Innocence', '狂亂': 'Madness', '活潑': 'Vivacious', '共鳴': 'Resonance', '雙面': 'Multifaceted'};
                 Object.entries(personalities).forEach(([zh, en]) => {
                     const cls = `sprite-base sprite-common sprite-Personality_${en}`;
                     window.ICON_MAP[`personality_${zh}`] = cls;
@@ -1321,14 +1321,14 @@
                         if (Array.isArray(rawPersonality)) {
                             // 如果資料格式是陣列 ["冷靜", "憂鬱"]
                             if (rawPersonality.length > 1) {
-                                pKey = "雙重";
+                                pKey = "雙面";
                             } else if (rawPersonality.length === 1) {
                                 pKey = rawPersonality[0];
                             }
                         } else if (typeof rawPersonality === 'string') {
                             // 如果資料格式是字串，檢查是否有分隔符號 (這裡涵蓋逗號、頓號、斜線、空白)
                             if (rawPersonality.includes(',') || rawPersonality.includes('、') || rawPersonality.includes('/') || rawPersonality.trim().includes(' ')) {
-                                pKey = "雙重";
+                                pKey = "雙面";
                             } else {
                                 pKey = rawPersonality;
                             }
@@ -1339,7 +1339,7 @@
                         const personalityMap = {
                             "冷靜": "ultimate_composed", "憂鬱": "ultimate_depressed", "天真": "ultimate_innocence", "狂亂": "ultimate_madness", "活潑": "ultimate_vivacious",
                             "Composed": "ultimate_composed", "Depressed": "ultimate_depressed", "Innocence": "ultimate_innocence", "Madness": "ultimate_madness", "Vivacious": "ultimate_vivacious",
-                            "共鳴": "ultimate_resonance", "Resonance": "ultimate_resonance", "雙重": "ultimate_multifaceted", "Multifaceted": "ultimate_multifaceted"};
+                            "共鳴": "ultimate_resonance", "Resonance": "ultimate_resonance", "雙面": "ultimate_multifaceted", "Multifaceted": "ultimate_multifaceted"};
                         const ultFileName = personalityMap[pKey] || "ultimate_composed";
             
                         const ultSkillIcon = `sprite-Icon_UltimateSkill_${spineKey}`;
@@ -1849,9 +1849,9 @@
             // 處理雙重性格判斷
                 let displayPersonality = currentCharData.personality;
                 if (Array.isArray(displayPersonality)) {
-                    displayPersonality = displayPersonality.length > 1 ? "雙重" : displayPersonality[0];
+                    displayPersonality = displayPersonality.length > 1 ? "雙面" : displayPersonality[0];
                 } else if (typeof displayPersonality === 'string' && (displayPersonality.includes('、') || displayPersonality.includes(',') || displayPersonality.includes('/') || displayPersonality.trim().includes(' '))) {
-                    displayPersonality = "雙重";
+                    displayPersonality = "雙面";
                 }
             // 5. 渲染全部屬性圖示
             updateTag('charIdentity', idLabel, identityValue, 'identity');
@@ -1956,9 +1956,9 @@
             // 處理雙重性格判斷
                 let displayPersonality = currentCharData.personality;
                 if (Array.isArray(displayPersonality)) {
-                    displayPersonality = displayPersonality.length > 1 ? "雙重" : displayPersonality[0];
+                    displayPersonality = displayPersonality.length > 1 ? "雙面" : displayPersonality[0];
                 } else if (typeof displayPersonality === 'string' && (displayPersonality.includes('、') || displayPersonality.includes(',') || displayPersonality.includes('/') || displayPersonality.trim().includes(' '))) {
-                    displayPersonality = "雙重";
+                    displayPersonality = "雙面";
                 }
             // 5. 渲染全部屬性圖示
             updateTag('charIdentity', idLabel, identityValue, 'identity');
