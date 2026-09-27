@@ -90,7 +90,6 @@
             0% { background-position: 0 0; }
             100% { background-position: 400% 0; }
             }
-            /* 🌈 流動彩虹邊框動畫 */
             .rainbow-wrapper {
             position: relative;
             padding: 4px; /* 控制邊框粗細 */
@@ -113,6 +112,16 @@
             position: relative;
             }
             #backToTop:hover { background-color: #d97706; transform: translateY(-5px); }
+
+            /* 🌟 雙面性格專用：外框呼吸流動與發光 */
+            @keyframes dualColorPulse {
+                0% { border-color: var(--c1); box-shadow: 0 0 6px var(--c1); }
+                50% { border-color: var(--c2); box-shadow: 0 0 6px var(--c2); }
+                100% { border-color: var(--c1); box-shadow: 0 0 6px var(--c1); }
+            }
+            .dual-border-anim {
+                animation: dualColorPulse 3s ease-in-out infinite;
+            }
         </style>
     </head>
     <body class="p-3 sm:p-6 md:p-8 text-gray-800 dark:text-gray-100">
@@ -240,7 +249,7 @@
                     currentRateUps = [...new Set(currentRateUps)];
                 }
 
-                // 🌟 新增：2. 檢查 EVENT_SCHEDULE 是否有開放性格招募，並自動判斷開放哪幾種性格與對應 Banner
+                // 2. 檢查 EVENT_SCHEDULE 是否有開放性格招募，並自動判斷開放哪幾種性格與對應 Banner
                 let isPersonalityOpen = false;
                 let activePersonalities = []; 
                 let personalityBannerName = "SelectPickPersonality"; // 預設 Banner 名稱
@@ -320,7 +329,6 @@
                     pPoolBtn.className = 'pool-btn rounded-xl border-4 border-transparent hover:border-amber-400 overflow-hidden transition-all p-0 h-[45px] bg-white dark:bg-gray-800 flex items-center justify-center min-w-[120px] shadow-sm';
                     const pPoolTitle = t('gacha_personality_pool');
                     
-                    // 🌟 這裡使用動態變數 personalityBannerName 組合圖片路徑
                     pPoolBtn.innerHTML = `
                         <img src="event/${personalityBannerName}_${langSuffix}.png" class="h-full w-auto object-contain" alt="${pPoolTitle}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                         <span style="display:none;" class="px-3 font-bold text-sm text-gray-700 dark:text-gray-200">${pPoolTitle}</span>
@@ -374,7 +382,12 @@
             function getGachaPool(isGuaranteed) {
                 let p1 = isGuaranteed ? 0 : 0.76; let p2 = isGuaranteed ? 0.97 : 0.21; let p3 = 0.03; let eldainBase = 0.00036;
                 let availableChars = validChars; 
-                if (currentPool.type === 'personality') availableChars = validChars.filter(c => c.personality === currentPool.personality);
+                
+                // 🌟 當為指定性格池時，透過 includes 允許「雙面性格」角色同時出現在這兩個性格的招募池裡
+                if (currentPool.type === 'personality') {
+                    availableChars = validChars.filter(c => c.personality && c.personality.includes(currentPool.personality));
+                }
+                
                 let stars1 = availableChars.filter(c => c.star === 1); let stars2 = availableChars.filter(c => c.star === 2); let stars3 = availableChars.filter(c => c.star === 3);
                 let weightedPool = [];
                 
@@ -440,40 +453,53 @@
                 const personalityBorderColors = { "天真": "border-green-500", "冷靜": "border-blue-500", "狂亂": "border-red-500", "活潑": "border-yellow-400", "憂鬱": "border-purple-500" };
                 const personalityHexMap = { "天真": "#22c55e", "冷靜": "#3b82f6", "狂亂": "#ef4444", "活潑": "#facc15", "憂鬱": "#a855f7" };
                 const bgClassMap = { "龍族": "sprite-Bg_Dragon", "精靈": "sprite-Bg_Elf", "妖精": "sprite-Bg_Sprite", "獸人": "sprite-Bg_Werebeast", "幽靈": "sprite-Bg_Phantom", "???": "sprite-Bg_Unknown", "unknown": "sprite-Bg_Unknown", "魔靈": "sprite-Bg_Elemental", "魔女": "sprite-Bg_Witch" };
-                const charSpriteBaseMap = { "冷靜": "sprite-char-composed", "憂鬱": "sprite-char-depressed", "天真": "sprite-char-innocence", "狂亂": "sprite-char-madness", "活潑": "sprite-char-vivacious" };
+                const charSpriteBaseMap = { "冷靜": "sprite-char-composed", "憂鬱": "sprite-char-depressed", "天真": "sprite-char-innocence", "狂亂": "sprite-char-madness", "活潑": "sprite-char-vivacious", "雙面": "sprite-char-resonance" };
                 
-                const borderColor = personalityBorderColors[charData.personality] || "border-gray-300"; 
-                const pColorHex = personalityHexMap[charData.personality] || "rgba(255,255,255,0.5)"; 
+                let displayPersonality = charData.personality || "";
+                let borderColor = "border-gray-300";
+                let customStyle = "";
+                
+                // 🌟 如果是雙面性格，抓取顏色並給予動態樣式
+                if (displayPersonality.includes(",")) {
+                    displayPersonality = "雙面";
+                    borderColor = "dual-border-anim";
+                    const parts = charData.personality.split(',').map(s => s.trim());
+                    const c1 = personalityHexMap[parts[0]] || "#a855f7"; 
+                    const c2 = personalityHexMap[parts[1]] || "#22c55e"; 
+                    customStyle = `style="--c1: ${c1}; --c2: ${c2};"`;
+                } else {
+                    borderColor = personalityBorderColors[displayPersonality] || "border-gray-300";
+                }
+
                 const raceKey = (charData.race === "???" || !charData.race) ? "unknown" : charData.race; 
                 const bgSprite = bgClassMap[raceKey] || "sprite-Bg_Unknown";
                 const spineName = typeof SPINE_MAP !== 'undefined' && SPINE_MAP[charData.name] ? SPINE_MAP[charData.name] : charData.name; 
-                const charSpriteBase = charSpriteBaseMap[charData.personality] || ""; 
+                const charSpriteBase = charSpriteBaseMap[displayPersonality] || ""; 
                 const charSpriteClass = `sprite-${spineName}`;
                 
                 const sizeClass = isLarge ? "w-[58px] h-[58px] sm:w-[76px] sm:h-[76px]" : "w-10 h-10"; 
                 const bgScaleClass = isLarge ? "scale-[0.52] sm:scale-[0.6]" : "scale-[0.45]"; 
                 const charScaleClass = isLarge ? "scale-[0.45] sm:scale-[0.55]" : "scale-[0.35]";
-                                
+                                                
                 const innerHTML = `
                     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 sprite-base sprite-common ${bgSprite} ${bgScaleClass} z-0 opacity-90"></div>
                     <div class="absolute inset-0 bg-white/20 dark:bg-black/20 backdrop-blur-[1px] z-[5]"></div>
                     <div class="absolute inset-0 flex items-center justify-center z-10"><div class="sprite-base ${charSpriteBase} ${charSpriteClass} shrink-0 ${charScaleClass} origin-center"></div></div>
                 `;
-                // 在 getGachaCharIconHTML 函數內
-            if (isLarge && isRateUp) {
-            return `
-            <div class="rainbow-wrapper shrink-0 ${sizeClass} shadow-lg rounded-xl" style="filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));">
-                <div class="rainbow-content w-full h-full bg-[#fcf8f2] dark:bg-gray-800 rounded-lg relative overflow-hidden">
+                
+                if (isLarge && isRateUp) {
+                    return `
+                    <div class="rainbow-wrapper shrink-0 ${sizeClass} shadow-lg rounded-xl" style="filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));">
+                        <div class="rainbow-content w-full h-full bg-[#fcf8f2] dark:bg-gray-800 rounded-lg relative overflow-hidden">
+                            ${innerHTML}
+                        </div>
+                    </div>`;
+                } else {
+                    return `
+                    <div class="${sizeClass} rounded-lg border-[3px] ${borderColor} shadow-inner bg-[#fcf8f2] dark:bg-gray-800 relative overflow-hidden shrink-0" ${customStyle}>
                     ${innerHTML}
-                </div>
-            </div>`;
-            } else {
-            // 一般角色的外框
-            return `
-            <div class="${sizeClass} rounded-lg border-[3px] ${borderColor} shadow-inner bg-[#fcf8f2] dark:bg-gray-800 relative overflow-hidden shrink-0">
-            ${innerHTML}
-            </div>`;
-            }
+                    </div>`;
+                }
                 
             }
             
@@ -510,17 +536,6 @@
                     card.style.opacity = '0'; card.style.transform = 'translateY(20px)'; container.appendChild(card);
                     setTimeout(() => { card.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)'; card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }, 100 * idx);
                 });
-            }
-            
-            // 🌟 核心修正：完美還原舊版 Firebase 存檔格式與渲染邏輯
-            function addToHistory(results, poolName) {
-                const record = {
-                    poolName: poolName,
-                    results: results.map(r => ({ name: r.char.name, star: r.char.star })),
-                    timestamp: new Date().toISOString()
-                };
-                renderSingleHistoryEntry(record); 
-                saveHistoryToCloud(record);
             }
             
             // ==========================
