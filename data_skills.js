@@ -100,65 +100,65 @@ const characterSkills = [
     "skills": {
       "zh-TW": {
         "normalAttack": {
-          "basic": " []",
-          "enhanced": " []"
+          "basic": "發射鎖鏈,對敵人造成物理傷害。夢境形象狀態下，召喚鎖鏈對敵人造成範圍物理傷害，並恢復所有友軍的HP。 [夢境形象:變更普通攻擊效果。] [物理傷害:200%] [夢境形象物理傷害:500%] [HP恢復:造成傷害量的150%]",
+          "enhanced": "根據自身的編隊排列獲得不同效果。夢境形象狀態下，會追加效果。所有效果持續8秒。\n前排編隊:進行第四次攻擊時,改為減少所有友軍受到的傷害量。夢境形象狀態下，賦予前排友軍使者護盾。\n中排編隊:進行第四次攻擊時，改為增加所有友軍的普通攻擊傷害量。夢境形象狀態下，提升中排友軍使者的攻擊速度。\n後排編隊:進行第四次攻擊時，改為增加所有友軍的技能傷害量。夢境形象狀態下，增加後排友軍使者的每秒SP恢復量。 [夢境形象:變更普通攻擊效果。] [前排站位受到的傷害量減少:15%] [夢境形象狀態下，前排站位護盾:最大HP的35%] [中排站位普通攻擊傷害提升:20%] [夢境形象狀態下，中排站位攻擊速度提升:50%] [後排站位友軍技能傷害提升:20%] [夢境形象狀態下，後排站位每秒SP恢復量提升:15]"
         },
         "normalSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""]
+          "name": "實踐教義",
+          "desc": "在一定時間內，使自身及攻擊力最高的2名友軍使者獲得分散效果。處於分散狀態時，提升攻擊力並降低受到的傷害。當前HP低於15%的友軍將排除在技能目標外、無法獲得分散效果。分散效果無法驅散，且友軍不會因分散傷害而陣亡。",
+          "stats": ["分散:與其他擁有分散效果的友軍分攤傷害。", "分散持續時間:10秒", "分散比例:90%", "攻擊力增加:47%", "受到的傷害量減少:21%"]
         },
         "ultimateSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""],
-          "cooldown": "秒"
+          "name": "我目睹的事物",
+          "desc": "對敵人造成範圍物理傷害，並使受到傷害的使者目前高級技能冷卻時間增加。自身進入夢境形象狀態，持續20秒，並為除自身外的所有友軍賦予護盾。夢境形象無法解除。攻擊目標會根據自身的編隊位置改變。",
+          "stats": ["前排編隊:最近的敵人", "中排編隊:位於中央的敵人", "後排編隊:指定範圍内最遠的敵人", "夢境形象:變更普通攻擊效果。", "物理傷害:1470%", "冷卻時間增加:9秒", "友軍護盾:最大HP的31%", "友軍護盾持續時間:10秒"],
+          "cooldown": "34秒"
         },
         "passiveSkill": {
-          "desc": "",
-          "stats": ["秒"]
+          "desc": "增加友軍使者的攻擊力。 (該效果即使瓊安不在場上也會觸發。)",
+          "stats": ["攻擊力增加:11.5%"]
         }
       },
       "ja": {
         "normalAttack": {
-          "basic": " []",
-          "enhanced": " []"
+          "basic": "鎖を飛ばし、敵に物理ダメージを与える。夢現の姿状態の時、鎖を召喚して敵に範囲物理ダメージを与え、味方全員のHPを回復させる。 [夢現の姿:普通攻撃の効果が変更される。] [物理ダメージ:200%] [夢現の姿状態の時、物理ダメージ: 500%] [HP回復:与えたダメージ量の150%]",
+          "enhanced": "自身の配置列に応じて異なる効果を受ける。夢現の姿状態の時、効果が追加される。すべての効果は8秒間持続する。\n前列配置:4回目の攻撃の代わりに味方全員の被ダメージ量を減少させる。夢現の姿状態の時、前列の味方使徒にシールドを付与する。\n中列配置:4回目の攻撃の代わりに味方全員の普通攻撃のダメージ量を増加させる。夢現の姿状態の時、中列の味方使徒の攻撃速度を増加させる。\n後列配置:4回目の攻撃の代わりに味方全員のスキルダメージ量を増加させる。夢現の姿状態の時、後列の味方使徒の1秒ごとのSP回復量を増加させる。 [夢現の姿:普通攻撃の効果が変更される。] [前列配置の被ダメージ量減少: 15%] [夢現の姿状態の時、前列配置のシールド: 最大HPの35%] [中列配置の普通攻撃のダメージ量増加:20%] [夢現の姿状態の時、中列配置の攻擊速度増加:50%] [後列配置のスキルダメージ量増加: 20%] [夢現の姿状装の時、後列配置の1秒ごとのSP回復量増加:15]"
         },
         "normalSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""]
+          "name": "教理を行ない",
+          "desc": "一定時間、自身と攻撃力が最も高い味方使徒2名に分散効果を付与する。分散効果を保有している場合、攻擊力を増加させ、被ダメージ量を減少させる。現在HPが15%未満の味方はスキル対象から除外され、 分散効果を受けない。分散効果は解除できず、分散ダメージによって味方が倒れることはない。",
+          "stats": ["分散:分散を保有する他の味方とダメージを分け合う。", "分散の持続時間:10秒", "分散の割合: 90%", "攻撃力増加:47%", "被ダメージ量減少:21%"]
         },
         "ultimateSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""],
-          "cooldown": "秒"
+          "name": "私が目撃したことを",
+          "desc": "敵に範囲物理ダメージを与え、ダメージを受けた使徒の現在の高学年スキルのクールタイムを即時増加させる。自身は20秒間夢現の姿状態となり、自身を除く全ての味方にシールドを付与する。夢現の姿は解除できない。攻撃対象は自身の配置列に応じて変化する。",
+          "stats": ["前列配置:最も近い敵", "中列配置:真ん中にいる敵", "後列配置:指定範囲内で最も遠い敵", "夢現の姿:普通攻撃の効果が変更される。", "物理ダメージ:1470%", "クールタイム即時增加:9秒", "味方シールド: 最大HPの31%", "味方シールドの持続時間:10秒"],
+          "cooldown": "34秒"
         },
         "passiveSkill": {
-          "desc": "",
-          "stats": [""]
+          "desc": "味方使徒の攻撃力を増加させる。(この効果はジョアンがフィールドにいなくても発動する。)",
+          "stats": ["攻撃力増加:11.5%"]
         }
       },
       "en": {
         "normalAttack": {
-          "basic": " []",
-          "enhanced": " []"
+          "basic": "Launches chains at the enemy, dealing Physical Damage. When in Dream Form, summons chains that deal AoE Physical Damage and recovers the HP of all allies. [Dream Form: Changes the effect of Normal Attacks.] [Physical DMG: 200%] [Dream Form Physical DMG: 500%] [HP Recovery: 150% of DMG Dealt]",
+          "enhanced": "Applies different effects based on her Formation. When in Dream Form, grants an additional effect. All effects last for 8 seconds.\nFront Row Formation: Instead of the fourth attack, reduces Incoming Damage to all allies. When in Dream Form, grants a Shield to Front Row Apostles.\nMiddle Row Formation: Instead of the fourth attack, increases Normal Attack Damage for all allies. When in Dream Form, increases the Attack Speed of Middle Row Apostles.\nBack Row Formation: Instead of the fourth attack, increases Skill Damage for all allies. When in Dream Form, increases SP Recovery per second for Back Row Apostles. [Dream Form: Changes the effect of Normal Attacks.] [Front Row Formation Incoming DMG Reduction: 15%] [Front Row Formation Shield in Dream Form: 35% of Max HP] [Middle Row Formation Normal Attack DMG Increase: 20%] [Middle Row Formation ATK SPD Increase in Dream Form: 50%] [Back Row Formation Skill DMG Increase: 20%] [Back Row Formation SP Recovery per Second Increase in Dream Form: 15]"
         },
         "normalSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""]
+          "name": "Religious Doctrine Practice",
+          "desc": "Applies the Dispersion effect to herself and the two allied Apostles with the highest Attack for a set period of time. When affected by Dispersion, increases Attack and reduces Incoming Damage. Allies with less than 15% HP are excluded from the skill's targets and do not receive the Dispersion effect. The Dispersion effect cannot be removed, and allies cannot be defeated by Dispersed Damage.",
+          "stats": ["Dispersion: Shares incoming damage with other allies affected by Dispersion.", "Dispersion Duration: 10s", "Dispersion Ratio: 90%", "ATK Increase: 47%", "Incoming DMG Reduction: 21%"]
         },
         "ultimateSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""],
-          "cooldown": "s"
+          "name": "Deliver What I Witnessed",
+          "desc": "Deals AoE Physical Damage to enemies and increases Senior Skill Cooldown of affected Apostles. Enters Dream Form for 20 seconds and grants a Shield to all allies except for herself. Dream Form cannot be removed. Target changes based on Formation Placement.",
+          "stats": ["Front Row Placement: Targets the closest enemy.", "Middle Row Placement: Targets the center enemy.", "Back Row Placement: Targets the farthest enemy within the designated range.", "Dream Form: Changes the effect of Normal Attacks.", "Physical DMG: 1470%", "Cooldown Increase: 9s", "Ally Shield: 31% of Max HP", "Ally Shield Duration: 10s"],
+          "cooldown": "34s"
         },
         "passiveSkill": {
-          "desc": "",
-          "stats": [""]
+          "desc": "Increases the Attack of allied Apostles. (This effect activates even if Joanne is not on the field)",
+          "stats": ["ATK Increase: 11.5%"]
         }
       }
     }
