@@ -96,7 +96,7 @@ const characterSkills = [
   },
     {
     "name": "瓊安",
-    "attribute": "魔法",
+    "attribute": "物理",
     "skills": {
       "zh-TW": {
         "normalAttack": {
