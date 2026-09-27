@@ -50,9 +50,7 @@
                 document.head.appendChild(manifestLink);
             })();
         </script>
-        <!-- 🍎 iOS 專屬桌面圖示 -->
         <link rel="apple-touch-icon" href="icon.png">
-        <!-- 🎨 讓瀏覽器與手機狀態列知道主題顏色 -->
         <meta name="theme-color" content="#2563eb">
 
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
@@ -333,6 +331,31 @@
             #backToTop:hover { 
             background-color: #d97706; 
             transform: translateX(-50%) translateY(-5px); 
+            }
+            
+            /* 🌟 雙重性格專屬動態漸層外框 */
+            @keyframes borderFlow {
+                0% { background-position: 0% 50%; }
+                100% { background-position: 200% 50%; }
+            }
+            .border-dual-dynamic {
+                border-color: transparent !important;
+                background-clip: padding-box, border-box !important;
+                background-origin: border-box !important;
+                /* var(--bg-color) 會配合深色/淺色模式變更，預設為卡片頭像底色 */
+                background-image: linear-gradient(var(--bg-color, #fcf8f2), var(--bg-color, #fcf8f2)),
+                                  linear-gradient(60deg, var(--c1, #a855f7), var(--c2, #4ade80), var(--c1, #a855f7)) !important;
+                background-size: 200% 200% !important;
+                animation: borderFlow 2.5s linear infinite;
+            }
+            .dark .border-dual-dynamic {
+                --bg-color: #1f2937;
+            }
+            .pickup-sparkle.border-dual-dynamic {
+                --bg-color: #ffffff;
+            }
+            .dark .pickup-sparkle.border-dual-dynamic {
+                --bg-color: #1f2937;
             }
         </style>
     </head>
@@ -675,8 +698,7 @@
                 personality_狂亂: "sprite-Personality_Madness",
                 personality_活潑: "sprite-Personality_Vivacious",
                 personality_憂鬱: "sprite-Personality_Depressed",
-                personality_共鳴: "sprite-Personality_Resonance",
-                personality_雙面: "sprite-Personality_Inside", 
+                personality_雙面: "sprite-Personality_Multifaceted", 
                 position_前排: "sprite-Position_Front",
                 position_中排: "sprite-Position_Middle",
                 position_後排: "sprite-Position_Back",
@@ -693,8 +715,7 @@
                 "天真": "sprite-char-innocence",
                 "狂亂": "sprite-char-madness",
                 "活潑": "sprite-char-vivacious",
-                "共鳴": "sprite-char-resonance",
-                "雙面": "sprite-char-inside" 
+                "雙面": "sprite-char-multifaceted" 
             };
             const ULT_SPRITE_MAP = {
                 "冷靜": "sprite-ult-composed",
@@ -702,8 +723,7 @@
                 "天真": "sprite-ult-innocence",
                 "狂亂": "sprite-ult-madness",
                 "活潑": "sprite-ult-vivacious",
-                "共鳴": "sprite-ult-resonance",
-                "雙面": "sprite-ult-inside" 
+                "雙面": "sprite-ult-multifaceted" 
             };
             
             function toggleSidebar() {
@@ -905,12 +925,23 @@
                 const localTooltipTexts = { "zh-TW": "特選招募中：", "ja": "ピックアップ中：", "en": "Pickup Rate Up: " };
                 const titleEl = document.getElementById('pickupTitleText');
                 if (titleEl) titleEl.innerText = localRecruitTexts[window.currentLang] || localRecruitTexts["zh-TW"];            
-                const personalityColors = { "天真": "border-green-400 text-green-400", "冷靜": "border-blue-400 text-blue-400", "狂亂": "border-red-400 text-red-400", "活潑": "border-yellow-400 text-yellow-400", "憂鬱": "border-purple-400 text-purple-400", "共鳴": "border-rainbow text-rainbow", "雙面": "border-teal-400 text-teal-400" };
+                const personalityColors = { "天真": "border-green-400 text-green-400", "冷靜": "border-blue-400 text-blue-400", "狂亂": "border-red-400 text-red-400", "活潑": "border-yellow-400 text-yellow-400", "憂鬱": "border-purple-400 text-purple-400", "雙面": "border-teal-400 text-teal-400" };
+                const traitColors = { "天真": "#4ade80", "冷靜": "#60a5fa", "狂亂": "#f87171", "活潑": "#facc15", "憂鬱": "#a855f7" };
+
                         activeChars.forEach(charName => {
                             const charData = INITIAL_DATA.find(c => c.name === charName); if (!charData) return;
-                            const dispPersonality = charData.personality.includes(',') ? "雙面" : charData.personality;
-                            const pColorClass = personalityColors[dispPersonality] || "border-gray-400 text-gray-400";
+                            const traits = charData.personality.split(',').map(t => t.trim());
+                            const dispPersonality = traits.length > 1 ? "雙面" : charData.personality;
+                            let pColorClass = personalityColors[dispPersonality] || "border-gray-400 text-gray-400";
+                            
                             const iconWrapper = document.createElement('div');
+                            
+                            if (traits.length > 1) {
+                                pColorClass = "border-dual-dynamic text-teal-400";
+                                iconWrapper.style.setProperty('--c1', traitColors[traits[0]] || '#a855f7');
+                                iconWrapper.style.setProperty('--c2', traitColors[traits[1]] || '#4ade80');
+                            }
+                            
                             iconWrapper.className = `w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 ${pColorClass} bg-white dark:bg-gray-800 flex items-center justify-center relative pickup-sparkle shrink-0 cursor-pointer transition-transform overflow-hidden`;
                             const prefix = localTooltipTexts[window.currentLang] || localTooltipTexts["zh-TW"]; iconWrapper.title = `${prefix}${t(charName)}`;
                             iconWrapper.onclick = () => window.open(`char_detail.html?char=${encodeURIComponent(charName)}`, '_blank');
@@ -1183,7 +1214,7 @@
             function setDisplayMode(mode) { activeFilters.displayMode = mode; ["all", "1", "2", "3"].forEach(m => { const btn = document.getElementById(`btn_disp_${m}`); if(btn) btn.className = (mode === m) ? btnDispActiveStyle : btnInactiveStyle; }); applyFilterUI(); }
             
             function buildFilterPanel() {
-                const keys = { personality: ["天真", "冷靜", "狂亂", "活潑", "憂鬱", "共鳴", "雙面"], race: [], position: ["前排", "中排", "後排", "所有排"], job: [], type: ["物理", "魔法"] };
+                const keys = { personality: ["天真", "冷靜", "狂亂", "活潑", "憂鬱", "雙面"], race: [], position: ["前排", "中排", "後排", "所有排"], job: [], type: ["物理", "魔法"] };
                 INITIAL_DATA.forEach(c => { if (c.race && !keys.race.includes(c.race)) keys.race.push(c.race); if (c.job && !keys.job.includes(c.job)) keys.job.push(c.job); });
                 Object.keys(keys).forEach(category => {
                     const container = document.getElementById(`filter_${category}`); if(!container) return; container.innerHTML = "";
@@ -1316,7 +1347,7 @@
             function applyFilterUI() {
                 INITIAL_DATA.forEach(char => {
                     // 性格判定：如果字串中有逗號，系統將其視為「雙面」
-                    let matchP = activeFilters.personality.length === 0 || char.personality === "共鳴";
+                    let matchP = activeFilters.personality.length === 0;
                     if (!matchP) {
                         matchP = activeFilters.personality.some(selectedP => {
                             if (selectedP === "雙面" && char.personality.includes(",")) return true;
@@ -1358,7 +1389,7 @@
                         });
                     }
                 });
-                const personalities = ["天真", "冷靜", "狂亂", "活潑", "憂鬱", "共鳴", "雙面"];
+                const personalities = ["天真", "冷靜", "狂亂", "活潑", "憂鬱", "雙面"];
                 personalities.forEach(pName => {
                     const pSection = document.getElementById(`section_p_${pName}`);
                     if (pSection) { const visibleInSec = pSection.querySelectorAll("[id^='char_card_']:not(.hidden)").length; if (visibleInSec === 0) pSection.classList.add("hidden"); else pSection.classList.remove("hidden"); }
@@ -1366,8 +1397,9 @@
             }
             function renderMatrix() {
                 const container = document.getElementById('matrixContainer'); if(!container) return; container.innerHTML = '';
-                const personalities = ["共鳴", "雙面", "天真", "冷靜", "狂亂", "活潑", "憂鬱"];
-                const personalityBorderColors = { "天真": "border-green-500", "冷靜": "border-blue-500", "狂亂": "border-red-500", "活潑": "border-yellow-400", "憂鬱": "border-purple-500", "共鳴": "border-rainbow", "雙面": "border-teal-500" };
+                const personalities = ["雙面", "天真", "冷靜", "狂亂", "活潑", "憂鬱"];
+                const personalityBorderColors = { "天真": "border-green-500", "冷靜": "border-blue-500", "狂亂": "border-red-500", "活潑": "border-yellow-400", "憂鬱": "border-purple-500", "雙面": "border-teal-500" };
+                const traitColors = { "天真": "#4ade80", "冷靜": "#60a5fa", "狂亂": "#f87171", "活潑": "#facc15", "憂鬱": "#a855f7" };
                 const nowTime = Date.now();
                 personalities.forEach(pName => {
                     // 在渲染區塊時，判斷是否為「雙面」（有逗號的歸類在這裡）
@@ -1388,7 +1420,15 @@
                             charCard.setAttribute('onmouseleave', 'checkMarquee(this, false)');
                         }
             const spineName = typeof SPINE_MAP !== 'undefined' && SPINE_MAP[char.name] ? SPINE_MAP[char.name] : char.name;
-            const dispPersonality = char.personality.includes(",") ? "雙面" : char.personality;
+            const traits = char.personality.split(',').map(t => t.trim());
+            const dispPersonality = traits.length > 1 ? "雙面" : char.personality;
+            
+            let borderColorClass = personalityBorderColors[dispPersonality] || "border-gray-300";
+            let dualStyle = "";
+            if (traits.length > 1) {
+                borderColorClass = "border-dual-dynamic text-teal-400";
+                dualStyle = `style="--c1: ${traitColors[traits[0]] || '#a855f7'}; --c2: ${traitColors[traits[1]] || '#4ade80'};"`;
+            }
             
             const charSpriteBase = CHAR_SPRITE_MAP[dispPersonality] || "";
             const ultSpriteBase = ULT_SPRITE_MAP[dispPersonality] || "";
@@ -1401,7 +1441,6 @@
                         const jSprite = SPRITE_CLASS_MAP[`job_${char.job}`] || "";
                         const tSprite = SPRITE_CLASS_MAP[`type_${char.type}`] || "";
                         const bgSprite = SPRITE_CLASS_MAP[`bg_${raceIconName}`] || "sprite-Bg_Unknown";
-                        const borderColorClass = personalityBorderColors[dispPersonality] || "border-gray-300"; 
                         const isOwned = savedStates['owned_' + char.name]; 
                         const avatarClass = isOwned && !isUnreleased ? "" : "unowned-avatar";
                         const displayName = isUnreleased ? "???" : t(char.name);
@@ -1432,7 +1471,7 @@
                             </div>`;
                         nameCol.innerHTML = `
             <div class="relative shrink-0 w-12 h-12" ${isUnreleased ? '' : `onclick="toggleOwnership('${char.name}')"`}>
-            <div id="avatar_container_${char.name}" class="char-avatar-container w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-inner ${avatarClass} ${isUnreleased ? 'pointer-events-none' : ''} bg-[#fcf8f2] dark:bg-gray-800 relative overflow-hidden">
+            <div id="avatar_container_${char.name}" class="char-avatar-container w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-inner ${avatarClass} ${isUnreleased ? 'pointer-events-none' : ''} bg-[#fcf8f2] dark:bg-gray-800 relative overflow-hidden" ${dualStyle}>
             <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 sprite-base sprite-common ${bgSprite} scale-[0.45] z-0 opacity-90 block bg-no-repeat"></div>
             <div class="absolute inset-0 bg-white/20 dark:bg-black/20 backdrop-blur-[1px] z-[5]"></div>
             <div class="absolute inset-0 z-10 ${isUnreleased ? 'silhouette-mode' : ''}">
@@ -1443,7 +1482,7 @@
             <div class="${ULT_SPRITE_MAP[dispPersonality]} sprite-Icon_UltimateSkill_${spineName} absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-[0.75] bg-no-repeat origin-center block"></div>
             </div>`}
             </div>
-            <div id="fall_av_${char.name}" class="hidden char-avatar-container w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-sm flex items-center justify-center font-bold text-amber-900 text-lg ${avatarClass} ${isUnreleased ? 'silhouette-mode' : ''}">${isUnreleased ? '?' : t(char.name).charAt(0)}</div>
+            <div id="fall_av_${char.name}" class="hidden char-avatar-container w-12 h-12 rounded-lg border-2 ${borderColorClass} shadow-sm flex items-center justify-center font-bold text-amber-900 text-lg ${avatarClass} ${isUnreleased ? 'silhouette-mode' : ''}" ${dualStyle}>${isUnreleased ? '?' : t(char.name).charAt(0)}</div>
             </div>
             <div class="flex flex-col gap-0.5 w-full overflow-hidden">
             <div class="marquee-box text-sm sm:text-base font-bold text-gray-900 dark:text-gray-100" title="${displayName}"><span class="marquee-content">${displayName}</span></div>
@@ -2115,8 +2154,7 @@ updateVisitCount();
         <button id="backToTop" onclick="scrollToTop()" title="回頂部">
         ▲
         </button>
-        <!-- 🌟 新版本提示彈窗 (預設隱藏，帶有滑動動畫) -->
-<div id="updateBanner" class="fixed bottom-4 right-4 sm:bottom-8 sm:right-8 bg-white dark:bg-gray-800 border-2 border-amber-400 shadow-2xl rounded-2xl p-4 z-[9999] hidden flex-col gap-2 transform transition-transform duration-300 translate-y-32">
+        <div id="updateBanner" class="fixed bottom-4 right-4 sm:bottom-8 sm:right-8 bg-white dark:bg-gray-800 border-2 border-amber-400 shadow-2xl rounded-2xl p-4 z-[9999] hidden flex-col gap-2 transform transition-transform duration-300 translate-y-32">
     <div class="flex items-center gap-2">
         <span class="text-xl animate-bounce">✨</span>
         <p class="text-sm font-bold text-amber-900 dark:text-amber-400">發現新版本！</p>
