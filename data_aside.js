@@ -127,6 +127,31 @@ const ASIDE_DATA = {
             }
         }
     },
+    "Belita": { 
+        asideIcon: "", 
+        totalName: { zh: "妾身心中的妹妹", ja: "わらわの心の中の妹", en: "My Little Sister in My Heart" }, 
+        stars: {
+            1: { 
+                icon: "", 
+                name: { zh: "妾身的妹妹艾爾芬", ja: "わらわの妹エルフィン", en: "My Sister Erpin" }, 
+                desc: { zh: "穿戴者的最大HP、魔法攻擊力、爆擊、爆擊傷害增加。", ja: "着用者の最大HP、魔法攻撃力、会心、会心ダメージが増加する。", en: "Increases the bearer's Max HP, Magical Attack, Critical Hit, and Critical Damage." }, 
+                effects: { zh: ["最大HP增加:6%", "魔法攻擊力增加:6%", "爆擊增加:6%", "爆擊傷害增加:6%"], ja: ["最大HP増加:6%", "魔法攻撃力増加:6%", "会心増加:6%", "会心ダメージ増加:6%"], en: ["Max HP Increase: 6%", "Magical ATK Increase: 6%", "CRIT Increase: 6%", "CRIT DMG Increase: 6%"] } 
+            },
+            2: { 
+                icon: "", 
+                name: { zh: "降下審判", ja: "そなたを裁く", en: "You Shall Be Judged" }, 
+                desc: { zh: "普通攻擊、普通技能命中時，會立即減少目前高級技能的冷卻時間。高級技能會施展2次。", ja: "普通攻撃、低学年スキル命中時、現在の高学年スキルのクールタイムが即時減少する。高学年スキルを2回使用する。", en: "When Normal Attack or Freshman Skill hits, instantly reduces the current Senior Skill Cooldown, Uses Senior Skill twice." }, 
+                effects: { zh: ["普通攻擊命中時冷卻時間立即減少:1秒", "普通技能命中時冷卻時間立即減少:2秒"], ja: ["普通攻撃命中時のクールタイム即時減少:1秒", "低学年スキル命中時のクールタイム即時減少:2秒"], en: ["Instant Cooldown Reduction when Normal ATK hits: 1s", "Instant Cooldown Reduction when Freshman Skill hits: 2s"] } 
+            },
+            3: { 
+                icon: "", 
+                name: { zh: "艾利亞斯守護者", ja: "エーリアスの守護者たち", en: "Guardians of Elias" }, 
+                desc: { zh: "提升後排友軍對敵人造成的傷害，並降低後排友軍受到的傷害。", ja: "後列の味方の敵への与ダメージ量を増加させ、 後列の味方の敵からの被ダメージ量を減少させる。", en: "Increases Outgoing Damage and reduces Incoming Damage of Back Row allies." }, 
+                effects: { zh: ["傷害量增加:13.6%", "受到的傷害量減少:5.9%"], ja: ["ダメージ量増加:13.6%", "被ダメージ量減少:5.9%"], en: ["DMG Increase: 13.6%", "Incoming DMG Reduction: 5.9%"] }, 
+                globalEffects: { zh: ["全體爆擊傷害 3%", "全體爆擊傷害抵抗 3%"], ja: ["全体会心ダメージ 3%", "全体会心ダメージ抵抗 3%"], en: ["All CRIT DMG 3%", "All CRIT DMG RES 3%"] } 
+            }
+        }
+    },
     "Blanchet": { 
         asideIcon: "", 
         totalName: { zh: "百萬朵藍玫瑰", ja: "百万本の青い薔薇", en: "A Million Blue Roses" }, 
@@ -274,6 +299,31 @@ const ASIDE_DATA = {
                 desc: { zh: "增加所有友軍的最大HP。", ja: "味方全員の最大HPを増加させる。", en: "Increases Max HP of all allies." }, 
                 effects: { zh: ["最大HP增加:18%"], ja: ["最大HP増加: 18%"], en: ["Max HP Increase: 18%"] }, 
                 globalEffects: { zh: ["全體 HP 4%", "全體爆擊抵抗 4%"], ja: ["全体HP 4%","全体会心抵抗 4%"], en: ["All HP 4%", "All CRIT Resistance 4%"] } 
+            }
+        }
+    },
+    "Epica": { 
+        asideIcon: "", 
+        totalName: { zh: "艾皮坎", ja: "エピカン", en: "Epikhan" }, 
+        stars: {
+            1: { 
+                icon: "", 
+                name: { zh: "助手艾比康", ja: "助手エピコン", en: "Assistant Epicon" }, 
+                desc: { zh: "穿戴者的最大HP、物理攻擊力、爆擊、爆擊傷害增加。", ja: "着用者の最大HP、物理攻撃力、会心、会心ダメージが増加する。", en: "Increases the bearer's Max HP, Physical Attack, Critical Hit, and Critical Damage." }, 
+                effects: { zh: ["最大HP增加:6%", "物理攻擊力增加:6%", "爆擊增加:6%", "爆擊傷害增加:6%"], ja: ["最大HP増加:6%", "物理攻撃力増加:6%", "会心増加:6%", "会心ダメージ増加:6%"], en: ["Max HP Increase: 6%", "Physical ATK Increase: 6%", "CRIT Increase: 6%", "CRIT DMG Increase: 6%"] } 
+            },
+            2: { 
+                icon: "", 
+                name: { zh: "艾皮康分身術", ja: "エピコンの分身術", en: "Epicon's Cloning Technique" }, 
+                desc: { zh: "普通攻擊目標額外追加隨機敵人。強化攻擊觸發機率提升，且每次發動強化攻擊時，會立即減少目前高級技能的冷卻時間。使用普通技能時，對自身給予保護效果。該效果在使用普通技能後只會發動1次。", ja: "普通攻撃の目標対象にランダムな敵が追加され強化攻撃の発動確率が増加し、強化攻撃を発動するたびに現在の高学年スキルのクールタイムが即時減少する。低学年スキルを使用すると、自身に保護を付与する。この効果は低学年スキル使用後、1回のみ発動する。", en: "The Normal Attack targets an additional random enemy. Increases Enhanced Attack Cast Rate. Each time Enhanced Attack is triggered, instantly reduces the current Senior Skill Cooldown. When Freshman Skill is used, applies Protection to herself. This effect can only activate once after using Freshman Skill." }, 
+                effects: { zh: ["保護:因直接傷害陷入無法戰鬥狀態時，該傷害將被無效化並賦予護盾。", "直接傷害:指狀態異常傷害、反射傷害以外的直接攻擊傷害。", "強化攻擊施展機率增加:15%", "冷卻時間立即減少:3秒", "保護持續時間:8秒", "護盾:最大HP的46%", "護盾持續時間:8秒"], ja: ["保護:直接ダメージによって戦闘不能になった時、そのダメージを無効化してシールドを付与する。", "直接ダメージ:直接攻撃によるダメージ(状態異常ダメージ、反射ダメージを除く)。", "強化攻撃発動確率増加:15%", "クールタイム即時減少:3秒", "保護の持続時間:8秒", "シールド: 最大HPの46%", "シールドの持続時間:8秒"], en: ["Protection: Negates incapacitating Direct Damage and grants a Shield.", "Direct Damage: Refers to damage caused by Direct Attacks, excluding Status Effect Damage and Damage Reflection.", "Enhanced ATK Cast Rate Increase: 15%", "Instant Cooldown Reduction: 3s", "Protection Duration: 8s", "Shield: 46% of Max HP", "Shield Duration: 8s"] } 
+            },
+            3: { 
+                icon: "", 
+                name: { zh: "獻給友軍", ja: "味方に捧げます", en: "For My Allies" }, 
+                desc: { zh: "提升中排友軍對敵人造成的傷害，並降低中排友軍受到的傷害。", ja: "中列の味方の敵への与ダメージ量を増加させ、 中列の味方の敵からの被ダメージ量を減少させる。", en: "Increases Outgoing Damage and reduces Incoming Damage of Middle Row allies." }, 
+                effects: { zh: ["傷害量增加:19.5%", "受到的傷害量減少:8.8%"], ja: ["ダメージ量増加:19.5%", "被ダメージ量減少:8.8%"], en: ["DMG Increase: 19.5%", "Incoming DMG Reduction: 8.8%"] }, 
+                globalEffects: { zh: ["全體物理攻擊力 4%", "全體物理防禦力 4%"], ja: ["全体物理攻撃力 4%", "全体物理防御力 4%"], en: ["All Physical ATK 4%", "All Physical DEF 4%"] } 
             }
         }
     },
