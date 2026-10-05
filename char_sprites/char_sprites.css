@@ -46,6 +46,7 @@
 [class*="_Kyarot"] { background-image: url('Kyarotsheet.png'); }
 [class*="_Lazy"] { background-image: url('Lazysheet.png'); }
 [class*="_Leets"] { background-image: url('Leetssheet.png'); }
+[class*="_Lethe"] { background-image: url('Lethesheet.png'); }
 [class*="_Levi"] { background-image: url('Levisheet.png'); }
 [class*="_MaestroMK2"] { background-image: url('MaestroMK2sheet.png'); }
 [class*="_Mago"] { background-image: url('Magosheet.png'); }
@@ -407,6 +408,16 @@
 .sprite-Icon_PassiveSkill_Kommy { width: 64px; height: 64px; background-position: -5px -939px; }
 .sprite-PresentList_Kommy { width: 249px; height: 221px; background-position: -5px -1013px; }
 
+/* --- KommySwim --- */
+.sprite-AsideIcon_KommySwim { width: 256px; height: 256px; background-position: -5px -5px; }
+.sprite-Aside_Skill_KommySwim_1 { width: 64px; height: 64px; background-position: -5px -271px; }
+.sprite-Aside_Skill_KommySwim_2 { width: 64px; height: 64px; background-position: -5px -345px; }
+.sprite-Aside_Skill_KommySwim_3 { width: 64px; height: 64px; background-position: -5px -419px; }
+.sprite-CG_Schedule_KommySwim { width: 1024px; height: 512px; background-position: -5px -493px; }
+.sprite-Icon_NormalSkill_KommySwim { width: 64px; height: 64px; background-position: -5px -1015px; }
+.sprite-Icon_PassiveSkill_KommySwim { width: 64px; height: 64px; background-position: -5px -1089px; }
+.sprite-PresentList_KommySwim { width: 155px; height: 205px; background-position: -5px -1163px; }
+
 /* --- Kyarot --- */
 .sprite-AsideIcon_Kyarot { width: 256px; height: 256px; background-position: -5px -5px; }
 .sprite-Aside_Skill_Kyarot_1 { width: 64px; height: 64px; background-position: -5px -271px; }
@@ -432,6 +443,12 @@
 .sprite-Icon_NormalSkill_Leets { width: 64px; height: 64px; background-position: -5px -1015px; }
 .sprite-Icon_PassiveSkill_Leets { width: 64px; height: 64px; background-position: -5px -1089px; }
 .sprite-PresentList_Leets { width: 182px; height: 204px; background-position: -5px -1163px; }
+
+/* --- Lethe --- */
+.sprite-CG_Schedule_Lethe { width: 1024px; height: 512px; background-position: -5px -5px; }
+.sprite-Icon_NormalSkill_Lethe { width: 64px; height: 64px; background-position: -5px -527px; }
+.sprite-Icon_PassiveSkill_Lethe { width: 64px; height: 64px; background-position: -5px -601px; }
+.sprite-PresentList_Lethe { width: 241px; height: 147px; background-position: -5px -675px; }
 
 /* --- Levi --- */
 .sprite-CG_Schedule_Levi { width: 1020px; height: 510px; background-position: -5px -5px; }
