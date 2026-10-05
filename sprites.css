@@ -106,6 +106,8 @@
 .sprite-Picora { width: 126px; height: 126px; background-position: -5px -1501px; }
 .sprite-Sylla { width: 126px; height: 126px; background-position: -5px -1637px; }
 .sprite-Velvet { width: 126px; height: 126px; background-position: -5px -1773px; }
+.sprite-Lethe { width: 126px; height: 126px; background-position: -5px -1909px; }
+.sprite-KommySwim { width: 126px; height: 126px; background-position: -5px -2045px; }
 /* Depressed */
 .sprite-Ashur { width: 126px; height: 126px; background-position: -5px -5px; }
 .sprite-Blanchet { width: 126px; height: 126px; background-position: -5px -141px; }
@@ -194,6 +196,8 @@
 .sprite-Icon_UltimateSkill_Picora { width: 64px; height: 64px; background-position: -5px -819px; }
 .sprite-Icon_UltimateSkill_Sylla { width: 64px; height: 64px; background-position: -5px -893px; }
 .sprite-Icon_UltimateSkill_Velvet { width: 64px; height: 64px; background-position: -5px -967px; }
+.sprite-Icon_UltimateSkill_Lethe { width: 64px; height: 64px; background-position: -5px -1041px; }
+.sprite-Icon_UltimateSkill_KommySwim { width: 64px; height: 64px; background-position: -5px -1115px; }
 /* Depressed */
 .sprite-Icon_UltimateSkill_Ashur { width: 64px; height: 64px; background-position: -5px -5px; }
 .sprite-Icon_UltimateSkill_Blanchet { width: 64px; height: 64px; background-position: -5px -79px; }
