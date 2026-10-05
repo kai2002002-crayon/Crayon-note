@@ -758,12 +758,13 @@
                         <div class="sprite-boss ${iconClass} shrink-0 scale-[0.32] sm:scale-[0.45] relative z-10"></div>
                     `;
                 } else {
-                    const charSpriteBase = CHAR_SPRITE_MAP[charObj.personality] || "sprite-char-innocence";
+                    // 🌟 修正：這裡要用 displayPersonality 而不是 charObj.personality
+                    const charSpriteBase = CHAR_SPRITE_MAP[displayPersonality] || "sprite-char-innocence";
                     const charSpriteClass = `sprite-${spineName}`;
                     iconEl.innerHTML = `
-                        <div class="absolute inset-0 flex items-center justify-center opacity-80"><div class="sprite-base sprite-common ${raceSprite} shrink-0 scale-[0.45]"></div></div>
-                        <div class="w-full h-full bg-white/20 dark:bg-black/20 backdrop-blur-[1px] absolute inset-0"></div>
-                        <div class="sprite-base ${charSpriteBase} ${charSpriteClass} shrink-0 scale-[0.36] sm:scale-[0.72] relative z-10"></div>
+                    <div class="absolute inset-0 flex items-center justify-center opacity-80"><div class="sprite-base sprite-common ${raceSprite} shrink-0 scale-[0.45]"></div></div>
+                    <div class="w-full h-full bg-white/20 dark:bg-black/20 backdrop-blur-[1px] absolute inset-0"></div>
+                    <div class="sprite-base ${charSpriteBase} ${charSpriteClass} shrink-0 scale-[0.36] sm:scale-[0.72] relative z-10"></div>
                     `;
                 }
                 
