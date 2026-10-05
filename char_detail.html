@@ -719,28 +719,72 @@
                 );
             };
             
-            const updateRaceBackground = (raceName, personalityName) => {
-                const bgDiv = document.getElementById('raceBackground');
-                if (!bgDiv) return;
+            const updateRaceBackground = (raceName, personalityData) => {
+    const bgDiv = document.getElementById('raceBackground');
+    if (!bgDiv) return;
 
-                let bgImages = [];
+    // 1. 清除之前的切換計時器（避免切換角色時發生重複呼叫導致閃爍）
+    if (window.bgSwapInterval) {
+        clearInterval(window.bgSwapInterval);
+        window.bgSwapInterval = null;
+    }
 
-                // 1. 先放種族圖 (在上層)
-                if (raceName && CHAR_BACKGROUNDS[raceName]) {
-                    bgImages.push(`url('${CHAR_BACKGROUNDS[raceName]}')`);
-                }
-                
-                // 2. 再放性格圖 (在下層打底)
-                if (personalityName && PERSONALITY_BACKGROUNDS[personalityName]) {
-                    bgImages.push(`url('${PERSONALITY_BACKGROUNDS[personalityName]}')`);
-                }
+    // 2. 處理雙面/多重性格資料，將其分割為陣列 
+    // 支援陣列格式 ["憂鬱", "天真"] 或是字串包含加號、逗號、斜線等 "憂鬱+天真"
+    let pList = [];
+    if (Array.isArray(personalityData)) {
+        pList = personalityData;
+    } else if (typeof personalityData === 'string') {
+        pList = personalityData.split(/[、,\/\s+]+/).map(s => s.trim()).filter(Boolean);
+    } else if (personalityData) {
+        pList = [String(personalityData)];
+    }
 
-                if (bgImages.length > 0) {
-                    bgDiv.style.backgroundImage = bgImages.join(', ');
-                } else {
-                    bgDiv.style.backgroundImage = "none";
-                }
-            };
+    // 3. 過濾出真的有背景圖的性格
+    let validPersonalities = pList.filter(p => typeof PERSONALITY_BACKGROUNDS !== 'undefined' && PERSONALITY_BACKGROUNDS[p]);
+    
+    // 若過濾後為空，把原始字串當作備用 (預防原本就只有單一字串且無特殊符號)
+    if (validPersonalities.length === 0 && typeof PERSONALITY_BACKGROUNDS !== 'undefined' && PERSONALITY_BACKGROUNDS[personalityData]) {
+        validPersonalities = [personalityData];
+    }
+
+    // 設定 CSS 動畫效果讓背景切換更柔和 (部分瀏覽器支援背景圖漸變)
+    bgDiv.style.transition = "background-image 1.5s ease-in-out";
+
+    // 負責組合與套用背景的內部函式
+    const applyBg = (currentP) => {
+        let bgImages = [];
+        // 先放種族圖 (在上層)
+        if (raceName && typeof CHAR_BACKGROUNDS !== 'undefined' && CHAR_BACKGROUNDS[raceName]) {
+            bgImages.push(`url('${CHAR_BACKGROUNDS[raceName]}')`);
+        }
+        // 再放性格圖 (在下層打底)
+        if (currentP && typeof PERSONALITY_BACKGROUNDS !== 'undefined' && PERSONALITY_BACKGROUNDS[currentP]) {
+            bgImages.push(`url('${PERSONALITY_BACKGROUNDS[currentP]}')`);
+        }
+
+        if (bgImages.length > 0) {
+            bgDiv.style.backgroundImage = bgImages.join(', ');
+        } else {
+            bgDiv.style.backgroundImage = "none";
+        }
+    };
+
+    // 4. 根據性格數量決定要不要輪播
+    if (validPersonalities.length > 1) {
+        let currentIndex = 0;
+        applyBg(validPersonalities[currentIndex]); // 初始化第一張性格圖
+        
+        // 設定計時器，每 4 秒切換一次性格背景圖
+        window.bgSwapInterval = setInterval(() => {
+            currentIndex = (currentIndex + 1) % validPersonalities.length;
+            applyBg(validPersonalities[currentIndex]);
+        }, 4000); 
+    } else {
+        // 單一性格或無性格，直接套用不輪播
+        applyBg(validPersonalities.length > 0 ? validPersonalities[0] : personalityData);
+    }
+};
             
             let currentTargetName = "";
             let currentCharData = null;
