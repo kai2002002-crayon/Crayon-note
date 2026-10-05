@@ -138,6 +138,10 @@ const PRESENT_MAP = {
         url: "https://i.postimg.cc/XqxtrJLt/Present-List-Kommy.png",
         name: { "zh-TW": "名牌枕頭", "ja": "高級ブランド枕", "en": "Luxury Pillow" }
     },
+	"KommySwim": { 
+        url: "",
+        name: { "zh-TW": "", "ja": "", "en": "" }
+    },
     "Kyarot": { 
         url: "https://i.postimg.cc/RhG2WFdy/Present-List-Kyarot.png",
         name: { "zh-TW": "優良農業獎盃", "ja": "優良農業トロフィー", "en": "Outstanding Harvest Trophy" }
@@ -149,6 +153,10 @@ const PRESENT_MAP = {
     "Leets": { 
         url: "https://i.postimg.cc/vTXC4BXb/Present-List-Leets.png",
         name: { "zh-TW": "超重鋼鐵盔甲", "ja": "超重量級の鋼鉄アーマー", "en": "Utterly Heavy Steel Armor" }
+    },
+	"Lethe": { 
+        url: "",
+        name: { "zh-TW": "", "ja": "", "en": "" }
     },
     "Levi": { 
         url: "https://i.postimg.cc/QCSvFtSj/Present-List-Levi.png",
