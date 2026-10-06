@@ -785,11 +785,14 @@
 .sprite-PresentList_xXionx { width: 171px; height: 179px; background-position: -5px -1161px; }
 
 /* --- Yomi --- */
-.sprite-Aside_Skill_Yomi_1 { width: 64px; height: 64px; background-position: -5px -5px; }
-.sprite-CG_Schedule_Yomi { width: 1020px; height: 510px; background-position: -5px -79px; }
-.sprite-Icon_NormalSkill_Yomi { width: 64px; height: 64px; background-position: -5px -599px; }
-.sprite-Icon_PassiveSkill_Yomi { width: 64px; height: 64px; background-position: -5px -673px; }
-.sprite-PresentList_Yomi { width: 246px; height: 198px; background-position: -5px -747px; }
+.sprite-AsideIcon_Yomi { width: 256px; height: 256px; background-position: -5px -5px; }
+.sprite-Aside_Skill_Yomi_1 { width: 64px; height: 64px; background-position: -5px -271px; }
+.sprite-Aside_Skill_Yomi_2 { width: 64px; height: 64px; background-position: -5px -345px; }
+.sprite-Aside_Skill_Yomi_3 { width: 64px; height: 64px; background-position: -5px -419px; }
+.sprite-CG_Schedule_Yomi { width: 1020px; height: 510px; background-position: -5px -493px; }
+.sprite-Icon_NormalSkill_Yomi { width: 64px; height: 64px; background-position: -5px -1013px; }
+.sprite-Icon_PassiveSkill_Yomi { width: 64px; height: 64px; background-position: -5px -1087px; }
+.sprite-PresentList_Yomi { width: 246px; height: 198px; background-position: -5px -1161px; }
 
 /* --- Yumimi --- */
 .sprite-CG_Schedule_Yumimi { width: 1020px; height: 510px; background-position: -5px -5px; }
