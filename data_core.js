@@ -617,7 +617,7 @@ const WORK_URL = {
     "Ifrit": "https://youtu.be/ANWq6bxvkBo",
     "Jade": "https://youtu.be/9zc4o0jcU8g",
     "Jubee": "https://youtu.be/GQNFRFORdB0",
-	"Joanne": "",
+	"Joanne": "https://youtu.be/RICRhocX9js",
     "Kidian": "https://youtu.be/PcT_8VB1NrQ",
     "Kommy": "https://youtu.be/2qZbcsuXL9U",
 	"KommySwim": "",
