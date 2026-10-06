@@ -1119,7 +1119,7 @@ const ASIDE_DATA = {
             }
         }
     },
-    "Yommi": { 
+    "Yomi": { 
         asideIcon: "", 
         totalName: { zh: "", ja: "", en: "" }, 
         stars: {
