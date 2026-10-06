@@ -196,7 +196,7 @@ function t(key) { return LANG_DICT[currentLang][key] || key; }
 // ------------------------------------------
 const INITIAL_DATA = [
 	{ name: "麗息", personality: "冷靜", race: "幽靈", position: "前排", job: "肉盾", pathVersion: "", releaseDate: "2026-10-08T17:00:00+09:00" },
-	{ name: "柯米(泳裝)", personality: "冷靜", race: "獸人", position: "中排", job: "輔助", pathVersion: "", releaseDate: "2026-10-08T17:00:00+09:00" },
+	{ name: "柯米(泳裝)", personality: "冷靜", race: "獸人", position: "中排", job: "輔助", pathVersion: "", releaseDate: "2026-10-15T17:00:00+09:00" },
 	{ name: "瓊安", personality: "憂鬱, 天真", race: "妖精", position: "所有排", job: "輔助", pathVersion: "V4", releaseDate: "2026-09-24T17:00:00+09:00" },
 	{ name: "芭莉耶", personality: "憂鬱", race: "魔女", position: "後排", job: "輔助", pathVersion: "V4", releaseDate: "2026-09-10T17:00:00+09:00" },
 	{ name: "雪蘭", personality: "天真", race: "魔女", position: "前排", job: "輸出", pathVersion: "V1", releaseDate: "2026-09-10T17:00:00+09:00" },
@@ -855,15 +855,15 @@ const MINI_SPINE = {
 
 const PICKUP_SCHEDULE = [
 	{
-        start: "2026-09-10T17:00:00+09:00",
-        end: "2026-09-17T03:59:59+09:00",
-        chars: ["雪蘭"],
-        note: "Sherum"
+        start: "2026-10-08T17:00:00+09:00",
+        end: "2026-10-15T10:59:59+09:00",
+        chars: ["瓊安", "海莉", "優米"],
+        note: "Yommi"
     },
 	{
-        start: "2026-10-08T17:00:00+09:00",
+        start: "2026-10-15T04:00:00+09:00",
         end: "2026-10-22T10:59:59+09:00",
-        chars: ["瓊安", "柯米(泳裝)"],
+        chars: ["瓊安", "海莉", "柯米(泳裝)", "艾琳娜"],
         note: "SwimKommy"
     },
 	{
