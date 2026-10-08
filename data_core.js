@@ -455,7 +455,7 @@ const FOOD_MAP = {
 	"Kyarot": { super: "兩口草生菜包", special: ["一口草生菜包", "蜂蜜罐", "甜甜蜂蜜罐"] },
     "Lazy": { super: "高級獸糧罐頭", special: ["獸糧罐頭", "溫熱的冰美式咖啡", "滾燙的冰美式咖啡"] },
     "Leets": { super: "龍族氣死你糖果", special: ["龍族糖果", "空氣炸豬排", "氫氣炸豬排"] },
-	"Lethe": "無",
+	"Lethe": { super: "龍族氣死你糖果", special: ["龍族糖果", "空氣炸豬排", "氫氣炸豬排"] },
     "Levi": { super: "追劇焦糖爆米花", special: ["焦糖爆米花", "UFC炸胡蘿蔔", "UFC炸蔬菜"] },
     "MaestroMK2": { super: "石榴甜茶", special: ["石榴果實", "祕密葡萄汁", "一級祕密葡萄汁"] },
     "Mago": { super: "ANSA太空食品", special: ["太空食品", "獸糧罐頭", "高級獸糧罐頭"] },
