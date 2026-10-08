@@ -1127,12 +1127,12 @@ const ASIDE_DATA = {
                 icon: "", 
                 name: { zh: "微明之光", ja: "ほのかに輝く", en: "Softly Glowing" }, 
                 desc: { zh: "穿戴者的最大HP、物理防禦力、魔法防禦力、 爆擊抵抗、爆擊傷害抵抗增加。", ja: "着用者の最大HP、物理防御力、魔法防御力、 会心抵抗、会心ダメージ抵抗が増加する。", en: "Increases the bearer's Max HP, Physical Defense, Magical Defense, Critical Hit Resistance, and Critical Damage Resistance." }, 
-                effects: { zh: ["最大HP增加:6%", "物理防禦力增加:6%", "魔法防禦力增加:6%", "爆擊抵抗增加:6%", "爆擊傷害抵抗增加:6%"], ja: ["最大HP增加:6%", "物理防御力增加:6%", "魔法防御力增加:6%", "会心抵抗增加:6%", "会心ダメージ抵抗增加:6%"], en: ["Max HP Increase: 6%", "Physical DEF Increase: 6%", "Magical DEF Increase: 6%", "CRIT Resistance Increase: 6%", "CRIT DMG Resistance Increase: 6%"] } 
+                effects: { zh: ["最大HP增加:6%", "物理防禦力增加:6%", "魔法防禦力增加:6%", "爆擊抵抗增加:6%", "爆擊傷害抵抗增加:6%"], ja: ["最大HP増加:6%", "物理防御力増加:6%", "魔法防御力增加:6%", "会心抵抗增加:6%", "会心ダメージ抵抗增加:6%"], en: ["Max HP Increase: 6%", "Physical DEF Increase: 6%", "Magical DEF Increase: 6%", "CRIT Resistance Increase: 6%", "CRIT DMG Resistance Increase: 6%"] } 
             },
             2: { 
                 icon: "", 
                 name: { zh: "含願之花", ja: "願いを宿した花", en: "Wish-Bearing Flower" }, 
-                desc: { zh: "強化攻擊的自身及友革HP恢復效果會額外發動1次。發動強化攻擊時，額外落下6次神祕星光，造成魔法傷害並減少敵人防禦力。該攻擊傷害視為強化攻擊傷害。", ja: "強化攻撃による自身および味方のHP回復効果が、1回追加で発動する。強化攻撃発動時、追加で神秘的な星光を6回路らせて魔法ダメージを与え、防御力を減少させる。この攻撃ダメージは強化攻撃のダメージとみなされる。", en: "Activates Enhanced Attack's HP Recovery Effect for herself and allies one additional time. When Enhanced Attack activates, additionally calls down Mystical Starlight 6 times to deal Magical Damage and reduce Defense. This Attack Damage is treated as Enhanced Attack Damage" }, 
+                desc: { zh: "強化攻擊的自身及友軍HP恢復效果會額外發動1次。發動強化攻擊時，額外落下6次神祕星光，造成魔法傷害並減少敵人防禦力。該攻擊傷害視為強化攻擊傷害。", ja: "強化攻撃による自身および味方のHP回復効果が、1回追加で発動する。強化攻撃発動時、追加で神秘的な星光を6回降らせて魔法ダメージを与え、防御力を減少させる。この攻撃ダメージは強化攻撃のダメージとみなされる。", en: "Activates Enhanced Attack's HP Recovery Effect for herself and allies one additional time. When Enhanced Attack activates, additionally calls down Mystical Starlight 6 times to deal Magical Damage and reduce Defense. This Attack Damage is treated as Enhanced Attack Damage" }, 
                 effects: { zh: ["神祕星光魔法傷害:160%", "防禦力減少:30%", "防禦力減少持續時間:3秒"], ja: ["神秘的な星光の魔法ダメージ: 160%", "防御力減少:30%", "防御力減少の持続時間:3秒"], en: ["Mystical Starlight Magical DMG: 160%", "DEF Reduction: 30%", "DEF Reduction Duration: 3s"] } 
             },
             3: { 
