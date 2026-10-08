@@ -169,65 +169,65 @@ const characterSkills = [
     "skills": {
       "zh-TW": {
         "normalAttack": {
-          "basic": " []",
+          "basic": "對敵軍使用雷射筆，造成4次物理傷害。 [總物理傷害:160%]",
           "enhanced": " []"
         },
         "normalSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""]
+          "name": "啟動神經連結",
+          "desc": "將雷射光注入自己的口中,忘記所受到的傷害。於一定時間內,每秒恢復自身HP。",
+          "stats": ["HP恢復:最大HP的7.5%", "恢復持續時間:6秒"]
         },
         "ultimateSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""],
-          "cooldown": "秒"
+          "name": "突襲閃光砰",
+          "desc": "對敵軍引爆一道閃光，造成物理傷害並給予致盲效果。",
+          "stats": ["致盲:普通攻擊失準。", "物理傷害:365%", "致盲持續時間:6秒"],
+          "cooldown": "24秒"
         },
         "passiveSkill": {
-          "desc": "",
-          "stats": ["秒"]
+          "desc": "減少受到的物理傷害量。",
+          "stats": ["受到的物理傷害量減少:46%"]
         }
       },
       "ja": {
         "normalAttack": {
-          "basic": " []",
+          "basic": "敵にレーザーポインターを照射し、物理ダメージを4回与える。 [総物理ダメージ: 160%]",
           "enhanced": " []"
         },
         "normalSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""]
+          "name": "ニューラルリンク・スタート",
+          "desc": "自身の口にレーザーを注入し、ダメージを受けた記憶を忘れる。一定時間、1秒ごとに自身のHPを回復する。",
+          "stats": ["HP回復:最大HPの7.5%", "回復の持続時間:6秒"]
         },
         "ultimateSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""],
-          "cooldown": "秒"
+          "name": "奇襲フラッシュ、ピカッ!",
+          "desc": "敵にフラッシュをたいて、物理ダメージを与え、目隠しを付与する。",
+          "stats": ["目隠し:普通攻撃が命中しない。", "物理ダメージ:365%", "目隠しの持続時間:6秒"],
+          "cooldown": "24秒"
         },
         "passiveSkill": {
-          "desc": "",
-          "stats": [""]
+          "desc": "物理被ダメージ量が減少する。",
+          "stats": ["物理被ダメージ量減少:46%"]
         }
       },
       "en": {
         "normalAttack": {
-          "basic": " []",
+          "basic": "Fires a Laser Pointer at enemies, dealing Physical Damage 4 times. [Total Physical DMG: 160%]",
           "enhanced": " []"
         },
         "normalSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""]
+          "name": "Neural Link Start",
+          "desc": "Injects a laser into one's own mouth, erasing memories of past damage. Gradually recover HP for a set period of time.",
+          "stats": ["HP Recovery: 7.5% of Max HP", "Recovery Duration: 6s"]
         },
         "ultimateSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""],
-          "cooldown": "s"
+          "name": "Surprise Flash Bang",
+          "desc": "Flashes a bright light, dealing Physical Damage to the enemy and applying Blindfold.",
+          "stats": ["Blindfold: Normal Attacks miss.", "Physical Damage: 365%", "Blindfold Duration: 6s"],
+          "cooldown": "24s"
         },
         "passiveSkill": {
-          "desc": "",
-          "stats": [""]
+          "desc": "Reduces Incoming Physical Damage.",
+          "stats": ["Incoming Physical DMG Reduction: 46%"]
         }
       }
     }
