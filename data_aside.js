@@ -1121,26 +1121,26 @@ const ASIDE_DATA = {
     },
     "Yomi": { 
         asideIcon: "", 
-        totalName: { zh: "", ja: "", en: "" }, 
+        totalName: { zh: "向月花", ja: "向月葵の花", en: "Moonflower" }, 
         stars: {
             1: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "" }, 
-                effects: { zh: [""], ja: [""], en: [""] } 
+                name: { zh: "微明之光", ja: "ほのかに輝く", en: "Softly Glowing" }, 
+                desc: { zh: "穿戴者的最大HP、物理防禦力、魔法防禦力、 爆擊抵抗、爆擊傷害抵抗增加。", ja: "着用者の最大HP、物理防御力、魔法防御力、 会心抵抗、会心ダメージ抵抗が増加する。", en: "Increases the bearer's Max HP, Physical Defense, Magical Defense, Critical Hit Resistance, and Critical Damage Resistance." }, 
+                effects: { zh: ["最大HP增加:6%", "物理防禦力增加:6%", "魔法防禦力增加:6%", "爆擊抵抗增加:6%", "爆擊傷害抵抗增加:6%"], ja: ["最大HP增加:6%", "物理防御力增加:6%", "魔法防御力增加:6%", "会心抵抗增加:6%", "会心ダメージ抵抗增加:6%"], en: ["Max HP Increase: 6%", "Physical DEF Increase: 6%", "Magical DEF Increase: 6%", "CRIT Resistance Increase: 6%", "CRIT DMG Resistance Increase: 6%"] } 
             },
             2: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "" }, 
-                effects: { zh: [""], ja: [""], en: [""] } 
+                name: { zh: "含願之花", ja: "願いを宿した花", en: "Wish-Bearing Flower" }, 
+                desc: { zh: "強化攻擊的自身及友革HP恢復效果會額外發動1次。發動強化攻擊時，額外落下6次神祕星光，造成魔法傷害並減少敵人防禦力。該攻擊傷害視為強化攻擊傷害。", ja: "強化攻撃による自身および味方のHP回復効果が、1回追加で発動する。強化攻撃発動時、追加で神秘的な星光を6回路らせて魔法ダメージを与え、防御力を減少させる。この攻撃ダメージは強化攻撃のダメージとみなされる。", en: "Activates Enhanced Attack's HP Recovery Effect for herself and allies one additional time. When Enhanced Attack activates, additionally calls down Mystical Starlight 6 times to deal Magical Damage and reduce Defense. This Attack Damage is treated as Enhanced Attack Damage" }, 
+                effects: { zh: ["神祕星光魔法傷害:160%", "防禦力減少:30%", "防禦力減少持續時間:3秒"], ja: ["神秘的な星光の魔法ダメージ: 160%", "防御力減少:30%", "防御力減少の持続時間:3秒"], en: ["Mystical Starlight Magical DMG: 160%", "DEF Reduction: 30%", "DEF Reduction Duration: 3s"] } 
             },
             3: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "" }, 
-                effects: { zh: [""], ja: [""], en: [""] }, 
-                globalEffects: { zh: ["全體 %", "全體 %"], ja: ["全体 %", "全体 %"], en: ["All %", "All %"] } 
+                name: { zh: "至誠之心", ja: "健気な心を込めて", en: "With Praiseworthy Devotion" }, 
+                desc: { zh: "使敵人對所有友軍造成的傷害量減少。", ja: "味方全員の敵からの被ダメージ量を減少させる。", en: "Reduces Incoming Damage from enemies for all allies." }, 
+                effects: { zh: ["受到的傷害量減少:11%"], ja: ["被ダメージ量減少:11%"], en: ["Incoming DMG Reduction: 11%"] }, 
+                globalEffects: { zh: ["全體爆擊 4%", "全體爆擊抵抗 4%"], ja: ["全体会心 4%", "全体会心抵抗 4%"], en: ["All CRIT Hit 4%", "All CRIT Resistance 4%"] } 
             }
         }
     },
