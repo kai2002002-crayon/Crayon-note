@@ -1289,8 +1289,32 @@
             }
             
             function selectGridTypeFilter(typeValue) {
-                activeFilters.gridType = typeValue; const buttons = document.getElementById("filter_gridType").getElementsByTagName("button");
-                for (let btn of buttons) { if ((typeValue === "" && btn.id.endsWith("_all")) || (typeValue !== "" && btn.id.endsWith(`_${typeValue}`))) btn.className = btnActiveStyle; else btn.className = btnInactiveStyle; } applyFilterUI();
+                if (typeValue === "") {
+                    activeFilters.gridType = [];
+                } else {
+                    const index = activeFilters.gridType.indexOf(typeValue);
+                    if (index > -1) {
+                        activeFilters.gridType.splice(index, 1);
+                    } else {
+                        activeFilters.gridType.push(typeValue);
+                    }
+                }
+                const buttons = document.getElementById("filter_gridType").getElementsByTagName("button");
+                for (let btn of buttons) {
+                    if (activeFilters.gridType.length === 0 && btn.id.endsWith("_all")) {
+                        btn.className = btnActiveStyle;
+                    } else if (activeFilters.gridType.length > 0 && btn.id.endsWith("_all")) {
+                        btn.className = btnInactiveStyle;
+                    } else if (btn.id !== "btn_filter_gridType_all") {
+                        const typeName = btn.id.replace("btn_filter_gridType_", "");
+                        if (activeFilters.gridType.includes(typeName)) {
+                            btn.className = btnActiveStyle;
+                        } else {
+                            btn.className = btnInactiveStyle;
+                        }
+                    }
+                }
+                applyFilterUI();
             }
             
             function selectGridStatusFilter(statusValue) {
@@ -1361,24 +1385,46 @@
                     const matchPos = activeFilters.position.length === 0 || activeFilters.position.includes(char.position) || char.position === "所有排";
                     const matchJ = activeFilters.job.length === 0 || activeFilters.job.includes(char.job);
                     const matchT = activeFilters.type.length === 0 || activeFilters.type.includes(char.type);
+                    
                     let matchGrid = true;
                     if (activeFilters.gridType.length > 0 || activeFilters.gridStatus !== "all") {
                         const layersToSearch = activeFilters.gridLayer === "all" ? [1,2,3] : [parseInt(activeFilters.gridLayer)];
-                        matchGrid = layersToSearch.some(l => {
+                        let availableTypes = [];
+                        let matchingInstances = [];
+                        
+                        layersToSearch.forEach(l => {
                             const layerData = char[`layer${l}`] || [];
-                            return layerData.some((attr, originalIdx) => {
-                                const typeMatches = activeFilters.gridType.length === 0 || activeFilters.gridType.includes(attr);
-                                let statusMatches = true;
-                                if (activeFilters.gridStatus !== "all") {
-                                    const stateKey = `${char.name}_l${l}_${attr}_${originalIdx}`;
-                                    const isOpened = !!savedStates[stateKey];
-                                    if (activeFilters.gridStatus === "opened") statusMatches = isOpened;
-                                    if (activeFilters.gridStatus === "unopened") statusMatches = !isOpened;
-                                }
-                                return typeMatches && statusMatches;
+                            layerData.forEach((attr, originalIdx) => {
+                                availableTypes.push(attr);
+                                const stateKey = `${char.name}_l${l}_${attr}_${originalIdx}`;
+                                const isOpened = !!savedStates[stateKey];
+                                matchingInstances.push({ attr, isOpened });
                             });
                         });
+
+                        if (activeFilters.gridType.length > 0) {
+                            const hasAllSelectedTypes = activeFilters.gridType.every(targetType => availableTypes.includes(targetType));
+                            if (!hasAllSelectedTypes) {
+                                matchGrid = false;
+                            } else {
+                                if (activeFilters.gridStatus !== "all") {
+                                    const relevantInstances = matchingInstances.filter(inst => activeFilters.gridType.includes(inst.attr));
+                                    if (activeFilters.gridStatus === "opened") {
+                                        matchGrid = relevantInstances.every(inst => inst.isOpened);
+                                    } else if (activeFilters.gridStatus === "unopened") {
+                                        matchGrid = relevantInstances.some(inst => !inst.isOpened);
+                                    }
+                                }
+                            }
+                        } else {
+                            if (activeFilters.gridStatus === "opened") {
+                                matchGrid = matchingInstances.length > 0 && matchingInstances.every(inst => inst.isOpened);
+                            } else if (activeFilters.gridStatus === "unopened") {
+                                matchGrid = matchingInstances.length > 0 && matchingInstances.some(inst => !inst.isOpened);
+                            }
+                        }
                     }
+                    
                     const matchSearch = !activeFilters.search || t(char.name).toLowerCase().includes(activeFilters.search) || char.name.toLowerCase().includes(activeFilters.search);
                     const cardElement = document.getElementById(`char_card_${char.name}`);
                     if (cardElement) {
@@ -1407,6 +1453,17 @@
                         if (pName === "雙面") return c.personality.includes(",");
                         return c.personality === pName;
                     });
+                    
+                    // 根據實裝時序(日期)進行排序：最新實裝或未來的角色排在最前面
+                    pChars.sort((a, b) => {
+                        const getDateStr = (dateStr) => dateStr ? dateStr.split('T')[0] : "0000-00-00";
+                        const dateA = getDateStr(a.releaseDate);
+                        const dateB = getDateStr(b.releaseDate);
+                        if (dateA > dateB) return -1; // A 的日期較新，排在前面
+                        if (dateA < dateB) return 1;  // A 的日期較舊，排在後面
+                        return 0; // 日期相同則維持原始順序
+                    });
+
                     if (pChars.length === 0) return;
                     const pSection = document.createElement('section'); pSection.id = `section_p_${pName}`; pSection.className = "bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-2xl p-4 sm:p-6 shadow-sm border-2 border-amber-100/70 dark:border-gray-700 mb-6 transition-colors";
                     pSection.innerHTML = `<div class="border-b-2 border-amber-400 dark:border-gray-600 pb-2.5 mb-4 flex justify-between items-center flex-wrap gap-2"><h2 class="text-lg sm:text-xl font-extrabold text-amber-955 dark:text-amber-400 flex items-center">📂 ${t(pName)}${t('stats_character')}</h2></div>`;
