@@ -196,7 +196,12 @@
                     <div id="costumeButtonsContainer" class="flex flex-wrap justify-center gap-2 hidden w-full max-w-[320px]"></div>
                 </div>
                 <div class="text-center sm:text-left w-full mt-2 sm:mt-0">
-                    <h1 id="charName" data-i18n="loading" class="text-3xl font-extrabold text-amber-950 dark:text-amber-400 mb-1 tracking-tight flex items-center justify-center sm:justify-start flex-wrap gap-2">載入中...</h1>
+                    <div class="flex flex-col sm:flex-row justify-between items-center sm:items-end w-full mb-1 gap-2">
+                        <h1 id="charName" data-i18n="loading" class="text-3xl font-extrabold text-amber-950 dark:text-amber-400 tracking-tight flex items-center justify-center sm:justify-start flex-wrap gap-2">載入中...</h1>
+                        <div class="text-xs sm:text-sm font-bold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-slate-700/80 px-3 py-1.5 rounded-full shadow-sm border border-gray-200 dark:border-slate-600 flex items-center gap-1 shrink-0 transition-colors">
+                            📅 <span data-i18n="release_date_label">實裝日期</span>: <span id="releaseDateValue" class="text-gray-700 dark:text-gray-200 font-extrabold ml-0.5">09/10/2025</span>
+                        </div>
+                    </div>
                     <div id="charStars" class="flex justify-center sm:justify-start items-center min-h-[28px] mb-3"></div>
                     <div class="flex justify-center sm:justify-start gap-5 sm:gap-4 pt-3 flex-wrap">
                         <div id="charIdentity"></div>
@@ -860,7 +865,7 @@
                     viewport: { x: -400, y: 0, width: 800, height: 1000 },
             
                     success: function (player) {
-                                                                        
+                                                                                
                             const loader = avatarBox.querySelector('.spine-player-loading-custom');
                             if (loader) loader.remove();
             
@@ -1809,7 +1814,7 @@
                     success: (player) => {
                         // 🌟 呼叫修復函數
                         fixSpineMultiplyHole(player);
-                                                                                        
+                                                                                                        
                         const canvas = container.querySelector('canvas');
                         if (canvas) {
                             canvas.style.width = '100%';
@@ -1872,6 +1877,11 @@
             // 1. 名字恢復為純文字
             document.getElementById('charName').innerHTML = displayName;
             document.title = `${displayName} - ${getI18n('page_title_char_detail') || '詳細資料'}`;
+
+            // 1.5 實裝日期多語系更新
+            let releaseLabel = getI18n('release_date_label');
+            if (releaseLabel === 'release_date_label') releaseLabel = '實裝日期';
+            if (document.getElementById('releaseDateLabelText')) document.getElementById('releaseDateLabelText').innerText = releaseLabel;
             
             // 2. 準備所有屬性標籤的多國語言文字
             let idLabel = getI18n('stats_identity'); if(idLabel === 'stats_identity') idLabel = '身份';
@@ -1986,6 +1996,25 @@ if (Array.isArray(displayPersonality)) {
             
             // 1. 名字恢復為純文字，移除舊的 identityHtml
             document.getElementById('charName').innerHTML = displayName;
+
+            // 🌟 實裝日期處理：若無 releaseDate 則預設為 09/10/2025
+            let releaseLabel = getI18n('release_date_label');
+            if (releaseLabel === 'release_date_label') releaseLabel = '實裝日期';
+            if (document.getElementById('releaseDateLabelText')) document.getElementById('releaseDateLabelText').innerText = releaseLabel;
+            
+            let releaseDateText = currentCharData.releaseDate || '09/10/2025';
+                // 1. 過濾掉時間部分 (空格或 'T' 後面的內容)
+                releaseDateText = releaseDateText.split(' ')[0].split('T')[0];
+                // 2. 判斷是否為 YYYY-MM-DD 或 YYYY/MM/DD 格式，並轉換為 DD/MM/YYYY
+                const dateMatch = releaseDateText.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})$/);
+                if (dateMatch) {
+                    const year = dateMatch[1];
+                    const month = dateMatch[2].padStart(2, '0'); // 自動補零，例如 9 會變成 09
+                    const day = dateMatch[3].padStart(2, '0');
+                    releaseDateText = `${day}/${month}/${year}`;
+                }
+                const releaseValueEl = document.getElementById('releaseDateValue');
+                if (releaseValueEl) releaseValueEl.innerText = releaseDateText;
             
             // 2. 準備所有屬性標籤的多國語言文字
             let idLabel = getI18n('stats_identity'); if(idLabel === 'stats_identity') idLabel = '身份';
