@@ -235,7 +235,7 @@ const INITIAL_DATA = [
     { name: "艾琳娜", personality: "冷靜", race: "精靈", position: "中排", job: "輸出", pathVersion: "V3", releaseDate: "2025-12-04" },
     { name: "佩佩", personality: "冷靜", race: "魔女", position: "前排", job: "肉盾", pathVersion: "V5" },
     { name: "希拉", personality: "冷靜", race: "魔靈", position: "後排", job: "輸出", pathVersion: "V2" },
-    { name: "皮可菈", personality: "冷靜", race: "魔女", position: "後排", job: "輔助", pathVersion: "V1" },
+    { name: "皮可菈", personality: "冷靜", race: "魔女", position: "後排", job: "輔助", pathVersion: "V1", releaseDate: "2026-01-29" },
     { name: "艾蜜莉雅", personality: "冷靜", race: "精靈", position: "後排", job: "輔助", pathVersion: "V2" },
     { name: "芙莉可", personality: "冷靜", race: "魔女", position: "中排", job: "輸出", pathVersion: "V2" },
     { name: "綾", personality: "冷靜", race: "魔女", position: "中排", job: "輸出", pathVersion: "V3" },
