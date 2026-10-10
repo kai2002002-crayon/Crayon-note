@@ -525,6 +525,18 @@
                         <span class="font-bold text-gray-500 dark:text-gray-400 shrink-0 pt-1 whitespace-nowrap" data-lang-key="stats_type">💥 類型：</span>
                         <div id="filter_type" class="flex flex-wrap gap-1.5 flex-1"></div>
                     </div>
+                    <div class="flex flex-col sm:flex-row items-start gap-2 border-t border-dashed border-gray-100 dark:border-gray-700 pt-2 w-full mt-1">
+                        <span class="font-bold text-gray-500 dark:text-gray-400 shrink-0 pt-1 flex items-center gap-0.5 whitespace-nowrap" data-lang-key="sort_title">↕️ 排序：</span>
+                        <div id="filter_sort" class="flex flex-wrap gap-1.5 flex-1 w-full">
+                            <button id="btn_sort_personality" onclick="setSortBy('personality')" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-bold transition bg-amber-500 text-white border-amber-600 shadow-sm" data-lang-key="sort_personality">預設(性格)</button>
+                            <button id="btn_sort_releaseDate" onclick="setSortBy('releaseDate')" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-medium transition bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600" data-lang-key="sort_releaseDate">實裝日期</button>
+                            <button id="btn_sort_name" onclick="setSortBy('name')" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-medium transition bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600" data-lang-key="sort_name">名稱</button>
+                            <button id="btn_sort_race" onclick="setSortBy('race')" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-medium transition bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600" data-lang-key="sort_race">種族</button>
+                            <button id="btn_sort_position" onclick="setSortBy('position')" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-medium transition bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600" data-lang-key="sort_position">站位</button>
+                            <button id="btn_sort_job" onclick="setSortBy('job')" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-medium transition bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600" data-lang-key="sort_job">職業</button>
+                            <button id="btn_sort_order" onclick="toggleSortOrder()" class="whitespace-nowrap inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded border text-[11px] sm:text-xs font-bold transition bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 border-gray-400 dark:border-gray-500 hover:bg-gray-300 dark:hover:bg-gray-500 shadow-sm ml-auto" data-lang-key="sort_order_desc">⬇️ 逆排</button>
+                        </div>
+                    </div>
                     <div class="flex flex-col sm:flex-row items-start gap-2 border-t border-dashed border-gray-100 dark:border-gray-700 pt-2 w-full">
                         <span class="font-bold text-amber-800 dark:text-amber-500 shrink-0 pt-1 flex items-center gap-0.5 whitespace-nowrap" data-lang-key="stats_cell">🖍️ 金蠟筆格：</span>
                         <div class="flex flex-col gap-2 flex-1 w-full">
@@ -669,6 +681,8 @@
             let savedStates = {};
             try { savedStates = JSON.parse(localStorage.getItem(storageKey)) || {}; } catch(e) { savedStates = {}; }
             let activeFilters = { personality: [], race: [], position: [], job: [], type: [], gridLayer: "all", gridType: [], gridStatus: "all", search: "", displayMode: "all" };
+            let activeSortBy = 'personality';
+            let activeSortOrder = 'desc'; 
             let isFilterOpen = true;
             let isStatsOpen = window.innerWidth >= 768;
             const LAYER_RULES = { 1: { name: "🥇 第一層", crayon: 2, bonus: 3 }, 2: { name: "🥈 第二層", crayon: 4, bonus: 4 }, 3: { name: "🥉 第三層", crayon: 6, bonus: 5 } };
@@ -1213,6 +1227,37 @@
             
             function setDisplayMode(mode) { activeFilters.displayMode = mode; ["all", "1", "2", "3"].forEach(m => { const btn = document.getElementById(`btn_disp_${m}`); if(btn) btn.className = (mode === m) ? btnDispActiveStyle : btnInactiveStyle; }); applyFilterUI(); }
             
+            function setSortBy(sortBy) {
+                activeSortBy = sortBy;
+                const sortOptions = ['personality', 'releaseDate', 'name', 'race', 'position', 'job'];
+                sortOptions.forEach(opt => {
+                    const btn = document.getElementById(`btn_sort_${opt}`);
+                    if (btn) {
+                        if (opt === sortBy) {
+                            btn.className = btnActiveStyle;
+                        } else {
+                            btn.className = btnInactiveStyle;
+                        }
+                    }
+                });
+                renderMatrix();
+            }
+
+            function toggleSortOrder() {
+                activeSortOrder = activeSortOrder === 'desc' ? 'asc' : 'desc';
+                const btn = document.getElementById('btn_sort_order');
+                if (btn) {
+                    if (activeSortOrder === 'desc') {
+                        btn.innerHTML = '⬇️ 逆排';
+                        btn.setAttribute('data-lang-key', 'sort_order_desc');
+                    } else {
+                        btn.innerHTML = '⬆️ 順排';
+                        btn.setAttribute('data-lang-key', 'sort_order_asc');
+                    }
+                }
+                renderMatrix();
+            }
+
             function buildFilterPanel() {
                 const keys = { personality: ["天真", "冷靜", "狂亂", "活潑", "憂鬱", "雙面"], race: [], position: ["前排", "中排", "後排", "所有排"], job: [], type: ["物理", "魔法"] };
                 INITIAL_DATA.forEach(c => { if (c.race && !keys.race.includes(c.race)) keys.race.push(c.race); if (c.job && !keys.job.includes(c.job)) keys.job.push(c.job); });
@@ -1327,6 +1372,15 @@
             function resetFilters() {
                 selectFilter("personality", ""); selectFilter("race", ""); selectFilter("position", ""); selectFilter("job", ""); selectFilter("type", ""); selectGridLayerFilter("all"); selectGridTypeFilter(""); selectGridStatusFilter("all");
                 document.getElementById("searchInput").value = ""; activeFilters.search = ""; setDisplayMode('all');
+                
+                activeSortBy = 'personality';
+                activeSortOrder = 'desc';
+                setSortBy('personality');
+                const orderBtn = document.getElementById('btn_sort_order');
+                if (orderBtn) {
+                    orderBtn.innerHTML = t('sort_order_desc') || '⬇️ 逆排';
+                    orderBtn.setAttribute('data-lang-key', 'sort_order_desc');
+                }
             }
             
             function toggleAllCharacters(own) {
@@ -1435,39 +1489,103 @@
                         });
                     }
                 });
-                const personalities = ["天真", "冷靜", "狂亂", "活潑", "憂鬱", "雙面"];
-                personalities.forEach(pName => {
-                    const pSection = document.getElementById(`section_p_${pName}`);
-                    if (pSection) { const visibleInSec = pSection.querySelectorAll("[id^='char_card_']:not(.hidden)").length; if (visibleInSec === 0) pSection.classList.add("hidden"); else pSection.classList.remove("hidden"); }
+
+                document.querySelectorAll('section.section-group').forEach(pSection => {
+                    const visibleInSec = pSection.querySelectorAll("[id^='char_card_']:not(.hidden)").length; 
+                    if (visibleInSec === 0) pSection.classList.add("hidden"); 
+                    else pSection.classList.remove("hidden");
                 });
             }
+
             function renderMatrix() {
                 const container = document.getElementById('matrixContainer'); if(!container) return; container.innerHTML = '';
-                const personalities = ["雙面", "天真", "冷靜", "狂亂", "活潑", "憂鬱"];
+                const nowTime = Date.now();
+
+                let groupKeys = [];
+                let groupField = activeSortBy;
+                let groupPrefix = "📂 ";
+
+                if (activeSortBy === 'personality' || activeSortBy === 'default') {
+                    groupKeys = ["雙面", "天真", "冷靜", "狂亂", "活潑", "憂鬱"];
+                    groupField = 'personality';
+                } else if (activeSortBy === 'race') {
+                    groupKeys = ["龍族", "精靈", "妖精", "獸人", "幽靈", "魔靈", "魔女", "???"];
+                    groupPrefix = "🧬 ";
+                } else if (activeSortBy === 'position') {
+                    groupKeys = ["前排", "中排", "後排", "所有排"];
+                    groupPrefix = "🗺️ ";
+                } else if (activeSortBy === 'job') {
+                    groupKeys = ["肉盾", "輸出", "輔助"];
+                    groupPrefix = "⚔️ ";
+                } else {
+                    groupKeys = ["所有坨坨"];
+                    groupField = 'all';
+                    groupPrefix = "📋 ";
+                }
+
                 const personalityBorderColors = { "天真": "border-green-500", "冷靜": "border-blue-500", "狂亂": "border-red-500", "活潑": "border-yellow-400", "憂鬱": "border-purple-500", "雙面": "border-teal-500" };
                 const traitColors = { "天真": "#4ade80", "冷靜": "#60a5fa", "狂亂": "#f87171", "活潑": "#facc15", "憂鬱": "#a855f7" };
-                const nowTime = Date.now();
-                personalities.forEach(pName => {
-                    // 在渲染區塊時，判斷是否為「雙面」（有逗號的歸類在這裡）
+
+                groupKeys.forEach(groupName => {
                     const pChars = INITIAL_DATA.filter(c => {
-                        if (pName === "雙面") return c.personality.includes(",");
-                        return c.personality === pName;
+                        if (groupField === 'all') return true;
+                        if (groupField === 'personality') {
+                            if (groupName === "雙面") return c.personality.includes(",");
+                            return c.personality === groupName;
+                        }
+                        return c[groupField] === groupName;
                     });
-                    
-                    // 根據實裝時序(日期)進行排序：最新實裝或未來的角色排在最前面
+
                     pChars.sort((a, b) => {
-                        const getDateStr = (dateStr) => dateStr ? dateStr.split('T')[0] : "0000-00-00";
-                        const dateA = getDateStr(a.releaseDate);
-                        const dateB = getDateStr(b.releaseDate);
-                        if (dateA > dateB) return -1; // A 的日期較新，排在前面
-                        if (dateA < dateB) return 1;  // A 的日期較舊，排在後面
-                        return 0; // 日期相同則維持原始順序
+                        let cmp = 0;
+                        // 取得翻譯後的名稱
+                        const nameA = t(a.name);
+                        const nameB = t(b.name);
+                        
+                        // 根據當前語言設定排序規則
+                        let locale = 'zh-TW';
+                        let options = { collation: 'stroke' }; // 中文預設筆畫
+                        
+                        if (window.currentLang === 'ja') {
+                            locale = 'ja-JP';
+                            options = {}; // 日文預設五十音
+                        } else if (window.currentLang === 'en') {
+                            locale = 'en-US';
+                            options = {}; // 英文預設字母A-Z
+                        }
+
+                        if (activeSortBy === 'name') {
+                            cmp = nameA.localeCompare(nameB, locale, options);
+                        } else {
+                            const dateA = a.releaseDate ? a.releaseDate.split('T')[0] : "0000-00-00";
+                            const dateB = b.releaseDate ? b.releaseDate.split('T')[0] : "0000-00-00";
+                            if (dateA > dateB) cmp = 1;
+                            else if (dateA < dateB) cmp = -1;
+                            else cmp = nameA.localeCompare(nameB, locale, options); // 同日期時以當地語言名稱排序
+                        }
+                        return activeSortOrder === 'asc' ? cmp : -cmp;
                     });
 
                     if (pChars.length === 0) return;
-                    const pSection = document.createElement('section'); pSection.id = `section_p_${pName}`; pSection.className = "bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-2xl p-4 sm:p-6 shadow-sm border-2 border-amber-100/70 dark:border-gray-700 mb-6 transition-colors";
-                    pSection.innerHTML = `<div class="border-b-2 border-amber-400 dark:border-gray-600 pb-2.5 mb-4 flex justify-between items-center flex-wrap gap-2"><h2 class="text-lg sm:text-xl font-extrabold text-amber-955 dark:text-amber-400 flex items-center">📂 ${t(pName)}${t('stats_character')}</h2></div>`;
-                    const charListContainer = document.createElement('div'); charListContainer.className = "space-y-4";
+
+                    const sectionId = `section_group_${groupName.replace('???', 'unknown')}`;
+                    const pSection = document.createElement('section'); 
+                    pSection.id = sectionId; 
+                    pSection.className = "bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-2xl p-4 sm:p-6 shadow-sm border-2 border-amber-100/70 dark:border-gray-700 mb-6 transition-colors section-group";
+                    
+                    // 動態組合標題名稱 (排除「所有坨坨」避免變成「所有角色坨坨」)
+                    let headerTitle = t(groupName);
+                    if (groupName !== "所有坨坨") {
+                        // 英文加上空格與複數s，中日文則直接套用字典裡的 stats_character ("坨坨" / "使徒")
+                        const suffix = window.currentLang === 'en' ? ' Apostles' : t('stats_character');
+                        headerTitle += suffix;
+                    }
+
+                    pSection.innerHTML = `<div class="border-b-2 border-amber-400 dark:border-gray-600 pb-2.5 mb-4 flex justify-between items-center flex-wrap gap-2"><h2 class="text-lg sm:text-xl font-extrabold text-amber-955 dark:text-amber-400 flex items-center">${groupPrefix}${headerTitle}</h2></div>`;
+                    
+                    const charListContainer = document.createElement('div'); 
+                    charListContainer.className = "space-y-4";
+                    
                     pChars.forEach(char => {
                         const isUnreleased = char.releaseDate && new Date(char.releaseDate).getTime() > nowTime;
                         
@@ -1678,6 +1796,7 @@
                 });
                 applyFilterUI();
             }
+
             setInterval(() => { document.body.classList.toggle('swap-avatars'); }, 3000);
             
             function checkMarquee(card, isHover) { const box = card.querySelector('.marquee-box'); const content = card.querySelector('.marquee-content'); if (box && content) { if (isHover && box.scrollWidth > box.clientWidth) content.style.animation = 'text-marquee 3.5s linear infinite alternate'; else content.style.animation = 'none'; } }
