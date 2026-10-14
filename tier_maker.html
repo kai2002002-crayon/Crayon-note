@@ -66,7 +66,44 @@
             --c2: #4ade80; 
             animation: dualColorPulse 3s ease-in-out infinite;
         }
-
+        /* 🌟 5色綜合流動 (專門用於雙面性格的分類標題) */
+        @keyframes pentaColorPulse {
+            0% { border-color: #4ade80; box-shadow: 0 0 6px #4ade80; }
+            20% { border-color: #60a5fa; box-shadow: 0 0 6px #60a5fa; }
+            40% { border-color: #f87171; box-shadow: 0 0 6px #f87171; }
+            60% { border-color: #facc15; box-shadow: 0 0 6px #facc15; }
+            80% { border-color: #c084fc; box-shadow: 0 0 6px #c084fc; }
+            100% { border-color: #4ade80; box-shadow: 0 0 6px #4ade80; }
+        }
+        .penta-border-anim { animation: pentaColorPulse 5s ease-in-out infinite; }
+        
+        /* 🌟 專門給分類標題用的無陰影邊框流動 */
+        /* 🌟 專門給分類標題用的無陰影邊框流動 */
+        @keyframes pentaBorderNoShadow {
+            0% { border-left-color: #4ade80; }
+            20% { border-left-color: #60a5fa; }
+            40% { border-left-color: #f87171; }
+            60% { border-left-color: #facc15; }
+            80% { border-left-color: #c084fc; }
+            100% { border-left-color: #4ade80; }
+        }
+        .penta-border-title-anim { 
+            animation: pentaBorderNoShadow 5s ease-in-out infinite; 
+        }
+        
+        @keyframes pentaTextFlow {
+            0% { background-position: 200% center; }
+            100% { background-position: 0% center; }
+        }
+        .penta-text-anim {
+            background: linear-gradient(90deg, #4ade80, #60a5fa, #f87171, #facc15, #c084fc, #4ade80);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text; /* 🌟 加上這行加強相容性 */
+            -webkit-text-fill-color: transparent;
+            color: transparent; /* 🌟 加上這行加強相容性 */
+            animation: pentaTextFlow 4s linear infinite;
+        }
         /* 🌟 控制 Rank 區內的圖示放大與名字隱藏 🌟 */
         /* 1. 隱藏 Rank 區的角色名字 */
         .tier-dropzone[id^="tier_"] .char-name { display: none !important; }
@@ -148,7 +185,7 @@
             "憂鬱": "border-purple-400 text-purple-400",
             "NPC": "border-gray-400 text-gray-400",
             "共鳴": "border-rainbow text-rainbow",
-            "雙面": "dual-border-anim text-fuchsia-400" // 🌟 雙面性格預設顏色
+            "雙面": "penta-border-title-anim penta-text-anim"
         };
         const SPRITE_CLASS_MAP = {
             race_龍族: "sprite-Bg_Dragon", race_精靈: "sprite-Bg_Elf", race_妖精: "sprite-Bg_Sprite",
@@ -318,13 +355,14 @@
             header.className = "flex justify-between items-center cursor-pointer hover:bg-slate-200/50 dark:hover:bg-slate-700/50 p-1.5 rounded-lg transition mb-1";
             header.onclick = () => togglePoolGroup(groupId, btnId);
             
-            // 🌟 如果是雙面，設定自訂 inline 樣式，讓標題也呈現雙色特效（非強制）
-            let headerStyle = title === "雙面" ? `style="--c1: #c084fc; --c2: #4ade80;"` : ""; 
+            // 將原本這行刪除：
+            // let headerStyle = title === "雙面" ? `style="--c1: #c084fc; --c2: #4ade80;"` : ""; 
             
             const i18nTitle = getI18n(title) || title;
+            const textClass = pColors.split(' ')[1] || ""; // 抓取文字顏色 class
 
-            header.innerHTML = `
-                <h3 class="text-xs sm:text-sm font-black border-l-4 ${borderClass} pl-2 ml-1 text-gray-700 dark:text-gray-300" ${headerStyle}>${i18nTitle}</h3>
+           header.innerHTML = `
+                <h3 class="text-xs sm:text-sm font-black border-l-4 ${borderClass} pl-2 ml-1 text-gray-700 dark:text-gray-300"><span class="${textClass}">${i18nTitle}</span></h3>
                 <span id="${btnId}" class="text-xs text-gray-400">🔼</span>
             `;
             
