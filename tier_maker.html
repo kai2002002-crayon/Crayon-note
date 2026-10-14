@@ -404,15 +404,33 @@
             
             // 🌟 如果是雙面性格，抓取顏色並給予動態樣式
             if (!isNPC && charData.personality) {
-                if (charData.personality.includes(",")) {
+                // 1. 使用正規表達式與陣列判斷，完美拆解所有格式
+                let pList = [];
+                if (Array.isArray(charData.personality)) {
+                    pList = charData.personality;
+                } else if (typeof charData.personality === 'string') {
+                    pList = charData.personality.split(/[、,\/\s+]+/).map(s => s.trim()).filter(Boolean);
+                }
+
+                // 2. 如果拆分後有兩個(或以上)的性格，啟動雙色呼吸框
+                if (pList.length > 1) {
                     displayPersonality = "雙面";
                     borderClass = "dual-border-anim";
-                    const parts = charData.personality.split(',').map(s => s.trim());
-                    const c1 = HEX_COLORS[parts[0]] || "#c084fc"; 
-                    const c2 = HEX_COLORS[parts[1]] || "#4ade80"; 
+                    
+                    const c1 = HEX_COLORS[pList[0]] || "#c084fc"; 
+                    const c2 = HEX_COLORS[pList[1]] || "#4ade80"; 
                     customStyle = `style="--c1: ${c1}; --c2: ${c2};"`;
-                } else if (personalityColors[charData.personality]) {
-                    borderClass = personalityColors[charData.personality].split(' ')[0];
+                } 
+                // 3. 如果只有單一性格，給予單色靜態框
+                else if (pList.length === 1) {
+                    const singleP = pList[0];
+                    // 防呆：如果文字明確寫「雙重性格」但沒有給第二個性格
+                    if (singleP === "雙重性格" || singleP === "雙面") {
+                        displayPersonality = "雙面";
+                        borderClass = "dual-border-anim";
+                    } else if (personalityColors[singleP]) {
+                        borderClass = personalityColors[singleP].split(' ')[0];
+                    }
                 }
             }
 
