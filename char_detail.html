@@ -400,9 +400,9 @@
             
                 /// 性格
                 const personalities = { 
-    '冷靜': 'Composed', '憂鬱': 'Depressed', '天真': 'Innocence', '狂亂': 'Madness', '活潑': 'Vivacious', '共鳴': 'Resonance', 
-    '雙重性格': 'Multifaceted', '雙重': 'Multifaceted', '雙面': 'Multifaceted' 
-};
+                    '冷靜': 'Composed', '憂鬱': 'Depressed', '天真': 'Innocence', '狂亂': 'Madness', '活潑': 'Vivacious', '共鳴': 'Resonance', 
+                    '雙重性格': 'Multifaceted', '雙重': 'Multifaceted', '雙面': 'Multifaceted' 
+                };
                 Object.entries(personalities).forEach(([zh, en]) => {
                     const cls = `sprite-base sprite-common sprite-Personality_${en}`;
                     window.ICON_MAP[`personality_${zh}`] = cls;
@@ -418,7 +418,7 @@
                 });
             
                 // 站位
-                const positions = { '後排': 'Back', '前排': 'Front', '中排': 'Middle', '全能': 'All' };
+                const positions = { '後排': 'Back', '前排': 'Front', '中排': 'Middle', '所有排': 'All' };
                 Object.entries(positions).forEach(([zh, en]) => {
                     const cls = `sprite-base sprite-common sprite-Position_${en}`;
                     window.ICON_MAP[`position_${zh}`] = cls;
@@ -460,11 +460,13 @@
                         <div class="${iconUrl} absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 origin-center ${scaleClass}"></div>
                        </div>`;
                 
-                // 修正：tooltip 文字強制呼叫 t() 進行字典對比翻譯
+                // 🌟 修正：利用 .replace(/[：:︰\s]+$/, '') 自動過濾掉 label 尾部可能自帶的任何全半形冒號，防止出現雙冒號
+                const cleanLabel = label.replace(/[：:︰\s]+$/, '');
+
                 el.innerHTML = `
                     ${iconHtml}
                     <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 px-3 py-1.5 bg-slate-900 dark:bg-slate-700 text-white dark:text-gray-100 text-[11px] font-black rounded-lg shadow-xl whitespace-nowrap pointer-events-none hidden group-hover:block transition-all duration-300 opacity-0 group-hover:opacity-100 z-50">
-                        ${label}：${t(value)}
+                        ${cleanLabel}：${t(value)}
                         <div class="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-900 dark:border-t-slate-700"></div>
                     </div>
                 `;
@@ -865,7 +867,7 @@
                     viewport: { x: -400, y: 0, width: 800, height: 1000 },
             
                     success: function (player) {
-                                                                                
+                                                                                                        
                             const loader = avatarBox.querySelector('.spine-player-loading-custom');
                             if (loader) loader.remove();
             
@@ -1366,33 +1368,37 @@
                         const normalSkillIcon = `sprite-Icon_NormalSkill_${spineKey}`;
                         const passiveSkillIcon = `sprite-Icon_PassiveSkill_${spineKey}`;
             
-                        // 1. 先取得原始性格資料
+                        // 1. 先取得原始性格資料並處理組合
                         let rawPersonality = currentCharData.personality;
-                        let pKey = "冷靜"; // 預設值
-                        // 2. 判斷是否有兩種性格 (即雙重性格) 邏輯
+                        let pListUlt = [];
                         if (Array.isArray(rawPersonality)) {
-                            // 如果資料格式是陣列 ["冷靜", "憂鬱"]
-                            if (rawPersonality.length > 1) {
-                                pKey = "雙面";
-                            } else if (rawPersonality.length === 1) {
-                                pKey = rawPersonality[0];
-                            }
+                            pListUlt = rawPersonality;
                         } else if (typeof rawPersonality === 'string') {
-                            // 如果資料格式是字串，檢查是否有分隔符號 (這裡涵蓋逗號、頓號、斜線、空白)
-                            if (rawPersonality.includes(',') || rawPersonality.includes('、') || rawPersonality.includes('/') || rawPersonality.trim().includes(' ')) {
-                                pKey = "雙面";
-                            } else {
-                                pKey = rawPersonality;
-                            }
+                            pListUlt = rawPersonality.split(/[、,\/\s+]+/).map(s => s.trim()).filter(Boolean);
                         } else if (rawPersonality) {
-                            pKey = rawPersonality; // 其他預料外但有值的狀況
+                            pListUlt = [String(rawPersonality)];
                         }
-                        // 3. 對應圖片
-                        const personalityMap = {
-                            "冷靜": "ultimate_composed", "憂鬱": "ultimate_depressed", "天真": "ultimate_innocence", "狂亂": "ultimate_madness", "活潑": "ultimate_vivacious",
-                            "Composed": "ultimate_composed", "Depressed": "ultimate_depressed", "Innocence": "ultimate_innocence", "Madness": "ultimate_madness", "Vivacious": "ultimate_vivacious",
-                            "共鳴": "ultimate_resonance", "Resonance": "ultimate_resonance", "雙面": "ultimate_multifaceted", "Multifaceted": "ultimate_multifaceted"};
-                        const ultFileName = personalityMap[pKey] || "ultimate_composed";
+
+                        let ultFileName = "ultimate_composed";
+                        const pDictUlt = { '冷靜': 'Composed', '憂鬱': 'Depressed', '天真': 'Innocence', '狂亂': 'Madness', '活潑': 'Vivacious', '共鳴': 'Resonance' };
+
+                        if (pListUlt.length > 1) {
+                            // 若為多重性格組合，對應至 ultimate_Depressed_Innocence (全部轉小寫以符命名習慣)
+                            const enList = pListUlt.map(p => pDictUlt[p] || 'multifaceted');
+                            ultFileName = `ultimate_${enList.map(e => e.toLowerCase()).join('_')}`;
+                        } else if (pListUlt.length === 1) {
+                            let pKey = pListUlt[0];
+                            if (pKey === "雙重性格" || pKey === "雙重" || pKey === "雙面") {
+                                ultFileName = "ultimate_multifaceted";
+                            } else {
+                                const personalityMap = {
+                                    "冷靜": "ultimate_composed", "憂鬱": "ultimate_depressed", "天真": "ultimate_innocence", "狂亂": "ultimate_madness", "活潑": "ultimate_vivacious",
+                                    "共鳴": "ultimate_resonance", "Composed": "ultimate_composed", "Depressed": "ultimate_depressed", "Innocence": "ultimate_innocence", "Madness": "ultimate_madness", "Vivacious": "ultimate_vivacious",
+                                    "Resonance": "ultimate_resonance", "Multifaceted": "ultimate_multifaceted"
+                                };
+                                ultFileName = personalityMap[pKey] || "ultimate_composed";
+                            }
+                        }
             
                         const ultSkillIcon = `sprite-Icon_UltimateSkill_${spineKey}`;
                         const ultStyle = `width: 64px; height: 64px; background-image: url('char_sprites/${ultFileName}.png'); background-size: auto; transform: translate(-50%, -50%) scale(0.625);`;
@@ -1814,7 +1820,7 @@
                     success: (player) => {
                         // 🌟 呼叫修復函數
                         fixSpineMultiplyHole(player);
-                                                                                                        
+                                                                                                                                                
                         const canvas = container.querySelector('canvas');
                         if (canvas) {
                             canvas.style.width = '100%';
@@ -1904,19 +1910,31 @@
             }
             }
             // 處理雙重性格判斷
-let displayPersonality = currentCharData.personality;
-if (Array.isArray(displayPersonality)) {
-    displayPersonality = displayPersonality.length > 1 ? "雙面" : displayPersonality[0];
-} else if (typeof displayPersonality === 'string') {
-    // 檢查是否包含分隔符號
-    if (displayPersonality.includes('、') || displayPersonality.includes(',') || displayPersonality.includes('/') || displayPersonality.trim().includes(' ')) {
-        displayPersonality = "雙面";
-    } 
-    // 若資料本身寫的是「雙重性格」或「雙重」，統一轉換為「雙面」
-    else if (displayPersonality === "雙重性格" || displayPersonality === "雙重") {
-        displayPersonality = "雙面";
-    }
-}
+            let displayPersonality = currentCharData.personality;
+            let pList = [];
+            if (Array.isArray(displayPersonality)) {
+                pList = displayPersonality;
+            } else if (typeof displayPersonality === 'string') {
+                pList = displayPersonality.split(/[、,\/\s+]+/).map(s => s.trim()).filter(Boolean);
+            } else if (displayPersonality) {
+                pList = [String(displayPersonality)];
+            }
+
+            const pDictLang = { '冷靜': 'Composed', '憂鬱': 'Depressed', '天真': 'Innocence', '狂亂': 'Madness', '活潑': 'Vivacious', '共鳴': 'Resonance' };
+
+            if (pList.length > 1) {
+                displayPersonality = pList.join('+'); // 將多重性格組合成顯示字串，例如 "憂鬱+天真"
+                const enList = pList.map(p => pDictLang[p] || 'Multifaceted');
+                // 動態註冊專屬的雙面性格組合 class
+                if (typeof window.ICON_MAP === 'undefined') window.ICON_MAP = {};
+                // 這樣無論 JSON 裡順序怎麼對調，都會固定產出字母順序排在前面的 (例如 D 在 I 前面，永遠輸出 Depressed_Innocence)
+                window.ICON_MAP[`personality_${displayPersonality}`] = `sprite-base sprite-common sprite-Personality_Multifaceted_${enList.sort().join('_')}`;
+            } else if (pList.length === 1) {
+                displayPersonality = pList[0];
+                if (displayPersonality === "雙重性格" || displayPersonality === "雙重") {
+                    displayPersonality = "雙面";
+                }
+            }
             // 5. 渲染全部屬性圖示
                 updateTag('charIdentity', idLabel, identityValue, 'identity');
                 updateTag('charPersonality', pLabel, displayPersonality, 'personality'); // <-- 改成 displayPersonality
@@ -2037,19 +2055,31 @@ if (Array.isArray(displayPersonality)) {
             }
             }
             // 處理雙重性格判斷
-let displayPersonality = currentCharData.personality;
-if (Array.isArray(displayPersonality)) {
-    displayPersonality = displayPersonality.length > 1 ? "雙面" : displayPersonality[0];
-} else if (typeof displayPersonality === 'string') {
-    // 檢查是否包含分隔符號
-    if (displayPersonality.includes('、') || displayPersonality.includes(',') || displayPersonality.includes('/') || displayPersonality.trim().includes(' ')) {
-        displayPersonality = "雙面";
-    } 
-    // 若資料本身寫的是「雙重性格」或「雙重」，統一轉換為「雙面」
-    else if (displayPersonality === "雙重性格" || displayPersonality === "雙重") {
-        displayPersonality = "雙面";
-    }
-}
+            let displayPersonality = currentCharData.personality;
+            let pList = [];
+            if (Array.isArray(displayPersonality)) {
+                pList = displayPersonality;
+            } else if (typeof displayPersonality === 'string') {
+                pList = displayPersonality.split(/[、,\/\s+]+/).map(s => s.trim()).filter(Boolean);
+            } else if (displayPersonality) {
+                pList = [String(displayPersonality)];
+            }
+
+            const pDictLoad = { '冷靜': 'Composed', '憂鬱': 'Depressed', '天真': 'Innocence', '狂亂': 'Madness', '活潑': 'Vivacious', '共鳴': 'Resonance' };
+
+            if (pList.length > 1) {
+                displayPersonality = pList.join('+'); // 將多重性格組合成顯示字串，例如 "憂鬱+天真"
+                const enList = pList.map(p => pDictLoad[p] || 'Multifaceted');
+                // 動態註冊專屬的雙面性格組合 class
+                if (typeof window.ICON_MAP === 'undefined') window.ICON_MAP = {};
+                // 🌟 修正：補上 Multifaceted_ 並且對陣列進行 .sort()，確保 CSS Class 名稱與 sprites.css 及 index.html 完全一致
+                window.ICON_MAP[`personality_${displayPersonality}`] = `sprite-base sprite-common sprite-Personality_Multifaceted_${enList.sort().join('_')}`;
+            } else if (pList.length === 1) {
+                displayPersonality = pList[0];
+                if (displayPersonality === "雙重性格" || displayPersonality === "雙重") {
+                    displayPersonality = "雙面";
+                }
+            }
             // 5. 渲染全部屬性圖示
                 updateTag('charIdentity', idLabel, identityValue, 'identity');
                 updateTag('charPersonality', pLabel, displayPersonality, 'personality'); // <-- 改成 displayPersonality
@@ -2489,8 +2519,8 @@ presentContainer.innerHTML = `
                 <input type="text" id="replyModalAuthor" placeholder="您的暱稱 (留白將以匿名顯示)" class="w-full mb-3 px-3 py-2 text-sm font-bold text-amber-900 dark:text-white placeholder-amber-700/50 dark:placeholder-gray-400 rounded-lg border border-amber-300 dark:border-slate-500 bg-white dark:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-amber-500 shadow-inner">
                 <textarea id="replyModalContent" rows="3" placeholder="寫下您的回覆..." class="w-full mb-3 px-3 py-2 text-sm font-medium text-gray-800 dark:text-gray-200 rounded-lg border border-amber-300 dark:border-slate-500 bg-white dark:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-amber-500 resize-none shadow-inner"></textarea>
                 <div class="flex justify-end gap-2">
-                    <button onclick="closeReplyModal()" class="px-4 py-2 bg-gray-200 dark:bg-slate-600 text-gray-700 dark:text-gray-200 text-sm font-bold rounded-xl shadow-sm hover:bg-gray-300 dark:hover:bg-slate-500 transition">取消</button>
-                    <button onclick="submitReply()" id="btnSubmitReply" class="px-4 py-2 bg-amber-500 text-white text-sm font-bold rounded-xl shadow-md hover:bg-amber-600 transition transform active:scale-95">送出回覆 🚀</button>
+                    <button onclick="closeReplyModal()" class="px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm font-bold rounded-lg shadow hover:bg-gray-400 dark:hover:bg-gray-500 transition">取消</button>
+                    <button id="btnSubmitReply" onclick="submitReply()" class="px-4 py-2 bg-amber-500 text-white text-sm font-bold rounded-lg shadow hover:bg-amber-600 transition">送出回覆 🚀</button>
                 </div>
             </div>
         </div>
