@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>終極角色資料管理系統 (檔案診斷版)</title>
+    <title>終極角色資料管理系統</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- 依序載入檔案 -->
     <script src="data_core.js"></script>
     <script src="data_skills.js"></script>
     <script src="data_aside.js"></script>
@@ -16,27 +15,26 @@
     <script>
         tailwind.config = { darkMode: 'class' };
         
-        // 嚴格防呆初始化
-        window.LANG_DICT = window.LANG_DICT || { "zh-TW": {}, "ja": {}, "en": {} };
-        window.INITIAL_DATA = window.INITIAL_DATA || [];
-        window.CV_MAP = window.CV_MAP || {};
-        window.GRADE_MAP = window.GRADE_MAP || {};
-        window.ELDAIN_LIST = window.ELDAIN_LIST || [];
-        window.FOOD_MAP = window.FOOD_MAP || {};
-        window.REWARD_MAP = window.REWARD_MAP || {};
-        window.WORK_URL = window.WORK_URL || {};
-        window.SPINE_MAP = window.SPINE_MAP || {};
-        window.COSTUME_MAP = window.COSTUME_MAP || {};
-        window.SD_COSTUME = window.SD_COSTUME || {};
-        window.MINI_SPINE = window.MINI_SPINE || {};
+        if(typeof LANG_DICT === 'undefined') window.LANG_DICT = { "zh-TW": {}, "ja": {}, "en": {} };
+        if(typeof INITIAL_DATA === 'undefined') window.INITIAL_DATA = [];
+        if(typeof CV_MAP === 'undefined') window.CV_MAP = {};
+        if(typeof GRADE_MAP === 'undefined') window.GRADE_MAP = {};
+        if(typeof ELDAIN_LIST === 'undefined') window.ELDAIN_LIST = [];
+        if(typeof FOOD_MAP === 'undefined') window.FOOD_MAP = {};
+        if(typeof REWARD_MAP === 'undefined') window.REWARD_MAP = {};
+        if(typeof WORK_URL === 'undefined') window.WORK_URL = {};
+        if(typeof SPINE_MAP === 'undefined') window.SPINE_MAP = {};
+        if(typeof COSTUME_MAP === 'undefined') window.COSTUME_MAP = {};
+        if(typeof SD_COSTUME === 'undefined') window.SD_COSTUME = {};
+        if(typeof MINI_SPINE === 'undefined') window.MINI_SPINE = {};
         
-        window.ASIDE_DATA = window.ASIDE_DATA || {};
-        window.characterSkills = window.characterSkills || []; 
+        if(typeof ASIDE_DATA === 'undefined') window.ASIDE_DATA = {};
+        if(typeof characterSkills === 'undefined') window.characterSkills = []; 
         
-        window.INTRO_MAP = window.INTRO_MAP || { "zh-TW": {}, "ja": {}, "en": {} };
-        window.PRESENT_MAP = window.PRESENT_MAP || {};
-        window.THOUGHT_MAP = window.THOUGHT_MAP || { "zh-TW": {}, "ja": {}, "en": {} };
-        window.LETTER_MAP = window.LETTER_MAP || { "zh-TW": {}, "ja": {}, "en": {} };
+        if(typeof INTRO_MAP === 'undefined') window.INTRO_MAP = { "zh-TW": {}, "ja": {}, "en": {} };
+        if(typeof PRESENT_MAP === 'undefined') window.PRESENT_MAP = {};
+        if(typeof THOUGHT_MAP === 'undefined') window.THOUGHT_MAP = { "zh-TW": {}, "ja": {}, "en": {} };
+        if(typeof LETTER_MAP === 'undefined') window.LETTER_MAP = { "zh-TW": {}, "ja": {}, "en": {} };
     </script>
     <style>
         details > summary { list-style: none; }
@@ -50,24 +48,17 @@
         <!-- 左側：資料填寫表單 -->
         <div class="w-full lg:w-3/4 bg-slate-800 rounded-xl shadow-xl p-6 h-[90vh] overflow-y-auto border border-slate-700 relative">
             
-            <div class="sticky top-0 bg-slate-800 pb-4 border-b border-slate-700 z-50">
-                <div class="flex justify-between items-end mb-4">
-                    <div>
-                        <h1 class="text-3xl font-black text-indigo-400 mb-2">⚙️ 終極角色資料管理系統</h1>
-                        <div class="flex items-center gap-4">
-                            <select id="charSelector" onchange="loadCharacterData(this.value)" class="bg-slate-900 border border-slate-600 text-white font-bold rounded p-2 focus:ring-2 focus:ring-indigo-500 outline-none w-64">
-                                <option value="">-- 選擇現有角色 --</option>
-                            </select>
-                            <button onclick="clearForm()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 rounded text-sm font-bold shadow">
-                                + 建立全新角色
-                            </button>
-                        </div>
+            <div class="sticky top-0 bg-slate-800 pb-4 border-b border-slate-700 z-50 flex justify-between items-end">
+                <div>
+                    <h1 class="text-3xl font-black text-indigo-400 mb-2">⚙️ 終極角色資料管理系統</h1>
+                    <div class="flex items-center gap-4">
+                        <select id="charSelector" onchange="loadCharacterData(this.value)" class="bg-slate-900 border border-slate-600 text-white font-bold rounded p-2 focus:ring-2 focus:ring-indigo-500 outline-none w-64">
+                            <option value="">-- 選擇現有角色 --</option>
+                        </select>
+                        <button onclick="clearForm()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 rounded text-sm font-bold transition-colors shadow">
+                            + 建立全新角色
+                        </button>
                     </div>
-                </div>
-                
-                <!-- 🌟 檔案載入診斷面板 -->
-                <div id="debugPanel" class="text-xs font-mono bg-slate-900 p-3 rounded border border-slate-700 text-slate-300 space-y-1">
-                    檢查檔案中...
                 </div>
             </div>
             
@@ -77,22 +68,17 @@
                     <h2 class="text-lg font-bold text-white mb-4">1. 核心識別碼 (Key)</h2>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                         <div><label class="block text-sm text-slate-400 mb-1">中文名字 (主鍵)</label><input type="text" id="zhName" class="w-full bg-slate-800 border border-slate-600 rounded p-2 text-white font-bold" required></div>
-                        <div>
-                            <label class="block text-sm text-slate-400 mb-1">Spine 名稱 (願像與文本主鍵)</label>
-                            <div class="flex gap-2">
-                                <input type="text" id="spineName" oninput="loadSpineDependentData(false)" class="w-full bg-slate-800 border border-slate-600 rounded p-2 text-amber-300 font-bold" required>
-                                <button type="button" onclick="loadSpineDependentData(true)" class="px-2 bg-amber-600 hover:bg-amber-500 rounded text-xs text-white" title="手動重新載入願像">🔄</button>
-                            </div>
-                        </div>
+                        <div><label class="block text-sm text-slate-400 mb-1">Spine 名稱 (主鍵)</label><input type="text" id="spineName" class="w-full bg-slate-800 border border-slate-600 rounded p-2 text-amber-300 font-bold" required></div>
                         <div><label class="block text-sm text-slate-400 mb-1">日文名字</label><input type="text" id="jaName" class="w-full bg-slate-800 border border-slate-600 rounded p-2"></div>
                         <div><label class="block text-sm text-slate-400 mb-1">英文名字</label><input type="text" id="enName" class="w-full bg-slate-800 border border-slate-600 rounded p-2"></div>
                     </div>
                 </div>
 
                 <!-- 區塊 2 -->
-                <details class="bg-slate-900 rounded-lg border border-slate-700 group">
+                <details class="bg-slate-900 rounded-lg border border-slate-700 group" open>
                     <summary class="cursor-pointer p-4 font-bold text-lg text-indigo-300 bg-slate-800/50 hover:bg-slate-700 rounded-lg flex justify-between items-center">
-                        2. 基本與外觀屬性 (data_core.js) <span class="text-xl group-open:rotate-180 transition-transform">▼</span>
+                        2. 基本與外觀屬性 (data_core.js)
+                        <span class="text-xl group-open:rotate-180 transition-transform">▼</span>
                     </summary>
                     <div class="p-5 border-t border-slate-700 grid grid-cols-2 md:grid-cols-4 gap-4">
                         <div><label class="block text-xs text-slate-400 mb-1">性格</label><input type="text" id="personality" class="w-full bg-slate-800 border border-slate-600 rounded p-2"></div>
@@ -100,19 +86,24 @@
                         <div><label class="block text-xs text-slate-400 mb-1">站位</label><input type="text" id="position" class="w-full bg-slate-800 border border-slate-600 rounded p-2"></div>
                         <div><label class="block text-xs text-slate-400 mb-1">職業</label><input type="text" id="job" class="w-full bg-slate-800 border border-slate-600 rounded p-2"></div>
                         <div><label class="block text-xs text-slate-400 mb-1">實裝版本</label><input type="text" id="pathVersion" class="w-full bg-slate-800 border border-slate-600 rounded p-2"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1">實裝日期</label><input type="text" id="releaseDate" class="w-full bg-slate-800 border border-slate-600 rounded p-2"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">實裝日期</label><input type="text" id="releaseDate" class="w-full bg-slate-800 border border-slate-600 rounded p-2" placeholder="YYYY-MM-DD..."></div>
                         <div><label class="block text-xs text-slate-400 mb-1">聲優 (CV)</label><input type="text" id="cv" class="w-full bg-slate-800 border border-slate-600 rounded p-2"></div>
                         <div><label class="block text-xs text-slate-400 mb-1">初始星數</label><input type="text" id="grade" class="w-full bg-slate-800 border border-slate-600 rounded p-2"></div>
+                        
                         <div class="col-span-4 border-b border-slate-700 my-2"></div>
+
                         <div><label class="block text-xs text-slate-400 mb-1">主 Spine</label><input type="text" id="spine" class="w-full bg-slate-800 border border-slate-600 rounded p-2"></div>
                         <div><label class="block text-xs text-slate-400 mb-1">迷你 Spine</label><input type="text" id="miniSpine" class="w-full bg-slate-800 border border-slate-600 rounded p-2"></div>
                         <div><label class="block text-xs text-slate-400 mb-1">立繪服裝 (逗號分隔)</label><input type="text" id="costume" class="w-full bg-slate-800 border border-slate-600 rounded p-2"></div>
                         <div><label class="block text-xs text-slate-400 mb-1">SD 服裝 (逗號分隔)</label><input type="text" id="sdCostume" class="w-full bg-slate-800 border border-slate-600 rounded p-2"></div>
+
                         <div class="col-span-4 border-b border-slate-700 my-2"></div>
-                        <div class="col-span-2"><label class="block text-xs text-slate-400 mb-1">最愛料理</label><input type="text" id="foodSuper" class="w-full bg-slate-800 border border-slate-600 rounded p-2"></div>
-                        <div class="col-span-2"><label class="block text-xs text-slate-400 mb-1">喜歡料理</label><input type="text" id="foodSpecial" class="w-full bg-slate-800 border border-slate-600 rounded p-2"></div>
-                        <div class="col-span-2"><label class="block text-xs text-slate-400 mb-1">打工獎勵</label><textarea id="rewards" class="w-full bg-slate-800 border border-slate-600 rounded p-2 h-16"></textarea></div>
+
+                        <div class="col-span-2"><label class="block text-xs text-slate-400 mb-1">最愛料理 (Super)</label><input type="text" id="foodSuper" class="w-full bg-slate-800 border border-slate-600 rounded p-2"></div>
+                        <div class="col-span-2"><label class="block text-xs text-slate-400 mb-1">喜歡料理 (Special, 逗號分隔)</label><input type="text" id="foodSpecial" class="w-full bg-slate-800 border border-slate-600 rounded p-2"></div>
+                        <div class="col-span-2"><label class="block text-xs text-slate-400 mb-1">打工獎勵 (換行分隔)</label><textarea id="rewards" class="w-full bg-slate-800 border border-slate-600 rounded p-2 h-16"></textarea></div>
                         <div class="col-span-2"><label class="block text-xs text-slate-400 mb-1">打工影片 URL</label><input type="text" id="workUrl" class="w-full bg-slate-800 border border-slate-600 rounded p-2"></div>
+                        
                         <div class="col-span-4 flex items-center bg-slate-800 p-3 rounded border border-slate-600">
                             <input type="checkbox" id="isEldain" class="w-5 h-5 mr-3 accent-indigo-500"> <label class="text-slate-200 font-bold">標記為艾爾丁 (Eldain)</label>
                         </div>
@@ -122,7 +113,8 @@
                 <!-- 區塊 3 -->
                 <details class="bg-slate-900 rounded-lg border border-slate-700 group">
                     <summary class="cursor-pointer p-4 font-bold text-lg text-blue-300 bg-slate-800/50 hover:bg-slate-700 rounded-lg flex justify-between items-center">
-                        3. 簡介與珍藏品 (data_intro / collectibles) <span class="text-xl group-open:rotate-180 transition-transform">▼</span>
+                        3. 簡介與珍藏品 (data_intro / collectibles)
+                        <span class="text-xl group-open:rotate-180 transition-transform">▼</span>
                     </summary>
                     <div class="p-5 border-t border-slate-700 space-y-6">
                         <div id="textInputsArea" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
@@ -132,21 +124,23 @@
                 <!-- 區塊 4 -->
                 <details class="bg-slate-900 rounded-lg border border-slate-700 group">
                     <summary class="cursor-pointer p-4 font-bold text-lg text-rose-300 bg-slate-800/50 hover:bg-slate-700 rounded-lg flex justify-between items-center">
-                        4. 技能設定 (data_skills.js) <span class="text-xl group-open:rotate-180 transition-transform">▼</span>
+                        4. 技能設定 (data_skills.js)
+                        <span class="text-xl group-open:rotate-180 transition-transform">▼</span>
                     </summary>
                     <div class="p-5 border-t border-slate-700">
                         <div class="mb-4 w-1/3">
                             <label class="block text-sm text-slate-400 mb-1">戰鬥屬性 (Attribute)</label>
-                            <input type="text" id="skillAttribute" class="w-full bg-slate-800 border border-slate-600 rounded p-2">
+                            <input type="text" id="skillAttribute" class="w-full bg-slate-800 border border-slate-600 rounded p-2" placeholder="物理/魔法">
                         </div>
                         <div id="skillInputsArea" class="space-y-8"></div>
                     </div>
                 </details>
 
                 <!-- 區塊 5 -->
-                <details class="bg-slate-900 rounded-lg border border-slate-700 group" open>
+                <details class="bg-slate-900 rounded-lg border border-slate-700 group">
                     <summary class="cursor-pointer p-4 font-bold text-lg text-amber-300 bg-slate-800/50 hover:bg-slate-700 rounded-lg flex justify-between items-center">
-                        5. 願像設定 (data_aside.js) <span class="text-xl group-open:rotate-180 transition-transform">▼</span>
+                        5. 願像設定 (data_aside.js)
+                        <span class="text-xl group-open:rotate-180 transition-transform">▼</span>
                     </summary>
                     <div class="p-5 border-t border-slate-700">
                         <div id="asideInputsArea" class="space-y-8"></div>
@@ -160,9 +154,13 @@
         <!-- 右側：資料更新與下載區 -->
         <div class="w-full lg:w-1/4 bg-slate-800 rounded-xl shadow-xl flex flex-col h-[90vh] border border-slate-700 p-6 sticky top-6">
             <h2 class="text-2xl font-black text-green-400 mb-6 border-b border-slate-700 pb-4">📦 打包與輸出</h2>
-            <button type="button" onclick="updateMemoryData()" class="w-full py-4 mb-6 bg-indigo-600 hover:bg-indigo-500 text-white font-black text-lg rounded-xl shadow-lg border border-indigo-400">
+            
+            <p class="text-sm text-slate-400 mb-6">先將表單資料儲存至系統記憶體，接著即可下載更新後的檔案覆蓋原檔。</p>
+
+            <button type="button" onclick="updateMemoryData()" class="w-full py-4 mb-6 bg-indigo-600 hover:bg-indigo-500 text-white font-black text-lg rounded-xl shadow-lg transition-transform hover:scale-[1.02] border border-indigo-400">
                 💾 1. 儲存至記憶體
             </button>
+
             <div class="space-y-3 flex-1 overflow-y-auto pr-2" id="downloadSection" style="opacity: 0.3; pointer-events: none;">
                 <h3 class="font-bold text-white mb-2 sticky top-0 bg-slate-800 py-1">2. 點擊下載更新檔</h3>
                 <button onclick="downloadJS('data_core.js', generateCoreData())" class="w-full py-3 bg-slate-700 hover:bg-slate-600 rounded text-left px-4 font-mono text-sm border border-slate-600">⬇️ data_core.js</button>
@@ -171,17 +169,21 @@
                 <button onclick="downloadJS('data_skills.js', generateDataMap('characterSkills', characterSkills))" class="w-full py-3 bg-slate-700 hover:bg-slate-600 rounded text-left px-4 font-mono text-sm border border-slate-600 text-rose-300">⬇️ data_skills.js</button>
                 <button onclick="downloadJS('data_aside.js', generateDataMap('ASIDE_DATA', ASIDE_DATA))" class="w-full py-3 bg-slate-700 hover:bg-slate-600 rounded text-left px-4 font-mono text-sm border border-slate-600 text-amber-300">⬇️ data_aside.js</button>
             </div>
-            <div id="statusMsg" class="mt-4 p-3 rounded bg-green-900/50 text-green-400 text-sm font-bold hidden text-center border border-green-500">✅ 儲存成功！</div>
+            
+            <div id="statusMsg" class="mt-4 p-3 rounded bg-green-900/50 text-green-400 text-sm font-bold hidden text-center border border-green-500">
+                ✅ 儲存成功！請下載檔案。
+            </div>
         </div>
+
     </div>
 
-    <!-- 邏輯腳本 -->
+    <!-- UI 生成與資料處理邏輯 -->
     <script>
         const LANGS = ['zh-TW', 'ja', 'en'];
         const LANG_LABELS = {'zh-TW': '繁體中文', 'ja': '日本語', 'en': 'English'};
 
         function textToArray(text) { return text ? text.split('\n').map(l => l.trim()).filter(l => l) : []; }
-        function arrayToText(arr) { if(!arr) return ''; if(Array.isArray(arr)) return arr.join('\n'); return String(arr); }
+        function arrayToText(arr) { return arr && Array.isArray(arr) ? arr.join('\n') : ''; }
         function textToCommaArray(text) { return text ? text.split(',').map(l => l.trim()).filter(l => l) : []; }
         function commaArrayToText(arr) { return arr && Array.isArray(arr) ? arr.join(', ') : ''; }
 
@@ -190,19 +192,6 @@
             buildSkillInputs();
             buildAsideInputs();
             populateDropdown();
-            
-            // 🌟 深度檢查每一個資料檔是否成功載入
-            const debugPanel = document.getElementById('debugPanel');
-            let asideKeys = [];
-            try {
-                asideKeys = Object.keys(window.ASIDE_DATA || {});
-            } catch(e) {}
-
-            debugPanel.innerHTML = `<b>📊 檔案掛載狀態診斷：</b><br>` +
-                `• data_core.js: <span class="${window.INITIAL_DATA.length > 0 ? 'text-green-400' : 'text-red-400'}">${window.INITIAL_DATA.length > 0 ? '✅ 正常 (' + window.INITIAL_DATA.length + ' 角色)' : '❌ 未載入或格式錯誤'}</span><br>` +
-                `• data_skills.js: <span class="${window.characterSkills.length > 0 ? 'text-green-400' : 'text-yellow-400'}">${window.characterSkills.length > 0 ? '✅ 正常 (' + window.characterSkills.length + ' 角色)' : '⚠️ 抓不到 characterSkills'}</span><br>` +
-                `• data_aside.js: <span class="${asideKeys.length > 0 ? 'text-green-400' : 'text-red-400'}">${asideKeys.length > 0 ? '✅ 正常 (' + asideKeys.length + ' 角色有願像)' : '❌ 讀取失敗 (共 0 個)'}</span><br>` +
-                (asideKeys.length > 0 ? `• 可用 Spine Keys: <code class="text-amber-300">${asideKeys.slice(0, 8).join(', ')}...</code>` : `<span class="text-red-400 font-bold">⚠️ 原因排查：請檢查 data_aside.js 內的第一行是否為 <code>const ASIDE_DATA = {</code>，且不能有語法錯誤！</span>`);
         };
 
         function populateDropdown() {
@@ -226,14 +215,51 @@
         function buildTextInputs() {
             const container = document.getElementById('textInputsArea');
             LANGS.forEach(lang => {
-                container.innerHTML += `<div class="space-y-3 bg-slate-800 p-4 rounded border border-slate-600"><h4 class="font-bold text-blue-300 border-b border-slate-600 pb-2">${LANG_LABELS[lang]}</h4><div><label class="block text-xs text-slate-400 mb-1">簡介 (Intro)</label><textarea id="intro_${lang}" class="w-full bg-slate-900 border border-slate-700 rounded p-2 h-20 text-sm"></textarea></div><div><label class="block text-xs text-slate-400 mb-1">珍藏品名稱</label><input type="text" id="present_${lang}" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm"></div><div><label class="block text-xs text-slate-400 mb-1">教主感想</label><textarea id="thought_${lang}" class="w-full bg-slate-900 border border-slate-700 rounded p-2 h-20 text-sm"></textarea></div><div><label class="block text-xs text-slate-400 mb-1">書信內容</label><textarea id="letter_${lang}" class="w-full bg-slate-900 border border-slate-700 rounded p-2 h-24 text-sm"></textarea></div></div>`;
+                container.innerHTML += `
+                    <div class="space-y-3 bg-slate-800 p-4 rounded border border-slate-600">
+                        <h4 class="font-bold text-blue-300 border-b border-slate-600 pb-2">${LANG_LABELS[lang]}</h4>
+                        <div><label class="block text-xs text-slate-400 mb-1">簡介 (Intro)</label><textarea id="intro_${lang}" class="w-full bg-slate-900 border border-slate-700 rounded p-2 h-20 text-sm"></textarea></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">珍藏品名稱 (Present)</label><input type="text" id="present_${lang}" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">教主感想 (Thought)</label><textarea id="thought_${lang}" class="w-full bg-slate-900 border border-slate-700 rounded p-2 h-20 text-sm"></textarea></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">書信內容 (Letter)</label><textarea id="letter_${lang}" class="w-full bg-slate-900 border border-slate-700 rounded p-2 h-24 text-sm"></textarea></div>
+                    </div>`;
             });
         }
 
         function buildSkillInputs() {
             const container = document.getElementById('skillInputsArea');
             LANGS.forEach(lang => {
-                container.innerHTML += `<div class="bg-slate-800 p-4 rounded border border-slate-600"><h4 class="font-bold text-rose-300 border-b border-slate-600 pb-2 mb-4">${LANG_LABELS[lang]} 技能</h4><div class="grid grid-cols-1 md:grid-cols-2 gap-4"><div class="space-y-2 border border-slate-700 p-3 rounded bg-slate-900/50"><h5 class="text-xs font-bold text-slate-300">⚔️ 普攻</h5><textarea id="sk_${lang}_na_b" placeholder="基礎普攻" class="w-full bg-slate-900 border border-slate-700 rounded p-2 h-16 text-xs"></textarea><textarea id="sk_${lang}_na_e" placeholder="強化普攻" class="w-full bg-slate-900 border border-slate-700 rounded p-2 h-16 text-xs"></textarea></div><div class="space-y-2 border border-slate-700 p-3 rounded bg-slate-900/50"><h5 class="text-xs font-bold text-slate-300">✨ 普技</h5><input type="text" id="sk_${lang}_ns_n" placeholder="名稱" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-xs"><textarea id="sk_${lang}_ns_d" placeholder="描述" class="w-full bg-slate-900 border border-slate-700 rounded p-2 h-16 text-xs"></textarea><textarea id="sk_${lang}_ns_s" placeholder="Stats (換行)" class="w-full bg-slate-900 border border-slate-700 rounded p-2 h-16 text-xs text-amber-200"></textarea></div><div class="space-y-2 border border-slate-700 p-3 rounded bg-slate-900/50"><h5 class="text-xs font-bold text-slate-300">🔥 大招</h5><div class="flex gap-2"><input type="text" id="sk_${lang}_us_n" placeholder="名稱" class="w-2/3 bg-slate-900 border border-slate-700 rounded p-2 text-xs"><input type="text" id="sk_${lang}_us_c" placeholder="CD" class="w-1/3 bg-slate-900 border border-slate-700 rounded p-2 text-xs"></div><textarea id="sk_${lang}_us_d" placeholder="描述" class="w-full bg-slate-900 border border-slate-700 rounded p-2 h-16 text-xs"></textarea><textarea id="sk_${lang}_us_s" placeholder="Stats (換行)" class="w-full bg-slate-900 border border-slate-700 rounded p-2 h-16 text-xs text-amber-200"></textarea></div><div class="space-y-2 border border-slate-700 p-3 rounded bg-slate-900/50"><h5 class="text-xs font-bold text-slate-300">🛡️ 被動</h5><textarea id="sk_${lang}_ps_d" placeholder="描述" class="w-full bg-slate-900 border border-slate-700 rounded p-2 h-16 text-xs"></textarea><textarea id="sk_${lang}_ps_s" placeholder="Stats (換行)" class="w-full bg-slate-900 border border-slate-700 rounded p-2 h-16 text-xs text-amber-200"></textarea></div></div></div>`;
+                container.innerHTML += `
+                    <div class="bg-slate-800 p-4 rounded border border-slate-600">
+                        <h4 class="font-bold text-rose-300 border-b border-slate-600 pb-2 mb-4">${LANG_LABELS[lang]} 技能</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="space-y-2 border border-slate-700 p-3 rounded bg-slate-900/50">
+                                <h5 class="text-xs font-bold text-slate-300">⚔️ 普通攻擊</h5>
+                                <textarea id="sk_${lang}_na_b" placeholder="基礎普攻描述..." class="w-full bg-slate-900 border border-slate-700 rounded p-2 h-16 text-xs"></textarea>
+                                <textarea id="sk_${lang}_na_e" placeholder="強化普攻描述..." class="w-full bg-slate-900 border border-slate-700 rounded p-2 h-16 text-xs"></textarea>
+                            </div>
+                            <div class="space-y-2 border border-slate-700 p-3 rounded bg-slate-900/50">
+                                <h5 class="text-xs font-bold text-slate-300">✨ 普通技能</h5>
+                                <input type="text" id="sk_${lang}_ns_n" placeholder="技能名稱" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-xs">
+                                <textarea id="sk_${lang}_ns_d" placeholder="技能描述" class="w-full bg-slate-900 border border-slate-700 rounded p-2 h-16 text-xs"></textarea>
+                                <textarea id="sk_${lang}_ns_s" placeholder="Stats (換行分隔)" class="w-full bg-slate-900 border border-slate-700 rounded p-2 h-16 text-xs text-amber-200"></textarea>
+                            </div>
+                            <div class="space-y-2 border border-slate-700 p-3 rounded bg-slate-900/50">
+                                <h5 class="text-xs font-bold text-slate-300">🔥 高級技能 (大招)</h5>
+                                <div class="flex gap-2">
+                                    <input type="text" id="sk_${lang}_us_n" placeholder="技能名稱" class="w-2/3 bg-slate-900 border border-slate-700 rounded p-2 text-xs">
+                                    <input type="text" id="sk_${lang}_us_c" placeholder="CD (例:34秒)" class="w-1/3 bg-slate-900 border border-slate-700 rounded p-2 text-xs">
+                                </div>
+                                <textarea id="sk_${lang}_us_d" placeholder="技能描述" class="w-full bg-slate-900 border border-slate-700 rounded p-2 h-16 text-xs"></textarea>
+                                <textarea id="sk_${lang}_us_s" placeholder="Stats (換行分隔)" class="w-full bg-slate-900 border border-slate-700 rounded p-2 h-16 text-xs text-amber-200"></textarea>
+                            </div>
+                            <div class="space-y-2 border border-slate-700 p-3 rounded bg-slate-900/50">
+                                <h5 class="text-xs font-bold text-slate-300">🛡️ 被動技能</h5>
+                                <textarea id="sk_${lang}_ps_d" placeholder="被動描述" class="w-full bg-slate-900 border border-slate-700 rounded p-2 h-16 text-xs"></textarea>
+                                <textarea id="sk_${lang}_ps_s" placeholder="Stats (換行分隔)" class="w-full bg-slate-900 border border-slate-700 rounded p-2 h-16 text-xs text-amber-200"></textarea>
+                            </div>
+                        </div>
+                    </div>`;
             });
         }
 
@@ -245,9 +271,17 @@
             container.innerHTML += totalHtml;
 
             [1, 2, 3].forEach(star => {
-                let starHtml = `<div class="bg-slate-800 p-4 rounded border border-slate-600 mb-4"><h4 class="font-bold text-amber-400 border-b border-slate-600 pb-2 mb-4">⭐ 星級 ${star}</h4><div class="grid grid-cols-1 md:grid-cols-3 gap-4">`;
+                let starHtml = `<div class="bg-slate-800 p-4 rounded border border-slate-600 mb-4">
+                    <h4 class="font-bold text-amber-400 border-b border-slate-600 pb-2 mb-4">⭐ 星級 ${star}</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">`;
+                
                 LANGS.forEach(lang => {
-                    starHtml += `<div class="space-y-2 border border-slate-700 p-3 rounded bg-slate-900/50"><h5 class="text-xs font-bold text-slate-300">${LANG_LABELS[lang]}</h5><input type="text" id="as_${star}_n_${lang}" placeholder="名稱" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-xs"><textarea id="as_${star}_d_${lang}" placeholder="描述" class="w-full bg-slate-900 border border-slate-700 rounded p-2 h-16 text-xs"></textarea><textarea id="as_${star}_e_${lang}" placeholder="Effects (換行)" class="w-full bg-slate-900 border border-slate-700 rounded p-2 h-16 text-xs text-green-200"></textarea>`;
+                    starHtml += `<div class="space-y-2 border border-slate-700 p-3 rounded bg-slate-900/50">
+                        <h5 class="text-xs font-bold text-slate-300">${LANG_LABELS[lang]}</h5>
+                        <input type="text" id="as_${star}_n_${lang}" placeholder="星級名稱" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-xs">
+                        <textarea id="as_${star}_d_${lang}" placeholder="星級描述" class="w-full bg-slate-900 border border-slate-700 rounded p-2 h-16 text-xs"></textarea>
+                        <textarea id="as_${star}_e_${lang}" placeholder="Effects (換行分隔)" class="w-full bg-slate-900 border border-slate-700 rounded p-2 h-16 text-xs text-green-200"></textarea>`;
+                    
                     if(star === 3) starHtml += `<textarea id="as_3_g_${lang}" placeholder="Global Effects (換行)" class="w-full bg-slate-900 border border-slate-700 rounded p-2 h-12 text-xs text-purple-300"></textarea>`;
                     starHtml += `</div>`;
                 });
@@ -258,8 +292,9 @@
 
         function loadCharacterData(zhName) {
             if (!zhName) { clearForm(); return; }
-            
             const spineName = SPINE_MAP[zhName] || "";
+            
+            // Core
             document.getElementById('zhName').value = zhName;
             document.getElementById('spineName').value = spineName;
             document.getElementById('jaName').value = (LANG_DICT['ja'] && LANG_DICT['ja'][zhName]) || "";
@@ -269,9 +304,11 @@
             ['personality', 'race', 'position', 'job', 'pathVersion', 'releaseDate'].forEach(k => {
                 document.getElementById(k).value = coreData[k] || "";
             });
+
             document.getElementById('cv').value = CV_MAP[zhName] || "";
             document.getElementById('grade').value = GRADE_MAP[zhName] || "";
             document.getElementById('isEldain').checked = ELDAIN_LIST.includes(zhName);
+            
             document.getElementById('spine').value = SPINE_MAP[zhName] || "";
             document.getElementById('miniSpine').value = MINI_SPINE[zhName] || "";
             document.getElementById('costume').value = commaArrayToText(COSTUME_MAP[zhName]);
@@ -285,37 +322,7 @@
             document.getElementById('rewards').value = arrayToText(REWARD_MAP[spineName]);
             document.getElementById('workUrl').value = WORK_URL[spineName] || "";
 
-            loadSpineDependentData(false);
-
-            // Skills
-            try {
-                const skData = characterSkills.find(s => s.name === zhName) || {};
-                document.getElementById('skillAttribute').value = skData.attribute || "";
-                const skillsObj = skData.skills || {};
-                LANGS.forEach(lang => {
-                    const sl = skillsObj[lang] || {};
-                    document.getElementById(`sk_${lang}_na_b`).value = sl.normalAttack?.basic || "";
-                    document.getElementById(`sk_${lang}_na_e`).value = sl.normalAttack?.enhanced || "";
-                    document.getElementById(`sk_${lang}_ns_n`).value = sl.normalSkill?.name || "";
-                    document.getElementById(`sk_${lang}_ns_d`).value = sl.normalSkill?.desc || "";
-                    document.getElementById(`sk_${lang}_ns_s`).value = arrayToText(sl.normalSkill?.stats);
-                    document.getElementById(`sk_${lang}_us_n`).value = sl.ultimateSkill?.name || "";
-                    document.getElementById(`sk_${lang}_us_c`).value = sl.ultimateSkill?.cooldown || "";
-                    document.getElementById(`sk_${lang}_us_d`).value = sl.ultimateSkill?.desc || "";
-                    document.getElementById(`sk_${lang}_us_s`).value = arrayToText(sl.ultimateSkill?.stats);
-                    document.getElementById(`sk_${lang}_ps_d`).value = sl.passiveSkill?.desc || "";
-                    document.getElementById(`sk_${lang}_ps_s`).value = arrayToText(sl.passiveSkill?.stats);
-                });
-            } catch(e) {}
-
-            document.getElementById('downloadSection').style.opacity = '1';
-            document.getElementById('downloadSection').style.pointerEvents = 'auto';
-        }
-
-        function loadSpineDependentData(isManual = false) {
-            const spineName = document.getElementById('spineName').value.trim();
-            
-            // 文本
+            // Texts
             LANGS.forEach(lang => {
                 document.getElementById(`intro_${lang}`).value = (INTRO_MAP[lang] && INTRO_MAP[lang][spineName]) || "";
                 document.getElementById(`thought_${lang}`).value = (THOUGHT_MAP[lang] && THOUGHT_MAP[lang][spineName]) || "";
@@ -325,45 +332,41 @@
                 } else { document.getElementById(`present_${lang}`).value = ""; }
             });
 
-            // 願像 (修正：支援 { zh: "...", ja: "...", en: "..." } 結構)
-            const asData = ASIDE_DATA[spineName];
-            if(asData) {
-                LANGS.forEach(lang => {
-                    const asideLang = (lang === 'zh-TW') ? 'zh' : lang;
-                    
-                    // 總名稱
-                    const totalNameObj = asData.totalName || {};
-                    document.getElementById(`as_total_${lang}`).value = totalNameObj[asideLang] || totalNameObj['zh'] || "";
+            // Skills
+            const skData = characterSkills.find(s => s.name === zhName) || { skills: {} };
+            document.getElementById('skillAttribute').value = skData.attribute || "";
+            LANGS.forEach(lang => {
+                const sl = skData.skills[lang] || {};
+                document.getElementById(`sk_${lang}_na_b`).value = sl.normalAttack?.basic || "";
+                document.getElementById(`sk_${lang}_na_e`).value = sl.normalAttack?.enhanced || "";
+                document.getElementById(`sk_${lang}_ns_n`).value = sl.normalSkill?.name || "";
+                document.getElementById(`sk_${lang}_ns_d`).value = sl.normalSkill?.desc || "";
+                document.getElementById(`sk_${lang}_ns_s`).value = arrayToText(sl.normalSkill?.stats);
+                document.getElementById(`sk_${lang}_us_n`).value = sl.ultimateSkill?.name || "";
+                document.getElementById(`sk_${lang}_us_c`).value = sl.ultimateSkill?.cooldown || "";
+                document.getElementById(`sk_${lang}_us_d`).value = sl.ultimateSkill?.desc || "";
+                document.getElementById(`sk_${lang}_us_s`).value = arrayToText(sl.ultimateSkill?.stats);
+                document.getElementById(`sk_${lang}_ps_d`).value = sl.passiveSkill?.desc || "";
+                document.getElementById(`sk_${lang}_ps_s`).value = arrayToText(sl.passiveSkill?.stats);
+            });
 
-                    [1, 2, 3].forEach(star => {
-                        const st = asData.stars?.[star] || {};
-                        const nameObj = st.name || {};
-                        const descObj = st.desc || {};
-                        const effObj = st.effects || {};
-                        const globObj = st.globalEffects || {};
+            // 🌟 Aside (修正語言鍵值對應：zh-TW -> zh)
+            const asData = ASIDE_DATA[spineName] || { totalName:{}, stars:{ 1:{}, 2:{}, 3:{} } };
+            LANGS.forEach(lang => {
+                const asideLang = (lang === 'zh-TW') ? 'zh' : lang; // 將 zh-TW 轉成 zh
+                
+                document.getElementById(`as_total_${lang}`).value = asData.totalName?.[asideLang] || "";
+                [1,2,3].forEach(star => {
+                    const st = asData.stars?.[star] || {};
+                    document.getElementById(`as_${star}_n_${lang}`).value = st.name?.[asideLang] || "";
+                    document.getElementById(`as_${star}_d_${lang}`).value = st.desc?.[asideLang] || "";
+                    document.getElementById(`as_${star}_e_${lang}`).value = arrayToText(st.effects?.[asideLang]);
+                    if(star===3) document.getElementById(`as_3_g_${lang}`).value = arrayToText(st.globalEffects?.[asideLang]);
+                });
+            });
 
-                        document.getElementById(`as_${star}_n_${lang}`).value = nameObj[asideLang] || nameObj['zh'] || "";
-                        document.getElementById(`as_${star}_d_${lang}`).value = descObj[asideLang] || descObj['zh'] || "";
-                        document.getElementById(`as_${star}_e_${lang}`).value = arrayToText(effObj[asideLang] || effObj['zh']);
-                        
-                        if(star === 3) {
-                            document.getElementById(`as_3_g_${lang}`).value = arrayToText(globObj[asideLang] || globObj['zh']);
-                        }
-                    });
-                });
-                if(isManual) alert(`成功載入 Spine [${spineName}] 的願像！`);
-            } else {
-                LANGS.forEach(lang => {
-                    document.getElementById(`as_total_${lang}`).value = "";
-                    [1,2,3].forEach(star => {
-                        document.getElementById(`as_${star}_n_${lang}`).value = "";
-                        document.getElementById(`as_${star}_d_${lang}`).value = "";
-                        document.getElementById(`as_${star}_e_${lang}`).value = "";
-                        if(star===3) document.getElementById(`as_3_g_${lang}`).value = "";
-                    });
-                });
-                if(isManual) alert(`在 ASIDE_DATA 找不到 Spine [${spineName}] 的資料。`);
-            }
+            document.getElementById('downloadSection').style.opacity = '1';
+            document.getElementById('downloadSection').style.pointerEvents = 'auto';
         }
 
         function updateMemoryData() {
@@ -432,7 +435,6 @@
             let skillObj = skIndex >= 0 ? characterSkills[skIndex] : { name: zhName, skills: {} };
             skillObj.attribute = document.getElementById('skillAttribute').value;
             LANGS.forEach(lang => {
-                if(!skillObj.skills) skillObj.skills = {};
                 skillObj.skills[lang] = {
                     normalAttack: {
                         basic: document.getElementById(`sk_${lang}_na_b`).value,
@@ -457,16 +459,18 @@
             });
             if(skIndex >= 0) characterSkills[skIndex] = skillObj; else characterSkills.push(skillObj);
 
-            // Aside
+            // 🌟 Aside (修正語言鍵值對應與物件保護)
             let asObj = ASIDE_DATA[spineName] || { asideIcon: "", totalName: {}, stars: { 1:{icon:""}, 2:{icon:""}, 3:{icon:""} } };
             if(!asObj.totalName) asObj.totalName = {};
             if(!asObj.stars) asObj.stars = { 1:{icon:""}, 2:{icon:""}, 3:{icon:""} };
             
             LANGS.forEach(lang => {
-                const asideLang = (lang === 'zh-TW') ? 'zh' : lang;
+                const asideLang = (lang === 'zh-TW') ? 'zh' : lang; // 將 zh-TW 轉成 zh 存檔
+                
                 if(document.getElementById(`as_total_${lang}`).value) {
                     asObj.totalName[asideLang] = document.getElementById(`as_total_${lang}`).value;
                 }
+                
                 [1,2,3].forEach(star => {
                     if(!asObj.stars[star]) asObj.stars[star] = {icon:"", name:{}, desc:{}, effects:{}};
                     if(!asObj.stars[star].name) asObj.stars[star].name = {};
@@ -492,6 +496,7 @@
             setTimeout(() => msg.classList.add('hidden'), 3000);
         }
 
+        // Export functions
         function generateCoreData() {
             return `const LANG_DICT = ${JSON.stringify(LANG_DICT, null, 4)};\n\n` +
                    `const INITIAL_DATA = ${JSON.stringify(INITIAL_DATA, null, 4)};\n\n` +
@@ -517,8 +522,8 @@
             return `const ${varName} = ${JSON.stringify(dataObj, null, 4)};\n`;
         }
 
-        function downloadJS(filename, content, mimeType='text/javascript;charset=utf-8;') {
-            const blob = new Blob(['\ufeff' + content], { type: mimeType });
+        function downloadJS(filename, content) {
+            const blob = new Blob(['\ufeff' + content], { type: 'text/javascript;charset=utf-8;' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
             link.download = filename;
