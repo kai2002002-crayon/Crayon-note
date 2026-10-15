@@ -505,26 +505,26 @@ const ASIDE_DATA = {
     },
     "KommySwim": { 
         asideIcon: "", 
-        totalName: { zh: "", ja: "", en: "" }, 
+        totalName: { zh: "魔性果汁", ja: "魔性のジュース", en: "Diabolic Juice" }, 
         stars: {
             1: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "" }, 
-                effects: { zh: [""], ja: [""], en: [""] } 
+                name: { zh: "切勿貪杯", ja: "飲みすぎ注意", en: "Drink in Moderation" }, 
+                desc: { zh: "穿戴者的最大HP、物理防禦力、魔法防禦力、 爆擊抵抗、爆擊傷害抵抗增加。", ja: "着用者の最大HP、物理防御力、魔法防御力、 会心抵抗、会心ダメージ抵抗が増加する。", en: "Increases the bearer's Max HP, Physical Defense, Magical Defense, Critical Hit Resistance, and Critical Damage Resistance" }, 
+                effects: { zh: ["最大HP增加:6%", "物理防禦力增加:6%", "魔法防禦力增加:6%", "爆擊抵抗增加:6%", "爆擊傷害抵抗增加:6%"], ja: ["最大HP増加:6%", "物理防御力増加:6%", "魔法防御力増加:6%", "会心抵抗増加:6%", "会心ダメージ抵抗増加:6%"], en: ["Max HP Increase: 6%", "Physical DEF Increase: 6%", "Magical DEF Increase: 6%", "CRIT Resistance Increase: 6%", "CRIT DMG Resistance Increase: 6%"] } 
             },
             2: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "" }, 
-                effects: { zh: [""], ja: [""], en: [""] } 
+                name: { zh: "傑作誕生", ja: "傑作誕生", en: "Birth of a Masterpiece" }, 
+                desc: { zh: "戰鬥時追加強化攻擊。進行第二次攻擊時，改為設置簡易攤位、向剩餘HP比例最低的3名友軍販售特製柯米果汁。特製柯米果汁會恢復友軍HP，並在一定時間內減少受到的傷害量。普通技能的技能傷害量增加數值變為2倍。使用普通技能時，在一定時間內進入無敵狀態。", ja: "戦闘時、強化攻撃が追加される。2回目の攻撃の代わりに簡易屋台を設置し、残りHP割合が最も低い味方3名に特製コミーシュースを販売する。特製コミージュースは味方のHPを回復させ、一定時間、被ダメージ量を減少させる。 低学年スキルのスキルダメージ量増加値が2倍になる。 低学年スキル使用時、一定時間、無敵になる。", en: "When in combat, an Enhanced Attack is added. Sets up a pop-up juice stand and sells Special Kommy Juice to the 3 allies with the lowest HP Ratio in lieu of the second attack, Special Kommy Juice recovers their HP and reduces their Incoming Damage for a set period of time. The amount of Skill Damage Increase for the Freshman Skill is doubled. When the Freshman Skill is used, becomes Invincible for a set period of time." }, 
+                effects: { zh: ["無敵:對所有傷害和減益效果免疫。", "HP恢復:目標最大HP的11%", "受到的傷害量減少:25%", "受到的傷害量減少持續時間:4秒", "無敵持續時間:3秒"], ja: ["無敵: すべてのダメージ及びデバフに免疫を得る。", "HP回復:対象の最大HPの11%", "被ダメージ量減少の持続時間: 4秒", "被ダメージ量減少:25%", "無敵の持続時間:3秒"], en: ["Invincible: Immune to all Damage and debuffs.", "HP Recovery: 11% of the target's Max HP", "Incoming DMG Reduction: 25%", "Incoming DMG Reduction Duration: 4s", "Invincible Duration: 3s] } 
             },
             3: { 
                 icon: "", 
-                name: { zh: "", ja: "", en: "" }, 
-                desc: { zh: "", ja: "", en: "" }, 
-                effects: { zh: [""], ja: [""], en: [""] }, 
-                globalEffects: { zh: ["全體 %", "全體 %"], ja: ["全体 %", "全体 %"], en: ["All %", "All %"] } 
+                name: { zh: "提前完售!柯老闆成功神話", ja: "即完売! コミー社長の成功神話", en: "Sold Out Early! Boss Kommy's Success Story" }, 
+                desc: { zh: "增加中排友軍對敵人造成的傷害量,並減少中排友軍受到敵人造成的傷害量。", ja: "中列の味方の敵への与ダメージ量を増加させ、 中列の味方の敵からの被ダメージ量を減少させる。", en: "Increases Outgoing Damage and reduces Incoming Damage of Middle Row allies." }, 
+                effects: { zh: ["傷害量增加:13.6%", "受到的傷害量減少:5.9%"], ja: ["ダメージ量増加:13.6%", "被ダメージ量減少:5.9%"], en: ["DMG Increase: 13.6%", "Incoming DMG Reduction: 5.9%"] }, 
+                globalEffects: { zh: ["全體魔法防禦力 3%", "全體爆擊抵抗 3%"], ja: ["全体魔法防御力 3%", "全体会心抵抗 3%"], en: ["All Magical DEF 3%", "All CRIT Resistance 3%"] } 
             }
         }
     },
