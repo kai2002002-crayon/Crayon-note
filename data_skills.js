@@ -94,71 +94,71 @@ const characterSkills = [
       }
     }
   },
-    {
+{
     "name": "柯米(泳裝)",
     "attribute": "魔法",
     "skills": {
       "zh-TW": {
         "normalAttack": {
-          "basic": " []",
+          "basic": "出售自製果汁給剩餘HP比例最低的前排友軍以及最近的1名敵人。自製果汁可以恢復友軍的HP，並對敵人造成魔法傷害。如果沒有前排友軍，則會選擇HP比例最低的友軍為目標。 [HP恢復:目標最大HP的5%] [魔法傷害:60%]",
           "enhanced": " []"
         },
         "normalSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""]
+          "name": "玩水不是超棒的嗎?",
+          "desc": "拍打水花，在一定時間內恢復周圍友軍HP12次，並增加包括自己在內的友軍技能傷害量3次。技能傷害量增加效果最多可疊加3次。",
+          "stats": ["總HP恢復:目標最大HP的24%", "每層技能傷害量增加:22%", "技能傷害量增加持續時間:9秒"]
         },
         "ultimateSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""],
-          "cooldown": "秒"
+          "name": "這裡就是泳池候選地!",
+          "desc": "在一定時間內，對敵方隨機位置灑鹽水6次，並對灑水區域的敵人造成範圍魔法傷害，並給予沉默效果。",
+          "stats": ["沉默:無法使用任何技能。", "總魔法傷害:4986%", "沉默持續時間:4秒"],
+          "cooldown": "32秒"
         },
         "passiveSkill": {
-          "desc": "",
-          "stats": ["秒"]
+          "desc": "增加HP治療量。",
+          "stats": ["HP治療量增加:63%"]
         }
       },
       "ja": {
         "normalAttack": {
-          "basic": " []",
+          "basic": "残りHP割合が最も低い前列の味方1名と、最も近い敵1体に手作りジュースを販売する。手作りジュースは味方のHPを回復させ、敵には魔法ダメージを与える。前列の味方がいない場合、残りHP割合が最も低い味方を対象に指定する。 [HP回復: 対象の最大HPの5%] [魔法ダメージ:60%]",
           "enhanced": " []"
         },
         "normalSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""]
+          "name": "水遊びって楽しくないかにゃ?",
+          "desc": "水遊びをしながら一定時間、周囲の味方のHPを12回回復させ、スキルダメージ量を3回増加させる。スキルダメージ量増加効果は最大3回までスタック可能。",
+          "stats": ["総HP回復:対象の最大HPの24%", "1スタック時のスキルダメージ量増加:22%", "スキルダメージ量増加の持続時間:9秒"]
         },
         "ultimateSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""],
-          "cooldown": "秒"
+          "name": "プール建設予定地にゃ",
+          "desc": "一定時間、ランダムな敵の位置に6回塩水を浴びせる。落下地点の敵に範囲魔法ダメージを与え、沈黙を付与する。",
+          "stats": ["沈黙: すべてのスキルが使用できなくなる。", "総魔法ダメージ:4986%", "沈黙の持続時間:4秒"],
+          "cooldown": "32秒"
         },
         "passiveSkill": {
-          "desc": "",
-          "stats": [""]
+          "desc": "HP治癒量が増加する。",
+          "stats": ["HP治癒量増加:63%"]
         }
       },
       "en": {
         "normalAttack": {
-          "basic": " []",
+          "basic": "Sells a handmade juice to the Front Row ally with the lowest HP Ratio and the closest enemy. The handmade juice recovers the ally's HP and deals Magical Damage to the enemy. If there are no Front Row allies, the effect targets the ally with the lowest HP Ratio.[HP Recovery: 5% of the target's Max HP] [Magical DMG: 60%]",
           "enhanced": " []"
         },
         "normalSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""]
+          "name": "Isn't Swimming Fun?",
+          "desc": "Recovers the HP of all allies nearby 12 times and increases their Skill Damage 3 times while splashing the water for a set period of time. The Skill Damage Increase effect can stack up to 3 times.",
+          "stats": ["Total HP Recovery: 24% of the target's Max HP", "Increases Skill Damage upon 1 Stack: 22%", "Skill DMG Increase Duration: 9s"]
         },
         "ultimateSkill": {
-          "name": "",
-          "desc": "",
-          "stats": [""],
-          "cooldown": "s"
+          "name": "Perfect Pool Candidate",
+          "desc": "Splashes saltwater 6 times for a set period of time at random enemy locations. Enemies in the affected areas take AoE Magical Damage and are inflicted with Silence.",
+          "stats": ["Silence: Unable to use any skills.", "Total Magical DMG: 4986%", "Silence Duration: 4s"],
+          "cooldown": "32s"
         },
         "passiveSkill": {
-          "desc": "",
-          "stats": [""]
+          "desc": "Increases HP Healing.",
+          "stats": ["HP Healing Increase: 63%"]
         }
       }
     }
