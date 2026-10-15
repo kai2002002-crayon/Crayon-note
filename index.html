@@ -1610,7 +1610,16 @@
             const charSpriteClass = `sprite-${spineName}`;
             const ultSpriteClass = `sprite-Icon_UltimateSkill_${spineName}`;
                         let raceIconName = char.race; if (char.race === "???") raceIconName = "unknown";
-                        const pSprite = SPRITE_CLASS_MAP[`personality_${dispPersonality}`] || "";
+                        
+                        // 動態決定雙面性格的專屬 icon class
+                        let pSprite = SPRITE_CLASS_MAP[`personality_${dispPersonality}`] || "";
+                        if (traits.length > 1) {
+                            const EN_PERSONALITY_MAP = { "天真": "Innocence", "冷靜": "Composed", "狂亂": "Madness", "活潑": "Vivacious", "憂鬱": "Depressed" };
+                            // 將組合轉換成英文並使用字母排序(sort)，確保生成的 class 名稱順序永遠唯一不變
+                            const enTraits = traits.map(t => EN_PERSONALITY_MAP[t]).sort();
+                            pSprite = `sprite-Personality_Multifaceted_${enTraits.join('_')}`;
+                        }
+
                         const rSprite = SPRITE_CLASS_MAP[`race_${raceIconName}`] || "";
                         const posSprite = SPRITE_CLASS_MAP[`position_${char.position}`] || "";
                         const jSprite = SPRITE_CLASS_MAP[`job_${char.job}`] || "";
@@ -1635,10 +1644,13 @@
                                 return `<span id="${fallbackId}" class="bg-gray-100 dark:bg-gray-700 px-1 rounded text-[9px] text-gray-500 dark:text-gray-400 font-medium whitespace-nowrap">${fallbackText}</span>`;
                             }
                         };
+                        // 翻譯包含的所有性格組合 (例如: "憂鬱, 純粋") 用於 Tooltip 顯示
+                        const translatedTraitsText = traits.map(tr => t(tr)).join(', ');
+
                         const traitsHtml = isUnreleased ? 
                             `<div class="flex items-center gap-1.5 pt-1 border-t border-dashed border-gray-100 dark:border-gray-700 text-gray-400 dark:text-gray-500 text-[10px] font-bold tracking-widest">DATA CLASSIFIED</div>` :
                             `<div class="flex items-center gap-1.5 pt-1 border-t border-dashed border-gray-100 dark:border-gray-700">
-                                ${createTraitNode(pSprite, `fall_p_${char.name}`, t(dispPersonality), `${t('stats_personality')} ${t(dispPersonality)}`)}
+                                ${createTraitNode(pSprite, `fall_p_${char.name}`, t(dispPersonality), `${t('stats_personality')} ${translatedTraitsText}`)}
                                 ${createTraitNode(rSprite, `fall_r_${char.name}`, t(char.race), `${t('stats_race')} ${t(char.race)}`)}
                                 ${createTraitNode(posSprite, `fall_pos_${char.name}`, t(char.position), `${t('stats_position')} ${t(char.position)}`)}
                                 ${createTraitNode(jSprite, `fall_j_${char.name}`, t(char.job), `${t('stats_job')} ${t(char.job)}`)}
