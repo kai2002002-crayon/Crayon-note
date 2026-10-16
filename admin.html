@@ -11,7 +11,32 @@
     <script src="data_aside.js"></script>
     <script src="data_intro.js"></script>
     <script src="data_collectibles.js"></script>
+    
+    <!-- Firebase SDK (以 v10 為例) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
+        // 替換成你的 Firebase Config
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // 初始化 Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // 將 db 和 API 掛載到全域，讓原有的腳本可以使用
+        window.db = db;
+        window.setDoc = setDoc;
+        window.doc = doc;
+    </script>
+    
     <script>
         tailwind.config = { darkMode: 'class' };
         
@@ -47,7 +72,8 @@
         
         <!-- 左側：資料填寫表單 -->
         <div class="w-full lg:w-3/4 bg-slate-800 rounded-xl shadow-xl p-6 h-[90vh] overflow-y-auto border border-slate-700 relative">
-            
+            <!-- (表單 HTML 區塊維持不變，此處省略以保持整潔，請保留你原本寫好的 HTML 表單結構) -->
+            <!-- 🌟🌟🌟 請將你上面提供的 <div class="sticky top-0 ..."> 到 </form> 之間的 HTML 完整貼回這裡 🌟🌟🌟 -->
             <div class="sticky top-0 bg-slate-800 pb-4 border-b border-slate-700 z-50 flex justify-between items-end">
                 <div>
                     <h1 class="text-3xl font-black text-indigo-400 mb-2">⚙️ 終極角色資料管理系統</h1>
@@ -153,16 +179,16 @@
 
         <!-- 右側：資料更新與下載區 -->
         <div class="w-full lg:w-1/4 bg-slate-800 rounded-xl shadow-xl flex flex-col h-[90vh] border border-slate-700 p-6 sticky top-6">
-            <h2 class="text-2xl font-black text-green-400 mb-6 border-b border-slate-700 pb-4">📦 打包與輸出</h2>
+            <h2 class="text-2xl font-black text-green-400 mb-6 border-b border-slate-700 pb-4">📦 儲存與發布</h2>
             
-            <p class="text-sm text-slate-400 mb-6">先將表單資料儲存至系統記憶體，接著即可下載更新後的檔案覆蓋原檔。</p>
+            <p class="text-sm text-slate-400 mb-6">點擊儲存後，資料會同步寫入本機記憶體以及 Firebase 雲端資料庫。</p>
 
             <button type="button" onclick="updateMemoryData()" class="w-full py-4 mb-6 bg-indigo-600 hover:bg-indigo-500 text-white font-black text-lg rounded-xl shadow-lg transition-transform hover:scale-[1.02] border border-indigo-400">
-                💾 1. 儲存至記憶體
+                💾 1. 同步儲存 (本機 + 雲端)
             </button>
 
             <div class="space-y-3 flex-1 overflow-y-auto pr-2" id="downloadSection" style="opacity: 0.3; pointer-events: none;">
-                <h3 class="font-bold text-white mb-2 sticky top-0 bg-slate-800 py-1">2. 點擊下載更新檔</h3>
+                <h3 class="font-bold text-white mb-2 sticky top-0 bg-slate-800 py-1">2. 產生靜態 JS 更新檔</h3>
                 <button onclick="downloadJS('data_core.js', generateCoreData())" class="w-full py-3 bg-slate-700 hover:bg-slate-600 rounded text-left px-4 font-mono text-sm border border-slate-600">⬇️ data_core.js</button>
                 <button onclick="downloadJS('data_intro.js', generateDataMap('INTRO_MAP', INTRO_MAP))" class="w-full py-3 bg-slate-700 hover:bg-slate-600 rounded text-left px-4 font-mono text-sm border border-slate-600">⬇️ data_intro.js</button>
                 <button onclick="downloadJS('data_collectibles.js', generateCollectiblesData())" class="w-full py-3 bg-slate-700 hover:bg-slate-600 rounded text-left px-4 font-mono text-sm border border-slate-600">⬇️ data_collectibles.js</button>
@@ -171,7 +197,7 @@
             </div>
             
             <div id="statusMsg" class="mt-4 p-3 rounded bg-green-900/50 text-green-400 text-sm font-bold hidden text-center border border-green-500">
-                ✅ 儲存成功！請下載檔案。
+                ✅ 成功儲存！
             </div>
         </div>
 
@@ -194,6 +220,7 @@
             populateDropdown();
         };
 
+        // ... [保留原本的 populateDropdown, clearForm, buildTextInputs, buildSkillInputs, buildAsideInputs, loadCharacterData 函數不變] ...
         function populateDropdown() {
             const selector = document.getElementById('charSelector');
             selector.innerHTML = '<option value="">-- 選擇現有角色 --</option>';
@@ -350,7 +377,7 @@
                 document.getElementById(`sk_${lang}_ps_s`).value = arrayToText(sl.passiveSkill?.stats);
             });
 
-            // 🌟 Aside (修正語言鍵值對應：zh-TW -> zh)
+            // Aside
             const asData = ASIDE_DATA[spineName] || { totalName:{}, stars:{ 1:{}, 2:{}, 3:{} } };
             LANGS.forEach(lang => {
                 const asideLang = (lang === 'zh-TW') ? 'zh' : lang; // 將 zh-TW 轉成 zh
@@ -369,11 +396,13 @@
             document.getElementById('downloadSection').style.pointerEvents = 'auto';
         }
 
-        function updateMemoryData() {
+        // 🌟🌟🌟 新增：變成 async 函數，以支援 await 寫入 Firebase 🌟🌟🌟
+        async function updateMemoryData() {
             const zhName = document.getElementById('zhName').value.trim();
             const spineName = document.getElementById('spineName').value.trim();
             if (!zhName || !spineName) { alert("中文名字與 Spine 名稱必填！"); return; }
 
+            // 1. 更新本機記憶體變數 (維持原有邏輯)
             // Core
             LANG_DICT['zh-TW'][zhName] = zhName;
             if(document.getElementById('jaName').value) LANG_DICT['ja'][zhName] = document.getElementById('jaName').value;
@@ -459,7 +488,7 @@
             });
             if(skIndex >= 0) characterSkills[skIndex] = skillObj; else characterSkills.push(skillObj);
 
-            // 🌟 Aside (修正語言鍵值對應與物件保護)
+            // Aside
             let asObj = ASIDE_DATA[spineName] || { asideIcon: "", totalName: {}, stars: { 1:{icon:""}, 2:{icon:""}, 3:{icon:""} } };
             if(!asObj.totalName) asObj.totalName = {};
             if(!asObj.stars) asObj.stars = { 1:{icon:""}, 2:{icon:""}, 3:{icon:""} };
@@ -489,14 +518,59 @@
             });
             ASIDE_DATA[spineName] = asObj;
 
+            // 🌟🌟🌟 2. 將資料整合成一個大 JSON 並寫入 Firebase Firestore 🌟🌟🌟
+            const characterDocument = {
+                spineName: spineName,
+                names: {
+                    "zh-TW": zhName,
+                    "ja": document.getElementById('jaName').value || "",
+                    "en": document.getElementById('enName').value || ""
+                },
+                core: INITIAL_DATA.find(c => c.name === zhName) || {},
+                skills: characterSkills.find(s => s.name === zhName) || {},
+                aside: ASIDE_DATA[spineName] || {},
+                texts: {
+                    intro: {
+                        "zh-TW": document.getElementById('intro_zh-TW').value || "",
+                        "ja": document.getElementById('intro_ja').value || "",
+                        "en": document.getElementById('intro_en').value || ""
+                    },
+                    thought: {
+                        "zh-TW": document.getElementById('thought_zh-TW').value || "",
+                        "ja": document.getElementById('thought_ja').value || "",
+                        "en": document.getElementById('thought_en').value || ""
+                    },
+                    letter: {
+                        "zh-TW": document.getElementById('letter_zh-TW').value || "",
+                        "ja": document.getElementById('letter_ja').value || "",
+                        "en": document.getElementById('letter_en').value || ""
+                    },
+                    present: PRESENT_MAP[spineName] || {}
+                },
+                lastUpdated: new Date().toISOString()
+            };
+
+            try {
+                // 執行 Firebase 寫入動作
+                if (window.setDoc && window.doc && window.db) {
+                    await window.setDoc(window.doc(window.db, "global_characters", spineName), characterDocument);
+                    const msg = document.getElementById('statusMsg');
+                    msg.textContent = "✅ 成功同步至本機與 Firebase 雲端！請點擊下載更新檔。";
+                    msg.classList.remove('hidden');
+                    setTimeout(() => msg.classList.add('hidden'), 5000);
+                } else {
+                    alert("⚠️ Firebase 尚未正確初始化，目前僅儲存至本機記憶體。");
+                }
+            } catch (error) {
+                console.error("Firebase 寫入失敗:", error);
+                alert("儲存至雲端失敗！請開啟 F12 開發者工具檢查 Console 錯誤訊息。");
+            }
+
             document.getElementById('downloadSection').style.opacity = '1';
             document.getElementById('downloadSection').style.pointerEvents = 'auto';
-            const msg = document.getElementById('statusMsg');
-            msg.classList.remove('hidden');
-            setTimeout(() => msg.classList.add('hidden'), 3000);
         }
 
-        // Export functions
+        // Export functions (保持不變)
         function generateCoreData() {
             return `const LANG_DICT = ${JSON.stringify(LANG_DICT, null, 4)};\n\n` +
                    `const INITIAL_DATA = ${JSON.stringify(INITIAL_DATA, null, 4)};\n\n` +
