@@ -15,10 +15,12 @@
     <!-- Firebase SDK (以 v10 為例) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+// 🌟 新增載入 Auth 驗證模組
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
-        // 替換成你的 Firebase Config
-       const firebaseConfig = {
+// 你的 Firebase Config (維持你剛剛貼好的)
+const firebaseConfig = {
   apiKey: "AIzaSyBxYB_Q29_hG5rOCMfemR2Dwod2PwUuqOA",
   authDomain: "crayonadmin-c20d6.firebaseapp.com",
   projectId: "crayonadmin-c20d6",
@@ -27,14 +29,36 @@
   appId: "1:522711827218:web:99bef1b13dec040e08e9cb"
 };
 
-        // 初始化 Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+// 初始化 Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app); // 🌟 初始化驗證功能
 
-        // 將 db 和 API 掛載到全域，讓原有的腳本可以使用
-        window.db = db;
-        window.setDoc = setDoc;
-        window.doc = doc;
+// 將 db 和 API 掛載到全域
+window.db = db;
+window.setDoc = setDoc;
+window.doc = doc;
+
+// 🌟 檢查登入狀態與跳出登入視窗
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        console.log("管理員已登入！UID:", user.uid);
+    } else {
+        // 如果還沒登入，利用瀏覽器內建的 prompt 要求輸入帳密
+        const email = prompt("🔒 系統已上鎖\n請輸入管理員帳號：");
+        const pwd = prompt("🔒 請輸入管理員密碼：");
+        
+        if (email && pwd) {
+            signInWithEmailAndPassword(auth, email, pwd)
+                .then(() => alert("✅ 登入成功！現在可以儲存資料至雲端了。"))
+                .catch((err) => {
+                    alert("❌ 登入失敗，請重新整理網頁再試一次。\n錯誤訊息：" + err.message);
+                });
+        } else {
+            alert("⚠️ 未登入！您目前只能下載 JS 檔，無法將資料同步至雲端。");
+        }
+    }
+});
     </script>
     
     <script>
