@@ -35,6 +35,7 @@
 [class*="_Festa"] { background-image: url('Festasheet.png'); }
 [class*="_Fricle"] { background-image: url('Friclesheet.png'); }
 [class*="_Gabia"] { background-image: url('Gabiasheet.png'); }
+[class*="_Guin"] { background-image: url('Guinsheet.png'); }
 [class*="_Haley"] { background-image: url('Haleysheet.png'); }
 [class*="_Hilde"] { background-image: url('Hildesheet.png'); }
 [class*="_Ifrit"] { background-image: url('Ifritsheet.png'); }
@@ -338,6 +339,16 @@
 .sprite-Icon_NormalSkill_Gabia { width: 64px; height: 64px; background-position: -5px -525px; }
 .sprite-Icon_PassiveSkill_Gabia { width: 64px; height: 64px; background-position: -5px -599px; }
 .sprite-PresentList_Gabia { width: 241px; height: 204px; background-position: -5px -673px; }
+
+/* --- Guin --- */
+.sprite-AsideIcon_Guin { width: 256px; height: 256px; background-position: -5px -5px; }
+.sprite-Aside_Skill_Guin_1 { width: 64px; height: 64px; background-position: -5px -271px; }
+.sprite-Aside_Skill_Guin_2 { width: 64px; height: 64px; background-position: -5px -345px; }
+.sprite-Aside_Skill_Guin_3 { width: 64px; height: 64px; background-position: -5px -419px; }
+.sprite-CG_Schedule_Guin { width: 1024px; height: 512px; background-position: -5px -493px; }
+.sprite-Icon_NormalSkill_Guin { width: 64px; height: 64px; background-position: -5px -1015px; }
+.sprite-Icon_PassiveSkill_Guin { width: 64px; height: 64px; background-position: -5px -1089px; }
+.sprite-PresentList_Guin { width: 222px; height: 179px; background-position: -5px -1163px; }
 
 /* --- Haley --- */
 .sprite-AsideIcon_Haley { width: 256px; height: 256px; background-position: -5px -5px; }
