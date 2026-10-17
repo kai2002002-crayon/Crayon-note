@@ -627,7 +627,7 @@ const WORK_URL = {
     "Kyarot": "https://youtu.be/jDl4YWvYp-U",
     "Lazy": "https://youtu.be/83peJu7yMEU",
     "Leets": "https://youtu.be/5FtyGwPgt1Q",
-	"Lethe": "",
+	"Lethe": "https://youtu.be/wOzPL--fJCY",
     "Levi": "https://youtu.be/79nJ7h2hnc0",
     "MaestroMK2": "https://youtu.be/IDJxotfwcx8",
     "Mago": "https://youtu.be/S8HF0T-C8gc",
