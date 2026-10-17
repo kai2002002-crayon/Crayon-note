@@ -14,52 +14,75 @@
     
     <!-- Firebase SDK (以 v10 為例) -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
 import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-// 🌟 新增載入 Auth 驗證模組
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+// 🌟 換回 signInWithPopup
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
-// 你的 Firebase Config (維持你剛剛貼好的)
-const firebaseConfig = {
-  apiKey: "AIzaSyBxYB_Q29_hG5rOCMfemR2Dwod2PwUuqOA",
-  authDomain: "crayonadmin-c20d6.firebaseapp.com",
-  projectId: "crayonadmin-c20d6",
-  storageBucket: "crayonadmin-c20d6.firebasestorage.app",
-  messagingSenderId: "522711827218",
-  appId: "1:522711827218:web:99bef1b13dec040e08e9cb"
+const firebaseConfig = { 
+    apiKey: "AIzaSyDhv8D2pY_0M56UJrDTQw0RGPHA-BkXU8Y", 
+    authDomain: "crayon-note.firebaseapp.com", 
+    projectId: "crayon-note", 
+    storageBucket: "crayon-note.firebasestorage.app", 
+    messagingSenderId: "210614088940", 
+    appId: "1:210614088940:web:7addbdc7c466eeb05421c9", 
+    measurementId: "G-M1EJPE12TE" 
 };
 
-// 初始化 Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const auth = getAuth(app); // 🌟 初始化驗證功能
+const auth = getAuth(app);
 
-// 將 db 和 API 掛載到全域
 window.db = db;
 window.setDoc = setDoc;
 window.doc = doc;
 
-// 🌟 檢查登入狀態與跳出登入視窗
+// ⚠️ 務必改成你自己的真實 Email 
+const ADMIN_EMAILS = [
+    "kai2002002@gmail.com" 
+];
+
 onAuthStateChanged(auth, (user) => {
+    const overlay = document.getElementById('loginOverlay');
     if (user) {
-        console.log("管理員已登入！UID:", user.uid);
-    } else {
-        // 如果還沒登入，利用瀏覽器內建的 prompt 要求輸入帳密
-        const email = prompt("🔒 系統已上鎖\n請輸入管理員帳號：");
-        const pwd = prompt("🔒 請輸入管理員密碼：");
-        
-        if (email && pwd) {
-            signInWithEmailAndPassword(auth, email, pwd)
-                .then(() => alert("✅ 登入成功！現在可以儲存資料至雲端了。"))
-                .catch((err) => {
-                    alert("❌ 登入失敗，請重新整理網頁再試一次。\n錯誤訊息：" + err.message);
-                });
+        if (ADMIN_EMAILS.length === 0 || ADMIN_EMAILS.includes(user.email)) {
+            console.log("✅ 管理員驗證成功：", user.email);
+            overlay.classList.add('hidden');
         } else {
-            alert("⚠️ 未登入！您目前只能下載 JS 檔，無法將資料同步至雲端。");
+            alert(`❌ 帳號 ${user.email} 沒有管理員權限！`);
+            signOut(auth);
         }
+    } else {
+        console.log("🔒 尚未登入");
+        overlay.classList.remove('hidden');
     }
 });
-    </script>
+
+window.addEventListener('DOMContentLoaded', () => {
+    const loginBtn = document.getElementById('googleLoginBtn');
+    if (loginBtn) {
+        loginBtn.addEventListener('click', () => {
+            const provider = new GoogleAuthProvider();
+            // 🌟 重新啟用彈窗登入
+            signInWithPopup(auth, provider).catch((error) => {
+                console.error("登入失敗:", error);
+                alert("登入失敗：" + error.message);
+            });
+        });
+    }
+});
+
+// 🌟 改用跳轉式登入
+window.addEventListener('DOMContentLoaded', () => {
+    const loginBtn = document.getElementById('googleLoginBtn');
+    if (loginBtn) {
+        loginBtn.addEventListener('click', () => {
+            const provider = new GoogleAuthProvider();
+            signInWithRedirect(auth, provider);
+        });
+    }
+});
+</script>
     
     <script>
         tailwind.config = { darkMode: 'class' };
@@ -93,6 +116,16 @@ onAuthStateChanged(auth, (user) => {
 <body class="bg-slate-900 text-slate-200 min-h-screen font-sans p-4 lg:p-6">
 
     <div class="max-w-screen-2xl mx-auto flex flex-col lg:flex-row gap-6">
+        <!-- 🔐 登入解鎖遮罩 -->
+<div id="loginOverlay" class="fixed inset-0 bg-slate-950/95 z-[9999] flex items-center justify-center hidden">
+    <div class="bg-slate-800 p-8 rounded-2xl shadow-2xl text-center max-w-sm w-full border border-indigo-500/50">
+        <h2 class="text-2xl font-black text-indigo-400 mb-2">🔐 系統已上鎖</h2>
+        <p class="text-xs text-slate-400 mb-6">請使用管理員 Google 帳號登入以存取後台。</p>
+        <button id="googleLoginBtn" type="button" class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow transition flex items-center justify-center gap-2">
+            <span>🌐</span> 使用 Google 帳號登入
+        </button>
+    </div>
+</div>
         
         <!-- 左側：資料填寫表單 -->
         <div class="w-full lg:w-3/4 bg-slate-800 rounded-xl shadow-xl p-6 h-[90vh] overflow-y-auto border border-slate-700 relative">
