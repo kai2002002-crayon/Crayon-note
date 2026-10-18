@@ -101,7 +101,7 @@ const characterSkills = [
       "zh-TW": {
         "normalAttack": {
           "basic": "出售自製果汁給剩餘HP比例最低的前排友軍以及最近的1名敵人。自製果汁可以恢復友軍的HP，並對敵人造成魔法傷害。如果沒有前排友軍，則會選擇HP比例最低的友軍為目標。 [HP恢復:目標最大HP的5%] [魔法傷害:60%]",
-          "enhanced": " []"
+          "enhanced": "無"
         },
         "normalSkill": {
           "name": "玩水不是超棒的嗎?",
@@ -122,7 +122,7 @@ const characterSkills = [
       "ja": {
         "normalAttack": {
           "basic": "残りHP割合が最も低い前列の味方1名と、最も近い敵1体に手作りジュースを販売する。手作りジュースは味方のHPを回復させ、敵には魔法ダメージを与える。前列の味方がいない場合、残りHP割合が最も低い味方を対象に指定する。 [HP回復: 対象の最大HPの5%] [魔法ダメージ:60%]",
-          "enhanced": " []"
+          "enhanced": "無"
         },
         "normalSkill": {
           "name": "水遊びって楽しくないかにゃ?",
@@ -143,7 +143,7 @@ const characterSkills = [
       "en": {
         "normalAttack": {
           "basic": "Sells a handmade juice to the Front Row ally with the lowest HP Ratio and the closest enemy. The handmade juice recovers the ally's HP and deals Magical Damage to the enemy. If there are no Front Row allies, the effect targets the ally with the lowest HP Ratio.[HP Recovery: 5% of the target's Max HP] [Magical DMG: 60%]",
-          "enhanced": " []"
+          "enhanced": "無"
         },
         "normalSkill": {
           "name": "Isn't Swimming Fun?",
@@ -170,7 +170,7 @@ const characterSkills = [
       "zh-TW": {
         "normalAttack": {
           "basic": "對敵軍使用雷射筆，造成4次物理傷害。 [總物理傷害:160%]",
-          "enhanced": " []"
+          "enhanced": "無"
         },
         "normalSkill": {
           "name": "啟動神經連結",
@@ -191,7 +191,7 @@ const characterSkills = [
       "ja": {
         "normalAttack": {
           "basic": "敵にレーザーポインターを照射し、物理ダメージを4回与える。 [総物理ダメージ: 160%]",
-          "enhanced": " []"
+          "enhanced": "無"
         },
         "normalSkill": {
           "name": "ニューラルリンク・スタート",
@@ -212,7 +212,7 @@ const characterSkills = [
       "en": {
         "normalAttack": {
           "basic": "Fires a Laser Pointer at enemies, dealing Physical Damage 4 times. [Total Physical DMG: 160%]",
-          "enhanced": " []"
+          "enhanced": "無"
         },
         "normalSkill": {
           "name": "Neural Link Start",
@@ -308,7 +308,7 @@ const characterSkills = [
       "zh-TW": {
         "normalAttack": {
           "basic": "向敵人發射墨水並對其造成魔法傷害。 [魔法傷害:120%]",
-          "enhanced": ""
+          "enhanced": "無"
         },
         "normalSkill": {
           "name": "請整理書本",
@@ -329,7 +329,7 @@ const characterSkills = [
       "ja": {
         "normalAttack": {
           "basic": "インクを発射し、敵に魔法ダメージを与える。 [魔法ダメージ:120%]",
-          "enhanced": ""
+          "enhanced": "無"
         },
         "normalSkill": {
           "name": "本を片付けてください",
@@ -350,7 +350,7 @@ const characterSkills = [
       "en": {
         "normalAttack": {
           "basic": "Shoots ink at enemies, dealing Magical Damage. [Magical DMG: 120%]",
-          "enhanced": ""
+          "enhanced": "無"
         },
         "normalSkill": {
           "name": "Please Organize the Books!",
