@@ -47,7 +47,6 @@
         </div>
 
         <!-- 該篇章的章節列表區 (打橫列出，預設隱藏) -->
-        <!-- 加入 bg-white/90 和 backdrop-blur-md 讓它在背景圖上有半透明的質感且易讀 -->
         <div id="episode-container" class="hidden bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-6 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700">
             <h3 id="episode-title" class="text-2xl font-black mb-6 border-b border-slate-200 dark:border-slate-700 pb-3 text-indigo-600 dark:text-indigo-400"></h3>
             <!-- 橫向滑動區塊 -->
@@ -100,20 +99,19 @@
                     const imgPrefix = category === 'main' ? 'Main' : 'Event';
                     const bannerUrl = `story/${imgPrefix}${story.chapterNumber}.png`;
                     
-                    // 根據主線或活動決定標籤文字
                     let displayLabelHTML = '';
                     if (category === 'main') {
-                        // 使用 parseInt 去除前導零 (例如 '001' -> 1)
                         const chapterInt = parseInt(story.chapterNumber, 10);
                         displayLabelHTML = `<p class="text-sm text-indigo-600 dark:text-indigo-400 font-bold mb-1">第 ${chapterInt} 章</p>`;
                     }
 
                     const bannerHTML = `
-                        <div onclick="loadEpisodes('${story.id}')" class="cursor-pointer group bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg hover:shadow-2xl hover:ring-2 hover:ring-indigo-400 transition-all hover:-translate-y-1">
-                            <div class="h-48 w-full bg-slate-300 dark:bg-slate-900 relative overflow-hidden">
-                                <img src="${bannerUrl}" alt="${story.name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://via.placeholder.com/600x300?text=${imgPrefix}${story.chapterNumber}'">
+                        <div onclick="loadEpisodes('${story.id}')" class="cursor-pointer group bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg hover:shadow-2xl hover:ring-2 hover:ring-indigo-400 transition-all hover:-translate-y-1 flex flex-col">
+                            <!-- 變更高度比例配合 600x314 (約 1.91:1)，使用 object-contain 完整顯示原圖不裁切 -->
+                            <div class="w-full aspect-[600/314] bg-slate-900 flex items-center justify-center relative overflow-hidden p-2">
+                                <img src="${bannerUrl}" alt="${story.name}" class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://via.placeholder.com/600x314?text=${imgPrefix}${story.chapterNumber}'">
                             </div>
-                            <div class="p-4 text-center">
+                            <div class="p-4 text-center flex-grow flex flex-col justify-center">
                                 ${displayLabelHTML}
                                 <h4 class="font-black text-lg text-slate-800 dark:text-white">${story.name}</h4>
                             </div>
@@ -125,7 +123,7 @@
             bannerContainer.classList.remove('hidden');
         }
 
-        // 2. 載入所選篇章的章節清單
+        // 2. 載入所選篇章的章節清單 (帶 YouTube 預覽圖)
         function loadEpisodes(storyId) {
             const episodeContainer = document.getElementById('episode-container');
             const episodeList = document.getElementById('episode-list');
@@ -134,7 +132,6 @@
             const storyData = STORY_DATA[currentCategory].find(s => s.id === storyId);
             if (!storyData) return;
 
-            // 主線標題顯示「第 X 章 - 名字」，活動則只顯示「名字」
             let chapterPrefix = '';
             if (currentCategory === 'main') {
                 const chapterInt = parseInt(storyData.chapterNumber, 10);
@@ -145,12 +142,26 @@
             episodeList.innerHTML = '';
 
             storyData.episodes.forEach(ep => {
+                // 使用 YouTube 標準縮圖 (hqdefault.jpg)
+                const thumbUrl = `https://img.youtube.com/vi/${ep.youtubeId}/hqdefault.jpg`;
+
                 const epHTML = `
-                    <button onclick="playVideo('${ep.youtubeId}')" class="shrink-0 flex flex-col items-center justify-center w-44 p-4 bg-slate-50 dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 hover:border-indigo-400 dark:hover:border-indigo-500 rounded-xl cursor-pointer transition-all snap-center shadow-sm group">
-                        <span class="text-indigo-600 dark:text-indigo-400 font-black text-2xl mb-2">${ep.epNumber}</span>
-                        <span class="text-sm font-bold text-slate-700 dark:text-slate-200 text-center line-clamp-2 h-10 flex items-center">${ep.title}</span>
-                        <div class="mt-4 w-10 h-10 rounded-full bg-red-600 flex items-center justify-center text-white pl-1 shadow-lg group-hover:scale-110 group-hover:bg-red-500 transition-transform">
-                            ▶
+                    <button onclick="playVideo('${ep.youtubeId}')" class="shrink-0 flex flex-col w-52 bg-slate-50 dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 hover:border-indigo-400 dark:hover:border-indigo-500 rounded-xl cursor-pointer transition-all snap-center shadow-sm group overflow-hidden">
+                        <!-- YouTube 預覽圖區塊 -->
+                        <div class="relative w-full aspect-video bg-slate-900 overflow-hidden">
+                            <img src="${thumbUrl}" alt="${ep.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                            <!-- 播放按鈕覆蓋層 -->
+                            <div class="absolute inset-0 bg-black/30 flex items-center justify-center group-hover:bg-black/10 transition-colors">
+                                <div class="w-10 h-10 rounded-full bg-red-600 flex items-center justify-center text-white pl-1 shadow-lg group-hover:scale-110 group-hover:bg-red-500 transition-transform">
+                                    ▶
+                                </div>
+                            </div>
+                            <!-- 集數標籤 (左上角) -->
+                            <span class="absolute top-2 left-2 px-2 py-0.5 bg-black/70 text-white font-black text-xs rounded shadow">${ep.epNumber}</span>
+                        </div>
+                        <!-- 標題區塊 -->
+                        <div class="p-3 text-left flex-grow flex items-center">
+                            <span class="text-xs font-bold text-slate-700 dark:text-slate-200 line-clamp-2">${ep.title}</span>
                         </div>
                     </button>
                 `;
