@@ -14,6 +14,27 @@ const STORY_DATA = {
     // 活動劇情
     event: [
         {
+            id: "event_026",
+            chapterNumber: "026", // 系統會自動抓取 story/Event002.png
+            name: "為誰祈禱",
+            episodes: [
+                { epNumber: "第1節", title: "從地下醒來", youtubeId: "2LrXGvhUCk0" },
+                { epNumber: "第2節", title: "甦醒的信仰", youtubeId: "2BKmlv6ryv8" },
+                { epNumber: "第3節", title: "主人與信仰", youtubeId: "wAtoyXpYbU0" },
+                { epNumber: "第4節", title: "受考驗的信仰", youtubeId: "OpP2j8qg1eE" },
+                { epNumber: "第5節", title: "受傷的信仰", youtubeId: "bRoug1YYj5I" },
+                { epNumber: "第6節", title: "迷惘中的信仰", youtubeId: "gZ0YwRvMSLY" },
+                { epNumber: "第7節", title: "你一路累積的信仰", youtubeId: "OHbxfI6ZBsE" },
+                { epNumber: "第8節", title: "準備好的信仰", youtubeId: "tKRLblgWbHo" },
+                { epNumber: "第9節", title: "動搖的信仰", youtubeId: "jXhTFPuU-wI" },
+                { epNumber: "第10節", title: "盲目的信仰", youtubeId: "NaVlBvAISjQ" },
+                { epNumber: "第11節", title: "並肩同行的信仰", youtubeId: "0ViL3Kyfxig" },
+                { epNumber: "第12節", title: "失控的信仰", youtubeId: "FmPGTVcmdgI" },
+                { epNumber: "第13節", title: "錯誤的信仰", youtubeId: "oBDrwsfDBSw" },
+                { epNumber: "第14節", title: "重生的信仰", youtubeId: "ZkJeqaAdb2g" },
+            ]
+        },
+        {
             id: "event_025",
             chapterNumber: "025", // 系統會自動抓取 story/Event002.png
             name: "無處可去的書籤",
