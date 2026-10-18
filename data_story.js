@@ -18,6 +18,7 @@ const STORY_DATA = {
             chapterNumber: "026", // 系統會自動抓取 story/Event002.png
             name: "為誰祈禱",
             episodes: [
+                { epNumber: "第0節", title: "官方PV", youtubeId: "Odz_0FRWgRI" },
                 { epNumber: "第1節", title: "從地下醒來", youtubeId: "2LrXGvhUCk0" },
                 { epNumber: "第2節", title: "甦醒的信仰", youtubeId: "2BKmlv6ryv8" },
                 { epNumber: "第3節", title: "主人與信仰", youtubeId: "wAtoyXpYbU0" },
@@ -39,6 +40,7 @@ const STORY_DATA = {
             chapterNumber: "025", // 系統會自動抓取 story/Event002.png
             name: "無處可去的書籤",
             episodes: [
+                { epNumber: "第0節", title: "官方PV", youtubeId: "v6-Zhe4qM6c" },
                 { epNumber: "第1節", title: "被抓到把柄的紀錄", youtubeId: "AMCdfejk34g" },
                 { epNumber: "第2節", title: "幽靈的紀錄", youtubeId: "YsrGl9jTRvA" },
                 { epNumber: "第3節", title: "獸人的紀錄", youtubeId: "31PiPUP4zVs" },
