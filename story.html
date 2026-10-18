@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>劇情回顧</title>
+    <!-- 引入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+</head>
+<!-- 加入背景圖，並設定滿版 (bg-cover)、位置居中 (bg-center) 與固定背景 (bg-fixed) -->
+<body class="bg-cover bg-center bg-fixed min-h-screen text-slate-800 dark:text-slate-200 p-4 sm:p-8" 
+      style="background-image: url('https://i.postimg.cc/fTJ36ZFT/CG-Schedule-Rim.png');">
+
+    <!-- 如果背景太亮或太暗，可以疊加一層半透明遮罩讓內容更清楚，不需要的話可以刪除這行 -->
+    <div class="fixed inset-0 bg-black/40 -z-10 pointer-events-none"></div>
+
+    <!-- 頂部導覽列 -->
+    <div class="max-w-6xl mx-auto mb-8 flex justify-between items-center drop-shadow-md">
+        <h1 class="text-3xl font-black text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">📖 劇情回顧室</h1>
+        <a href="index.html" class="px-5 py-2 bg-slate-900/80 hover:bg-slate-700/90 text-white rounded-lg font-bold transition-colors shadow-lg backdrop-blur-sm border border-slate-600">
+            返回首頁
+        </a>
+    </div>
+
+    <!-- 劇情回顧主區塊 -->
+    <div class="max-w-6xl mx-auto font-sans relative z-10">
+        
+        <!-- 兩大區域按鈕 (Icons)：移除背景色與文字，放大一倍 -->
+        <div class="flex justify-center gap-16 mb-12 border-b border-white/20 pb-10">
+            <button onclick="loadStoryCategory('main')" class="group cursor-pointer hover:scale-110 transition-transform outline-none drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)]">
+                <img src="story/Mainstory.png" alt="主線" class="w-32 h-32 object-contain group-hover:drop-shadow-[0_0_15px_rgba(59,130,246,0.8)] transition-all" onerror="this.style.display='none'">
+            </button>
+
+            <button onclick="loadStoryCategory('event')" class="group cursor-pointer hover:scale-110 transition-transform outline-none drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)]">
+                <img src="story/Eventstory.png" alt="活動" class="w-32 h-32 object-contain group-hover:drop-shadow-[0_0_15px_rgba(245,158,11,0.8)] transition-all" onerror="this.style.display='none'">
+            </button>
+        </div>
+
+        <!-- 篇章 Banner 列表區 (預設隱藏) -->
+        <div id="banner-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10 hidden">
+            <!-- JS 動態生成 Banner -->
+        </div>
+
+        <!-- 該篇章的章節列表區 (打橫列出，預設隱藏) -->
+        <!-- 加入 bg-white/90 和 backdrop-blur-md 讓它在背景圖上有半透明的質感且易讀 -->
+        <div id="episode-container" class="hidden bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-6 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700">
+            <h3 id="episode-title" class="text-2xl font-black mb-6 border-b border-slate-200 dark:border-slate-700 pb-3 text-indigo-600 dark:text-indigo-400"></h3>
+            <!-- 橫向滑動區塊 -->
+            <div id="episode-list" class="flex gap-4 overflow-x-auto pb-4 snap-x">
+                <!-- JS 動態生成章節按鈕 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- YouTube 影片彈出視窗 (Modal) -->
+    <div id="video-modal" class="fixed inset-0 bg-black/90 z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300 backdrop-blur-sm">
+        <div class="relative w-full max-w-5xl mx-4 bg-black rounded-xl shadow-2xl ring-1 ring-white/10">
+            <button onclick="closeVideo()" class="absolute -top-12 right-0 text-white hover:text-red-400 text-lg font-bold bg-white/10 px-4 py-2 rounded-lg transition-colors">
+                ✕ 關閉影片
+            </button>
+            <div class="aspect-video w-full bg-black rounded-xl overflow-hidden">
+                <iframe id="youtube-player" class="w-full h-full" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- 引入劇情資料檔 -->
+    <script src="data_story.js"></script>
+
+    <!-- 頁面互動邏輯 -->
+    <script>
+        let currentCategory = ''; 
+
+        // 1. 載入兩大類別 (主線 / 活動) 的 Banners
+        function loadStoryCategory(category) {
+            currentCategory = category;
+            const bannerContainer = document.getElementById('banner-container');
+            const episodeContainer = document.getElementById('episode-container');
+            
+            bannerContainer.innerHTML = ''; 
+            episodeContainer.classList.add('hidden'); 
+
+            if (typeof STORY_DATA === 'undefined') {
+                bannerContainer.innerHTML = '<p class="text-center text-red-400 w-full col-span-full bg-black/50 p-4 rounded-lg">無法載入資料，請檢查 data_story.js 是否正確連結。</p>';
+                bannerContainer.classList.remove('hidden');
+                return;
+            }
+
+            const storyData = STORY_DATA[category];
+
+            if (!storyData || storyData.length === 0) {
+                bannerContainer.innerHTML = '<p class="text-center text-white w-full col-span-full font-bold text-lg bg-black/50 p-4 rounded-lg backdrop-blur-sm">目前尚無劇情資料</p>';
+            } else {
+                storyData.forEach(story => {
+                    const imgPrefix = category === 'main' ? 'Main' : 'Event';
+                    const bannerUrl = `story/${imgPrefix}${story.chapterNumber}.png`;
+                    
+                    // 根據主線或活動決定標籤文字
+                    let displayLabelHTML = '';
+                    if (category === 'main') {
+                        // 使用 parseInt 去除前導零 (例如 '001' -> 1)
+                        const chapterInt = parseInt(story.chapterNumber, 10);
+                        displayLabelHTML = `<p class="text-sm text-indigo-600 dark:text-indigo-400 font-bold mb-1">第 ${chapterInt} 章</p>`;
+                    }
+
+                    const bannerHTML = `
+                        <div onclick="loadEpisodes('${story.id}')" class="cursor-pointer group bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg hover:shadow-2xl hover:ring-2 hover:ring-indigo-400 transition-all hover:-translate-y-1">
+                            <div class="h-48 w-full bg-slate-300 dark:bg-slate-900 relative overflow-hidden">
+                                <img src="${bannerUrl}" alt="${story.name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://via.placeholder.com/600x300?text=${imgPrefix}${story.chapterNumber}'">
+                            </div>
+                            <div class="p-4 text-center">
+                                ${displayLabelHTML}
+                                <h4 class="font-black text-lg text-slate-800 dark:text-white">${story.name}</h4>
+                            </div>
+                        </div>
+                    `;
+                    bannerContainer.insertAdjacentHTML('beforeend', bannerHTML);
+                });
+            }
+            bannerContainer.classList.remove('hidden');
+        }
+
+        // 2. 載入所選篇章的章節清單
+        function loadEpisodes(storyId) {
+            const episodeContainer = document.getElementById('episode-container');
+            const episodeList = document.getElementById('episode-list');
+            const episodeTitle = document.getElementById('episode-title');
+            
+            const storyData = STORY_DATA[currentCategory].find(s => s.id === storyId);
+            if (!storyData) return;
+
+            // 主線標題顯示「第 X 章 - 名字」，活動則只顯示「名字」
+            let chapterPrefix = '';
+            if (currentCategory === 'main') {
+                const chapterInt = parseInt(storyData.chapterNumber, 10);
+                chapterPrefix = `第 ${chapterInt} 章 - `;
+            }
+            
+            episodeTitle.innerText = `${chapterPrefix}${storyData.name}`;
+            episodeList.innerHTML = '';
+
+            storyData.episodes.forEach(ep => {
+                const epHTML = `
+                    <button onclick="playVideo('${ep.youtubeId}')" class="shrink-0 flex flex-col items-center justify-center w-44 p-4 bg-slate-50 dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 hover:border-indigo-400 dark:hover:border-indigo-500 rounded-xl cursor-pointer transition-all snap-center shadow-sm group">
+                        <span class="text-indigo-600 dark:text-indigo-400 font-black text-2xl mb-2">${ep.epNumber}</span>
+                        <span class="text-sm font-bold text-slate-700 dark:text-slate-200 text-center line-clamp-2 h-10 flex items-center">${ep.title}</span>
+                        <div class="mt-4 w-10 h-10 rounded-full bg-red-600 flex items-center justify-center text-white pl-1 shadow-lg group-hover:scale-110 group-hover:bg-red-500 transition-transform">
+                            ▶
+                        </div>
+                    </button>
+                `;
+                episodeList.insertAdjacentHTML('beforeend', epHTML);
+            });
+
+            episodeContainer.classList.remove('hidden');
+            setTimeout(() => {
+                episodeContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+
+        // 3. 播放 YouTube 影片
+        function playVideo(youtubeId) {
+            const modal = document.getElementById('video-modal');
+            const player = document.getElementById('youtube-player');
+            
+            player.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0`;
+            
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+            }, 10);
+        }
+
+        // 4. 關閉影片
+        function closeVideo() {
+            const modal = document.getElementById('video-modal');
+            const player = document.getElementById('youtube-player');
+            
+            modal.classList.add('opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                player.src = ''; 
+            }, 300);
+        }
+    </script>
+</body>
+</html>
