@@ -4,11 +4,6 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>嘟嘟臉坨坨動態展示器</title>
-        <!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-        <script src="data_config.js"></script>
         <script src="data_core.js"></script>
         <link rel="stylesheet" href="sprites.css">
         <script src="https://cdn.tailwindcss.com"></script>
@@ -261,73 +256,6 @@
         </section>
         </div>
         <script>
-            let db = null;
-let auth = null;
-let currentUser = null;
-let savedStates = {}; // 用於存放從 Firestore 抓取的玩家角色狀態
-
-// 替換或確保這段 Firebase 設定存在
-const firebaseConfig = { 
-    apiKey: "AIzaSyDhv8D2pY_0M56UJrDTQw0RGPHA-BkXU8Y", 
-    authDomain: "crayon-note.firebaseapp.com", 
-    projectId: "crayon-note", 
-    storageBucket: "crayon-note.firebasestorage.app", 
-    messagingSenderId: "210614088940", 
-    appId: "1:210614088940:web:7addbdc7c466eeb05421c9", 
-    measurementId: "G-M1EJPE12TE" 
-};
-
-// 初始化 Firebase
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig); 
-} else {
-    firebase.app(); 
-}
-
-db = firebase.firestore(); 
-auth = firebase.auth();
-
-            // 定義一個全域變數來存放圖鑑資料（取代原本寫死的 INITIAL_DATA）
-window.INITIAL_DATA = [];
-
-function fetchGlobalCharacters() {
-    if (!db) {
-        console.error("Firestore 尚未初始化！");
-        return;
-    }
-
-    console.log("開始讀取全域角色圖鑑...");
-    
-    // 讀取 global_characters 集合內的所有文件
-    db.collection("global_characters").get().then((querySnapshot) => {
-        let charactersData = [];
-        
-        querySnapshot.forEach((doc) => {
-            // 取得文件資料，並將 Firestore 的文件 ID 也一併存入，方便後續對應
-            let data = doc.data();
-            data.docId = doc.id; 
-            charactersData.push(data);
-        });
-        
-        console.log(`成功讀取 ${charactersData.length} 筆角色資料:`, charactersData);
-        
-        // 將陣列賦值給全域變數
-        window.INITIAL_DATA = charactersData;
-        
-        // 【關鍵步驟】：資料讀取完畢後，在這裡呼叫你用來生成/渲染畫面的函式
-        // 例如：renderCharacterGrid() 或 initApostleView() 等
-        // renderCharacterGrid();
-        
-    }).catch((error) => {
-        console.error("讀取全域角色資料發生錯誤:", error);
-    });
-}
-
-// 確保網頁 DOM 載入後再執行讀取
-window.addEventListener('load', () => {
-    fetchGlobalCharacters();
-});
-            
             // 🌟 全域通用：專門修復 WebGL 透明畫布下的「色彩增值(Multiply)」破洞 Bug
            
             function fixSpineMultiplyHole(player) {
