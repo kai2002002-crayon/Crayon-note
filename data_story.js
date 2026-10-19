@@ -16,7 +16,7 @@ const STORY_DATA = {
         {
             id: "event_027",
             chapterNumber: "027", // 系統會自動抓取 story/Event002.png
-            name: "為誰祈禱",
+            name: "妄想狂大騷動",
             episodes: [
                 { epNumber: "第0節", title: "官方PV", youtubeId: "DO3gvA002gs" },
                 { epNumber: "第1節", title: "海莉與異形怪物", youtubeId: "QHIzkjJFoX8" },
