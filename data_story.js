@@ -14,6 +14,21 @@ const STORY_DATA = {
     // 活動劇情
     event: [
         {
+            id: "event_027",
+            chapterNumber: "027", // 系統會自動抓取 story/Event002.png
+            name: "為誰祈禱",
+            episodes: [
+                { epNumber: "第0節", title: "官方PV", youtubeId: "DO3gvA002gs" },
+                { epNumber: "第1節", title: "海莉與異形怪物", youtubeId: "QHIzkjJFoX8" },
+                { epNumber: "第2節", title: "海莉與非法實驗", youtubeId: "RvqtuNezbjs" },
+                { epNumber: "第3節", title: "海莉與緊急廣播", youtubeId: "c9NLXpcdlwA" },
+                { epNumber: "第4節", title: "海莉與治療劑", youtubeId: "Ir4ITLTdzSo" },
+                { epNumber: "第5節", title: "海莉與殭屍女王", youtubeId: "WWO6xlAFcjk" },
+                { epNumber: "第6節", title: "海莉與失憶", youtubeId: "trTwNR86Xcw" },
+                { epNumber: "第7節", title: "海莉與雷射療法", youtubeId: "WH-Aw1rX0wc" }
+            ]
+        },
+        {
             id: "event_026",
             chapterNumber: "026", // 系統會自動抓取 story/Event002.png
             name: "為誰祈禱",
@@ -32,7 +47,7 @@ const STORY_DATA = {
                 { epNumber: "第11節", title: "並肩同行的信仰", youtubeId: "0ViL3Kyfxig" },
                 { epNumber: "第12節", title: "失控的信仰", youtubeId: "FmPGTVcmdgI" },
                 { epNumber: "第13節", title: "錯誤的信仰", youtubeId: "oBDrwsfDBSw" },
-                { epNumber: "第14節", title: "重生的信仰", youtubeId: "ZkJeqaAdb2g" },
+                { epNumber: "第14節", title: "重生的信仰", youtubeId: "ZkJeqaAdb2g" }
             ]
         },
         {
@@ -50,7 +65,7 @@ const STORY_DATA = {
                 { epNumber: "第7節", title: "提問的紀錄", youtubeId: "GQ0Yptxa8AQ" },
                 { epNumber: "第8節", title: "我的紀錄", youtubeId: "495rUi8IM3Y" },
                 { epNumber: "第9節", title: "告白的紀錄", youtubeId: "0rBMRMXFcA8" },
-                { epNumber: "第10節", title: "日記本的紀錄", youtubeId: "ZA4li2LJ8bM" },
+                { epNumber: "第10節", title: "日記本的紀錄", youtubeId: "ZA4li2LJ8bM" }
                 
             ]
         }
