@@ -6,7 +6,14 @@ const STORY_DATA = {
             chapterNumber: "001", // 系統會自動抓取 story/Main001.png
             name: "至少幫我塗點果醬",
             episodes: [
-                { epNumber: "第1節", title: "序章", youtubeId: "_azTVTZ6XhU" }
+                { epNumber: "第1節", title: "序章", youtubeId: "_azTVTZ6XhU" },
+                { epNumber: "第2節", title: "女王與教主", youtubeId: "Dc1X7qcqgFg" },
+                { epNumber: "第3節", title: "修養錄揭露", youtubeId: "yLeRVGUOWZM" },
+                { epNumber: "第4節", title: "魔法(?)師艾舒爾", youtubeId: "lkNL--QusJM" },
+                { epNumber: "第5節", title: "探險家瑪麗", youtubeId: "OaQ40Cb7jYs" },
+                { epNumber: "第6節", title: "收藏家瑪約", youtubeId: "hkpQ4A-pYEg" },
+                { epNumber: "第7節", title: "逆轉叛亂", youtubeId: "AEcXWfWRqmk" },
+                { epNumber: "第8節", title: "被叛亂逆轉", youtubeId: "a3gqSM0RHgI" }
             ]
         }
     ],
