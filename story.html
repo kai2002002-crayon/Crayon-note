@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>劇情回顧</title>
+    <title>嘟嘟臉劇情回顧</title>
     <!-- 引入 Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -22,7 +22,7 @@
 
     <!-- 頂部導覽列 -->
     <div class="max-w-6xl mx-auto mb-8 flex justify-between items-center drop-shadow-md">
-        <h1 class="text-3xl font-black text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">📖 劇情回顧室</h1>
+        <h1 class="text-3xl font-black text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">📖 嘟嘟臉劇情回顧室</h1>
         <a href="index.html" class="px-5 py-2 bg-slate-900/80 hover:bg-slate-700/90 text-white rounded-lg font-bold transition-colors shadow-lg backdrop-blur-sm border border-slate-600">
             返回首頁
         </a>
@@ -31,19 +31,19 @@
     <!-- 劇情回顧主區塊 -->
     <div class="max-w-6xl mx-auto font-sans relative z-10">
         
-        <!-- 兩大區域按鈕 (Icons)：原圖 518*190，等比例調整，移除背景色與文字 -->
+        <!-- 兩大區域按鈕 (Icons)：原圖 518*190，以原圖大小顯示，移除背景色與文字 -->
         <div class="flex justify-center items-center gap-8 sm:gap-16 mb-12 border-b border-white/20 pb-10">
             <button onclick="loadStoryCategory('main')" class="group cursor-pointer hover:scale-105 transition-transform outline-none">
-                <img src="story/Mainstory.png" alt="主線" class="w-[220px] sm:w-[259px] h-auto object-contain group-hover:drop-shadow-[0_0_15px_rgba(59,130,246,0.8)] transition-all" onerror="this.style.display='none'">
+                <img src="story/Mainstory.png" alt="主線" class="w-[259px] h-[95px] object-contain group-hover:drop-shadow-[0_0_15px_rgba(59,130,246,0.8)] transition-all" onerror="this.style.display='none'">
             </button>
 
             <button onclick="loadStoryCategory('event')" class="group cursor-pointer hover:scale-105 transition-transform outline-none">
-                <img src="story/Eventstory.png" alt="活動" class="w-[220px] sm:w-[259px] h-auto object-contain group-hover:drop-shadow-[0_0_15px_rgba(245,158,11,0.8)] transition-all" onerror="this.style.display='none'">
+                <img src="story/Eventstory.png" alt="活動" class="w-[259px] h-[95px] object-contain group-hover:drop-shadow-[0_0_15px_rgba(245,158,11,0.8)] transition-all" onerror="this.style.display='none'">
             </button>
         </div>
 
-        <!-- 篇章 Banner 列表區 (預設隱藏) - 改為直式 500x700 比例 (5:7) -->
-        <div id="banner-container" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 mb-10 hidden">
+        <!-- 篇章 Banner 列表區 (預設隱藏) -->
+        <div id="banner-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10 hidden">
             <!-- JS 動態生成 Banner -->
         </div>
 
@@ -103,18 +103,21 @@
                     let displayLabelHTML = '';
                     if (category === 'main') {
                         const chapterInt = parseInt(story.chapterNumber, 10);
-                        displayLabelHTML = `<p class="text-xs text-indigo-600 dark:text-indigo-400 font-bold mb-1">第 ${chapterInt} 章</p>`;
+                        displayLabelHTML = `<p class="text-sm text-indigo-600 dark:text-indigo-400 font-bold mb-1">第 ${chapterInt} 章</p>`;
                     }
+
+                    // 區分主線 (50% 大小，以 500x700 比例呈現) 與活動 (原本的 600x314 設定)
+                    const aspectClass = category === 'main' ? 'aspect-[5/7]' : 'aspect-[600/314]';
+                    const objectFitClass = category === 'main' ? 'object-cover' : 'object-contain';
 
                     const bannerHTML = `
                         <div onclick="loadEpisodes('${story.id}')" class="cursor-pointer group bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg hover:shadow-2xl hover:ring-2 hover:ring-indigo-400 transition-all hover:-translate-y-1 flex flex-col">
-                            <!-- 採用 500x700 比例 (aspect-[5/7])，以 50% 大小呈現直式 Banner -->
-                            <div class="w-full aspect-[5/7] bg-slate-900 flex items-center justify-center relative overflow-hidden">
-                                <img src="${bannerUrl}" alt="${story.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://via.placeholder.com/500x700?text=${imgPrefix}${story.chapterNumber}'">
+                            <div class="w-full ${aspectClass} bg-slate-900 flex items-center justify-center relative overflow-hidden p-2">
+                                <img src="${bannerUrl}" alt="${story.name}" class="w-full h-full ${objectFitClass} group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://via.placeholder.com/600x314?text=${imgPrefix}${story.chapterNumber}'">
                             </div>
-                            <div class="p-3 text-center flex-grow flex flex-col justify-center">
+                            <div class="p-4 text-center flex-grow flex flex-col justify-center">
                                 ${displayLabelHTML}
-                                <h4 class="font-black text-sm sm:text-base text-slate-800 dark:text-white line-clamp-1">${story.name}</h4>
+                                <h4 class="font-black text-lg text-slate-800 dark:text-white">${story.name}</h4>
                             </div>
                         </div>
                     `;
