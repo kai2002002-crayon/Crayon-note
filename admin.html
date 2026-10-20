@@ -5,84 +5,79 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>終極角色資料管理系統</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
+    <script src="data_config.js"></script>
     <script src="data_core.js"></script>
     <script src="data_skills.js"></script>
     <script src="data_aside.js"></script>
     <script src="data_intro.js"></script>
     <script src="data_collectibles.js"></script>
     
-    <!-- Firebase SDK (以 v10 為例) -->
+    <!-- Firebase SDK -->
     <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-// 🌟 換回 signInWithPopup
-import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+    // 🌟 新增 getDocs 與 collection 來抓取整個資料表
+    import { getFirestore, doc, setDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
-const firebaseConfig = { 
-    apiKey: "AIzaSyDhv8D2pY_0M56UJrDTQw0RGPHA-BkXU8Y", 
-    authDomain: "crayon-note.firebaseapp.com", 
-    projectId: "crayon-note", 
-    storageBucket: "crayon-note.firebasestorage.app", 
-    messagingSenderId: "210614088940", 
-    appId: "1:210614088940:web:7addbdc7c466eeb05421c9", 
-    measurementId: "G-M1EJPE12TE" 
-};
+    const firebaseConfig = { 
+        apiKey: "AIzaSyDhv8D2pY_0M56UJrDTQw0RGPHA-BkXU8Y", 
+        authDomain: "crayon-note.firebaseapp.com", 
+        projectId: "crayon-note", 
+        storageBucket: "crayon-note.firebasestorage.app", 
+        messagingSenderId: "210614088940", 
+        appId: "1:210614088940:web:7addbdc7c466eeb05421c9", 
+        measurementId: "G-M1EJPE12TE" 
+    };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
 
-window.db = db;
-window.setDoc = setDoc;
-window.doc = doc;
+    window.db = db;
+    window.setDoc = setDoc;
+    window.doc = doc;
+    window.collection = collection;
+    window.getDocs = getDocs;
 
-// ⚠️ 務必改成你自己的真實 Email 
-const ADMIN_EMAILS = [
-    "kai2002002@gmail.com" 
-];
+    // ⚠️ 務必改成你自己的真實 Email 
+    const ADMIN_EMAILS = [
+        "kai2002002@gmail.com" 
+    ];
 
-onAuthStateChanged(auth, (user) => {
-    const overlay = document.getElementById('loginOverlay');
-    if (user) {
-        if (ADMIN_EMAILS.length === 0 || ADMIN_EMAILS.includes(user.email)) {
-            console.log("✅ 管理員驗證成功：", user.email);
-            overlay.classList.add('hidden');
+    onAuthStateChanged(auth, (user) => {
+        const overlay = document.getElementById('loginOverlay');
+        if (user) {
+            if (ADMIN_EMAILS.length === 0 || ADMIN_EMAILS.includes(user.email)) {
+                console.log("✅ 管理員驗證成功：", user.email);
+                overlay.classList.add('hidden');
+                
+                // 🌟 登入成功後，立刻從 Firestore 抓取雲端角色清單！
+                if(typeof window.fetchFirestoreData === 'function') {
+                    window.fetchFirestoreData();
+                }
+            } else {
+                alert(`❌ 帳號 ${user.email} 沒有管理員權限！`);
+                signOut(auth);
+            }
         } else {
-            alert(`❌ 帳號 ${user.email} 沒有管理員權限！`);
-            signOut(auth);
+            console.log("🔒 尚未登入");
+            overlay.classList.remove('hidden');
         }
-    } else {
-        console.log("🔒 尚未登入");
-        overlay.classList.remove('hidden');
-    }
-});
+    });
 
-window.addEventListener('DOMContentLoaded', () => {
-    const loginBtn = document.getElementById('googleLoginBtn');
-    if (loginBtn) {
-        loginBtn.addEventListener('click', () => {
-            const provider = new GoogleAuthProvider();
-            // 🌟 重新啟用彈窗登入
-            signInWithPopup(auth, provider).catch((error) => {
-                console.error("登入失敗:", error);
-                alert("登入失敗：" + error.message);
+    window.addEventListener('DOMContentLoaded', () => {
+        const loginBtn = document.getElementById('googleLoginBtn');
+        if (loginBtn) {
+            loginBtn.addEventListener('click', () => {
+                const provider = new GoogleAuthProvider();
+                signInWithPopup(auth, provider).catch((error) => {
+                    console.error("登入失敗:", error);
+                    alert("登入失敗：" + error.message);
+                });
             });
-        });
-    }
-});
-
-// 🌟 改用跳轉式登入
-window.addEventListener('DOMContentLoaded', () => {
-    const loginBtn = document.getElementById('googleLoginBtn');
-    if (loginBtn) {
-        loginBtn.addEventListener('click', () => {
-            const provider = new GoogleAuthProvider();
-            signInWithRedirect(auth, provider);
-        });
-    }
-});
-</script>
+        }
+    });
+    </script>
     
     <script>
         tailwind.config = { darkMode: 'class' };
@@ -117,26 +112,24 @@ window.addEventListener('DOMContentLoaded', () => {
 
     <div class="max-w-screen-2xl mx-auto flex flex-col lg:flex-row gap-6">
         <!-- 🔐 登入解鎖遮罩 -->
-<div id="loginOverlay" class="fixed inset-0 bg-slate-950/95 z-[9999] flex items-center justify-center hidden">
-    <div class="bg-slate-800 p-8 rounded-2xl shadow-2xl text-center max-w-sm w-full border border-indigo-500/50">
-        <h2 class="text-2xl font-black text-indigo-400 mb-2">🔐 系統已上鎖</h2>
-        <p class="text-xs text-slate-400 mb-6">請使用管理員 Google 帳號登入以存取後台。</p>
-        <button id="googleLoginBtn" type="button" class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow transition flex items-center justify-center gap-2">
-            <span>🌐</span> 使用 Google 帳號登入
-        </button>
-    </div>
-</div>
+        <div id="loginOverlay" class="fixed inset-0 bg-slate-950/95 z-[9999] flex items-center justify-center hidden">
+            <div class="bg-slate-800 p-8 rounded-2xl shadow-2xl text-center max-w-sm w-full border border-indigo-500/50">
+                <h2 class="text-2xl font-black text-indigo-400 mb-2">🔐 系統已上鎖</h2>
+                <p class="text-xs text-slate-400 mb-6">請使用管理員 Google 帳號登入以存取後台。</p>
+                <button id="googleLoginBtn" type="button" class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow transition flex items-center justify-center gap-2">
+                    <span>🌐</span> 使用 Google 帳號登入
+                </button>
+            </div>
+        </div>
         
         <!-- 左側：資料填寫表單 -->
         <div class="w-full lg:w-3/4 bg-slate-800 rounded-xl shadow-xl p-6 h-[90vh] overflow-y-auto border border-slate-700 relative">
-            <!-- (表單 HTML 區塊維持不變，此處省略以保持整潔，請保留你原本寫好的 HTML 表單結構) -->
-            <!-- 🌟🌟🌟 請將你上面提供的 <div class="sticky top-0 ..."> 到 </form> 之間的 HTML 完整貼回這裡 🌟🌟🌟 -->
             <div class="sticky top-0 bg-slate-800 pb-4 border-b border-slate-700 z-50 flex justify-between items-end">
                 <div>
                     <h1 class="text-3xl font-black text-indigo-400 mb-2">⚙️ 終極角色資料管理系統</h1>
                     <div class="flex items-center gap-4">
                         <select id="charSelector" onchange="loadCharacterData(this.value)" class="bg-slate-900 border border-slate-600 text-white font-bold rounded p-2 focus:ring-2 focus:ring-indigo-500 outline-none w-64">
-                            <option value="">-- 選擇現有角色 --</option>
+                            <option value="">-- 等待登入... --</option>
                         </select>
                         <button onclick="clearForm()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 rounded text-sm font-bold transition-colors shadow">
                             + 建立全新角色
@@ -270,14 +263,85 @@ window.addEventListener('DOMContentLoaded', () => {
         function textToCommaArray(text) { return text ? text.split(',').map(l => l.trim()).filter(l => l) : []; }
         function commaArrayToText(arr) { return arr && Array.isArray(arr) ? arr.join(', ') : ''; }
 
+        window.fetchFirestoreData = async function() {
+            try {
+                const selector = document.getElementById('charSelector');
+                selector.innerHTML = '<option value="">-- ⏳ 從雲端同步角色資料中... --</option>';
+
+                const querySnapshot = await window.getDocs(window.collection(window.db, "global_characters"));
+                
+                window.INITIAL_DATA = []; // 清空，重新從雲端載入
+
+                querySnapshot.forEach(doc => {
+                    const data = doc.data();
+                    const zhName = data.names?.["zh-TW"] || data.core?.name || doc.id;
+                    const spineName = data.spineName || doc.id;
+
+                    // 1. 重新建構 INITIAL_DATA
+                    if (data.core) {
+                        data.core.name = zhName; // 確保名稱正確
+                        INITIAL_DATA.push(data.core);
+                    } else {
+                        INITIAL_DATA.push({ name: zhName });
+                    }
+
+                    // 2. 將雲端的各種屬性同步回本機變數
+                    SPINE_MAP[zhName] = spineName;
+                    if (data.names) {
+                        LANG_DICT['zh-TW'][zhName] = data.names['zh-TW'] || zhName;
+                        if (data.names['ja']) LANG_DICT['ja'][zhName] = data.names['ja'];
+                        if (data.names['en']) LANG_DICT['en'][zhName] = data.names['en'];
+                    }
+
+                    // 🌟🌟🌟 新增：把散落的欄位解壓縮回全域 MAP 中，表單才讀得到
+                    if (data.cv) CV_MAP[zhName] = data.cv;
+                    if (data.grade) GRADE_MAP[zhName] = data.grade;
+                    if (data.isEldain && !ELDAIN_LIST.includes(zhName)) ELDAIN_LIST.push(zhName);
+                    if (data.miniSpine) MINI_SPINE[zhName] = data.miniSpine;
+                    if (data.costume) COSTUME_MAP[zhName] = data.costume;
+                    if (data.sdCostume) SD_COSTUME[zhName] = data.sdCostume;
+                    if (data.food) FOOD_MAP[spineName] = data.food;
+                    if (data.rewards) REWARD_MAP[spineName] = data.rewards;
+                    if (data.workUrl) WORK_URL[spineName] = data.workUrl;
+
+                    if (data.skills) {
+                        const skIndex = characterSkills.findIndex(s => s.name === zhName);
+                        if(skIndex >= 0) characterSkills[skIndex] = data.skills;
+                        else characterSkills.push(data.skills);
+                    }
+
+                    if (data.aside) ASIDE_DATA[spineName] = data.aside;
+
+                    if (data.texts) {
+                        if (data.texts.intro) {
+                            LANGS.forEach(l => { if(data.texts.intro[l]) { INTRO_MAP[l] = INTRO_MAP[l]||{}; INTRO_MAP[l][spineName] = data.texts.intro[l]; } });
+                        }
+                        if (data.texts.thought) {
+                            LANGS.forEach(l => { if(data.texts.thought[l]) { THOUGHT_MAP[l] = THOUGHT_MAP[l]||{}; THOUGHT_MAP[l][spineName] = data.texts.thought[l]; } });
+                        }
+                        if (data.texts.letter) {
+                            LANGS.forEach(l => { if(data.texts.letter[l]) { LETTER_MAP[l] = LETTER_MAP[l]||{}; LETTER_MAP[l][spineName] = data.texts.letter[l]; } });
+                        }
+                        if (data.texts.present) PRESENT_MAP[spineName] = data.texts.present;
+                    }
+                });
+
+                console.log(`✅ 成功從雲端同步 ${INITIAL_DATA.length} 隻角色！`);
+                populateDropdown(); 
+
+            } catch (error) {
+                console.error("同步 Firestore 失敗:", error);
+                document.getElementById('charSelector').innerHTML = '<option value="">-- ❌ 載入失敗 --</option>';
+            }
+        };
+
         window.onload = function() {
             buildTextInputs();
             buildSkillInputs();
             buildAsideInputs();
-            populateDropdown();
+            // populateDropdown() 移到了 fetchFirestoreData 裡面執行
         };
 
-        // ... [保留原本的 populateDropdown, clearForm, buildTextInputs, buildSkillInputs, buildAsideInputs, loadCharacterData 函數不變] ...
         function populateDropdown() {
             const selector = document.getElementById('charSelector');
             selector.innerHTML = '<option value="">-- 選擇現有角色 --</option>';
@@ -437,7 +501,7 @@ window.addEventListener('DOMContentLoaded', () => {
             // Aside
             const asData = ASIDE_DATA[spineName] || { totalName:{}, stars:{ 1:{}, 2:{}, 3:{} } };
             LANGS.forEach(lang => {
-                const asideLang = (lang === 'zh-TW') ? 'zh' : lang; // 將 zh-TW 轉成 zh
+                const asideLang = (lang === 'zh-TW') ? 'zh' : lang; 
                 
                 document.getElementById(`as_total_${lang}`).value = asData.totalName?.[asideLang] || "";
                 [1,2,3].forEach(star => {
@@ -453,14 +517,12 @@ window.addEventListener('DOMContentLoaded', () => {
             document.getElementById('downloadSection').style.pointerEvents = 'auto';
         }
 
-        // 🌟🌟🌟 新增：變成 async 函數，以支援 await 寫入 Firebase 🌟🌟🌟
         async function updateMemoryData() {
             const zhName = document.getElementById('zhName').value.trim();
             const spineName = document.getElementById('spineName').value.trim();
             if (!zhName || !spineName) { alert("中文名字與 Spine 名稱必填！"); return; }
 
-            // 1. 更新本機記憶體變數 (維持原有邏輯)
-            // Core
+            // 1. 更新本機記憶體變數
             LANG_DICT['zh-TW'][zhName] = zhName;
             if(document.getElementById('jaName').value) LANG_DICT['ja'][zhName] = document.getElementById('jaName').value;
             if(document.getElementById('enName').value) LANG_DICT['en'][zhName] = document.getElementById('enName').value;
@@ -551,7 +613,7 @@ window.addEventListener('DOMContentLoaded', () => {
             if(!asObj.stars) asObj.stars = { 1:{icon:""}, 2:{icon:""}, 3:{icon:""} };
             
             LANGS.forEach(lang => {
-                const asideLang = (lang === 'zh-TW') ? 'zh' : lang; // 將 zh-TW 轉成 zh 存檔
+                const asideLang = (lang === 'zh-TW') ? 'zh' : lang; 
                 
                 if(document.getElementById(`as_total_${lang}`).value) {
                     asObj.totalName[asideLang] = document.getElementById(`as_total_${lang}`).value;
@@ -575,7 +637,7 @@ window.addEventListener('DOMContentLoaded', () => {
             });
             ASIDE_DATA[spineName] = asObj;
 
-            // 🌟🌟🌟 2. 將資料整合成一個大 JSON 並寫入 Firebase Firestore 🌟🌟🌟
+            // 2. 將資料整合成大 JSON 並寫入 Firebase
             const characterDocument = {
                 spineName: spineName,
                 names: {
@@ -584,6 +646,21 @@ window.addEventListener('DOMContentLoaded', () => {
                     "en": document.getElementById('enName').value || ""
                 },
                 core: INITIAL_DATA.find(c => c.name === zhName) || {},
+                
+                // 🌟 新增：將原本散落的 Map 資料一併打包進 Firebase！
+                cv: document.getElementById('cv').value || "",
+                grade: document.getElementById('grade').value || "",
+                isEldain: document.getElementById('isEldain').checked,
+                miniSpine: document.getElementById('miniSpine').value || "",
+                costume: textToCommaArray(document.getElementById('costume').value),
+                sdCostume: textToCommaArray(document.getElementById('sdCostume').value),
+                food: {
+                    super: document.getElementById('foodSuper').value || "",
+                    special: textToCommaArray(document.getElementById('foodSpecial').value)
+                },
+                rewards: textToArray(document.getElementById('rewards').value),
+                workUrl: document.getElementById('workUrl').value || "",
+
                 skills: characterSkills.find(s => s.name === zhName) || {},
                 aside: ASIDE_DATA[spineName] || {},
                 texts: {
@@ -608,7 +685,6 @@ window.addEventListener('DOMContentLoaded', () => {
             };
 
             try {
-                // 執行 Firebase 寫入動作
                 if (window.setDoc && window.doc && window.db) {
                     await window.setDoc(window.doc(window.db, "global_characters", spineName), characterDocument);
                     const msg = document.getElementById('statusMsg');
@@ -627,10 +703,12 @@ window.addEventListener('DOMContentLoaded', () => {
             document.getElementById('downloadSection').style.pointerEvents = 'auto';
         }
 
-        // Export functions (保持不變)
+        // 🌟 修正點：防止 INITIAL_DATA 再度被寫回 data_core.js 造成資料兩倍的 Bug
         function generateCoreData() {
             return `const LANG_DICT = ${JSON.stringify(LANG_DICT, null, 4)};\n\n` +
-                   `const INITIAL_DATA = ${JSON.stringify(INITIAL_DATA, null, 4)};\n\n` +
+                   `// ⚠️ INITIAL_DATA 已全面改由 Firebase 雲端動態抓取，\n` +
+                   `// ⚠️ 這裡不再匯出陣列，確保網頁不會因「本機＋雲端」同時載入而變成兩倍角色！\n` +
+                   `const INITIAL_DATA = [];\n\n` +
                    `const CV_MAP = ${JSON.stringify(CV_MAP, null, 4)};\n\n` +
                    `const GRADE_MAP = ${JSON.stringify(GRADE_MAP, null, 4)};\n\n` +
                    `const ELDAIN_LIST = ${JSON.stringify(ELDAIN_LIST, null, 4)};\n\n` +
