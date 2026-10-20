@@ -19,6 +19,15 @@ const STORY_DATA = {
     ],
     // 活動劇情
     event: [
+
+        {
+            id: "event_028",
+            chapterNumber: "028", // 系統會自動抓取 story/Event002.png
+            name: "乘浪而來的企鵝人",
+            episodes: [
+                { epNumber: "第0節", title: "官方PV", youtubeId: "K-NtiLSm8Ow" }
+            ]
+        },
         {
             id: "event_027",
             chapterNumber: "027", // 系統會自動抓取 story/Event002.png
