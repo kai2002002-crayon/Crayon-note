@@ -263,6 +263,7 @@
         function textToCommaArray(text) { return text ? text.split(',').map(l => l.trim()).filter(l => l) : []; }
         function commaArrayToText(arr) { return arr && Array.isArray(arr) ? arr.join(', ') : ''; }
 
+        // 🌟 新增：從 Firestore 讀取所有資料並還原 INITIAL_DATA
         window.fetchFirestoreData = async function() {
             try {
                 const selector = document.getElementById('charSelector');
@@ -279,30 +280,18 @@
 
                     // 1. 重新建構 INITIAL_DATA
                     if (data.core) {
-                        data.core.name = zhName; // 確保名稱正確
                         INITIAL_DATA.push(data.core);
                     } else {
                         INITIAL_DATA.push({ name: zhName });
                     }
 
-                    // 2. 將雲端的各種屬性同步回本機變數
+                    // 2. 將雲端的各種屬性同步回本機變數，確保你在編輯舊角色時可以載入最新內容
                     SPINE_MAP[zhName] = spineName;
                     if (data.names) {
                         LANG_DICT['zh-TW'][zhName] = data.names['zh-TW'] || zhName;
                         if (data.names['ja']) LANG_DICT['ja'][zhName] = data.names['ja'];
                         if (data.names['en']) LANG_DICT['en'][zhName] = data.names['en'];
                     }
-
-                    // 🌟🌟🌟 新增：把散落的欄位解壓縮回全域 MAP 中，表單才讀得到
-                    if (data.cv) CV_MAP[zhName] = data.cv;
-                    if (data.grade) GRADE_MAP[zhName] = data.grade;
-                    if (data.isEldain && !ELDAIN_LIST.includes(zhName)) ELDAIN_LIST.push(zhName);
-                    if (data.miniSpine) MINI_SPINE[zhName] = data.miniSpine;
-                    if (data.costume) COSTUME_MAP[zhName] = data.costume;
-                    if (data.sdCostume) SD_COSTUME[zhName] = data.sdCostume;
-                    if (data.food) FOOD_MAP[spineName] = data.food;
-                    if (data.rewards) REWARD_MAP[spineName] = data.rewards;
-                    if (data.workUrl) WORK_URL[spineName] = data.workUrl;
 
                     if (data.skills) {
                         const skIndex = characterSkills.findIndex(s => s.name === zhName);
@@ -327,7 +316,7 @@
                 });
 
                 console.log(`✅ 成功從雲端同步 ${INITIAL_DATA.length} 隻角色！`);
-                populateDropdown(); 
+                populateDropdown(); // 資料備齊後，重新產生下拉選單
 
             } catch (error) {
                 console.error("同步 Firestore 失敗:", error);
@@ -646,21 +635,6 @@
                     "en": document.getElementById('enName').value || ""
                 },
                 core: INITIAL_DATA.find(c => c.name === zhName) || {},
-                
-                // 🌟 新增：將原本散落的 Map 資料一併打包進 Firebase！
-                cv: document.getElementById('cv').value || "",
-                grade: document.getElementById('grade').value || "",
-                isEldain: document.getElementById('isEldain').checked,
-                miniSpine: document.getElementById('miniSpine').value || "",
-                costume: textToCommaArray(document.getElementById('costume').value),
-                sdCostume: textToCommaArray(document.getElementById('sdCostume').value),
-                food: {
-                    super: document.getElementById('foodSuper').value || "",
-                    special: textToCommaArray(document.getElementById('foodSpecial').value)
-                },
-                rewards: textToArray(document.getElementById('rewards').value),
-                workUrl: document.getElementById('workUrl').value || "",
-
                 skills: characterSkills.find(s => s.name === zhName) || {},
                 aside: ASIDE_DATA[spineName] || {},
                 texts: {
