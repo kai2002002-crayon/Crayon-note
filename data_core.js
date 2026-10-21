@@ -938,10 +938,16 @@ const EVENT_SCHEDULE = [
 // 🃏 特選卡片排程表
 const CARD_SCHEDULE = [
 	{
-        start: "2026-10-22T17:00:00+09:00",
+        start: "2026-10-29T04:00:00+09:00",
         end: "2026-11-05T10:59:59+09:00",
         id: "Rune52",
         type: "Rune"
+    },
+	{
+        start: "2026-10-22T17:00:00+09:00",
+        end: "2026-11-05T10:59:59+09:00",
+        id: "Artifact118",
+        type: "Artifact"
     },
 	{
         start: "2026-09-17T04:00:00+09:00",
