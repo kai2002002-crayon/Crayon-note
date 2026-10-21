@@ -13,11 +13,10 @@
     </script>
     <link rel="icon" href="https://i.postimg.cc/mkfSTq5k/Favicon.png" type="image/png">
 </head>
-<!-- 加入背景圖，並設定滿版 (bg-cover)、位置居中 (bg-center) 與固定背景 (bg-fixed) -->
 <body class="bg-cover bg-center bg-fixed min-h-screen text-slate-800 dark:text-slate-200 p-4 sm:p-8" 
       style="background-image: url('https://i.postimg.cc/fTJ36ZFT/CG-Schedule-Rim.png');">
 
-    <!-- 如果背景太亮或太暗，可以疊加一層半透明遮罩讓內容更清楚 -->
+    <!-- 半透明遮罩 -->
     <div class="fixed inset-0 bg-black/40 -z-10 pointer-events-none"></div>
 
     <!-- 頂部導覽列 -->
@@ -31,7 +30,7 @@
     <!-- 劇情回顧主區塊 -->
     <div class="max-w-6xl mx-auto font-sans relative z-10">
         
-        <!-- 兩大區域按鈕 (Icons)：原圖 518*190，以原圖大小顯示，移除背景色與文字 -->
+        <!-- 兩大區域按鈕 -->
         <div class="flex justify-center items-center gap-8 sm:gap-16 mb-12 border-b border-white/20 pb-10">
             <button onclick="loadStoryCategory('main')" class="group cursor-pointer hover:scale-105 transition-transform outline-none">
                 <img src="story/Mainstory.png" alt="主線" class="w-[259px] h-[95px] object-contain group-hover:drop-shadow-[0_0_15px_rgba(59,130,246,0.8)] transition-all" onerror="this.style.display='none'">
@@ -43,17 +42,20 @@
         </div>
 
         <!-- 篇章 Banner 列表區 (預設隱藏) -->
-        <div id="banner-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10 hidden">
+        <!-- 注意這裡加入了 relative 確保內部插入元素佈局正常 -->
+        <div id="banner-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10 hidden relative">
             <!-- JS 動態生成 Banner -->
         </div>
 
-        <!-- 該篇章的章節列表區 (打橫列出，預設隱藏) -->
-        <div id="episode-container" class="hidden bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-6 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700">
-            <h3 id="episode-title" class="text-2xl font-black mb-6 border-b border-slate-200 dark:border-slate-700 pb-3 text-indigo-600 dark:text-indigo-400"></h3>
-            <!-- 橫向滑動區塊 -->
-            <div id="episode-list" class="flex gap-4 overflow-x-auto pb-4 snap-x">
-                <!-- JS 動態生成章節按鈕 -->
-            </div>
+    </div>
+
+    <!-- 該篇章的章節列表區 (預設隱藏，並改為 col-span 全覆蓋) -->
+    <!-- ⚠️ 此區塊會由 JavaScript 動態搬移到被點擊的篇章那一列的下方 -->
+    <div id="episode-container" class="hidden col-span-1 sm:col-span-2 lg:col-span-3 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-6 rounded-2xl shadow-2xl border-2 border-indigo-400 dark:border-indigo-500 w-full relative z-20">
+        <h3 id="episode-title" class="text-2xl font-black mb-6 border-b border-slate-200 dark:border-slate-700 pb-3 text-indigo-600 dark:text-indigo-400"></h3>
+        <!-- 橫向滑動區塊 -->
+        <div id="episode-list" class="flex gap-4 overflow-x-auto pb-4 snap-x">
+            <!-- JS 動態生成章節按鈕 -->
         </div>
     </div>
 
@@ -75,12 +77,19 @@
     <!-- 頁面互動邏輯 -->
     <script>
         let currentCategory = ''; 
+        let activeStoryIndex = -1;
 
         // 1. 載入兩大類別 (主線 / 活動) 的 Banners
         function loadStoryCategory(category) {
             currentCategory = category;
+            activeStoryIndex = -1;
             const bannerContainer = document.getElementById('banner-container');
             const episodeContainer = document.getElementById('episode-container');
+            
+            // 🌟 將章節區塊暫時移回 body，避免清空容器時被刪除
+            if (episodeContainer.parentNode === bannerContainer) {
+                document.body.appendChild(episodeContainer);
+            }
             
             bannerContainer.innerHTML = ''; 
             episodeContainer.classList.add('hidden'); 
@@ -96,7 +105,7 @@
             if (!storyData || storyData.length === 0) {
                 bannerContainer.innerHTML = '<p class="text-center text-white w-full col-span-full font-bold text-lg bg-black/50 p-4 rounded-lg backdrop-blur-sm">目前尚無劇情資料</p>';
             } else {
-                storyData.forEach(story => {
+                storyData.forEach((story, index) => {
                     const imgPrefix = category === 'main' ? 'Main' : 'Event';
                     const bannerUrl = `story/${imgPrefix}${story.chapterNumber}.png`;
                     
@@ -106,16 +115,16 @@
                         displayLabelHTML = `<p class="text-sm text-indigo-600 dark:text-indigo-400 font-bold mb-1">第 ${chapterInt} 章</p>`;
                     }
 
-                    // 區分主線 (50% 大小，以 500x700 比例呈現) 與活動 (原本的 600x314 設定)
                     const aspectClass = category === 'main' ? 'aspect-[5/7]' : 'aspect-[600/314]';
                     const objectFitClass = category === 'main' ? 'object-cover' : 'object-contain';
 
+                    // 🌟 加上 id 與 index 參數，並加上 banner-card 類別方便控制外觀
                     const bannerHTML = `
-                        <div onclick="loadEpisodes('${story.id}')" class="cursor-pointer group bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg hover:shadow-2xl hover:ring-2 hover:ring-indigo-400 transition-all hover:-translate-y-1 flex flex-col">
+                        <div id="banner-card-${index}" onclick="loadEpisodes('${story.id}', ${index})" class="banner-card cursor-pointer group bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg hover:shadow-2xl hover:ring-2 hover:ring-indigo-400 transition-all hover:-translate-y-1 flex flex-col">
                             <div class="w-full ${aspectClass} bg-slate-900 flex items-center justify-center relative overflow-hidden p-2">
                                 <img src="${bannerUrl}" alt="${story.name}" class="w-full h-full ${objectFitClass} group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://via.placeholder.com/600x314?text=${imgPrefix}${story.chapterNumber}'">
                             </div>
-                            <div class="p-4 text-center flex-grow flex flex-col justify-center">
+                            <div class="p-4 text-center flex-grow flex flex-col justify-center relative">
                                 ${displayLabelHTML}
                                 <h4 class="font-black text-lg text-slate-800 dark:text-white">${story.name}</h4>
                             </div>
@@ -127,14 +136,52 @@
             bannerContainer.classList.remove('hidden');
         }
 
-        // 2. 載入所選篇章的章節清單 (帶 YouTube 預覽圖)
-        function loadEpisodes(storyId) {
+        // 🌟 輔助函數：取得目前畫面的網格欄位數
+        function getColumns() {
+            if (window.innerWidth >= 1024) return 3; // lg (電腦)
+            if (window.innerWidth >= 640) return 2;  // sm (平板)
+            return 1;                                // base (手機)
+        }
+
+        // 🌟 核心函數：計算並把章節清單安插在「同一列的最尾端」下方
+        function placeEpisodeContainer(index) {
+            const cols = getColumns();
+            const storyData = STORY_DATA[currentCategory];
+            const totalItems = storyData.length;
+
+            // 計算該列最後一個項目的 index
+            let targetIndex = Math.floor(index / cols) * cols + (cols - 1);
+            if (targetIndex >= totalItems) {
+                targetIndex = totalItems - 1;
+            }
+
+            const targetCard = document.getElementById(`banner-card-${targetIndex}`);
+            const episodeContainer = document.getElementById('episode-container');
+
+            if (targetCard) {
+                // 將容器直接移動到該列最後一張卡片的後面 (因為容器有 col-span-full，會自動推擠開下方的卡片)
+                targetCard.insertAdjacentElement('afterend', episodeContainer);
+            }
+        }
+
+        // 2. 載入所選篇章的章節清單
+        function loadEpisodes(storyId, index) {
+            activeStoryIndex = index;
             const episodeContainer = document.getElementById('episode-container');
             const episodeList = document.getElementById('episode-list');
             const episodeTitle = document.getElementById('episode-title');
             
             const storyData = STORY_DATA[currentCategory].find(s => s.id === storyId);
             if (!storyData) return;
+
+            // 清除其他卡片的亮起狀態，凸顯當前點擊的卡片
+            document.querySelectorAll('.banner-card').forEach(card => {
+                card.classList.remove('ring-4', 'ring-indigo-500', 'scale-[1.02]');
+            });
+            const activeCard = document.getElementById(`banner-card-${index}`);
+            if (activeCard) {
+                activeCard.classList.add('ring-4', 'ring-indigo-500', 'scale-[1.02]');
+            }
 
             let chapterPrefix = '';
             if (currentCategory === 'main') {
@@ -167,10 +214,16 @@
                 episodeList.insertAdjacentHTML('beforeend', epHTML);
             });
 
+            // 🌟 將容器移動到該列下方並顯示
+            placeEpisodeContainer(index);
             episodeContainer.classList.remove('hidden');
+
+            // 滾動畫面讓容器置中或剛好顯示
             setTimeout(() => {
-                episodeContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }, 100);
+                const yOffset = -80; // 預留頂部空間
+                const y = activeCard.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                window.scrollTo({top: y, behavior: 'smooth'});
+            }, 50);
         }
 
         // 3. 播放 YouTube 影片
@@ -197,6 +250,13 @@
                 player.src = ''; 
             }, 300);
         }
+
+        // 🌟 監聽視窗大小改變：如果改變寬度導致網格列數變動，自動重新計算並把面板放回正確的列下方
+        window.addEventListener('resize', () => {
+            if (activeStoryIndex !== -1 && !document.getElementById('episode-container').classList.contains('hidden')) {
+                placeEpisodeContainer(activeStoryIndex);
+            }
+        });
     </script>
 </body>
 </html>
