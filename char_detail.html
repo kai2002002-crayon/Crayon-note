@@ -4,21 +4,19 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>坨坨詳細資料</title>
+        <script src="data_config.js"></script>
         <script src="data_core.js"></script>
         <script src="data_skills.js"></script>
         <script src="data_collectibles.js"></script>
         <script src="data_intro.js"></script>
         <script src="data_aside.js"></script>
-        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="stylesheet" href="./style.css">
         <link id="dynamicFavicon" rel="icon" href="https://i.postimg.cc/mkfSTq5k/Favicon.png" type="image/png">
         <link rel="preconnect" href="https://firebasestorage.googleapis.com">
         <link rel="stylesheet" href="sprites.css">
         <link rel="stylesheet" href="char_sprites/char_sprites.css">
         <link rel="preconnect" href="https://i.postimg.cc">
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
-        <script>
-            tailwind.config = { darkMode: 'class', }
-        </script>
         <script>
             const isDarkMode = localStorage.getItem('theme') === 'dark' || 
                                (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
@@ -1266,7 +1264,23 @@
                 btnElement.classList.remove('bg-white', 'dark:bg-slate-700', 'text-gray-700', 'dark:text-gray-200', 'border-gray-300', 'dark:border-slate-600', 'hover:bg-amber-100', 'dark:hover:bg-slate-600');
                 btnElement.classList.add('bg-amber-500', 'text-white', 'border-amber-600', 'shadow-sm');
             
+                // 載入上方的主要立繪
                 loadSpineAnimation(costumeKey);
+                
+                // 🌟 同步切換下方技能區的 SD 小人
+                const charName = currentCharData.name;
+                let sdCostumeKey = null;
+                
+                if (typeof COSTUME_MAP !== 'undefined' && COSTUME_MAP[charName]) {
+                    const idx = COSTUME_MAP[charName].indexOf(costumeKey);
+                    // 根據相同的索引，去 SD_COSTUME 找出對應的模型
+                    if (idx !== -1 && typeof SD_COSTUME !== 'undefined' && SD_COSTUME[charName] && SD_COSTUME[charName][idx]) {
+                        sdCostumeKey = SD_COSTUME[charName][idx];
+                    }
+                }
+                
+                // 重新載入對應服裝的技能 SD 動畫
+                loadSkillSpines(charName, sdCostumeKey);
             }
             
             function renderCollectibles(charName) {
@@ -1484,7 +1498,13 @@
                         
                         skillsContainer.innerHTML = html;
             
-                        setTimeout(() => loadSkillSpines(charName), 100);
+                        // 🌟 初始化時，嘗試取得第一套 SD 小人服裝（預設服裝）
+                        let initialSdCostumeKey = null;
+                        if (typeof SD_COSTUME !== 'undefined' && SD_COSTUME[charName] && SD_COSTUME[charName].length > 0) {
+                            initialSdCostumeKey = SD_COSTUME[charName][0];
+                        }
+                        
+                        setTimeout(() => loadSkillSpines(charName, initialSdCostumeKey), 100);
             
                     } else {
                         skillsContainer.innerHTML = `<div class="p-4 bg-gray-50 dark:bg-slate-700 text-gray-500 dark:text-gray-400 font-bold border border-gray-200 dark:border-slate-600 rounded-xl text-center">⚠️ ${getI18n('error_char_skill_not_found') || "找不到此坨坨的技能資料"}</div>`;
@@ -1635,15 +1655,20 @@
                 asideContainer.innerHTML = html;
             }
             
-            function loadSkillSpines(charName) {
+            function loadSkillSpines(charName, sdCostumeKey = null) {
                 if (window.skillSpinePlayers && window.skillSpinePlayers.length > 0) {
                     window.skillSpinePlayers.forEach(p => p.dispose());
                     window.skillSpinePlayers = [];
                 }
             
                 window.currentActiveCharName = charName;
+                window.currentActiveSdCostumeKey = sdCostumeKey; // 🌟 儲存當前的 SD 服裝，供 resize 重新渲染時使用
             
-                const baseFolderKey = typeof SPINE_MAP !== 'undefined' && SPINE_MAP[charName] ? SPINE_MAP[charName] : charName;
+                // 🌟 如果有傳入 sdCostumeKey，則優先使用指定的 SD 服裝模型，否則使用預設的 SPINE_MAP 模型
+                let baseFolderKey = typeof SPINE_MAP !== 'undefined' && SPINE_MAP[charName] ? SPINE_MAP[charName] : charName;
+                if (sdCostumeKey) {
+                    baseFolderKey = sdCostumeKey;
+                }
             
                 const targets = [
                     { id: 'spine-attack', prefix: 'Attack' },
@@ -1858,7 +1883,8 @@
                 clearTimeout(resizeTimeout);
                 resizeTimeout = setTimeout(() => {
                     if (window.currentActiveCharName) {
-                        loadSkillSpines(window.currentActiveCharName);
+                        // 🌟 帶入 currentActiveSdCostumeKey，避免縮放視窗時變回預設服裝
+                        loadSkillSpines(window.currentActiveCharName, window.currentActiveSdCostumeKey);
                     }
                 }, 300); 
             });
