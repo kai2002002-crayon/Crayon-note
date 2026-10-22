@@ -380,7 +380,7 @@ const ASIDE_DATA = {
     },
     "Guin": { 
         asideIcon: "", 
-        totalName: { zh: "", ja: "", en: "" }, 
+        totalName: { zh: "傳說指南針", ja: "伝説の羅針盤", en: "Legendary Compass" }, 
         stars: {
             1: { 
                 icon: "", 
