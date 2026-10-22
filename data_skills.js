@@ -3,27 +3,6 @@
 // 役割: 使徒の全言語（中・日・英）のスキルデータを一元管理
 // ==========================================
 
-const CHAR_BACKGROUNDS = {
-    "龍族": "https://i.postimg.cc/SNvZjtmR/Popup-Gacha-Event-Pattern-Tribe-Dragon.png",
-    "魔靈": "https://i.postimg.cc/5tMSFhGq/Popup-Gacha-Event-Pattern-Tribe-Elemental.png",
-    "精靈": "https://i.postimg.cc/X7z2XDnX/Popup-Gacha-Event-Pattern-Tribe-Elf.png",
-    "???": "https://i.postimg.cc/jSfh2x8F/Popup-Gacha-Event-Pattern-Tribe-Mystic.png",
-    "幽靈": "https://i.postimg.cc/13FKXmWY/Popup-Gacha-Event-Pattern-Tribe-Phantom.png",
-    "妖精": "https://i.postimg.cc/GmS7TWsH/Popup-Gacha-Event-Pattern-Tribe-Sprite.png",
-    "獸人": "https://i.postimg.cc/qvZb6PCg/Popup-Gacha-Event-Pattern-Tribe-Werebeast.png",
-    "魔女": "https://i.postimg.cc/C1r8JXPw/Popup-Gacha-Event-Pattern-Tribe-Witch.png"
-};
-
-const PERSONALITY_BACKGROUNDS = {
-    "冷靜": "https://i.postimg.cc/HkNfDkrZ/Motion-Experience-Pattern-Bg-Composed.png",
-    "憂鬱": "https://i.postimg.cc/4x0rkxY2/Motion-Experience-Pattern-Bg-Depressed.png",
-    "狂亂": "https://i.postimg.cc/5tFDxWzq/Motion-Experience-Pattern-Bg-Madness.png",
-    "活潑": "https://i.postimg.cc/q7CWkHKG/Motion-Experience-Pattern-Bg-Vivacious.png",
-    "天真": "https://i.postimg.cc/BQVhtwJ6/Motion-Experience-Pattern-Bg-Innocence.png",
-    "共鳴": "https://i.postimg.cc/bJwTwLmc/Motion-Experience-Pattern-Bg-Resonance.png"
-};
-
-
 const characterSkills = [
        {
     "name": "",
