@@ -3,84 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>終極角色資料管理系統</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>終極角色資料管理系統 (單機版)</title>
+    <link rel="stylesheet" href="./style.css">
     <script src="data_core.js"></script>
     <script src="data_skills.js"></script>
     <script src="data_aside.js"></script>
     <script src="data_intro.js"></script>
     <script src="data_collectibles.js"></script>
     
-    <!-- Firebase SDK -->
-    <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-    // 🌟 新增 getDocs 與 collection 來抓取整個資料表
-    import { getFirestore, doc, setDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-    import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-
-    const firebaseConfig = { 
-        apiKey: "AIzaSyDhv8D2pY_0M56UJrDTQw0RGPHA-BkXU8Y", 
-        authDomain: "crayon-note.firebaseapp.com", 
-        projectId: "crayon-note", 
-        storageBucket: "crayon-note.firebasestorage.app", 
-        messagingSenderId: "210614088940", 
-        appId: "1:210614088940:web:7addbdc7c466eeb05421c9", 
-        measurementId: "G-M1EJPE12TE" 
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const auth = getAuth(app);
-
-    window.db = db;
-    window.setDoc = setDoc;
-    window.doc = doc;
-    window.collection = collection;
-    window.getDocs = getDocs;
-
-    // ⚠️ 務必改成你自己的真實 Email 
-    const ADMIN_EMAILS = [
-        "kai2002002@gmail.com" 
-    ];
-
-    onAuthStateChanged(auth, (user) => {
-        const overlay = document.getElementById('loginOverlay');
-        if (user) {
-            if (ADMIN_EMAILS.length === 0 || ADMIN_EMAILS.includes(user.email)) {
-                console.log("✅ 管理員驗證成功：", user.email);
-                overlay.classList.add('hidden');
-                
-                // 🌟 登入成功後，立刻從 Firestore 抓取雲端角色清單！
-                if(typeof window.fetchFirestoreData === 'function') {
-                    window.fetchFirestoreData();
-                }
-            } else {
-                alert(`❌ 帳號 ${user.email} 沒有管理員權限！`);
-                signOut(auth);
-            }
-        } else {
-            console.log("🔒 尚未登入");
-            overlay.classList.remove('hidden');
-        }
-    });
-
-    window.addEventListener('DOMContentLoaded', () => {
-        const loginBtn = document.getElementById('googleLoginBtn');
-        if (loginBtn) {
-            loginBtn.addEventListener('click', () => {
-                const provider = new GoogleAuthProvider();
-                signInWithPopup(auth, provider).catch((error) => {
-                    console.error("登入失敗:", error);
-                    alert("登入失敗：" + error.message);
-                });
-            });
-        }
-    });
-    </script>
-    
     <script>
-        tailwind.config = { darkMode: 'class' };
         
+        // 確保變數存在，避免報錯
         if(typeof LANG_DICT === 'undefined') window.LANG_DICT = { "zh-TW": {}, "ja": {}, "en": {} };
         if(typeof INITIAL_DATA === 'undefined') window.INITIAL_DATA = [];
         if(typeof CV_MAP === 'undefined') window.CV_MAP = {};
@@ -110,25 +43,15 @@
 <body class="bg-slate-900 text-slate-200 min-h-screen font-sans p-4 lg:p-6">
 
     <div class="max-w-screen-2xl mx-auto flex flex-col lg:flex-row gap-6">
-        <!-- 🔐 登入解鎖遮罩 -->
-        <div id="loginOverlay" class="fixed inset-0 bg-slate-950/95 z-[9999] flex items-center justify-center hidden">
-            <div class="bg-slate-800 p-8 rounded-2xl shadow-2xl text-center max-w-sm w-full border border-indigo-500/50">
-                <h2 class="text-2xl font-black text-indigo-400 mb-2">🔐 系統已上鎖</h2>
-                <p class="text-xs text-slate-400 mb-6">請使用管理員 Google 帳號登入以存取後台。</p>
-                <button id="googleLoginBtn" type="button" class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow transition flex items-center justify-center gap-2">
-                    <span>🌐</span> 使用 Google 帳號登入
-                </button>
-            </div>
-        </div>
         
         <!-- 左側：資料填寫表單 -->
         <div class="w-full lg:w-3/4 bg-slate-800 rounded-xl shadow-xl p-6 h-[90vh] overflow-y-auto border border-slate-700 relative">
             <div class="sticky top-0 bg-slate-800 pb-4 border-b border-slate-700 z-50 flex justify-between items-end">
                 <div>
-                    <h1 class="text-3xl font-black text-indigo-400 mb-2">⚙️ 終極角色資料管理系統</h1>
+                    <h1 class="text-3xl font-black text-indigo-400 mb-2">⚙️ 終極角色資料管理系統 (單機版)</h1>
                     <div class="flex items-center gap-4">
                         <select id="charSelector" onchange="loadCharacterData(this.value)" class="bg-slate-900 border border-slate-600 text-white font-bold rounded p-2 focus:ring-2 focus:ring-indigo-500 outline-none w-64">
-                            <option value="">-- 等待登入... --</option>
+                            <option value="">-- 選擇現有角色 --</option>
                         </select>
                         <button onclick="clearForm()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 rounded text-sm font-bold transition-colors shadow">
                             + 建立全新角色
@@ -230,10 +153,10 @@
         <div class="w-full lg:w-1/4 bg-slate-800 rounded-xl shadow-xl flex flex-col h-[90vh] border border-slate-700 p-6 sticky top-6">
             <h2 class="text-2xl font-black text-green-400 mb-6 border-b border-slate-700 pb-4">📦 儲存與發布</h2>
             
-            <p class="text-sm text-slate-400 mb-6">點擊儲存後，資料會同步寫入本機記憶體以及 Firebase 雲端資料庫。</p>
+            <p class="text-sm text-slate-400 mb-6">點擊儲存後，資料會寫入網頁記憶體，隨後可下載更新的 .js 檔案。</p>
 
             <button type="button" onclick="updateMemoryData()" class="w-full py-4 mb-6 bg-indigo-600 hover:bg-indigo-500 text-white font-black text-lg rounded-xl shadow-lg transition-transform hover:scale-[1.02] border border-indigo-400">
-                💾 1. 同步儲存 (本機 + 雲端)
+                💾 1. 同步儲存 (寫入記憶體)
             </button>
 
             <div class="space-y-3 flex-1 overflow-y-auto pr-2" id="downloadSection" style="opacity: 0.3; pointer-events: none;">
@@ -246,7 +169,7 @@
             </div>
             
             <div id="statusMsg" class="mt-4 p-3 rounded bg-green-900/50 text-green-400 text-sm font-bold hidden text-center border border-green-500">
-                ✅ 成功儲存！
+                ✅ 已更新記憶體！請點擊上方按鈕下載。
             </div>
         </div>
 
@@ -262,72 +185,13 @@
         function textToCommaArray(text) { return text ? text.split(',').map(l => l.trim()).filter(l => l) : []; }
         function commaArrayToText(arr) { return arr && Array.isArray(arr) ? arr.join(', ') : ''; }
 
-        // 🌟 新增：從 Firestore 讀取所有資料並還原 INITIAL_DATA
-        window.fetchFirestoreData = async function() {
-            try {
-                const selector = document.getElementById('charSelector');
-                selector.innerHTML = '<option value="">-- ⏳ 從雲端同步角色資料中... --</option>';
-
-                const querySnapshot = await window.getDocs(window.collection(window.db, "global_characters"));
-                
-                window.INITIAL_DATA = []; // 清空，重新從雲端載入
-
-                querySnapshot.forEach(doc => {
-                    const data = doc.data();
-                    const zhName = data.names?.["zh-TW"] || data.core?.name || doc.id;
-                    const spineName = data.spineName || doc.id;
-
-                    // 1. 重新建構 INITIAL_DATA
-                    if (data.core) {
-                        INITIAL_DATA.push(data.core);
-                    } else {
-                        INITIAL_DATA.push({ name: zhName });
-                    }
-
-                    // 2. 將雲端的各種屬性同步回本機變數，確保你在編輯舊角色時可以載入最新內容
-                    SPINE_MAP[zhName] = spineName;
-                    if (data.names) {
-                        LANG_DICT['zh-TW'][zhName] = data.names['zh-TW'] || zhName;
-                        if (data.names['ja']) LANG_DICT['ja'][zhName] = data.names['ja'];
-                        if (data.names['en']) LANG_DICT['en'][zhName] = data.names['en'];
-                    }
-
-                    if (data.skills) {
-                        const skIndex = characterSkills.findIndex(s => s.name === zhName);
-                        if(skIndex >= 0) characterSkills[skIndex] = data.skills;
-                        else characterSkills.push(data.skills);
-                    }
-
-                    if (data.aside) ASIDE_DATA[spineName] = data.aside;
-
-                    if (data.texts) {
-                        if (data.texts.intro) {
-                            LANGS.forEach(l => { if(data.texts.intro[l]) { INTRO_MAP[l] = INTRO_MAP[l]||{}; INTRO_MAP[l][spineName] = data.texts.intro[l]; } });
-                        }
-                        if (data.texts.thought) {
-                            LANGS.forEach(l => { if(data.texts.thought[l]) { THOUGHT_MAP[l] = THOUGHT_MAP[l]||{}; THOUGHT_MAP[l][spineName] = data.texts.thought[l]; } });
-                        }
-                        if (data.texts.letter) {
-                            LANGS.forEach(l => { if(data.texts.letter[l]) { LETTER_MAP[l] = LETTER_MAP[l]||{}; LETTER_MAP[l][spineName] = data.texts.letter[l]; } });
-                        }
-                        if (data.texts.present) PRESENT_MAP[spineName] = data.texts.present;
-                    }
-                });
-
-                console.log(`✅ 成功從雲端同步 ${INITIAL_DATA.length} 隻角色！`);
-                populateDropdown(); // 資料備齊後，重新產生下拉選單
-
-            } catch (error) {
-                console.error("同步 Firestore 失敗:", error);
-                document.getElementById('charSelector').innerHTML = '<option value="">-- ❌ 載入失敗 --</option>';
-            }
-        };
-
         window.onload = function() {
             buildTextInputs();
             buildSkillInputs();
             buildAsideInputs();
-            // populateDropdown() 移到了 fetchFirestoreData 裡面執行
+            populateDropdown(); // 直接讀取本地 JS 的資料來生成選單
+            document.getElementById('downloadSection').style.opacity = '1';
+            document.getElementById('downloadSection').style.pointerEvents = 'auto';
         };
 
         function populateDropdown() {
@@ -344,8 +208,6 @@
         function clearForm() {
             document.getElementById('charSelector').value = "";
             document.getElementById('charForm').reset();
-            document.getElementById('downloadSection').style.opacity = '0.3';
-            document.getElementById('downloadSection').style.pointerEvents = 'none';
         }
 
         function buildTextInputs() {
@@ -500,12 +362,9 @@
                     if(star===3) document.getElementById(`as_3_g_${lang}`).value = arrayToText(st.globalEffects?.[asideLang]);
                 });
             });
-
-            document.getElementById('downloadSection').style.opacity = '1';
-            document.getElementById('downloadSection').style.pointerEvents = 'auto';
         }
 
-        async function updateMemoryData() {
+        function updateMemoryData() {
             const zhName = document.getElementById('zhName').value.trim();
             const spineName = document.getElementById('spineName').value.trim();
             if (!zhName || !spineName) { alert("中文名字與 Spine 名稱必填！"); return; }
@@ -625,63 +484,16 @@
             });
             ASIDE_DATA[spineName] = asObj;
 
-            // 2. 將資料整合成大 JSON 並寫入 Firebase
-            const characterDocument = {
-                spineName: spineName,
-                names: {
-                    "zh-TW": zhName,
-                    "ja": document.getElementById('jaName').value || "",
-                    "en": document.getElementById('enName').value || ""
-                },
-                core: INITIAL_DATA.find(c => c.name === zhName) || {},
-                skills: characterSkills.find(s => s.name === zhName) || {},
-                aside: ASIDE_DATA[spineName] || {},
-                texts: {
-                    intro: {
-                        "zh-TW": document.getElementById('intro_zh-TW').value || "",
-                        "ja": document.getElementById('intro_ja').value || "",
-                        "en": document.getElementById('intro_en').value || ""
-                    },
-                    thought: {
-                        "zh-TW": document.getElementById('thought_zh-TW').value || "",
-                        "ja": document.getElementById('thought_ja').value || "",
-                        "en": document.getElementById('thought_en').value || ""
-                    },
-                    letter: {
-                        "zh-TW": document.getElementById('letter_zh-TW').value || "",
-                        "ja": document.getElementById('letter_ja').value || "",
-                        "en": document.getElementById('letter_en').value || ""
-                    },
-                    present: PRESENT_MAP[spineName] || {}
-                },
-                lastUpdated: new Date().toISOString()
-            };
-
-            try {
-                if (window.setDoc && window.doc && window.db) {
-                    await window.setDoc(window.doc(window.db, "global_characters", spineName), characterDocument);
-                    const msg = document.getElementById('statusMsg');
-                    msg.textContent = "✅ 成功同步至本機與 Firebase 雲端！請點擊下載更新檔。";
-                    msg.classList.remove('hidden');
-                    setTimeout(() => msg.classList.add('hidden'), 5000);
-                } else {
-                    alert("⚠️ Firebase 尚未正確初始化，目前僅儲存至本機記憶體。");
-                }
-            } catch (error) {
-                console.error("Firebase 寫入失敗:", error);
-                alert("儲存至雲端失敗！請開啟 F12 開發者工具檢查 Console 錯誤訊息。");
-            }
-
-            document.getElementById('downloadSection').style.opacity = '1';
-            document.getElementById('downloadSection').style.pointerEvents = 'auto';
+            // 顯示成功訊息
+            const msg = document.getElementById('statusMsg');
+            msg.classList.remove('hidden');
+            setTimeout(() => msg.classList.add('hidden'), 5000);
         }
 
-        // 🌟 修正點：防止 INITIAL_DATA 再度被寫回 data_core.js 造成資料兩倍的 Bug
+        // 重新完整匯出 INITIAL_DATA
         function generateCoreData() {
             return `const LANG_DICT = ${JSON.stringify(LANG_DICT, null, 4)};\n\n` +
-                   `// ⚠️ INITIAL_DATA 已全面改由 Firebase 雲端動態抓取，\n` +
-                   `// ⚠️ 這裡不再匯出陣列，確保網頁不會因「本機＋雲端」同時載入而變成兩倍角色！\n` +
-                   `const INITIAL_DATA = [];\n\n` +
+                   `const INITIAL_DATA = ${JSON.stringify(INITIAL_DATA, null, 4)};\n\n` +
                    `const CV_MAP = ${JSON.stringify(CV_MAP, null, 4)};\n\n` +
                    `const GRADE_MAP = ${JSON.stringify(GRADE_MAP, null, 4)};\n\n` +
                    `const ELDAIN_LIST = ${JSON.stringify(ELDAIN_LIST, null, 4)};\n\n` +
