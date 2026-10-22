@@ -38,16 +38,6 @@ const LANG_DICT = {
         "魔女": "魔女", "獸人": "獸人", "龍族": "龍族", "魔靈": "魔靈", "妖精": "妖精", "精靈": "精靈", "幽靈": "幽靈", "???": "???",
         "前排": "前排", "中排": "中排", "後排": "後排", "所有排": "所有排", "輸出": "輸出", "肉盾": "肉盾", "輔助": "輔助",
         "攻擊": "攻擊", "防禦": "防禦", "血量": "血量", "爆擊": "爆擊", "爆抗": "爆抗", "全部": "全部",
-        "洛涅": "洛涅", "薇薇": "薇薇", "艾爾芬": "艾爾芬", "x乂錫安乂x": "x乂錫安乂x", "伊弗利特": "伊弗利特", "伊德": "伊德", "佩佩": "佩佩", "佩斯塔": "佩斯塔",
-        "修帕": "修帕", "傑德": "傑德", "優米": "優米", "劉美美": "劉美美", "加薇雅": "加薇雅", "卡洛特": "卡洛特", "卡蓮": "卡蓮", "喬菲": "喬菲",
-        "基狄恩": "基狄恩", "大師2號": "大師2號", "大木頭": "大木頭", "奈雅": "奈雅", "奶油": "奶油", "布蘭切": "布蘭切", "希拉": "希拉", "希爾德": "希爾德",
-        "希瑟圖": "希瑟圖", "希菲爾": "希菲爾", "帕特拉": "帕特拉", "庫洛艾": "庫洛艾", "康娜": "康娜", "愛麗絲": "愛麗絲", "班尼": "班尼", "斯皮奇": "斯皮奇",
-        "斯諾奇": "斯諾奇", "柯米": "柯米", "桃桃": "桃桃", "梅森": "梅森", "梅露娜": "梅露娜", "海莉": "海莉", "珀榭": "珀榭", "琳": "琳",
-        "瑟琳娜": "瑟琳娜", "瑪約": "瑪約", "瑪麗": "瑪麗", "皮可菈": "皮可菈", "盧波": "盧波", "米雪": "米雪", "綾": "綾", "羽伊": "羽伊",
-        "艾斯皮": "艾斯皮", "艾琳娜": "艾琳娜", "艾皮卡": "艾皮卡", "艾舒爾": "艾舒爾", "艾蜜莉雅": "艾蜜莉雅", "芙莉可": "芙莉可", "茱蜜": "茱蜜", "莉茲": "莉茲",
-        "莎莉": "莎莉", "萊薇": "萊薇", "蒂亞娜": "蒂亞娜", "謝蒂": "謝蒂", "貝魯": "貝魯", "貝麗塔": "貝麗塔", "路德": "路德", "路易": "路易",
-        "阿萊特": "阿萊特", "雷吉": "雷吉", "馬爾": "馬爾", "泰達": "泰達", "寧琉": "寧琉", "莉絲蒂": "莉絲蒂", "雷內瓦": "雷內瓦", "芭瓏": "芭瓏", "達雅": "達雅", "提格": "提格",
-		"羅蕾特": "羅蕾特", "琵拉": "琵拉", "雪蘭": "雪蘭", "芭莉耶": "芭莉耶", "瓊安": "瓊安", "柯米(泳裝)": "柯米(泳裝)", "麗息": "麗息", "瑰恩": "瑰恩",
 		"克魯布魯斯": "克魯布魯斯", "蠟筆勇士": "蠟筆勇士", "R41雷內瓦": "R41雷內瓦", "莉1莉": "莉1莉", "M.E.O.W.": "M.E.O.W.", "雷內瓦(NPC)": "雷內瓦", "榮春": "榮春", "高蒂": "高蒂", "可麗餅": "可麗餅",
         page_title_char_detail: "坨坨詳細資料", btn_close_page: "⬅️ 關閉此頁", loading: "載入中...", release_date_label: "實裝日期",
         crayon_detail_title: "🖍️ 金蠟筆分佈詳情", layer_1_stats: "🥇 第一層屬性", layer_2_stats: "🥈 第二層屬性", layer_3_stats: "🥉 第三層屬性",
@@ -67,6 +57,88 @@ const LANG_DICT = {
 		ui_title: "坨坨動態展示器", ui_back: "⬅️ 返回", ui_select_char: "👥 選擇坨坨", ui_show_all: "顯示全部", ui_hide_all: "隱藏全部", ui_please_select: "請先選擇坨坨", ui_camera: "🔄 重置", ui_waiting: "等待載入...", ui_mode_lobby: "🔄 模式: 大廳", ui_mode_battle: "⚔️ 模式: 戰鬥", ui_ar_open: "📷 開啟AR", ui_ar_close: "❌ 關閉AR", ui_ar_panel: "📷 相機面板", ui_ar_flip: "🔄 翻轉鏡頭", ui_ar_capture: "📸 拍照儲存", ui_costume: "服裝", ui_default_costume: "預設服裝", ui_default_model: "預設模型", ui_select_anim: "選擇動作", ui_slots: "🧩 外觀插槽", ui_show_slots: "全顯", ui_hide_slots: "全隱", ui_loading_data: "讀取資料中...",
 		gacha_simulator: "嘟嘟臉角色招募模擬器", gacha_select_pool: "📍 選擇招募池", gacha_personality_hint: "🔮 指定性格：", gacha_1_pull: "1次招募", gacha_10_pull: "10次招募", gacha_waiting: "等待招募中...", gacha_history: "📜 招募紀錄", gacha_rate_up: "🎯 特選招募", gacha_normal: "🌟 普通招募", gacha_personality_pool: "🔮 性格選擇招募", gacha_result_title: "🎉 招募結果 🎉", gacha_prev_page: "上一頁", gacha_next_page: "下一頁", gacha_page: "第 {current} / {total} 頁", gacha_unknown_time: "未知時間", gacha_unknown_pool: "未知招募",
 		ui_tier_title: "排行榜生成器", ui_tier_add_row: "新增級別", ui_tier_reset: "全部重置", ui_tier_export: "輸出圖片", ui_tier_pool_title: "選擇角色 (拖曳至上方排行榜)", ui_tier_default_title: "我的最愛排行榜", ui_tier_reset_confirm: "確定要重置整個排行榜並將所有角色放回角色池嗎？", ui_tier_export_error: "匯出圖片失敗",
+		"愛麗絲": "愛麗絲",
+        "阿萊特": "阿萊特",
+        "艾蜜莉雅": "艾蜜莉雅",
+        "艾舒爾": "艾舒爾",
+        "綾": "綾",
+        "芭莉耶": "芭莉耶",
+        "芭瓏": "芭瓏",
+        "貝麗塔": "貝麗塔",
+        "班尼": "班尼",
+        "大木頭": "大木頭",
+        "布蘭切": "布蘭切",
+        "奶油": "奶油",
+        "康娜": "康娜",
+        "卡蓮": "卡蓮",
+        "庫洛艾": "庫洛艾",
+        "喬菲": "喬菲",
+        "路易": "路易",
+        "達雅": "達雅",
+        "蒂亞娜": "蒂亞娜",
+        "伊德": "伊德",
+        "艾琳娜": "艾琳娜",
+        "艾皮卡": "艾皮卡",
+        "艾爾芬": "艾爾芬",
+        "艾斯皮": "艾斯皮",
+        "佩斯塔": "佩斯塔",
+        "芙莉可": "芙莉可",
+        "加薇雅": "加薇雅",
+        "瑰恩": "瑰恩",
+        "海莉": "海莉",
+        "希爾德": "希爾德",
+        "伊弗利特": "伊弗利特",
+        "傑德": "傑德",
+        "瓊安": "瓊安",
+        "茱蜜": "茱蜜",
+        "基狄恩": "基狄恩",
+        "柯米": "柯米",
+        "柯米(泳裝)": "柯米(泳裝)",
+        "卡洛特": "卡洛特",
+        "雷吉": "雷吉",
+        "莉茲": "莉茲",
+        "麗息": "麗息",
+        "萊薇": "萊薇",
+        "大師2號": "大師2號",
+        "馬爾": "馬爾",
+        "梅森": "梅森",
+        "瑪麗": "瑪麗",
+        "瑪約": "瑪約",
+        "梅露娜": "梅露娜",
+        "桃桃": "桃桃",
+        "米雪": "米雪",
+        "奈雅": "奈雅",
+        "寧琉": "寧琉",
+        "帕特拉": "帕特拉",
+        "皮可菈": "皮可菈",
+        "琵拉": "琵拉",
+        "珀榭": "珀榭",
+        "雷內瓦": "雷內瓦",
+        "琳": "琳",
+        "莉絲蒂": "莉絲蒂",
+        "洛涅": "洛涅",
+        "羅蕾特": "羅蕾特",
+        "路德": "路德",
+        "盧波": "盧波",
+        "莎莉": "莎莉",
+        "瑟琳娜": "瑟琳娜",
+        "謝蒂": "謝蒂",
+        "雪蘭": "雪蘭",
+        "修帕": "修帕",
+        "希菲爾": "希菲爾",
+        "希瑟圖": "希瑟圖",
+        "斯諾奇": "斯諾奇",
+        "斯皮奇": "斯皮奇",
+        "希拉": "希拉",
+        "泰達": "泰達",
+        "提格": "提格",
+        "羽伊": "羽伊",
+        "佩佩": "佩佩",
+        "貝魯": "貝魯",
+        "薇薇": "薇薇",
+        "優米": "優米",
+        "劉美美": "劉美美",
+        "x乂錫安乂x": "x乂錫安乂x"
     },
     "ja": {
         app_title: "トリッカル特級クレヨンノート", app_subtitle: "教主が毎日特級クレヨンを受け取れますように", stats_title: "📊 統計とボーナス情報",
@@ -99,16 +171,6 @@ const LANG_DICT = {
         "魔女": "魔女", "獸人": "獣人", "龍族": "竜族", "魔靈": "精霊", "妖精": "妖精", "精靈": "エルフ", "幽靈": "幽霊", "???": "???",
         "前排": "前列", "中排": "中列", "後排": "後列", "所有排": "全ての列", "輸出": "攻撃", "肉盾": "守備", "輔助": "支援",
         "攻擊": "攻撃", "防禦": "防御", "血量": "HP", "爆擊": "会心", "爆抗": "会心抵抗", "全部": "すべて",
-        "洛涅": "ローネ", "薇薇": "ヴィヴィ", "艾爾芬": "エルフィン", "x乂錫安乂x": "シオン・ザ・DB", "伊弗利特": "イフリート", "伊德": "イード", "佩佩": "ベルベット", "佩斯塔": "フェスタ",
-        "修帕": "シュパン", "傑德": "ジェイド", "優米": "ヨミ", "劉美美": "ユミミ", "加薇雅": "ガヴィア", "卡洛特": "キャロット", "卡蓮": "カレン", "喬菲": "チョッピー",
-        "基狄恩": "ギデオン", "大師2號": "マエストロMK2", "大木頭": "ビッグウッド", "奈雅": "ナイア", "奶油": "バター", "布蘭切": "ブランセ", "希拉": "シーラ", "希爾德": "ヒルデ",
-        "希瑟圖": "シスト", "希菲爾": "シルフィール", "帕特拉": "パトラ", "庫洛艾": "クロエ", "康娜": "カンナ", "愛麗絲": "アリス", "班尼": "ベニー", "斯皮奇": "スピッキー",
-        "斯諾奇": "スノキー", "柯米": "コミー", "桃桃": "モモ", "梅森": "メゾン", "梅露娜": "メロナ", "海莉": "ヘイリー", "珀榭": "ポーシャー", "琳": "リム",
-        "瑟琳娜": "セリーネ", "瑪約": "マヨ", "瑪麗": "マリー", "皮可菈": "ピコラ", "盧波": "ルポ", "米雪": "ミンス", "綾": "アヤ", "羽伊": "ウイ",
-        "艾斯皮": "エスピー", "艾琳娜": "エレナ", "艾皮卡": "エピカ", "艾舒爾": "エシュール", "艾蜜莉雅": "アメリア", "芙莉可": "フリックル", "茱蜜": "ジュビー", "莉茲": "リッツ",
-        "莎莉": "サリー", "萊薇": "レヴィ", "蒂亞娜": "ディアナ", "謝蒂": "シェイディ", "貝魯": "ベル", "貝麗塔": "ベリータ", "路德": "ルード", "路易": "キュウイ",
-        "阿萊特": "アレット", "雷吉": "レイジー", "馬爾": "マーゴ", "泰達": "タイダー", "寧琉": "ネル", "莉絲蒂": "リスティ", "雷內瓦": "リニュア", "芭瓏": "バロン", "達雅": "ダーヤ", "提格": "ティグ",
-		"羅蕾特": "ロレット", "琵拉": "ピラ", "雪蘭": "シェルム", "芭莉耶": "バリエ", "瓊安": "ジョアン", "柯米(泳裝)": "コミー（水着）", "麗息": "レーテー", "瑰恩": "グウィン",
 		"克魯布魯斯": "ケルベロス", "蠟筆勇士": "イサムレヨン", "R41雷內瓦": "R41 リニュア", "莉1莉": "リリー", "M.E.O.W.": "M.E.O.W.", "雷內瓦(NPC)": "リニュア", "榮春": "ブルミ", "高蒂": "ゴールディ", "可麗餅": "クレープ",
         page_title_char_detail: "使徒詳細データ", btn_close_page: "⬅️ 閉じる", loading: "読み込み中...", release_date_label: "実装日",
         crayon_detail_title: "🖍️ 特級クレヨン分布詳細", layer_1_stats: "🥇 1段階目ステータス", layer_2_stats: "🥈 2段階目ステータス", layer_3_stats: "🥉 3段階目ステータス",
@@ -128,6 +190,88 @@ const LANG_DICT = {
 		ui_title: "使徒ビューアー", ui_back: "⬅️ 戻る", ui_select_char: "👥 使徒選択", ui_show_all: "全て表示", ui_hide_all: "全て隠す", ui_please_select: "先に選択してください", ui_camera: "🔄 リセット", ui_waiting: "ロード中...", ui_mode_lobby: "🔄 モード: ロビー", ui_mode_battle: "⚔️ モード: バトル", ui_ar_open: "📷 ARオン", ui_ar_close: "❌ ARオフ", ui_ar_panel: "📷 カメラパネル", ui_ar_flip: "🔄 反転", ui_ar_capture: "📸 撮影", ui_costume: "衣装", ui_default_costume: "デフォルト", ui_default_model: "基本モデル", ui_select_anim: "モーション", ui_slots: "🧩 スロット", ui_show_slots: "全表示", ui_hide_slots: "全非表示", ui_loading_data: "読み込み中...",
 		gacha_simulator: "使徒ガチャシミュレーター", gacha_select_pool: "📍 ガチャ選択", gacha_personality_hint: "🔮 指定性格：", gacha_1_pull: "1回募集", gacha_10_pull: "10回募集", gacha_waiting: "結果待ち...", gacha_history: "📜 ガチャ履歴", gacha_rate_up: "🎯 ピックアップ募集", gacha_normal: "🌟 一般募集", gacha_personality_pool: "🔮 性格選択募集", gacha_result_title: "🎉 ガチャ結果 🎉", gacha_prev_page: "前へ", gacha_next_page: "次へ", gacha_page: "{current} / {total} ページ", gacha_unknown_time: "不明な時間", gacha_unknown_pool: "不明なガチャ",
 		ui_tier_title: "ティアメーカー", ui_tier_add_row: "ランク追加", ui_tier_reset: "すべてリセット", ui_tier_export: "画像として保存", ui_tier_pool_title: "キャラクター一覧 (上のランクへドラッグ)", ui_tier_default_title: "私の最強ランキング", ui_tier_reset_confirm: "本当にすべてリセットしてキャラクターを一覧に戻しますか？", ui_tier_export_error: "画像の出力に失敗しました。",
+		"愛麗絲": "アリス",
+        "阿萊特": "アレット",
+        "艾蜜莉雅": "アメリア",
+        "艾舒爾": "エシュール",
+        "綾": "アヤ",
+        "芭莉耶": "バリエ",
+        "芭瓏": "バロン",
+        "貝麗塔": "ベリータ",
+        "班尼": "ベニー",
+        "大木頭": "ビッグウッド",
+        "布蘭切": "ブランセ",
+        "奶油": "バター",
+        "康娜": "カンナ",
+        "卡蓮": "カレン",
+        "庫洛艾": "クロエ",
+        "喬菲": "チョッピー",
+        "路易": "キュウイ",
+        "達雅": "ダーヤ",
+        "蒂亞娜": "ディアナ",
+        "伊德": "イード",
+        "艾琳娜": "エレナ",
+        "艾皮卡": "エピカ",
+        "艾爾芬": "エルフィン",
+        "艾斯皮": "エスピー",
+        "佩斯塔": "フェスタ",
+        "芙莉可": "フリックル",
+        "加薇雅": "ガヴィア",
+        "瑰恩": "グウィン",
+        "海莉": "ヘイリー",
+        "希爾德": "ヒルデ",
+        "伊弗利特": "イフリート",
+        "傑德": "ジェイド",
+        "瓊安": "ジョアン",
+        "茱蜜": "ジュビー",
+        "基狄恩": "ギデオン",
+        "柯米": "コミー",
+        "柯米(泳裝)": "コミー（水着）",
+        "卡洛特": "キャロット",
+        "雷吉": "レイジー",
+        "莉茲": "リッツ",
+        "麗息": "レーテー",
+        "萊薇": "レヴィ",
+        "大師2號": "マエストロMK2",
+        "馬爾": "マーゴ",
+        "梅森": "メゾン",
+        "瑪麗": "マリー",
+        "瑪約": "マヨ",
+        "梅露娜": "メロナ",
+        "桃桃": "モモ",
+        "米雪": "ミンス",
+        "奈雅": "ナイア",
+        "寧琉": "ネル",
+        "帕特拉": "パトラ",
+        "皮可菈": "ピコラ",
+        "琵拉": "ピラ",
+        "珀榭": "ポーシャー",
+        "雷內瓦": "リニュア",
+        "琳": "リム",
+        "莉絲蒂": "リスティ",
+        "洛涅": "ローネ",
+        "羅蕾特": "ロレット",
+        "路德": "ルード",
+        "盧波": "ルポ",
+        "莎莉": "サリー",
+        "瑟琳娜": "セリーネ",
+        "謝蒂": "シェイディ",
+        "雪蘭": "シェルム",
+        "修帕": "シュパン",
+        "希菲爾": "シルフィール",
+        "希瑟圖": "シスト",
+        "斯諾奇": "スノキー",
+        "斯皮奇": "スピッキー",
+        "希拉": "シーラ",
+        "泰達": "タイダー",
+        "提格": "ティグ",
+        "羽伊": "ウイ",
+        "佩佩": "ベルベット",
+        "貝魯": "ベル",
+        "薇薇": "ヴィヴィ",
+        "優米": "ヨミ",
+        "劉美美": "ユミミ",
+        "x乂錫安乂x": "シオン・ザ・DB"
     },
     "en": {
         app_title: "Trickcal Crayon Notepad", app_subtitle: "May the Master get Ultra Crayons daily", stats_title: "📊 Stats & Bonus Info",
@@ -160,16 +304,6 @@ const LANG_DICT = {
         "魔女": "Witch", "獸人": "Werebeast", "龍族": "Dragon", "魔靈": "Elemental", "妖精": "Sprite", "精靈": "Elf", "幽靈": "Phantom", "???": "???",
         "前排": "Front", "中排": "Middle", "後排": "Back", "所有排": "All Columns", "輸出": "DPS", "肉盾": "Tank", "輔助": "Support",
         "攻擊": "ATK", "防禦": "DEF", "血量": "HP", "爆擊": "CRIT", "爆抗": "CRIT RES", "全部": "All",
-        "洛涅": "Rohne", "薇薇": "Vivi", "艾爾芬": "Erpin", "x乂錫安乂x": "xXionx", "伊弗利特": "Ifrit", "伊德": "ED", "佩佩": "Velvet", "佩斯塔": "Festa",
-        "修帕": "Shoupan", "傑德": "Jade", "優米": "Yomi", "劉美美": "Yumimi", "加薇雅": "Gabia", "卡洛特": "Kyarot", "卡蓮": "Carren", "喬菲": "Chopi",
-        "基狄恩": "Kidian", "大師2號": "Maestro Mk.2", "大木頭": "Big Wood", "奈雅": "Naia", "奶油": "Butter", "布蘭切": "Blanchet", "希拉": "Sylla", "希爾德": "Hilde",
-        "希瑟圖": "Sist", "希菲爾": "Silphir", "帕特拉": "Patula", "庫洛艾": "Chloe", "康娜": "Canna", "愛麗絲": "Alice", "班尼": "Beni", "斯皮奇": "Speaki",
-        "斯諾奇": "Snorky", "柯米": "Kommy", "桃桃": "Momo", "梅森": "Maison", "梅露娜": "Meluna", "海莉": "Haley", "珀榭": "Posher", "琳": "Rim",
-        "瑟琳娜": "Selene", "瑪約": "Mayo", "瑪麗": "Marie", "皮可菈": "Picora", "盧波": "Rufo", "米雪": "Mynx", "綾": "Aya", "羽伊": "Ui",
-        "艾斯皮": "Espi", "艾琳娜": "Elena", "艾皮卡": "Epica", "艾舒爾": "Ashur", "艾蜜莉雅": "Amelia", "芙莉可": "Fricle", "茱蜜": "Jubee", "莉茲": "Leets",
-        "莎莉": "Sari", "萊薇": "Levi", "蒂亞娜": "Diana", "謝蒂": "Shaydi", "貝魯": "Veroo", "貝麗塔": "Belita", "路德": "Rudd", "路易": "Kyuri",
-        "阿萊特": "Allet", "雷吉": "Layze", "馬爾": "Mago", "泰達": "Taida", "寧琉": "Ner", "莉絲蒂": "Risty", "雷內瓦": "Renewa", "芭瓏": "Barong", "達雅": "Daya", "提格": "Tig",
-        "羅蕾特": "Rollett", "琵拉": "Pira", "雪蘭": "Sherum", "芭莉耶": "Barie", "瓊安": "Joanne", "柯米(泳裝)": "Swimsuit Kommy", "麗息": "Lethe", "瑰恩": "Guin",
 		"克魯布魯斯": "Cerberus", "蠟筆勇士": "Super Crayon", "R41雷內瓦": "R41 Renewa", "莉1莉": "L1ly", "M.E.O.W.": "M.E.O.W.", "雷內瓦(NPC)": "Renewa", "榮春": "Youngchun", "高蒂": "Goldy", "可麗餅": "Crepe",
 		page_title_char_detail: "Apostle Details", btn_close_page: "⬅️ Close", loading: "Loading...",  release_date_label: "Release Date",
         crayon_detail_title: "🖍️ Ultra Crayon Details", layer_1_stats: "🥇 Board 1 Stats", layer_2_stats: "🥈 Board 2 Stats", layer_3_stats: "🥉 Board 3 Stats",
@@ -189,16 +323,97 @@ const LANG_DICT = {
 		ui_title: "Apostle Viewer", ui_back: "⬅️ Back", ui_select_char: "👥 Select Apostle", ui_show_all: "Show All", ui_hide_all: "Hide All", ui_please_select: "Please select first", ui_camera: "🔄 Reset", ui_waiting: "Loading...", ui_mode_lobby: "🔄 Mode: Lobby", ui_mode_battle: "⚔️ Mode: Battle", ui_ar_open: "📷 AR On", ui_ar_close: "❌ AR Off", ui_ar_panel: "📷 Camera UI", ui_ar_flip: "🔄 Flip", ui_ar_capture: "📸 Capture", ui_costume: "Costume", ui_default_costume: "Default", ui_default_model: "Base Model", ui_select_anim: "Animation", ui_slots: "🧩 Slots", ui_show_slots: "Show All", ui_hide_slots: "Hide All", ui_loading_data: "Loading...",
 		gacha_simulator: "Apostle Gacha Simulator", gacha_select_pool: "📍 Select Pool", gacha_personality_hint: "🔮 Personality:", gacha_1_pull: "1 Pull", gacha_10_pull: "10 Pulls", gacha_waiting: "Waiting...", gacha_history: "📜 Gacha History", gacha_rate_up: "🎯 Rate Up", gacha_normal: "🌟 Normal Gacha", gacha_personality_pool: "🔮 Personality Gacha", gacha_result_title: "🎉 Gacha Results 🎉", gacha_prev_page: "Prev", gacha_next_page: "Next", gacha_page: "Page {current} / {total}", gacha_unknown_time: "Unknown Time", gacha_unknown_pool: "Unknown Pool",
 		ui_tier_title: "Tier List Maker", ui_tier_add_row: "Add Rank", ui_tier_reset: "Reset All", ui_tier_export: "Export Image", ui_tier_pool_title: "Character Pool (Drag to Rank)", ui_tier_default_title: "My Ultimate Tier List", ui_tier_reset_confirm: "Are you sure you want to reset the board and return all characters to the pool?", ui_tier_export_error: "Failed to export image.",
+		"愛麗絲": "Alice",
+        "阿萊特": "Allet",
+        "艾蜜莉雅": "Amelia",
+        "艾舒爾": "Ashur",
+        "綾": "Aya",
+        "芭莉耶": "Barie",
+        "芭瓏": "Barong",
+        "貝麗塔": "Belita",
+        "班尼": "Beni",
+        "大木頭": "Big Wood",
+        "布蘭切": "Blanchet",
+        "奶油": "Butter",
+        "康娜": "Canna",
+        "卡蓮": "Carren",
+        "庫洛艾": "Chloe",
+        "喬菲": "Chopi",
+        "路易": "Kyuri",
+        "達雅": "Daya",
+        "蒂亞娜": "Diana",
+        "伊德": "ED",
+        "艾琳娜": "Elena",
+        "艾皮卡": "Epica",
+        "艾爾芬": "Erpin",
+        "艾斯皮": "Espi",
+        "佩斯塔": "Festa",
+        "芙莉可": "Fricle",
+        "加薇雅": "Gabia",
+        "瑰恩": "Guin",
+        "海莉": "Haley",
+        "希爾德": "Hilde",
+        "伊弗利特": "Ifrit",
+        "傑德": "Jade",
+        "瓊安": "Joanne",
+        "茱蜜": "Jubee",
+        "基狄恩": "Kidian",
+        "柯米": "Kommy",
+        "柯米(泳裝)": "Swimsuit Kommy",
+        "卡洛特": "Kyarot",
+        "雷吉": "Layze",
+        "莉茲": "Leets",
+        "麗息": "Lethe",
+        "萊薇": "Levi",
+        "大師2號": "Maestro Mk.2",
+        "馬爾": "Mago",
+        "梅森": "Maison",
+        "瑪麗": "Marie",
+        "瑪約": "Mayo",
+        "梅露娜": "Meluna",
+        "桃桃": "Momo",
+        "米雪": "Mynx",
+        "奈雅": "Naia",
+        "寧琉": "Ner",
+        "帕特拉": "Patula",
+        "皮可菈": "Picora",
+        "琵拉": "Pira",
+        "珀榭": "Posher",
+        "雷內瓦": "Renewa",
+        "琳": "Rim",
+        "莉絲蒂": "Risty",
+        "洛涅": "Rohne",
+        "羅蕾特": "Rollett",
+        "路德": "Rudd",
+        "盧波": "Rufo",
+        "莎莉": "Sari",
+        "瑟琳娜": "Selene",
+        "謝蒂": "Shaydi",
+        "雪蘭": "Sherum",
+        "修帕": "Shoupan",
+        "希菲爾": "Silphir",
+        "希瑟圖": "Sist",
+        "斯諾奇": "Snorky",
+        "斯皮奇": "Speaki",
+        "希拉": "Sylla",
+        "泰達": "Taida",
+        "提格": "Tig",
+        "羽伊": "Ui",
+        "佩佩": "Velvet",
+        "貝魯": "Veroo",
+        "薇薇": "Vivi",
+        "優米": "Yomi",
+        "劉美美": "Yumimi",
+        "x乂錫安乂x": "xXionx"
     }
 };
-
 const currentLang = localStorage.getItem('user_lang') || 'zh-TW';
 function t(key) { return LANG_DICT[currentLang][key] || key; }
+
 // ------------------------------------------
 // 坨坨資料
 // ------------------------------------------
-const INITIAL_DATA = [
-	{ name: "瑰恩", personality: "冷靜", race: "獸人", position: "前排", job: "輔助", pathVersion: "", releaseDate: "2026-10-22T17:00:00+09:00" },
+const INITIAL_DATA = [{ name: "瑰恩", personality: "冷靜", race: "獸人", position: "前排", job: "輔助", pathVersion: "", releaseDate: "2026-10-22T17:00:00+09:00" },
 	{ name: "麗息", personality: "冷靜", race: "幽靈", position: "前排", job: "肉盾", pathVersion: "V4", releaseDate: "2026-10-08T17:00:00+09:00" },
 	{ name: "柯米(泳裝)", personality: "冷靜", race: "獸人", position: "中排", job: "輔助", pathVersion: "V4", releaseDate: "2026-10-15T10:00:00+09:00" },
 	{ name: "瓊安", personality: "憂鬱, 天真", race: "妖精", position: "所有排", job: "輔助", pathVersion: "V4", releaseDate: "2026-09-24T17:00:00+09:00" },
@@ -282,112 +497,6 @@ const INITIAL_DATA = [
 	{ name: "提格", personality: "活潑", race: "獸人", position: "前排", job: "輸出", pathVersion: "V2", releaseDate: "2026-07-16T19:00:00+09:00" }
 ];
 
-const CRAYON_PATH_CONFIG = {
-    "精靈": {
-        "V1": { layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-        "V2": { layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-        "V3": { layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-        "V4": { layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-        "V5": { layer1: ["爆擊", "爆抗"], layer2: ["爆擊", "血量", "爆抗"], layer3: ["爆擊", "防禦", "血量", "爆抗"] }
-    },
-    "獸人": {
-        "V1": { layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-        "V2": { layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-        "V3": { layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-        "V4": { layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-        "V5": { layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] }
-    },
-    "龍族": {
-        "V1": { layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["爆擊", "防禦", "血量", "爆抗"] },
-        "V2": { layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-        "V3": { layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-        "V4": { layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "血量", "爆擊", "防禦"] }
-    },
-    "幽靈": {
-        "V1": { layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-        "V2": { layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-        "V3": { layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-        "V4": { layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] }
-    },
-    "魔女": {
-        "V1": { layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-        "V2": { layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-        "V3": { layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-        "V4": { layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-        "V5": { layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] }
-    },
-    "魔靈": {
-        "V1": { layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-        "V2": { layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-        "V3": { layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-        "V4": { layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] },
-        "V5": { layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] }
-    },
-    "妖精": {
-        "V1": { layer1: ["防禦", "爆抗"], layer2: ["攻擊", "血量", "爆擊"], layer3: ["攻擊", "防禦", "血量", "爆抗"] },
-        "V2": { layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] },
-        "V3": { layer1: ["攻擊", "血量"], layer2: ["攻擊", "防禦", "爆抗"], layer3: ["攻擊", "防禦", "爆擊", "爆抗"] },
-        "V4": { layer1: ["血量", "爆擊"], layer2: ["防禦", "爆擊", "爆抗"], layer3: ["攻擊", "防禦", "血量", "爆擊"] },
-        "V5": { layer1: ["爆擊", "爆抗"], layer2: ["血量", "爆擊", "爆抗"], layer3: ["防禦", "血量", "爆擊", "爆抗"] }
-    },
-    "???": {
-        "V1": { layer1: ["攻擊", "防禦"], layer2: ["攻擊", "防禦", "血量"], layer3: ["攻擊", "血量", "爆擊", "爆抗"] }
-    }
-};
-
-const PATH_IMAGES = {
-    "幽靈": {
-        "V1": { 1: "https://i.postimg.cc/nMb6P1wY/PHANTOM-V1-L1.png", 2: "https://i.postimg.cc/0ytjmZqp/PHANTOM-V1-L2.png", 3: "https://i.postimg.cc/vDFpNvSt/PHANTOM-V1-L3.png" },
-        "V2": { 1: "https://i.postimg.cc/PNsBRMF2/PHANTOM-V2-L1.png", 2: "https://i.postimg.cc/z3Z9ckPP/PHANTOM-V2-L2.png", 3: "https://i.postimg.cc/V5Q3VFHZ/PHANTOM-V2-L3.png" },
-        "V3": { 1: "https://i.postimg.cc/pybg6B1S/PHANTOM-V3-L1.png", 2: "https://i.postimg.cc/23RPKxXK/PHANTOM-V3-L2.png", 3: "https://i.postimg.cc/qBhqWM5V/PHANTOM-V3-L3.png" },
-        "V4": { 1: "https://i.postimg.cc/FFdzwsBm/PHANTOM-V4-L1.png", 2: "https://i.postimg.cc/WpFzxbHc/PHANTOM-V4-L2.png", 3: "https://i.postimg.cc/J7D0S428/PHANTOM-V4-L3.png" }
-    },
-    "???": {
-        "V1": { 1: "https://i.postimg.cc/L5LH55cN/UNKNOWN-V1-L1.png", 2: "https://i.postimg.cc/vTfQTTJ0/UNKNOWN-V1-L2.png", 3: "https://i.postimg.cc/ZnpTnnGj/UNKNOWN-V1-L3.png" }
-    },
-    "妖精": {
-        "V1": { 1: "https://i.postimg.cc/VNvmMKyN/SPRITE-V1-L1.png", 2: "https://i.postimg.cc/43ystWCx/SPRITE-V1-L2.png", 3: "https://i.postimg.cc/fbyDX84T/SPRITE-V1-L3.png" },
-        "V2": { 1: "https://i.postimg.cc/Jh0MJpwn/SPRITE-V2-L1.png", 2: "https://i.postimg.cc/s2xsSTFW/SPRITE-V2-L2.png", 3: "https://i.postimg.cc/TP1fmt85/SPRITE-V2-L3.png" },
-        "V3": { 1: "https://i.postimg.cc/k5Gq8Tr8/SPRITE-V3-L1.png", 2: "https://i.postimg.cc/xd8nH6rM/SPRITE-V3-L2.png", 3: "https://i.postimg.cc/yNxs9Lqm/SPRITE-V3-L3.png" },
-        "V4": { 1: "https://i.postimg.cc/zfQ5kT5y/SPRITE-V4-L1.png", 2: "https://i.postimg.cc/W4yj70jD/SPRITE-V4-L2.png", 3: "https://i.postimg.cc/d0fv9GvT/SPRITE-V4-L3.png" },
-        "V5": { 1: "https://i.postimg.cc/XvP3g935/SPRITE-V5-L1.png", 2: "https://i.postimg.cc/8CYDbLDW/SPRITE-V5-L2.png", 3: "https://i.postimg.cc/XvP3g93d/SPRITE-V5-L3.png" }
-    },
-    "魔靈": {
-        "V1": { 1: "https://i.postimg.cc/t4CjQB4m/ELEMENTAL-V1-L1.png", 2: "https://i.postimg.cc/NjfcqdjC/ELEMENTAL-V1-L2.png", 3: "https://i.postimg.cc/135Qhv3C/ELEMENTAL-V1-L3.png" },
-        "V2": { 1: "https://i.postimg.cc/mg2sfmgn/ELEMENTAL-V2-L1.png", 2: "https://i.postimg.cc/g2SPY3xg/ELEMENTAL-V2-L2.png", 3: "https://i.postimg.cc/pLGt2Kmq/ELEMENTAL-V2-L3.png" },
-        "V3": { 1: "https://i.postimg.cc/7ZsyxS5R/ELEMENTAL-V3-L1.png", 2: "https://i.postimg.cc/7ZsyxS5j/ELEMENTAL-V3-L2.png", 3: "https://i.postimg.cc/vZqdQ51w/ELEMENTAL-V3-L3.png" },
-        "V4": { 1: "https://i.postimg.cc/13CZ9Dgh/ELEMENTAL-V4-L1.png", 2: "https://i.postimg.cc/dVHKqG7K/ELEMENTAL-V4-L2.png", 3: "https://i.postimg.cc/zGt1JTLr/ELEMENTAL-V4-L3.png" },
-        "V5": { 1: "https://i.postimg.cc/sg6RV5Bs/ELEMENTAL-V5-L1.png", 2: "https://i.postimg.cc/3xSHK2yK/ELEMENTAL-V5-L2.png", 3: "https://i.postimg.cc/P53kt1LX/ELEMENTAL-V5-L3.png" }
-    },
-    "魔女": {
-        "V1": { 1: "https://i.postimg.cc/bYxcZ7G2/WITCH-V1-L1.png", 2: "https://i.postimg.cc/ZY8tWG9v/WITCH-V1-L2.png", 3: "https://i.postimg.cc/VsqQJxSt/WITCH-V1-L3.png" },
-        "V2": { 1: "https://i.postimg.cc/VsqQJxSC/WITCH-V2-L1.png", 2: "https://i.postimg.cc/RC75Wk3f/WITCH-V2-L2.png", 3: "https://i.postimg.cc/qBsVNPt8/WITCH-V2-L3.png" },
-        "V3": { 1: "https://i.postimg.cc/h4LWXkJV/WITCH-V3-L1.png", 2: "https://i.postimg.cc/dQ2Phb7r/WITCH-V3-L2.png", 3: "https://i.postimg.cc/ry1XDBdg/WITCH-V3-L3.png" },
-        "V4": { 1: "https://i.postimg.cc/NG6qK3yx/WITCH-V4-L1.png", 2: "https://i.postimg.cc/HWwDrqJ2/WITCH-V4-L2.png", 3: "https://i.postimg.cc/T2VMKzyC/WITCH-V4-L3.png" },
-        "V5": { 1: "https://i.postimg.cc/sfYdMkB0/WITCH-V5-L1.png", 2: "https://i.postimg.cc/SQ6FnBX5/WITCH-V5-L2.png", 3: "https://i.postimg.cc/FFy5YMfw/WITCH-V5-L3.png" }
-    },
-    "精靈": {
-        "V1": { 1: "https://i.postimg.cc/CMNrTSnK/ELF-V1-L1.png", 2: "https://i.postimg.cc/CMNrTSnM/ELF-V1-L2.png", 3: "https://i.postimg.cc/FFZC5Nks/ELF-V1-L3.png" },
-        "V2": { 1: "https://i.postimg.cc/h4rZWcQj/ELF-V2-L1.png", 2: "https://i.postimg.cc/J4z6RvjW/ELF-V2-L2.png", 3: "https://i.postimg.cc/Pr53d91H/ELF-V2-L3.png" },
-        "V3": { 1: "https://i.postimg.cc/5N27fT8f/ELF-V3-L1.png", 2: "https://i.postimg.cc/nchRngqV/ELF-V3-L2.png", 3: "https://i.postimg.cc/jdSgRmyx/ELF-V3-L3.png" },
-        "V4": { 1: "https://i.postimg.cc/28ScCMn5/ELF-V4-L1.png", 2: "https://i.postimg.cc/dtVHJpG1/ELF-V4-L2.png", 3: "https://i.postimg.cc/Ghm7bVv9/ELF-V4-L3.png" },
-        "V5": { 1: "https://i.postimg.cc/7YZsqdSf/ELF-V5-L1.png", 2: "https://i.postimg.cc/kXg17zW2/ELF-V5-L2.png", 3: "https://i.postimg.cc/rFwnq35r/ELF-V5-L3.png" }
-    },
-    "獸人": {
-        "V1": { 1: "https://i.postimg.cc/nrPvFRtL/WEREBEAST-V1-L1.png", 2: "https://i.postimg.cc/j2FzxgrL/WEREBEAST-V1-L2.png", 3: "https://i.postimg.cc/hv59Dyqv/WEREBEAST-V1-L3.png" },
-        "V2": { 1: "https://i.postimg.cc/NFz1sJwM/WEREBEAST-V2-L1.png", 2: "https://i.postimg.cc/qq58Jbdn/WEREBEAST-V2-L2.png", 3: "https://i.postimg.cc/nrPvFRtB/WEREBEAST-V2-L3.png" },
-        "V3": { 1: "https://i.postimg.cc/PJRmX3km/WEREBEAST-V3-L1.png", 2: "https://i.postimg.cc/j2Fzxgry/WEREBEAST-V3-L2.png", 3: "https://i.postimg.cc/MHFy6P8s/WEREBEAST-V3-L3.png" },
-        "V4": { 1: "https://i.postimg.cc/v8q7tBxp/WEREBEAST-V4-L1.png", 2: "https://i.postimg.cc/BZY5B6PR/WEREBEAST-V4-L2.png", 3: "https://i.postimg.cc/pVGQJTnt/WEREBEAST-V4-L3.png" },
-        "V5": { 1: "https://i.postimg.cc/c197BH8S/WEREBEAST-V5-L1.png", 2: "https://i.postimg.cc/QN4gJtWX/WEREBEAST-V5-L2.png", 3: "https://i.postimg.cc/L4Ck3XZ4/WEREBEAST-V5-L3.png" }
-    },
-    "龍族": {
-        "V1": { 1: "https://i.postimg.cc/5tSLYNVY/DRAGON-V1-L1.png", 2: "https://i.postimg.cc/W4wgFbvd/DRAGON-V1-L2.png", 3: "https://i.postimg.cc/Ls3LY6pq/DRAGON-V1-L3.png" },
-        "V2": { 1: "https://i.postimg.cc/cJBwg4St/DRAGON-V2-L1.png", 2: "https://i.postimg.cc/SsQ8WFSN/DRAGON-V2-L2.png", 3: "https://i.postimg.cc/RFCfc5SF/DRAGON-V2-L3.png" },
-        "V3": { 1: "https://i.postimg.cc/gJcRvFzc/DRAGON-V3-L1.png", 2: "https://i.postimg.cc/HxW5QDYn/DRAGON-V3-L2.png", 3: "https://i.postimg.cc/k4M8x3JR/DRAGON-V3-L3.png" },
-        "V4": { 1: "https://i.postimg.cc/9MXTG5mq/DRAGON-V4-L1.png", 2: "https://i.postimg.cc/PxfZmsXD/DRAGON-V4-L2.png", 3: "https://i.postimg.cc/bJYbQcyb/DRAGON-V4-L3.png" }
-    }
-};
-
 const CV_MAP = {
     "洛涅": "田向結月", "薇薇": "新井里美", "艾爾芬": "木野日菜", "x乂錫安乂x": "上坂すみれ", "伊弗利特": "安堂ななこ", "伊德": "内田真礼", "佩佩": "上田瞳", "佩斯塔": "仁見紗綾",
     "修帕": "大空直美", "傑德": "行成とあ", "優米": "高野麻里佳", "劉美美": "兼田めぐみ", "加薇雅": "大谷衣里奈", "卡洛特": "牧野由依", "卡蓮": "咲谷怜奈", "喬菲": "漆山ゆうき",
@@ -447,8 +556,8 @@ const FOOD_MAP = {
     "Festa": { super: "氫氣炸豬排", special: ["空氣炸豬排", "祕密葡萄汁", "一級祕密葡萄汁"] },
     "Fricle": { super: "927穀麵茶", special: ["麵茶", "扭結麵包", "愛心扭結麵包"] },
     "Gabia": { super: "肉桂口味健康糖球", special: ["肉桂口味糖球", "檸檬茶", "有機檸檬茶"] },
-	"Guin": "無",
-    "Haley": { super: "一碗糯米飯", special: ["一碗米飯", "檸檬茶", "有機檸檬茶"] },
+    "Guin": "無",
+	"Haley": { super: "一碗糯米飯", special: ["一碗米飯", "檸檬茶", "有機檸檬茶"] },
     "Hilde": { super: "皇家蜂蜜大蒜鮭魚", special: ["蜂蜜大蒜鮭魚", "太空食品", "ANSA太空食品"] },
     "Ifrit": { super: "軟軟焦糖布丁", special: ["焦糖布丁", "龍族糖果", "龍族氣死你糖果"] },
     "Jade": { super: "薄荷巧克力冰淇淋", special: ["巧克力冰淇淋", "龍族糖果", "龍族氣死你糖果"] },
@@ -456,11 +565,11 @@ const FOOD_MAP = {
     "Jubee": { super: "甜甜蜂蜜罐", special: ["蜂蜜罐", "棉花糖馬卡龍", "低糖棉花糖馬卡龍"] },
     "Kidian": { super: "愛心扭結麵包", special: ["扭結麵包", "獸糧罐頭", "高級獸糧罐頭"] },
     "Kommy": { super: "高級獸糧罐頭", special: ["獸糧罐頭", "焦糖爆米花", "追劇焦糖爆米花"] },
-    "KommySwim": { super: "高級獸糧罐頭", special: ["獸糧罐頭", "焦糖爆米花", "追劇焦糖爆米花"] },
+    "KommySwim": "無",
 	"Kyarot": { super: "兩口草生菜包", special: ["一口草生菜包", "蜂蜜罐", "甜甜蜂蜜罐"] },
     "Lazy": { super: "高級獸糧罐頭", special: ["獸糧罐頭", "溫熱的冰美式咖啡", "滾燙的冰美式咖啡"] },
     "Leets": { super: "龍族氣死你糖果", special: ["龍族糖果", "空氣炸豬排", "氫氣炸豬排"] },
-	"Lethe": { super: "龍族氣死你糖果", special: ["龍族糖果", "空氣炸豬排", "氫氣炸豬排"] },
+	"Lethe": "無",
     "Levi": { super: "追劇焦糖爆米花", special: ["焦糖爆米花", "UFC炸胡蘿蔔", "UFC炸蔬菜"] },
     "MaestroMK2": { super: "石榴甜茶", special: ["石榴果實", "祕密葡萄汁", "一級祕密葡萄汁"] },
     "Mago": { super: "ANSA太空食品", special: ["太空食品", "獸糧罐頭", "高級獸糧罐頭"] },
@@ -534,8 +643,8 @@ const REWARD_MAP = {
     "Festa": ["巧克力", "堅硬的石頭", "巧克力米"],
     "Fricle": ["柔軟的棉花", "牛肉", "堅硬的碎布"],
     "Gabia": ["米", "牛肉", "百老師萬能醬料"],
-	"Guin": [],
-    "Haley": ["細膩的鐵粉", "軟棉棉的樹木", "閃亮的玻璃"],
+    "Guin": [],
+	"Haley": ["細膩的鐵粉", "軟棉棉的樹木", "閃亮的玻璃"],
     "Hilde": ["可彎曲金屬", "魚", "軟棉棉的樹木"],
     "Ifrit": ["銅湯匙", "蔬菜", "堅硬的黑色果實"],
     "Jade": ["堅硬的黑色果實", "各式穀物", "水果"],
@@ -543,11 +652,11 @@ const REWARD_MAP = {
     "Jubee": ["軟棉棉的樹木", "濕潤的紙漿", "牛肉"],
     "Kidian": ["可彎曲金屬", "彩虹花汁", "軟棉棉的樹木"],
     "Kommy": ["酥脆的金箔", "堅硬的黑色果實", "起司"],
-	"KommySwim": ["回收塑膠", "槭樹樹液", "彩虹花汁"],
+	"KommySwim": [],
     "Kyarot": ["寶石碎片", "黏膩的黏土", "酥脆的金箔"],
     "Lazy": ["堅硬的石頭", "雞蛋", "細膩的鐵粉"],
     "Leets": ["酥脆的金箔", "細膩的鐵粉", "起司"],
-	"Lethe": ["尖銳的針", "濕潤的紙漿", "皮革樹葉"],
+	"Lethe": [],
     "Levi": ["堅硬的碎布", "水果", "糖"],
     "MaestroMK2": ["牛肉", "尖銳的針", "銅湯匙"],
     "Mago": ["堅硬的石頭", "百老師萬能醬料", "細膩的鐵粉"],
@@ -618,20 +727,20 @@ const WORK_URL = {
     "Festa": "https://youtu.be/kdbGcSzzyqI",
     "Fricle": "https://youtu.be/6dxpDLKWzJI",
     "Gabia": "https://youtu.be/cu80mqXBiew",
-	"Guin": "",
-    "Haley": "https://youtu.be/u6mmhB-zY3Y",
+    "Guin": "",
+	"Haley": "https://youtu.be/u6mmhB-zY3Y",
     "Hilde": "https://youtu.be/rLfss0AWKtA",
     "Ifrit": "https://youtu.be/ANWq6bxvkBo",
     "Jade": "https://youtu.be/9zc4o0jcU8g",
     "Jubee": "https://youtu.be/GQNFRFORdB0",
-	"Joanne": "https://youtu.be/RICRhocX9js",
+	"Joanne": "",
     "Kidian": "https://youtu.be/PcT_8VB1NrQ",
     "Kommy": "https://youtu.be/2qZbcsuXL9U",
 	"KommySwim": "",
     "Kyarot": "https://youtu.be/jDl4YWvYp-U",
     "Lazy": "https://youtu.be/83peJu7yMEU",
     "Leets": "https://youtu.be/5FtyGwPgt1Q",
-	"Lethe": "https://youtu.be/wOzPL--fJCY",
+	"Lethe": "",
     "Levi": "https://youtu.be/79nJ7h2hnc0",
     "MaestroMK2": "https://youtu.be/IDJxotfwcx8",
     "Mago": "https://youtu.be/S8HF0T-C8gc",
@@ -671,140 +780,7 @@ const WORK_URL = {
     "Yumimi": "https://youtu.be/uC9ohB_CqF8"
 };
 
-// ------------------------------------------
-// 圖標與圖片對應表
-// ------------------------------------------
-const LOBBY_BACKGROUNDS = [
-    "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/lobby%2FLobby-100010-1.webp?alt=media&token=91171715-07aa-4c3d-aee6-0daf8099536c", "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/lobby%2FLobby-10002-1.webp?alt=media&token=e44c4eba-f9b0-4e1e-bd2c-bbcd5891be84", "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/lobby%2FLobby-10003-1.webp?alt=media&token=11071be4-520c-4bd4-ae9d-10aae72e6dd1",
-    "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/lobby%2FLobby-10007-1.webp?alt=media&token=d5e8d59e-8dc0-41af-a18b-ed5e62a7cff2", "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/lobby%2FLobby-10008-1.webp?alt=media&token=daba6fe4-8708-4767-896f-e40867e86a2f", "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/lobby%2FLobby-10009-1.webp?alt=media&token=153f26aa-b336-4301-bffa-130172c0af75", "https://firebasestorage.googleapis.com/v0/b/crayon-note.firebasestorage.app/o/lobby%2FLobby_10001_1.webp?alt=media&token=97f5b368-2818-46f7-a957-6af54f9e3d33"
-];
-const SPINE_BACKGROUNDS = {
-"龍族":"https://i.postimg.cc/FdJxQDZ7/Gacha-Pattern-Bg-Dragon.png",
-"精靈":"https://i.postimg.cc/xJbPStRN/Gacha-Pattern-Bg-Elf.png",
-"妖精":"https://i.postimg.cc/G8sj1qQ4/Gacha-Pattern-Bg-Fairy.png",
-"獸人":"https://i.postimg.cc/S2zGpDrz/Gacha-Pattern-Bg-Furry.png",
-"幽靈":"https://i.postimg.cc/ygSTzvP0/Gacha-Pattern-Bg-Ghost.png",
-"???":"https://i.postimg.cc/kR3vMK1D/Gacha-Pattern-Bg-Mystic.png",
-"魔靈":"https://i.postimg.cc/BP9BZHYb/Gacha-Pattern-Bg-Spirit.png",
-"魔女":"https://i.postimg.cc/zHZFDKtL/Gacha-Pattern-Bg-Witch.png",
-"NPC":"https://i.postimg.cc/q703FkG3/Gacha-Characterpattern.png"
-}; 
 
-const FOOD_ICON = {
-    "草莓蛋糕": { ja: "イチゴケーキ", url: "https://i.postimg.cc/ZWC1KYw9/Icon-Food-1.png" },
-    "巧克力冰淇淋": { ja: "チョコアイス", url: "https://i.postimg.cc/TKpZY2tK/Icon-Food-2.png" },
-    "焦糖布丁": { ja: "クレームブリュレ", url: "https://i.postimg.cc/rDKvFyfK/Icon-Food-3.png" },
-    "焦糖爆米花": { ja: "キャラメルポップコーン", url: "https://i.postimg.cc/TKpZY2tP/Icon-Food-4.png" },
-    "獸糧罐頭": { ja: "アニマル缶", url: "https://i.postimg.cc/mPt02Zmy/Icon-Food-5.pngg" },
-    "扭結麵包": { ja: "プレッツェル", url: "https://i.postimg.cc/rD37d6HR/Icon-Food-6.png" },
-    "蜂蜜大蒜鮭魚": { ja: "ハニーガーリックサーモン", url: "https://i.postimg.cc/qNSWtfF3/Icon-Food-7.png" },
-    "烤漫畫肉": { ja: "マンガ肉焼き", url: "https://i.postimg.cc/jDmBWV1f/Icon-Food-8.png" },
-    "溫熱的冰美式咖啡": { ja: "ホットアイスアメリカーノ", url: "https://i.postimg.cc/nXgNs8W7/Icon-Food-9.png" },
-    "檸檬茶": { ja: "レモンティー", url: "https://i.postimg.cc/879xF8YR/Icon-Food-10.png" },
-    "祕密葡萄汁": { ja: "秘密のブドウジュース", url: "https://i.postimg.cc/CRX9Zy2j/Icon-Food-11.png" },
-    "太空食品": { ja: "宇宙食", url: "https://i.postimg.cc/879xF8Yb/Icon-Food-12.png" },
-    "哈密瓜博孔奇尼起司": { ja: "メロンボッコンチーニ", url: "https://i.postimg.cc/jDmBWV1k/Icon-Food-13.png" },
-    "一口草生菜包": { ja: "一口草-野菜包み", url: "https://i.postimg.cc/bZW4GX5m/Icon-Food-14.png" },
-    "蜂蜜罐": { ja: "ハニーポット", url: "https://i.postimg.cc/BjkR8WzN/Icon-Food-15.png" },
-    "海藻沙拉": { ja: "海藻サラダ", url: "https://i.postimg.cc/hX6NJFYZ/Icon-Food-16.png" },
-    "南瓜濃湯": { ja: "かぼちゃ粥", url: "https://i.postimg.cc/dhpg7Mff/Icon-Food-17.png" },
-    "肉桂口味糖球": { ja: "シナモン味の飴玉", url: "https://i.postimg.cc/yDt2JqGt/Icon-Food-18.png" },
-    "幽靈布丁": { ja: "幽霊プリン", url: "https://i.postimg.cc/WdCxDRyx/Icon-Food-19.pngg" },
-    "空氣炸豬排": { ja: "空気カツレツ", url: "https://i.postimg.cc/3kVzyMqs/Icon-Food-20.png" },
-    "寶石塔": { ja: "宝石タルト", url: "https://i.postimg.cc/XZ5mdHMH/Icon-Food-21.png" },
-    "石榴果實": { ja: "ガーネットの実", url: "https://i.postimg.cc/HrRFJGK1/Icon-Food-22.png" },
-    "龍族糖果": { ja: "竜族キャンティ", url: "https://i.postimg.cc/t16wWS0M/Icon-Food-23.png" },
-    "金糖葫蘆": { ja: "金のフルーツ飴", url: "https://i.postimg.cc/nsmgBR8S/Icon-Food-24.png" },
-    "椰子松針粥": { ja: "ココナッツ松葉粥", url: "https://i.postimg.cc/kVSzK1rz/Icon-Food-25.png" },
-    "麵茶": { ja: "穀物ドリンク", url: "https://i.postimg.cc/PLD9Y3Gc/Icon-Food-26.png" },
-    "薄荷巧克力冰淇淋": { ja: "チョコミントアイス", url: "https://i.postimg.cc/mc9JCXx0/Icon-Food-27.png" },
-    "UFC炸胡蘿蔔": { ja: "UFC ニンジンフライ", url: "https://i.postimg.cc/7Czd0svj/Icon-Food-28.png" },
-    "棉花糖馬卡龍": { ja: "マシュマロマカロン", url: "https://i.postimg.cc/d7CprHPc/Icon-Food-29.png" },
-    "一碗米飯": { ja: "ご飯", url: "https://i.postimg.cc/hJm6TyWB/Icon-Food-30.png" },
-    "美味維他命C": { ja: "もぐもぐビタミンC", url: "https://i.postimg.cc/hJm6TyWg/Icon-Food-31.png" },
-    "松糕": { ja: "笹団子", url: "https://i.postimg.cc/Z9N2p7th/Icon-Food-32.png" },
-    "酸甜維他命F": { ja: "スパビタF", url: "https://i.postimg.cc/SX93CTFk/Icon-Food-33.png" },
-    "聖誕樹幹蛋糕": { ja: "ブッシュドノエル", url: "https://i.postimg.cc/7Czd0s8q/Icon-Food-34.png" },
-    "杏仁金沙巧克力": { ja: "アーモンドロシェ", url: "https://i.postimg.cc/TybFg7MR/Icon-Food-35.png" },
-    "年糕湯": { ja: "餅スープ", url: "https://i.postimg.cc/zLh6KtZG/Icon-Food-36.png" },
-    "艾心堂綜合糖": { ja: "エーカリードロップ", url: "https://i.postimg.cc/kVSzK13G/Icon-Food-37.png" },
-    "草莓切片蛋糕": { ja: "あーんイチゴケーキ", url: "https://i.postimg.cc/zLh6KtZ3/Icon-Food-38.png" },
-    "ANSA太空食品": { ja: "ANSA宇宙食", url: "https://i.postimg.cc/nsmgBRbC/Icon-Food-39.png" },
-    "甜甜蜂蜜罐": { ja: "ハチミツツボ", url: "https://i.postimg.cc/Z9N2p7tW/Icon-Food-40.png" },
-    "龍族氣死你糖果": { ja: "逆鱗なでなでキャンディ", url: "https://i.postimg.cc/Z9N2p7tB/Icon-Food-41.png" },
-    "UFC炸蔬菜": { ja: "UFC野菜フライ", url: "https://i.postimg.cc/wydPVXgq/Icon-Food-42.png" },
-    "追劇焦糖爆米花": { ja: "エルフキャラメルポップコーン", url: "https://i.postimg.cc/8Fv9MKQF/Icon-Food-43.png" },
-    "肉桂口味健康糖球": { ja: "シナモンの健康アメ玉", url: "https://i.postimg.cc/1nZTHGs9/Icon-Food-44.png" },
-    "低糖棉花糖馬卡龍": { ja: "低糖マシュマロマカロン", url: "https://i.postimg.cc/wydPVXgv/Icon-Food-45.png" },
-    "高級獸糧罐頭": { ja: "高級アニマル缶", url: "https://i.postimg.cc/MM84D7qX/Icon-Food-46.png" },
-    "愛心扭結麵包": { ja: "ハートプレッツェル", url: "https://i.postimg.cc/HcCK2wdV/Icon-Food-47.png" },
-    "有機檸檬茶": { ja: "オーガニックレモンティー", url: "https://i.postimg.cc/R6z8R74h/Icon-Food-48.png" },
-    "兩口草生菜包": { ja: "二口草野菜包み", url: "https://i.postimg.cc/ZBhgc84v/Icon-Food-49.png" },
-    "氫氣炸豬排": { ja: "水素カツレツ", url: "https://i.postimg.cc/47TM56s7/Icon-Food-50.png" },
-    "椰子萬能青汁": { ja: "ココナッツ万能野菜ジュース", url: "https://i.postimg.cc/cgNjmR08/Icon-Food-51.png" },
-    "軟軟焦糖布丁": { ja: "ソフトクレームフリコレ", url: "https://i.postimg.cc/sQR8cYsh/Icon-Food-52.png" },
-    "白金糖葫蘆": { ja: "白銀フルーツ飴", url: "https://i.postimg.cc/1nZTHGsp/Icon-Food-53.png" },
-    "皇家蜂蜜大蒜鮭魚": { ja: "ロイヤルハニーガーリックサーモン", url: "https://i.postimg.cc/R6z8R74f/Icon-Food-54.png" },
-    "滾燙的冰美式咖啡": { ja: "灼熱アイスアメリカーノ", url: "https://i.postimg.cc/wydPVXgF/Icon-Food-55.png" },
-    "夏威夷海藻蓋飯": { ja: "海藻ボキ", url: "https://i.postimg.cc/34H6BXYj/Icon-Food-56.png" },
-    "燉南瓜": { ja: "ガほちゃシチュー", url: "https://i.postimg.cc/34H6BXYZ/Icon-Food-57.png" },
-    "927穀麵茶": { ja: "927粒穀物ドリンク", url: "https://i.postimg.cc/r0LbJ1MC/Icon-Food-58.png" },
-    "石榴甜茶": { ja: "ザクロフルーツパンチ", url: "https://i.postimg.cc/ygz5Pmsf/Icon-Food-59.png" },
-    "一級祕密葡萄汁": { ja: "一級品秘密のフトウシュース", url: "https://i.postimg.cc/62NS0rtM/Icon-Food-60.png" },
-    "寶石蛋塔": { ja: "秘宝タルト", url: "https://i.postimg.cc/ZBFQDW56/Icon-Food-61.png" },
-    "一碗糯米飯": { ja: "もち米ご飯", url: "https://i.postimg.cc/Q9rPbQh4/Icon-Food-62.png" },
-    "麝香甜瓜博孔奇尼起司": { ja: "マスクメロンボッコンチーニ", url: "https://i.postimg.cc/phYS1mLf/Icon-Food-63.png" },
-    "惡靈布丁": { ja: "悪霊プリン", url: "https://i.postimg.cc/MMbLrnpy/Icon-Food-64.png" },
-    "深黑巧克力冰淇淋": { ja: "ディープダーワチョコアイス", url: "https://i.postimg.cc/VrBhHJk9/Icon-Food-65.png" },
-    "烤海賊漫畫肉": { ja: "海賊マンガ肉焼き", url: "https://i.postimg.cc/R6QYbWZL/Icon-Food-66.png" },
-    "三重薄荷冰淇淋": { ja: "トリブルチョコスミントアイス", url: "https://i.postimg.cc/TLqsHK3Q/Icon-Food-67.png" },
-    
-    // 給 1 星坨坨使用的通用餐牌
-    "餐牌": { ja: "メニュー", url: "https://i.postimg.cc/YGfPyvCb/My-Home-Restaurant-Menu-Icon.png" }
-};
-
-const REWARD_ICON = {
-    // 🍕 食材類
-    "麵粉": { ja: "小麦粉", url: "https://i.postimg.cc/Vd6QSCc7/Icon-Food-Made-Low1.png" },
-    "雞蛋": { ja: "卵", url: "https://i.postimg.cc/bsJcGtjg/Icon-Food-Made-Low2.png" },
-    "家禽肉": { ja: "鶏肉", url: "https://i.postimg.cc/qzRVt3dQ/Icon-Food-Made-Low3.png" },
-    "水果": { ja: "果物", url: "https://i.postimg.cc/hfjWJdqy/Icon-Food-Made-Low4.png" },
-    "巧克力": { ja: "チョコ", url: "https://i.postimg.cc/HVxDJyCN/Icon-Food-Made-Low5.png" },
-    "糖": { ja: "砂糖", url: "https://i.postimg.cc/gnJFwZPB/Icon-Food-Made-Low6.png" },
-    "牛肉": { ja: "牛肉", url: "https://i.postimg.cc/ykd4JZzp/Icon-Food-Made-Low7.png" },
-    "魚": { ja: "魚", url: "https://i.postimg.cc/rKmXdrL3/Icon-Food-Made-Low8.png" },
-    "堅硬的黑色果實": { ja: "黒くて硬い実", url: "https://i.postimg.cc/hfjWJdqN/Icon-Food-Made-Low9.png" },
-    "各式穀物": { ja: "雑穀", url: "https://i.postimg.cc/vcBF1Vdp/Icon-Food-Made-Low10.png" },
-    "蔬菜": { ja: "野菜", url: "https://i.postimg.cc/2V6RqZDp/Icon-Food-Made-Low11.png" },
-    "蜂蜜": { ja: "蜜", url: "https://i.postimg.cc/GH2wBy1W/Icon-Food-Made-Low12.png" },
-    "百老師萬能醬料": { ja: "万能スパイス", url: "https://i.postimg.cc/mt5x7gbm/Icon-Food-Made-Low13.png" },
-    "牛奶": { ja: "牛乳", url: "https://i.postimg.cc/MvT2cQS2/Icon-Food-Made-Low14.png" },
-    "米": { ja: "米", url: "https://i.postimg.cc/4mSCpxJ8/Icon-Food-Made-Low15.png" },
-    "起司": { ja: "チーズ", url: "https://i.postimg.cc/9rn3yQW8/Icon-Food-Made-Low16.png" },
-    "樹葉": { ja: "木の葉", url: "https://i.postimg.cc/GH50vmcg/Icon-Food-Made-Low17.png" },
-    "巧克力米": { ja: "スプリンクル", url: "https://i.postimg.cc/ykbq08Vb/Icon-Food-Made-Low18.png" },
-
-    // 🪵 素材類
-    "軟棉棉的樹木": { ja: "加工しやすい木", url: "https://i.postimg.cc/YhscQCp5/Icon-Made-Low1.png" },
-    "堅硬的石頭": { ja: "固い石", url: "https://i.postimg.cc/qz5f2vJf/Icon-Made-Low2.png" },
-    "細膩的鐵粉": { ja: "サラサラの鉄粉", url: "https://i.postimg.cc/N5zhRjsq/Icon-Made-Low3.png" },
-    "酥脆的金箔": { ja: "パリパリの金箔", url: "https://i.postimg.cc/jLFVySxY/Icon-Made-Low4.png" },
-    "寶石碎片": { ja: "宝石の欠片", url: "https://i.postimg.cc/mt5x7gLG/Icon-Made-Low5.png" },
-    "閃亮的玻璃": { ja: "キラキラのガラス", url: "https://i.postimg.cc/pp6NKLWR/Icon-Made-Low6.png" },
-    "黏膩的黏土": { ja: "やわらか粘土", url: "https://i.postimg.cc/GH50vmLR/Icon-Made-Low7.png" },
-    "濕潤的紙漿": { ja: "湿っぽい紙の原料", url: "https://i.postimg.cc/ykbq081V/Icon-Made-Low9.png" },
-    "回收塑膠": { ja: "再生プラスチック", url: "https://i.postimg.cc/HVhGbkYH/Icon-Made-Low10.png" },
-    "彩虹花汁": { ja: "虹の花の汁", url: "https://i.postimg.cc/6ymsCpW6/Icon-Made-Low12.png" },
-    "堅硬的碎布": { ja: "ごわごわの布切れ", url: "https://i.postimg.cc/D8MV1wvw/Icon-Made-Low13.png" },
-    "皮革樹葉": { ja: "レザーウッドの葉", url: "https://i.postimg.cc/jLFVySx5/Icon-Made-Low14.png" },
-    "柔軟的棉花": { ja: "ふわふわ綿", url: "https://i.postimg.cc/JG2wjzrt/Icon-Made-Low15.png" },
-    "槭樹樹液": { ja: "カエデの樹液", url: "https://i.postimg.cc/ZCMk65bW/Icon-Made-Low16.png" },
-    "眨眼墨水": { ja: "ウィンクウィンク", url: "https://i.postimg.cc/gxXCsbjm/Icon-Made-Low18.png" },
-    "睡眠眼罩": { ja: "睡眠アイマスク", url: "https://i.postimg.cc/bZD7gfrq/Icon-Made-Low20.png" },
-    "銅湯匙": { ja: "銅の匙", url: "https://i.postimg.cc/mPzvjWkb/Icon-Made-Low21.png" },
-    "尖銳的針": { ja: "尖った針", url: "https://i.postimg.cc/0zMTn1jk/Icon-Made-Low25.png" },
-    "可彎曲金屬": { ja: "曲がったもの", url: "https://i.postimg.cc/PPRG15t0/Icon-Furn-Made-Low1.png" }
-};
 // ------------------------------------------
 // Spine 與服裝對應表
 // ------------------------------------------
@@ -856,104 +832,4 @@ const MINI_SPINE = {
 	"羅蕾特": "Mini_Rollett", "琵拉": "Mini_Pira", "雪蘭": "Mini_Sherum", "芭莉耶": "Mini_Barie", "瓊安": "Mini_Joanne", "柯米(泳裝)": "Mini_KommySwim", "麗息": "Mini_Lethe", "瑰恩": "Mini_Guin"
 };
 
-// ------------------------------------------
-// 特選使者招募, 活動, 卡片schedule
-// ------------------------------------------
-
-const PICKUP_SCHEDULE = [
-	{
-        start: "2026-10-22T17:00:00+09:00",
-        end: "2026-11-05T03:59:59+09:00",
-        chars: ["瑰恩"],
-        note: "Guin"
-    },
-	{
-        start: "2026-10-08T17:00:00+09:00",
-        end: "2026-10-22T10:59:59+09:00",
-        chars: ["瓊安", "柯米(泳裝)", "艾琳娜", "海莉"],
-        note: "SwimKommy"
-    },
-	{
-        start: "2026-10-01T03:00:00+09:00",
-        end: "2026-10-08T10:59:59+09:00",
-        chars: ["瓊安", "貝麗塔", "艾皮卡"],
-        note: "Joanne"
-    },
-];
-
-// 🎪 遊戲內活動排程表
-const EVENT_SCHEDULE = [
-    {
-        start: "2026-09-10T17:00:00+09:00",
-        end: "2026-09-24T10:59:59+09:00",
-        eventId: "Theme023" 
-    },
-	{
-        start: "2026-09-24T17:00:00+09:00",
-        end: "2026-10-22T10:59:59+09:00",
-        eventId: "Theme024" 
-    },
-		{
-        start: "2026-10-22T17:00:00+09:00",
-        end: "2026-11-05T10:59:59+09:00",
-        eventId: "Theme028" 
-    },
-	{
-        start: "2026-09-24T17:00:00+09:00",
-        end: "2026-10-22T10:59:59+09:00",
-        eventId: "SelectPickPersonality" 
-    },
-	{
-        start: "2026-08-13T17:00:00+09:00",
-        end: "2026-08-27T10:59:59+09:00",
-        eventId: "PickPersonalityComposed" 
-    },
-	{
-        start: "2026-08-20T17:00:00+09:00",
-        end: "2026-08-27T10:59:59+09:00",
-        eventId: "GachaOnceSelectPickHero1" 
-    },
-	{
-        start: "2026-09-25T12:00:00+09:00",
-        end: "2026-09-28T03:59:59+09:00",
-        eventId: "TowerBattle" 
-    },
-	{
-        start: "2026-08-14T12:00:00+09:00",
-        end: "2026-08-17T03:59:59+09:00",
-        eventId: "Playground" 
-    },
-	{
-        start: "2026-10-23T12:00:00+09:00",
-        end: "2026-10-25T15:59:59+09:00",
-        eventId: "WWE" 
-    },
-	{
-        start: "2026-09-11T11:00:00+09:00",
-        end: "2026-09-14T03:59:59+09:00",
-        eventId: "TricDice" 
-    }
-];
-
-// 🃏 特選卡片排程表
-const CARD_SCHEDULE = [
-	{
-        start: "2026-10-29T04:00:00+09:00",
-        end: "2026-11-05T10:59:59+09:00",
-        id: "Rune52",
-        type: "Rune"
-    },
-	{
-        start: "2026-10-22T17:00:00+09:00",
-        end: "2026-11-05T10:59:59+09:00",
-        id: "Artifact118",
-        type: "Artifact"
-    },
-	{
-        start: "2026-10-01T04:00:00+09:00",
-        end: "2026-10-22T10:59:59+09:00",
-        id: "Rune58",
-        type: "Rune"
-    }
-];
 console.log("LANG_DICT 內容:", LANG_DICT);
