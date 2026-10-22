@@ -1397,18 +1397,15 @@
                         const pDictUlt = { '冷靜': 'Composed', '憂鬱': 'Depressed', '天真': 'Innocence', '狂亂': 'Madness', '活潑': 'Vivacious', '共鳴': 'Resonance' };
 
                         if (pListUlt.length > 1) {
-                            // 若為多重性格組合，對應至 ultimate_Depressed_Innocence (全部轉小寫以符命名習慣)
-                            const enList = pListUlt.map(p => pDictUlt[p] || 'multifaceted');
-                            ultFileName = `ultimate_${enList.map(e => e.toLowerCase()).join('_')}`;
+                            // 【修正這裡】：若為多重性格組合，直接讀取雙面性格的sprites圖
+                            ultFileName = "ultimate_multifaceted";
                         } else if (pListUlt.length === 1) {
                             let pKey = pListUlt[0];
                             if (pKey === "雙重性格" || pKey === "雙重" || pKey === "雙面") {
                                 ultFileName = "ultimate_multifaceted";
                             } else {
                                 const personalityMap = {
-                                    "冷靜": "ultimate_composed", "憂鬱": "ultimate_depressed", "天真": "ultimate_innocence", "狂亂": "ultimate_madness", "活潑": "ultimate_vivacious",
-                                    "共鳴": "ultimate_resonance", "Composed": "ultimate_composed", "Depressed": "ultimate_depressed", "Innocence": "ultimate_innocence", "Madness": "ultimate_madness", "Vivacious": "ultimate_vivacious",
-                                    "Resonance": "ultimate_resonance", "Multifaceted": "ultimate_multifaceted"
+                                    "冷靜": "ultimate_composed", "憂鬱": "ultimate_depressed", "天真": "ultimate_innocence", "狂亂": "ultimate_madness", "活潑": "ultimate_vivacious", "共鳴": "ultimate_resonance", "Composed": "ultimate_composed", "Depressed": "ultimate_depressed", "Innocence": "ultimate_innocence", "Madness": "ultimate_madness", "Vivacious": "ultimate_vivacious", "Resonance": "ultimate_resonance", "Multifaceted": "ultimate_multifaceted"
                                 };
                                 ultFileName = personalityMap[pKey] || "ultimate_composed";
                             }
