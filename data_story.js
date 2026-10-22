@@ -26,6 +26,13 @@ const STORY_DATA = {
             name: "乘浪而來的企鵝人",
             episodes: [
                 { epNumber: "第0節", title: "官方PV", youtubeId: "K-NtiLSm8Ow" }
+                { epNumber: "第1節", title: "艾利亞斯冒險", youtubeId: "1WwKqjvxYq4" }
+                { epNumber: "第2節", title: "疑點重重的冒險", youtubeId: "rBoyt-5LtPA" }
+                { epNumber: "第3節", title: "管制區冒險", youtubeId: "POy2tFe5HVY" }
+                { epNumber: "第4節", title: "憂鬱的冒險", youtubeId: "B7o4EYAGUX0" }
+                { epNumber: "第5節", title: "半露營冒險", youtubeId: "yjdim9ki9a4" }
+                { epNumber: "第6節", title: "問題滿滿的冒險", youtubeId: "fVldW7pIgBA" }
+                { epNumber: "第7節", title: "友情中的冒險    ", youtubeId: "jIIHKMn-d-s" }
             ]
         },
         {
