@@ -4,15 +4,15 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>嘟嘟臉坨坨動態展示器</title>
+        <script src="data_config.js"></script>
         <script src="data_core.js"></script>
         <link rel="stylesheet" href="sprites.css">
-        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="stylesheet" href="./style.css">
         <link id="dynamicFavicon" rel="icon" href="https://i.postimg.cc/mkfSTq5k/Favicon.png" type="image/png">
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@esotericsoftware/spine-player@4.1.23/dist/spine-player.min.css">
         <script src="https://cdn.jsdelivr.net/npm/@esotericsoftware/spine-player@4.1.23/dist/iife/spine-player.min.js"></script>
         <script>
-            tailwind.config = { darkMode: 'class', }
             const isDarkMode = localStorage.getItem('theme') === 'dark' || 
                                (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
             if (isDarkMode) { document.documentElement.classList.add('dark'); }
@@ -29,7 +29,7 @@
             .spine-player-loading-custom {
             position: absolute; top: 50%; left: 50%;
             width: 80px; height: 80px; margin: -40px 0 0 -40px;
-            background: url('https://i.postimg.cc/qvjNxZzg/golden-crayon.png') no-repeat center center;
+            background: url('./icon.png') no-repeat center center;
             background-size: contain;
             animation: crayonFloat 1.5s ease-in-out infinite;
             z-index: 10;
