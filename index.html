@@ -18,13 +18,13 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link rel="preconnect" href="https://www.gstatic.com">
         <link rel="preconnect" href="https://unpkg.com">
-        <link rel="preload" as="image" href="./icon.png">
+        <link rel="preload" as="image" href="./golden_crayon.png">
         <link rel="preload" as="image" href="./char_sprites/common_icon.png">
         <script src="data_config.js"></script>
         <script src="data_core.js"></script>
         <script src="data_skills.js"></script>
         <link rel="stylesheet" href="./style.css">
-        <link rel="apple-touch-icon" href="icon.png">
+        <link rel="apple-touch-icon" href="golden_crayon.png">
         <meta name="theme-color" content="#2563eb">
 
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
@@ -41,7 +41,7 @@
             top: 50%; left: 50%;
             width: 60px; height: 60px;
             margin: -30px 0 0 -30px;
-            background: url('./icon.png') no-repeat center center;
+            background: url('./golden_crayon.png') no-repeat center center;
             background-size: contain;
             animation: crayonFloat 1.5s ease-in-out infinite;
             z-index: 999;
@@ -75,7 +75,7 @@
             .shake-strong-anim { animation: shakeStrongEffect 0.5s ease-in-out; }
             .projectile-crayon, .burst-crayon {
             position: absolute;
-            background: url('./icon.png') no-repeat center center; 
+            background: url('./golden_crayon.png') no-repeat center center; 
             background-size: contain; z-index: 200; pointer-events: none;
             }
             .projectile-crayon {
@@ -154,7 +154,7 @@
             #rim-live-container .spine-player-canvas { background-color: transparent !important; }
             .track-crayon {
             position: absolute; width: 23px; height: 18px;
-            background-image: url('./icon.png');
+            background-image: url('./golden_crayon.png');
             background-size: contain; background-repeat: no-repeat; background-position: center;
             bottom: 55px; z-index: 50; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
             animation: crayonIdle 2s ease-in-out infinite; transition: transform 0.6s ease-out, opacity 0.5s ease-out, filter 0.6s ease-out; opacity: 0;
@@ -436,7 +436,7 @@
             </div>
         </div>
         <div id="loader" class="fixed inset-0 bg-[#fcf8f2] dark:bg-slate-900 z-[9999] flex items-center justify-center">
-            <img src="./icon.png" class="animate-bounce h-10 w-auto object-contain drop-shadow-md" alt="Loading...">
+            <img src="./golden_crayon.png" class="animate-bounce h-10 w-auto object-contain drop-shadow-md" alt="Loading...">
         </div>
         <div class="max-w-7xl mx-auto">
             <header class="bg-gradient-to-r from-amber-100/90 via-yellow-100/90 to-orange-100/90 dark:from-gray-800/90 dark:via-gray-700/90 dark:to-gray-800/90 rounded-2xl p-4 sm:p-6 shadow-md mb-6 border-4 border-amber-400 dark:border-gray-600 flex flex-col transition-colors backdrop-blur-sm relative z-10">
@@ -638,9 +638,9 @@
                         src="" 
                         class="max-w-[180px] sm:max-w-[220px] max-h-[50vh] object-contain hidden" 
                         onload="this.classList.remove('hidden'); document.getElementById('pathImageLoading').classList.add('hidden');"
-                        onerror="this.onerror=null; this.src='./icon.png'; this.classList.remove('hidden'); document.getElementById('pathImageLoading').classList.add('hidden');">
+                        onerror="this.onerror=null; this.src='./golden_crayon.png'; this.classList.remove('hidden'); document.getElementById('pathImageLoading').classList.add('hidden');">
                     <div id="pathImageLoading" class="absolute inset-0 flex flex-col items-center justify-center text-amber-600 dark:text-amber-400 font-bold gap-1 text-[10px]">
-                        <img src="./icon.png" class="animate-bounce w-5 h-5">
+                        <img src="./golden_crayon.png" class="animate-bounce w-5 h-5">
                         <span>載入中...</span>
                     </div>
                 </div>
