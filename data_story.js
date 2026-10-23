@@ -2,8 +2,8 @@ const STORY_DATA = {
     // 主線劇情
     main: [
         {
-            id: "main_001",
-            chapterNumber: "001", // 系統會自動抓取 story/Main001.png
+            id: "main_s1_1",
+            chapterNumber: "101", // 系統會自動抓取 story/Main101.png
             name: "至少幫我塗點果醬",
             episodes: [
                 { epNumber: "第1節", title: "序章", youtubeId: "_azTVTZ6XhU" },
