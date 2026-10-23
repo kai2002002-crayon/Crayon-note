@@ -2112,27 +2112,33 @@
             }
             
             function handleAuth() {
-                if (!auth) { alert("目前處於斷線單機模式（可能被擴充功能阻擋），無法登入雲端。"); return; }
-                if (currentUser) { auth.signOut().then(() => { localStorage.removeItem(storageKey); location.reload(); }).catch(err => alert("登出失敗: " + err.message)); } 
-                else { const provider = new firebase.auth.GoogleAuthProvider(); setTimeout(() => { auth.signInWithPopup(provider).catch(err => alert("登入被中斷，請確認是否允許跳出視窗。(" + err.code + ")")); }, 50); }
-            }
-            
-                        function updateAuthButtonUI(user) {
-                const btn = document.getElementById('authBtn'); 
-                const svgLogo = document.getElementById('googleLogoSvg'); 
-                const logoutText = document.getElementById('logoutText'); 
-                if (!btn) return;
-                
-                if (user) { 
-                    if (svgLogo) svgLogo.classList.add('hidden'); 
-                    if (logoutText) logoutText.classList.remove('hidden'); 
-                    btn.className = "p-1 flex items-center justify-center transition hover:opacity-70 shrink-0 whitespace-nowrap"; 
-                } else { 
-                    if (svgLogo) svgLogo.classList.remove('hidden'); 
-                    if (logoutText) logoutText.classList.add('hidden'); 
-                    btn.className = "p-1 flex items-center justify-center transition hover:opacity-70 shrink-0"; 
-                }
-            }
+    if (!auth) { 
+        alert("目前處於斷線單機模式（可能被擴充功能阻擋），無法登入雲端。"); 
+        return; 
+    }
+    
+    if (currentUser) { 
+        auth.signOut()
+            .then(() => { localStorage.removeItem(storageKey); location.reload(); })
+            .catch(err => alert("登出失敗: " + err.message)); 
+    } else { 
+        const provider = new firebase.auth.GoogleAuthProvider(); 
+        
+        // 判斷是否為 iOS主畫面(Standalone)、Android PWA 或是 行動裝置
+        const isStandalone = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+        if (isStandalone || isMobile) {
+            // 手機或主畫面 App 模式下，強制使用 Redirect 轉跳登入避開彈出視窗封鎖
+            auth.signInWithRedirect(provider).catch(err => alert("登入請求失敗: " + err.message));
+        } else {
+            // 電腦瀏覽器維持使用 Popup
+            setTimeout(() => { 
+                auth.signInWithPopup(provider).catch(err => alert("登入被中斷，請確認是否允許跳出視窗。(" + err.code + ")")); 
+            }, 50); 
+        }
+    }
+}
             
             
             function spawnCrayonOnTrack() {
