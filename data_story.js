@@ -15,6 +15,16 @@ const STORY_DATA = {
                 { epNumber: "第7節", title: "逆轉叛亂", youtubeId: "AEcXWfWRqmk" },
                 { epNumber: "第8節", title: "被叛亂逆轉", youtubeId: "a3gqSM0RHgI" }
             ]
+        },
+        {
+            id: "main_s1_2",
+            chapterNumber: "102", // 系統會自動抓取 story/Main101.png
+            name: "獸糧大團結",
+            episodes: [
+                { epNumber: "第1節", title: "冷酷的開罐器", youtubeId: "FcU9N7orymo" },
+                { epNumber: "第2節", title: "班尼，所向披靡", youtubeId: "VM0u38gJoDQ" },
+                { epNumber: "第3節", title: "世界上沒有壞奶油", youtubeId: "aUZ9wkogy3k" }
+            ]
         }
     ],
     // 活動劇情
