@@ -2124,18 +2124,16 @@
     } else { 
         const provider = new firebase.auth.GoogleAuthProvider(); 
         
-        // 判斷是否為 iOS主畫面(Standalone)、Android PWA 或是 行動裝置
+        // ⚠️ 絕對不能用 setTimeout，否則 iOS 會判定為「非使用者主動點擊」而封鎖跳轉狀態
         const isStandalone = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
         if (isStandalone || isMobile) {
-            // 手機或主畫面 App 模式下，強制使用 Redirect 轉跳登入避開彈出視窗封鎖
-            auth.signInWithRedirect(provider).catch(err => alert("登入請求失敗: " + err.message));
+            // 手機與主畫面版：使用同頁面跳轉
+            auth.signInWithRedirect(provider).catch(err => alert("跳轉登入失敗: " + err.message));
         } else {
-            // 電腦瀏覽器維持使用 Popup
-            setTimeout(() => { 
-                auth.signInWithPopup(provider).catch(err => alert("登入被中斷，請確認是否允許跳出視窗。(" + err.code + ")")); 
-            }, 50); 
+            // 電腦版：使用彈出視窗
+            auth.signInWithPopup(provider).catch(err => alert("彈出視窗被中斷: " + err.message)); 
         }
     }
 }
@@ -2275,6 +2273,18 @@ db.enablePersistence()
   });
 
 auth = firebase.auth(); 
+
+// === 新增：主動捕捉 Redirect 跳轉回來的登入結果 ===
+auth.getRedirectResult().then((result) => {
+    if (result && result.user) {
+        console.log("Redirect 登入成功", result.user);
+    }
+}).catch((error) => {
+    alert("登入回傳失敗，可能是瀏覽器阻擋了跨站追蹤: " + error.message);
+});
+// =================================================
+
+updateVisitCount();
 updateVisitCount();
                         auth.onAuthStateChanged(user => {
                             updateAuthButtonUI(user); 
