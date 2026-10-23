@@ -26,7 +26,7 @@ const characterSkills = [
         },
         "passiveSkill": {
           "desc": "",
-          "stats": ["秒"]
+          "stats": [""]
         }
       },
       "ja": {
@@ -95,7 +95,7 @@ const characterSkills = [
         },
         "passiveSkill": {
           "desc": "",
-          "stats": ["秒"]
+          "stats": [""]
         }
       },
       "ja": {
