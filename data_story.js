@@ -3,7 +3,7 @@ const STORY_DATA = {
     main: [
         {
             id: "main_s1_1",
-            chapterNumber: "101", // 系統會自動抓取 story/Main101.png
+            chapterNumber: "001", // 系統會自動抓取 story/Main101.png
             name: "至少幫我塗點果醬",
             episodes: [
                 { epNumber: "第1節", title: "序章", youtubeId: "_azTVTZ6XhU" },
@@ -18,7 +18,7 @@ const STORY_DATA = {
         },
         {
             id: "main_s1_2",
-            chapterNumber: "102", // 系統會自動抓取 story/Main101.png
+            chapterNumber: "002", // 系統會自動抓取 story/Main101.png
             name: "獸糧大團結",
             episodes: [
                 { epNumber: "第1節", title: "冷酷的開罐器", youtubeId: "FcU9N7orymo" },
