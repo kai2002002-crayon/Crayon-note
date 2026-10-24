@@ -33,7 +33,7 @@ const STORY_DATA = {
         {
             id: "main_s1_3",
             chapterNumber: "003", // 系統會自動抓取 story/Main101.png
-            name: "獸糧大團結",
+            name: "慘劇的教訓",
             episodes: [
                 { epNumber: "第1節", title: "教科書式入場方法", youtubeId: "Wlgev9XaXno" },
                 { epNumber: "第2節", title: "結巴指南", youtubeId: "8EjW9jQh7ms" },
