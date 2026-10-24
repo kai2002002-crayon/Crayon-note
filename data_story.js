@@ -39,9 +39,9 @@ const STORY_DATA = {
                 { epNumber: "第2節", title: "結巴指南", youtubeId: "8EjW9jQh7ms" },
                 { epNumber: "第3節", title: "市長、秘書、士兵、間諜", youtubeId: "wSYa53u9D2Y" },
                 { epNumber: "第4節", title: "自由交流", youtubeId: "NBKRDm4s3UA" },
-                { epNumber: "第5節", title: "D-Day零時", youtubeId: "" },
-                { epNumber: "第6節", title: "大姐姐", youtubeId: "" },
-                { epNumber: "第7節", title: "正義將至", youtubeId: "" }
+                { epNumber: "第5節", title: "D-Day零時", youtubeId: "Dy5f5n2g84w" },
+                { epNumber: "第6節", title: "大姐姐", youtubeId: "vJNOxGzPlQ0" },
+                { epNumber: "第7節", title: "正義將至", youtubeId: "spToMD9_ZV0" }
             ]
         }
     ],
