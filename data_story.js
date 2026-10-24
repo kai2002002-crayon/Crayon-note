@@ -29,6 +29,20 @@ const STORY_DATA = {
                 { epNumber: "第6節", title: "固執與偏見", youtubeId: "77ayeAgGCyE" },
                 { epNumber: "第7節", title: "暴風後的喧鬧", youtubeId: "U53URCynXsc" }
             ]
+        },
+        {
+            id: "main_s1_3",
+            chapterNumber: "003", // 系統會自動抓取 story/Main101.png
+            name: "獸糧大團結",
+            episodes: [
+                { epNumber: "第1節", title: "教科書式入場方法", youtubeId: "Wlgev9XaXno" },
+                { epNumber: "第2節", title: "結巴指南", youtubeId: "8EjW9jQh7ms" },
+                { epNumber: "第3節", title: "市長、秘書、士兵、間諜", youtubeId: "wSYa53u9D2Y" },
+                { epNumber: "第4節", title: "自由交流", youtubeId: "NBKRDm4s3UA" },
+                { epNumber: "第5節", title: "D-Day零時", youtubeId: "" },
+                { epNumber: "第6節", title: "大姐姐", youtubeId: "" },
+                { epNumber: "第7節", title: "正義將至", youtubeId: "" }
+            ]
         }
     ],
     // 活動劇情
