@@ -23,7 +23,11 @@ const STORY_DATA = {
             episodes: [
                 { epNumber: "第1節", title: "冷酷的開罐器", youtubeId: "FcU9N7orymo" },
                 { epNumber: "第2節", title: "班尼，所向披靡", youtubeId: "VM0u38gJoDQ" },
-                { epNumber: "第3節", title: "世界上沒有壞奶油", youtubeId: "aUZ9wkogy3k" }
+                { epNumber: "第3節", title: "世界上沒有壞奶油", youtubeId: "aUZ9wkogy3k" },
+                { epNumber: "第4節", title: "藥物女王", youtubeId: "zT0wEV_XB0M" },
+                { epNumber: "第5節", title: "反對獸糧黨的反擊", youtubeId: "XYHm4ouJ9nM" },
+                { epNumber: "第6節", title: "固執與偏見", youtubeId: "77ayeAgGCyE" },
+                { epNumber: "第7節", title: "暴風後的喧鬧", youtubeId: "U53URCynXsc" }
             ]
         }
     ],
