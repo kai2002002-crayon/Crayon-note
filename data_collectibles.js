@@ -282,9 +282,9 @@
     "KommySwim": {
         "url": "",
         "name": {
-            "zh-TW": "",
-            "ja": "",
-            "en": ""
+            "zh-TW": "悔恨的檸檬水",
+            "ja": "後悔のレモネード",
+            "en": "Lemonade of Regret"
         }
     },
     "Kyarot": {
@@ -694,7 +694,8 @@ const THOUGHT_MAP = {
         "xXionx": "據說，她自費把她發在暗網上的小說出版，這是一本艾利亞斯只有50本的珍貴書籍。",
         "Yomi": "優米用向月花編成的花環。她還說希望我每天都戴著它。",
         "Yumimi": "戴上這個木製面具後，據說不會被野生動物襲擊。建議在森林裡行走時佩戴。",
-        "Lethe": "麗息的目的是讓我失去記憶,而不是傷害我的眼睛。 她要我戴上這個,並接受雷射光的照射。"
+        "Lethe": "麗息的目的是讓我失去記憶,而不是傷害我的眼睛。 她要我戴上這個,並接受雷射光的照射。",
+        "KommySwim": "這是柯米為了反省自己的失誤，誠實地製作的檸檬汁。她會定期帶來讓我喝喝看。"
     },
     "ja": {
         "Alice": "1日に1枚取り出すとその日の運を大体知ることができるというカードブック。魔法のせいか自動でシャッフルしてくれる。",
@@ -772,7 +773,8 @@ const THOUGHT_MAP = {
         "xXionx": "自分がダークネットで書いていた小説を自費で出版するらしい。エーリアスに50部しかない貴重なものだという。",
         "Yomi": "ヨミが向月葵を編んで作った花輪。いつも身につけてほしいという言葉と共に渡してくれた。",
         "Yumimi": "木でできたこの仮面をつけると野生の獣に攻撃されないらしい？森を歩く時におすすめだそう。",
-        "Lethe": "レーテーの目的は私の記憶を消すことであって目の健康を害するものじゃないという。これをかけてレーザーにあたってくれと言ってる。"
+        "Lethe": "レーテーの目的は私の記憶を消すことであって目の健康を害するものじゃないという。これをかけてレーザーにあたってくれと言ってる。",
+        "KommySwim": "コミーがかつての自分のミスを後悔して正直に作ったレモネード。私に試飲してみてと定期的に持ってくる。"
     },
     "en": {
         "Alice": "A card deck that roughly tells you this day's fortune by drawing a card once daily. It seems that its magic automatically shuffles the cards.",
@@ -850,7 +852,8 @@ const THOUGHT_MAP = {
         "xXionx": "A self-published bound book of a web novel that Xion released on the Darknet. She said it's a rarity with only 50 copies circulating in Elias.",
         "Yomi": "A wreath made by Yomi weaving moonflowers together. She gave it to me with the request to always wear it.",
         "Yumimi": "A wooden mask said to prevent attacks from wild beasts. But really? However, she recommended me to wear it while wandering in the forest.",
-        "Lethe": "Lethe's goal is to make me forget, not harm my eyesight. She handed them to me and said to wear them to get hit by lasers"
+        "Lethe": "Lethe's goal is to make me forget, not harm my eyesight. She handed them to me and said to wear them to get hit by lasers",
+        "KommySwim": "Lemonade that Kommy made earnestly, out of remorse for her past mistakes. She regularly brings it to me, asking me to taste it."
     }
 };
 
@@ -931,7 +934,8 @@ const LETTER_MAP = {
         "xXionx": "如果你正在讀這封信，那就代表我們已經親密到可以共享心象世界了，對吧？現在的時間是凌晨2點，連月亮都顯得寂寞的時刻。這是艾利亞斯所有生命體最孤獨的時分，而我在這個時候寫信，就是因為你這傢伙，教主。你在宴會廳聽到我說話後，居然說了句「真有錫安的風格」，這到底是什麼意思？請快點回覆我。P.S. 這樣不奇怪吧？「心象世界」這個詞是不是很酷？",
         "Yomi": "給教主大人寫信時，雀躍的心情實在難以平復。畢竟用文字傳達，和用言語表達是兩種不同的情感。經過半日的思考，我想以詩歌來表達我的感恩之心，於是寫下這一首。希望您會喜歡。\n迎月花一朵，抬首望明月。\n僅得月光照，恩澤已浩蕩。\n月卻回首望，此生復何求。",
         "Yumimi": "嗯~最近我的別墅都沒有人來，想來是教主您特別留意了吧？謝謝！以後如果在森林裡遇到什麼珍貴的藥草或香菇，我會包裝好寄給您!今後也請多多指教，若是您想享受大自然的生活，隨時都可以到附近來玩。但請您務必一個人來喔?因為我不太喜歡別墅裡太過熱鬧。",
-        "Lethe": "教主，是我，麗息。沒想到我竟然會寫信給教主。每次我射雷射,教主都會生氣,但我這麼做都是有原因的。希望教主有一天也能明白,我射雷射更深一層的用意。這樣就不會老是只看到教主生氣的表情,也能看看你笑起來的樣子了吧。那你能不能來找我,乖乖按我一發雷射就好?我會等你的。"
+        "Lethe": "教主，是我，麗息。沒想到我竟然會寫信給教主。每次我射雷射,教主都會生氣,但我這麼做都是有原因的。希望教主有一天也能明白,我射雷射更深一層的用意。這樣就不會老是只看到教主生氣的表情,也能看看你笑起來的樣子了吧。那你能不能來找我,乖乖按我一發雷射就好?我會等你的。",
+        "KommySwim": "教主，我是柯米。柯米在游泳游到一半的時候突然想起教主,所以信紙可能會有點皺皺的。不過沒關係，只要看得清楚字跡就好了。你想知道柯米為什麼游泳游到一半突然寫信嗎﹖因為柯米在游泳的時候突破了自己的極限喔！所以柯米就覺得教主是不是也可以藉由游泳來突破極限呢﹖柯米現在要繼續游泳了，就先寫到這裡囉,教主。"
     },
     "ja": {
         "Alice": "教主、覚えてる？鏡の中のお姉さまと一緒に暮らしたいかって聞いたこと。あれ、なかったことにするわ。残念に思うかもしれないけど仕方ないでしょ？だって気づいたんだもの。お姉さまに譲るにはもったいないくらい面白いやつだってことに。私が気に入るなんてめったにないことなんだから、喜んでいいわよ。いつかタロット占いにいらっしゃい。最高の運勢を占ってあげる。もちろん、誰にとっての最高の運勢なのかは内緒だけどね。",
@@ -1009,7 +1013,8 @@ const LETTER_MAP = {
         "xXionx": "この手紙を読んでいるということは、既に我と精神世界を共有するほど親密な関係になったということだろう。現在時刻は午前2時。月すら寂寞を覚え、エーリアスの全生命体が最も孤独になるこの時間にペンを取ったのは、他でもない教主、そなたが原因だ。宴会場で我が話を聞いて「シオンらしい」と言ったのはどういう意味だ？至急返事求む。p.s おかしくないよな？精神世界っていう表現、かっこいいよな？",
         "Yomi": "月様へ。お手紙を書いていると、胸が弾んで落ち着きません。文字で伝えるのは言葉とは違う趣きがありますから。半日悩み、感謝の気持ちを詩に表すのはどうかと思い、一篇、詠ませていただきます。\n月見草一輪、頭を上げて月を見る。\n照らさるるのみで、その恩恵計り知れぬというに顔を向けて見つめてくださる、この上何をや望まん。",
         "Yumimi": "ふ〜ん、最近、誰も私の離れを訪ねて来ないと思ったら、教主様が気を遣ってくれてたのね？ありがとう！今度、森で貴重な薬草とかキノコとかを見つけたら送るね！これからもよろしく。それから、自然の中で過ごしたくなったら、いつでも遊びに来てね！その代わり、一人で来てね。離れが人でガヤガヤするのは嫌だから。",
-        "Lethe": "教主う、私よお、レーテーだよぉ。まさか教主に手紙を書く日がくるなんてねぇ。教主は私がレーザーを使う度に怒るけど、これには理由があるのよぉ?教主にもいつか私のレーザーにふか〜い意味があるって気づいてほしいなぁ〜。そうしたら、怒った顔じゃなくて笑顔になれると思うんだぁ。だからねぇ、私のレーザーを真正面から受けてもらえないかなぁ?待ってるよぉ。"
+        "Lethe": "教主う、私よお、レーテーだよぉ。まさか教主に手紙を書く日がくるなんてねぇ。教主は私がレーザーを使う度に怒るけど、これには理由があるのよぉ?教主にもいつか私のレーザーにふか〜い意味があるって気づいてほしいなぁ〜。そうしたら、怒った顔じゃなくて笑顔になれると思うんだぁ。だからねぇ、私のレーザーを真正面から受けてもらえないかなぁ?待ってるよぉ。",
+        "KommySwim": "教主、コミーだにゃん。泳いでたら、教主のことを思い出したにゃん。だから紙がちょっとしわくちゃになったかもしれにゃい。\nコミーがなんで急に泳ぐのをやめて手紙を書いたか気になるかにゃ?コミーは泳ぎながらコミーの限界を超えたにゃん。だから教主も泳ぎながら限界を超えるのはどうかなと思ったにゃん。\nコミーはもう泳ぎに行くにゃん。バイバイだにゃん。"
     },
     "en": {
         "Alice": "Master, remember when I asked if you'd like to live with my sister in the mirror? Yeah, let's forget about that. Disappointed? Well, tough luck, I've realized that you're just way too fun to let go of. You should feel honored... It's not easy to win me over like this. Stop by for a tarot reading soon. I'll make sure it's the best fortune... just don't ask whose it'll be.",
@@ -1087,6 +1092,7 @@ const LETTER_MAP = {
         "xXionx": "If this letter has reached you, it's undeniable... We are now tethered by a bond so profound that we inhabit the same shared mental realm! The time? 2 a.m., when even the moon gazes down in melancholy as all life in Elias succumbs to the weight of its loneliness. Yet it's YOU, Master, who drives me to write at this hour. At the Banquet Hall, in response to what I said, you uttered, \"That's so like you, Xion.\" Explain yourself at once! P.S. Admit it, the phrase \"mental realm\" is just pure genius, isn't it?",
         "Yomi": "Dear Master, sending you this letter is so exciting, my heart can't be at peace.\nExpressing my feelings in writing is different from expressing them in words. After thinking about it for half a day, I decided to write a poem to express my gratitude. I hope you like it.\nAn evening primrose raises its head to look at the moon.\nJust basking in its light is an immeasurable blessing.\nIt faces the moon, and it can wish for nothing more.",
         "Yumimi": "Hmm, I believe I have you to thank for how I haven't had unwanted visitors at my cabin! If I come across any rare herbs or mushrooms in the forest, I'll make sure to send them your way. And hey, if you ever want to escape to nature for a bit, feel free to drop by. Just one thing... please come alone. I'm not a fan of my cabin getting too crowded.",
-        "Lethe": "Master, it's me, Lethe. I never thought I'd be writing you a letter. You get mad every time I use my laser, but I've got my reasons. I hope someday you'll understand the deeper meaning behind my laser, too. Then maybe I'll finally get to see you smile instead of looking mad at me all the time. So... could you come see me and actually let me zap you with my laser just once? I'll be waiting."
+        "Lethe": "Master, it's me, Lethe. I never thought I'd be writing you a letter. You get mad every time I use my laser, but I've got my reasons. I hope someday you'll understand the deeper meaning behind my laser, too. Then maybe I'll finally get to see you smile instead of looking mad at me all the time. So... could you come see me and actually let me zap you with my laser just once? I'll be waiting.",
+        "KommySwim": "Master, it's Kommy. I thought of you while I was swimming, so the paper might be a little wrinkled. But it's okay as long as you can still read it. Wondering why Kommy suddenly stopped swimming to write you a letter? While swimming, Kommy pushed past Kommy's limits. It made me think maybe you could try swimming and push past your limits too. Kommy's going swimming again now. That's all for now, Master."
     }
 };
