@@ -43,6 +43,20 @@ const STORY_DATA = {
                 { epNumber: "第6節", title: "大姐姐", youtubeId: "vJNOxGzPlQ0" },
                 { epNumber: "第7節", title: "正義將至", youtubeId: "spToMD9_ZV0" }
             ]
+        },
+        {
+            id: "main_s1_4",
+            chapterNumber: "004", // 系統會自動抓取 story/Main101.png
+            name: "王國爆炸前5分鐘",
+            episodes: [
+                { epNumber: "第1節", title: "苦澀的同伴", youtubeId: "SjeYQ64bOMU" },
+                { epNumber: "第2節", title: "魔女的巫術", youtubeId: "NyzPNp6ZcKo" },
+                { epNumber: "第3節", title: "佩佩的祕密活動", youtubeId: "VWSWPtjKj3k" },
+                { epNumber: "第4節", title: "真誠的計畫", youtubeId: "EHDMeSSav3I" },
+                { epNumber: "第5節", title: "破曉的號角聲", youtubeId: "xIO6TPuvXUA" },
+                { epNumber: "第6節", title: "單挑是過時的想法", youtubeId: "yy3aapFtK_c" },
+                { epNumber: "第7節", title: "暫時找回的和平", youtubeId: "iWH79_FSkxA" },
+            ]
         }
     ],
     // 活動劇情
