@@ -55,7 +55,20 @@ const STORY_DATA = {
                 { epNumber: "第4節", title: "真誠的計畫", youtubeId: "EHDMeSSav3I" },
                 { epNumber: "第5節", title: "破曉的號角聲", youtubeId: "xIO6TPuvXUA" },
                 { epNumber: "第6節", title: "單挑是過時的想法", youtubeId: "yy3aapFtK_c" },
-                { epNumber: "第7節", title: "暫時找回的和平", youtubeId: "iWH79_FSkxA" },
+                { epNumber: "第7節", title: "暫時找回的和平", youtubeId: "iWH79_FSkxA" }
+            ]
+        },
+        {
+            id: "main_s1_5",
+            chapterNumber: "005", // 系統會自動抓取 story/Main101.png
+            name: "圍觀隔離火災",
+            episodes: [
+                { epNumber: "第1節", title: "精靈會騙你兩次", youtubeId: "dQZ2hctRnoM" },
+                { epNumber: "第2節", title: "不安的同盟", youtubeId: "0TOV5sa_4yU" },
+                { epNumber: "第3節", title: "無風不起浪", youtubeId: "nIIlUIZkVn0" },
+                { epNumber: "第4節", title: "一半是真心的", youtubeId: "nwvwA79y_Hg" },
+                { epNumber: "第5節", title: "滅火隊", youtubeId: "9QsVa4xc71g" },
+                { epNumber: "第6節", title: "尾聲", youtubeId: "eDSGBAFahJk" }
             ]
         }
     ],
