@@ -310,7 +310,7 @@
             const dragSourceFood = document.getElementById('drag-source-food');
             dragSourceFood.innerHTML = '';
             [...foodSet].sort().forEach(val => {
-                let iconUrl = window.FOOD_ICON && window.FOOD_ICON[val] ? window.FOOD_ICON[val] : null;
+                let iconUrl = window.FOOD_ICON && window.FOOD_ICON[val] && window.FOOD_ICON[val].url ? window.FOOD_ICON[val].url : null;
                 let el = iconUrl 
                     ? `<img src="${iconUrl}" title="${val}" draggable="true" ondragstart="dragStart(event, '${val}', 'food')" class="w-12 h-12 object-contain bg-slate-700 border border-slate-600 rounded shadow-md cursor-grab hover:scale-110 hover:border-amber-400 transition-all p-1">`
                     : `<div draggable="true" ondragstart="dragStart(event, '${val}', 'food')" title="${val}" class="w-12 h-12 flex items-center justify-center bg-slate-700 border border-slate-600 rounded shadow-md cursor-grab hover:scale-110 hover:border-amber-400 transition-all p-1 text-[10px] text-center text-slate-300 font-bold overflow-hidden leading-tight">${val}</div>`;
@@ -327,7 +327,7 @@
             const dragSourceReward = document.getElementById('drag-source-reward');
             dragSourceReward.innerHTML = '';
             [...rewardSet].sort().forEach(val => {
-                let iconUrl = window.REWARD_ICON && window.REWARD_ICON[val] ? window.REWARD_ICON[val] : null;
+                let iconUrl = window.REWARD_ICON && window.REWARD_ICON[val] && window.REWARD_ICON[val].url ? window.REWARD_ICON[val].url : null;
                 let el = iconUrl 
                     ? `<img src="${iconUrl}" title="${val}" draggable="true" ondragstart="dragStart(event, '${val}', 'reward')" class="w-12 h-12 object-contain bg-slate-700 border border-slate-600 rounded shadow-md cursor-grab hover:scale-110 hover:border-emerald-400 transition-all p-1">`
                     : `<div draggable="true" ondragstart="dragStart(event, '${val}', 'reward')" title="${val}" class="w-12 h-12 flex items-center justify-center bg-slate-700 border border-slate-600 rounded shadow-md cursor-grab hover:scale-110 hover:border-emerald-400 transition-all p-1 text-[10px] text-center text-slate-300 font-bold overflow-hidden leading-tight">${val}</div>`;
