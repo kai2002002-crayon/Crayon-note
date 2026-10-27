@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>終極角色資料管理系統 (單機版)</title>
     <link rel="stylesheet" href="./style.css">
-    <!-- 引入所有資料檔 (加入 data_config.js 以便抓取 FOOD_ICON / REWARD_ICON) -->
     <script src="data_config.js"></script> 
     <script src="data_core.js"></script>
     <script src="data_skills.js"></script>
@@ -14,7 +13,6 @@
     <script src="data_collectibles.js"></script>
     
     <script>
-        // 確保變數存在，避免報錯
         if(typeof LANG_DICT === 'undefined') window.LANG_DICT = { "zh-TW": {}, "ja": {}, "en": {} };
         if(typeof INITIAL_DATA === 'undefined') window.INITIAL_DATA = [];
         if(typeof CV_MAP === 'undefined') window.CV_MAP = {};
@@ -36,13 +34,26 @@
         if(typeof THOUGHT_MAP === 'undefined') window.THOUGHT_MAP = { "zh-TW": {}, "ja": {}, "en": {} };
         if(typeof LETTER_MAP === 'undefined') window.LETTER_MAP = { "zh-TW": {}, "ja": {}, "en": {} };
         
-        // 確保設定檔變數存在
         if(typeof FOOD_ICON === 'undefined') window.FOOD_ICON = {};
         if(typeof REWARD_ICON === 'undefined') window.REWARD_ICON = {};
     </script>
     <style>
         details > summary { list-style: none; }
         details > summary::-webkit-details-marker { display: none; }
+        
+        /* 拖曳時游標樣式 */
+        .cursor-grab { cursor: grab; }
+        .cursor-grab:active { cursor: grabbing; }
+        
+        /* 拖放目標的高亮特效 */
+        .drag-over {
+            border-color: #fbbf24 !important;
+            background-color: rgba(251, 191, 36, 0.1) !important;
+        }
+        .drag-over-reward {
+            border-color: #34d399 !important;
+            background-color: rgba(52, 211, 153, 0.1) !important;
+        }
     </style>
 </head>
 <body class="bg-slate-900 text-slate-200 min-h-screen font-sans p-4 lg:p-6">
@@ -84,11 +95,11 @@
                         <span class="text-xl group-open:rotate-180 transition-transform">▼</span>
                     </summary>
                     <div class="p-5 border-t border-slate-700 grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <!-- 新增 list 屬性綁定下拉選單 -->
-                        <div><label class="block text-xs text-slate-400 mb-1">性格</label><input type="text" id="personality" list="list-personality" class="w-full bg-slate-800 border border-slate-600 rounded p-2 focus:ring-1 focus:ring-indigo-400 outline-none"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1">種族</label><input type="text" id="race" list="list-race" class="w-full bg-slate-800 border border-slate-600 rounded p-2 focus:ring-1 focus:ring-indigo-400 outline-none"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1">站位</label><input type="text" id="position" list="list-position" class="w-full bg-slate-800 border border-slate-600 rounded p-2 focus:ring-1 focus:ring-indigo-400 outline-none"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1">職業</label><input type="text" id="job" list="list-job" class="w-full bg-slate-800 border border-slate-600 rounded p-2 focus:ring-1 focus:ring-indigo-400 outline-none"></div>
+                        
+                        <div><label class="block text-xs text-slate-400 mb-1">性格</label><input type="text" id="personality" list="list-personality" class="w-full bg-slate-800 border border-slate-600 rounded p-2"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">種族</label><input type="text" id="race" list="list-race" class="w-full bg-slate-800 border border-slate-600 rounded p-2"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">站位</label><input type="text" id="position" list="list-position" class="w-full bg-slate-800 border border-slate-600 rounded p-2"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">職業</label><input type="text" id="job" list="list-job" class="w-full bg-slate-800 border border-slate-600 rounded p-2"></div>
                         
                         <div><label class="block text-xs text-slate-400 mb-1">實裝版本</label><input type="text" id="pathVersion" class="w-full bg-slate-800 border border-slate-600 rounded p-2"></div>
                         <div><label class="block text-xs text-slate-400 mb-1">實裝日期</label><input type="text" id="releaseDate" class="w-full bg-slate-800 border border-slate-600 rounded p-2" placeholder="YYYY-MM-DD..."></div>
@@ -102,27 +113,45 @@
                         <div><label class="block text-xs text-slate-400 mb-1">立繪服裝 (逗號分隔)</label><input type="text" id="costume" class="w-full bg-slate-800 border border-slate-600 rounded p-2"></div>
                         <div><label class="block text-xs text-slate-400 mb-1">SD 服裝 (逗號分隔)</label><input type="text" id="sdCostume" class="w-full bg-slate-800 border border-slate-600 rounded p-2"></div>
 
-                        <div class="col-span-4 border-b border-slate-700 my-2"></div>
-
-                        <!-- 料理與獎勵區 (新增快捷按鈕容器) -->
-                        <div class="col-span-2">
-                            <label class="block text-xs text-slate-400 mb-1">最愛料理 (Super)</label>
-                            <input type="text" id="foodSuper" list="list-food" class="w-full bg-slate-800 border border-slate-600 rounded p-2 focus:ring-1 focus:ring-indigo-400 outline-none">
-                        </div>
-                        <div class="col-span-2">
-                            <label class="block text-xs text-slate-400 mb-1">喜歡料理 (Special, 逗號分隔)</label>
-                            <input type="text" id="foodSpecial" class="w-full bg-slate-800 border border-slate-600 rounded p-2 mb-2">
-                            <div id="chips-foodSpecial" class="flex flex-wrap gap-1"></div>
-                        </div>
-                        <div class="col-span-2">
-                            <label class="block text-xs text-slate-400 mb-1">打工獎勵 (換行分隔)</label>
-                            <textarea id="rewards" class="w-full bg-slate-800 border border-slate-600 rounded p-2 h-16 mb-2"></textarea>
-                            <div id="chips-rewards" class="flex flex-wrap gap-1"></div>
-                        </div>
-                        <div class="col-span-2"><label class="block text-xs text-slate-400 mb-1">打工影片 URL</label><input type="text" id="workUrl" class="w-full bg-slate-800 border border-slate-600 rounded p-2"></div>
-                        
                         <div class="col-span-4 flex items-center bg-slate-800 p-3 rounded border border-slate-600">
                             <input type="checkbox" id="isEldain" class="w-5 h-5 mr-3 accent-indigo-500"> <label class="text-slate-200 font-bold">標記為艾爾丁 (Eldain)</label>
+                        </div>
+
+                        <!-- 💡 料理拖曳圖庫與輸入區 -->
+                        <div class="col-span-4 bg-slate-800/80 p-4 rounded-xl border border-amber-600/50 mt-4 shadow-inner">
+                            <label class="block text-sm font-bold text-amber-400 mb-2">🍎 共用料理圖庫 (請拖曳 ICON 至下方輸入框)</label>
+                            <div id="drag-source-food" class="flex flex-wrap gap-3 mb-5 p-3 bg-slate-900/50 rounded-lg min-h-[60px] border border-slate-700"></div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-xs text-slate-400 mb-1">最愛料理 (Super) - 只能1項</label>
+                                    <input type="text" id="foodSuper" placeholder="將料理圖示拖曳到此處..." class="w-full bg-slate-900 border-2 border-dashed border-slate-500 rounded-lg p-3 text-amber-200 font-bold focus:outline-none transition-colors"
+                                    ondragover="allowDrop(event)" ondragenter="dragEnterFood(event)" ondragleave="dragLeaveFood(event)" ondrop="dropItem(event, 'foodSuper')">
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-slate-400 mb-1">喜歡料理 (Special) - 逗號分隔，可多項</label>
+                                    <input type="text" id="foodSpecial" placeholder="將料理圖示拖曳到此處..." class="w-full bg-slate-900 border-2 border-dashed border-slate-500 rounded-lg p-3 text-amber-100 focus:outline-none transition-colors"
+                                    ondragover="allowDrop(event)" ondragenter="dragEnterFood(event)" ondragleave="dragLeaveFood(event)" ondrop="dropItem(event, 'foodSpecial')">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 💡 打工獎勵拖曳圖庫與輸入區 -->
+                        <div class="col-span-4 bg-slate-800/80 p-4 rounded-xl border border-emerald-600/50 mt-2 shadow-inner">
+                            <label class="block text-sm font-bold text-emerald-400 mb-2">💼 打工獎勵圖庫 (請拖曳 ICON 至下方輸入框)</label>
+                            <div id="drag-source-reward" class="flex flex-wrap gap-3 mb-5 p-3 bg-slate-900/50 rounded-lg min-h-[60px] border border-slate-700"></div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-xs text-slate-400 mb-1">打工獎勵 (換行分隔) - 可多項</label>
+                                    <textarea id="rewards" placeholder="將獎勵圖示拖曳到此處..." class="w-full bg-slate-900 border-2 border-dashed border-slate-500 rounded-lg p-3 h-24 text-emerald-200 focus:outline-none transition-colors"
+                                    ondragover="allowDrop(event)" ondragenter="dragEnterReward(event)" ondragleave="dragLeaveReward(event)" ondrop="dropItem(event, 'rewards')"></textarea>
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-slate-400 mb-1">打工影片 URL</label>
+                                    <input type="text" id="workUrl" class="w-full bg-slate-900 border border-slate-600 rounded p-2">
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </details>
@@ -171,13 +200,9 @@
         <!-- 右側：資料更新與下載區 -->
         <div class="w-full lg:w-1/4 bg-slate-800 rounded-xl shadow-xl flex flex-col h-[90vh] border border-slate-700 p-6 sticky top-6">
             <h2 class="text-2xl font-black text-green-400 mb-6 border-b border-slate-700 pb-4">📦 儲存與發布</h2>
-            
-            <p class="text-sm text-slate-400 mb-6">點擊儲存後，資料會寫入網頁記憶體，隨後可下載更新的 .js 檔案。</p>
-
             <button type="button" onclick="updateMemoryData()" class="w-full py-4 mb-6 bg-indigo-600 hover:bg-indigo-500 text-white font-black text-lg rounded-xl shadow-lg transition-transform hover:scale-[1.02] border border-indigo-400">
                 💾 1. 同步儲存 (寫入記憶體)
             </button>
-
             <div class="space-y-3 flex-1 overflow-y-auto pr-2" id="downloadSection" style="opacity: 0.3; pointer-events: none;">
                 <h3 class="font-bold text-white mb-2 sticky top-0 bg-slate-800 py-1">2. 產生靜態 JS 更新檔</h3>
                 <button onclick="downloadJS('data_core.js', generateCoreData())" class="w-full py-3 bg-slate-700 hover:bg-slate-600 rounded text-left px-4 font-mono text-sm border border-slate-600">⬇️ data_core.js</button>
@@ -186,7 +211,6 @@
                 <button onclick="downloadJS('data_skills.js', generateDataMap('characterSkills', characterSkills))" class="w-full py-3 bg-slate-700 hover:bg-slate-600 rounded text-left px-4 font-mono text-sm border border-slate-600 text-rose-300">⬇️ data_skills.js</button>
                 <button onclick="downloadJS('data_aside.js', generateDataMap('ASIDE_DATA', ASIDE_DATA))" class="w-full py-3 bg-slate-700 hover:bg-slate-600 rounded text-left px-4 font-mono text-sm border border-slate-600 text-amber-300">⬇️ data_aside.js</button>
             </div>
-            
             <div id="statusMsg" class="mt-4 p-3 rounded bg-green-900/50 text-green-400 text-sm font-bold hidden text-center border border-green-500">
                 ✅ 已更新記憶體！請點擊上方按鈕下載。
             </div>
@@ -194,14 +218,12 @@
 
     </div>
 
-    <!-- 隱藏的 Datalist 資料庫 (供輸入框綁定下拉選單用) -->
+    <!-- 隱藏的 Datalist (性格, 種族, 站位, 職業) -->
     <datalist id="list-personality"></datalist>
     <datalist id="list-race"></datalist>
     <datalist id="list-position"></datalist>
     <datalist id="list-job"></datalist>
-    <datalist id="list-food"></datalist>
 
-    <!-- UI 生成與資料處理邏輯 -->
     <script>
         const LANGS = ['zh-TW', 'ja', 'en'];
         const LANG_LABELS = {'zh-TW': '繁體中文', 'ja': '日本語', 'en': 'English'};
@@ -216,95 +238,104 @@
             buildSkillInputs();
             buildAsideInputs();
             populateDropdown(); 
-            buildHelperUI(); // 初始化下拉選單與快捷按鈕
+            buildHelperUI(); 
             document.getElementById('downloadSection').style.opacity = '1';
             document.getElementById('downloadSection').style.pointerEvents = 'auto';
         };
 
-        // ========== 自動提取資料生成選單邏輯 ==========
-        function buildHelperUI() {
-            // 1. 自動從 INITIAL_DATA 提取所有現有選項 (不需手動寫死)
-            const dataSets = {
-                personality: new Set(),
-                race: new Set(),
-                position: new Set(),
-                job: new Set()
-            };
+        // ========== 拖曳 (Drag & Drop) 事件邏輯 ==========
+        function dragStart(e, value, type) {
+            e.dataTransfer.setData('custom/type', type);
+            e.dataTransfer.setData('custom/value', value);
+            e.dataTransfer.effectAllowed = 'copy';
+        }
 
+        function allowDrop(e) { e.preventDefault(); e.dataTransfer.dropEffect = 'copy'; }
+        function dragEnterFood(e) { e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
+        function dragLeaveFood(e) { e.currentTarget.classList.remove('drag-over'); }
+        function dragEnterReward(e) { e.preventDefault(); e.currentTarget.classList.add('drag-over-reward'); }
+        function dragLeaveReward(e) { e.currentTarget.classList.remove('drag-over-reward'); }
+
+        function dropItem(e, targetId) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('drag-over', 'drag-over-reward');
+            
+            const type = e.dataTransfer.getData('custom/type');
+            const val = e.dataTransfer.getData('custom/value');
+            if(!val) return; 
+
+            // 確保料理不能拉進獎勵，獎勵不能拉進料理
+            if (targetId.startsWith('food') && type !== 'food') { alert('這不是料理圖示！'); return; }
+            if (targetId === 'rewards' && type !== 'reward') { alert('這不是獎勵圖示！'); return; }
+
+            const input = document.getElementById(targetId);
+            
+            if (targetId === 'foodSuper') {
+                input.value = val; // 最愛料理單選覆蓋
+            } else if (targetId === 'foodSpecial') {
+                let arr = textToCommaArray(input.value);
+                if (!arr.includes(val)) arr.push(val);
+                input.value = commaArrayToText(arr); // 喜歡料理逗號分隔
+            } else if (targetId === 'rewards') {
+                let arr = textToArray(input.value);
+                if (!arr.includes(val)) arr.push(val);
+                input.value = arrayToText(arr); // 獎勵換行分隔
+            }
+        }
+        // ============================================
+
+        function buildHelperUI() {
+            // 1. 初始化下拉清單
+            const dataSets = { personality: new Set(), race: new Set(), position: new Set(), job: new Set() };
             INITIAL_DATA.forEach(c => {
                 if (c.personality) dataSets.personality.add(c.personality);
                 if (c.race) dataSets.race.add(c.race);
                 if (c.position) dataSets.position.add(c.position);
                 if (c.job) dataSets.job.add(c.job);
             });
-
-            // 填充原生的 Datalist 下拉選項
             ['personality', 'race', 'position', 'job'].forEach(key => {
                 const list = document.getElementById(`list-${key}`);
-                [...dataSets[key]].sort().forEach(val => {
-                    list.innerHTML += `<option value="${val}">`;
-                });
+                list.innerHTML = '';
+                [...dataSets[key]].sort().forEach(val => list.innerHTML += `<option value="${val}">`);
             });
 
-            // 2. 處理料理 (從 FOOD_ICON 或 FOOD_MAP 分析)
+            // 2. 建立料理拖曳圖庫 (合併 Super & Special，並從 FOOD_ICON 取圖)
             const foodSet = new Set();
-            if (Object.keys(FOOD_ICON).length > 0) Object.keys(FOOD_ICON).forEach(k => foodSet.add(k));
+            if (Object.keys(window.FOOD_ICON || {}).length > 0) Object.keys(FOOD_ICON).forEach(k => foodSet.add(k));
             Object.values(FOOD_MAP).forEach(f => {
                 if (f.super) foodSet.add(f.super);
                 if (f.special) f.special.forEach(sp => foodSet.add(sp));
             });
 
-            const listFood = document.getElementById('list-food');
-            const specialChips = document.getElementById('chips-foodSpecial');
+            const dragSourceFood = document.getElementById('drag-source-food');
+            dragSourceFood.innerHTML = '';
             [...foodSet].sort().forEach(val => {
-                // 加到下拉選單
-                listFood.innerHTML += `<option value="${val}">`;
-                // 生成點擊按鈕
-                const btn = document.createElement('button');
-                btn.type = 'button';
-                btn.className = 'text-[11px] bg-slate-700 hover:bg-indigo-500 border border-slate-600 px-2 py-1 rounded text-slate-300 transition-colors mr-1 mb-1';
-                btn.textContent = val;
-                btn.onclick = () => toggleComma(val);
-                specialChips.appendChild(btn);
+                let iconUrl = window.FOOD_ICON && window.FOOD_ICON[val] ? window.FOOD_ICON[val] : null;
+                let el = iconUrl 
+                    ? `<img src="${iconUrl}" title="${val}" draggable="true" ondragstart="dragStart(event, '${val}', 'food')" class="w-12 h-12 object-contain bg-slate-700 border border-slate-600 rounded shadow-md cursor-grab hover:scale-110 hover:border-amber-400 transition-all p-1">`
+                    : `<div draggable="true" ondragstart="dragStart(event, '${val}', 'food')" title="${val}" class="w-12 h-12 flex items-center justify-center bg-slate-700 border border-slate-600 rounded shadow-md cursor-grab hover:scale-110 hover:border-amber-400 transition-all p-1 text-[10px] text-center text-slate-300 font-bold overflow-hidden leading-tight">${val}</div>`;
+                dragSourceFood.innerHTML += el;
             });
 
-            // 3. 處理打工獎勵 (從 REWARD_ICON 或 REWARD_MAP 分析)
+            // 3. 建立打工獎勵拖曳圖庫 (從 REWARD_ICON 取圖)
             const rewardSet = new Set();
-            if (Object.keys(REWARD_ICON).length > 0) Object.keys(REWARD_ICON).forEach(k => rewardSet.add(k));
+            if (Object.keys(window.REWARD_ICON || {}).length > 0) Object.keys(REWARD_ICON).forEach(k => rewardSet.add(k));
             Object.values(REWARD_MAP).forEach(rList => {
                 if(Array.isArray(rList)) rList.forEach(r => rewardSet.add(r));
             });
 
-            const rewardChips = document.getElementById('chips-rewards');
+            const dragSourceReward = document.getElementById('drag-source-reward');
+            dragSourceReward.innerHTML = '';
             [...rewardSet].sort().forEach(val => {
-                const btn = document.createElement('button');
-                btn.type = 'button';
-                btn.className = 'text-[11px] bg-slate-700 hover:bg-emerald-500 border border-slate-600 px-2 py-1 rounded text-slate-300 transition-colors mr-1 mb-1';
-                btn.textContent = val;
-                btn.onclick = () => toggleNewline(val);
-                rewardChips.appendChild(btn);
+                let iconUrl = window.REWARD_ICON && window.REWARD_ICON[val] ? window.REWARD_ICON[val] : null;
+                let el = iconUrl 
+                    ? `<img src="${iconUrl}" title="${val}" draggable="true" ondragstart="dragStart(event, '${val}', 'reward')" class="w-12 h-12 object-contain bg-slate-700 border border-slate-600 rounded shadow-md cursor-grab hover:scale-110 hover:border-emerald-400 transition-all p-1">`
+                    : `<div draggable="true" ondragstart="dragStart(event, '${val}', 'reward')" title="${val}" class="w-12 h-12 flex items-center justify-center bg-slate-700 border border-slate-600 rounded shadow-md cursor-grab hover:scale-110 hover:border-emerald-400 transition-all p-1 text-[10px] text-center text-slate-300 font-bold overflow-hidden leading-tight">${val}</div>`;
+                dragSourceReward.innerHTML += el;
             });
         }
 
-        // 逗號分隔欄位快捷切換
-        function toggleComma(val) {
-            const input = document.getElementById('foodSpecial');
-            let arr = textToCommaArray(input.value);
-            if (arr.includes(val)) arr = arr.filter(v => v !== val); // 已存在則移除
-            else arr.push(val); // 不存在則加入
-            input.value = commaArrayToText(arr);
-        }
-
-        // 換行分隔欄位快捷切換
-        function toggleNewline(val) {
-            const input = document.getElementById('rewards');
-            let arr = textToArray(input.value);
-            if (arr.includes(val)) arr = arr.filter(v => v !== val);
-            else arr.push(val);
-            input.value = arrayToText(arr);
-        }
-        // ============================================
-
+        // --- 下方為原本已有的表單生成與下載邏輯 (無異動，僅為保持完整性) ---
         function populateDropdown() {
             const selector = document.getElementById('charSelector');
             selector.innerHTML = '<option value="">-- 選擇現有角色 --</option>';
@@ -403,7 +434,6 @@
             if (!zhName) { clearForm(); return; }
             const spineName = SPINE_MAP[zhName] || "";
             
-            // Core
             document.getElementById('zhName').value = zhName;
             document.getElementById('spineName').value = spineName;
             document.getElementById('jaName').value = (LANG_DICT['ja'] && LANG_DICT['ja'][zhName]) || "";
@@ -431,7 +461,6 @@
             document.getElementById('rewards').value = arrayToText(REWARD_MAP[spineName]);
             document.getElementById('workUrl').value = WORK_URL[spineName] || "";
 
-            // Texts
             LANGS.forEach(lang => {
                 document.getElementById(`intro_${lang}`).value = (INTRO_MAP[lang] && INTRO_MAP[lang][spineName]) || "";
                 document.getElementById(`thought_${lang}`).value = (THOUGHT_MAP[lang] && THOUGHT_MAP[lang][spineName]) || "";
@@ -441,7 +470,6 @@
                 } else { document.getElementById(`present_${lang}`).value = ""; }
             });
 
-            // Skills
             const skData = characterSkills.find(s => s.name === zhName) || { skills: {} };
             document.getElementById('skillAttribute').value = skData.attribute || "";
             LANGS.forEach(lang => {
@@ -459,11 +487,9 @@
                 document.getElementById(`sk_${lang}_ps_s`).value = arrayToText(sl.passiveSkill?.stats);
             });
 
-            // Aside
             const asData = ASIDE_DATA[spineName] || { totalName:{}, stars:{ 1:{}, 2:{}, 3:{} } };
             LANGS.forEach(lang => {
                 const asideLang = (lang === 'zh-TW') ? 'zh' : lang; 
-                
                 document.getElementById(`as_total_${lang}`).value = asData.totalName?.[asideLang] || "";
                 [1,2,3].forEach(star => {
                     const st = asData.stars?.[star] || {};
@@ -480,7 +506,6 @@
             const spineName = document.getElementById('spineName').value.trim();
             if (!zhName || !spineName) { alert("中文名字與 Spine 名稱必填！"); return; }
 
-            // 1. 更新本機記憶體變數
             LANG_DICT['zh-TW'][zhName] = zhName;
             if(document.getElementById('jaName').value) LANG_DICT['ja'][zhName] = document.getElementById('jaName').value;
             if(document.getElementById('enName').value) LANG_DICT['en'][zhName] = document.getElementById('enName').value;
@@ -518,16 +543,13 @@
             if(rewards.length) REWARD_MAP[spineName] = rewards;
             if(document.getElementById('workUrl').value) WORK_URL[spineName] = document.getElementById('workUrl').value;
 
-            // Texts
             LANGS.forEach(lang => {
                 if(!INTRO_MAP[lang]) INTRO_MAP[lang] = {};
                 if(!THOUGHT_MAP[lang]) THOUGHT_MAP[lang] = {};
                 if(!LETTER_MAP[lang]) LETTER_MAP[lang] = {};
-                
                 if(document.getElementById(`intro_${lang}`).value) INTRO_MAP[lang][spineName] = document.getElementById(`intro_${lang}`).value;
                 if(document.getElementById(`thought_${lang}`).value) THOUGHT_MAP[lang][spineName] = document.getElementById(`thought_${lang}`).value;
                 if(document.getElementById(`letter_${lang}`).value) LETTER_MAP[lang][spineName] = document.getElementById(`letter_${lang}`).value;
-                
                 const pres = document.getElementById(`present_${lang}`).value;
                 if(pres) {
                     if(!PRESENT_MAP[spineName]) PRESENT_MAP[spineName] = { name: {} };
@@ -536,57 +558,33 @@
                 }
             });
 
-            // Skills
             let skIndex = characterSkills.findIndex(s => s.name === zhName);
             let skillObj = skIndex >= 0 ? characterSkills[skIndex] : { name: zhName, skills: {} };
             skillObj.attribute = document.getElementById('skillAttribute').value;
             LANGS.forEach(lang => {
                 skillObj.skills[lang] = {
-                    normalAttack: {
-                        basic: document.getElementById(`sk_${lang}_na_b`).value,
-                        enhanced: document.getElementById(`sk_${lang}_na_e`).value
-                    },
-                    normalSkill: {
-                        name: document.getElementById(`sk_${lang}_ns_n`).value,
-                        desc: document.getElementById(`sk_${lang}_ns_d`).value,
-                        stats: textToArray(document.getElementById(`sk_${lang}_ns_s`).value)
-                    },
-                    ultimateSkill: {
-                        name: document.getElementById(`sk_${lang}_us_n`).value,
-                        desc: document.getElementById(`sk_${lang}_us_d`).value,
-                        cooldown: document.getElementById(`sk_${lang}_us_c`).value,
-                        stats: textToArray(document.getElementById(`sk_${lang}_us_s`).value)
-                    },
-                    passiveSkill: {
-                        desc: document.getElementById(`sk_${lang}_ps_d`).value,
-                        stats: textToArray(document.getElementById(`sk_${lang}_ps_s`).value)
-                    }
+                    normalAttack: { basic: document.getElementById(`sk_${lang}_na_b`).value, enhanced: document.getElementById(`sk_${lang}_na_e`).value },
+                    normalSkill: { name: document.getElementById(`sk_${lang}_ns_n`).value, desc: document.getElementById(`sk_${lang}_ns_d`).value, stats: textToArray(document.getElementById(`sk_${lang}_ns_s`).value) },
+                    ultimateSkill: { name: document.getElementById(`sk_${lang}_us_n`).value, desc: document.getElementById(`sk_${lang}_us_d`).value, cooldown: document.getElementById(`sk_${lang}_us_c`).value, stats: textToArray(document.getElementById(`sk_${lang}_us_s`).value) },
+                    passiveSkill: { desc: document.getElementById(`sk_${lang}_ps_d`).value, stats: textToArray(document.getElementById(`sk_${lang}_ps_s`).value) }
                 };
             });
             if(skIndex >= 0) characterSkills[skIndex] = skillObj; else characterSkills.push(skillObj);
 
-            // Aside
             let asObj = ASIDE_DATA[spineName] || { asideIcon: "", totalName: {}, stars: { 1:{icon:""}, 2:{icon:""}, 3:{icon:""} } };
             if(!asObj.totalName) asObj.totalName = {};
             if(!asObj.stars) asObj.stars = { 1:{icon:""}, 2:{icon:""}, 3:{icon:""} };
-            
             LANGS.forEach(lang => {
                 const asideLang = (lang === 'zh-TW') ? 'zh' : lang; 
-                
-                if(document.getElementById(`as_total_${lang}`).value) {
-                    asObj.totalName[asideLang] = document.getElementById(`as_total_${lang}`).value;
-                }
-                
+                if(document.getElementById(`as_total_${lang}`).value) asObj.totalName[asideLang] = document.getElementById(`as_total_${lang}`).value;
                 [1,2,3].forEach(star => {
                     if(!asObj.stars[star]) asObj.stars[star] = {icon:"", name:{}, desc:{}, effects:{}};
                     if(!asObj.stars[star].name) asObj.stars[star].name = {};
                     if(!asObj.stars[star].desc) asObj.stars[star].desc = {};
                     if(!asObj.stars[star].effects) asObj.stars[star].effects = {};
-                    
                     asObj.stars[star].name[asideLang] = document.getElementById(`as_${star}_n_${lang}`).value;
                     asObj.stars[star].desc[asideLang] = document.getElementById(`as_${star}_d_${lang}`).value;
                     asObj.stars[star].effects[asideLang] = textToArray(document.getElementById(`as_${star}_e_${lang}`).value);
-                    
                     if(star===3) {
                         if(!asObj.stars[3].globalEffects) asObj.stars[3].globalEffects = {};
                         asObj.stars[3].globalEffects[asideLang] = textToArray(document.getElementById(`as_3_g_${lang}`).value);
@@ -595,16 +593,13 @@
             });
             ASIDE_DATA[spineName] = asObj;
 
-            // 更新選單中的快捷按鈕與清單
-            buildHelperUI();
+            buildHelperUI(); 
 
-            // 顯示成功訊息
             const msg = document.getElementById('statusMsg');
             msg.classList.remove('hidden');
             setTimeout(() => msg.classList.add('hidden'), 5000);
         }
 
-        // 重新完整匯出 INITIAL_DATA
         function generateCoreData() {
             return `const LANG_DICT = ${JSON.stringify(LANG_DICT, null, 4)};\n\n` +
                    `const INITIAL_DATA = ${JSON.stringify(INITIAL_DATA, null, 4)};\n\n` +
