@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>終極角色資料管理系統 (單機版)</title>
     <link rel="stylesheet" href="./style.css">
+    <!-- 引入所有資料檔 (加入 data_config.js 以便抓取 FOOD_ICON / REWARD_ICON) -->
+    <script src="data_config.js"></script> 
     <script src="data_core.js"></script>
     <script src="data_skills.js"></script>
     <script src="data_aside.js"></script>
@@ -12,7 +14,6 @@
     <script src="data_collectibles.js"></script>
     
     <script>
-        
         // 確保變數存在，避免報錯
         if(typeof LANG_DICT === 'undefined') window.LANG_DICT = { "zh-TW": {}, "ja": {}, "en": {} };
         if(typeof INITIAL_DATA === 'undefined') window.INITIAL_DATA = [];
@@ -34,6 +35,10 @@
         if(typeof PRESENT_MAP === 'undefined') window.PRESENT_MAP = {};
         if(typeof THOUGHT_MAP === 'undefined') window.THOUGHT_MAP = { "zh-TW": {}, "ja": {}, "en": {} };
         if(typeof LETTER_MAP === 'undefined') window.LETTER_MAP = { "zh-TW": {}, "ja": {}, "en": {} };
+        
+        // 確保設定檔變數存在
+        if(typeof FOOD_ICON === 'undefined') window.FOOD_ICON = {};
+        if(typeof REWARD_ICON === 'undefined') window.REWARD_ICON = {};
     </script>
     <style>
         details > summary { list-style: none; }
@@ -79,10 +84,12 @@
                         <span class="text-xl group-open:rotate-180 transition-transform">▼</span>
                     </summary>
                     <div class="p-5 border-t border-slate-700 grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div><label class="block text-xs text-slate-400 mb-1">性格</label><input type="text" id="personality" class="w-full bg-slate-800 border border-slate-600 rounded p-2"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1">種族</label><input type="text" id="race" class="w-full bg-slate-800 border border-slate-600 rounded p-2"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1">站位</label><input type="text" id="position" class="w-full bg-slate-800 border border-slate-600 rounded p-2"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1">職業</label><input type="text" id="job" class="w-full bg-slate-800 border border-slate-600 rounded p-2"></div>
+                        <!-- 新增 list 屬性綁定下拉選單 -->
+                        <div><label class="block text-xs text-slate-400 mb-1">性格</label><input type="text" id="personality" list="list-personality" class="w-full bg-slate-800 border border-slate-600 rounded p-2 focus:ring-1 focus:ring-indigo-400 outline-none"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">種族</label><input type="text" id="race" list="list-race" class="w-full bg-slate-800 border border-slate-600 rounded p-2 focus:ring-1 focus:ring-indigo-400 outline-none"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">站位</label><input type="text" id="position" list="list-position" class="w-full bg-slate-800 border border-slate-600 rounded p-2 focus:ring-1 focus:ring-indigo-400 outline-none"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">職業</label><input type="text" id="job" list="list-job" class="w-full bg-slate-800 border border-slate-600 rounded p-2 focus:ring-1 focus:ring-indigo-400 outline-none"></div>
+                        
                         <div><label class="block text-xs text-slate-400 mb-1">實裝版本</label><input type="text" id="pathVersion" class="w-full bg-slate-800 border border-slate-600 rounded p-2"></div>
                         <div><label class="block text-xs text-slate-400 mb-1">實裝日期</label><input type="text" id="releaseDate" class="w-full bg-slate-800 border border-slate-600 rounded p-2" placeholder="YYYY-MM-DD..."></div>
                         <div><label class="block text-xs text-slate-400 mb-1">聲優 (CV)</label><input type="text" id="cv" class="w-full bg-slate-800 border border-slate-600 rounded p-2"></div>
@@ -97,9 +104,21 @@
 
                         <div class="col-span-4 border-b border-slate-700 my-2"></div>
 
-                        <div class="col-span-2"><label class="block text-xs text-slate-400 mb-1">最愛料理 (Super)</label><input type="text" id="foodSuper" class="w-full bg-slate-800 border border-slate-600 rounded p-2"></div>
-                        <div class="col-span-2"><label class="block text-xs text-slate-400 mb-1">喜歡料理 (Special, 逗號分隔)</label><input type="text" id="foodSpecial" class="w-full bg-slate-800 border border-slate-600 rounded p-2"></div>
-                        <div class="col-span-2"><label class="block text-xs text-slate-400 mb-1">打工獎勵 (換行分隔)</label><textarea id="rewards" class="w-full bg-slate-800 border border-slate-600 rounded p-2 h-16"></textarea></div>
+                        <!-- 料理與獎勵區 (新增快捷按鈕容器) -->
+                        <div class="col-span-2">
+                            <label class="block text-xs text-slate-400 mb-1">最愛料理 (Super)</label>
+                            <input type="text" id="foodSuper" list="list-food" class="w-full bg-slate-800 border border-slate-600 rounded p-2 focus:ring-1 focus:ring-indigo-400 outline-none">
+                        </div>
+                        <div class="col-span-2">
+                            <label class="block text-xs text-slate-400 mb-1">喜歡料理 (Special, 逗號分隔)</label>
+                            <input type="text" id="foodSpecial" class="w-full bg-slate-800 border border-slate-600 rounded p-2 mb-2">
+                            <div id="chips-foodSpecial" class="flex flex-wrap gap-1"></div>
+                        </div>
+                        <div class="col-span-2">
+                            <label class="block text-xs text-slate-400 mb-1">打工獎勵 (換行分隔)</label>
+                            <textarea id="rewards" class="w-full bg-slate-800 border border-slate-600 rounded p-2 h-16 mb-2"></textarea>
+                            <div id="chips-rewards" class="flex flex-wrap gap-1"></div>
+                        </div>
                         <div class="col-span-2"><label class="block text-xs text-slate-400 mb-1">打工影片 URL</label><input type="text" id="workUrl" class="w-full bg-slate-800 border border-slate-600 rounded p-2"></div>
                         
                         <div class="col-span-4 flex items-center bg-slate-800 p-3 rounded border border-slate-600">
@@ -175,6 +194,13 @@
 
     </div>
 
+    <!-- 隱藏的 Datalist 資料庫 (供輸入框綁定下拉選單用) -->
+    <datalist id="list-personality"></datalist>
+    <datalist id="list-race"></datalist>
+    <datalist id="list-position"></datalist>
+    <datalist id="list-job"></datalist>
+    <datalist id="list-food"></datalist>
+
     <!-- UI 生成與資料處理邏輯 -->
     <script>
         const LANGS = ['zh-TW', 'ja', 'en'];
@@ -189,10 +215,95 @@
             buildTextInputs();
             buildSkillInputs();
             buildAsideInputs();
-            populateDropdown(); // 直接讀取本地 JS 的資料來生成選單
+            populateDropdown(); 
+            buildHelperUI(); // 初始化下拉選單與快捷按鈕
             document.getElementById('downloadSection').style.opacity = '1';
             document.getElementById('downloadSection').style.pointerEvents = 'auto';
         };
+
+        // ========== 自動提取資料生成選單邏輯 ==========
+        function buildHelperUI() {
+            // 1. 自動從 INITIAL_DATA 提取所有現有選項 (不需手動寫死)
+            const dataSets = {
+                personality: new Set(),
+                race: new Set(),
+                position: new Set(),
+                job: new Set()
+            };
+
+            INITIAL_DATA.forEach(c => {
+                if (c.personality) dataSets.personality.add(c.personality);
+                if (c.race) dataSets.race.add(c.race);
+                if (c.position) dataSets.position.add(c.position);
+                if (c.job) dataSets.job.add(c.job);
+            });
+
+            // 填充原生的 Datalist 下拉選項
+            ['personality', 'race', 'position', 'job'].forEach(key => {
+                const list = document.getElementById(`list-${key}`);
+                [...dataSets[key]].sort().forEach(val => {
+                    list.innerHTML += `<option value="${val}">`;
+                });
+            });
+
+            // 2. 處理料理 (從 FOOD_ICON 或 FOOD_MAP 分析)
+            const foodSet = new Set();
+            if (Object.keys(FOOD_ICON).length > 0) Object.keys(FOOD_ICON).forEach(k => foodSet.add(k));
+            Object.values(FOOD_MAP).forEach(f => {
+                if (f.super) foodSet.add(f.super);
+                if (f.special) f.special.forEach(sp => foodSet.add(sp));
+            });
+
+            const listFood = document.getElementById('list-food');
+            const specialChips = document.getElementById('chips-foodSpecial');
+            [...foodSet].sort().forEach(val => {
+                // 加到下拉選單
+                listFood.innerHTML += `<option value="${val}">`;
+                // 生成點擊按鈕
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'text-[11px] bg-slate-700 hover:bg-indigo-500 border border-slate-600 px-2 py-1 rounded text-slate-300 transition-colors mr-1 mb-1';
+                btn.textContent = val;
+                btn.onclick = () => toggleComma(val);
+                specialChips.appendChild(btn);
+            });
+
+            // 3. 處理打工獎勵 (從 REWARD_ICON 或 REWARD_MAP 分析)
+            const rewardSet = new Set();
+            if (Object.keys(REWARD_ICON).length > 0) Object.keys(REWARD_ICON).forEach(k => rewardSet.add(k));
+            Object.values(REWARD_MAP).forEach(rList => {
+                if(Array.isArray(rList)) rList.forEach(r => rewardSet.add(r));
+            });
+
+            const rewardChips = document.getElementById('chips-rewards');
+            [...rewardSet].sort().forEach(val => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'text-[11px] bg-slate-700 hover:bg-emerald-500 border border-slate-600 px-2 py-1 rounded text-slate-300 transition-colors mr-1 mb-1';
+                btn.textContent = val;
+                btn.onclick = () => toggleNewline(val);
+                rewardChips.appendChild(btn);
+            });
+        }
+
+        // 逗號分隔欄位快捷切換
+        function toggleComma(val) {
+            const input = document.getElementById('foodSpecial');
+            let arr = textToCommaArray(input.value);
+            if (arr.includes(val)) arr = arr.filter(v => v !== val); // 已存在則移除
+            else arr.push(val); // 不存在則加入
+            input.value = commaArrayToText(arr);
+        }
+
+        // 換行分隔欄位快捷切換
+        function toggleNewline(val) {
+            const input = document.getElementById('rewards');
+            let arr = textToArray(input.value);
+            if (arr.includes(val)) arr = arr.filter(v => v !== val);
+            else arr.push(val);
+            input.value = arrayToText(arr);
+        }
+        // ============================================
 
         function populateDropdown() {
             const selector = document.getElementById('charSelector');
@@ -483,6 +594,9 @@
                 });
             });
             ASIDE_DATA[spineName] = asObj;
+
+            // 更新選單中的快捷按鈕與清單
+            buildHelperUI();
 
             // 顯示成功訊息
             const msg = document.getElementById('statusMsg');
