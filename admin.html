@@ -285,57 +285,57 @@
         // ============================================
 
         function buildHelperUI() {
-            // 1. 初始化下拉清單
-            const dataSets = { personality: new Set(), race: new Set(), position: new Set(), job: new Set() };
-            INITIAL_DATA.forEach(c => {
-                if (c.personality) dataSets.personality.add(c.personality);
-                if (c.race) dataSets.race.add(c.race);
-                if (c.position) dataSets.position.add(c.position);
-                if (c.job) dataSets.job.add(c.job);
-            });
-            ['personality', 'race', 'position', 'job'].forEach(key => {
-                const list = document.getElementById(`list-${key}`);
-                list.innerHTML = '';
-                [...dataSets[key]].sort().forEach(val => list.innerHTML += `<option value="${val}">`);
-            });
+    // 1. 初始化下拉清單
+    const dataSets = { personality: new Set(), race: new Set(), position: new Set(), job: new Set() };
+    INITIAL_DATA.forEach(c => {
+        if (c.personality) dataSets.personality.add(c.personality);
+        if (c.race) dataSets.race.add(c.race);
+        if (c.position) dataSets.position.add(c.position);
+        if (c.job) dataSets.job.add(c.job);
+    });
+    ['personality', 'race', 'position', 'job'].forEach(key => {
+        const list = document.getElementById(`list-${key}`);
+        list.innerHTML = '';
+        [...dataSets[key]].sort().forEach(val => list.innerHTML += `<option value="${val}">`);
+    });
 
-            // 2. 建立料理拖曳圖庫 (合併 Super & Special，並從 FOOD_ICON 取圖)
-            const foodSet = new Set();
-            if (Object.keys(window.FOOD_ICON || {}).length > 0) Object.keys(FOOD_ICON).forEach(k => foodSet.add(k));
-            Object.values(FOOD_MAP).forEach(f => {
-                if (f.super) foodSet.add(f.super);
-                if (f.special) f.special.forEach(sp => foodSet.add(sp));
-            });
+    // 2. 建立料理拖曳圖庫 (合併 Super & Special，並從 FOOD_ICON 取圖)
+    const foodSet = new Set();
+    if (typeof FOOD_ICON !== 'undefined') Object.keys(FOOD_ICON).forEach(k => foodSet.add(k));
+    Object.values(FOOD_MAP).forEach(f => {
+        if (f.super) foodSet.add(f.super);
+        if (f.special) f.special.forEach(sp => foodSet.add(sp));
+    });
 
-            const dragSourceFood = document.getElementById('drag-source-food');
-            dragSourceFood.innerHTML = '';
-            [...foodSet].sort().forEach(val => {
-                // 💡 修正點：加上 .url 來讀取物件中的網址
-                let iconUrl = window.FOOD_ICON && window.FOOD_ICON[val] && window.FOOD_ICON[val].url ? window.FOOD_ICON[val].url : null;
-                let el = iconUrl 
-                    ? `<img src="${iconUrl}" title="${val}" draggable="true" ondragstart="dragStart(event, '${val}', 'food')" class="w-12 h-12 object-contain bg-slate-700 border border-slate-600 rounded shadow-md cursor-grab hover:scale-110 hover:border-amber-400 transition-all p-1">`
-                    : `<div draggable="true" ondragstart="dragStart(event, '${val}', 'food')" title="${val}" class="w-12 h-12 flex items-center justify-center bg-slate-700 border border-slate-600 rounded shadow-md cursor-grab hover:scale-110 hover:border-amber-400 transition-all p-1 text-[10px] text-center text-slate-300 font-bold overflow-hidden leading-tight">${val}</div>`;
-                dragSourceFood.innerHTML += el;
-            });
+    const dragSourceFood = document.getElementById('drag-source-food');
+    dragSourceFood.innerHTML = '';
+    [...foodSet].sort().forEach(val => {
+        // 💡 修正：移除 window. 前綴，直接讀取全域變數
+        let iconUrl = (typeof FOOD_ICON !== 'undefined' && FOOD_ICON[val] && FOOD_ICON[val].url) ? FOOD_ICON[val].url : null;
+        let el = iconUrl 
+            ? `<img src="${iconUrl}" title="${val}" draggable="true" ondragstart="dragStart(event, '${val}', 'food')" class="w-12 h-12 object-contain bg-slate-700 border border-slate-600 rounded shadow-md cursor-grab hover:scale-110 hover:border-amber-400 transition-all p-1">`
+            : `<div draggable="true" ondragstart="dragStart(event, '${val}', 'food')" title="${val}" class="w-12 h-12 flex items-center justify-center bg-slate-700 border border-slate-600 rounded shadow-md cursor-grab hover:scale-110 hover:border-amber-400 transition-all p-1 text-[10px] text-center text-slate-300 font-bold overflow-hidden leading-tight">${val}</div>`;
+        dragSourceFood.innerHTML += el;
+    });
 
-            // 3. 建立打工獎勵拖曳圖庫 (從 REWARD_ICON 取圖)
-            const rewardSet = new Set();
-            if (Object.keys(window.REWARD_ICON || {}).length > 0) Object.keys(REWARD_ICON).forEach(k => rewardSet.add(k));
-            Object.values(REWARD_MAP).forEach(rList => {
-                if(Array.isArray(rList)) rList.forEach(r => rewardSet.add(r));
-            });
+    // 3. 建立打工獎勵拖曳圖庫 (從 REWARD_ICON 取圖)
+    const rewardSet = new Set();
+    if (typeof REWARD_ICON !== 'undefined') Object.keys(REWARD_ICON).forEach(k => rewardSet.add(k));
+    Object.values(REWARD_MAP).forEach(rList => {
+        if(Array.isArray(rList)) rList.forEach(r => rewardSet.add(r));
+    });
 
-            const dragSourceReward = document.getElementById('drag-source-reward');
-            dragSourceReward.innerHTML = '';
-            [...rewardSet].sort().forEach(val => {
-                // 💡 修正點：加上 .url 來讀取物件中的網址
-                let iconUrl = window.REWARD_ICON && window.REWARD_ICON[val] && window.REWARD_ICON[val].url ? window.REWARD_ICON[val].url : null;
-                let el = iconUrl 
-                    ? `<img src="${iconUrl}" title="${val}" draggable="true" ondragstart="dragStart(event, '${val}', 'reward')" class="w-12 h-12 object-contain bg-slate-700 border border-slate-600 rounded shadow-md cursor-grab hover:scale-110 hover:border-emerald-400 transition-all p-1">`
-                    : `<div draggable="true" ondragstart="dragStart(event, '${val}', 'reward')" title="${val}" class="w-12 h-12 flex items-center justify-center bg-slate-700 border border-slate-600 rounded shadow-md cursor-grab hover:scale-110 hover:border-emerald-400 transition-all p-1 text-[10px] text-center text-slate-300 font-bold overflow-hidden leading-tight">${val}</div>`;
-                dragSourceReward.innerHTML += el;
-            });
-        }
+    const dragSourceReward = document.getElementById('drag-source-reward');
+    dragSourceReward.innerHTML = '';
+    [...rewardSet].sort().forEach(val => {
+        // 💡 修正：移除 window. 前綴，直接讀取全域變數
+        let iconUrl = (typeof REWARD_ICON !== 'undefined' && REWARD_ICON[val] && REWARD_ICON[val].url) ? REWARD_ICON[val].url : null;
+        let el = iconUrl 
+            ? `<img src="${iconUrl}" title="${val}" draggable="true" ondragstart="dragStart(event, '${val}', 'reward')" class="w-12 h-12 object-contain bg-slate-700 border border-slate-600 rounded shadow-md cursor-grab hover:scale-110 hover:border-emerald-400 transition-all p-1">`
+            : `<div draggable="true" ondragstart="dragStart(event, '${val}', 'reward')" title="${val}" class="w-12 h-12 flex items-center justify-center bg-slate-700 border border-slate-600 rounded shadow-md cursor-grab hover:scale-110 hover:border-emerald-400 transition-all p-1 text-[10px] text-center text-slate-300 font-bold overflow-hidden leading-tight">${val}</div>`;
+        dragSourceReward.innerHTML += el;
+    });
+}
 
         // --- 下方為原本已有的表單生成與下載邏輯 (無異動，僅為保持完整性) ---
         function populateDropdown() {
