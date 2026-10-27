@@ -310,6 +310,7 @@
             const dragSourceFood = document.getElementById('drag-source-food');
             dragSourceFood.innerHTML = '';
             [...foodSet].sort().forEach(val => {
+                // 💡 修正點：加上 .url 來讀取物件中的網址
                 let iconUrl = window.FOOD_ICON && window.FOOD_ICON[val] && window.FOOD_ICON[val].url ? window.FOOD_ICON[val].url : null;
                 let el = iconUrl 
                     ? `<img src="${iconUrl}" title="${val}" draggable="true" ondragstart="dragStart(event, '${val}', 'food')" class="w-12 h-12 object-contain bg-slate-700 border border-slate-600 rounded shadow-md cursor-grab hover:scale-110 hover:border-amber-400 transition-all p-1">`
@@ -327,6 +328,7 @@
             const dragSourceReward = document.getElementById('drag-source-reward');
             dragSourceReward.innerHTML = '';
             [...rewardSet].sort().forEach(val => {
+                // 💡 修正點：加上 .url 來讀取物件中的網址
                 let iconUrl = window.REWARD_ICON && window.REWARD_ICON[val] && window.REWARD_ICON[val].url ? window.REWARD_ICON[val].url : null;
                 let el = iconUrl 
                     ? `<img src="${iconUrl}" title="${val}" draggable="true" ondragstart="dragStart(event, '${val}', 'reward')" class="w-12 h-12 object-contain bg-slate-700 border border-slate-600 rounded shadow-md cursor-grab hover:scale-110 hover:border-emerald-400 transition-all p-1">`
