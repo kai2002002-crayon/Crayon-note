@@ -70,6 +70,40 @@ const STORY_DATA = {
                 { epNumber: "第5節", title: "滅火隊", youtubeId: "9QsVa4xc71g" },
                 { epNumber: "第6節", title: "尾聲", youtubeId: "eDSGBAFahJk" }
             ]
+        },
+        {
+            id: "main_s1_6",
+            chapterNumber: "006", // 系統會自動抓取 story/Main101.png
+            name: "三拜九叩",
+            episodes: [
+                { epNumber: "第1節", title: "再次迎來的春天", youtubeId: "06onN-6zZGQ" },
+                { epNumber: "第2節", title: "不怎麼樣的謎團", youtubeId: "8ZdA9LYMovc" },
+                { epNumber: "第3節", title: "名為艾利亞斯的巨大密室", youtubeId: "_74VuvXpAL0" },
+                { epNumber: "第4節", title: "水印水上樂園", youtubeId: "junnfHcdxCU" },
+                { epNumber: "第5節", title: "深陷地底", youtubeId: "tkDdNZxRgL8" },
+                { epNumber: "第6節", title: "如火的關係", youtubeId: "6AQGj5646-A" },
+                { epNumber: "第7節", title: "秘密保鏢", youtubeId: "pcHl_nnBy8U" },
+                { epNumber: "第8節", title: "風的力量", youtubeId: "lBIRtJkgZ54" },
+                { epNumber: "第9節", title: "捕風者", youtubeId: "4K0e89rI3rc" },
+                { epNumber: "第10節", title: "靈感應", youtubeId: "3pn0OY7xDDA" }
+            ]
+        },
+        {
+            id: "main_s1_7",
+            chapterNumber: "007", // 系統會自動抓取 story/Main101.png
+            name: "藤條是最好的解方",
+            episodes: [
+                { epNumber: "第1節", title: "沒有夢的夢想隊", youtubeId: "ZqGvMys3KEQ" },
+                { epNumber: "第2節", title: "命運的沼澤", youtubeId: "-CrtMuGNesA" },
+                { epNumber: "第3節", title: "身分認同危機", youtubeId: "TM60yQq862E" },
+                { epNumber: "第4節", title: "南瓜教主", youtubeId: "YDmzGujUmd4" },
+                { epNumber: "第5節", title: "間諜行動", youtubeId: "NnogREG5lkQ" },
+                { epNumber: "第6節", title: "真正的冰冷者", youtubeId: "k_W7-FfHncI" },
+                { epNumber: "第7節", title: "琳的世界", youtubeId: "GpLNdSjgYAA" },
+                { epNumber: "第8節", title: "主人影子的世界", youtubeId: "-UecomYhWhs" },
+                { epNumber: "第9節", title: "影子遊戲", youtubeId: "QKmW_wgQ6LU" },
+                { epNumber: "第10節", title: "該忘記的和忘記的", youtubeId: "XE9UbLho2jU" }
+            ]
         }
     ],
     // 活動劇情
