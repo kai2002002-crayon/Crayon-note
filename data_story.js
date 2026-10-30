@@ -3,7 +3,7 @@ const STORY_DATA = {
     main: [
         {
             id: "main_s1_1",
-            chapterNumber: "001", // 系統會自動抓取 story/Main101.png
+            chapterNumber: "001",
             name: "至少幫我塗點果醬",
             episodes: [
                 { epNumber: "第1節", title: "序章", youtubeId: "_azTVTZ6XhU" },
@@ -18,7 +18,7 @@ const STORY_DATA = {
         },
         {
             id: "main_s1_2",
-            chapterNumber: "002", // 系統會自動抓取 story/Main101.png
+            chapterNumber: "002",
             name: "獸糧大團結",
             episodes: [
                 { epNumber: "第1節", title: "冷酷的開罐器", youtubeId: "FcU9N7orymo" },
@@ -32,7 +32,7 @@ const STORY_DATA = {
         },
         {
             id: "main_s1_3",
-            chapterNumber: "003", // 系統會自動抓取 story/Main101.png
+            chapterNumber: "003",
             name: "慘劇的教訓",
             episodes: [
                 { epNumber: "第1節", title: "教科書式入場方法", youtubeId: "Wlgev9XaXno" },
@@ -46,7 +46,7 @@ const STORY_DATA = {
         },
         {
             id: "main_s1_4",
-            chapterNumber: "004", // 系統會自動抓取 story/Main101.png
+            chapterNumber: "004",
             name: "王國爆炸前5分鐘",
             episodes: [
                 { epNumber: "第1節", title: "苦澀的同伴", youtubeId: "SjeYQ64bOMU" },
@@ -60,7 +60,7 @@ const STORY_DATA = {
         },
         {
             id: "main_s1_5",
-            chapterNumber: "005", // 系統會自動抓取 story/Main101.png
+            chapterNumber: "005",
             name: "圍觀隔離火災",
             episodes: [
                 { epNumber: "第1節", title: "精靈會騙你兩次", youtubeId: "dQZ2hctRnoM" },
@@ -73,7 +73,7 @@ const STORY_DATA = {
         },
         {
             id: "main_s1_6",
-            chapterNumber: "006", // 系統會自動抓取 story/Main101.png
+            chapterNumber: "006",
             name: "三拜九叩",
             episodes: [
                 { epNumber: "第1節", title: "再次迎來的春天", youtubeId: "06onN-6zZGQ" },
@@ -90,7 +90,7 @@ const STORY_DATA = {
         },
         {
             id: "main_s1_7",
-            chapterNumber: "007", // 系統會自動抓取 story/Main101.png
+            chapterNumber: "007",
             name: "藤條是最好的解方",
             episodes: [
                 { epNumber: "第1節", title: "沒有夢的夢想隊", youtubeId: "ZqGvMys3KEQ" },
@@ -107,7 +107,7 @@ const STORY_DATA = {
         },
         {
             id: "main_s1_8",
-            chapterNumber: "008", // 系統會自動抓取 story/Main101.png
+            chapterNumber: "008",
             name: "發‧電‧廠",
             episodes: [
                 { epNumber: "第1節", title: "地底下的頹廢音樂", youtubeId: "aSZQyemUA-U" },
@@ -122,7 +122,7 @@ const STORY_DATA = {
         },
         {
             id: "main_s1_9",
-            chapterNumber: "009", // 系統會自動抓取 story/Main101.png
+            chapterNumber: "009",
             name: "最後一刻的逆轉",
             episodes: [
                 { epNumber: "第1節", title: "強襲魔女", youtubeId: "JrW0l6TFFA8" },
@@ -138,7 +138,7 @@ const STORY_DATA = {
         },
                 {
             id: "main_s1_sp1",
-            chapterNumber: "SP1", // 系統會自動抓取 story/Main101.png
+            chapterNumber: "SP1",
             name: "回顧與祈禱",
             episodes: [
                 { epNumber: "第1節", title: "回憶錄：同病相憐", youtubeId: "XN1AmmWiCAs" },
@@ -155,7 +155,7 @@ const STORY_DATA = {
         },
                         {
             id: "main_s1_sp2",
-            chapterNumber: "SP2", // 系統會自動抓取 story/Main101.png
+            chapterNumber: "SP2",
             name: "學園鬧翻天",
             episodes: [
                 { epNumber: "第1節", title: "求學之地", youtubeId: "5boY6VBtSss" },
@@ -171,7 +171,7 @@ const STORY_DATA = {
 
         {
             id: "event_028",
-            chapterNumber: "028", // 系統會自動抓取 story/Event002.png
+            chapterNumber: "028",
             name: "乘浪而來的企鵝人",
             episodes: [
                 { epNumber: "第0節", title: "官方PV", youtubeId: "K-NtiLSm8Ow" },
@@ -186,7 +186,7 @@ const STORY_DATA = {
         },
         {
             id: "event_027",
-            chapterNumber: "027", // 系統會自動抓取 story/Event002.png
+            chapterNumber: "027",
             name: "妄想狂大騷動",
             episodes: [
                 { epNumber: "第0節", title: "官方PV", youtubeId: "DO3gvA002gs" },
@@ -201,7 +201,7 @@ const STORY_DATA = {
         },
         {
             id: "event_026",
-            chapterNumber: "026", // 系統會自動抓取 story/Event002.png
+            chapterNumber: "026",
             name: "為誰祈禱",
             episodes: [
                 { epNumber: "第0節", title: "官方PV", youtubeId: "Odz_0FRWgRI" },
@@ -223,7 +223,7 @@ const STORY_DATA = {
         },
         {
             id: "event_025",
-            chapterNumber: "025", // 系統會自動抓取 story/Event002.png
+            chapterNumber: "025",
             name: "無處可去的書籤",
             episodes: [
                 { epNumber: "第0節", title: "官方PV", youtubeId: "v6-Zhe4qM6c" },
@@ -237,6 +237,22 @@ const STORY_DATA = {
                 { epNumber: "第8節", title: "我的紀錄", youtubeId: "495rUi8IM3Y" },
                 { epNumber: "第9節", title: "告白的紀錄", youtubeId: "0rBMRMXFcA8" },
                 { epNumber: "第10節", title: "日記本的紀錄", youtubeId: "ZA4li2LJ8bM" }
+                
+            ]
+        },
+        {
+            id: "event_001",
+            chapterNumber: "001",
+            name: "注視著月光的花",
+            episodes: [
+                { epNumber: "第0節", title: "官方PV", youtubeId: "8TroQFA15tg" },
+                { epNumber: "第1節", title: "沒有記憶的月亮", youtubeId: "5rikUni2fEY" },
+                { epNumber: "第2節", title: "記憶中的月亮", youtubeId: "qQ2xO2aTOpE" },
+                { epNumber: "第3節", title: "凝視的月亮", youtubeId: "LoP8wf9hiDg" },
+                { epNumber: "第4節", title: "看不見的月亮", youtubeId: "f61TqMH2IBQ" },
+                { epNumber: "第5節", title: "滿月", youtubeId: "bXFgVhzDVjk" },
+                { epNumber: "第6節", title: "堅定心志的月亮", youtubeId: "vn3qbv8Da4k" },
+                { epNumber: "第7節", title: "信仰中的月亮", youtubeId: "Z2DQXJNC3uE" }
                 
             ]
         }
