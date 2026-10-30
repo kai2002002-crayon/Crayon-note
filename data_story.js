@@ -104,6 +104,66 @@ const STORY_DATA = {
                 { epNumber: "第9節", title: "影子遊戲", youtubeId: "QKmW_wgQ6LU" },
                 { epNumber: "第10節", title: "該忘記的和忘記的", youtubeId: "XE9UbLho2jU" }
             ]
+        },
+        {
+            id: "main_s1_8",
+            chapterNumber: "008", // 系統會自動抓取 story/Main101.png
+            name: "發‧電‧廠",
+            episodes: [
+                { epNumber: "第1節", title: "地底下的頹廢音樂", youtubeId: "aSZQyemUA-U" },
+                { epNumber: "第2節", title: "見風轉舵的商人", youtubeId: "XshdOtFLFp4" },
+                { epNumber: "第3節", title: "翡翠螺栓", youtubeId: "tqkvGDwljEQ" },
+                { epNumber: "第4節", title: "鍛鍊過的寶石", youtubeId: "PE6prIxqK0s" },
+                { epNumber: "第5節", title: "逆行排名", youtubeId: "LKtLUfvV50M" },
+                { epNumber: "第6節", title: "奔跑吧，社畜", youtubeId: "OYnoMb0sSZE" },
+                { epNumber: "第7節", title: "鑽石切割機", youtubeId: "HmgE0seC8zY" },
+                { epNumber: "第8節", title: "唯一的真王", youtubeId: "6rLsgEDJiaM" }
+            ]
+        },
+        {
+            id: "main_s1_9",
+            chapterNumber: "009", // 系統會自動抓取 story/Main101.png
+            name: "最後一刻的逆轉",
+            episodes: [
+                { epNumber: "第1節", title: "強襲魔女", youtubeId: "JrW0l6TFFA8" },
+                { epNumber: "第2節", title: "叛徒的叛徒", youtubeId: "nfCV7jtw6aQ" },
+                { epNumber: "第3節", title: "腹黑的攝政王", youtubeId: "HZZCugLPA2s" },
+                { epNumber: "第4節", title: "反突擊症候群", youtubeId: "N25D_XsaGXM" },
+                { epNumber: "第5節", title: "可可的樂園", youtubeId: "lLcXqk3G5jw" },
+                { epNumber: "第6節", title: "宮殿的秘密", youtubeId: "VvbyurB1s2E" },
+                { epNumber: "第7節", title: "叛徒的叛徒的叛徒", youtubeId: "8WaSShhsKyA" },
+                { epNumber: "第8節", title: "魔女童話", youtubeId: "bOS51EalqAg" },
+                { epNumber: "第9節", title: "真正的和平", youtubeId: "EHsICkCrSMY" }
+            ]
+        },
+                {
+            id: "main_s1_sp1",
+            chapterNumber: "SP1", // 系統會自動抓取 story/Main101.png
+            name: "回顧與祈禱",
+            episodes: [
+                { epNumber: "第1節", title: "回憶錄：同病相憐", youtubeId: "XN1AmmWiCAs" },
+                { epNumber: "第2節", title: "回憶錄：糖果流氓", youtubeId: "VN3xTNtLgHs" },
+                { epNumber: "第3節", title: "回憶錄：信仰的一擊", youtubeId: "luJ6S1CLrKo" },
+                { epNumber: "第4節", title: "回憶錄：淺眠", youtubeId: "l3J2hGfI_cY" },
+                { epNumber: "第5節", title: "回憶錄：心靈的恩師", youtubeId: "9SbEwwPHRKU" },
+                { epNumber: "第6節", title: "夢中的祈禱：午睡", youtubeId: "0ZTivuMdia4" },
+                { epNumber: "第7節", title: "夢中的祈禱：新綻之花", youtubeId: "pAYiCBMB5bc" },
+                { epNumber: "第8節", title: "夢中的祈禱：敷衍的日記", youtubeId: "znLtbYn7N50" },
+                { epNumber: "第9節", title: "夢中的祈禱：祭司修行錄", youtubeId: "GWi23w_4Jcw" },
+                { epNumber: "第10節", title: "夢中的祈禱：我可愛的命運", youtubeId: "0yPTOSv6Lv0" }
+            ]
+        },
+                        {
+            id: "main_s1_sp2",
+            chapterNumber: "SP2", // 系統會自動抓取 story/Main101.png
+            name: "學園鬧翻天",
+            episodes: [
+                { epNumber: "第1節", title: "求學之地", youtubeId: "5boY6VBtSss" },
+                { epNumber: "第2節", title: "表現自然", youtubeId: "3MXVHM1kEnI" },
+                { epNumber: "第3節", title: "我要學壞了", youtubeId: "NLGrUpjfnyE" },
+                { epNumber: "第4節", title: "催淚課堂", youtubeId: "iwJP2A74Dpc" },
+                { epNumber: "第5節", title: "校鐘響起的傍晚", youtubeId: "q1dtw3o0K4w" }
+            ]
         }
     ],
     // 活動劇情
