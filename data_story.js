@@ -1,184 +1,259 @@
-const STORY_DATA = {
-    // 主線劇情
-    main: [
-        {
-            id: "main_s1_1",
-            chapterNumber: "001", // 系統會自動抓取 story/Main101.png
-            name: "至少幫我塗點果醬",
-            episodes: [
-                { epNumber: "第1節", title: "序章", youtubeId: "_azTVTZ6XhU" },
-                { epNumber: "第2節", title: "女王與教主", youtubeId: "Dc1X7qcqgFg" },
-                { epNumber: "第3節", title: "修養錄揭露", youtubeId: "yLeRVGUOWZM" },
-                { epNumber: "第4節", title: "魔法(?)師艾舒爾", youtubeId: "lkNL--QusJM" },
-                { epNumber: "第5節", title: "探險家瑪麗", youtubeId: "OaQ40Cb7jYs" },
-                { epNumber: "第6節", title: "收藏家瑪約", youtubeId: "hkpQ4A-pYEg" },
-                { epNumber: "第7節", title: "逆轉叛亂", youtubeId: "AEcXWfWRqmk" },
-                { epNumber: "第8節", title: "被叛亂逆轉", youtubeId: "a3gqSM0RHgI" }
-            ]
-        },
-        {
-            id: "main_s1_2",
-            chapterNumber: "002", // 系統會自動抓取 story/Main101.png
-            name: "獸糧大團結",
-            episodes: [
-                { epNumber: "第1節", title: "冷酷的開罐器", youtubeId: "FcU9N7orymo" },
-                { epNumber: "第2節", title: "班尼，所向披靡", youtubeId: "VM0u38gJoDQ" },
-                { epNumber: "第3節", title: "世界上沒有壞奶油", youtubeId: "aUZ9wkogy3k" },
-                { epNumber: "第4節", title: "藥物女王", youtubeId: "zT0wEV_XB0M" },
-                { epNumber: "第5節", title: "反對獸糧黨的反擊", youtubeId: "XYHm4ouJ9nM" },
-                { epNumber: "第6節", title: "固執與偏見", youtubeId: "77ayeAgGCyE" },
-                { epNumber: "第7節", title: "暴風後的喧鬧", youtubeId: "U53URCynXsc" }
-            ]
-        },
-        {
-            id: "main_s1_3",
-            chapterNumber: "003", // 系統會自動抓取 story/Main101.png
-            name: "慘劇的教訓",
-            episodes: [
-                { epNumber: "第1節", title: "教科書式入場方法", youtubeId: "Wlgev9XaXno" },
-                { epNumber: "第2節", title: "結巴指南", youtubeId: "8EjW9jQh7ms" },
-                { epNumber: "第3節", title: "市長、秘書、士兵、間諜", youtubeId: "wSYa53u9D2Y" },
-                { epNumber: "第4節", title: "自由交流", youtubeId: "NBKRDm4s3UA" },
-                { epNumber: "第5節", title: "D-Day零時", youtubeId: "Dy5f5n2g84w" },
-                { epNumber: "第6節", title: "大姐姐", youtubeId: "vJNOxGzPlQ0" },
-                { epNumber: "第7節", title: "正義將至", youtubeId: "spToMD9_ZV0" }
-            ]
-        },
-        {
-            id: "main_s1_4",
-            chapterNumber: "004", // 系統會自動抓取 story/Main101.png
-            name: "王國爆炸前5分鐘",
-            episodes: [
-                { epNumber: "第1節", title: "苦澀的同伴", youtubeId: "SjeYQ64bOMU" },
-                { epNumber: "第2節", title: "魔女的巫術", youtubeId: "NyzPNp6ZcKo" },
-                { epNumber: "第3節", title: "佩佩的祕密活動", youtubeId: "VWSWPtjKj3k" },
-                { epNumber: "第4節", title: "真誠的計畫", youtubeId: "EHDMeSSav3I" },
-                { epNumber: "第5節", title: "破曉的號角聲", youtubeId: "xIO6TPuvXUA" },
-                { epNumber: "第6節", title: "單挑是過時的想法", youtubeId: "yy3aapFtK_c" },
-                { epNumber: "第7節", title: "暫時找回的和平", youtubeId: "iWH79_FSkxA" }
-            ]
-        },
-        {
-            id: "main_s1_5",
-            chapterNumber: "005", // 系統會自動抓取 story/Main101.png
-            name: "圍觀隔離火災",
-            episodes: [
-                { epNumber: "第1節", title: "精靈會騙你兩次", youtubeId: "dQZ2hctRnoM" },
-                { epNumber: "第2節", title: "不安的同盟", youtubeId: "0TOV5sa_4yU" },
-                { epNumber: "第3節", title: "無風不起浪", youtubeId: "nIIlUIZkVn0" },
-                { epNumber: "第4節", title: "一半是真心的", youtubeId: "nwvwA79y_Hg" },
-                { epNumber: "第5節", title: "滅火隊", youtubeId: "9QsVa4xc71g" },
-                { epNumber: "第6節", title: "尾聲", youtubeId: "eDSGBAFahJk" }
-            ]
-        },
-        {
-            id: "main_s1_6",
-            chapterNumber: "006", // 系統會自動抓取 story/Main101.png
-            name: "三拜九叩",
-            episodes: [
-                { epNumber: "第1節", title: "再次迎來的春天", youtubeId: "06onN-6zZGQ" },
-                { epNumber: "第2節", title: "不怎麼樣的謎團", youtubeId: "8ZdA9LYMovc" },
-                { epNumber: "第3節", title: "名為艾利亞斯的巨大密室", youtubeId: "_74VuvXpAL0" },
-                { epNumber: "第4節", title: "水印水上樂園", youtubeId: "junnfHcdxCU" },
-                { epNumber: "第5節", title: "深陷地底", youtubeId: "tkDdNZxRgL8" },
-                { epNumber: "第6節", title: "如火的關係", youtubeId: "6AQGj5646-A" },
-                { epNumber: "第7節", title: "秘密保鏢", youtubeId: "pcHl_nnBy8U" },
-                { epNumber: "第8節", title: "風的力量", youtubeId: "lBIRtJkgZ54" },
-                { epNumber: "第9節", title: "捕風者", youtubeId: "4K0e89rI3rc" },
-                { epNumber: "第10節", title: "靈感應", youtubeId: "3pn0OY7xDDA" }
-            ]
-        },
-        {
-            id: "main_s1_7",
-            chapterNumber: "007", // 系統會自動抓取 story/Main101.png
-            name: "藤條是最好的解方",
-            episodes: [
-                { epNumber: "第1節", title: "沒有夢的夢想隊", youtubeId: "ZqGvMys3KEQ" },
-                { epNumber: "第2節", title: "命運的沼澤", youtubeId: "-CrtMuGNesA" },
-                { epNumber: "第3節", title: "身分認同危機", youtubeId: "TM60yQq862E" },
-                { epNumber: "第4節", title: "南瓜教主", youtubeId: "YDmzGujUmd4" },
-                { epNumber: "第5節", title: "間諜行動", youtubeId: "NnogREG5lkQ" },
-                { epNumber: "第6節", title: "真正的冰冷者", youtubeId: "k_W7-FfHncI" },
-                { epNumber: "第7節", title: "琳的世界", youtubeId: "GpLNdSjgYAA" },
-                { epNumber: "第8節", title: "主人影子的世界", youtubeId: "-UecomYhWhs" },
-                { epNumber: "第9節", title: "影子遊戲", youtubeId: "QKmW_wgQ6LU" },
-                { epNumber: "第10節", title: "該忘記的和忘記的", youtubeId: "XE9UbLho2jU" }
-            ]
-        }
-    ],
-    // 活動劇情
-    event: [
+<!DOCTYPE html>
+<html lang="zh-TW" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>嘟嘟臉劇情回顧</title>
+    <!-- 引入 Tailwind CSS -->
+    <link rel="stylesheet" href="./style.css">
+    <link rel="icon" href="https://i.postimg.cc/mkfSTq5k/Favicon.png" type="image/png">
+</head>
+<body class="bg-cover bg-center bg-fixed min-h-screen text-slate-800 dark:text-slate-200 p-4 sm:p-8" 
+      style="background-image: url('./CG_Schedule_Rim.png');">
 
-        {
-            id: "event_028",
-            chapterNumber: "028", // 系統會自動抓取 story/Event002.png
-            name: "乘浪而來的企鵝人",
-            episodes: [
-                { epNumber: "第0節", title: "官方PV", youtubeId: "K-NtiLSm8Ow" },
-                { epNumber: "第1節", title: "艾利亞斯冒險", youtubeId: "1WwKqjvxYq4" },
-                { epNumber: "第2節", title: "疑點重重的冒險", youtubeId: "rBoyt-5LtPA" },
-                { epNumber: "第3節", title: "管制區冒險", youtubeId: "POy2tFe5HVY" },
-                { epNumber: "第4節", title: "憂鬱的冒險", youtubeId: "B7o4EYAGUX0" },
-                { epNumber: "第5節", title: "半露營冒險", youtubeId: "yjdim9ki9a4" },
-                { epNumber: "第6節", title: "問題滿滿的冒險", youtubeId: "fVldW7pIgBA" },
-                { epNumber: "第7節", title: "友情中的冒險    ", youtubeId: "jIIHKMn-d-s" }
-            ]
-        },
-        {
-            id: "event_027",
-            chapterNumber: "027", // 系統會自動抓取 story/Event002.png
-            name: "妄想狂大騷動",
-            episodes: [
-                { epNumber: "第0節", title: "官方PV", youtubeId: "DO3gvA002gs" },
-                { epNumber: "第1節", title: "海莉與異形怪物", youtubeId: "QHIzkjJFoX8" },
-                { epNumber: "第2節", title: "海莉與非法實驗", youtubeId: "RvqtuNezbjs" },
-                { epNumber: "第3節", title: "海莉與緊急廣播", youtubeId: "c9NLXpcdlwA" },
-                { epNumber: "第4節", title: "海莉與治療劑", youtubeId: "Ir4ITLTdzSo" },
-                { epNumber: "第5節", title: "海莉與殭屍女王", youtubeId: "WWO6xlAFcjk" },
-                { epNumber: "第6節", title: "海莉與失憶", youtubeId: "trTwNR86Xcw" },
-                { epNumber: "第7節", title: "海莉與雷射療法", youtubeId: "WH-Aw1rX0wc" }
-            ]
-        },
-        {
-            id: "event_026",
-            chapterNumber: "026", // 系統會自動抓取 story/Event002.png
-            name: "為誰祈禱",
-            episodes: [
-                { epNumber: "第0節", title: "官方PV", youtubeId: "Odz_0FRWgRI" },
-                { epNumber: "第1節", title: "從地下醒來", youtubeId: "2LrXGvhUCk0" },
-                { epNumber: "第2節", title: "甦醒的信仰", youtubeId: "2BKmlv6ryv8" },
-                { epNumber: "第3節", title: "主人與信仰", youtubeId: "wAtoyXpYbU0" },
-                { epNumber: "第4節", title: "受考驗的信仰", youtubeId: "OpP2j8qg1eE" },
-                { epNumber: "第5節", title: "受傷的信仰", youtubeId: "bRoug1YYj5I" },
-                { epNumber: "第6節", title: "迷惘中的信仰", youtubeId: "gZ0YwRvMSLY" },
-                { epNumber: "第7節", title: "你一路累積的信仰", youtubeId: "OHbxfI6ZBsE" },
-                { epNumber: "第8節", title: "準備好的信仰", youtubeId: "tKRLblgWbHo" },
-                { epNumber: "第9節", title: "動搖的信仰", youtubeId: "jXhTFPuU-wI" },
-                { epNumber: "第10節", title: "盲目的信仰", youtubeId: "NaVlBvAISjQ" },
-                { epNumber: "第11節", title: "並肩同行的信仰", youtubeId: "0ViL3Kyfxig" },
-                { epNumber: "第12節", title: "失控的信仰", youtubeId: "FmPGTVcmdgI" },
-                { epNumber: "第13節", title: "錯誤的信仰", youtubeId: "oBDrwsfDBSw" },
-                { epNumber: "第14節", title: "重生的信仰", youtubeId: "ZkJeqaAdb2g" }
-            ]
-        },
-        {
-            id: "event_025",
-            chapterNumber: "025", // 系統會自動抓取 story/Event002.png
-            name: "無處可去的書籤",
-            episodes: [
-                { epNumber: "第0節", title: "官方PV", youtubeId: "v6-Zhe4qM6c" },
-                { epNumber: "第1節", title: "被抓到把柄的紀錄", youtubeId: "AMCdfejk34g" },
-                { epNumber: "第2節", title: "幽靈的紀錄", youtubeId: "YsrGl9jTRvA" },
-                { epNumber: "第3節", title: "獸人的紀錄", youtubeId: "31PiPUP4zVs" },
-                { epNumber: "第4節", title: "妖精的紀錄", youtubeId: "h_IMoq879zk" },
-                { epNumber: "第5節", title: "錯誤的紀錄", youtubeId: "LDPejz0jl4o" },
-                { epNumber: "第6節", title: "教主的紀錄", youtubeId: "XCx-bE8fNiQ" },
-                { epNumber: "第7節", title: "提問的紀錄", youtubeId: "GQ0Yptxa8AQ" },
-                { epNumber: "第8節", title: "我的紀錄", youtubeId: "495rUi8IM3Y" },
-                { epNumber: "第9節", title: "告白的紀錄", youtubeId: "0rBMRMXFcA8" },
-                { epNumber: "第10節", title: "日記本的紀錄", youtubeId: "ZA4li2LJ8bM" }
-                
-            ]
+    <!-- 半透明遮罩 -->
+    <div class="fixed inset-0 bg-black/40 -z-10 pointer-events-none"></div>
+
+    <!-- 頂部導覽列 -->
+    <div class="max-w-6xl mx-auto mb-8 flex justify-between items-center drop-shadow-md">
+        <h1 class="text-3xl font-black text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">📖 嘟嘟臉劇情回顧室</h1>
+        <a href="index.html" class="px-5 py-2 bg-slate-900/80 hover:bg-slate-700/90 text-white rounded-lg font-bold transition-colors shadow-lg backdrop-blur-sm border border-slate-600">
+            返回首頁
+        </a>
+    </div>
+
+    <!-- 劇情回顧主區塊 -->
+    <div class="max-w-6xl mx-auto font-sans relative z-10">
+        
+        <!-- 兩大區域按鈕 -->
+        <div class="flex justify-center items-center gap-8 sm:gap-16 mb-12 border-b border-white/20 pb-10">
+            <button onclick="loadStoryCategory('main')" class="group cursor-pointer hover:scale-105 transition-transform outline-none">
+                <img src="story/Mainstory.png" alt="主線" class="w-[259px] h-[95px] object-contain group-hover:drop-shadow-[0_0_15px_rgba(59,130,246,0.8)] transition-all" onerror="this.style.display='none'">
+            </button>
+
+            <button onclick="loadStoryCategory('event')" class="group cursor-pointer hover:scale-105 transition-transform outline-none">
+                <img src="story/Eventstory.png" alt="活動" class="w-[259px] h-[95px] object-contain group-hover:drop-shadow-[0_0_15px_rgba(245,158,11,0.8)] transition-all" onerror="this.style.display='none'">
+            </button>
+        </div>
+
+        <!-- 篇章 Banner 列表區 (預設隱藏) -->
+        <div id="banner-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10 hidden relative">
+            <!-- JS 動態生成 Banner -->
+        </div>
+
+    </div>
+
+    <!-- 該篇章的章節列表區 (預設隱藏，並改為 col-span 全覆蓋) -->
+    <div id="episode-container" class="hidden col-span-1 sm:col-span-2 lg:col-span-3 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-6 rounded-2xl shadow-2xl border-2 border-indigo-400 dark:border-indigo-500 w-full relative z-20">
+        <h3 id="episode-title" class="text-2xl font-black mb-6 border-b border-slate-200 dark:border-slate-700 pb-3 text-indigo-600 dark:text-indigo-400"></h3>
+        <!-- 橫向滑動區塊 -->
+        <div id="episode-list" class="flex gap-4 overflow-x-auto pb-4 snap-x">
+            <!-- JS 動態生成章節按鈕 -->
+        </div>
+    </div>
+
+    <!-- YouTube 影片彈出視窗 (Modal) -->
+    <div id="video-modal" class="fixed inset-0 bg-black/90 z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300 backdrop-blur-sm">
+        <div class="relative w-full max-w-5xl mx-4 bg-black rounded-xl shadow-2xl ring-1 ring-white/10">
+            <button onclick="closeVideo()" class="absolute -top-12 right-0 text-white hover:text-red-400 text-lg font-bold bg-white/10 px-4 py-2 rounded-lg transition-colors">
+                ✕ 關閉影片
+            </button>
+            <div class="aspect-video w-full bg-black rounded-xl overflow-hidden">
+                <iframe id="youtube-player" class="w-full h-full" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- 引入劇情資料檔 -->
+    <script src="data_story.js"></script>
+
+    <!-- 頁面互動邏輯 -->
+    <script>
+        let currentCategory = ''; 
+        let activeStoryIndex = -1;
+
+        // 1. 載入兩大類別 (主線 / 活動) 的 Banners
+        function loadStoryCategory(category) {
+            currentCategory = category;
+            activeStoryIndex = -1;
+            const bannerContainer = document.getElementById('banner-container');
+            const episodeContainer = document.getElementById('episode-container');
+            
+            // 將章節區塊暫時移回 body，避免清空容器時被刪除
+            if (episodeContainer.parentNode === bannerContainer) {
+                document.body.appendChild(episodeContainer);
+            }
+            
+            bannerContainer.innerHTML = ''; 
+            episodeContainer.classList.add('hidden'); 
+
+            if (typeof STORY_DATA === 'undefined') {
+                bannerContainer.innerHTML = '<p class="text-center text-red-400 w-full col-span-full bg-black/50 p-4 rounded-lg">無法載入資料，請檢查 data_story.js 是否正確連結。</p>';
+                bannerContainer.classList.remove('hidden');
+                return;
+            }
+
+            const storyData = STORY_DATA[category];
+
+            if (!storyData || storyData.length === 0) {
+                bannerContainer.innerHTML = '<p class="text-center text-white w-full col-span-full font-bold text-lg bg-black/50 p-4 rounded-lg backdrop-blur-sm">目前尚無劇情資料</p>';
+            } else {
+                storyData.forEach((story, index) => {
+                    const imgPrefix = category === 'main' ? 'Main' : 'Event';
+                    const bannerUrl = `story/${imgPrefix}${story.chapterNumber}.png`;
+                    
+                    let displayLabelHTML = '';
+                    if (category === 'main') {
+                        const chapterStr = String(story.chapterNumber);
+                        // 💡 判斷邏輯：如果是純數字，顯示「第 X 章」，否則顯示「番外篇」
+                        if (/^\d+$/.test(chapterStr)) {
+                            displayLabelHTML = `<p class="text-sm text-indigo-600 dark:text-indigo-400 font-bold mb-1">第 ${chapterStr} 章</p>`;
+                        } else {
+                            // 番外篇樣式 (可自訂文字與顏色)
+                            displayLabelHTML = `<p class="text-sm text-pink-500 dark:text-pink-400 font-bold mb-1">番外篇</p>`;
+                        }
+                    }
+
+                    const aspectClass = category === 'main' ? 'aspect-[5/7]' : 'aspect-[600/314]';
+                    const objectFitClass = category === 'main' ? 'object-cover' : 'object-contain';
+
+                    const bannerHTML = `
+                        <div id="banner-card-${index}" onclick="loadEpisodes('${story.id}', ${index})" class="banner-card cursor-pointer group bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg hover:shadow-2xl hover:ring-2 hover:ring-indigo-400 transition-all hover:-translate-y-1 flex flex-col">
+                            <div class="w-full ${aspectClass} bg-slate-900 flex items-center justify-center relative overflow-hidden p-2">
+                                <img src="${bannerUrl}" alt="${story.name}" class="w-full h-full ${objectFitClass} group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://via.placeholder.com/600x314?text=${imgPrefix}${story.chapterNumber}'">
+                            </div>
+                            <div class="p-4 text-center flex-grow flex flex-col justify-center relative">
+                                ${displayLabelHTML}
+                                <h4 class="font-black text-lg text-slate-800 dark:text-white">${story.name}</h4>
+                            </div>
+                        </div>
+                    `;
+                    bannerContainer.insertAdjacentHTML('beforeend', bannerHTML);
+                });
+            }
+            bannerContainer.classList.remove('hidden');
         }
-    ]
-};
+
+        // 輔助函數：取得目前畫面的網格欄位數
+        function getColumns() {
+            if (window.innerWidth >= 1024) return 3; // lg (電腦)
+            if (window.innerWidth >= 640) return 2;  // sm (平板)
+            return 1;                                // base (手機)
+        }
+
+        // 核心函數：計算並把章節清單安插在「同一列的最尾端」下方
+        function placeEpisodeContainer(index) {
+            const cols = getColumns();
+            const storyData = STORY_DATA[currentCategory];
+            const totalItems = storyData.length;
+
+            let targetIndex = Math.floor(index / cols) * cols + (cols - 1);
+            if (targetIndex >= totalItems) {
+                targetIndex = totalItems - 1;
+            }
+
+            const targetCard = document.getElementById(`banner-card-${targetIndex}`);
+            const episodeContainer = document.getElementById('episode-container');
+
+            if (targetCard) {
+                targetCard.insertAdjacentElement('afterend', episodeContainer);
+            }
+        }
+
+        // 2. 載入所選篇章的章節清單
+        function loadEpisodes(storyId, index) {
+            activeStoryIndex = index;
+            const episodeContainer = document.getElementById('episode-container');
+            const episodeList = document.getElementById('episode-list');
+            const episodeTitle = document.getElementById('episode-title');
+            
+            const storyData = STORY_DATA[currentCategory].find(s => s.id === storyId);
+            if (!storyData) return;
+
+            document.querySelectorAll('.banner-card').forEach(card => {
+                card.classList.remove('ring-4', 'ring-indigo-500', 'scale-[1.02]');
+            });
+            const activeCard = document.getElementById(`banner-card-${index}`);
+            if (activeCard) {
+                activeCard.classList.add('ring-4', 'ring-indigo-500', 'scale-[1.02]');
+            }
+
+            let chapterPrefix = '';
+            if (currentCategory === 'main') {
+                const chapterStr = String(storyData.chapterNumber);
+                // 💡 展開章節標題時的判斷：純數字顯示「第 X 章」，否則顯示「番外篇」
+                if (/^\d+$/.test(chapterStr)) {
+                    chapterPrefix = `第 ${chapterStr} 章 - `;
+                } else {
+                    chapterPrefix = `番外篇 - `;
+                }
+            }
+            
+            episodeTitle.innerText = `${chapterPrefix}${storyData.name}`;
+            episodeList.innerHTML = '';
+
+            storyData.episodes.forEach(ep => {
+                const thumbUrl = `https://img.youtube.com/vi/${ep.youtubeId}/hqdefault.jpg`;
+
+                const epHTML = `
+                    <button onclick="playVideo('${ep.youtubeId}')" class="shrink-0 flex flex-col w-52 bg-slate-50 dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 hover:border-indigo-400 dark:hover:border-indigo-500 rounded-xl cursor-pointer transition-all snap-center shadow-sm group overflow-hidden">
+                        <div class="relative w-full aspect-video bg-slate-900 overflow-hidden">
+                            <img src="${thumbUrl}" alt="${ep.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                            <div class="absolute inset-0 bg-black/30 flex items-center justify-center group-hover:bg-black/10 transition-colors">
+                                <div class="w-10 h-10 rounded-full bg-red-600 flex items-center justify-center text-white pl-1 shadow-lg group-hover:scale-110 group-hover:bg-red-500 transition-transform">
+                                    ▶
+                                </div>
+                            </div>
+                            <span class="absolute top-2 left-2 px-2 py-0.5 bg-black/70 text-white font-black text-xs rounded shadow">${ep.epNumber}</span>
+                        </div>
+                        <div class="p-3 text-left flex-grow flex items-center">
+                            <span class="text-xs font-bold text-slate-700 dark:text-slate-200 line-clamp-2">${ep.title}</span>
+                        </div>
+                    </button>
+                `;
+                episodeList.insertAdjacentHTML('beforeend', epHTML);
+            });
+
+            placeEpisodeContainer(index);
+            episodeContainer.classList.remove('hidden');
+
+            setTimeout(() => {
+                const yOffset = -80;
+                const y = activeCard.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                window.scrollTo({top: y, behavior: 'smooth'});
+            }, 50);
+        }
+
+        // 3. 播放 YouTube 影片
+        function playVideo(youtubeId) {
+            const modal = document.getElementById('video-modal');
+            const player = document.getElementById('youtube-player');
+            
+            player.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0`;
+            
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+            }, 10);
+        }
+
+        // 4. 關閉影片
+        function closeVideo() {
+            const modal = document.getElementById('video-modal');
+            const player = document.getElementById('youtube-player');
+            
+            modal.classList.add('opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                player.src = ''; 
+            }, 300);
+        }
+
+        window.addEventListener('resize', () => {
+            if (activeStoryIndex !== -1 && !document.getElementById('episode-container').classList.contains('hidden')) {
+                placeEpisodeContainer(activeStoryIndex);
+            }
+        });
+    </script>
+</body>
+</html>
