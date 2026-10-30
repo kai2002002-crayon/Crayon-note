@@ -241,6 +241,22 @@ const STORY_DATA = {
             ]
         },
         {
+            id: "event_002",
+            chapterNumber: "002",
+            name: "被融化的奶油",
+            episodes: [
+                { epNumber: "第0節", title: "官方PV", youtubeId: "8TroQFA15tg" },
+                { epNumber: "第1節", title: "奶油與免費勞工", youtubeId: "id2IMqEpXlg" },
+                { epNumber: "第2節", title: "奶油與學校", youtubeId: "iVBZch2InfY" },
+                { epNumber: "第3節", title: "奶油與贓物", youtubeId: "yqiSM2_-WgM" },
+                { epNumber: "第4節", title: "奶油與憤怒", youtubeId: "-mph5496U1s" },
+                { epNumber: "第5節", title: "奶油與報復", youtubeId: "bCfAzjzS7r0" },
+                { epNumber: "第6節", title: "奶油與失憶", youtubeId: "0jACLXGpwEU" },
+                { epNumber: "第7節", title: "奶油與心理諮商", youtubeId: "dVTKIQ7B5HA" }
+                
+            ]
+        },
+        {
             id: "event_001",
             chapterNumber: "001",
             name: "注視著月光的花",
