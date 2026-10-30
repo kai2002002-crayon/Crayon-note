@@ -110,7 +110,7 @@
                             displayLabelHTML = `<p class="text-sm text-indigo-600 dark:text-indigo-400 font-bold mb-1">第 ${chapterStr} 章</p>`;
                         } else {
                             // 番外篇樣式 (可自訂文字與顏色)
-                            displayLabelHTML = `<p class="text-sm text-pink-500 dark:text-pink-400 font-bold mb-1">✨ 番外篇</p>`;
+                            displayLabelHTML = `<p class="text-sm text-pink-500 dark:text-pink-400 font-bold mb-1">番外篇</p>`;
                         }
                     }
 
@@ -185,7 +185,7 @@
                 if (/^\d+$/.test(chapterStr)) {
                     chapterPrefix = `第 ${chapterStr} 章 - `;
                 } else {
-                    chapterPrefix = `✨ 番外篇 - `;
+                    chapterPrefix = `番外篇 - `;
                 }
             }
             
