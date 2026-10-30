@@ -105,11 +105,12 @@
                     let displayLabelHTML = '';
                     if (category === 'main') {
                         const chapterStr = String(story.chapterNumber);
-                        // 💡 判斷邏輯：如果是純數字，顯示「第 X 章」，否則顯示「番外篇」
+                        // 💡 判斷邏輯：如果是純數字，用 parseInt 去除開頭的 0，顯示「第 X 章」
                         if (/^\d+$/.test(chapterStr)) {
-                            displayLabelHTML = `<p class="text-sm text-indigo-600 dark:text-indigo-400 font-bold mb-1">第 ${chapterStr} 章</p>`;
+                            const chapterInt = parseInt(chapterStr, 10);
+                            displayLabelHTML = `<p class="text-sm text-indigo-600 dark:text-indigo-400 font-bold mb-1">第 ${chapterInt} 章</p>`;
                         } else {
-                            // 番外篇樣式 (可自訂文字與顏色)
+                            // 番外篇樣式
                             displayLabelHTML = `<p class="text-sm text-pink-500 dark:text-pink-400 font-bold mb-1">番外篇</p>`;
                         }
                     }
@@ -181,9 +182,10 @@
             let chapterPrefix = '';
             if (currentCategory === 'main') {
                 const chapterStr = String(storyData.chapterNumber);
-                // 💡 展開章節標題時的判斷：純數字顯示「第 X 章」，否則顯示「番外篇」
+                // 💡 展開章節標題時的判斷：用 parseInt 去除開頭的 0
                 if (/^\d+$/.test(chapterStr)) {
-                    chapterPrefix = `第 ${chapterStr} 章 - `;
+                    const chapterInt = parseInt(chapterStr, 10);
+                    chapterPrefix = `第 ${chapterInt} 章 - `;
                 } else {
                     chapterPrefix = `番外篇 - `;
                 }
