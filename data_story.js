@@ -241,6 +241,22 @@ const STORY_DATA = {
             ]
         },
         {
+            id: "event_003",
+            chapterNumber: "003",
+            name: "卡片簿裡跳舞的命運",
+            episodes: [
+                { epNumber: "第0節", title: "官方PV", youtubeId: "KPQqyliXlDc" },
+                { epNumber: "第1節", title: "命運的捉弄者，愛麗絲", youtubeId: "1Dce3vxU3DE" },
+                { epNumber: "第2節", title: "窺莉之眼與愛麗絲", youtubeId: "4iX7IfuZUoA" },
+                { epNumber: "第3節", title: "規則強迫症與愛麗絲", youtubeId: "k85Dnpc7tio" },
+                { epNumber: "第4節", title: "愛麗絲暢遊地下", youtubeId: "TBJic5Zhun4" },
+                { epNumber: "第5節", title: "引發危機的愛麗絲", youtubeId: "fd-3louz-VQ" },
+                { epNumber: "第6節", title: "提示的占卜與愛麗絲", youtubeId: "NhERb0p3_4s" },
+                { epNumber: "第7節", title: "放鬆警惕的愛麗絲", youtubeId: "ylaeB9TVyxE" }
+                
+            ]
+        },
+        {
             id: "event_002",
             chapterNumber: "002",
             name: "被融化的奶油",
