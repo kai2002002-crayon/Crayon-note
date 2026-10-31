@@ -9,7 +9,7 @@
     <link rel="icon" href="https://i.postimg.cc/mkfSTq5k/Favicon.png" type="image/png">
 </head>
 <body class="bg-cover bg-center bg-fixed min-h-screen text-slate-800 dark:text-slate-200 p-4 sm:p-8" 
-      style="background-image: url('./CG_Schedule_Rim.png');">
+      style="background-image: url('https://i.postimg.cc/fTJ36ZFT/CG-Schedule-Rim.png');">
 
     <!-- 半透明遮罩 -->
     <div class="fixed inset-0 bg-black/40 -z-10 pointer-events-none"></div>
@@ -37,6 +37,7 @@
         </div>
 
         <!-- 篇章 Banner 列表區 (預設隱藏) -->
+        <!-- 注意這裡加入了 relative 確保內部插入元素佈局正常 -->
         <div id="banner-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10 hidden relative">
             <!-- JS 動態生成 Banner -->
         </div>
@@ -44,6 +45,7 @@
     </div>
 
     <!-- 該篇章的章節列表區 (預設隱藏，並改為 col-span 全覆蓋) -->
+    <!-- ⚠️ 此區塊會由 JavaScript 動態搬移到被點擊的篇章那一列的下方 -->
     <div id="episode-container" class="hidden col-span-1 sm:col-span-2 lg:col-span-3 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-6 rounded-2xl shadow-2xl border-2 border-indigo-400 dark:border-indigo-500 w-full relative z-20">
         <h3 id="episode-title" class="text-2xl font-black mb-6 border-b border-slate-200 dark:border-slate-700 pb-3 text-indigo-600 dark:text-indigo-400"></h3>
         <!-- 橫向滑動區塊 -->
@@ -79,7 +81,7 @@
             const bannerContainer = document.getElementById('banner-container');
             const episodeContainer = document.getElementById('episode-container');
             
-            // 將章節區塊暫時移回 body，避免清空容器時被刪除
+            // 🌟 將章節區塊暫時移回 body，避免清空容器時被刪除
             if (episodeContainer.parentNode === bannerContainer) {
                 document.body.appendChild(episodeContainer);
             }
@@ -104,20 +106,14 @@
                     
                     let displayLabelHTML = '';
                     if (category === 'main') {
-                        const chapterStr = String(story.chapterNumber);
-                        // 💡 判斷邏輯：如果是純數字，用 parseInt 去除開頭的 0，顯示「第 X 章」
-                        if (/^\d+$/.test(chapterStr)) {
-                            const chapterInt = parseInt(chapterStr, 10);
-                            displayLabelHTML = `<p class="text-sm text-indigo-600 dark:text-indigo-400 font-bold mb-1">第 ${chapterInt} 章</p>`;
-                        } else {
-                            // 番外篇樣式
-                            displayLabelHTML = `<p class="text-sm text-pink-500 dark:text-pink-400 font-bold mb-1">番外篇</p>`;
-                        }
+                        const chapterInt = parseInt(story.chapterNumber, 10);
+                        displayLabelHTML = `<p class="text-sm text-indigo-600 dark:text-indigo-400 font-bold mb-1">第 ${chapterInt} 章</p>`;
                     }
 
                     const aspectClass = category === 'main' ? 'aspect-[5/7]' : 'aspect-[600/314]';
                     const objectFitClass = category === 'main' ? 'object-cover' : 'object-contain';
 
+                    // 🌟 加上 id 與 index 參數，並加上 banner-card 類別方便控制外觀
                     const bannerHTML = `
                         <div id="banner-card-${index}" onclick="loadEpisodes('${story.id}', ${index})" class="banner-card cursor-pointer group bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg hover:shadow-2xl hover:ring-2 hover:ring-indigo-400 transition-all hover:-translate-y-1 flex flex-col">
                             <div class="w-full ${aspectClass} bg-slate-900 flex items-center justify-center relative overflow-hidden p-2">
@@ -135,19 +131,20 @@
             bannerContainer.classList.remove('hidden');
         }
 
-        // 輔助函數：取得目前畫面的網格欄位數
+        // 🌟 輔助函數：取得目前畫面的網格欄位數
         function getColumns() {
             if (window.innerWidth >= 1024) return 3; // lg (電腦)
             if (window.innerWidth >= 640) return 2;  // sm (平板)
             return 1;                                // base (手機)
         }
 
-        // 核心函數：計算並把章節清單安插在「同一列的最尾端」下方
+        // 🌟 核心函數：計算並把章節清單安插在「同一列的最尾端」下方
         function placeEpisodeContainer(index) {
             const cols = getColumns();
             const storyData = STORY_DATA[currentCategory];
             const totalItems = storyData.length;
 
+            // 計算該列最後一個項目的 index
             let targetIndex = Math.floor(index / cols) * cols + (cols - 1);
             if (targetIndex >= totalItems) {
                 targetIndex = totalItems - 1;
@@ -157,6 +154,7 @@
             const episodeContainer = document.getElementById('episode-container');
 
             if (targetCard) {
+                // 將容器直接移動到該列最後一張卡片的後面 (因為容器有 col-span-full，會自動推擠開下方的卡片)
                 targetCard.insertAdjacentElement('afterend', episodeContainer);
             }
         }
@@ -171,6 +169,7 @@
             const storyData = STORY_DATA[currentCategory].find(s => s.id === storyId);
             if (!storyData) return;
 
+            // 清除其他卡片的亮起狀態，凸顯當前點擊的卡片
             document.querySelectorAll('.banner-card').forEach(card => {
                 card.classList.remove('ring-4', 'ring-indigo-500', 'scale-[1.02]');
             });
@@ -181,14 +180,8 @@
 
             let chapterPrefix = '';
             if (currentCategory === 'main') {
-                const chapterStr = String(storyData.chapterNumber);
-                // 💡 展開章節標題時的判斷：用 parseInt 去除開頭的 0
-                if (/^\d+$/.test(chapterStr)) {
-                    const chapterInt = parseInt(chapterStr, 10);
-                    chapterPrefix = `第 ${chapterInt} 章 - `;
-                } else {
-                    chapterPrefix = `番外篇 - `;
-                }
+                const chapterInt = parseInt(storyData.chapterNumber, 10);
+                chapterPrefix = `第 ${chapterInt} 章 - `;
             }
             
             episodeTitle.innerText = `${chapterPrefix}${storyData.name}`;
@@ -216,11 +209,13 @@
                 episodeList.insertAdjacentHTML('beforeend', epHTML);
             });
 
+            // 🌟 將容器移動到該列下方並顯示
             placeEpisodeContainer(index);
             episodeContainer.classList.remove('hidden');
 
+            // 滾動畫面讓容器置中或剛好顯示
             setTimeout(() => {
-                const yOffset = -80;
+                const yOffset = -80; // 預留頂部空間
                 const y = activeCard.getBoundingClientRect().top + window.pageYOffset + yOffset;
                 window.scrollTo({top: y, behavior: 'smooth'});
             }, 50);
@@ -251,10 +246,32 @@
             }, 300);
         }
 
+        // 🌟 監聽視窗大小改變：如果改變寬度導致網格列數變動，自動重新計算並把面板放回正確的列下方
         window.addEventListener('resize', () => {
             if (activeStoryIndex !== -1 && !document.getElementById('episode-container').classList.contains('hidden')) {
                 placeEpisodeContainer(activeStoryIndex);
             }
+        });
+        // 5. 進入頁面時自動播放官方 PV
+        window.addEventListener('DOMContentLoaded', () => {
+            // 💡 在這裡填入官方預告 PV 的 YouTube ID (例如 v= 後面的那串代碼)
+            const officialPvId = "2MMjyU3mmzs"; 
+            
+            const modal = document.getElementById('video-modal');
+            const player = document.getElementById('youtube-player');
+            
+            // ⚠️ 瀏覽器限制：現代瀏覽器嚴格禁止「有聲音」的影片自動播放。
+            // 為了確保一進網頁就能自動播，我們必須加上 &mute=1 (靜音)。
+            // 玩家看到畫面後可以自己點擊取消靜音。
+            player.src = `https://www.youtube.com/embed/${officialPvId}?autoplay=1&mute=1&rel=0`;
+            
+            // 延遲 0.5 秒再顯示，讓背景圖先載入，視覺效果更好
+            setTimeout(() => {
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                }, 10);
+            }, 500);
         });
     </script>
 </body>
