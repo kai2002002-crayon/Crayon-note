@@ -138,7 +138,8 @@ const LANG_DICT = {
         "薇薇": "薇薇",
         "優米": "優米",
         "劉美美": "劉美美",
-        "x乂錫安乂x": "x乂錫安乂x"
+        "x乂錫安乂x": "x乂錫安乂x",
+		"波朗": "波朗"
     },
     "ja": {
         app_title: "トリッカル特級クレヨンノート", app_subtitle: "教主が毎日特級クレヨンを受け取れますように", stats_title: "📊 統計とボーナス情報",
@@ -271,7 +272,8 @@ const LANG_DICT = {
         "薇薇": "ヴィヴィ",
         "優米": "ヨミ",
         "劉美美": "ユミミ",
-        "x乂錫安乂x": "シオン・ザ・DB"
+        "x乂錫安乂x": "シオン・ザ・DB",
+		"波朗": "ポラン"
     },
     "en": {
         app_title: "Trickcal Crayon Notepad", app_subtitle: "May the Master get Ultra Crayons daily", stats_title: "📊 Stats & Bonus Info",
@@ -404,7 +406,8 @@ const LANG_DICT = {
         "薇薇": "Vivi",
         "優米": "Yomi",
         "劉美美": "Yumimi",
-        "x乂錫安乂x": "xXionx"
+        "x乂錫安乂x": "xXionx",
+		"波朗": "Polan"
     }
 };
 const currentLang = localStorage.getItem('user_lang') || 'zh-TW';
@@ -414,6 +417,7 @@ function t(key) { return LANG_DICT[currentLang][key] || key; }
 // 坨坨資料
 // ------------------------------------------
 const INITIAL_DATA = [
+	{ name: "波朗", personality: "狂亂", race: "妖精", position: "後排", job: "輔助", pathVersion: "", releaseDate: "2026-11-05T17:00:00+09:00" },
 	{ name: "瑰恩", personality: "冷靜", race: "獸人", position: "前排", job: "輔助", pathVersion: "V3", releaseDate: "2026-10-22T17:00:00+09:00" },
 	{ name: "麗息", personality: "冷靜", race: "幽靈", position: "前排", job: "肉盾", pathVersion: "V4", releaseDate: "2026-10-08T17:00:00+09:00" },
 	{ name: "柯米(泳裝)", personality: "冷靜", race: "獸人", position: "中排", job: "輔助", pathVersion: "V4", releaseDate: "2026-10-15T10:00:00+09:00" },
@@ -508,7 +512,7 @@ const CV_MAP = {
     "艾斯皮": "內海まり", "艾琳娜": "塚田悠衣", "艾皮卡": "日高里菜", "艾舒爾": "長尾玲奈", "艾蜜莉雅": "中林新夏", "芙莉可": "百瀨帆南", "茱蜜": "山田聖奈", "莉茲": "藤本侑里",
     "莎莉": "漆山ゆうき", "萊薇": "上永紗也華", "蒂亞娜": "立花日菜", "謝蒂": "山城リアン", "貝魯": "若山なつみ", "貝麗塔": "松岡美里", "路德": "渡部惠子", "路易": "兼田めぐみ",
     "阿萊特": "若山なつみ", "雷吉": "大園朱花子", "馬爾": "花咲心優", "泰達": "赤堀実華琉", "寧琉": "アンデルソンゆり子", "莉絲蒂": "黒沢ともよ", "雷內瓦": "花守ゆみり", "芭瓏": "橋本千波", "達雅": "羊宮妃那", "提格": "篠田南",
-	"羅蕾特": "日野麻里", "琵拉": "菱川花菜", "雪蘭": "安齋由香里", "芭莉耶": "寺澤百花", "瓊安": "雨宮天", "柯米(泳裝)": "河瀬茉希", "麗息": "藤咲野々花", "瑰恩": "南早紀"
+	"羅蕾特": "日野麻里", "琵拉": "菱川花菜", "雪蘭": "安齋由香里", "芭莉耶": "寺澤百花", "瓊安": "雨宮天", "柯米(泳裝)": "河瀬茉希", "麗息": "藤咲野々花", "瑰恩": "南早紀", "波朗": "飯田友子"
 };
 
 const GRADE_MAP = {
@@ -521,7 +525,7 @@ const GRADE_MAP = {
     "艾斯皮": "2", "艾琳娜": "3", "艾皮卡": "3", "艾舒爾": "3", "艾蜜莉雅": "3", "芙莉可": "3", "茱蜜": "2", "莉茲": "3",
     "莎莉": "2", "萊薇": "3", "蒂亞娜": "3", "謝蒂": "3", "貝魯": "1", "貝麗塔": "3", "路德": "3", "路易": "1",
     "阿萊特": "2", "雷吉": "2", "馬爾": "3", "泰達": "2", "寧琉": "3", "莉絲蒂": "3", "雷內瓦": "3", "芭瓏": "3", "達雅": "3", "提格": "3", "羅蕾特": "3", "琵拉": "3", "雪蘭": "3", "芭莉耶": "2",
-	"瓊安": "3", "柯米(泳裝)": "3", "麗息": "2", "瑰恩": "3"
+	"瓊安": "3", "柯米(泳裝)": "3", "麗息": "2", "瑰恩": "3", "波朗": "3"
 };
 
 const ELDAIN_LIST = ['綾', '庫洛艾', '艾皮卡', '伊德', '羽伊', '薇薇', 'x乂錫安乂x', '優米', '雷內瓦', '瓊安'];
@@ -585,6 +589,7 @@ const FOOD_MAP = {
     "Patula": "無",
     "Picora": { super: "白金糖葫蘆", special: ["金糖葫蘆", "溫熱的冰美式咖啡", "滾燙的冰美式咖啡"] },
 	"Pira": { super: "一級祕密葡萄汁", special: ["祕密葡萄汁", "龍族糖果", "龍族氣死你糖果"] },
+	"Polan": "無",
     "Posher": { super: "椰子萬能青汁", special: ["椰子松針粥", "太空食品", "ANSA太空食品"] },
     "RenewaAwaken": { super: "有機檸檬茶", special: ["檸檬茶", "太空食品", "ANSA太空食品"] },
     "Rim": { super: "燉南瓜", special: ["南瓜濃湯", "祕密葡萄汁", "一級祕密葡萄汁"] },
@@ -672,6 +677,7 @@ const REWARD_MAP = {
     "Patula": [],
     "Picora": ["皮革樹葉", "巧克力", "可彎曲金屬"],
 	"Pira": ["糖", "回收塑膠", "堅硬的石頭"],
+	"Polan": [],
     "Posher": ["黏膩的黏土", "閃亮的玻璃", "柔軟的棉花"],
     "RenewaAwaken": ["各式穀物", "閃亮的玻璃", "雞蛋"],
     "Rim": ["黏膩的黏土", "軟棉棉的樹木", "柔軟的棉花"],
@@ -753,6 +759,7 @@ const WORK_URL = {
     "Ner": "https://youtu.be/yDeHfWHSUt8",
     "Picora": "https://youtu.be/rd9O8naEQZ8",
 	"Pira": "https://youtu.be/HoF-S_d-7fI",
+	"Polan": "",
     "Posher": "https://youtu.be/f00ZKS1IE-g",
     "RenewaAwaken": "https://youtu.be/AXm1PhUQmjE",
     "Rim": "https://youtu.be/0dde_RrWSGE",
@@ -795,7 +802,7 @@ const SPINE_MAP = {
     "艾斯皮": "Espi", "艾琳娜": "Elena", "艾皮卡": "Epica", "艾舒爾": "Ashur", "艾蜜莉雅": "Amelia", "芙莉可": "Fricle", "茱蜜": "Jubee", "莉茲": "Leets",
     "莎莉": "Sari", "萊薇": "Levi", "蒂亞娜": "Diana", "謝蒂": "Shady", "貝魯": "Veroo", "貝麗塔": "Belita", "路德": "Rude", "路易": "Cuee",
     "阿萊特": "Allet", "雷吉": "Lazy", "馬爾": "Mago", "泰達": "Taida", "寧琉": "Ner", "莉絲蒂": "Risty", "R41雷內瓦": "R41_Renewa", "雷內瓦": "RenewaAwaken", "芭瓏": "Barong", "達雅": "Daya", "提格": "Tig",
-	"羅蕾特": "Rollett", "琵拉": "Pira", "雪蘭": "Sherum", "芭莉耶": "Barie", "瓊安": "Joanne", "柯米(泳裝)": "KommySwim", "麗息": "Lethe", "瑰恩": "Guin"
+	"羅蕾特": "Rollett", "琵拉": "Pira", "雪蘭": "Sherum", "芭莉耶": "Barie", "瓊安": "Joanne", "柯米(泳裝)": "KommySwim", "麗息": "Lethe", "瑰恩": "Guin", "波朗": "Polan"
 };
 
 const COSTUME_MAP = {
@@ -805,7 +812,7 @@ const COSTUME_MAP = {
     "愛麗絲": ["Alice", "AliceSkin1", "AliceSkin2"], "艾蜜莉雅": ["Amelia", "AmeliaSkin2"], "綾": ["Aya", "AyaSkin1", "AyaSkin2", "AyaSkin3", "AyaSkin4"], "庫洛艾": ["Chloe", "ChloeSkin1", "ChloeSkin2", "ChloeSkin3", "ChloeSkin4"], "蒂亞娜": ["Diana", "DianaSkin1", "DianaSkin2"], "桃桃": ["Momo", "MomoSkin3"], "瑟琳娜": ["Selline", "SellineSkin1"], "羽伊": ["Ui", "UiSkin1", "UiSkin2", "UiSkin3", "UiSkin4"], "薇薇": ["Vivi", "ViviSkin1", "ViviSkin2", "ViviSkin3", "ViviSkin4"], "x乂錫安乂x": ["xXionx", "xXionxSkin1", "xXionxSkin2", "xXionxSkin3", "xXionxSkin4"],
     "艾爾芬": ["Erpin", "ErpinSkin1", "ErpinSkin3"], "莉絲蒂": ["Risty", "RistySkin1"], "雷內瓦": ["RenewaAwaken", "RenewaAwakenSkin1", "RenewaAwakenSkin2"],
 	"芭瓏": ["Barong", "BarongSkin1"], "達雅": ["Daya", "DayaSkin1"], "提格": ["Tig", "TigSkin1"], "柯米(泳裝)": ["KommySwim", "KommySwimSkin3"], "麗息": ["Lethe"], "瑰恩": ["Guin", "GuinSkin3"],
-	"羅蕾特": ["Rollett", "RollettSkin2"], "琵拉": ["Pira", "PiraSkin2"], "雪蘭": ["Sherum", "SherumSkin1"], "芭莉耶": ["Barie"], "瓊安": ["Joanne", "JoanneSkin2", "JoanneSkin5"]
+	"羅蕾特": ["Rollett", "RollettSkin2"], "琵拉": ["Pira", "PiraSkin2"], "雪蘭": ["Sherum", "SherumSkin1"], "芭莉耶": ["Barie"], "瓊安": ["Joanne", "JoanneSkin2", "JoanneSkin5"], "波朗": ["Polan"]
 };
 
 
@@ -816,7 +823,7 @@ const SD_COSTUME = {
     "愛麗絲": ["Alice", "AliceSkin1", "AliceSkin2"], "艾蜜莉雅": ["Amelia", "AmeliaSkin2"], "綾": ["Aya", "AyaSkin1", "AyaSkin2", "AyaSkin3", "AyaSkin4"], "庫洛艾": ["Chloe", "ChloeSkin1", "ChloeSkin2", "ChloeSkin3", "ChloeSkin4"], "蒂亞娜": ["Diana", "DianaSkin1", "DianaSkin2"], "桃桃": ["Momo", "MomoSkin3"], "瑟琳娜": ["Selline", "SellineSkin1"], "羽伊": ["Ui", "UiSkin1", "UiSkin2", "UiSkin3", "UiSkin4"], "薇薇": ["Vivi", "ViviSkin1", "ViviSkin2", "ViviSkin3", "ViviSkin4"], "x乂錫安乂x": ["xXionx", "xXionxSkin1", "xXionxSkin2", "xXionxSkin3", "xXionxSkin4"],
     "艾爾芬": ["Erpin", "ErpinSkin1", "ErpinSkin3"], "莉絲蒂": ["Risty", "RistySkin1"], "雷內瓦": ["RenewaAwaken", "RenewaAwakenSkin1", "RenewaAwakenSkin2"],
 	"芭瓏": ["Barong", "BarongSkin1"], "達雅": ["Daya", "DayaSkin1"], "提格": ["Tig", "TigSkin1"], "柯米(泳裝)": ["KommySwim", "KommySwimSkin3"], "麗息": ["Lethe"], "瑰恩": ["Guin", "GuinSkin3"],
-	"羅蕾特": ["Rollett", "RollettSkin2"], "琵拉": ["Pira", "PiraSkin2"], "雪蘭": ["Sherum", "SherumSkin1"], "芭莉耶": ["Barie"], "瓊安": ["Joanne", "JoanneSkin2", "JoanneSkin5"]
+	"羅蕾特": ["Rollett", "RollettSkin2"], "琵拉": ["Pira", "PiraSkin2"], "雪蘭": ["Sherum", "SherumSkin1"], "芭莉耶": ["Barie"], "瓊安": ["Joanne", "JoanneSkin2", "JoanneSkin5"], "波朗": ["Polan"]
 };
 
 //迷你坨坨SPINE NAME
@@ -830,7 +837,7 @@ const MINI_SPINE = {
     "艾斯皮": "Mini_Espi", "艾琳娜": "Mini_Elena", "艾皮卡": "Mini_Epica", "艾舒爾": "Mini_Ashur", "艾蜜莉雅": "Mini_Amelia", "芙莉可": "Mini_Fricle", "茱蜜": "Mini_Jubee", "莉茲": "Mini_Leets",
     "莎莉": "Mini_Sari", "萊薇": "Mini_Levi", "蒂亞娜": "Mini_Diana", "謝蒂": "Mini_Shady", "貝魯": "Mini_Veroo", "貝麗塔": "Mini_Belita", "路德": "Mini_Rude", "路易": "Mini_Cuee",
     "阿萊特": "Mini_Allet", "雷吉": "Mini_Lazy", "馬爾": "Mini_Mago", "泰達": "Mini_Taida", "寧琉": "Mini_Ner", "莉絲蒂": "Mini_Risty",  "雷內瓦": "Mini_RenewaAwaken", "芭瓏": "Mini_Barong", "達雅": "Mini_Daya", "提格": "Mini_Tig",
-	"羅蕾特": "Mini_Rollett", "琵拉": "Mini_Pira", "雪蘭": "Mini_Sherum", "芭莉耶": "Mini_Barie", "瓊安": "Mini_Joanne", "柯米(泳裝)": "Mini_KommySwim", "麗息": "Mini_Lethe", "瑰恩": "Mini_Guin"
+	"羅蕾特": "Mini_Rollett", "琵拉": "Mini_Pira", "雪蘭": "Mini_Sherum", "芭莉耶": "Mini_Barie", "瓊安": "Mini_Joanne", "柯米(泳裝)": "Mini_KommySwim", "麗息": "Mini_Lethe", "瑰恩": "Mini_Guin", "波朗": "Mini_Polan"
 };
 
 console.log("LANG_DICT 內容:", LANG_DICT);
