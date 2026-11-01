@@ -210,9 +210,9 @@
     "Guin": {
         "url": "",
         "name": {
-            "zh-TW": "",
-            "ja": "",
-            "en": ""
+            "zh-TW": "酷涼冰袋",
+            "ja": "アイスクーリングパック",
+            "en": "Ice Cooling Pack"
         }
     },
     "Haley": {
@@ -645,7 +645,7 @@ const THOUGHT_MAP = {
         "Festa": "這是佩斯塔用過去的名字活動時，親自簽名的最佳專輯。",
         "Fricle": "刺是用橡膠製成的，所以不會傷到人。她好像是趁我不注意時，偷偷把它跟信放進了我的口袋。",
         "Gabia": "這是加薇雅在魔靈山洞窟和湖附近用心收集的漂亮石頭，看起來就像是寶石一樣。",
-        "Guin": "",
+        "Guin": "這是瑰恩和德莉亞一起製作的魔法冰袋。當天氣炎熱時，放在身上會感到全身清涼。",
         "Haley": "據說是莫納蒂姆的祕密地圖，但感覺只是觀光旅遊指南而已。海莉說她在祕密地圖上畫圈的地方是重要的要塞。",
         "Hilde": "上面大大地寫著「希爾德博士」的學位證書。看來是她背著艾琳娜，偷偷藏在了自己的抽屜裡。",
         "Ifrit": "每當遇到炙熱的她時，她都會要求人穿上這個。",
@@ -724,7 +724,7 @@ const THOUGHT_MAP = {
         "Festa": "昔、他の名前で活動してた当時、自分のベストアルバムに直接フェスタがサインしたレコード。",
         "Fricle": "棘はゴム製なので痛くない。私が見ていない時に、手紙と一緒にそっとポケットに入れておいたようだ。",
         "Gabia": "ガヴィアが精霊の山と湖の近くで入念に集めた綺麗な石。宝石のような見た目。",
-        "Guin": "",
+        "Guin": "グウィンとデリアが一緒に作ったという魔法のアイスバック。暑い時に体に当てると全身に涼しさが広がる。",
         "Haley": "モナティアムの機密地図だと言いながらくれたが、普通の観光用パンフレットみたいだ。ヘイリーが要所であるとして、いくつかの場所に丸がつけてある。",
         "Hilde": "ドクターヒルデと大きく書かれた学位記。エレナに知られないよう、自分の引き出しに隠しておいたみたいだ。",
         "Ifrit": "いつも熱い自分と会う時はこれを着用してくれという。",
@@ -803,7 +803,7 @@ const THOUGHT_MAP = {
         "Festa": "An album Festa recorded when she was in the music scene under another name. It's even signed by her.",
         "Fricle": "A ring with rubber thorns that won't hurt. It seems she slyly slipped it into my pocket with a letter when I wasn't looking.",
         "Gabia": "Beautiful stones that Gabia painstakingly collected near the Elemental Mountain's cave and pond. They look no different from gems.",
-        "Guin": "",
+        "Guin": "A magical ice pack made by Guin and Delia. When placed on the body in hot weather, it provides a refreshing coolness all over.",
         "Haley": "Haley gave this to me, saying that it's a classified map of Monatium, but it looks more like a tourist pamphlet. There are some circles that she marked as important strategic points.",
         "Hilde": "A diploma plaque with 'Doctor Hilde' written in big letters. It seems she secretly hid it in her drawer from Elena.",
         "Ifrit": "A suit that Ifrit asks me to wear whenever I come to see her, as she is always burning.",
@@ -885,7 +885,7 @@ const LETTER_MAP = {
         "Festa": "【您好！這裡是搖滾節活動主辦單位。恭喜您參加了「按讚搖滾節ElfTube，開心享受搖滾節吧！」活動、並成功抽中獎品搖滾節入場券1人2張！】看到沒？我的中獎運氣怎麼樣？反正我是搖滾節的參加者，不需要入場券～但教主你應該需要吧？你一定會來看我的，對吧？不是嗎？那就搖滾節見囉！",
         "Fricle": "今天肯定又是帶著那副呆萌的表情，埋頭處理那堆積如山的文件吧。你知道在開始處理文件之前，分類是很重要的嗎？先將相同類型的文件分開，然後依據重要性排序處理，這樣可以更快速地完成工作。我才不是因為擔心你忙得焦頭爛額才告訴你這些的。作為教主，這點事情你應該早就想到吧。那麼，今天也請繼續努力工作吧！",
         "Gabia": "以前總是待在洞穴裡，只有地之靈陪我玩，真是無聊得很。還好教主在宴會廳裡給我好吃的，還常常陪我聊天，讓我很開心。和教主一起玩的時候，總會讓我想起以前和希拉、奈雅和伊弗利特感情還很好的那些日子。教主做的料理，有好吃的也有不好吃的，但我都一口不剩地吃完了。有時候還會偷偷帶回去分給地之靈們，她們都很喜歡。下次我們再一起玩吧！",
-        "Guin": "",
+        "Guin": "來到德莉亞斯……啊不對，是來到艾利亞斯這個新的地方，有好多不習慣的地方。像是整天不停吃砂糖的妖精，或是沒有鹹味的微風。不過多虧了照顧我和德莉亞的教主大人，我們過得很好、很有活力。除了我們之外，應該還會有其他朋友來到這裡吧?到時候我也會幫忙教主大人，讓大家都能好好適應的。有空再一起去冒險吧!",
         "Haley": "親愛的教主，近來可好？托你的福，艾利亞斯今日也和平安穩。說來或許突兀，但你著實是位能幹之人。若在地球時也能遇到像你這般人物，任務執行想必會順遂許多。坦白說，我對地球的朋友們不甚滿意。即便針對待遇提出抗議，他們也從未認真考量。正因如此，我才會對你有這麼高的評價。在此，我要向你的辛勞表達敬意。改日不妨來莫納蒂姆，我必盛情款待。",
         "Hilde": "教主大人，您好。您最近的檢查結果似乎不是很好。該不會因為待在艾利亞斯，就完全放鬆警惕了吧？看來有必要再次進行檢查了。有空的話，務必過來一趟。呵呵，開玩笑的。您的健康檢查結果非常良好！這應該多虧教主大人平時管理得當吧？不過既然到了該檢查的時候，還是請您找時間再來一趟吧！希爾德敬上",
         "Ifrit": "喂，教主！是我，伊弗利特！寫信這件事，為什麼這麼難啊？寫著寫著，紙就一直被燒掉，這已經是第四張了。不過也沒什麼大不了的……只是想感謝你這段時間一直聽我抱怨，還耐心陪我說話。而且，我聽說你對宴會廳裡的初級火之靈也一直很友善，是吧？教主，我覺得你真的值得信賴。所以才說，以後我們也要好好相處啊！",
@@ -964,7 +964,7 @@ const LETTER_MAP = {
         "Festa": "[こんにちは。ロックフェス運営です。お客様は「ロックフェス公式エルチューブにいいね！をしてロックフェスに行こう！」イベントに当選されたため、ロックフェス入場チケット2枚お送りいたします。]どうよ？おいらの強運は！おいらはロックフェスの参加者だからチケットは要らないけど、教主は要るだろ？このチケットをあげたら、会いに来てくれるか？くれるよな？じゃ、ロックフェスで会おうぜ！",
         "Fricle": "今日もバカみたいな顔して、山積みの書類を片付けているんじゃない？仕事を始める前の大事なポイントは仕分けよ。まず同じ内容ごとに作業を分け、優先順位を決めてやれば、より早く片付けられるの。別にあなたが仕事に追われて大変だから、教えてやってるわけじゃないの。教主なら、これくらい分かってるでしょうからね。それじゃあ今日も頑張りなさい。",
         "Gabia": "洞窟で地の精霊とばかり遊んでるのは退屈だったけど、教主が宴会場でご飯をくれて一緒にお話できるから楽しい。教主と遊んでると、シーラ、ナイア、イフリートと仲良くしてた頃を思い出す。教主が作ってくれる料理は、美味しいのも美味しくないのもあるけど、残さず食べてる。ときどきこっそり持ち帰って、地の精霊たちにもあげるけど、みんな喜んでる。また一緒に遊ぼう。",
-        "Guin": "",
+        "Guin": "デーリアス･･････いや、エーリアスという新しい場所には、びっくりすることが多かったよ。一日中砂糖を食べてる妖精とか、しょっぱい匂いがしない風とかね。\nでも、私とデリアを世話してくれる教主さんのおかげて元気よく過ごせてるよ。\n私たち以外にも、ここを訪れる人たちがいるはず! そのときは私も教主さんを手伝って、みんながうま <馴染めるように頑張るよ。\nいつか一緒に冒険に行こうね!",
         "Haley": "おかげでエーリアスは今日も平和だ。改めて言うが、教主は実に有能な人間だ。地球にいた時、教主のような人間がいたら、もっと楽に任務を遂行できたものを。率直に言って、地球の友人のことは少々気に入らなかった。待遇について抗議しても真剣に受け止めてもらえなかったからな。だからこそ、私は教主を高く評価する他はない。教主の労苦に敬意を表す。いつかモナティアムに来てくれたら、もてなすようにしよう。",
         "Hilde": "こんにちは、教主様。前回の検診結果があまりよくありませんね。まさか、エーリアスにいるからといって、気を抜いているのではありませんか？再検査が必要なようです。時間がある時、ぜひいらしてください。ふふ、冗談ですよ。検診結果はとても良好です。健康管理を怠っていないおかげでしょうか？ですが、そろそろ検診の時期ですので、一度ご訪問ください。ヒルデより",
         "Ifrit": "おい、教主！イフリートだ！手紙ってなんでこんなに難しいんだ？書くたびに紙が燃えちゃって、もう4枚目だぞ。まぁ、大したことじゃねぇけどな……。今まで俺のわがままに付き合ってくれてありがとな。それから、宴会場にいる火の下級精霊から聞いたけど、あいつらにもよくしてくれてるんだってな？やっぱり教主は信頼できるやつだ。これからもよろしくな！",
@@ -1043,7 +1043,7 @@ const LETTER_MAP = {
         "Festa": "[Hi there! This is the Rockfest Operations Manager. Congratulations! You've won two Rockfest tickets through the \"Like Rockfest ElfTube and Join the Fun!\" event.] Boom! My luck's pretty rockin', right? Since I'm performing, I don't need these tickets, but you'll want them! You're coming to see me bring the house down, right?! Catch ya there!",
         "Fricle": "I can already picture you handling a mountain of paperwork with that stupid look on your face again. You do realize how crucial sorting is before diving into working on those documents, right? Start by grouping similar items together, then prioritize by importance to get through it more quickly. I'm not saying this because I'm worried about you being overwhelmed. I'm sure you've already thought of this, Master. Anyway, keep up the good work today.",
         "Gabia": "Playing only with earth elementals in the cave was starting to feel dull, but the meals you provided me and the conversations you had with me at the Banquet Hall brightened up my days. Being with you brings back memories of when Sylla, Naia, and Ifrit used to get along so well. Your cooking? It's hit and miss, but I always eat every last bite. Sometimes I sneak some back to the earth elementals, and they love it too. Let's spend time together again soon.",
-        "Guin": "",
+        "Guin": "Delias... No, Elias. There's been so much to get used to since we arrived here. Like sprites who eat sugar all day, or breezes that don't smell like the sea. But thanks to you looking after Delia and me, I think we're settling in just fine. I wonder if more friends will find their way here, too. When they do, I'll help you make them feel at home, just like you did for us. Let's go on an adventure together sometime!",
         "Haley": "Dear Master, how are you doing? Thanks to you, Eliash is peaceful today as well. It may sound obvious, but you're quite a capable human. Back when I was on Earth, if there had been humans like you, I could have carried out my missions much more smoothly. To be frank, I wasn't too fond of my Earth friends. Even when I protested our treatment, they didn't take it seriously. That's why I can't help but hold you in high regard. I pay my respects to your hard work. Come visit Monatium sometime and I'll treat you well.",
         "Hilde": "Hello, Master. The results from your recent checkup were not ideal. I trust you're not under the impression that being in Elias gives you the luxury of neglecting your health. It seems we'll need a follow-up exam. Please come by at your earliest convenience. Haha, just kidding. Your health results were excellent. You must be taking great care of yourself! Still, it's about time for another checkup, so please visit soon. Sincerely, Hilde",
         "Ifrit": "Hey, Master! Ifrit here! Writing letters is harder than I thought. The paper keeps catching fire, so this is already my fourth try. Anyway, it's nothing big, but I just wanted to say thanks for listening to me whine and putting up with me all this time. Oh, and I heard from the lesser fire elementals in the Banquet Hall that you've been nice to them, too. Honestly, you seem like someone I can trust. Let's keep this good thing we have going!",
