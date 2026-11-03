@@ -273,6 +273,22 @@ const STORY_DATA = {
             ]
         },
         {
+            id: "event_004",
+            chapterNumber: "004",
+            name: "有毒的銀色小鎮",
+            episodes: [
+                { epNumber: "第0節", title: "官方PV", youtubeId: "Fby0ulv_sRk" },
+                { epNumber: "第1節", title: "甦醒的銀", youtubeId: "QCABpYO3hwE" },
+                { epNumber: "第2節", title: "挑戰者與銀", youtubeId: "03snxDKuIyg" },
+                { epNumber: "第3節", title: "進擊的銀", youtubeId: "qb3PHqXb4nc" },
+                { epNumber: "第4節", title: "痕跡中的銀", youtubeId: "O5RtPIwEAWg" },
+                { epNumber: "第5節", title: "袐密中的銀", youtubeId: "JbLQ6aq_NSM" },
+                { epNumber: "第6節", title: "柔軟的銀", youtubeId: "KPFGFoTXRoA" },
+                { epNumber: "第7節", title: "包容的銀", youtubeId: "2UNkZhQOJW4" }
+                
+            ]
+        },
+        {
             id: "event_003",
             chapterNumber: "003",
             name: "卡片簿裡跳舞的命運",
