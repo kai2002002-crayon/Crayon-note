@@ -83,7 +83,7 @@
             const bannerContainer = document.getElementById('banner-container');
             const episodeContainer = document.getElementById('episode-container');
             
-            // 將章節區塊暫時移回 body，避免清空容器時被刪除
+            // 將章節區塊移回 body，避免清空容器時被刪除
             if (episodeContainer.parentNode === bannerContainer) {
                 document.body.appendChild(episodeContainer);
             }
@@ -103,7 +103,7 @@
                 bannerContainer.innerHTML = '<p class="text-center text-white w-full col-span-full font-bold text-lg bg-black/50 p-4 rounded-lg backdrop-blur-sm">目前尚無劇情資料</p>';
             } else {
                 storyData.forEach((story, index) => {
-                    // 🌟 修改處 1：根據 category 設定不同的檔名前綴
+                    // 根據 category 設定不同的檔名前綴
                     let imgPrefix = '';
                     if (category === 'main') imgPrefix = 'Main';
                     else if (category === 'event') imgPrefix = 'Event';
@@ -111,7 +111,8 @@
                     
                     const bannerUrl = `story/${imgPrefix}${story.chapterNumber}.png`;
                     
-                    // 🌟 修改處 2：設定不同的章節標籤顏色與文字
+
+                    // 只保留主線的標籤，便服與活動維持空白
                     let displayLabelHTML = '';
                     if (category === 'main') {
                         const chapterStr = String(story.chapterNumber);
@@ -121,20 +122,11 @@
                         } else {
                             displayLabelHTML = `<p class="text-sm text-pink-500 dark:text-pink-400 font-bold mb-1">番外篇</p>`;
                         }
-                    } else if (category === 'skin') {
-                        // 新增便服故事的標籤樣式
-                        const chapterStr = String(story.chapterNumber);
-                        if (/^\d+$/.test(chapterStr)) {
-                            const chapterInt = parseInt(chapterStr, 10);
-                            displayLabelHTML = `<p class="text-sm text-pink-500 dark:text-pink-400 font-bold mb-1">Vol. ${chapterInt}</p>`;
-                        } else {
-                            displayLabelHTML = `<p class="text-sm text-pink-500 dark:text-pink-400 font-bold mb-1">特別篇</p>`;
-                        }
                     }
 
                     // 🌟 統一便服故事的圖片裁切比例 (比照主線或活動，這裡先預設比照活動使用 600/314 橫幅)
-                    const aspectClass = category === 'main' ? 'aspect-[5/7]' : 'aspect-[600/314]';
-                    const objectFitClass = category === 'main' ? 'object-cover' : 'object-contain';
+                    const aspectClass = (category === 'main' || category === 'skin') ? 'aspect-[5/7]' : 'aspect-[600/314]';
+                    const objectFitClass = (category === 'main' || category === 'skin') ? 'object-cover' : 'object-contain';
 
                     const bannerHTML = `
                         <div id="banner-card-${index}" onclick="loadEpisodes('${story.id}', ${index})" class="banner-card cursor-pointer group bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg hover:shadow-2xl hover:ring-2 hover:ring-indigo-400 transition-all hover:-translate-y-1 flex flex-col">
