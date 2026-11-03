@@ -25,14 +25,18 @@
     <!-- 劇情回顧主區塊 -->
     <div class="max-w-6xl mx-auto font-sans relative z-10">
         
-        <!-- 兩大區域按鈕 -->
-        <div class="flex justify-center items-center gap-8 sm:gap-16 mb-12 border-b border-white/20 pb-10">
+        <!-- 三大區域按鈕 -->
+        <div class="flex justify-center items-center gap-8 sm:gap-16 mb-12 border-b border-white/20 pb-10 flex-wrap">
             <button onclick="loadStoryCategory('main')" class="group cursor-pointer hover:scale-105 transition-transform outline-none">
                 <img src="story/Mainstory.png" alt="主線" class="w-[259px] h-[95px] object-contain group-hover:drop-shadow-[0_0_15px_rgba(59,130,246,0.8)] transition-all" onerror="this.style.display='none'">
             </button>
 
             <button onclick="loadStoryCategory('event')" class="group cursor-pointer hover:scale-105 transition-transform outline-none">
                 <img src="story/Eventstory.png" alt="活動" class="w-[259px] h-[95px] object-contain group-hover:drop-shadow-[0_0_15px_rgba(245,158,11,0.8)] transition-all" onerror="this.style.display='none'">
+            </button>
+
+            <button onclick="loadStoryCategory('skin')" class="group cursor-pointer hover:scale-105 transition-transform outline-none">
+                <img src="story/Skinstory.png" alt="便服" class="w-[259px] h-[95px] object-contain group-hover:drop-shadow-[0_0_15px_rgba(236,72,153,0.8)] transition-all" onerror="this.style.display='none'">
             </button>
         </div>
 
@@ -99,22 +103,36 @@
                 bannerContainer.innerHTML = '<p class="text-center text-white w-full col-span-full font-bold text-lg bg-black/50 p-4 rounded-lg backdrop-blur-sm">目前尚無劇情資料</p>';
             } else {
                 storyData.forEach((story, index) => {
-                    const imgPrefix = category === 'main' ? 'Main' : 'Event';
+                    // 🌟 修改處 1：根據 category 設定不同的檔名前綴
+                    let imgPrefix = '';
+                    if (category === 'main') imgPrefix = 'Main';
+                    else if (category === 'event') imgPrefix = 'Event';
+                    else if (category === 'skin') imgPrefix = 'Skin';
+                    
                     const bannerUrl = `story/${imgPrefix}${story.chapterNumber}.png`;
                     
+                    // 🌟 修改處 2：設定不同的章節標籤顏色與文字
                     let displayLabelHTML = '';
                     if (category === 'main') {
                         const chapterStr = String(story.chapterNumber);
-                        // 💡 判斷邏輯：如果是純數字，用 parseInt 去除開頭的 0，顯示「第 X 章」
                         if (/^\d+$/.test(chapterStr)) {
                             const chapterInt = parseInt(chapterStr, 10);
                             displayLabelHTML = `<p class="text-sm text-indigo-600 dark:text-indigo-400 font-bold mb-1">第 ${chapterInt} 章</p>`;
                         } else {
-                            // 番外篇樣式
                             displayLabelHTML = `<p class="text-sm text-pink-500 dark:text-pink-400 font-bold mb-1">番外篇</p>`;
+                        }
+                    } else if (category === 'skin') {
+                        // 新增便服故事的標籤樣式
+                        const chapterStr = String(story.chapterNumber);
+                        if (/^\d+$/.test(chapterStr)) {
+                            const chapterInt = parseInt(chapterStr, 10);
+                            displayLabelHTML = `<p class="text-sm text-pink-500 dark:text-pink-400 font-bold mb-1">Vol. ${chapterInt}</p>`;
+                        } else {
+                            displayLabelHTML = `<p class="text-sm text-pink-500 dark:text-pink-400 font-bold mb-1">特別篇</p>`;
                         }
                     }
 
+                    // 🌟 統一便服故事的圖片裁切比例 (比照主線或活動，這裡先預設比照活動使用 600/314 橫幅)
                     const aspectClass = category === 'main' ? 'aspect-[5/7]' : 'aspect-[600/314]';
                     const objectFitClass = category === 'main' ? 'object-cover' : 'object-contain';
 
@@ -182,12 +200,19 @@
             let chapterPrefix = '';
             if (currentCategory === 'main') {
                 const chapterStr = String(storyData.chapterNumber);
-                // 💡 展開章節標題時的判斷：用 parseInt 去除開頭的 0
                 if (/^\d+$/.test(chapterStr)) {
                     const chapterInt = parseInt(chapterStr, 10);
                     chapterPrefix = `第 ${chapterInt} 章 - `;
                 } else {
                     chapterPrefix = `番外篇 - `;
+                }
+            } else if (currentCategory === 'skin') {
+                const chapterStr = String(storyData.chapterNumber);
+                if (/^\d+$/.test(chapterStr)) {
+                    const chapterInt = parseInt(chapterStr, 10);
+                    chapterPrefix = `Vol. ${chapterInt} - `;
+                } else {
+                    chapterPrefix = `特別篇 - `;
                 }
             }
             
