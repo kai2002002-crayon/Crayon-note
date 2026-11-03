@@ -169,17 +169,6 @@ const STORY_DATA = {
     // 活動劇情
     event: [
         {
-            id: "event_bunny",
-            chapterNumber: "Bunny",
-            name: "兔兔，咖啡廳大作戰！",
-            episodes: [
-                { epNumber: "第0節", title: "官方PV", youtubeId: "I79abNBywN4" },
-                { epNumber: "第1節", title: "兔兔，大作戰！", youtubeId: "Tb4TJ3B3NYg" },
-                { epNumber: "第2節", title: "兔兔，蛋包飯！", youtubeId: "snYJeTKmsBY" },
-                { epNumber: "第3節", title: "兔兔，Happy！", youtubeId: "hoycHaW5U5U" },
-            ]
-        },
-        {
             id: "event_028",
             chapterNumber: "028",
             name: "乘浪而來的企鵝人",
@@ -344,6 +333,20 @@ const STORY_DATA = {
                 { epNumber: "第6節", title: "堅定心志的月亮", youtubeId: "vn3qbv8Da4k" },
                 { epNumber: "第7節", title: "信仰中的月亮", youtubeId: "Z2DQXJNC3uE" }
                 
+            ]
+        }
+    ],
+    // 便服故事
+    skin: [
+        {
+            id: "event_bunny",
+            chapterNumber: "002",
+            name: "兔兔，咖啡廳大作戰！",
+            episodes: [
+                { epNumber: "第0節", title: "官方PV", youtubeId: "I79abNBywN4" },
+                { epNumber: "第1節", title: "兔兔，大作戰！", youtubeId: "Tb4TJ3B3NYg" },
+                { epNumber: "第2節", title: "兔兔，蛋包飯！", youtubeId: "snYJeTKmsBY" },
+                { epNumber: "第3節", title: "兔兔，Happy！", youtubeId: "hoycHaW5U5U" },
             ]
         }
     ]
