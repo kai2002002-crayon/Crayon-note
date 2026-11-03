@@ -189,6 +189,7 @@
                 activeCard.classList.add('ring-4', 'ring-indigo-500', 'scale-[1.02]');
             }
 
+            // 只保留主線的前綴，便服與活動維持空白
             let chapterPrefix = '';
             if (currentCategory === 'main') {
                 const chapterStr = String(storyData.chapterNumber);
@@ -197,14 +198,6 @@
                     chapterPrefix = `第 ${chapterInt} 章 - `;
                 } else {
                     chapterPrefix = `番外篇 - `;
-                }
-            } else if (currentCategory === 'skin') {
-                const chapterStr = String(storyData.chapterNumber);
-                if (/^\d+$/.test(chapterStr)) {
-                    const chapterInt = parseInt(chapterStr, 10);
-                    chapterPrefix = `Vol. ${chapterInt} - `;
-                } else {
-                    chapterPrefix = `特別篇 - `;
                 }
             }
             
