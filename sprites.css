@@ -289,6 +289,7 @@
 .sprite-Goldy { width: 126px; height: 126px; background-position: -5px -141px; }
 .sprite-RenewaNPC { width: 126px; height: 126px; background-position: -5px -277px; }
 .sprite-Youngchun { width: 126px; height: 126px; background-position: -5px -413px; }
+.sprite-Delia { width: 126px; height: 126px; background-position: -5px -549px; }
 
 /* 共鳴專屬：五種性格顏色輪迴特效 */
 @keyframes rainbow-border {
