@@ -168,7 +168,17 @@ const STORY_DATA = {
     ],
     // 活動劇情
     event: [
-
+        {
+            id: "event_bunny",
+            chapterNumber: "bunny",
+            name: "兔兔，咖啡廳大作戰！",
+            episodes: [
+                { epNumber: "第0節", title: "官方PV", youtubeId: "I79abNBywN4" },
+                { epNumber: "第1節", title: "兔兔，大作戰！", youtubeId: "Tb4TJ3B3NYg" },
+                { epNumber: "第2節", title: "兔兔，蛋包飯！", youtubeId: "snYJeTKmsBY" },
+                { epNumber: "第3節", title: "兔兔，Happy！", youtubeId: "hoycHaW5U5U" },
+            ]
+        },
         {
             id: "event_028",
             chapterNumber: "028",
