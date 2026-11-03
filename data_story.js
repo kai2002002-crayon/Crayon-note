@@ -170,7 +170,7 @@ const STORY_DATA = {
     event: [
         {
             id: "event_bunny",
-            chapterNumber: "bunny",
+            chapterNumber: "Bunny",
             name: "兔兔，咖啡廳大作戰！",
             episodes: [
                 { epNumber: "第0節", title: "官方PV", youtubeId: "I79abNBywN4" },
