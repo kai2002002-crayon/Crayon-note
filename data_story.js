@@ -168,6 +168,15 @@ const STORY_DATA = {
     ],
     // 活動劇情
     event: [
+        
+        {
+            id: "event_029",
+            chapterNumber: "029",
+            name: "篡奪與脫序之間",
+            episodes: [
+                { epNumber: "第0節", title: "官方PV", youtubeId: "M62O1z6ajLk" }
+            ]
+        },
         {
             id: "event_028",
             chapterNumber: "028",
