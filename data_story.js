@@ -261,7 +261,14 @@ const STORY_DATA = {
             chapterNumber: "007",
             name: "為了你而讚頌",
             episodes: [
-                { epNumber: "第0節", title: "官方PV", youtubeId: "JPFw7FHCegk" }
+                { epNumber: "第0節", title: "官方PV", youtubeId: "JPFw7FHCegk" },
+                { epNumber: "第1節", title: "宴會與艾皮卡", youtubeId: "aczUt_gXHok" },
+                { epNumber: "第2節", title: "宴會外的艾皮卡", youtubeId: "UEEUp3B-eVs" },
+                { epNumber: "第3節", title: "教主與艾皮卡", youtubeId: "GgecoHDRNjw" },
+                { epNumber: "第4節", title: "壞結局的艾皮卡", youtubeId: "y35wOEijC80" },
+                { epNumber: "第5節", title: "逆轉中的艾皮卡", youtubeId: "ldkq0LYQNzc" },
+                { epNumber: "第6節", title: "劇本中的艾皮卡", youtubeId: "T8TbHjw-A6A" },
+                { epNumber: "第7節", title: "艾皮卡的好結局", youtubeId: "EczwoXzYAUE" }
             ]
         },
         {
@@ -271,12 +278,12 @@ const STORY_DATA = {
             episodes: [
                 { epNumber: "第0節", title: "官方PV", youtubeId: "LnkKTpm8c08" },
                 { epNumber: "第1節", title: "角落的鋼鐵", youtubeId: "Eg0dnYJGiOE" },
-                { epNumber: "第1節", title: "風中的鋼鐵", youtubeId: "thjGNL8QilY" },
-                { epNumber: "第1節", title: "稍微有點軟的鐵？", youtubeId: "N8oPdJp6IPQ" },
-                { epNumber: "第1節", title: "變得堅韌的鋼鐵？", youtubeId: "y0t_uURtPXc" },
-                { epNumber: "第1節", title: "鍛鍊的鋼鐵", youtubeId: "tSrQxesV_b8" },
-                { epNumber: "第1節", title: "較量的鋼鐵", youtubeId: "thV5JR983pc" },
-                { epNumber: "第1節", title: "勇敢的鋼鐵", youtubeId: "HgN2nLZQuoE" },
+                { epNumber: "第2節", title: "風中的鋼鐵", youtubeId: "thjGNL8QilY" },
+                { epNumber: "第3節", title: "稍微有點軟的鐵？", youtubeId: "N8oPdJp6IPQ" },
+                { epNumber: "第4節", title: "變得堅韌的鋼鐵？", youtubeId: "y0t_uURtPXc" },
+                { epNumber: "第5節", title: "鍛鍊的鋼鐵", youtubeId: "tSrQxesV_b8" },
+                { epNumber: "第6節", title: "較量的鋼鐵", youtubeId: "thV5JR983pc" },
+                { epNumber: "第7節", title: "勇敢的鋼鐵", youtubeId: "HgN2nLZQuoE" }
             ]
         },
         {
