@@ -253,7 +253,14 @@ const STORY_DATA = {
             chapterNumber: "008",
             name: "再次綻放的藍玫瑰",
             episodes: [
-                { epNumber: "第0節", title: "官方PV", youtubeId: "EOaShY_-44s" }
+                { epNumber: "第0節", title: "官方PV", youtubeId: "EOaShY_-44s" },
+                { epNumber: "第1節", title: "藍玫瑰與試煉", youtubeId: "CpSozOUUld0" },
+                { epNumber: "第2節", title: "與藍玫瑰的相遇", youtubeId: "hJG9lrWc7JY" },
+                { epNumber: "第3節", title: "藍玫瑰的成長", youtubeId: "PHuDybKBPpk" },
+                { epNumber: "第4節", title: "藍玫瑰與機會", youtubeId: "qbOdFhbfmRM" },
+                { epNumber: "第5節", title: "藍玫瑰與競爭", youtubeId: "QGc-xRqakMs" },
+                { epNumber: "第6節", title: "藍玟瑰與覺醒", youtubeId: "IumuBP6hy1o" },
+                { epNumber: "第7節", title: "藍玫瑰與真心", youtubeId: "APYdwcuc0P8" }
             ]
         },
         {
