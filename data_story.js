@@ -265,6 +265,37 @@ const STORY_DATA = {
             ]
         },
         {
+            id: "event_008",
+            chapterNumber: "008",
+            name: "再次綻放的藍玫瑰",
+            episodes: [
+                { epNumber: "第0節", title: "官方PV", youtubeId: "EOaShY_-44s" }
+            ]
+        },
+        {
+            id: "event_007",
+            chapterNumber: "007",
+            name: "為了你而讚頌",
+            episodes: [
+                { epNumber: "第0節", title: "官方PV", youtubeId: "JPFw7FHCegk" }
+            ]
+        },
+        {
+            id: "event_006",
+            chapterNumber: "006",
+            name: "鋼鐵般的地獄訓練",
+            episodes: [
+                { epNumber: "第0節", title: "官方PV", youtubeId: "LnkKTpm8c08" },
+                { epNumber: "第1節", title: "角落的鋼鐵", youtubeId: "Eg0dnYJGiOE" },
+                { epNumber: "第1節", title: "風中的鋼鐵", youtubeId: "thjGNL8QilY" },
+                { epNumber: "第1節", title: "稍微有點軟的鐵？", youtubeId: "N8oPdJp6IPQ" },
+                { epNumber: "第1節", title: "變得堅韌的鋼鐵？", youtubeId: "y0t_uURtPXc" },
+                { epNumber: "第1節", title: "鍛鍊的鋼鐵", youtubeId: "tSrQxesV_b8" },
+                { epNumber: "第1節", title: "較量的鋼鐵", youtubeId: "thV5JR983pc" },
+                { epNumber: "第1節", title: "勇敢的鋼鐵", youtubeId: "HgN2nLZQuoE" },
+            ]
+        },
+        {
             id: "event_005",
             chapterNumber: "005",
             name: "市長、市長，我的市長！",
