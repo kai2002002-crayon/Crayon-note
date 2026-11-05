@@ -407,6 +407,14 @@
             "en": "Pyrite Coin"
         }
     },
+     "Polan": {
+        "url": "",
+        "name": {
+            "zh-TW": "",
+            "ja": "",
+            "en": ""
+        }
+    },
     "Posher": {
         "url": "https://i.postimg.cc/7YYpp3Pt/Present-List-Posher.png",
         "name": {
@@ -668,6 +676,7 @@ const THOUGHT_MAP = {
         "Ner": "這是寧琉當初教導並撫養貝麗塔和艾爾芬的日記。真不愧是寧琉、詳實紀錄了一切。",
         "Picora": "皮可菈親自製作的貼紙簿，上面貼滿了表達各種感情和表情符號的貼紙。",
         "Pira": "不是黃金，而是由黃鐵礦製成的硬幣。這似乎是琵拉開始認同自我價值的象徵。",
+        "Polan": "",
         "Posher": "為了照顧我的健康而送的葡萄汁，送得太頻繁了，根本喝不完。",
         "RenewaAwaken": "雷內瓦會收集已下檔作品的海報帶來給我。這些是以在艾利亞斯經歷的冒險為基礎製作的作品海報。",
         "Rim": "琳扭扭捏捏地送給我的茶杯套組。她每次來我房間時都想用這個一起喝茶。",
@@ -747,6 +756,7 @@ const THOUGHT_MAP = {
         "Ner": "エルフィンはもちろん、べリータを初めて担当して教育し育てていた頃の日誌。ネルらしく細かく内容を書き留めてある。",
         "Picora": "ピコラが直接作ったステッカーブック。色んな感情とエモーションを表現したステッカーでいっぱい。",
         "Pira": "金じゃない黄鉄鉱で作られたコイン。ビラが自分だけの価値を自ら納得し始めたという意味が込められているようだ。",
+        "Polan": "",
         "Posher": "私の健康を考えて送ってくれたブドウジュース。あまりにも頻繁に送ってくるので飲み切れないと思う。",
         "RenewaAwaken": "リニュアは上映が終わった作品のポスターを集めて持って来てくれる。エーリアスで経験した冒険を元に作った作品のポスター。",
         "Rim": "リムがぎこちない感じで私にプレゼントした茶器セット。私の部屋に来る度これで一緒にお茶を飲みたいという。",
@@ -826,6 +836,7 @@ const THOUGHT_MAP = {
         "Ner": "A diary of the old days when Ner was taking care of and educating Erpin and Belita. As expected of Ner, it is written meticulously.",
         "Picora": "A sticker book that Picora made by herself. It's full of stickers showing various emotions and emojis.",
         "Pira": "A coin made from pyrite instead of gold. It seems Pira has started to find and accept her own worth.",
+        "Polan": "",
         "Posher": "Grape juice that Posher sent me, as she worries about my health. She sends it too often, so that I can't finish it all.",
         "RenewaAwaken": "Posters of films based on adventures that took place in Elias. When they finish screening, Renewa collects them and brings them to me.",
         "Rim": "A teacup set that Rim gifted to me shyly. She said she wants to drink tea together every time she visits my room.",
@@ -908,6 +919,7 @@ const LETTER_MAP = {
         "Ner": "教主大人,您好。\n雖然說這個可能有點突然,但我最近常常覺得,我們世界樹教團的教主不是別人而是您,真是太好了。希望您今後也能繼續留在我和女王大人的身邊。對了, 昨天我沒收到您的修養錄,您應該還在寫對吧?我會等您的。\n寧琉敬上。",
         "Picora": "師父！您好嗎？您永遠的弟子，皮可菈寫信給您！能和師父在一起的每一天，都像在作夢一樣。不但能得到師父變成貼紙、變成髮夾的教誨，還能一起聊些生活瑣事、一起吃好吃的東西，對我來說真的是莫大的幸福！為了成為不給師父添麻煩的帥氣弟子，皮可菈會更加努力的！",
         "Pira": "老大,老大。是我琵拉啦。\n這可不是叫你來借錢的信，放心吧。只是……想謝謝你一直以來各方面的照顧,才寫了這封信,別想太多。\n之前我還在想,其他傢伙為什麼都那麼愛跟著你跑, 現在好像有點懂了。\n以後要是有不錯的生意點子,我會偷偷聯絡你,別錯過好機會囉?那就下次見啦,老大。",
+        "Polan": "",
         "Posher": "教主，我這次又製作了一種新藥水，要不要來試試看？我已經說過很多次了，像我的藥水這樣苦口的東西，才是對身體好的，你懂的吧？不過嘛，為了教主，我可以破例考慮一下製作一款味道好一點的藥水。當然，也別抱太高期待，畢竟味道的好壞是很主觀的。呵呵。有空的話，記得來找我玩。我會等著你的。",
         "RenewaAwaken": "一直四處漂泊的我，從沒想過自己能和誰結下這麼深的牽絆。也因此，現在的每一個瞬間都顯得格外特別，有時也會覺得有些不自在。我經歷過無數個艾利亞斯，也看過許多地方，但唯獨對教主大人，我懷抱著特別的期待。能在這條時間線遇見教主大人，讓我心裡有些感謝。願艾利亞斯能為教主大人帶來幸福。",
         "Rim": "在山坡上的偏僻小屋獨自生活的我，自從來到宴會廳後結識了許多朋友。似乎也有喜歡我笑話的朋友，讓我感到欣慰。喜歡檸檬茶的朋友多嗎？希望有一天朋友們也能來我家玩。多虧教主大人在宴會廳讓我認識了這麼多使者，真是太好了。",
@@ -987,6 +999,7 @@ const LETTER_MAP = {
         "Ner": "こんにちは、教主様。\n今さらかも知れませんが、私たち世界樹教団の教主様があなたで良かったと思っています。これからも私や女王様のそばにいてくださると嬉しいです。そういえば、昨日の修養録をまだいただいておりませんが、作成中なのでしょうか？お待ちしております。\nネルより。",
         "Picora": "師匠様！こんにちは！師匠様の永遠の弟子、ピコラが手紙を送ります！師匠様との毎日は本当に夢みたいです。師匠様からステッカーや髪飾りの作り方を教えてもらったり、たわいもない話をしたり、それに美味しいものが食べられるなんて！師匠様に恥をかかせない素敵な弟子になれるように、もっと頑張ります！",
         "Pira": "やぁやぁ。ピラやで。融資の手紙やないから安心しいや。\n今まで･･････いろいろ世話ぁ焼いてもろうたのがうれしゅうて書いただけやねん、別に気にすることあらへんで。なんで他の連中に慕われてるのか気になっとったんやけど、今は分かる気がすんねん。これからもええビジネスのネタがあったらこっそり連絡入れたるからな。チャンスは掴まなあかんでぇ?\nほなまたな。",
+        "Polan": "",
         "Posher": "教主、新しいポーションを作ったけど味見しに来る？いつも言ってるけど、私のポーションが「良薬口に苦し」ってのは分かってるわよね？だけど教主のためなら……一度くらいは味を考慮したポーションを作ってもいいわ。でも、あまり期待しないでね。味の基準はそれぞれだから。ふふ。暇になったら、遊びに来てね。待ってるわ。",
         "RenewaAwaken": "流れ者だった私が、誰かとプライベートで深い繋がりができるなんて想像したこともなかったです。おかげで今の1秒1秒が特別で、時にはぎこちなくも感じます。いろいろな時代のエーリアスを経験して、さまざまなのものを見てきましたが、教主様には特別な期待を抱いてしまいます。教主様に出会わせてくれたこの時間軸に、少し感謝しています。エーリアスが、教主様にとって幸せな場所でありますように。",
         "Rim": "丘の上に独りで暮らしていた私にも……宴会場でたくさんの友達ができました。私のギャグを気に入ってくれる友達もいて嬉しいです。レモンティーを好きな人がいたら……いつか私の家に招待したいなと思っています。教主のおかげで、たくさんの使徒と出会えました……ありがとうございます。",
@@ -1066,6 +1079,7 @@ const LETTER_MAP = {
         "Ner": "Hello, Master.\nThis may sound a little out of nowhere, but lately I often find myself thinking how fortunate it is that you, and no one else, are the Master of our Yggdrasil Order. I hope you will continue to remain by my side and by Her Majesty's as well. Oh, and before I forget, I did not receive your diary yesterday. You are still working on it, I assume? I shall be waiting.\nSincerely, Ner.",
         "Picora": "Master! Hello! Your eternal disciple, Picora, is writing you a letter! Every single day with you feels like a dream come true. Your teachings don't just become stickers and hairpins for thought, sharing little everyday stories together, and eating delicious food, it brings such great happiness to me! I'll work even harder to become a wonderful disciple who won't be a burden to you, Master!",
         "Pira": "Oi, oi, it's me, Pira.\nRelax, this ain't a collection letter. I'm just writing cause I'm grateful for how much you've looked out for me all this time, so don't make a big deal outta it.\nI didn't get why the others were so obsessed with you, but I finally think I get it, yarou. I'll reach out if a sweet business opportunity pops up, so don't miss the boat.\nCatch you later, oyabun.",
+        "Polan": "",
         "Posher": "Hey, Master, I've made a new potion. How about you come and give it a try? I've told you before, just like my potions, things that taste bitter are actually good for you, right? For you, though, I'll try making one that actually tastes pleasant. Don't get your hopes up, though... taste is all relative, after all. Hehe. Drop by when you have time. I'll be waiting.",
         "RenewaAwaken": "I've spent most of my life wandering from place to place, so I never imagined I'd grow so close to someone. That's why every moment feels more precious, and sometimes a little awkward. I've seen many places across countless versions of Elias, but I find myself holding special expectations for you, Master. I'm somewhat grateful to this timeline for allowing me to meet you. I hope Elias brings you nothing but happiness, Master.",
         "Rim": "I used to live alone in a secluded house on a hill, but coming to the banquet hall has allowed me to make many friends. I'm tickled pink that there seem to be some who like my jokes. Are there more who are about that lemon tea life? I can't wait for my friends to come by my house someday. I'm grateful that the Master allowed me to meet many Apostles at the banquet hall.",
