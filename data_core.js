@@ -818,7 +818,7 @@ const COSTUME_MAP = {
 	"蒂亞娜": ["Diana", "DianaSkin1", "DianaSkin2"], "桃桃": ["Momo", "MomoSkin3"], "瑟琳娜": ["Selline", "SellineSkin1", "SellineSkin3"], "羽伊": ["Ui", "UiSkin1", "UiSkin2", "UiSkin3", "UiSkin4"], "薇薇": ["Vivi", "ViviSkin1", "ViviSkin2", "ViviSkin3", "ViviSkin4"], "x乂錫安乂x": ["xXionx", "xXionxSkin1", "xXionxSkin2", "xXionxSkin3", "xXionxSkin4"],
     "艾爾芬": ["Erpin", "ErpinSkin1", "ErpinSkin3"], "莉絲蒂": ["Risty", "RistySkin1"], "雷內瓦": ["RenewaAwaken", "RenewaAwakenSkin1", "RenewaAwakenSkin2"],
 	"芭瓏": ["Barong", "BarongSkin1"], "達雅": ["Daya", "DayaSkin1"], "提格": ["Tig", "TigSkin1"], "柯米(泳裝)": ["KommySwim", "KommySwimSkin3"], "麗息": ["Lethe"], "瑰恩": ["Guin", "GuinSkin3"],
-	"羅蕾特": ["Rollett", "RollettSkin2"], "琵拉": ["Pira", "PiraSkin2"], "雪蘭": ["Sherum", "SherumSkin1"], "芭莉耶": ["Barie"], "瓊安": ["Joanne", "JoanneSkin2", "JoanneSkin5"], "波朗": ["Polan"]
+	"羅蕾特": ["Rollett", "RollettSkin2"], "琵拉": ["Pira", "PiraSkin2"], "雪蘭": ["Sherum", "SherumSkin1"], "芭莉耶": ["Barie"], "瓊安": ["Joanne", "JoanneSkin2", "JoanneSkin5"], "波朗": ["Polan", "PolanSkin4"]
 };
 
 
@@ -835,7 +835,7 @@ const SD_COSTUME = {
 	"蒂亞娜": ["Diana", "DianaSkin1", "DianaSkin2"], "桃桃": ["Momo", "MomoSkin3"], "瑟琳娜": ["Selline", "SellineSkin1", "SellineSkin3"], "羽伊": ["Ui", "UiSkin1", "UiSkin2", "UiSkin3", "UiSkin4"], "薇薇": ["Vivi", "ViviSkin1", "ViviSkin2", "ViviSkin3", "ViviSkin4"], "x乂錫安乂x": ["xXionx", "xXionxSkin1", "xXionxSkin2", "xXionxSkin3", "xXionxSkin4"],
     "艾爾芬": ["Erpin", "ErpinSkin1", "ErpinSkin3"], "莉絲蒂": ["Risty", "RistySkin1"], "雷內瓦": ["RenewaAwaken", "RenewaAwakenSkin1", "RenewaAwakenSkin2"],
 	"芭瓏": ["Barong", "BarongSkin1"], "達雅": ["Daya", "DayaSkin1"], "提格": ["Tig", "TigSkin1"], "柯米(泳裝)": ["KommySwim", "KommySwimSkin3"], "麗息": ["Lethe"], "瑰恩": ["Guin", "GuinSkin3"],
-	"羅蕾特": ["Rollett", "RollettSkin2"], "琵拉": ["Pira", "PiraSkin2"], "雪蘭": ["Sherum", "SherumSkin1"], "芭莉耶": ["Barie"], "瓊安": ["Joanne", "JoanneSkin2", "JoanneSkin5"], "波朗": ["Polan"]
+	"羅蕾特": ["Rollett", "RollettSkin2"], "琵拉": ["Pira", "PiraSkin2"], "雪蘭": ["Sherum", "SherumSkin1"], "芭莉耶": ["Barie"], "瓊安": ["Joanne", "JoanneSkin2", "JoanneSkin5"], "波朗": ["Polan", "PolanSkin4"]
 };
 
 //迷你坨坨SPINE NAME
