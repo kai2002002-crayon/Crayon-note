@@ -174,7 +174,14 @@ const STORY_DATA = {
             chapterNumber: "029",
             name: "篡奪與脫序之間",
             episodes: [
-                { epNumber: "第0節", title: "官方PV", youtubeId: "M62O1z6ajLk" }
+                { epNumber: "第0節", title: "官方PV", youtubeId: "M62O1z6ajLk" },
+                { epNumber: "第1節", title: "最後的進擊", youtubeId: "LP1rtT-OhNs" },
+                { epNumber: "第2節", title: "無聲的進擊", youtubeId: "RWnPL85oHLU" },
+                { epNumber: "第3節", title: "意志的進擊", youtubeId: "2Bbiyf1GJVE" },
+                { epNumber: "第4節", title: "真心的進擊", youtubeId: "9MqAhV8-TD8" },
+                { epNumber: "第5節", title: "朝王座進擊", youtubeId: "x-dVTVApaTw" },
+                { epNumber: "第6節", title: "笨蛋的進擊", youtubeId: "XqBHbPVBA0k" },
+                { epNumber: "第7節", title: "淚水的進擊", youtubeId: "hcjujJU_k9U" }
             ]
         },
         {
