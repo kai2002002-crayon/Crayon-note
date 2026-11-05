@@ -356,9 +356,9 @@ const CARD_SCHEDULE = [
         type: "Rune"
     },
 	{
-        start: "2026-10-22T17:00:00+09:00",
-        end: "2026-11-05T10:59:59+09:00",
-        id: "Artifact118",
+        start: "2026-11-05T17:00:00+09:00",
+        end: "2026-11-19T10:59:59+09:00",
+        id: "Artifact120",
         type: "Artifact"
     },
 	{
