@@ -86,6 +86,93 @@
             }
         }
     },
+     {
+        "name": "波朗",
+        "attribute": "物理",
+        "skills": {
+            "zh-TW": {
+                "normalAttack": {
+                    "basic": " []",
+                    "enhanced": " []"
+                },
+                "normalSkill": {
+                    "name": "",
+                    "desc": "",
+                    "stats": [
+                        ""
+                    ]
+                },
+                "ultimateSkill": {
+                    "name": "",
+                    "desc": "",
+                    "stats": [
+                        ""
+                    ],
+                    "cooldown": "秒"
+                },
+                "passiveSkill": {
+                    "desc": "",
+                    "stats": [
+                        "秒"
+                    ]
+                }
+            },
+            "ja": {
+                "normalAttack": {
+                    "basic": " []",
+                    "enhanced": " []"
+                },
+                "normalSkill": {
+                    "name": "",
+                    "desc": "",
+                    "stats": [
+                        ""
+                    ]
+                },
+                "ultimateSkill": {
+                    "name": "",
+                    "desc": "",
+                    "stats": [
+                        ""
+                    ],
+                    "cooldown": "秒"
+                },
+                "passiveSkill": {
+                    "desc": "",
+                    "stats": [
+                        ""
+                    ]
+                }
+            },
+            "en": {
+                "normalAttack": {
+                    "basic": " []",
+                    "enhanced": " []"
+                },
+                "normalSkill": {
+                    "name": "",
+                    "desc": "",
+                    "stats": [
+                        ""
+                    ]
+                },
+                "ultimateSkill": {
+                    "name": "",
+                    "desc": "",
+                    "stats": [
+                        ""
+                    ],
+                    "cooldown": "s"
+                },
+                "passiveSkill": {
+                    "desc": "",
+                    "stats": [
+                        ""
+                    ]
+                }
+            }
+        }
+    },
     {
         "name": "瑰恩",
         "attribute": "魔法",
