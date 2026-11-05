@@ -417,7 +417,7 @@ function t(key) { return LANG_DICT[currentLang][key] || key; }
 // 坨坨資料
 // ------------------------------------------
 const INITIAL_DATA = [
-	{ name: "波朗", personality: "狂亂", race: "妖精", position: "後排", job: "輔助", pathVersion: "", releaseDate: "2026-11-05T17:00:00+09:00" },
+	{ name: "波朗", personality: "狂亂", race: "妖精", position: "後排", job: "輔助", pathVersion: "V5", releaseDate: "2026-11-05T17:00:00+09:00" },
 	{ name: "瑰恩", personality: "冷靜", race: "獸人", position: "前排", job: "輔助", pathVersion: "V3", releaseDate: "2026-10-22T17:00:00+09:00" },
 	{ name: "麗息", personality: "冷靜", race: "幽靈", position: "前排", job: "肉盾", pathVersion: "V4", releaseDate: "2026-10-08T17:00:00+09:00" },
 	{ name: "柯米(泳裝)", personality: "冷靜", race: "獸人", position: "中排", job: "輔助", pathVersion: "V4", releaseDate: "2026-10-15T10:00:00+09:00" },
