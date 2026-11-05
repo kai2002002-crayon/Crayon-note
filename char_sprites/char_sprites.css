@@ -64,6 +64,7 @@
 [class*="_Picora"] { background-image: url('Picorasheet.png'); }
 [class*="_Pira"] { background-image: url('Pirasheet.png'); }
 [class*="_Posher"] { background-image: url('Poshersheet.png'); }
+[class*="_Polan"] { background-image: url('Polansheet.png'); }
 [class*="_RenewaAwaken"] { background-image: url('RenewaAwakensheet.png'); }
 [class*="_Rim"] { background-image: url('Rimsheet.png'); }
 [class*="_Risty"] { background-image: url('Ristysheet.png'); }
@@ -577,6 +578,16 @@
 .sprite-Icon_NormalSkill_Posher { width: 64px; height: 64px; background-position: -5px -1013px; }
 .sprite-Icon_PassiveSkill_Posher { width: 64px; height: 64px; background-position: -5px -1087px; }
 .sprite-PresentList_Posher { width: 135px; height: 214px; background-position: -5px -1161px; }
+
+/* --- Polan --- */
+.sprite-AsideIcon_Polan { width: 256px; height: 256px; background-position: -5px -5px; }
+.sprite-Aside_Skill_Polan_1 { width: 64px; height: 64px; background-position: -5px -271px; }
+.sprite-Aside_Skill_Polan_2 { width: 64px; height: 64px; background-position: -5px -345px; }
+.sprite-Aside_Skill_Polan_3 { width: 64px; height: 64px; background-position: -5px -419px; }
+.sprite-CG_Schedule_Polan { width: 1024px; height: 512px; background-position: -5px -493px; }
+.sprite-Icon_NormalSkill_Polan { width: 64px; height: 64px; background-position: -5px -1015px; }
+.sprite-Icon_PassiveSkill_Polan { width: 64px; height: 64px; background-position: -5px -1089px; }
+.sprite-PresentList_Polan { width: 247px; height: 191px; background-position: -5px -1163px; }
 
 /* --- RenewaAwaken --- */
 .sprite-AsideIcon_RenewaAwaken { width: 256px; height: 256px; background-position: -5px -5px; }
