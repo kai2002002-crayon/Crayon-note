@@ -107,7 +107,7 @@
                 "ultimateSkill": {
                     "name": "皇家同花順",
                     "desc": "發射大砲，對敵人造成範園物理傷害。被砲擊命中的友軍會在一定時間內增加最大HP、並恢復HP。",
-                    "cooldown": "秒",
+                    "cooldown": "17秒",
                     "stats": [
                         "物理傷害:840%",
                         "基本最大HP增加:23%",
@@ -140,7 +140,7 @@
                 "ultimateSkill": {
                     "name": "ロイヤルストレート",
                     "desc": "大砲を発射して敵に範囲物理ダメージを与える。一定時間、砲撃が命中した味方の最大HPを増加させ、HPを回復させる。",
-                    "cooldown": "秒",
+                    "cooldown": "17秒",
                     "stats": [
                         "物理ダメージ:840%",
                         "基本最大HP增加:23%",
@@ -173,7 +173,7 @@
                 "ultimateSkill": {
                     "name": "Royal Straight",
                     "desc": "Fires a cannon, dealing AoE Physical Damage to enemies.\nIncreases Max HP of allies hit by the bombardment and recovers their HP for a set period of time.",
-                    "cooldown": "s",
+                    "cooldown": "17s",
                     "stats": [
                         "Physical DMG: 840%",
                         "Increased Base Max HP: 23%",
