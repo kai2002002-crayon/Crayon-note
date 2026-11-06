@@ -256,6 +256,21 @@ const STORY_DATA = {
             ]
         },
         {
+            id: "event_010",
+            chapterNumber: "010",
+            name: "自行選擇的黑暗道路",
+            episodes: [
+                { epNumber: "第0節", title: "官方PV", youtubeId: "mS4HE3AT4rc" },
+                { epNumber: "第1節", title: "樹木與閃光", youtubeId: "HJfWXLdFRMQ" },
+                { epNumber: "第2節", title: "黑暗中的閃光", youtubeId: "2VYU6wSqjQk" },
+                { epNumber: "第3節", title: "一線閃光", youtubeId: "uZ6xto2TPXg" },
+                { epNumber: "第4節", title: "金色閃光", youtubeId: "ioTpNyDS-Zc" },
+                { epNumber: "第5節", title: "逐漸消逝的閃光", youtubeId: "QLFsfFQBTwY" },
+                { epNumber: "第6節", title: "黑色閃光", youtubeId: "YT6gdETrOhI" },
+                { epNumber: "第7節", title: "接續的閃光", youtubeId: "Q-2NqH-8vz8" }
+            ]
+        },
+        {
             id: "event_009",
             chapterNumber: "009",
             name: "皮可菈的導師恐懼症",
