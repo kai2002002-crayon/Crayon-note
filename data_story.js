@@ -256,6 +256,36 @@ const STORY_DATA = {
             ]
         },
         {
+            id: "event_013",
+            chapterNumber: "013",
+            name: "夢想永恆的電綿羊",
+            episodes: [
+                { epNumber: "第0節", title: "官方PV", youtubeId: "t_6ZdAN4CVQ" },
+                { epNumber: "第1節", title: "", youtubeId: "" },
+                { epNumber: "第2節", title: "", youtubeId: "" },
+                { epNumber: "第3節", title: "", youtubeId: "" },
+                { epNumber: "第4節", title: "", youtubeId: "" },
+                { epNumber: "第5節", title: "", youtubeId: "" },
+                { epNumber: "第6節", title: "", youtubeId: "" },
+                { epNumber: "第7節", title: "", youtubeId: "" }
+            ]
+        },
+        {
+            id: "event_012",
+            chapterNumber: "012",
+            name: "奔跑！憤怒的快遞！",
+            episodes: [
+                { epNumber: "第0節", title: "官方PV", youtubeId: "7cIYSvOHeUM" },
+                { epNumber: "第1節", title: "英雄傳令官修帕", youtubeId: "D_CyigEQxYU" },
+                { epNumber: "第2節", title: "羊羮失業者修帕", youtubeId: "Q-kZnE3QBD8" },
+                { epNumber: "第3節", title: "鐵匠和修帕", youtubeId: "aC6zL6B_UW0" },
+                { epNumber: "第4節", title: "復仇之火與修帕", youtubeId: "JsnlO3eUMfc" },
+                { epNumber: "第5節", title: "蛋糕粉碎機修帕", youtubeId: "Ea7Q0nZmPuw" },
+                { epNumber: "第6節", title: "暴走族修帕", youtubeId: "56oV5TqPlGQ" },
+                { epNumber: "第7節", title: "奔跑吧修帕", youtubeId: "-bPIcetfh5M" }
+            ]
+        },
+        {
             id: "event_011",
             chapterNumber: "011",
             name: "湖中女神",
