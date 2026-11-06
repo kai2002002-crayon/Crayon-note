@@ -261,13 +261,13 @@ const STORY_DATA = {
             name: "夢想永恆的電綿羊",
             episodes: [
                 { epNumber: "第0節", title: "官方PV", youtubeId: "t_6ZdAN4CVQ" },
-                { epNumber: "第1節", title: "", youtubeId: "" },
-                { epNumber: "第2節", title: "", youtubeId: "" },
-                { epNumber: "第3節", title: "", youtubeId: "" },
-                { epNumber: "第4節", title: "", youtubeId: "" },
-                { epNumber: "第5節", title: "", youtubeId: "" },
-                { epNumber: "第6節", title: "", youtubeId: "" },
-                { epNumber: "第7節", title: "", youtubeId: "" }
+                { epNumber: "第1節", title: "遺棄之地的夢", youtubeId: "-PKlldZG2tM" },
+                { epNumber: "第2節", title: "失敗者的夢", youtubeId: "ZzVhc3jbEz4" },
+                { epNumber: "第3節", title: "流亡的夢", youtubeId: "L_vaqieiJIw" },
+                { epNumber: "第4節", title: "援助者的夢", youtubeId: "Pn7abW8ibVw" },
+                { epNumber: "第5節", title: "黑暗的夢", youtubeId: "qY86nMLZ6u0" },
+                { epNumber: "第6節", title: "願望之夢", youtubeId: "xk1LlHd4vFw" },
+                { epNumber: "第7節", title: "永遠做夢的人", youtubeId: "pIw9Qf-JCPo" }
             ]
         },
         {
