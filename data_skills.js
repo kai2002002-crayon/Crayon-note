@@ -92,82 +92,100 @@
         "skills": {
             "zh-TW": {
                 "normalAttack": {
-                    "basic": " []",
-                    "enhanced": " []"
+                    "basic": "發射火槍,對敵人造成範圍物理傷害。 [物理傷害:75%]",
+                    "enhanced": " 每3次攻擊會裝填火槍，恢復剩餘HP比例最低的友軍使者HP，接著朝敵人開火，造成範圍物理傷害。 [HP恢復:目標最大HP的15%] [物理傷害:150%]"
                 },
                 "normalSkill": {
-                    "name": "",
-                    "desc": "",
+                    "name": "向妖精王國敬禮",
+                    "desc": "以軍禮動作鼓提友軍士氣。恢復所有友軍使者的HP，並在一定時間內增加技能傷害量。",
                     "stats": [
-                        ""
+                        "HP恢復:目標最大HP的21%",
+                        "技能傷害量增加: 36%",
+                        "技能傷害量增加持續時間:10秒"
                     ]
                 },
                 "ultimateSkill": {
-                    "name": "",
-                    "desc": "",
+                    "name": "皇家同花順",
+                    "desc": "發射大砲，對敵人造成範園物理傷害。被砲擊命中的友軍會在一定時間內增加最大HP、並恢復HP。",
+                    "cooldown": "秒",
                     "stats": [
-                        ""
-                    ],
-                    "cooldown": "秒"
+                        "物理傷害:840%",
+                        "基本最大HP增加:23%",
+                        "最大HP增加持續時間:6秒",
+                        "HP恢復:目標最大HP的25%"
+                    ]
                 },
                 "passiveSkill": {
-                    "desc": "",
+                    "desc": "透過強化攻擊、普通技能或高級技能恢復後排友軍HP時，會額外賦予護盾。",
                     "stats": [
-                        "秒"
+                        "護盾:最大HP的42%",
+                        "護盾持續時間:6秒"
                     ]
                 }
             },
             "ja": {
                 "normalAttack": {
-                    "basic": " []",
-                    "enhanced": " []"
+                    "basic": "マスケットを発射して敵に囲物理ダメージを与える。 [物理ダメージ:75%]",
+                    "enhanced": "3回目の攻撃ごとにマスケットを装填し、残りHPの割合が最も低い味方使徒のHPを回復させる。その後、敵に発射して範囲物理ダメージを与える。 [HP回復:対象の最大HPの15%] [物理ダメージ:150%]"
                 },
                 "normalSkill": {
-                    "name": "",
-                    "desc": "",
+                    "name": "妖精王国に敬礼",
+                    "desc": "基本教練を行って味方の士気を高める。味方使徒全員のHPを回復させ、一定時間、スキルダメージ量を増加させる。",
                     "stats": [
-                        ""
+                        "HP回復:対象の最大HPの21%",
+                        "スキルダメージ量増加:36%",
+                        "スキルダメージ量増加の持続時間:10秒"
                     ]
                 },
                 "ultimateSkill": {
-                    "name": "",
-                    "desc": "",
+                    "name": "ロイヤルストレート",
+                    "desc": "大砲を発射して敵に範囲物理ダメージを与える。一定時間、砲撃が命中した味方の最大HPを増加させ、HPを回復させる。",
+                    "cooldown": "秒",
                     "stats": [
-                        ""
-                    ],
-                    "cooldown": "秒"
+                        "物理ダメージ:840%",
+                        "基本最大HP增加:23%",
+                        "最大HP増加の持続時間:6秒",
+                        "HP回復:対象の最大HPの25%"
+                    ]
                 },
                 "passiveSkill": {
-                    "desc": "",
+                    "desc": "後列の味方に強化攻撃、低学年スキル、高学年スキルでHP回復を適用時、追加でシールドを付与する。",
                     "stats": [
-                        ""
+                        "シールド: 最大HPの42%",
+                        "シールドの持続時間:6秒"
                     ]
                 }
             },
             "en": {
                 "normalAttack": {
-                    "basic": " []",
-                    "enhanced": " []"
+                    "basic": "Fires her musket, dealing AoE Physical Damage to enemies. [Physical DMG: 75%]",
+                    "enhanced": "Every third attack, she reloads her musket to recover HP of the allied Apostle with the lowest remaining HP Ratio. Then fires upon enemies, dealing AoE Physical Damage. [HP Recovery: 15% of the target's Max HP] [Physical DMG: 150%]"
                 },
                 "normalSkill": {
-                    "name": "",
-                    "desc": "",
+                    "name": "Saluting Sprite Kingdom",
+                    "desc": "Performs a military drill to boost allies' morale. Recovers\nHP of all allied Apostles and increases Skill Damage for a\nset period of time.",
                     "stats": [
-                        ""
+                        "HP Recovery: 21% of the target's Max HP",
+                        "Skill DMG Increase: 36%",
+                        "Skill DMG Increase Duration: 10s"
                     ]
                 },
                 "ultimateSkill": {
-                    "name": "",
-                    "desc": "",
+                    "name": "Royal Straight",
+                    "desc": "Fires a cannon, dealing AoE Physical Damage to enemies.\nIncreases Max HP of allies hit by the bombardment and recovers their HP for a set period of time.",
+                    "cooldown": "s",
                     "stats": [
-                        ""
-                    ],
-                    "cooldown": "s"
+                        "Physical DMG: 840%",
+                        "Increased Base Max HP: 23%",
+                        "Max HP Increase Duration: 6s",
+                        "HP Recovery: 25% of the target's Max HP"
+                    ]
                 },
                 "passiveSkill": {
-                    "desc": "",
+                    "desc": "When applying HP Recovery to Back Row allies using Enhanced Attack, Freshman Skill, or Senior Skill, additionally grants a Shield.",
                     "stats": [
-                        ""
+                        "Shield: 42% of Max HP",
+                        "Shield Duration: 6s"
                     ]
                 }
             }
