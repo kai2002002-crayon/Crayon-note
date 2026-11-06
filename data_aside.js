@@ -3326,94 +3326,124 @@
      "Polan": {
         "asideIcon": "",
         "totalName": {
-            "zh": "",
-            "ja": "",
-            "en": ""
+            "zh": "內心的少女",
+            "ja": "内なる少女",
+            "en": "The Girl Within"
         },
         "stars": {
             "1": {
                 "icon": "",
                 "name": {
-                    "zh": "",
-                    "ja": "",
-                    "en": ""
+                    "zh": "我也是少女啊",
+                    "ja": "私だって少せであります",
+                    "en": "I'm a Girl Too"
                 },
                 "desc": {
-                    "zh": "",
-                    "ja": "",
-                    "en": ""
+                    "zh": "增加穿戴者的最大HP、物理防禦力、魔法防禦力、爆擊抵抗與爆擊傷害抵抗。",
+                    "ja": "着用者の最大HP、物理防御力、魔法防御力、 会心抵抗、会心ダメージ抵抗が増加する。",
+                    "en": "Increases the bearer's Max HP, Physical Defense, Magical Defense, Critical Hit Resistance, and Critical Damage Resistance."
                 },
                 "effects": {
                     "zh": [
-                        ""
+                        "最大HP增加:6%",
+                        "物理防禦力增加:6%",
+                        "魔法防禦力增加:6%",
+                        "爆擊抵抗增加:6%",
+                        "爆擊傷害抵抗增加:6%"
                     ],
                     "ja": [
-                        ""
+                        "最大HP增加:6%",
+                        "物理防御力增加:6%",
+                        "魔法防御力增加:6%",
+                        "会心抵抗增加:6%",
+                        "会心ダメージ抵抗增加:6%"
                     ],
                     "en": [
-                        ""
+                        "Max HP Increase: 6%",
+                        "Physical DEF Increase: 6%",
+                        "Magical DEF Increase: 6%",
+                        "CRIT Resistance Increase: 6%",
+                        "CRIT DMG Resistance Increase: 6%"
                     ]
                 }
             },
             "2": {
                 "icon": "",
                 "name": {
-                    "zh": "",
-                    "ja": "",
-                    "en": ""
+                    "zh": "波朗破擊",
+                    "ja": "ボランバスター",
+                    "en": "Polan Buster"
                 },
                 "desc": {
-                    "zh": "",
-                    "ja": "",
-                    "en": ""
+                    "zh": "強化攻撃命中時，增加敵人受到的傷害量。高級技能的範圍增加。被砲擊命中的敵人會陷入昏迷，友軍則會增加攻擊力。",
+                    "ja": "強化攻撃命中時、敵の被ダメージ量を増加させる。高学年スキルの範囲が増加する。砲撃が命中した敵は気絶が付与され、味方は攻撃力が増加する。",
+                    "en": "When Enhanced Attack hits, increases the enemy's Incoming Damage. Increases the Senior Skill's AoE, When the bombardment hits, inflicts Stun on enemies and increases Attack for allies."
                 },
                 "effects": {
                     "zh": [
-                        ""
+                        "昏迷:陷入無法行動狀態。",
+                        "受到的傷害量增加:15%",
+                        "受到的傷害量增加持續時間:2秒",
+                        "昏迷持續時間:1.5秒",
+                        "攻擊力增加:25%",
+                        "攻擊力增加持續時間:6秒"
                     ],
                     "ja": [
-                        ""
+                        "気絕:行動不能状態になる。",
+                        "被ダメージ量增加:15%",
+                        "被ダメージ量増加の持続時間:2秒",
+                        "気絶の持続時間:1.5秒",
+                        "攻擊力增加:25%",
+                        "攻撃力増加の持続時間:6秒"
                     ],
                     "en": [
-                        ""
+                        "Stun: Becomes unable to act.",
+                        "Incoming DMG Increase: 15%",
+                        "Incoming DMG Increase Duration: 2s",
+                        "Stun Duration: 1.5s",
+                        "ATK Increase: 25%",
+                        "ATK Increase Duration: 6s"
                     ]
                 }
             },
             "3": {
                 "icon": "",
                 "name": {
-                    "zh": "",
-                    "ja": "",
-                    "en": ""
+                    "zh": "埃爾皮恩進軍旗",
+                    "ja": "エルフィンランド進軍旗",
+                    "en": "Erpien's Vanguard Banner"
                 },
                 "desc": {
-                    "zh": "",
-                    "ja": "",
-                    "en": ""
+                    "zh": "增加所有友軍對敵人造成的傷害量，並減少所有友軍受到敵人的傷害量。",
+                    "ja": "味方全員の敵への与ダメージ量を増加させ、味方全員の敵からの被ダメージ量を減少させる。",
+                    "en": "Increases all allies' Outgoing Damage to enemies. Reduces all allies' Incoming Damage from enemies."
                 },
                 "effects": {
                     "zh": [
-                        ""
+                        "傷害量增加:10.5%",
+                        "受到的傷害量減少:4.5%"
                     ],
                     "ja": [
-                        ""
+                        "ダメージ量増加:10.5%",
+                        "被ダメージ量減少:4.5%"
                     ],
                     "en": [
-                        ""
+                        "DMG Increase: 10.5%",
+                        "Incoming DMG Reduction: 4.5%"
                     ]
                 },
                 "globalEffects": {
                     "zh": [
-                        "全體 %",
-                        "全體 %"
+                        "全體物理攻擊力 3%",
+                        "全體物理防禦力 3%"
                     ],
                     "ja": [
-                        "全体 %",
-                        "全体 %"
+                        "全体物理攻擊力 3%",
+                        "全体物理防御力 3%"
                     ],
                     "en": [
-                        "All %",
-                        "All %"
+                        "All Physical ATK 3%",
+                        "All Physical DEF 3%"
                     ]
                 }
             }
