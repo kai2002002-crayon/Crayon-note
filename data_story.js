@@ -256,6 +256,21 @@ const STORY_DATA = {
             ]
         },
         {
+            id: "event_009",
+            chapterNumber: "009",
+            name: "皮可菈的導師恐懼症",
+            episodes: [
+                { epNumber: "第0節", title: "官方PV", youtubeId: "cgjhxQWtvVo" },
+                { epNumber: "第1節", title: "掌門弟子皮可菈", youtubeId: "0rowJ_dwpTM" },
+                { epNumber: "第2節", title: "逃亡者皮可菈", youtubeId: "SqltpNjfIjE" },
+                { epNumber: "第3節", title: "麵包店的皮可菈", youtubeId: "wYXiDyLMYac" },
+                { epNumber: "第4節", title: "露宿街頭的皮可菈", youtubeId: "QGF8YPuP8O0" },
+                { epNumber: "第5節", title: "宮廷的皮可菈", youtubeId: "nz40LhY4Btw" },
+                { epNumber: "第6節", title: "被坑的皮可菈", youtubeId: "8sYi_3a1fA8" },
+                { epNumber: "第7節", title: "迷路的皮可菈", youtubeId: "SMexWqsQYxU" }
+            ]
+        },
+        {
             id: "event_008",
             chapterNumber: "008",
             name: "再次綻放的藍玫瑰",
