@@ -256,6 +256,21 @@ const STORY_DATA = {
             ]
         },
         {
+            id: "event_011",
+            chapterNumber: "011",
+            name: "湖中女神",
+            episodes: [
+                { epNumber: "第0節", title: "官方PV", youtubeId: "wYF0K52TJ0U" },
+                { epNumber: "第1節", title: "在那湖裡⋯⋯", youtubeId: "MgJfhDhOJ8U" },
+                { epNumber: "第2節", title: "奈雅，好無聊！", youtubeId: "X4u6c5TAwN0" },
+                { epNumber: "第3節", title: "奈雅，掉進去了！", youtubeId: "6yZfrfdNk2Q" },
+                { epNumber: "第4節", title: "奈雅，變聰明了！", youtubeId: "F4vr6MiDSYI" },
+                { epNumber: "第5節", title: "奈雅，變強壯了！", youtubeId: "5Fzy6Pcdthg" },
+                { epNumber: "第6節", title: "奈雅，變年輕了！", youtubeId: "iQG1w7bVztk" },
+                { epNumber: "第7節", title: "奈雅，其實是⋯⋯！", youtubeId: "gfnGU836xXk" }
+            ]
+        },
+        {
             id: "event_010",
             chapterNumber: "010",
             name: "自行選擇的黑暗道路",
