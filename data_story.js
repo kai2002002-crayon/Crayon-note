@@ -256,18 +256,147 @@ const STORY_DATA = {
             ]
         },
         {
+            id: "event_024",
+            chapterNumber: "024",
+            name: "即使閃閃發光的未必都是黃金    ",
+            episodes: [
+                { epNumber: "第0節", title: "官方PV", youtubeId: "Ks-W4FGbugc" }
+            ]
+        },
+        {
+            id: "event_023",
+            chapterNumber: "023",
+            name: "冰封的你的名字之上    ",
+            episodes: [
+                { epNumber: "第0節", title: "官方PV", youtubeId: "LZ-xDYirVIo" }
+            ]
+        },
+        {
+            id: "event_022",
+            chapterNumber: "022",
+            name: "奇奇妙妙羅蕾特連結",
+            episodes: [
+                { epNumber: "第0節", title: "官方PV", youtubeId: "1Ys1SATOJwE" }
+            ]
+        },
+        {
+            id: "event_021",
+            chapterNumber: "021",
+            name: "艾利亞斯奧德賽",
+            episodes: [
+                { epNumber: "第0節", title: "官方PV", youtubeId: "YrVjAgHWofQ" },
+                { epNumber: "第1節", title: "", youtubeId: "" },
+                { epNumber: "第2節", title: "", youtubeId: "" },
+                { epNumber: "第3節", title: "", youtubeId: "" },
+                { epNumber: "第4節", title: "", youtubeId: "" },
+                { epNumber: "第5節", title: "", youtubeId: "" },
+                { epNumber: "第6節", title: "", youtubeId: "" },
+                { epNumber: "第7節", title: "", youtubeId: "" }
+            ]
+        },
+        {
+            id: "event_020",
+            chapterNumber: "020",
+            name: "午夜木偶",
+            episodes: [
+                { epNumber: "第0節", title: "官方PV", youtubeId: "_t-1mARoqUc" },
+                { epNumber: "第1節", title: "", youtubeId: "" },
+                { epNumber: "第2節", title: "", youtubeId: "" },
+                { epNumber: "第3節", title: "", youtubeId: "" },
+                { epNumber: "第4節", title: "", youtubeId: "" },
+                { epNumber: "第5節", title: "", youtubeId: "" },
+                { epNumber: "第6節", title: "", youtubeId: "" },
+                { epNumber: "第7節", title: "", youtubeId: "" }
+            ]
+        },
+        {
+            id: "event_019",
+            chapterNumber: "019",
+            name: "總有一天會再次到來的時機",
+            episodes: [
+                { epNumber: "第0節", title: "官方PV", youtubeId: "YkwSPPwqZuc" },
+                { epNumber: "第1節", title: "", youtubeId: "" },
+                { epNumber: "第2節", title: "", youtubeId: "" },
+                { epNumber: "第3節", title: "", youtubeId: "" },
+                { epNumber: "第4節", title: "", youtubeId: "" },
+                { epNumber: "第5節", title: "", youtubeId: "" },
+                { epNumber: "第6節", title: "", youtubeId: "" },
+                { epNumber: "第7節", title: "", youtubeId: "" }
+            ]
+        },
+        {
+            id: "event_018",
+            chapterNumber: "018",
+            name: "半個世界的格羅夫",
+            episodes: [
+                { epNumber: "第0節", title: "官方PV", youtubeId: "VpskLXBaPF8" },
+                { epNumber: "第1節", title: "", youtubeId: "" },
+                { epNumber: "第2節", title: "", youtubeId: "" },
+                { epNumber: "第3節", title: "", youtubeId: "" },
+                { epNumber: "第4節", title: "", youtubeId: "" },
+                { epNumber: "第5節", title: "", youtubeId: "" },
+                { epNumber: "第6節", title: "", youtubeId: "" },
+                { epNumber: "第7節", title: "", youtubeId: "" }
+            ]
+        },
+        {
+            id: "event_017",
+            chapterNumber: "017",
+            name: "縫向樂園",
+            episodes: [
+                { epNumber: "第0節", title: "官方PV", youtubeId: "TpTdNEqNidg" },
+                { epNumber: "第1節", title: "", youtubeId: "" },
+                { epNumber: "第2節", title: "", youtubeId: "" },
+                { epNumber: "第3節", title: "", youtubeId: "" },
+                { epNumber: "第4節", title: "", youtubeId: "" },
+                { epNumber: "第5節", title: "", youtubeId: "" },
+                { epNumber: "第6節", title: "", youtubeId: "" },
+                { epNumber: "第7節", title: "", youtubeId: "" }
+            ]
+        },
+        {
+            id: "event_016",
+            chapterNumber: "016",
+            name: "甜蜜苦澀的花園生活",
+            episodes: [
+                { epNumber: "第0節", title: "官方PV", youtubeId: "krlsd4PKUco" },
+                { epNumber: "第1節", title: "", youtubeId: "" },
+                { epNumber: "第2節", title: "", youtubeId: "" },
+                { epNumber: "第3節", title: "", youtubeId: "" },
+                { epNumber: "第4節", title: "", youtubeId: "" },
+                { epNumber: "第5節", title: "", youtubeId: "" },
+                { epNumber: "第6節", title: "", youtubeId: "" },
+                { epNumber: "第7節", title: "", youtubeId: "" }
+            ]
+        },
+        {
+            id: "event_015",
+            chapterNumber: "015",
+            name: "大膽放肆的驚魂聖誕",
+            episodes: [
+                { epNumber: "第0節", title: "官方PV", youtubeId: "Jp0du7PxzGM" },
+                { epNumber: "第1節", title: "", youtubeId: "" },
+                { epNumber: "第2節", title: "", youtubeId: "" },
+                { epNumber: "第3節", title: "", youtubeId: "" },
+                { epNumber: "第4節", title: "", youtubeId: "" },
+                { epNumber: "第5節", title: "", youtubeId: "" },
+                { epNumber: "第6節", title: "", youtubeId: "" },
+                { epNumber: "第7節", title: "", youtubeId: "" }
+            ]
+        },
+        {
             id: "event_014",
             chapterNumber: "014",
             name: "黑幫無王國",
             episodes: [
                 { epNumber: "第0節", title: "官方PV", youtubeId: "PmmcCvdQopw" },
-                { epNumber: "第1節", title: "歸來的黑幫", youtubeId: "https://youtu.be/ygO7ZztZI_A" },
-                { epNumber: "第2節", title: "重操舊業的黑幫", youtubeId: "https://youtu.be/8ZZFmDu-Hd0" },
-                { epNumber: "第3節", title: "教團的黑幫", youtubeId: "https://youtu.be/n86NCtyZIh0" },
-                { epNumber: "第4節", title: "金主與黑幫", youtubeId: "https://youtu.be/eDrKEkkM_qs" },
-                { epNumber: "第5節", title: "黃金與黑幫", youtubeId: "https://youtu.be/EgQdMnWEuT4" },
-                { epNumber: "第6節", title: "三角黑幫", youtubeId: "https://youtu.be/hbYaTkKNoMo" },
-                { epNumber: "第7節", title: "夢想中的黑幫", youtubeId: "https://youtu.be/VtovfuDE6MQ" }
+                { epNumber: "第1節", title: "歸來的黑幫", youtubeId: "ygO7ZztZI_A" },
+                { epNumber: "第2節", title: "重操舊業的黑幫", youtubeId: "8ZZFmDu-Hd0" },
+                { epNumber: "第3節", title: "教團的黑幫", youtubeId: "n86NCtyZIh0" },
+                { epNumber: "第4節", title: "金主與黑幫", youtubeId: "eDrKEkkM_qs" },
+                { epNumber: "第5節", title: "黃金與黑幫", youtubeId: "EgQdMnWEuT4" },
+                { epNumber: "第6節", title: "三角黑幫", youtubeId: "hbYaTkKNoMo" },
+                { epNumber: "第7節", title: "夢想中的黑幫", youtubeId: "VtovfuDE6MQ" }
             ]
         },
         {
