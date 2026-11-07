@@ -170,8 +170,8 @@ const STORY_DATA = {
     event: [
         
         {
-            id: "event_029",
-            chapterNumber: "029",
+            id: "event_030",
+            chapterNumber: "030",
             name: "篡奪與脫序之間",
             episodes: [
                 { epNumber: "第0節", title: "官方PV", youtubeId: "M62O1z6ajLk" },
@@ -185,8 +185,8 @@ const STORY_DATA = {
             ]
         },
         {
-            id: "event_028",
-            chapterNumber: "028",
+            id: "event_029",
+            chapterNumber: "029",
             name: "乘浪而來的企鵝人",
             episodes: [
                 { epNumber: "第0節", title: "官方PV", youtubeId: "K-NtiLSm8Ow" },
@@ -200,8 +200,8 @@ const STORY_DATA = {
             ]
         },
         {
-            id: "event_027",
-            chapterNumber: "027",
+            id: "event_028",
+            chapterNumber: "028",
             name: "妄想狂大騷動",
             episodes: [
                 { epNumber: "第0節", title: "官方PV", youtubeId: "DO3gvA002gs" },
@@ -215,8 +215,8 @@ const STORY_DATA = {
             ]
         },
         {
-            id: "event_026",
-            chapterNumber: "026",
+            id: "event_027",
+            chapterNumber: "027",
             name: "為誰祈禱",
             episodes: [
                 { epNumber: "第0節", title: "官方PV", youtubeId: "Odz_0FRWgRI" },
@@ -237,8 +237,8 @@ const STORY_DATA = {
             ]
         },
         {
-            id: "event_025",
-            chapterNumber: "025",
+            id: "event_026",
+            chapterNumber: "026",
             name: "無處可去的書籤",
             episodes: [
                 { epNumber: "第0節", title: "官方PV", youtubeId: "v6-Zhe4qM6c" },
@@ -256,32 +256,32 @@ const STORY_DATA = {
             ]
         },
         {
-            id: "event_024",
-            chapterNumber: "024",
+            id: "event_025",
+            chapterNumber: "025",
             name: "即使閃閃發光的未必都是黃金    ",
             episodes: [
                 { epNumber: "第0節", title: "官方PV", youtubeId: "Ks-W4FGbugc" }
             ]
         },
         {
-            id: "event_023",
-            chapterNumber: "023",
+            id: "event_024",
+            chapterNumber: "024",
             name: "冰封的你的名字之上    ",
             episodes: [
                 { epNumber: "第0節", title: "官方PV", youtubeId: "LZ-xDYirVIo" }
             ]
         },
         {
-            id: "event_022",
-            chapterNumber: "022",
+            id: "event_023",
+            chapterNumber: "023",
             name: "奇奇妙妙羅蕾特連結",
             episodes: [
                 { epNumber: "第0節", title: "官方PV", youtubeId: "1Ys1SATOJwE" }
             ]
         },
         {
-            id: "event_021",
-            chapterNumber: "021",
+            id: "event_022",
+            chapterNumber: "022",
             name: "艾利亞斯奧德賽",
             episodes: [
                 { epNumber: "第0節", title: "官方PV", youtubeId: "YrVjAgHWofQ" },
@@ -295,8 +295,8 @@ const STORY_DATA = {
             ]
         },
         {
-            id: "event_020",
-            chapterNumber: "020",
+            id: "event_021",
+            chapterNumber: "021",
             name: "午夜木偶",
             episodes: [
                 { epNumber: "第0節", title: "官方PV", youtubeId: "_t-1mARoqUc" },
@@ -310,8 +310,8 @@ const STORY_DATA = {
             ]
         },
         {
-            id: "event_019",
-            chapterNumber: "019",
+            id: "event_020",
+            chapterNumber: "020",
             name: "總有一天會再次到來的時機",
             episodes: [
                 { epNumber: "第0節", title: "官方PV", youtubeId: "YkwSPPwqZuc" },
@@ -325,8 +325,8 @@ const STORY_DATA = {
             ]
         },
         {
-            id: "event_018",
-            chapterNumber: "018",
+            id: "event_019",
+            chapterNumber: "019",
             name: "半個世界的格羅夫",
             episodes: [
                 { epNumber: "第0節", title: "官方PV", youtubeId: "VpskLXBaPF8" },
@@ -340,8 +340,8 @@ const STORY_DATA = {
             ]
         },
         {
-            id: "event_017",
-            chapterNumber: "017",
+            id: "event_018",
+            chapterNumber: "018",
             name: "縫向樂園",
             episodes: [
                 { epNumber: "第0節", title: "官方PV", youtubeId: "TpTdNEqNidg" },
@@ -355,11 +355,26 @@ const STORY_DATA = {
             ]
         },
         {
-            id: "event_016",
-            chapterNumber: "016",
+            id: "event_017",
+            chapterNumber: "017",
             name: "甜蜜苦澀的花園生活",
             episodes: [
                 { epNumber: "第0節", title: "官方PV", youtubeId: "krlsd4PKUco" },
+                { epNumber: "第1節", title: "", youtubeId: "" },
+                { epNumber: "第2節", title: "", youtubeId: "" },
+                { epNumber: "第3節", title: "", youtubeId: "" },
+                { epNumber: "第4節", title: "", youtubeId: "" },
+                { epNumber: "第5節", title: "", youtubeId: "" },
+                { epNumber: "第6節", title: "", youtubeId: "" },
+                { epNumber: "第7節", title: "", youtubeId: "" }
+            ]
+        },
+        {
+            id: "event_016",
+            chapterNumber: "016",
+            name: "凝結記憶的池塘",
+            episodes: [
+                { epNumber: "第0節", title: "官方PV", youtubeId: "Zuo9TFdWPR4" },
                 { epNumber: "第1節", title: "", youtubeId: "" },
                 { epNumber: "第2節", title: "", youtubeId: "" },
                 { epNumber: "第3節", title: "", youtubeId: "" },
