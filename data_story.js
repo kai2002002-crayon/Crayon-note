@@ -256,6 +256,21 @@ const STORY_DATA = {
             ]
         },
         {
+            id: "event_014",
+            chapterNumber: "014",
+            name: "黑幫無王國",
+            episodes: [
+                { epNumber: "第0節", title: "官方PV", youtubeId: "PmmcCvdQopw" },
+                { epNumber: "第1節", title: "歸來的黑幫", youtubeId: "https://youtu.be/ygO7ZztZI_A" },
+                { epNumber: "第2節", title: "重操舊業的黑幫", youtubeId: "https://youtu.be/8ZZFmDu-Hd0" },
+                { epNumber: "第3節", title: "教團的黑幫", youtubeId: "https://youtu.be/n86NCtyZIh0" },
+                { epNumber: "第4節", title: "金主與黑幫", youtubeId: "https://youtu.be/eDrKEkkM_qs" },
+                { epNumber: "第5節", title: "黃金與黑幫", youtubeId: "https://youtu.be/EgQdMnWEuT4" },
+                { epNumber: "第6節", title: "三角黑幫", youtubeId: "https://youtu.be/hbYaTkKNoMo" },
+                { epNumber: "第7節", title: "夢想中的黑幫", youtubeId: "https://youtu.be/VtovfuDE6MQ" }
+            ]
+        },
+        {
             id: "event_013",
             chapterNumber: "013",
             name: "夢想永恆的電綿羊",
