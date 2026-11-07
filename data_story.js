@@ -360,13 +360,13 @@ const STORY_DATA = {
             name: "甜蜜苦澀的花園生活",
             episodes: [
                 { epNumber: "第0節", title: "官方PV", youtubeId: "krlsd4PKUco" },
-                { epNumber: "第1節", title: "", youtubeId: "" },
-                { epNumber: "第2節", title: "", youtubeId: "" },
-                { epNumber: "第3節", title: "", youtubeId: "" },
-                { epNumber: "第4節", title: "", youtubeId: "" },
-                { epNumber: "第5節", title: "", youtubeId: "" },
-                { epNumber: "第6節", title: "", youtubeId: "" },
-                { epNumber: "第7節", title: "", youtubeId: "" }
+                { epNumber: "第1節", title: "被盜的花園", youtubeId: "u_BmuhqTz1A" },
+                { epNumber: "第2節", title: "甜美的花園", youtubeId: "DajsnKfRiWs" },
+                { epNumber: "第3節", title: "線索的花園", youtubeId: "LgLvk5C0IZU" },
+                { epNumber: "第4節", title: "袐密的花園", youtubeId: "eUuk3tjintI" },
+                { epNumber: "第5節", title: "鑰匙的花園", youtubeId: "wVptI0U9M2Q" },
+                { epNumber: "第6節", title: "牽手的花園", youtubeId: "BquXVRiYPTo" },
+                { epNumber: "第7節", title: "你和我的花園", youtubeId: "yrvaWrOt47w" }
             ]
         },
         {
