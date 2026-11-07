@@ -390,13 +390,13 @@ const STORY_DATA = {
             name: "大膽放肆的驚魂聖誕",
             episodes: [
                 { epNumber: "第0節", title: "官方PV", youtubeId: "Jp0du7PxzGM" },
-                { epNumber: "第1節", title: "惡夢自動販賣機與瑟琳娜", youtubeId: "https://youtu.be/SdPEU2mWgm8" },
-                { epNumber: "第2節", title: "大樹與瑟琳娜", youtubeId: "https://youtu.be/suciNW8YRL0" },
-                { epNumber: "第3節", title: "間諜與瑟琳娜", youtubeId: "https://youtu.be/XJvFSiyGpBE" },
-                { epNumber: "第4節", title: "鹿？與瑟琳娜", youtubeId: "https://youtu.be/zlz3oo3UBgg" },
-                { epNumber: "第5節", title: "魔靈與瑟琳娜", youtubeId: "https://youtu.be/wPAnlyOZhfo" },
-                { epNumber: "第6節", title: "毛毛雨與瑟琳娜", youtubeId: "https://youtu.be/mIZNQDEkB7g" },
-                { epNumber: "第7節", title: "聖誕節的瑟琳娜", youtubeId: "https://youtu.be/M50Btrn2Ywc" }
+                { epNumber: "第1節", title: "惡夢自動販賣機與瑟琳娜", youtubeId: "SdPEU2mWgm8" },
+                { epNumber: "第2節", title: "大樹與瑟琳娜", youtubeId: "suciNW8YRL0" },
+                { epNumber: "第3節", title: "間諜與瑟琳娜", youtubeId: "XJvFSiyGpBE" },
+                { epNumber: "第4節", title: "鹿？與瑟琳娜", youtubeId: "zlz3oo3UBgg" },
+                { epNumber: "第5節", title: "魔靈與瑟琳娜", youtubeId: "wPAnlyOZhfo" },
+                { epNumber: "第6節", title: "毛毛雨與瑟琳娜", youtubeId: "mIZNQDEkB7g" },
+                { epNumber: "第7節", title: "聖誕節的瑟琳娜", youtubeId: "M50Btrn2Ywc" }
             ]
         },
         {
