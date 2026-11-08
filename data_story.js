@@ -345,13 +345,13 @@ const STORY_DATA = {
             name: "縫向樂園",
             episodes: [
                 { epNumber: "第0節", title: "官方PV", youtubeId: "TpTdNEqNidg" },
-                { epNumber: "第1節", title: "", youtubeId: "" },
-                { epNumber: "第2節", title: "", youtubeId: "" },
-                { epNumber: "第3節", title: "", youtubeId: "" },
-                { epNumber: "第4節", title: "", youtubeId: "" },
-                { epNumber: "第5節", title: "", youtubeId: "" },
-                { epNumber: "第6節", title: "", youtubeId: "" },
-                { epNumber: "第7節", title: "", youtubeId: "" }
+                { epNumber: "第1節", title: "被趕走的玩偶師", youtubeId: "UqRd-ENI2vQ" },
+                { epNumber: "第2節", title: "街頭的玩偶師", youtubeId: "RaWjcQnHAAU" },
+                { epNumber: "第3節", title: "孤獨的玩偶師", youtubeId: "dNijvCBsglE" },
+                { epNumber: "第4節", title: "咒語與玩偶師", youtubeId: "XhAWMhQ0Rhk" },
+                { epNumber: "第5節", title: "熱情的玩偶師", youtubeId: "mVROYbVsvW8" },
+                { epNumber: "第6節", title: "暴風中的玩偶師", youtubeId: "kZdrJU0W3aY" },
+                { epNumber: "第7節", title: "樂土的玩偶師", youtubeId: "HaaEv_4gUIQ" }
             ]
         },
         {
@@ -375,13 +375,13 @@ const STORY_DATA = {
             name: "凝結記憶的池塘",
             episodes: [
                 { epNumber: "第0節", title: "官方PV", youtubeId: "Zuo9TFdWPR4" },
-                { epNumber: "第1節", title: "魔靈山的毛毛雨", youtubeId: "https://youtu.be/LtT1JybFvVQ" },
-                { epNumber: "第2節", title: "魔靈洞穴的毛毛雨", youtubeId: "https://youtu.be/cLWT5FXIBk0" },
-                { epNumber: "第3節", title: "獨自落下的毛毛雨", youtubeId: "https://youtu.be/TaJUtPXT6ls" },
-                { epNumber: "第4節", title: "思念中的毛毛雨", youtubeId: "https://youtu.be/7jpveM8CitI" },
-                { epNumber: "第5節", title: "姊姊家的毛毛雨", youtubeId: "https://youtu.be/mUTH7on_4fo" },
-                { epNumber: "第6節", title: "記憶中的毛毛雨", youtubeId: "https://youtu.be/BTn56Lonp0s" },
-                { epNumber: "第7節", title: "夢醒時分的毛毛雨", youtubeId: "https://youtu.be/Lh_19CQhAoQ" }
+                { epNumber: "第1節", title: "魔靈山的毛毛雨", youtubeId: "LtT1JybFvVQ" },
+                { epNumber: "第2節", title: "魔靈洞穴的毛毛雨", youtubeId: "cLWT5FXIBk0" },
+                { epNumber: "第3節", title: "獨自落下的毛毛雨", youtubeId: "TaJUtPXT6ls" },
+                { epNumber: "第4節", title: "思念中的毛毛雨", youtubeId: "7jpveM8CitI" },
+                { epNumber: "第5節", title: "姊姊家的毛毛雨", youtubeId: "mUTH7on_4fo" },
+                { epNumber: "第6節", title: "記憶中的毛毛雨", youtubeId: "BTn56Lonp0s" },
+                { epNumber: "第7節", title: "夢醒時分的毛毛雨", youtubeId: "Lh_19CQhAoQ" }
             ]
         },
         {
