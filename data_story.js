@@ -315,13 +315,13 @@ const STORY_DATA = {
             name: "總有一天會再次到來的時機",
             episodes: [
                 { epNumber: "第0節", title: "官方PV", youtubeId: "YkwSPPwqZuc" },
-                { epNumber: "第1節", title: "時間的意志", youtubeId: "" },
-                { epNumber: "第2節", title: "迷失時空", youtubeId: "" },
-                { epNumber: "第3節", title: "倒轉時間", youtubeId: "" },
-                { epNumber: "第4節", title: "中場休息", youtubeId: "" },
-                { epNumber: "第5節", title: "就在此刻", youtubeId: "" },
-                { epNumber: "第6節", title: "時空戰警", youtubeId: "" },
-                { epNumber: "第7節", title: "時間連續體", youtubeId: "" }
+                { epNumber: "第1節", title: "時間的意志", youtubeId: "wFHZG9Jw0v0" },
+                { epNumber: "第2節", title: "迷失時空", youtubeId: "3UrbYrURkuc" },
+                { epNumber: "第3節", title: "倒轉時間", youtubeId: "5P1Hb0sRXzI" },
+                { epNumber: "第4節", title: "中場休息", youtubeId: "9Jsi8jdkDW0" },
+                { epNumber: "第5節", title: "就在此刻", youtubeId: "8mtbytr5lUM" },
+                { epNumber: "第6節", title: "時空戰警", youtubeId: "Ex-dlpz0ByQ" },
+                { epNumber: "第7節", title: "時間連續體", youtubeId: "rmHin8v4wSs" }
             ]
         },
         {
