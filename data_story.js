@@ -330,13 +330,13 @@ const STORY_DATA = {
             name: "半個世界的格羅夫",
             episodes: [
                 { epNumber: "第0節", title: "官方PV", youtubeId: "VpskLXBaPF8" },
-                { epNumber: "第1節", title: "", youtubeId: "" },
-                { epNumber: "第2節", title: "", youtubeId: "" },
-                { epNumber: "第3節", title: "", youtubeId: "" },
-                { epNumber: "第4節", title: "", youtubeId: "" },
-                { epNumber: "第5節", title: "", youtubeId: "" },
-                { epNumber: "第6節", title: "", youtubeId: "" },
-                { epNumber: "第7節", title: "", youtubeId: "" }
+                { epNumber: "第1節", title: "暗網之王，駭客", youtubeId: "" },
+                { epNumber: "第2節", title: "無計畫無節制的駭客", youtubeId: "" },
+                { epNumber: "第3節", title: "祕密場所的駭客", youtubeId: "" },
+                { epNumber: "第4節", title: "真誠的友善駭客", youtubeId: "" },
+                { epNumber: "第5節", title: "駭人幸福", youtubeId: "" },
+                { epNumber: "第6節", title: "駭入妳的本心", youtubeId: "" },
+                { epNumber: "第7節", title: "破解生活駭客", youtubeId: "" }
             ]
         },
         {
