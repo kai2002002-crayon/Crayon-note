@@ -258,7 +258,7 @@ const STORY_DATA = {
         {
             id: "event_025",
             chapterNumber: "025",
-            name: "即使閃閃發光的未必都是黃金    ",
+            name: "即使閃閃發光的未必都是黃金",
             episodes: [
                 { epNumber: "第0節", title: "官方PV", youtubeId: "Ks-W4FGbugc" }
             ]
@@ -266,7 +266,7 @@ const STORY_DATA = {
         {
             id: "event_024",
             chapterNumber: "024",
-            name: "冰封的你的名字之上    ",
+            name: "冰封的你的名字之上",
             episodes: [
                 { epNumber: "第0節", title: "官方PV", youtubeId: "LZ-xDYirVIo" }
             ]
@@ -315,13 +315,13 @@ const STORY_DATA = {
             name: "總有一天會再次到來的時機",
             episodes: [
                 { epNumber: "第0節", title: "官方PV", youtubeId: "YkwSPPwqZuc" },
-                { epNumber: "第1節", title: "", youtubeId: "" },
-                { epNumber: "第2節", title: "", youtubeId: "" },
-                { epNumber: "第3節", title: "", youtubeId: "" },
-                { epNumber: "第4節", title: "", youtubeId: "" },
-                { epNumber: "第5節", title: "", youtubeId: "" },
-                { epNumber: "第6節", title: "", youtubeId: "" },
-                { epNumber: "第7節", title: "", youtubeId: "" }
+                { epNumber: "第1節", title: "時間的意志", youtubeId: "" },
+                { epNumber: "第2節", title: "迷失時空", youtubeId: "" },
+                { epNumber: "第3節", title: "倒轉時間", youtubeId: "" },
+                { epNumber: "第4節", title: "中場休息", youtubeId: "" },
+                { epNumber: "第5節", title: "就在此刻", youtubeId: "" },
+                { epNumber: "第6節", title: "時空戰警", youtubeId: "" },
+                { epNumber: "第7節", title: "時間連續體", youtubeId: "" }
             ]
         },
         {
