@@ -330,13 +330,13 @@ const STORY_DATA = {
             name: "半個世界的格羅夫",
             episodes: [
                 { epNumber: "第0節", title: "官方PV", youtubeId: "VpskLXBaPF8" },
-                { epNumber: "第1節", title: "暗網之王，駭客", youtubeId: "" },
-                { epNumber: "第2節", title: "無計畫無節制的駭客", youtubeId: "" },
-                { epNumber: "第3節", title: "祕密場所的駭客", youtubeId: "" },
-                { epNumber: "第4節", title: "真誠的友善駭客", youtubeId: "" },
-                { epNumber: "第5節", title: "駭人幸福", youtubeId: "" },
-                { epNumber: "第6節", title: "駭入妳的本心", youtubeId: "" },
-                { epNumber: "第7節", title: "破解生活駭客", youtubeId: "" }
+                { epNumber: "第1節", title: "暗網之王，駭客", youtubeId: "_QGzXrWGRAk" },
+                { epNumber: "第2節", title: "無計畫無節制的駭客", youtubeId: "0W21VDgYgzg" },
+                { epNumber: "第3節", title: "祕密場所的駭客", youtubeId: "dFpN0eS_EVU" },
+                { epNumber: "第4節", title: "真誠的友善駭客", youtubeId: "-NZT7L5MUsg" },
+                { epNumber: "第5節", title: "駭入幸福", youtubeId: "_RMVps7AwQM" },
+                { epNumber: "第6節", title: "駭入妳的本心", youtubeId: "1NbDOj4iHJ0" },
+                { epNumber: "第7節", title: "破解生活駭客", youtubeId: "rK5qarHew2o" }
             ]
         },
         {
