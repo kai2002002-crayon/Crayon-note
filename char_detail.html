@@ -18,6 +18,31 @@
         <link rel="preconnect" href="https://i.postimg.cc">
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
         <script>
+            (function() {
+                // 取得當前網址的參數
+                const urlParams = new URLSearchParams(window.location.search);
+                const charName = urlParams.get('char');
+            
+                // 建立標準網址 (Canonical URL)
+                let canonicalUrl = "https://crayon-note.vercel.app/char_detail.html";
+                if (charName) {
+                    // 將中文字元轉碼，確保與 Sitemap 一致
+                    canonicalUrl += "?char=" + encodeURIComponent(charName);
+                }
+            
+                // 動態插入 <link rel="canonical"> 標籤
+                const link = document.createElement('link');
+                link.rel = 'canonical';
+                link.href = canonicalUrl;
+                document.head.appendChild(link);
+            
+                // 順便動態修改網頁標題 (這對 Google 區分網頁也非常重要！)
+                if (charName) {
+                    document.title = charName + " - 角色詳情";
+                }
+            })();
+        </script>
+        <script>
             const isDarkMode = localStorage.getItem('theme') === 'dark' || 
                                (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
             if (isDarkMode) { document.documentElement.classList.add('dark'); }
