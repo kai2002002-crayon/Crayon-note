@@ -285,13 +285,13 @@ const STORY_DATA = {
             name: "艾利亞斯奧德賽",
             episodes: [
                 { epNumber: "第0節", title: "官方PV", youtubeId: "YrVjAgHWofQ" },
-                { epNumber: "第1節", title: "", youtubeId: "" },
-                { epNumber: "第2節", title: "", youtubeId: "" },
-                { epNumber: "第3節", title: "", youtubeId: "" },
-                { epNumber: "第4節", title: "", youtubeId: "" },
-                { epNumber: "第5節", title: "", youtubeId: "" },
-                { epNumber: "第6節", title: "", youtubeId: "" },
-                { epNumber: "第7節", title: "", youtubeId: "" }
+                { epNumber: "第1節", title: "艾利亞斯之主", youtubeId: "oSjWGK52AUo" },
+                { epNumber: "第2節", title: "英雄的第一個寶物", youtubeId: "TeEsHUmLVcQ" },
+                { epNumber: "第3節", title: "英雄的第二個寶物", youtubeId: "eCDL3ecO5eo" },
+                { epNumber: "第4節", title: "英雄的第三個寶物", youtubeId: "h2wOEyZsiNQ" },
+                { epNumber: "第5節", title: "英雄的第四個寶物", youtubeId: "wP9rMfmeRh4" },
+                { epNumber: "第6節", title: "英雄的第五個寶物", youtubeId: "2DmbxSoz0S8" },
+                { epNumber: "第7節", title: "英雄的最後一個寶物", youtubeId: "LR5G5_MAOmY" }
             ]
         },
         {
@@ -300,13 +300,13 @@ const STORY_DATA = {
             name: "午夜木偶",
             episodes: [
                 { epNumber: "第0節", title: "官方PV", youtubeId: "_t-1mARoqUc" },
-                { epNumber: "第1節", title: "", youtubeId: "" },
-                { epNumber: "第2節", title: "", youtubeId: "" },
-                { epNumber: "第3節", title: "", youtubeId: "" },
-                { epNumber: "第4節", title: "", youtubeId: "" },
-                { epNumber: "第5節", title: "", youtubeId: "" },
-                { epNumber: "第6節", title: "", youtubeId: "" },
-                { epNumber: "第7節", title: "", youtubeId: "" }
+                { epNumber: "第1節", title: "玩偶的詛咒", youtubeId: "8aV7wHUYyrc" },
+                { epNumber: "第2節", title: "玩偶之家", youtubeId: "qLeQY717yeo" },
+                { epNumber: "第3節", title: "玩偶的第一個考驗", youtubeId: "FVIpreN2lcU" },
+                { epNumber: "第4節", title: "玩偶的第二個考驗", youtubeId: "BxaT6zUE_Hk" },
+                { epNumber: "第5節", title: "玩偶的新主人", youtubeId: "rVr0CVNCx40" },
+                { epNumber: "第6節", title: "玩偶的真面目", youtubeId: "ZwU39D_pKqM" },
+                { epNumber: "第7節", title: "玩偶的真正主人", youtubeId: "C8VuVeCDQc8" }
             ]
         },
         {
