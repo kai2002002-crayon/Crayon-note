@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>坨坨桌布</title>
+        <script src="data_config.js"></script>
+        <script src="data_core.js"></script>
+        <link rel="stylesheet" href="sprites.css">
+        <link rel="stylesheet" href="./style.css">
+        <link id="dynamicFavicon" rel="icon" href="./favicon.png" type="image/png">
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="./spine-player.min.css">
+        <script src="./spine-player.min.js"></script>
+        <script>
+            const isDarkMode = localStorage.getItem('theme') === 'dark' || 
+                               (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            if (isDarkMode) { document.documentElement.classList.add('dark'); }
+            window.currentLang = localStorage.getItem('user_lang') || "zh-TW";
+        </script>
+        <style>
+            /* 🌟 桌布模式專用設定：全螢幕、無捲動、背景透明 */
+            html, body {
+                margin: 0; padding: 0; width: 100vw; height: 100vh;
+                overflow: hidden; background: transparent !important;
+                font-family: 'Noto Sans TC', sans-serif;
+            }
+
+            /* 將原本的 UI 包裝預設隱藏並提高層級 */
+            #uiWrapper {
+                position: relative; z-index: 50 !important;
+                display: none !important; opacity: 0;
+                transition: opacity 0.3s ease-in-out;
+                max-width: 1400px; margin: 0 auto; padding: 1rem;
+            }
+
+            /* 畫布與全螢幕配置 */
+            #spineViewerSection {
+                margin: 0; padding: 0; border: none; border-radius: 0;
+                width: 100vw; height: 100vh; position: absolute; inset: 0;
+                box-shadow: none; background: none !important;
+                z-index: 10;
+            }
+            #spineCanvasContainer {
+                width: 100vw !important; height: 100vh !important;
+                border: none; border-radius: 0; margin: 0;
+                background: transparent !important; /* 讓 WE 決定背景 */
+            }
+
+            .spine-player-controls { display: none !important; }
+            #spineCanvasContainer canvas {
+                width: 100% !important; height: 100% !important;
+                display: block !important; touch-action: none;
+            }
+
+            /* 桌面時鐘樣式 */
+            .desktop-clock-shadow {
+                text-shadow: 0 4px 15px rgba(0,0,0,0.6), 0 1px 3px rgba(0,0,0,0.8);
+            }
+
+            .spine-player-loading-custom {
+                position: absolute; top: 50%; left: 50%;
+                width: 80px; height: 80px; margin: -40px 0 0 -40px;
+                background: url('./golden_crayon.png') no-repeat center center;
+                background-size: contain;
+                animation: crayonFloat 1.5s ease-in-out infinite;
+                z-index: 10;
+            }
+            @keyframes crayonFloat {
+                0%, 100% { transform: translateY(0) scale(1); filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.5)); }
+                50% { transform: translateY(-10px) scale(1.05); filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.9)); }
+            }
+
+            /* 原有樣式保留 (折疊、雙面特效等) */
+            ::-webkit-scrollbar { width: 6px; height: 6px; }
+            ::-webkit-scrollbar-track { background: transparent; }
+            ::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 10px; }
+            .dark ::-webkit-scrollbar-thumb { background-color: #475569; }
+            
+            .collapsible-content { transition: max-height 0.3s ease-out, opacity 0.3s ease-out; overflow: hidden; }
+            .collapsed { max-height: 0; opacity: 0; margin-top: 0 !important; overflow: hidden;}
+            .custom-select-btn { -webkit-tap-highlight-color: transparent; }
+
+            @keyframes dualColorPulse {
+                0% { border-color: var(--c1); box-shadow: 0 0 6px var(--c1); }
+                50% { border-color: var(--c2); box-shadow: 0 0 6px var(--c2); }
+                100% { border-color: var(--c1); box-shadow: 0 0 6px var(--c1); }
+            }
+            .dual-border-anim { --c1: #c084fc; --c2: #4ade80; animation: dualColorPulse 3s ease-in-out infinite; }
+            
+            @keyframes pentaColorPulse {
+                0% { border-color: #4ade80; box-shadow: 0 0 6px #4ade80; }
+                20% { border-color: #60a5fa; box-shadow: 0 0 6px #60a5fa; }
+                40% { border-color: #f87171; box-shadow: 0 0 6px #f87171; }
+                60% { border-color: #facc15; box-shadow: 0 0 6px #facc15; }
+                80% { border-color: #c084fc; box-shadow: 0 0 6px #c084fc; }
+                100% { border-color: #4ade80; box-shadow: 0 0 6px #4ade80; }
+            }
+            .penta-border-anim { animation: pentaColorPulse 5s ease-in-out infinite; }
+            @keyframes pentaBorderNoShadow {
+                0% { border-left-color: #4ade80; }
+                20% { border-left-color: #60a5fa; }
+                40% { border-left-color: #f87171; }
+                60% { border-left-color: #facc15; }
+                80% { border-left-color: #c084fc; }
+                100% { border-left-color: #4ade80; }
+            }
+            .penta-border-title-anim { animation: pentaBorderNoShadow 5s ease-in-out infinite; }
+            
+            @keyframes pentaTextFlow {
+                0% { background-position: 200% center; }
+                100% { background-position: 0% center; }
+            }
+            .penta-text-anim {
+                background: linear-gradient(90deg, #4ade80, #60a5fa, #f87171, #facc15, #c084fc, #4ade80);
+                background-size: 200% auto;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                animation: pentaTextFlow 4s linear infinite;
+            }
+            
+            @keyframes dualTextFlow {
+                0% { background-position: 200% center; }
+                100% { background-position: 0% center; }
+            }
+            .dual-text-anim {
+                --c1: #c084fc; --c2: #4ade80;
+                background: linear-gradient(90deg, var(--c1), var(--c2), var(--c1));
+                background-size: 200% auto;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                animation: dualTextFlow 3s linear infinite;
+            }
+        </style>
+    </head>
+    <body class="text-gray-800 dark:text-gray-200 transition-colors duration-300">
+        
+        <!-- 🌟 新增：全螢幕超迷你小人隨機出現的容器 (層級低於畫布，且不阻擋點擊) -->
+        <div id="wallpaperMiniContainer" class="fixed inset-0 pointer-events-none z-[5] overflow-hidden"></div>
+
+        <!-- 🌟 半透明黑色遮罩 (雙擊呼叫 UI 用) -->
+        <div id="uiBackdrop" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-[40] opacity-0 pointer-events-none transition-opacity duration-300" style="display: none !important;"></div>
+
+        <!-- 🌟 桌布時鐘：固定在角色左側 (畫面右側偏中) -->
+        <div id="desktopClock" class="fixed bottom-[15vh] right-[35vw] flex flex-col items-start z-0 pointer-events-none text-white desktop-clock-shadow">
+            <div id="clockDate" class="text-3xl sm:text-4xl font-black tracking-widest text-amber-300 mb-1">DD/MM/YYYY</div>
+            <div id="clockTime" class="text-5xl sm:text-6xl font-black tracking-wider flex items-baseline gap-2">
+                <span id="clockTimeDigits">HH:MM:SS</span> 
+                <span id="clockAmPm" class="text-2xl sm:text-3xl text-amber-500 font-bold">AM</span>
+            </div>
+        </div>
+
+        <div id="uiWrapper" class="space-y-4">
+            <header class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md p-4 sm:p-5 rounded-2xl shadow-md border-4 border-amber-400 dark:border-slate-600 flex justify-between items-center">
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-black text-amber-950 dark:text-amber-400 mb-0.5 flex items-center gap-2">
+                        <div class="sprite-base sprite-common sprite-Title_Rim scale-[0.6] origin-center shrink-0"></div>
+                        <span class="-ml-2" data-i18n="ui_title">坨坨桌布)</span>
+                    </h1>
+                </div>
+                <div class="flex items-center gap-2 shrink-0">
+                <!-- 🌟 新增：切換 12/24 小時制按鈕 -->
+                <button onclick="toggleTimeFormat()" class="px-2 py-1.5 sm:px-3 sm:py-2 text-[10px] sm:text-xs bg-slate-600 text-white font-bold rounded-lg shadow hover:bg-slate-700 transition shrink-0">
+                🕒 <span id="timeFormatText">12H</span>
+                </button>
+                    <select id="langSelect" onchange="changeLanguage(this.value)" class="bg-amber-100 dark:bg-slate-700 text-amber-900 dark:text-white border border-amber-300 dark:border-slate-500 text-xs sm:text-sm font-bold rounded-lg px-2 py-1.5 outline-none shadow-sm cursor-pointer">
+                        <option value="zh-TW">繁中</option>
+                        <option value="ja">日本語</option>
+                        <option value="en">EN</option>
+                    </select>
+                </div>
+            </header>
+            
+            <section class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md p-4 sm:p-5 rounded-2xl shadow-md border border-amber-200 dark:border-slate-700 transition-all">
+                <div class="flex justify-between items-center mb-3 border-b border-amber-200 dark:border-slate-700 pb-2">
+                    <h2 class="text-base sm:text-lg font-bold text-amber-900 dark:text-amber-400" data-i18n="ui_select_char">👥 選擇坨坨</h2>
+                    <button id="toggleAllCharBtn" onclick="toggleAllCharacters()" class="px-3 py-1 text-xs font-bold bg-amber-100 dark:bg-slate-700 text-amber-800 dark:text-gray-300 rounded-lg hover:bg-amber-200 transition shadow-sm" data-i18n="ui_show_all">
+                    顯示全部 🔽
+                    </button>
+                </div>
+                <div id="charGridContainer" class="space-y-3 collapsible-content collapsed" style="max-height: 0px; opacity: 0;"></div>
+            </section>
+
+            <!-- 獨立的控制面板區塊 -->
+            <div id="playerControls" class="bg-amber-50/90 dark:bg-slate-700/90 backdrop-blur-md p-4 rounded-xl border-2 border-amber-300 dark:border-slate-500 flex flex-col gap-3 transition-opacity w-full mx-auto shadow-lg">
+                
+                <div class="flex items-center justify-between border-b border-amber-200 dark:border-slate-600 pb-3">
+                    <div class="flex items-center gap-3">
+                        <div id="activeCharIconContainer" class="w-10 h-10 rounded-lg border-2 border-amber-400 shadow-sm overflow-hidden bg-white dark:bg-slate-700 hidden relative items-center justify-center shrink-0"></div>
+                        <h2 id="activeCharName" class="text-lg font-black text-amber-900 dark:text-amber-300" data-i18n="ui_please_select">請先選擇坨坨</h2>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div id="pixelSettings" class="hidden items-center gap-1 bg-white dark:bg-slate-800 px-1.5 py-0.5 rounded-lg border border-amber-300 shadow-sm">
+                            <span class="text-[10px] font-bold text-amber-900">顆粒</span>
+                            <span id="pixelScaleValue" class="text-[10px] font-bold text-amber-600 w-3 text-center">5</span>
+                            <div class="flex flex-col">
+                                <button onclick="adjustPixelScale(1)" class="text-[8px] text-gray-500 hover:text-amber-600 leading-none p-[1.5px]">▲</button>
+                                <button onclick="adjustPixelScale(-1)" class="text-[8px] text-gray-500 hover:text-amber-600 leading-none p-[1.5px]">▼</button>
+                            </div>
+                        </div>
+                        <button onclick="togglePixelMode()" class="px-2 py-1.5 bg-green-500 hover:bg-green-600 text-white text-xs font-bold rounded-lg shadow whitespace-nowrap">👾 像素</button>
+                        <button onclick="resetCamera()" class="px-3 py-1.5 bg-slate-600 hover:bg-slate-700 text-white text-xs font-bold rounded-lg shadow whitespace-nowrap" data-i18n="ui_camera">🔄 重置位置</button>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between gap-2 flex-wrap">
+                    <div class="flex items-center gap-2">
+                        <button id="btnPlayPause" onclick="togglePlay()" class="w-9 h-9 flex items-center justify-center bg-amber-500 text-white rounded-lg shadow hover:bg-amber-600 transition" title="播放/暫停">⏸️</button>
+                        <div class="flex bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-600 p-1 shadow-inner">
+                            <button onclick="setSpeed(0.5)" class="speed-btn px-2 py-1 text-xs font-bold rounded text-gray-700">0.5x</button>
+                            <button onclick="setSpeed(1)" class="speed-btn px-2 py-1 text-xs font-bold rounded bg-amber-200 text-amber-900">1.0x</button>
+                            <button onclick="setSpeed(2)" class="speed-btn px-2 py-1 text-xs font-bold rounded text-gray-700">2.0x</button>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button id="btnModeSwitch" onclick="toggleViewerMode()" class="px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold rounded-lg shadow whitespace-nowrap" data-i18n="ui_mode_lobby">🔄 模式: 大廳</button>
+                        <select id="costumeSelect" onchange="changeSpineCostume(this.value)" class="bg-white border border-gray-300 text-xs font-bold rounded-lg px-2 py-1.5 outline-none min-w-[100px]">
+                            <option value="" data-i18n="ui_costume">服裝</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex justify-between w-full relative z-[100] items-center gap-4">
+                    <div class="relative w-[48%]" id="animDropdownWrapper">
+                        <button onclick="toggleCustomSelect('animList')" class="custom-select-btn w-full bg-white border border-gray-300 text-xs font-bold rounded-lg px-2 py-1.5 flex justify-between items-center text-left shadow-sm">
+                            <span id="animSelectText" class="truncate text-amber-900" data-i18n="ui_select_anim">選擇動作</span>
+                            <span class="ml-1 text-gray-400 shrink-0 text-[10px]">▼</span>
+                        </button>
+                        <div id="animList" class="hidden absolute top-[calc(100%+6px)] left-0 w-full bg-white border border-amber-300 rounded-lg shadow-2xl max-h-[240px] overflow-y-auto flex-col py-1 z-[110]"></div>
+                    </div>
+                    <div class="relative w-[48%]" id="slotDropdownWrapper">
+                        <button onclick="toggleCustomSelect('slotList')" class="custom-select-btn w-full bg-white border border-gray-300 text-xs font-bold rounded-lg px-2 py-1.5 flex justify-between items-center text-left shadow-sm">
+                            <span class="truncate text-amber-900" data-i18n="ui_slots">🧩 外觀插槽</span>
+                            <span class="ml-1 text-gray-400 shrink-0 text-[10px]">▼</span>
+                        </button>
+                        <div id="slotList" class="hidden absolute top-[calc(100%+6px)] right-0 w-full bg-white border border-amber-300 rounded-lg shadow-2xl max-h-[240px] overflow-y-auto flex-col z-[110]">
+                            <div class="flex gap-1 p-1.5 border-b border-gray-100 sticky top-0 bg-gray-50 z-20">
+                                <button onclick="toggleAllSlots(true, event)" class="flex-1 py-1 text-[10px] font-bold bg-white hover:bg-amber-100 rounded border shadow-sm text-gray-700" data-i18n="ui_show_slots">全顯</button>
+                                <button onclick="toggleAllSlots(false, event)" class="flex-1 py-1 text-[10px] font-bold bg-white hover:bg-amber-100 rounded border shadow-sm text-gray-700" data-i18n="ui_hide_slots">全隱</button>
+                            </div>
+                            <div id="slotsContainerInner" class="flex flex-col pb-1"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 🌟 全螢幕的 Spine 畫布區域 (底層) -->
+        <section id="spineViewerSection">
+            <div id="spineCanvasContainer" class="w-full h-full relative overflow-hidden flex items-center justify-center">
+                <canvas id="pixelOverlay" class="absolute inset-0 w-full h-full pointer-events-none z-10 hidden" style="image-rendering: pixelated; image-rendering: crisp-edges;"></canvas>
+            </div>
+        </section>
+
+        <script>
+            // ==========================================
+            // 🌟 1. 桌布時鐘邏輯 (支援 12/24 小時制與 LocalStorage 記憶)
+            // ==========================================
+            let is24HourFormat = localStorage.getItem('we_time_format') === '24';
+
+            function toggleTimeFormat() {
+                is24HourFormat = !is24HourFormat;
+                localStorage.setItem('we_time_format', is24HourFormat ? '24' : '12');
+                updateClock(); 
+            }
+
+            function updateClock() {
+                const now = new Date();
+                const dd = String(now.getDate()).padStart(2, '0');
+                const mm = String(now.getMonth() + 1).padStart(2, '0');
+                const yyyy = now.getFullYear();
+                document.getElementById('clockDate').innerText = `${dd}/${mm}/${yyyy}`;
+                
+                let rawHours = now.getHours();
+                let hh, ampm;
+                const ampmEl = document.getElementById('clockAmPm');
+                
+                if (is24HourFormat) {
+                    hh = String(rawHours).padStart(2, '0');
+                    ampm = '';
+                    ampmEl.style.display = 'none'; 
+                } else {
+                    hh = String(rawHours % 12 || 12).padStart(2, '0');
+                    ampm = rawHours >= 12 ? 'PM' : 'AM';
+                    ampmEl.style.display = 'inline-block';
+                    ampmEl.innerText = ampm;
+                }
+
+                const m = String(now.getMinutes()).padStart(2, '0');
+                const s = String(now.getSeconds()).padStart(2, '0');
+                
+                document.getElementById('clockTimeDigits').innerText = `${hh}:${m}:${s}`;
+                
+                const formatTextEl = document.getElementById('timeFormatText');
+                if (formatTextEl) {
+                    formatTextEl.innerText = is24HourFormat ? '24H' : '12H';
+                }
+            }
+            setInterval(updateClock, 1000);
+            updateClock();
+
+            // ==========================================
+            // 🌟 2. 雙擊顯示/隱藏 UI 面板邏輯
+            // ==========================================
+            function toggleDesktopUI(show) {
+                const backdrop = document.getElementById('uiBackdrop');
+                const uiWrapper = document.getElementById('uiWrapper');
+                
+                if (show) {
+                    backdrop.style.setProperty('display', 'block', 'important');
+                    uiWrapper.style.setProperty('display', 'block', 'important');
+                    backdrop.classList.remove('pointer-events-none');
+                    
+                    requestAnimationFrame(() => {
+                        backdrop.style.opacity = '1';
+                        uiWrapper.style.opacity = '1';
+                    });
+                } else {
+                    backdrop.style.opacity = '0';
+                    uiWrapper.style.opacity = '0';
+                    backdrop.classList.add('pointer-events-none');
+                    
+                    setTimeout(() => {
+                        if (backdrop.style.opacity === '0') {
+                            backdrop.style.setProperty('display', 'none', 'important');
+                            uiWrapper.style.setProperty('display', 'none', 'important');
+                        }
+                    }, 300);
+                }
+            }
+
+            document.getElementById('uiBackdrop').addEventListener('click', () => { toggleDesktopUI(false); });
+
+            document.getElementById('spineCanvasContainer').addEventListener('dblclick', (e) => {
+                const rect = e.target.getBoundingClientRect();
+                if (typeof getHitZone === 'function' && !getHitZone(e.clientX - rect.left, e.clientY - rect.top)) {
+                    const backdrop = document.getElementById('uiBackdrop');
+                    if (backdrop.style.opacity === '0' || !backdrop.style.opacity) { toggleDesktopUI(true); }
+                }
+            });
+
+            // ==========================================
+            // 🌟 3. Spine 核心變數與初始化
+            // ==========================================
+            function fixSpineMultiplyHole(player) {
+                if (!player || !player.skeleton) return;
+                player.skeleton.slots.forEach(slot => {
+                    if (slot.data.blendMode === spine.BlendMode.Multiply || slot.data.name.toLowerCase().includes('shadow')) {
+                       slot.data.blendMode = spine.BlendMode.Normal;
+                       slot.color.a = Math.min(slot.color.a, 0.6);
+                    }
+                });
+            }
+            
+            function changeLanguage(lang) {
+                localStorage.setItem('user_lang', lang);
+                window.currentLang = lang;
+                location.reload(); 
+            }
+            
+            function applyTranslations() {
+                const langSelect = document.getElementById('langSelect');
+                if (langSelect) langSelect.value = window.currentLang;
+                document.querySelectorAll('[data-i18n]').forEach(el => {
+                    const key = el.getAttribute('data-i18n');
+                    el.innerText = getI18n(key); 
+                });
+                document.title = getI18n('ui_title');
+            }
+            
+            function getI18n(key) {
+                if (!key) return key;
+                const safeLang = (typeof LANG_DICT !== 'undefined' && LANG_DICT[window.currentLang]) ? window.currentLang : 'zh-TW';
+                if (typeof LANG_DICT !== 'undefined' && LANG_DICT[safeLang] && LANG_DICT[safeLang][key]) return LANG_DICT[safeLang][key];
+                return key; 
+            }
+
+            const HEX_COLORS = { "天真": "#4ade80", "冷靜": "#60a5fa", "狂亂": "#f87171", "活潑": "#facc15", "憂鬱": "#c084fc" };
+            const personalityColors = { 
+                "天真": "border-green-400 text-green-400", 
+                "冷靜": "border-blue-400 text-blue-400", 
+                "狂亂": "border-red-400 text-red-400", 
+                "活潑": "border-yellow-400 text-yellow-400", 
+                "憂鬱": "border-purple-400 text-purple-400",
+                "雙面": "penta-border-title-anim penta-text-anim",
+                "共鳴": "border-rainbow text-rainbow"
+            };
+            const SPRITE_CLASS_MAP = {
+                race_龍族: "sprite-Bg_Dragon", race_精靈: "sprite-Bg_Elf", race_妖精: "sprite-Bg_Sprite",
+                race_幽靈: "sprite-Bg_Phantom", race_魔靈: "sprite-Bg_Elemental", race_不明: "sprite-Bg_Unknown",
+                race_獸人: "sprite-Bg_Werebeast", race_魔女: "sprite-Bg_Witch", race_unknown: "sprite-Bg_Unknown"
+            };
+            const CHAR_SPRITE_MAP = {
+                "冷靜": "sprite-char-composed", "憂鬱": "sprite-char-depressed",
+                "天真": "sprite-char-innocence", "狂亂": "sprite-char-madness", "活潑": "sprite-char-vivacious", "共鳴": "sprite-char-resonance", "雙面": "sprite-char-multifaceted"
+            };
+
+            let globalPlayer = null;
+            let slotVisibilityMap = {};
+            let activeCharData = null; 
+            let currentMode = 'lobby'; 
+            let currentZoom = 1.0;
+            
+            function saveCurrentConfig(charObj, costume) {
+                if(charObj) {
+                    localStorage.setItem('we_char', charObj.name);
+                    localStorage.setItem('we_spine', charObj.spineName);
+                }
+                if(costume) localStorage.setItem('we_costume', costume);
+            }
+
+            window.onload = function() { 
+                applyTranslations(); 
+                initCharacterGrid(); 
+
+                const savedCharName = localStorage.getItem('we_char');
+                const savedSpine = localStorage.getItem('we_spine');
+                const savedCostume = localStorage.getItem('we_costume');
+                
+                let charObj = INITIAL_DATA[0];
+                let spineName = typeof SPINE_MAP !== 'undefined' ? (SPINE_MAP[charObj.name] || charObj.name) : charObj.name;
+                
+                if (savedCharName && INITIAL_DATA.find(c => c.name === savedCharName)) {
+                    charObj = INITIAL_DATA.find(c => c.name === savedCharName);
+                    spineName = savedSpine || (typeof SPINE_MAP !== 'undefined' ? SPINE_MAP[charObj.name] || charObj.name : charObj.name);
+                }
+                
+                window.pendingCostume = savedCostume; 
+                selectCharacter(charObj, spineName, ""); 
+            };
+
+            const VoiceManager = {
+                currentAudio: null, fadeInterval: null, baseName: "", skinSuffix: "",
+                init(baseName, costumeKey) {
+                    this.baseName = baseName;
+                    let suffix = costumeKey.replace(baseName, "");
+                    this.skinSuffix = suffix ? `_${suffix}` : ""; 
+                    if (!this.currentAudio) {
+                        this.currentAudio = new Audio();
+                        this.currentAudio.setAttribute('playsinline', 'true');
+                    }
+                },
+                stop(fadeDuration = 0.5) {
+                    if (this.fadeInterval) { clearInterval(this.fadeInterval); this.fadeInterval = null; }
+                    if (this.currentAudio && !this.currentAudio.paused) {
+                        const audio = this.currentAudio; audio.loop = false;
+                        this.fadeInterval = setInterval(() => {
+                            if (audio.volume > 0.1) { audio.volume -= 0.1; } 
+                            else { audio.pause(); audio.currentTime = 0; audio.volume = 0.8; clearInterval(this.fadeInterval); }
+                        }, (fadeDuration * 1000) / 10);
+                    }
+                },
+                play(folder, filename, onEnded = null, loop = false) {
+                    if (this.fadeInterval) { clearInterval(this.fadeInterval); this.fadeInterval = null; }
+                    if (!this.currentAudio) { this.currentAudio = new Audio(); this.currentAudio.setAttribute('playsinline', 'true'); }
+                    const audio = this.currentAudio;
+                    audio.pause(); audio.onended = null;
+                    const path = `./${folder}/${filename}.mp3`;
+                    audio.src = path; audio.volume = window.weVolume || 0.8; audio.loop = loop; audio.currentTime = 0; audio.load();
+                    if (onEnded && !loop) { audio.onended = onEnded; }
+                    const playPromise = audio.play();
+                    if (playPromise !== undefined) playPromise.catch(e => { if (onEnded) onEnded(); });
+                    return audio;
+                },
+                playRandom(folder, variants, suffix = "", onEnded = null) {
+                    const pick = variants[Math.floor(Math.random() * variants.length)];
+                    return this.play(folder, `${pick}${suffix}`, onEnded);
+                },
+                playSpawn(onEnded = null) { this.playRandom('spawn', [`Voice_${this.baseName}_Spawn1`, `Voice_${this.baseName}_Spawn2`], "", onEnded); },
+                playTickleStart(onEnded = null) { this.play('tickle', `Voice_${this.baseName}_TickleStart1`, onEnded); },
+                playTickleDuring() { this.play('tickle', `Voice_${this.baseName}_TickleDuring1`, null, true); },
+                playTouch(onEnded = null) { this.playRandom('touch', [`Voice_${this.baseName}_Touch1`, `Voice_${this.baseName}_Touch1_1`, `Voice_${this.baseName}_Touch1_2`], this.skinSuffix, onEnded); },
+                playPat(onEnded = null) { this.playRandom('pat', [`Voice_${this.baseName}_Touch2`, `Voice_${this.baseName}_Touch2_1`, `Voice_${this.baseName}_Touch2_2`], this.skinSuffix, onEnded); },
+                playSmash(onEnded = null) { this.play('smash', `Voice_${this.baseName}_DutchRubEnd1`, () => { this.play('smash', `Voice_${this.baseName}_DutchRubEnd2${this.skinSuffix}`, onEnded); }); }
+            };
+
+            window.wallpaperPropertyListener = {
+                applyUserProperties: function(properties) {
+                    if (properties.volume) {
+                        window.weVolume = (properties.volume.value / 100) * 0.8;
+                        if (VoiceManager.currentAudio) VoiceManager.currentAudio.volume = window.weVolume;
+                    }
+                }
+            };
+
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('#animDropdownWrapper')) {
+                    document.getElementById('animList').classList.add('hidden'); document.getElementById('animList').classList.remove('flex');
+                }
+                if (!e.target.closest('#slotDropdownWrapper')) {
+                    document.getElementById('slotList').classList.add('hidden'); document.getElementById('slotList').classList.remove('flex');
+                }
+            });
+            
+            function toggleCustomSelect(listId) {
+                const list = document.getElementById(listId);
+                if (list.classList.contains('hidden')) {
+                    if (listId === 'animList') {
+                        document.getElementById('slotList').classList.add('hidden'); document.getElementById('slotList').classList.remove('flex');
+                    } else {
+                        document.getElementById('animList').classList.add('hidden'); document.getElementById('animList').classList.remove('flex');
+                    }
+                    list.classList.remove('hidden'); list.classList.add('flex');
+                } else {
+                    list.classList.add('hidden'); list.classList.remove('flex');
+                }
+            }
+            
+            function toggleAllCharacters() {
+                const container = document.getElementById('charGridContainer');
+                const btn = document.getElementById('toggleAllCharBtn');
+                if (container.classList.contains('collapsed')) {
+                    container.classList.remove('collapsed'); container.style.maxHeight = '2000px'; container.style.opacity = '1'; btn.innerHTML = `${getI18n('ui_hide_all')} 🔼`;
+                } else {
+                    container.classList.add('collapsed'); container.style.maxHeight = '0px'; container.style.opacity = '0'; btn.innerHTML = `${getI18n('ui_show_all')} 🔽`;
+                }
+            }
+            
+            function togglePersonalityGroup(id, btnId) {
+                const group = document.getElementById(id);
+                const btn = document.getElementById(btnId);
+                if (group.classList.contains('collapsed')) {
+                    group.classList.remove('collapsed'); group.style.maxHeight = '1000px'; group.style.opacity = '1'; btn.innerHTML = btn.innerHTML.replace('🔽', '🔼');
+                } else {
+                    group.classList.add('collapsed'); group.style.maxHeight = '0px'; group.style.opacity = '0'; btn.innerHTML = btn.innerHTML.replace('🔼', '🔽');
+                }
+            }
+            
+            function preloadIcons() {
+                if (typeof INITIAL_DATA === 'undefined') return;
+                INITIAL_DATA.forEach(c => {
+                    const iconUrl = typeof IMAGE_MAP !== 'undefined' ? IMAGE_MAP[`avatar_${c.name}`] : '';
+                    if (iconUrl) { const img = new Image(); img.src = iconUrl; }
+                });
+            }
+            
+            function initCharacterGrid() {
+                preloadIcons();
+                const container = document.getElementById('charGridContainer');
+                if (typeof INITIAL_DATA === 'undefined' || !INITIAL_DATA) return;
+                const personalities = ["共鳴", "雙面", "天真", "冷靜", "狂亂", "活潑", "憂鬱"];
+                
+                personalities.forEach((p, index) => {
+                    const chars = INITIAL_DATA.filter(c => p === "雙面" ? c.personality.includes(",") : c.personality === p);
+                    if (chars.length === 0) return;
+                    
+                    const borderTextClass = personalityColors[p] || "border-gray-400 text-gray-400";
+                    const borderClass = borderTextClass.split(' ')[0];
+                    const textClass = borderTextClass.split(' ')[1] || borderClass;
+                    
+                    const groupId = `group_${index}`;
+                    const btnId = `btn_${index}`;
+            
+                    const row = document.createElement('div');
+                    row.className = "flex flex-col bg-amber-50/50 dark:bg-slate-800/50 p-2 rounded-xl border border-dashed border-amber-200 dark:border-slate-700";
+                    
+                    const header = document.createElement('div');
+                    header.className = "flex justify-between items-center cursor-pointer hover:bg-amber-100/50 dark:hover:bg-slate-700/50 p-1.5 rounded-lg transition";
+                    header.onclick = () => togglePersonalityGroup(groupId, btnId);
+                    const pSprite = SPRITE_CLASS_MAP[`p_${p}`] || "";
+                    
+                    header.innerHTML = `
+                        <div class="flex items-center gap-1">
+                            <div class="sprite-base sprite-common ${pSprite} shrink-0 scale-[0.35] origin-left -ml-2"></div>
+                            <h3 class="text-xs sm:text-sm font-black border-l-4 ${borderClass} pl-1 -ml-3"><span class="${textClass}">${getI18n(p)}</span></h3>
+                        </div>
+                        <span id="${btnId}" class="text-xs text-gray-400">🔼</span>
+                    `;
+                    
+                    const iconContainer = document.createElement('div');
+                    iconContainer.id = groupId; iconContainer.className = "flex flex-wrap gap-1.5 pt-2 pl-1 collapsible-content";
+                    iconContainer.style.maxHeight = "1000px"; iconContainer.style.opacity = "1";
+            
+                    chars.forEach(c => {
+                        const spineName = typeof SPINE_MAP !== 'undefined' ? SPINE_MAP[c.name] : c.name;
+                        const displayName = getI18n(c.name);
+                        
+                        const btn = document.createElement('button');
+                        btn.className = "group flex flex-col items-center gap-0.5 transition-transform hover:scale-110 active:scale-95 w-12 sm:w-14";
+                        btn.onclick = () => selectCharacter(c, spineName, "");
+            
+                        const displayPersonality = c.personality.includes(",") ? "雙面" : c.personality;
+                        const charSpriteBase = CHAR_SPRITE_MAP[displayPersonality] || "sprite-char-innocence";
+                        const charSpriteClass = `sprite-${spineName}`;
+                        let raceKey = c.race === "???" ? "unknown" : c.race;
+                        const raceSprite = SPRITE_CLASS_MAP[`race_${raceKey}`] || "sprite-Bg_Unknown";
+            
+                        let charStyle = "";
+                        let charBorderClass = borderClass; 
+                        
+                        if (displayPersonality === "雙面") {
+                            const parts = c.personality.split(',').map(s => s.trim());
+                            const c1 = HEX_COLORS[parts[0]] || "#c084fc";
+                            const c2 = HEX_COLORS[parts[1]] || "#4ade80";
+                            charStyle = `style="--c1: ${c1}; --c2:${c2};"`;
+                            charBorderClass = "dual-border-anim"; 
+                        }
+
+                        btn.innerHTML = `
+                            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl border-2 ${charBorderClass} overflow-hidden shadow-sm group-hover:shadow-md transition-all relative flex items-center justify-center" ${charStyle}>
+                                <div class="absolute inset-0 flex items-center justify-center opacity-80">
+                                    <div class="sprite-base sprite-common ${raceSprite} shrink-0 scale-[0.6]"></div>
+                                </div>
+                                <div class="w-full h-full bg-white/20 dark:bg-black/20 backdrop-blur-[1px] absolute inset-0"></div>
+                                <div class="sprite-base ${charSpriteBase} ${charSpriteClass} shrink-0 scale-[0.35] relative z-10"></div>
+                            </div>
+                            <span class="text-[9px] sm:text-[10px] font-bold text-gray-600 dark:text-gray-300 group-hover:text-amber-600 dark:group-hover:text-amber-400 text-center w-full truncate leading-tight">${displayName}</span>
+                        `;
+                        iconContainer.appendChild(btn);
+                    });
+            
+                    row.appendChild(header); row.appendChild(iconContainer); container.appendChild(row);
+                });
+            }
+            
+            function toggleViewerMode() {
+                if (!activeCharData) return;
+                currentMode = currentMode === 'lobby' ? 'battle' : 'lobby';
+                const btn = document.getElementById('btnModeSwitch');
+                btn.innerHTML = currentMode === 'lobby' ? getI18n('ui_mode_lobby') : getI18n('ui_mode_battle');
+                btn.className = currentMode === 'lobby' 
+                    ? "px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold rounded-lg shadow whitespace-nowrap"
+                    : "px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-bold rounded-lg shadow whitespace-nowrap";
+                refreshCostumeDropdownAndLoad();
+            }
+
+            function selectCharacter(charObj, spineName, iconUrl) {
+                activeCharData = { ...charObj, spineName: spineName };
+                saveCurrentConfig(activeCharData, null); // 存檔
+
+                let pColors = "border-amber-400 text-amber-900";
+                const displayPersonality = charObj.personality.includes(",") ? "雙面" : charObj.personality;
+                let customStyle = ""; 
+
+                pColors = personalityColors[displayPersonality] || pColors;
+                if (displayPersonality === "雙面") {
+                    const parts = charObj.personality.split(',').map(s => s.trim());
+                    const c1 = HEX_COLORS[parts[0]] || "#c084fc";
+                    const c2 = HEX_COLORS[parts[1]] || "#4ade80";
+                    customStyle = `--c1: ${c1}; --c2: ${c2};`;
+                    pColors = "dual-border-anim dual-text-anim"; 
+                }
+                
+                const borderClass = pColors.split(' ')[0]; 
+                const textClass = pColors.split(' ')[1] || "";  
+                
+                const iconEl = document.getElementById('activeCharIconContainer');
+                let raceKey = charObj.race === "???" ? "unknown" : charObj.race;
+                const raceSprite = SPRITE_CLASS_MAP[`race_${raceKey}`] || "sprite-Bg_Unknown";
+                
+                const charSpriteBase = CHAR_SPRITE_MAP[displayPersonality] || "sprite-char-innocence";
+                const charSpriteClass = `sprite-${spineName}`;
+                iconEl.innerHTML = `
+                <div class="absolute inset-0 flex items-center justify-center opacity-80"><div class="sprite-base sprite-common ${raceSprite} shrink-0 scale-[0.45]"></div></div>
+                <div class="w-full h-full bg-white/20 dark:bg-black/20 backdrop-blur-[1px] absolute inset-0"></div>
+                <div class="sprite-base ${charSpriteBase} ${charSpriteClass} shrink-0 scale-[0.36] relative z-10"></div>
+                `;
+                
+                iconEl.className = `w-10 h-10 rounded-lg border-2 ${borderClass} shadow-sm overflow-hidden bg-white dark:bg-slate-700 flex items-center justify-center shrink-0 relative`;
+                iconEl.style.display = 'flex';
+                if (customStyle) iconEl.setAttribute("style", customStyle);
+                else iconEl.removeAttribute("style");
+                
+                const nameEl = document.getElementById('activeCharName');
+                nameEl.innerText = getI18n(charObj.name); 
+                nameEl.className = `text-lg font-black ${textClass}`;
+                if (customStyle) nameEl.setAttribute("style", customStyle);
+                else nameEl.removeAttribute("style");
+            
+                document.getElementById('animList').classList.add('hidden'); 
+                document.getElementById('slotList').classList.add('hidden');
+                slotVisibilityMap = {};
+                
+                const btnMode = document.getElementById('btnModeSwitch');
+                btnMode.style.display = 'inline-block';
+                btnMode.innerHTML = currentMode === 'lobby' ? getI18n('ui_mode_lobby') : getI18n('ui_mode_battle');
+            
+                refreshCostumeDropdownAndLoad();
+            }
+            
+            function getCostumeList(charName, mode) {
+                if (mode === 'lobby') {
+                    return (typeof COSTUME_MAP !== 'undefined' && COSTUME_MAP[charName]) ? COSTUME_MAP[charName] : [];
+                } else {
+                    return (typeof SD_COSTUME !== 'undefined' && SD_COSTUME[charName]) ? SD_COSTUME[charName] : 
+                           ((typeof COSTUME_MAP !== 'undefined' && COSTUME_MAP[charName]) ? COSTUME_MAP[charName] : []);
+                }
+            }
+
+            function refreshCostumeDropdownAndLoad() {
+                const costumes = getCostumeList(activeCharData.name, currentMode);
+                const fallbackKey = costumes.length > 0 ? costumes[0] : activeCharData.spineName;
+                const selectEl = document.getElementById('costumeSelect');
+                
+                let currentSelection = window.pendingCostume || selectEl.value; 
+                window.pendingCostume = null;
+
+                let targetCostume = costumes.includes(currentSelection) ? currentSelection : fallbackKey;
+                selectEl.innerHTML = '';
+            
+                if (costumes.length > 0) {
+                    costumes.forEach((costume, idx) => {
+                        const opt = document.createElement('option');
+                        opt.value = costume; 
+                        opt.text = idx === 0 ? getI18n('ui_default_costume') : `${getI18n('ui_costume')} ${idx}`;
+                        if (costume === targetCostume) opt.selected = true;
+                        selectEl.appendChild(opt);
+                    });
+                    selectEl.style.display = 'inline-block';
+                } else {
+                    selectEl.style.display = 'none';
+                }
+                
+                saveCurrentConfig(null, targetCostume); // 存檔
+                loadSpine(activeCharData.spineName, targetCostume, currentMode);
+
+                // 🌟 新增：呼叫背景超迷你小人生成函數
+                loadWallpaperMiniSpines(activeCharData.spineName, targetCostume, 5);
+            }
+
+            function changeSpineCostume(costumeKey) {
+                if(!costumeKey || !activeCharData) return;
+                saveCurrentConfig(null, costumeKey); // 存檔
+                loadSpine(activeCharData.spineName, costumeKey, currentMode);
+
+                // 🌟 新增：同步切換背景小人服裝
+                loadWallpaperMiniSpines(activeCharData.spineName, costumeKey, 5);
+            }
+            
+            function loadSpine(baseFolderKey, costumeKey, mode) {
+               const container = document.getElementById('spineCanvasContainer');
+               VoiceManager.init(baseFolderKey, costumeKey);
+               if (globalPlayer) { globalPlayer.dispose(); globalPlayer = null; }
+            
+               const existingPixelOverlay = document.getElementById('pixelOverlay');
+               container.innerHTML = '<div class="spine-player-loading-custom"></div>';
+               if (existingPixelOverlay) container.appendChild(existingPixelOverlay); 
+               
+               let skelUrl = mode === 'lobby' ? `./spine_assets/${baseFolderKey}/${costumeKey}.skel.bytes` : `./spine_sd_assets/${costumeKey}.skel.bytes`;
+               let atlasUrl = mode === 'lobby' ? `./spine_assets/${baseFolderKey}/${costumeKey}.atlas.txt` : `./spine_sd_assets/${costumeKey}.atlas.txt`;
+               let targetZoom = mode === 'battle' ? 2.5 : 1.0;
+               let baseViewport = mode === 'lobby' ? { x: -400, y: 0, width: 800, height: 1000 } : { x: -750, y: -150, width: 1500, height: 3000 };
+               currentZoom = targetZoom;
+
+               const originalGetContext = HTMLCanvasElement.prototype.getContext;
+               HTMLCanvasElement.prototype.getContext = function(type, options) {
+                   if (type === 'webgl' || type === 'webgl2' || type === 'experimental-webgl') {
+                       options = options || {}; options.preserveDrawingBuffer = true;
+                   }
+                   return originalGetContext.call(this, type, options);
+               };
+            
+               globalPlayer = new spine.SpinePlayer(container, {
+                   skelUrl: skelUrl, atlasUrl: atlasUrl, premultipliedAlpha: true,
+                   backgroundColor: "#00000000", alpha: true, showControls: false,
+                   showLoading: false, debugRendering: true, viewport: { ...baseViewport },
+                   
+                   success: function (player) {
+                       const loader = container.querySelector('.spine-player-loading-custom');
+                       if (loader) loader.remove();
+        
+                       if (isPixelMode) {
+                           const originalCanvas = container.querySelector('canvas:not(#pixelOverlay)');
+                           if (originalCanvas) originalCanvas.style.opacity = '0.001';
+                       }
+
+                       setSpeed(1);
+                       const skins = player.skeleton.data.skins;
+                       if (skins && skins.length > 0) {
+                           const tSkin = skins.find(s => s.name === 'Normal') || skins.find(s => s.name !== 'default') || skins[0];
+                           if (tSkin) { player.skeleton.setSkinByName(tSkin.name); }
+                       }
+                       
+                       player.skeleton.scaleX = currentZoom; player.skeleton.scaleY = currentZoom;
+                       player.skeleton.setToSetupPose(); 
+                       fixSpineMultiplyHole(player);
+                       player.skeleton.updateWorldTransform();
+                       
+                       buildAnimationDropdown(player); 
+                       buildSlotsPanel(player);
+            
+                       setTimeout(() => {
+                           const anims = player.skeleton.data.animations.map(a => a.name);
+                           const fallbackAnim = mode === 'lobby' ? 'Idle_1' : 'Idle';
+                           const startAnim = anims.includes(fallbackAnim) ? fallbackAnim : (anims.includes('idle') ? 'idle' : anims[0]);
+
+                           if (startAnim) {
+                               player.animationState.setAnimation(0, startAnim, true);
+                               document.getElementById('animSelectText').innerText = startAnim;
+                               document.getElementById('btnPlayPause').innerText = '⏸️';
+                           }
+                           player.play();
+                           if (mode === 'lobby') VoiceManager.playSpawn();
+                           
+                           setupComplexInteractions(player, container);
+                           resetCamera(); // 套用靠右下的排版
+                       }, 50);
+                   },
+                   error: function () {
+                       container.innerHTML = `<div class="text-red-500 font-bold text-sm text-center p-4">載入失敗：檔案可能不存在</div>`;
+                   }
+               });
+               HTMLCanvasElement.prototype.getContext = originalGetContext;
+            }
+
+            function togglePlay() {
+                if (!globalPlayer) return;
+                if (globalPlayer.paused) {
+                    globalPlayer.play(); document.getElementById('btnPlayPause').innerText = '⏸️';
+                } else {
+                    globalPlayer.pause(); document.getElementById('btnPlayPause').innerText = '▶️';
+                }
+            }
+            
+            function setSpeed(speed) {
+                if (!globalPlayer) return;
+                globalPlayer.speed = speed;
+                document.querySelectorAll('.speed-btn').forEach(btn => {
+                    if (btn.innerText.includes(speed.toFixed(1))) {
+                        btn.className = "speed-btn px-2 py-1 text-xs font-bold rounded bg-amber-200 text-amber-900";
+                    } else {
+                        btn.className = "speed-btn px-2 py-1 text-xs font-bold rounded hover:bg-amber-100 text-gray-700";
+                    }
+                });
+            }
+            
+            function buildAnimationDropdown(player) {
+                const animList = document.getElementById('animList'); animList.innerHTML = '';
+                const anims = player.skeleton.data.animations.map(a => a.name).sort();
+                anims.forEach(animName => {
+                    const btn = document.createElement('button');
+                    btn.className = "text-left px-3 py-2 text-xs hover:bg-amber-100 w-full truncate transition-colors text-gray-700 flex-shrink-0 border-b border-gray-50";
+                    btn.innerText = animName;
+                    btn.onclick = (e) => {
+                        e.stopPropagation(); 
+                        player.animationState.setAnimation(0, animName, true);
+                        document.getElementById('animSelectText').innerText = animName;
+                        animList.classList.add('hidden'); animList.classList.remove('flex');
+                        player.play(); document.getElementById('btnPlayPause').innerText = '⏸️';
+                        player.skeleton.updateWorldTransform();
+                    };
+                    animList.appendChild(btn);
+                });
+            }
+            
+            function buildSlotsPanel(player) {
+                const container = document.getElementById('slotsContainerInner'); container.innerHTML = '';
+                slotVisibilityMap = {};
+                const slots = player.skeleton.slots.filter(s => s.attachment != null).sort((a, b) => a.data.name.localeCompare(b.data.name));
+
+                slots.forEach((slot) => {
+                    const slotName = slot.data.name; slotVisibilityMap[slotName] = true;
+                    const originalColor = { r: slot.color.r, g: slot.color.g, b: slot.color.b };
+            
+                    const item = document.createElement('label');
+                    item.className = "flex items-center gap-2 px-3 py-1.5 hover:bg-red-50 cursor-pointer transition-colors border-b border-gray-50 group";
+                    
+                    const checkbox = document.createElement('input');
+                    checkbox.type = "checkbox"; checkbox.checked = true;
+                    checkbox.className = "w-3.5 h-3.5 text-amber-500 rounded focus:ring-amber-500 border-gray-300";
+                    checkbox.onchange = (e) => { toggleSlot(slotName, e.target.checked); };
+            
+                    const span = document.createElement('span');
+                    span.className = "text-xs font-medium text-gray-700 truncate group-hover:text-red-600 transition-colors";
+                    span.innerText = slotName;
+            
+                    item.addEventListener('click', (e) => e.stopPropagation());
+                    item.onmouseenter = () => { slot.color.r = 1; slot.color.g = 0; slot.color.b = 0; };
+                    item.onmouseleave = () => { slot.color.r = originalColor.r; slot.color.g = originalColor.g; slot.color.b = originalColor.b; };
+            
+                    item.appendChild(checkbox); item.appendChild(span); container.appendChild(item);
+                });
+            
+                if(!globalPlayer.config.injectedUpdate) {
+                    const origUpdate = player.skeleton.updateWorldTransform;
+                    player.skeleton.updateWorldTransform = function() {
+                        origUpdate.call(player.skeleton);
+                        const skelSlots = player.skeleton.slots;
+                        for(let i = 0; i < skelSlots.length; i++) {
+                            const s = skelSlots[i];
+                            if (slotVisibilityMap[s.data.name] === false) s.color.a = 0;
+                        }
+                    };
+                    globalPlayer.config.injectedUpdate = true;
+                }
+            }
+            
+            function toggleSlot(slotName, isVisible) {
+                slotVisibilityMap[slotName] = isVisible;
+                if (globalPlayer && globalPlayer.skeleton) {
+                    const s = globalPlayer.skeleton.findSlot(slotName);
+                    if (s) {
+                        if (isVisible) {
+                            s.setToSetupPose(); fixSpineMultiplyHole(globalPlayer);
+                        } else { s.color.a = 0; }
+                    }
+                }
+            }
+            
+            function toggleAllSlots(show, event) {
+                if(event) event.stopPropagation();
+                const checkboxes = document.querySelectorAll('#slotsContainerInner input[type="checkbox"]');
+                checkboxes.forEach(cb => {
+                    cb.checked = show;
+                    const slotName = cb.nextElementSibling.innerText;
+                    slotVisibilityMap[slotName] = show;
+                    if (globalPlayer && globalPlayer.skeleton) {
+                        const s = globalPlayer.skeleton.findSlot(slotName);
+                        if (s) {
+                            if (show) { s.setToSetupPose(); } else { s.color.a = 0; }
+                        }
+                    }
+                });
+                if (show) fixSpineMultiplyHole(globalPlayer);
+            }
+            
+            function resetCamera() {
+                if (!globalPlayer || !globalPlayer.skeleton) return;
+                currentZoom = currentMode === 'battle' ? 2.5 : 1.0;
+                globalPlayer.skeleton.scaleX = currentZoom;
+                globalPlayer.skeleton.scaleY = currentZoom;
+                
+                globalPlayer.skeleton.x = currentMode === 'battle' ? 500 : 250; 
+                globalPlayer.skeleton.y = currentMode === 'lobby' ? 600 * (1 - currentZoom) : 0;
+                globalPlayer.skeleton.updateWorldTransform();
+            }
+            window.addEventListener('resize', resetCamera);
+
+            function setupComplexInteractions(player, container) {
+                const canvas = container.querySelector('canvas:not(#pixelOverlay)');
+                if (!canvas) return;
+                canvas.style.touchAction = 'none';
+                
+                function screenToWorldCoords(cam, screenX, screenY, rect) {
+                    let vec;
+                    if (typeof spine !== 'undefined' && spine.webgl && spine.webgl.Vector3) {
+                        vec = new spine.webgl.Vector3(screenX, screenY, 0);
+                    } else {
+                        vec = new spine.Vector3(screenX, screenY, 0);
+                    }
+                    cam.screenToWorld(vec, rect.width, rect.height);
+                    return { x: vec.x, y: vec.y };
+                }
+                
+                let pointers = {}; 
+                let isDragging = false;
+                let startX = 0, startY = 0;
+                let lastMouseX = 0, lastMouseY = 0;
+                let dragDistance = 0;
+                
+                let hitZoneOnDown = null;
+                let activeInteractBone = null; 
+                let initialBoneX = 0, initialBoneY = 0;
+            
+                let hasTriggeredRub = false; 
+                let tickleTimer = null; 
+                let voiceRecoveryTimer = null;
+            
+                const getIsLobby = () => typeof currentMode === 'undefined' || currentMode === 'lobby';
+                const updateUI = (text) => { const el = document.getElementById('animSelectText'); if (el) el.innerText = text; };
+                const safeClearIdle = () => { if (typeof globalIdleTimer !== 'undefined') clearTimeout(globalIdleTimer); };
+                const safeStartIdle = () => { if (typeof startRandomAnimationLoop === 'function') startRandomAnimationLoop(); };
+            
+                function getHitZone(mouseX, mouseY) {
+                    if (!getIsLobby()) return null;
+                    const rect = canvas.getBoundingClientRect();
+                    if (!globalPlayer || !globalPlayer.sceneRenderer || !globalPlayer.sceneRenderer.camera) return null;
+                    const cam = globalPlayer.sceneRenderer.camera;
+                    
+                    const worldPos = screenToWorldCoords(cam, mouseX, mouseY, rect);
+                    player.skeleton.updateWorldTransform();
+                 
+                    let clickedPart = null;
+                    let minDistance = Infinity;
+                 
+                    const hitZones = [
+                        { name: "臉頰", bones: ["Character_Ball_Move"], radius: 60 },
+                        { name: "頭部", bones: ["Character_Pat"], radius: 60 }, 
+                        { name: "身體", bones: ["Character_Tickle"], radius: 70 }
+                    ];
+                 
+                    hitZones.forEach(zone => {
+                        let targetBone = null;
+                        for (let bName of zone.bones) { targetBone = player.skeleton.findBone(bName); if (targetBone) break; }
+                        if (targetBone) {
+                            const distance = Math.hypot(worldPos.x - targetBone.worldX, worldPos.y - targetBone.worldY);
+                            if (distance < zone.radius && distance < minDistance) { 
+                                minDistance = distance; 
+                                clickedPart = { ...zone, bone: targetBone }; 
+                            }
+                        }
+                    });
+                    return clickedPart;
+                }
+            
+                canvas.addEventListener('pointerdown', (e) => {
+                    pointers[e.pointerId] = { x: e.clientX, y: e.clientY };
+                    clearTimeout(voiceRecoveryTimer);
+            
+                    isDragging = true;
+                    startX = lastMouseX = e.clientX;
+                    startY = lastMouseY = e.clientY;
+                    dragDistance = 0;
+                    hasTriggeredRub = false; 
+                    hitZoneOnDown = null;
+                    activeInteractBone = null;
+                    canvas.setPointerCapture(e.pointerId);
+            
+                    const rect = canvas.getBoundingClientRect();
+                    hitZoneOnDown = getHitZone(e.clientX - rect.left, e.clientY - rect.top);
+                    
+                    if (hitZoneOnDown && (hitZoneOnDown.name === "臉頰" || hitZoneOnDown.name === "頭部")) {
+                        activeInteractBone = hitZoneOnDown.bone; 
+                        initialBoneX = activeInteractBone.x; 
+                        initialBoneY = activeInteractBone.y;
+                    }
+                });
+            
+                canvas.addEventListener('pointermove', (e) => {
+                    if (pointers[e.pointerId]) { pointers[e.pointerId] = { x: e.clientX, y: e.clientY }; }
+            
+                    if (!isDragging || !player.skeleton) return;
+                    const rect = canvas.getBoundingClientRect();
+                    if (rect.width === 0) return;
+            
+                    const dx = e.clientX - lastMouseX;
+                    const dy = e.clientY - lastMouseY;
+                    dragDistance += Math.hypot(dx, dy);
+            
+                    if (dragDistance > 10 && hitZoneOnDown && !hasTriggeredRub) {
+                        hasTriggeredRub = true;
+                        clearTimeout(tickleTimer);
+                        safeClearIdle(); 
+            
+                        const animNames = player.skeleton.data.animations.map(a => a.name);
+            
+                        if (hitZoneOnDown.name === "臉頰" && animNames.includes("Touch_Idle")) {
+                            player.animationState.setAnimation(0, "Touch_Idle", true); updateUI("Touch_Idle");
+                        } else if (hitZoneOnDown.name === "頭部" && animNames.includes("Pat_Idle")) {
+                            player.animationState.setAnimation(0, "Pat_Idle", true); updateUI("Pat_Idle");
+                       } else if (hitZoneOnDown.name === "身體" && animNames.includes("Tickle_Idle_1")) {
+                            player.animationState.setAnimation(0, "Tickle_Idle_1", true); updateUI("Tickle_Idle_1");
+                            VoiceManager.playTickleStart(() => {
+                                if (isDragging) {
+                                    if (animNames.includes("Tickle_Idle_2")) {
+                                        player.animationState.setAnimation(0, "Tickle_Idle_2", true); updateUI("Tickle_Idle_2");
+                                    }
+                                    VoiceManager.playTickleDuring();
+                                }
+                            });
+                        }
+                    }
+            
+                    if (hasTriggeredRub && hitZoneOnDown && activeInteractBone) {
+                        const isCheek = hitZoneOnDown.name === "臉頰";
+                        const cam = globalPlayer.sceneRenderer.camera;
+                        const startWorld = screenToWorldCoords(cam, startX - rect.left, startY - rect.top, rect);
+                        const currentWorld = screenToWorldCoords(cam, e.clientX - rect.left, e.clientY - rect.top, rect);
+                        
+                        const stretchIntensity = isCheek ? 0.8 : 0.5; 
+                        let worldDx = (currentWorld.x - startWorld.x) * stretchIntensity;
+                        let worldDy = (currentWorld.y - startWorld.y) * stretchIntensity;
+            
+                        if (isCheek && worldDx > 0) worldDx = 0; 
+                        
+                        let baseWorld = { x: initialBoneX, y: initialBoneY };
+                        if (activeInteractBone.parent) {
+                            activeInteractBone.parent.localToWorld(baseWorld);
+                        } else {
+                            baseWorld.x = player.skeleton.x + initialBoneX * player.skeleton.scaleX;
+                            baseWorld.y = player.skeleton.y + initialBoneY * player.skeleton.scaleY;
+                        }
+                        
+                        let targetWorld = { x: baseWorld.x + worldDx, y: baseWorld.y + worldDy };
+                        if (activeInteractBone.parent) activeInteractBone.parent.worldToLocal(targetWorld);
+                        
+                        let localDx = targetWorld.x - initialBoneX;
+                        let localDy = targetWorld.y - initialBoneY;
+                        let rawDistance = Math.hypot(localDx, localDy);
+                        
+                        const MAX_RADIUS = isCheek ? 55 : 20; 
+            
+                        if (rawDistance > 0) {
+                            let elasticDist = MAX_RADIUS * (1 - Math.exp(-rawDistance / (MAX_RADIUS * 1.2)));
+                            localDx = (localDx / rawDistance) * elasticDist;
+                            localDy = (localDy / rawDistance) * elasticDist;
+                        }
+                        activeInteractBone.x = initialBoneX + localDx;
+                        activeInteractBone.y = initialBoneY + localDy;
+                        player.skeleton.updateWorldTransform();
+                    } 
+            
+                    lastMouseX = e.clientX; lastMouseY = e.clientY;
+                });
+            
+                canvas.addEventListener('mousemove', (e) => {
+                    const rect = canvas.getBoundingClientRect();
+                    const hit = getHitZone(e.clientX - rect.left, e.clientY - rect.top);
+                    if (hit) { canvas.style.cursor = 'pointer'; } else { canvas.style.cursor = 'default'; }
+                });
+            
+                const stopDrag = (e) => { 
+                    delete pointers[e.pointerId];
+            
+                    if (!isDragging) return;
+                    isDragging = false; 
+                    clearTimeout(tickleTimer);
+                    VoiceManager.stop(0.5);
+            
+                    if (!getIsLobby()) return;
+                    const animNames = player.skeleton.data.animations.map(a => a.name);
+            
+                    if (activeInteractBone) {
+                        let targetX = initialBoneX, targetY = initialBoneY;
+                        let bouncingBone = activeInteractBone;
+                        activeInteractBone = null; 
+                        let velX = 0, velY = 0;
+                        const tension = 0.20, friction = 0.85; 
+                        
+                        function applyBounce() {
+                            let dx = targetX - bouncingBone.x; let dy = targetY - bouncingBone.y;
+                            velX += dx * tension; velY += dy * tension;
+                            velX *= friction; velY *= friction;
+                            bouncingBone.x += velX; bouncingBone.y += velY;
+                            if (Math.abs(dx) > 0.1 || Math.abs(velX) > 0.1 || Math.abs(dy) > 0.1 || Math.abs(velY) > 0.1) {
+                                requestAnimationFrame(applyBounce);
+                            } else {
+                                bouncingBone.x = targetX; bouncingBone.y = targetY;
+                            }
+                        }
+                        applyBounce();
+                    }
+            
+                    if (hasTriggeredRub) {
+                        if (hitZoneOnDown && hitZoneOnDown.name === "臉頰" && animNames.includes("Touch_End")) {
+                            player.animationState.setAnimation(0, "Touch_End", true); updateUI("Touch_End");
+                            VoiceManager.playTouch(() => {
+                                voiceRecoveryTimer = setTimeout(() => {
+                                    player.animationState.setAnimation(0, "Idle_1", true); updateUI("Idle_1"); safeStartIdle();
+                                }, 500);
+                            });
+                        } else if (hitZoneOnDown && hitZoneOnDown.name === "頭部" && animNames.includes("Pat_End")) {
+                            player.animationState.setAnimation(0, "Pat_End", true); updateUI("Pat_End");
+                            VoiceManager.playPat(() => {
+                                voiceRecoveryTimer = setTimeout(() => {
+                                    player.animationState.setAnimation(0, "Idle_1", true); updateUI("Idle_1"); safeStartIdle();
+                                }, 500);
+                            });
+                        } else if (hitZoneOnDown && hitZoneOnDown.name === "身體" && animNames.includes("Tickle_End")) {
+                            player.animationState.setAnimation(0, "Tickle_End", false); player.animationState.addAnimation(0, "Idle_1", true, 0); updateUI("Tickle_End"); safeStartIdle();
+                        } else {
+                            player.animationState.setAnimation(0, "Idle_1", true); updateUI("Idle_1"); safeStartIdle();
+                        }
+                    } else if (hitZoneOnDown && dragDistance < 10) {
+                        if ((hitZoneOnDown.name === "頭部" || hitZoneOnDown.name === "臉頰") && animNames.includes("Smash_End_1")) {
+                            player.animationState.setAnimation(0, "Smash_End_1", false);
+                            if (animNames.includes("Smash_End_2")) { player.animationState.addAnimation(0, "Smash_End_2", true, 0); }
+                            updateUI("Smash_End");
+                            VoiceManager.playSmash(() => {
+                                voiceRecoveryTimer = setTimeout(() => {
+                                    player.animationState.setAnimation(0, "Idle_1", true); updateUI("Idle_1"); safeStartIdle();
+                                }, 500);
+                            });
+                        } else { safeStartIdle(); }
+                    } else { safeStartIdle(); }
+                };
+            
+                canvas.addEventListener('pointerup', stopDrag);
+                canvas.addEventListener('pointercancel', stopDrag);
+                canvas.addEventListener('pointerout', stopDrag);
+            }
+
+            // ==========================================
+            // 🌟 像素化運算邏輯
+            // ==========================================
+            let isPixelMode = false;
+            let pixelAnimationFrame = null;
+            let currentPixelScale = 5; 
+            
+            function adjustPixelScale(delta) {
+                currentPixelScale += delta;
+                if (currentPixelScale < 2) currentPixelScale = 2;
+                if (currentPixelScale > 10) currentPixelScale = 10;
+                document.getElementById('pixelScaleValue').innerText = currentPixelScale;
+            }
+            
+            function togglePixelMode() {
+                isPixelMode = !isPixelMode;
+                const overlay = document.getElementById('pixelOverlay');
+                const container = document.getElementById('spineCanvasContainer');
+                const originalCanvas = container.querySelector('canvas:not(#pixelOverlay)'); 
+                const settingsUI = document.getElementById('pixelSettings');
+            
+                if (pixelAnimationFrame) { cancelAnimationFrame(pixelAnimationFrame); pixelAnimationFrame = null; }
+            
+                if (isPixelMode) {
+                    overlay.style.setProperty('display', 'block', 'important');
+                    if (originalCanvas) originalCanvas.style.opacity = '0.001'; 
+                    if (settingsUI) { settingsUI.classList.remove('hidden'); settingsUI.classList.add('flex'); }
+                    startPixelLoop();
+                } else {
+                    overlay.style.setProperty('display', 'none', 'important');
+                    if (originalCanvas) originalCanvas.style.opacity = '1'; 
+                    if (settingsUI) { settingsUI.classList.add('hidden'); settingsUI.classList.remove('flex'); }
+                }
+            }
+            
+            function startPixelLoop() {
+                if (!isPixelMode) return;
+                const container = document.getElementById('spineCanvasContainer');
+                const webglCanvas = container.querySelector('canvas:not(#pixelOverlay)');
+                const overlay = document.getElementById('pixelOverlay');
+                
+                if (webglCanvas && overlay) {
+                    const ctx = overlay.getContext('2d');
+                    overlay.width = Math.floor(container.clientWidth / currentPixelScale);
+                    overlay.height = Math.floor(container.clientHeight / currentPixelScale);
+                    
+                    ctx.clearRect(0, 0, overlay.width, overlay.height);
+                    ctx.imageSmoothingEnabled = false; 
+                    ctx.drawImage(webglCanvas, 0, 0, overlay.width, overlay.height);
+                }
+                pixelAnimationFrame = requestAnimationFrame(startPixelLoop);
+            }
+
+            // ==========================================
+            // 🌟 4. 新增：超迷你小人背景隨機生成邏輯
+            // ==========================================
+            window.wallpaperMiniPlayers = [];
+
+            function loadWallpaperMiniSpines(baseFolderKey, costumeKey, count = 5) {
+                const container = document.getElementById('wallpaperMiniContainer');
+                if (!container) return;
+
+                // 1. 清除舊的小人
+                if (window.wallpaperMiniPlayers && window.wallpaperMiniPlayers.length > 0) {
+                    window.wallpaperMiniPlayers.forEach(p => p.dispose());
+                    window.wallpaperMiniPlayers = [];
+                }
+                container.innerHTML = '';
+
+                // 2. 組合路徑邏輯
+                // 預設為 Mini_ 資料夾的寫法
+                const miniFolder = `Mini_${baseFolderKey}`;
+                const miniFile = `Mini_${costumeKey}`; 
+                
+                let skelUrl = `./spine_assets/${miniFolder}/${miniFile}.skel.bytes`;
+                let atlasUrl = `./spine_assets/${miniFolder}/${miniFile}.atlas.txt`;
+
+                // 💡【提示】如果你想要直接拿 SD 版角色來當背景迷你小人，請「取消註解」底下這兩行：
+                // skelUrl = `./spine_sd_assets/${costumeKey}.skel.bytes`;
+                // atlasUrl = `./spine_sd_assets/${costumeKey}.atlas.txt`;
+
+                // 3. 隨機生成指定數量的小人
+                for (let i = 0; i < count; i++) {
+                    const randomX = Math.floor(Math.random() * 90);
+                    const randomY = Math.floor(Math.random() * 90);
+                    const randomAngle = Math.floor(Math.random() * 8) * 45;
+                    const randomScale = (Math.random() * 0.4 + 0.8).toFixed(2);
+
+                    const wrapperId = `mini-wp-${i}`;
+                    const wrapperHtml = `
+                        <div id="${wrapperId}" style="
+                            position: absolute; 
+                            left: ${randomX}vw; 
+                            top: ${randomY}vh; 
+                            width: 120px; 
+                            height: 120px; 
+                            transform: rotate(${randomAngle}deg) scale(${randomScale});
+                            opacity: 0.6;
+                            z-index: 5;
+                        "></div>
+                    `;
+                    container.insertAdjacentHTML('beforeend', wrapperHtml);
+
+                    new spine.SpinePlayer(wrapperId, {
+                        skelUrl: skelUrl,
+                        atlasUrl: atlasUrl,
+                        animation: "Idle", 
+                        skin: "Normal", 
+                        showControls: false,
+                        showLoading: false,
+                        backgroundColor: "#00000000",
+                        alpha: true,
+                        premultipliedAlpha: true,
+                        viewport: { x: -250, y: 0, width: 500, height: 500 },
+                        success: (p) => {
+                            if (typeof fixSpineMultiplyHole === 'function') {
+                                fixSpineMultiplyHole(p);
+                            }
+                            
+                            const canvas = document.querySelector(`#${wrapperId} canvas`);
+                            if (canvas) {
+                                canvas.style.width = '100%';
+                                canvas.style.height = '100%';
+                            }
+
+                            const anims = p.skeleton.data.animations.map(a => a.name);
+                            let targetAnim = anims.includes("Idle") ? "Idle" : (anims.includes("idle") ? "idle" : anims[0]);
+                            if (targetAnim) {
+                                p.animationState.setAnimation(0, targetAnim, true);
+                            }
+                            
+                            // 錯開每隻小人的動畫播放速度
+                            p.animationState.timeScale = (Math.random() * 0.5 + 0.5); 
+                            p.play();
+                            
+                            window.wallpaperMiniPlayers.push(p);
+                        },
+                        error: (p, reason) => {
+                            console.warn(`超迷你 Spine [${wrapperId}] 載入失敗:`, reason);
+                            const el = document.getElementById(wrapperId);
+                            if(el) el.remove();
+                        }
+                    });
+                }
+            }
+        </script>
+    </body>
+</html>
