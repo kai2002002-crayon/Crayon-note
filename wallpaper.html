@@ -1268,11 +1268,12 @@ function loadWallpaperMiniSpines(charName, costumeKey, count = 5) {
                 position: absolute; 
                 left: ${randomX}vw; 
                 top: ${randomY}vh; 
-                width: 120px; 
-                height: 120px; 
-                transform: rotate(${randomAngle}deg) scale(${randomScale});
-                opacity: 0.6;
-                z-index: 5;
+                width: 200px; 
+                height: 200px; 
+                transform: scale(${randomScale});
+                opacity: 1;
+                z-index: 9999;
+                border: 2px dashed red; /* 加上紅框方便肉眼尋找容器位置 */
             "></div>
         `;
         container.insertAdjacentHTML('beforeend', wrapperHtml);
@@ -1291,16 +1292,27 @@ function loadWallpaperMiniSpines(charName, costumeKey, count = 5) {
                 if (typeof fixSpineMultiplyHole === 'function') {
                     fixSpineMultiplyHole(p);
                 }
-                
-                // 成功載入後直接套用正確的 skinName
-                if (skinName) {
+                // 列出這個 Spine 內含的所有 Skin 名稱到 Console 供對照
+                if (i === 0 && p.skeleton.data.skins) {
+                    console.log("【當前 Minimi 檔案內包含的所有 Skin 名稱列表】：", p.skeleton.data.skins.map(s => s.name));
+                }
+                const possibleSkins = [`Mini_${costumeKey}`, costumeKey];
+                let applied = false;
+                for (let sName of possibleSkins) {
                     try {
-                        p.skeleton.setSkinByName(skinName);
+                        p.skeleton.setSkinByName(sName);
                         p.skeleton.setToSetupPose();
                         p.skeleton.updateWorldTransform();
+                        console.log(`[${wrapperId}] 成功套用 Skin: ${sName}`);
+                        applied = true;
+                        break;
                     } catch (e) {
-                        console.warn(`無法設定 Skin: ${skinName}`, e);
+                        // 略過找不到的
                     }
+                }
+                
+                if (!applied) {
+                    console.warn(`[${wrapperId}] 找不到任何匹配的 Skin，使用預設外觀`);
                 }
 
                 const canvas = document.querySelector(`#${wrapperId} canvas`);
@@ -1315,14 +1327,13 @@ function loadWallpaperMiniSpines(charName, costumeKey, count = 5) {
                     p.animationState.setAnimation(0, targetAnim, true);
                 }
                 
-                p.animationState.timeScale = (Math.random() * 0.5 + 0.5); 
+                p.animationState.timeScale = 1.0; 
                 p.play();
                 
                 window.wallpaperMiniPlayers.push(p);
-                console.log(`[${wrapperId}] 迷你小人載入成功！`);
             },
             error: (p, reason) => {
-                console.warn(`超迷你 Spine [${wrapperId}] 載入失敗:`, reason);
+                console.error(`[${wrapperId}] 載入失敗:`, reason);
                 const el = document.getElementById(wrapperId);
                 if(el) el.remove();
             }
