@@ -1240,9 +1240,19 @@ function loadWallpaperMiniSpines(charName, costumeKey, count = 5) {
     const skinName = `Mini_${costumeKey}`;
 
     for (let i = 0; i < count; i++) {
-        // 隨機分佈在畫面上
-        const randomX = Math.floor(Math.random() * 85);
-        const randomY = Math.floor(Math.random() * 85);
+        let randomX, randomY;
+        let isRightBottom = true;
+
+        // 用迴圈確保隨機抽出的座標不在右下角 (X > 60% 且 Y > 50%)
+        while (isRightBottom) {
+            randomX = Math.floor(Math.random() * 90) + 3;  // 3% ~ 93%
+            randomY = Math.floor(Math.random() * 85) + 5;  // 5% ~ 90%
+            
+            // 檢查是否落在右下角區域 (X > 60% 且 Y > 50%)
+            if (!(randomX > 60 && randomY > 50)) {
+                isRightBottom = false; // 不在右下角，合格！
+            }
+        }
         const randomAngle = Math.floor(Math.random() * 8) * 45;
         const randomScale = (Math.random() * 0.3 + 0.9).toFixed(2);
 
