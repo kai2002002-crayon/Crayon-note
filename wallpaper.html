@@ -8,7 +8,7 @@
         <script src="data_core.js"></script>
         <link rel="stylesheet" href="sprites.css">
         <link rel="stylesheet" href="./style.css">
-        <link id="dynamicFavicon" rel="icon" href="./favicon.png" type="image/png">
+        <link id="dynamicFavicon" rel="icon" href="./Favicon.png" type="image/png">
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="./spine-player.min.css">
         <script src="./spine-player.min.js"></script>
@@ -31,7 +31,7 @@
                 position: relative; z-index: 50 !important;
                 display: none !important; opacity: 0;
                 transition: opacity 0.3s ease-in-out;
-                max-width: 1400px; margin: 0 auto; padding: 1rem;
+                max-width: 800px; margin: 0 auto; padding: 1rem;
             }
 
             /* 畫布與全螢幕配置 */
@@ -44,7 +44,7 @@
             #spineCanvasContainer {
                 width: 100vw !important; height: 100vh !important;
                 border: none; border-radius: 0; margin: 0;
-                background: transparent !important; /* 讓 WE 決定背景 */
+                background: transparent !important;
             }
 
             .spine-player-controls { display: none !important; }
@@ -71,7 +71,6 @@
                 50% { transform: translateY(-10px) scale(1.05); filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.9)); }
             }
 
-            /* 原有樣式保留 (折疊、雙面特效等) */
             ::-webkit-scrollbar { width: 6px; height: 6px; }
             ::-webkit-scrollbar-track { background: transparent; }
             ::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 10px; }
@@ -135,13 +134,13 @@
     </head>
     <body class="text-gray-800 dark:text-gray-200 transition-colors duration-300">
         
-        <!-- 🌟 新增：全螢幕超迷你小人隨機出現的容器 (層級低於畫布，且不阻擋點擊) -->
+        <!-- 背景超迷你小人隨機出現的容器 -->
         <div id="wallpaperMiniContainer" class="fixed inset-0 pointer-events-none z-[5] overflow-hidden"></div>
 
-        <!-- 🌟 半透明黑色遮罩 (雙擊呼叫 UI 用) -->
+        <!-- 半透明黑色遮罩 (雙擊呼叫 UI 用) -->
         <div id="uiBackdrop" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-[40] opacity-0 pointer-events-none transition-opacity duration-300" style="display: none !important;"></div>
 
-        <!-- 🌟 桌布時鐘：固定在角色左側 (畫面右側偏中) -->
+        <!-- 桌布時鐘：固定在角色左側 (畫面右側偏中) -->
         <div id="desktopClock" class="fixed bottom-[15vh] right-[20vw] flex flex-col items-start z-0 pointer-events-none text-white desktop-clock-shadow">
             <div id="clockDate" class="text-3xl sm:text-4xl font-black tracking-widest text-amber-300 mb-1">DD/MM/YYYY</div>
             <div id="clockTime" class="text-5xl sm:text-6xl font-black tracking-wider flex items-baseline gap-2">
@@ -159,10 +158,9 @@
                     </h1>
                 </div>
                 <div class="flex items-center gap-2 shrink-0">
-                <!-- 🌟 新增：切換 12/24 小時制按鈕 -->
-                <button onclick="toggleTimeFormat()" class="px-2 py-1.5 sm:px-3 sm:py-2 text-[10px] sm:text-xs bg-slate-600 text-white font-bold rounded-lg shadow hover:bg-slate-700 transition shrink-0">
-                🕒 <span id="timeFormatText">12H</span>
-                </button>
+                    <button onclick="toggleTimeFormat()" class="px-2 py-1.5 sm:px-3 sm:py-2 text-[10px] sm:text-xs bg-slate-600 text-white font-bold rounded-lg shadow hover:bg-slate-700 transition shrink-0">
+                    🕒 <span id="timeFormatText">12H</span>
+                    </button>
                     <select id="langSelect" onchange="changeLanguage(this.value)" class="bg-amber-100 dark:bg-slate-700 text-amber-900 dark:text-white border border-amber-300 dark:border-slate-500 text-xs sm:text-sm font-bold rounded-lg px-2 py-1.5 outline-none shadow-sm cursor-pointer">
                         <option value="zh-TW">繁中</option>
                         <option value="ja">日本語</option>
@@ -189,28 +187,11 @@
                         <div id="activeCharIconContainer" class="w-10 h-10 rounded-lg border-2 border-amber-400 shadow-sm overflow-hidden bg-white dark:bg-slate-700 hidden relative items-center justify-center shrink-0"></div>
                         <h2 id="activeCharName" class="text-lg font-black text-amber-900 dark:text-amber-300" data-i18n="ui_please_select">請先選擇坨坨</h2>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <div id="pixelSettings" class="hidden items-center gap-1 bg-white dark:bg-slate-800 px-1.5 py-0.5 rounded-lg border border-amber-300 shadow-sm">
-                            <span class="text-[10px] font-bold text-amber-900">顆粒</span>
-                            <span id="pixelScaleValue" class="text-[10px] font-bold text-amber-600 w-3 text-center">5</span>
-                            <div class="flex flex-col">
-                                <button onclick="adjustPixelScale(1)" class="text-[8px] text-gray-500 hover:text-amber-600 leading-none p-[1.5px]">▲</button>
-                                <button onclick="adjustPixelScale(-1)" class="text-[8px] text-gray-500 hover:text-amber-600 leading-none p-[1.5px]">▼</button>
-                            </div>
-                        </div>
-                        <button onclick="togglePixelMode()" class="px-2 py-1.5 bg-green-500 hover:bg-green-600 text-white text-xs font-bold rounded-lg shadow whitespace-nowrap">👾 像素</button>
-                        <button onclick="resetCamera()" class="px-3 py-1.5 bg-slate-600 hover:bg-slate-700 text-white text-xs font-bold rounded-lg shadow whitespace-nowrap" data-i18n="ui_camera">🔄 重置位置</button>
-                    </div>
                 </div>
 
                 <div class="flex items-center justify-between gap-2 flex-wrap">
                     <div class="flex items-center gap-2">
                         <button id="btnPlayPause" onclick="togglePlay()" class="w-9 h-9 flex items-center justify-center bg-amber-500 text-white rounded-lg shadow hover:bg-amber-600 transition" title="播放/暫停">⏸️</button>
-                        <div class="flex bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-600 p-1 shadow-inner">
-                            <button onclick="setSpeed(0.5)" class="speed-btn px-2 py-1 text-xs font-bold rounded text-gray-700">0.5x</button>
-                            <button onclick="setSpeed(1)" class="speed-btn px-2 py-1 text-xs font-bold rounded bg-amber-200 text-amber-900">1.0x</button>
-                            <button onclick="setSpeed(2)" class="speed-btn px-2 py-1 text-xs font-bold rounded text-gray-700">2.0x</button>
-                        </div>
                     </div>
                     <div class="flex items-center gap-2">
                         <button id="btnModeSwitch" onclick="toggleViewerMode()" class="px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold rounded-lg shadow whitespace-nowrap" data-i18n="ui_mode_lobby">🔄 模式: 大廳</button>
@@ -220,41 +201,23 @@
                     </div>
                 </div>
                 <div class="flex justify-between w-full relative z-[100] items-center gap-4">
-                    <div class="relative w-[48%]" id="animDropdownWrapper">
+                    <div class="relative w-full" id="animDropdownWrapper">
                         <button onclick="toggleCustomSelect('animList')" class="custom-select-btn w-full bg-white border border-gray-300 text-xs font-bold rounded-lg px-2 py-1.5 flex justify-between items-center text-left shadow-sm">
                             <span id="animSelectText" class="truncate text-amber-900" data-i18n="ui_select_anim">選擇動作</span>
                             <span class="ml-1 text-gray-400 shrink-0 text-[10px]">▼</span>
                         </button>
                         <div id="animList" class="hidden absolute top-[calc(100%+6px)] left-0 w-full bg-white border border-amber-300 rounded-lg shadow-2xl max-h-[240px] overflow-y-auto flex-col py-1 z-[110]"></div>
                     </div>
-                    <div class="relative w-[48%]" id="slotDropdownWrapper">
-                        <button onclick="toggleCustomSelect('slotList')" class="custom-select-btn w-full bg-white border border-gray-300 text-xs font-bold rounded-lg px-2 py-1.5 flex justify-between items-center text-left shadow-sm">
-                            <span class="truncate text-amber-900" data-i18n="ui_slots">🧩 外觀插槽</span>
-                            <span class="ml-1 text-gray-400 shrink-0 text-[10px]">▼</span>
-                        </button>
-                        <div id="slotList" class="hidden absolute top-[calc(100%+6px)] right-0 w-full bg-white border border-amber-300 rounded-lg shadow-2xl max-h-[240px] overflow-y-auto flex-col z-[110]">
-                            <div class="flex gap-1 p-1.5 border-b border-gray-100 sticky top-0 bg-gray-50 z-20">
-                                <button onclick="toggleAllSlots(true, event)" class="flex-1 py-1 text-[10px] font-bold bg-white hover:bg-amber-100 rounded border shadow-sm text-gray-700" data-i18n="ui_show_slots">全顯</button>
-                                <button onclick="toggleAllSlots(false, event)" class="flex-1 py-1 text-[10px] font-bold bg-white hover:bg-amber-100 rounded border shadow-sm text-gray-700" data-i18n="ui_hide_slots">全隱</button>
-                            </div>
-                            <div id="slotsContainerInner" class="flex flex-col pb-1"></div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- 🌟 全螢幕的 Spine 畫布區域 (底層) -->
+        <!-- 全螢幕 Spine 畫布區域 -->
         <section id="spineViewerSection">
-            <div id="spineCanvasContainer" class="w-full h-full relative overflow-hidden flex items-center justify-center">
-                <canvas id="pixelOverlay" class="absolute inset-0 w-full h-full pointer-events-none z-10 hidden" style="image-rendering: pixelated; image-rendering: crisp-edges;"></canvas>
-            </div>
+            <div id="spineCanvasContainer" class="w-full h-full relative overflow-hidden flex items-center justify-center"></div>
         </section>
 
         <script>
-            // ==========================================
-            // 🌟 1. 桌布時鐘邏輯 (支援 12/24 小時制與 LocalStorage 記憶)
-            // ==========================================
             let is24HourFormat = localStorage.getItem('we_time_format') === '24';
 
             function toggleTimeFormat() {
@@ -298,9 +261,6 @@
             setInterval(updateClock, 1000);
             updateClock();
 
-            // ==========================================
-            // 🌟 2. 雙擊顯示/隱藏 UI 面板邏輯
-            // ==========================================
             function toggleDesktopUI(show) {
                 const backdrop = document.getElementById('uiBackdrop');
                 const uiWrapper = document.getElementById('uiWrapper');
@@ -338,9 +298,6 @@
                 }
             });
 
-            // ==========================================
-            // 🌟 3. Spine 核心變數與初始化
-            // ==========================================
             function fixSpineMultiplyHole(player) {
                 if (!player || !player.skeleton) return;
                 player.skeleton.slots.forEach(slot => {
@@ -395,7 +352,6 @@
             };
 
             let globalPlayer = null;
-            let slotVisibilityMap = {};
             let activeCharData = null; 
             let currentMode = 'lobby'; 
             let currentZoom = 1.0;
@@ -486,19 +442,11 @@
                 if (!e.target.closest('#animDropdownWrapper')) {
                     document.getElementById('animList').classList.add('hidden'); document.getElementById('animList').classList.remove('flex');
                 }
-                if (!e.target.closest('#slotDropdownWrapper')) {
-                    document.getElementById('slotList').classList.add('hidden'); document.getElementById('slotList').classList.remove('flex');
-                }
             });
             
             function toggleCustomSelect(listId) {
                 const list = document.getElementById(listId);
                 if (list.classList.contains('hidden')) {
-                    if (listId === 'animList') {
-                        document.getElementById('slotList').classList.add('hidden'); document.getElementById('slotList').classList.remove('flex');
-                    } else {
-                        document.getElementById('animList').classList.add('hidden'); document.getElementById('animList').classList.remove('flex');
-                    }
                     list.classList.remove('hidden'); list.classList.add('flex');
                 } else {
                     list.classList.add('hidden'); list.classList.remove('flex');
@@ -625,7 +573,7 @@
 
             function selectCharacter(charObj, spineName, iconUrl) {
                 activeCharData = { ...charObj, spineName: spineName };
-                saveCurrentConfig(activeCharData, null); // 存檔
+                saveCurrentConfig(activeCharData, null);
 
                 let pColors = "border-amber-400 text-amber-900";
                 const displayPersonality = charObj.personality.includes(",") ? "雙面" : charObj.personality;
@@ -667,8 +615,6 @@
                 else nameEl.removeAttribute("style");
             
                 document.getElementById('animList').classList.add('hidden'); 
-                document.getElementById('slotList').classList.add('hidden');
-                slotVisibilityMap = {};
                 
                 const btnMode = document.getElementById('btnModeSwitch');
                 btnMode.style.display = 'inline-block';
@@ -710,19 +656,15 @@
                     selectEl.style.display = 'none';
                 }
                 
-                saveCurrentConfig(null, targetCostume); // 存檔
+                saveCurrentConfig(null, targetCostume);
                 loadSpine(activeCharData.spineName, targetCostume, currentMode);
-
-                // 🌟 新增：呼叫背景超迷你小人生成函數
                 loadWallpaperMiniSpines(activeCharData.spineName, targetCostume, 5);
             }
 
             function changeSpineCostume(costumeKey) {
                 if(!costumeKey || !activeCharData) return;
-                saveCurrentConfig(null, costumeKey); // 存檔
+                saveCurrentConfig(null, costumeKey);
                 loadSpine(activeCharData.spineName, costumeKey, currentMode);
-
-                // 🌟 新增：同步切換背景小人服裝
                 loadWallpaperMiniSpines(activeCharData.spineName, costumeKey, 5);
             }
             
@@ -731,9 +673,7 @@
                VoiceManager.init(baseFolderKey, costumeKey);
                if (globalPlayer) { globalPlayer.dispose(); globalPlayer = null; }
             
-               const existingPixelOverlay = document.getElementById('pixelOverlay');
                container.innerHTML = '<div class="spine-player-loading-custom"></div>';
-               if (existingPixelOverlay) container.appendChild(existingPixelOverlay); 
                
                let skelUrl = mode === 'lobby' ? `./spine_assets/${baseFolderKey}/${costumeKey}.skel.bytes` : `./spine_sd_assets/${costumeKey}.skel.bytes`;
                let atlasUrl = mode === 'lobby' ? `./spine_assets/${baseFolderKey}/${costumeKey}.atlas.txt` : `./spine_sd_assets/${costumeKey}.atlas.txt`;
@@ -758,12 +698,7 @@
                        const loader = container.querySelector('.spine-player-loading-custom');
                        if (loader) loader.remove();
         
-                       if (isPixelMode) {
-                           const originalCanvas = container.querySelector('canvas:not(#pixelOverlay)');
-                           if (originalCanvas) originalCanvas.style.opacity = '0.001';
-                       }
-
-                       setSpeed(1);
+                       player.speed = 1;
                        const skins = player.skeleton.data.skins;
                        if (skins && skins.length > 0) {
                            const tSkin = skins.find(s => s.name === 'Normal') || skins.find(s => s.name !== 'default') || skins[0];
@@ -776,7 +711,6 @@
                        player.skeleton.updateWorldTransform();
                        
                        buildAnimationDropdown(player); 
-                       buildSlotsPanel(player);
             
                        setTimeout(() => {
                            const anims = player.skeleton.data.animations.map(a => a.name);
@@ -792,7 +726,7 @@
                            if (mode === 'lobby') VoiceManager.playSpawn();
                            
                            setupComplexInteractions(player, container);
-                           resetCamera(); // 套用靠右下的排版
+                           applyDefaultCamera();
                        }, 50);
                    },
                    error: function () {
@@ -809,18 +743,6 @@
                 } else {
                     globalPlayer.pause(); document.getElementById('btnPlayPause').innerText = '▶️';
                 }
-            }
-            
-            function setSpeed(speed) {
-                if (!globalPlayer) return;
-                globalPlayer.speed = speed;
-                document.querySelectorAll('.speed-btn').forEach(btn => {
-                    if (btn.innerText.includes(speed.toFixed(1))) {
-                        btn.className = "speed-btn px-2 py-1 text-xs font-bold rounded bg-amber-200 text-amber-900";
-                    } else {
-                        btn.className = "speed-btn px-2 py-1 text-xs font-bold rounded hover:bg-amber-100 text-gray-700";
-                    }
-                });
             }
             
             function buildAnimationDropdown(player) {
@@ -842,78 +764,7 @@
                 });
             }
             
-            function buildSlotsPanel(player) {
-                const container = document.getElementById('slotsContainerInner'); container.innerHTML = '';
-                slotVisibilityMap = {};
-                const slots = player.skeleton.slots.filter(s => s.attachment != null).sort((a, b) => a.data.name.localeCompare(b.data.name));
-
-                slots.forEach((slot) => {
-                    const slotName = slot.data.name; slotVisibilityMap[slotName] = true;
-                    const originalColor = { r: slot.color.r, g: slot.color.g, b: slot.color.b };
-            
-                    const item = document.createElement('label');
-                    item.className = "flex items-center gap-2 px-3 py-1.5 hover:bg-red-50 cursor-pointer transition-colors border-b border-gray-50 group";
-                    
-                    const checkbox = document.createElement('input');
-                    checkbox.type = "checkbox"; checkbox.checked = true;
-                    checkbox.className = "w-3.5 h-3.5 text-amber-500 rounded focus:ring-amber-500 border-gray-300";
-                    checkbox.onchange = (e) => { toggleSlot(slotName, e.target.checked); };
-            
-                    const span = document.createElement('span');
-                    span.className = "text-xs font-medium text-gray-700 truncate group-hover:text-red-600 transition-colors";
-                    span.innerText = slotName;
-            
-                    item.addEventListener('click', (e) => e.stopPropagation());
-                    item.onmouseenter = () => { slot.color.r = 1; slot.color.g = 0; slot.color.b = 0; };
-                    item.onmouseleave = () => { slot.color.r = originalColor.r; slot.color.g = originalColor.g; slot.color.b = originalColor.b; };
-            
-                    item.appendChild(checkbox); item.appendChild(span); container.appendChild(item);
-                });
-            
-                if(!globalPlayer.config.injectedUpdate) {
-                    const origUpdate = player.skeleton.updateWorldTransform;
-                    player.skeleton.updateWorldTransform = function() {
-                        origUpdate.call(player.skeleton);
-                        const skelSlots = player.skeleton.slots;
-                        for(let i = 0; i < skelSlots.length; i++) {
-                            const s = skelSlots[i];
-                            if (slotVisibilityMap[s.data.name] === false) s.color.a = 0;
-                        }
-                    };
-                    globalPlayer.config.injectedUpdate = true;
-                }
-            }
-            
-            function toggleSlot(slotName, isVisible) {
-                slotVisibilityMap[slotName] = isVisible;
-                if (globalPlayer && globalPlayer.skeleton) {
-                    const s = globalPlayer.skeleton.findSlot(slotName);
-                    if (s) {
-                        if (isVisible) {
-                            s.setToSetupPose(); fixSpineMultiplyHole(globalPlayer);
-                        } else { s.color.a = 0; }
-                    }
-                }
-            }
-            
-            function toggleAllSlots(show, event) {
-                if(event) event.stopPropagation();
-                const checkboxes = document.querySelectorAll('#slotsContainerInner input[type="checkbox"]');
-                checkboxes.forEach(cb => {
-                    cb.checked = show;
-                    const slotName = cb.nextElementSibling.innerText;
-                    slotVisibilityMap[slotName] = show;
-                    if (globalPlayer && globalPlayer.skeleton) {
-                        const s = globalPlayer.skeleton.findSlot(slotName);
-                        if (s) {
-                            if (show) { s.setToSetupPose(); } else { s.color.a = 0; }
-                        }
-                    }
-                });
-                if (show) fixSpineMultiplyHole(globalPlayer);
-            }
-            
-            function resetCamera() {
+            function applyDefaultCamera() {
                 if (!globalPlayer || !globalPlayer.skeleton) return;
                 currentZoom = currentMode === 'battle' ? 2.5 : 1.0;
                 globalPlayer.skeleton.scaleX = currentZoom;
@@ -923,10 +774,10 @@
                 globalPlayer.skeleton.y = currentMode === 'lobby' ? 600 * (1 - currentZoom) : 0;
                 globalPlayer.skeleton.updateWorldTransform();
             }
-            window.addEventListener('resize', resetCamera);
+            window.addEventListener('resize', applyDefaultCamera);
 
             function setupComplexInteractions(player, container) {
-                const canvas = container.querySelector('canvas:not(#pixelOverlay)');
+                const canvas = container.querySelector('canvas');
                 if (!canvas) return;
                 canvas.style.touchAction = 'none';
                 
@@ -1128,7 +979,7 @@
                             }
                         }
                         applyBounce();
-                    }
+                    } 
             
                     if (hasTriggeredRub) {
                         if (hitZoneOnDown && hitZoneOnDown.name === "臉頰" && animNames.includes("Touch_End")) {
@@ -1169,157 +1020,96 @@
                 canvas.addEventListener('pointerout', stopDrag);
             }
 
-            // ==========================================
-            // 🌟 像素化運算邏輯
-            // ==========================================
-            let isPixelMode = false;
-            let pixelAnimationFrame = null;
-            let currentPixelScale = 5; 
-            
-            function adjustPixelScale(delta) {
-                currentPixelScale += delta;
-                if (currentPixelScale < 2) currentPixelScale = 2;
-                if (currentPixelScale > 10) currentPixelScale = 10;
-                document.getElementById('pixelScaleValue').innerText = currentPixelScale;
-            }
-            
-            function togglePixelMode() {
-                isPixelMode = !isPixelMode;
-                const overlay = document.getElementById('pixelOverlay');
-                const container = document.getElementById('spineCanvasContainer');
-                const originalCanvas = container.querySelector('canvas:not(#pixelOverlay)'); 
-                const settingsUI = document.getElementById('pixelSettings');
-            
-                if (pixelAnimationFrame) { cancelAnimationFrame(pixelAnimationFrame); pixelAnimationFrame = null; }
-            
-                if (isPixelMode) {
-                    overlay.style.setProperty('display', 'block', 'important');
-                    if (originalCanvas) originalCanvas.style.opacity = '0.001'; 
-                    if (settingsUI) { settingsUI.classList.remove('hidden'); settingsUI.classList.add('flex'); }
-                    startPixelLoop();
-                } else {
-                    overlay.style.setProperty('display', 'none', 'important');
-                    if (originalCanvas) originalCanvas.style.opacity = '1'; 
-                    if (settingsUI) { settingsUI.classList.add('hidden'); settingsUI.classList.remove('flex'); }
+            window.wallpaperMiniPlayers = [];
+
+            function loadWallpaperMiniSpines(charName, costumeKey, count = 5) {
+                const container = document.getElementById('wallpaperMiniContainer');
+                if (!container) return;
+
+                if (window.wallpaperMiniPlayers && window.wallpaperMiniPlayers.length > 0) {
+                    window.wallpaperMiniPlayers.forEach(p => p.dispose());
+                    window.wallpaperMiniPlayers = [];
                 }
-            }
-            
-            function startPixelLoop() {
-                if (!isPixelMode) return;
-                const container = document.getElementById('spineCanvasContainer');
-                const webglCanvas = container.querySelector('canvas:not(#pixelOverlay)');
-                const overlay = document.getElementById('pixelOverlay');
-                
-                if (webglCanvas && overlay) {
-                    const ctx = overlay.getContext('2d');
-                    overlay.width = Math.floor(container.clientWidth / currentPixelScale);
-                    overlay.height = Math.floor(container.clientHeight / currentPixelScale);
-                    
-                    ctx.clearRect(0, 0, overlay.width, overlay.height);
-                    ctx.imageSmoothingEnabled = false; 
-                    ctx.drawImage(webglCanvas, 0, 0, overlay.width, overlay.height);
-                }
-                pixelAnimationFrame = requestAnimationFrame(startPixelLoop);
-            }
+                container.innerHTML = '';
 
-            // ==========================================
-// 🌟 4. 最終修正版：結合 MINI_SPINE 與 COSTUME_MAP 的超迷你小人背景生成
-// ==========================================
-window.wallpaperMiniPlayers = [];
+                const skinName = `Mini_${costumeKey}`;
 
-function loadWallpaperMiniSpines(charName, costumeKey, count = 5) {
-    const container = document.getElementById('wallpaperMiniContainer');
-    if (!container) return;
+                for (let i = 0; i < count; i++) {
+                    let randomX, randomY;
+                    let isRightBottom = true;
 
-    if (window.wallpaperMiniPlayers && window.wallpaperMiniPlayers.length > 0) {
-        window.wallpaperMiniPlayers.forEach(p => p.dispose());
-        window.wallpaperMiniPlayers = [];
-    }
-    container.innerHTML = '';
-
-    const skinName = `Mini_${costumeKey}`;
-
-    for (let i = 0; i < count; i++) {
-        let randomX, randomY;
-        let isRightBottom = true;
-
-        // 用迴圈確保隨機抽出的座標不在右下角 (X > 60% 且 Y > 50%)
-        while (isRightBottom) {
-            randomX = Math.floor(Math.random() * 90) + 3;  // 3% ~ 93%
-            randomY = Math.floor(Math.random() * 85) + 5;  // 5% ~ 90%
-            
-            // 檢查是否落在右下角區域 (X > 60% 且 Y > 50%)
-            if (!(randomX > 60 && randomY > 50)) {
-                isRightBottom = false; // 不在右下角，合格！
-            }
-        }
-        const randomAngle = Math.floor(Math.random() * 8) * 45;
-        const randomScale = (Math.random() * 0.3 + 0.9).toFixed(2);
-
-        const wrapperId = `mini-wp-${i}`;
-        const wrapperHtml = `
-            <div id="${wrapperId}" style="
-                position: absolute; 
-                left: ${randomX}vw; 
-                top: ${randomY}vh; 
-                width: 150px; 
-                height: 150px; 
-                transform: rotate(${randomAngle}deg) scale(${randomScale});
-                opacity: 0.85;
-                z-index: 5;
-                pointer-events: none;
-            "></div>
-        `;
-        container.insertAdjacentHTML('beforeend', wrapperHtml);
-
-        const miniPlayer = new spine.SpinePlayer(wrapperId, {
-            skelUrl: "./mini/Minimi.skel.bytes",
-            atlasUrl: "./mini/Minimi.atlas.txt",
-            skin: skinName,
-            animation: "Idle",
-            showControls: false,
-            showLoading: false,
-            backgroundColor: "#00000000",
-            alpha: true,
-            premultipliedAlpha: true,
-            viewport: { x: -250, y: 0, width: 500, height: 500 },
-            
-            success: (player) => {
-                // 呼叫修復函數
-                if (typeof fixSpineMultiplyHole === 'function') {
-                    fixSpineMultiplyHole(player);
-                }
-                
-                // 強制調整 canvas 樣式，確保順利渲染
-                const canvas = document.getElementById(wrapperId).querySelector('canvas');
-                if (canvas) {
-                    canvas.style.width = '100%';
-                    canvas.style.height = '100%';
-                    canvas.style.position = 'relative';
-                    canvas.style.zIndex = '99999';
-                }
-
-                const anims = player.skeleton.data.animations.map(a => a.name);
-                if (!anims.includes("Idle")) {
-                    let targetAnim = anims.includes("idle") ? "idle" : anims[0];
-                    if (targetAnim) {
-                        player.animationState.setAnimation(0, targetAnim, true);
+                    while (isRightBottom) {
+                        randomX = Math.floor(Math.random() * 90) + 3; 
+                        randomY = Math.floor(Math.random() * 85) + 5; 
+                        
+                        if (!(randomX > 60 && randomY > 50)) {
+                            isRightBottom = false; 
+                        }
                     }
+                    const randomAngle = Math.floor(Math.random() * 8) * 45;
+                    const randomScale = (Math.random() * 0.3 + 0.9).toFixed(2);
+
+                    const wrapperId = `mini-wp-${i}`;
+                    const wrapperHtml = `
+                        <div id="${wrapperId}" style="
+                            position: absolute; 
+                            left: ${randomX}vw; 
+                            top: ${randomY}vh; 
+                            width: 150px; 
+                            height: 150px; 
+                            transform: rotate(${randomAngle}deg) scale(${randomScale});
+                            opacity: 0.85;
+                            z-index: 5;
+                            pointer-events: none;
+                        "></div>
+                    `;
+                    container.insertAdjacentHTML('beforeend', wrapperHtml);
+
+                    const miniPlayer = new spine.SpinePlayer(wrapperId, {
+                        skelUrl: "./mini/Minimi.skel.bytes",
+                        atlasUrl: "./mini/Minimi.atlas.txt",
+                        skin: skinName,
+                        animation: "Idle",
+                        showControls: false,
+                        showLoading: false,
+                        backgroundColor: "#00000000",
+                        alpha: true,
+                        premultipliedAlpha: true,
+                        viewport: { x: -250, y: 0, width: 500, height: 500 },
+                        
+                        success: (player) => {
+                            if (typeof fixSpineMultiplyHole === 'function') {
+                                fixSpineMultiplyHole(player);
+                            }
+                            
+                            const canvas = document.getElementById(wrapperId).querySelector('canvas');
+                            if (canvas) {
+                                canvas.style.width = '100%';
+                                canvas.style.height = '100%';
+                                canvas.style.position = 'relative';
+                                canvas.style.zIndex = '99999';
+                            }
+
+                            const anims = player.skeleton.data.animations.map(a => a.name);
+                            if (!anims.includes("Idle")) {
+                                let targetAnim = anims.includes("idle") ? "idle" : anims[0];
+                                if (targetAnim) {
+                                    player.animationState.setAnimation(0, targetAnim, true);
+                                }
+                            }
+                        
+                            player.animationState.timeScale = 0.5 + Math.random() * 0.5;
+                            player.play();
+                            
+                            window.wallpaperMiniPlayers.push(player);
+                        },
+                        error: (player, reason) => {
+                            const el = document.getElementById(wrapperId);
+                            if (el) el.remove();
+                        }
+                    });
                 }
-            
-                player.animationState.timeScale = 0.5 + Math.random() * 0.5; // 錯開每個小人的速度
-                player.play();
-                
-                window.wallpaperMiniPlayers.push(player);
-            },
-            error: (player, reason) => {
-                console.warn(`超迷你 Spine [${wrapperId}] 載入失敗:`, reason);
-                const el = document.getElementById(wrapperId);
-                if (el) el.remove();
             }
-        });
-    }
-}
         </script>
     </body>
 </html>
