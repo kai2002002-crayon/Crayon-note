@@ -1240,10 +1240,10 @@
 
                 // 2. 組合路徑邏輯
                 // 預設為 Mini_ 資料夾的寫法
-                const miniFile = `Mini_${costumeKey}`; 
+                const miniFileName = "Minimi"; 
                 
-                let skelUrl = `./mini/${miniFile}.skel.bytes`;
-                let atlasUrl = `./mini/${miniFile}.atlas.txt`;
+                const skelUrl = `./mini/${miniFileName}.skel.bytes`;
+                const atlasUrl = `./mini/${miniFileName}.atlas.txt`;
 
                 // 💡【提示】如果你想要直接拿 SD 版角色來當背景迷你小人，請「取消註解」底下這兩行：
                 // skelUrl = `./spine_sd_assets/${costumeKey}.skel.bytes`;
