@@ -5,21 +5,29 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>坨坨桌布</title>
         
-        <!-- 🌟 修復 1：加回 Tailwind CSS，解決時鐘跑位與排版崩壞問題 -->
+        <!-- 引入 Tailwind CSS 確保所有排版正常運作 -->
         <script src="https://cdn.tailwindcss.com"></script>
         
         <script src="data_config.js"></script>
         <script src="data_core.js"></script>
         <link rel="stylesheet" href="sprites.css">
+        <link rel="stylesheet" href="./style.css">
         <link id="dynamicFavicon" rel="icon" href="./Favicon.png" type="image/png">
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="./spine-player.min.css">
         <script src="./spine-player.min.js"></script>
+        
         <script>
-            const isDarkMode = localStorage.getItem('theme') === 'dark' || 
-                               (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            // 🌟 強化版 Storage 防護：避免 WE 封鎖 LocalStorage 導致腳本崩潰
+            const SafeStorage = {
+                get: (k) => { try { return localStorage.getItem(k); } catch(e) { return null; } },
+                set: (k, v) => { try { localStorage.setItem(k, v); } catch(e) {} }
+            };
+
+            const isDarkMode = SafeStorage.get('theme') === 'dark' || 
+                               (!SafeStorage.get('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
             if (isDarkMode) { document.documentElement.classList.add('dark'); }
-            window.currentLang = localStorage.getItem('user_lang') || "zh-TW";
+            window.currentLang = SafeStorage.get('user_lang') || "zh-TW";
         </script>
         <style>
             html, body {
@@ -92,11 +100,10 @@
     <body class="text-gray-800 dark:text-gray-200 transition-colors duration-300">
         
         <div id="wallpaperMiniContainer" class="fixed inset-0 pointer-events-none z-[5] overflow-hidden"></div>
-
         <div id="uiBackdrop" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-[40] opacity-0 pointer-events-none transition-opacity duration-300" style="display: none !important;"></div>
 
-        <!-- 🌟 加入雙重防護：保留 Tailwind class 同時加上 style 確保時鐘絕對在右下角 -->
-        <div id="desktopClock" class="fixed text-white desktop-clock-shadow pointer-events-none" style="bottom: 15vh; right: 20vw; z-index: 0; display: flex; flex-direction: column; align-items: flex-start;">
+        <!-- 🌟 修復 1：時鐘位置改到明確的左下角 (left: 8vw)，徹底避開右側主 Spine -->
+        <div id="desktopClock" class="fixed text-white desktop-clock-shadow pointer-events-none" style="bottom: 15vh; left: 8vw; z-index: 0; display: flex; flex-direction: column; align-items: flex-start;">
             <div id="clockDate" class="text-3xl sm:text-4xl font-black tracking-widest text-amber-300 mb-1">DD/MM/YYYY</div>
             <div id="clockTime" class="text-5xl sm:text-6xl font-black tracking-wider flex items-baseline gap-2">
                 <span id="clockTimeDigits">HH:MM:SS</span> 
@@ -127,9 +134,7 @@
             <section class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md p-4 sm:p-5 rounded-2xl shadow-md border border-amber-200 dark:border-slate-700 transition-all">
                 <div class="flex justify-between items-center mb-3 border-b border-amber-200 dark:border-slate-700 pb-2">
                     <h2 class="text-base sm:text-lg font-bold text-amber-900 dark:text-amber-400" data-i18n="ui_select_char">👥 選擇坨坨</h2>
-                    <button id="toggleAllCharBtn" onclick="toggleAllCharacters()" class="px-3 py-1 text-xs font-bold bg-amber-100 dark:bg-slate-700 text-amber-800 dark:text-gray-300 rounded-lg hover:bg-amber-200 transition shadow-sm" data-i18n="ui_show_all">
-                    顯示全部 🔽
-                    </button>
+                    <button id="toggleAllCharBtn" onclick="toggleAllCharacters()" class="px-3 py-1 text-xs font-bold bg-amber-100 dark:bg-slate-700 text-amber-800 dark:text-gray-300 rounded-lg hover:bg-amber-200 transition shadow-sm" data-i18n="ui_show_all">顯示全部 🔽</button>
                 </div>
                 <div id="charGridContainer" class="space-y-3 collapsible-content collapsed" style="max-height: 0px; opacity: 0;"></div>
             </section>
@@ -165,37 +170,23 @@
             </div>
         </div>
 
-        <!-- 🌟 修復 2：將雙擊事件綁定移到外部區塊，確保隨時可點擊 -->
+        <!-- 確保點擊與拖拉事件能在這裡被捕捉 -->
         <section id="spineViewerSection" ondblclick="handleDesktopDoubleClick(event)">
             <div id="spineCanvasContainer" class="w-full h-full relative overflow-hidden flex items-center justify-center pointer-events-auto"></div>
         </section>
 
         <script>
-            // ==========================================
-            // 雙擊開啟 UI 邏輯 (完全解耦，不會再卡住)
-            // ==========================================
             function toggleDesktopUI(show) {
-                const backdrop = document.getElementById('uiBackdrop');
-                const uiWrapper = document.getElementById('uiWrapper');
-                
+                const backdrop = document.getElementById('uiBackdrop'); const uiWrapper = document.getElementById('uiWrapper');
                 if (show) {
-                    backdrop.style.setProperty('display', 'block', 'important');
-                    uiWrapper.style.setProperty('display', 'block', 'important');
+                    backdrop.style.setProperty('display', 'block', 'important'); uiWrapper.style.setProperty('display', 'block', 'important');
                     backdrop.classList.remove('pointer-events-none');
-                    
-                    requestAnimationFrame(() => {
-                        backdrop.style.opacity = '1';
-                        uiWrapper.style.opacity = '1';
-                    });
+                    requestAnimationFrame(() => { backdrop.style.opacity = '1'; uiWrapper.style.opacity = '1'; });
                 } else {
-                    backdrop.style.opacity = '0';
-                    uiWrapper.style.opacity = '0';
-                    backdrop.classList.add('pointer-events-none');
-                    
+                    backdrop.style.opacity = '0'; uiWrapper.style.opacity = '0'; backdrop.classList.add('pointer-events-none');
                     setTimeout(() => {
                         if (backdrop.style.opacity === '0') {
-                            backdrop.style.setProperty('display', 'none', 'important');
-                            uiWrapper.style.setProperty('display', 'none', 'important');
+                            backdrop.style.setProperty('display', 'none', 'important'); uiWrapper.style.setProperty('display', 'none', 'important');
                         }
                     }, 300);
                 }
@@ -203,91 +194,92 @@
 
             function handleDesktopDoubleClick(e) {
                 const backdrop = document.getElementById('uiBackdrop');
-                if (backdrop.style.opacity === '0' || !backdrop.style.opacity) { 
-                    toggleDesktopUI(true); 
-                }
+                if (backdrop.style.opacity === '0' || !backdrop.style.opacity) toggleDesktopUI(true); 
             }
             document.getElementById('uiBackdrop').addEventListener('click', () => { toggleDesktopUI(false); });
 
-            // ==========================================
-            // 時鐘邏輯
-            // ==========================================
-            let is24HourFormat = localStorage.getItem('we_time_format') === '24';
+            let is24HourFormat = SafeStorage.get('we_time_format') === '24';
             function toggleTimeFormat() {
-                is24HourFormat = !is24HourFormat;
-                localStorage.setItem('we_time_format', is24HourFormat ? '24' : '12');
-                updateClock(); 
+                is24HourFormat = !is24HourFormat; SafeStorage.set('we_time_format', is24HourFormat ? '24' : '12'); updateClock(); 
             }
             function updateClock() {
-                const now = new Date();
-                const dd = String(now.getDate()).padStart(2, '0');
-                const mm = String(now.getMonth() + 1).padStart(2, '0');
-                const yyyy = now.getFullYear();
+                const now = new Date(); const dd = String(now.getDate()).padStart(2, '0'); const mm = String(now.getMonth() + 1).padStart(2, '0'); const yyyy = now.getFullYear();
                 document.getElementById('clockDate').innerText = `${dd}/${mm}/${yyyy}`;
-                
-                let rawHours = now.getHours();
-                let hh, ampm;
-                const ampmEl = document.getElementById('clockAmPm');
-                
-                if (is24HourFormat) {
-                    hh = String(rawHours).padStart(2, '0');
-                    ampm = '';
-                    ampmEl.style.display = 'none'; 
-                } else {
-                    hh = String(rawHours % 12 || 12).padStart(2, '0');
-                    ampm = rawHours >= 12 ? 'PM' : 'AM';
-                    ampmEl.style.display = 'inline-block';
-                    ampmEl.innerText = ampm;
-                }
-                const m = String(now.getMinutes()).padStart(2, '0');
-                const s = String(now.getSeconds()).padStart(2, '0');
+                let rawHours = now.getHours(); let hh, ampm; const ampmEl = document.getElementById('clockAmPm');
+                if (is24HourFormat) { hh = String(rawHours).padStart(2, '0'); ampm = ''; ampmEl.style.display = 'none'; } 
+                else { hh = String(rawHours % 12 || 12).padStart(2, '0'); ampm = rawHours >= 12 ? 'PM' : 'AM'; ampmEl.style.display = 'inline-block'; ampmEl.innerText = ampm; }
+                const m = String(now.getMinutes()).padStart(2, '0'); const s = String(now.getSeconds()).padStart(2, '0');
                 document.getElementById('clockTimeDigits').innerText = `${hh}:${m}:${s}`;
-                const formatTextEl = document.getElementById('timeFormatText');
-                if (formatTextEl) formatTextEl.innerText = is24HourFormat ? '24H' : '12H';
+                const formatTextEl = document.getElementById('timeFormatText'); if (formatTextEl) formatTextEl.innerText = is24HourFormat ? '24H' : '12H';
             }
             setInterval(updateClock, 1000); updateClock();
 
-            // ==========================================
-            // SPINE 核心與資料初始化
-            // ==========================================
+            // 🌟 補回語音管理器
+            const VoiceManager = {
+                currentAudio: null, fadeInterval: null, baseName: "", skinSuffix: "",
+                init(baseName, costumeKey) {
+                    this.baseName = baseName;
+                    let suffix = costumeKey.replace(baseName, ""); this.skinSuffix = suffix ? `_${suffix}` : ""; 
+                    if (!this.currentAudio) { this.currentAudio = new Audio(); this.currentAudio.setAttribute('playsinline', 'true'); }
+                },
+                stop(fadeDuration = 0.5) {
+                    if (this.fadeInterval) { clearInterval(this.fadeInterval); this.fadeInterval = null; }
+                    if (this.currentAudio && !this.currentAudio.paused) {
+                        const audio = this.currentAudio; audio.loop = false;
+                        this.fadeInterval = setInterval(() => {
+                            if (audio.volume > 0.1) audio.volume -= 0.1; 
+                            else { audio.pause(); audio.currentTime = 0; audio.volume = 0.8; clearInterval(this.fadeInterval); }
+                        }, (fadeDuration * 1000) / 10);
+                    }
+                },
+                play(folder, filename, onEnded = null, loop = false) {
+                    if (this.fadeInterval) { clearInterval(this.fadeInterval); this.fadeInterval = null; }
+                    if (!this.currentAudio) { this.currentAudio = new Audio(); this.currentAudio.setAttribute('playsinline', 'true'); }
+                    const audio = this.currentAudio;
+                    audio.pause(); audio.onended = null;
+                    audio.src = `./${folder}/${filename}.mp3`; audio.volume = window.weVolume || 0.8; audio.loop = loop; audio.currentTime = 0; audio.load();
+                    if (onEnded && !loop) audio.onended = onEnded;
+                    const playPromise = audio.play();
+                    if (playPromise !== undefined) playPromise.catch(e => { if (onEnded) onEnded(); });
+                    return audio;
+                },
+                playRandom(folder, variants, suffix = "", onEnded = null) {
+                    const pick = variants[Math.floor(Math.random() * variants.length)]; return this.play(folder, `${pick}${suffix}`, onEnded);
+                },
+                playSpawn(onEnded = null) { this.playRandom('spawn', [`Voice_${this.baseName}_Spawn1`, `Voice_${this.baseName}_Spawn2`], "", onEnded); },
+                playTickleStart(onEnded = null) { this.play('tickle', `Voice_${this.baseName}_TickleStart1`, onEnded); },
+                playTickleDuring() { this.play('tickle', `Voice_${this.baseName}_TickleDuring1`, null, true); },
+                playTouch(onEnded = null) { this.playRandom('touch', [`Voice_${this.baseName}_Touch1`, `Voice_${this.baseName}_Touch1_1`, `Voice_${this.baseName}_Touch1_2`], this.skinSuffix, onEnded); },
+                playPat(onEnded = null) { this.playRandom('pat', [`Voice_${this.baseName}_Touch2`, `Voice_${this.baseName}_Touch2_1`, `Voice_${this.baseName}_Touch2_2`], this.skinSuffix, onEnded); },
+                playSmash(onEnded = null) { this.play('smash', `Voice_${this.baseName}_DutchRubEnd1`, () => { this.play('smash', `Voice_${this.baseName}_DutchRubEnd2${this.skinSuffix}`, onEnded); }); }
+            };
+
             function fixSpineMultiplyHole(player) {
                 if (!player || !player.skeleton) return;
                 player.skeleton.slots.forEach(slot => {
                     if (slot.data.blendMode === spine.BlendMode.Multiply || slot.data.name.toLowerCase().includes('shadow')) {
-                       slot.data.blendMode = spine.BlendMode.Normal;
-                       slot.color.a = Math.min(slot.color.a, 0.6);
+                       slot.data.blendMode = spine.BlendMode.Normal; slot.color.a = Math.min(slot.color.a, 0.6);
                     }
                 });
             }
             
-            function changeLanguage(lang) {
-                localStorage.setItem('user_lang', lang);
-                window.currentLang = lang; location.reload(); 
-            }
+            function changeLanguage(lang) { SafeStorage.set('user_lang', lang); window.currentLang = lang; location.reload(); }
             
             function applyTranslations() {
-                const langSelect = document.getElementById('langSelect');
-                if (langSelect) langSelect.value = window.currentLang;
-                document.querySelectorAll('[data-i18n]').forEach(el => {
-                    const key = el.getAttribute('data-i18n');
-                    el.innerText = getI18n(key); 
-                });
+                const langSelect = document.getElementById('langSelect'); if (langSelect) langSelect.value = window.currentLang;
+                document.querySelectorAll('[data-i18n]').forEach(el => { el.innerText = getI18n(el.getAttribute('data-i18n')); });
                 document.title = getI18n('ui_title');
             }
             
             function getI18n(key) {
-                if (!key) return key;
-                const safeLang = (typeof LANG_DICT !== 'undefined' && LANG_DICT[window.currentLang]) ? window.currentLang : 'zh-TW';
-                if (typeof LANG_DICT !== 'undefined' && LANG_DICT[safeLang] && LANG_DICT[safeLang][key]) return LANG_DICT[safeLang][key];
-                return key; 
+                if (!key) return key; const safeLang = (typeof LANG_DICT !== 'undefined' && LANG_DICT[window.currentLang]) ? window.currentLang : 'zh-TW';
+                if (typeof LANG_DICT !== 'undefined' && LANG_DICT[safeLang] && LANG_DICT[safeLang][key]) return LANG_DICT[safeLang][key]; return key; 
             }
 
             const HEX_COLORS = { "天真": "#4ade80", "冷靜": "#60a5fa", "狂亂": "#f87171", "活潑": "#facc15", "憂鬱": "#c084fc" };
             const personalityColors = { 
-                "天真": "border-green-400 text-green-400", "冷靜": "border-blue-400 text-blue-400", 
-                "狂亂": "border-red-400 text-red-400", "活潑": "border-yellow-400 text-yellow-400", 
-                "憂鬱": "border-purple-400 text-purple-400", "雙面": "penta-border-title-anim penta-text-anim",
-                "共鳴": "border-rainbow text-rainbow"
+                "天真": "border-green-400 text-green-400", "冷靜": "border-blue-400 text-blue-400", "狂亂": "border-red-400 text-red-400", 
+                "活潑": "border-yellow-400 text-yellow-400", "憂鬱": "border-purple-400 text-purple-400", "雙面": "penta-border-title-anim penta-text-anim", "共鳴": "border-rainbow text-rainbow"
             };
             const SPRITE_CLASS_MAP = {
                 race_龍族: "sprite-Bg_Dragon", race_精靈: "sprite-Bg_Elf", race_妖精: "sprite-Bg_Sprite",
@@ -295,46 +287,31 @@
                 race_獸人: "sprite-Bg_Werebeast", race_魔女: "sprite-Bg_Witch", race_unknown: "sprite-Bg_Unknown"
             };
             const CHAR_SPRITE_MAP = {
-                "冷靜": "sprite-char-composed", "憂鬱": "sprite-char-depressed",
-                "天真": "sprite-char-innocence", "狂亂": "sprite-char-madness", "活潑": "sprite-char-vivacious", "共鳴": "sprite-char-resonance", "雙面": "sprite-char-multifaceted"
+                "冷靜": "sprite-char-composed", "憂鬱": "sprite-char-depressed", "天真": "sprite-char-innocence", 
+                "狂亂": "sprite-char-madness", "活潑": "sprite-char-vivacious", "共鳴": "sprite-char-resonance", "雙面": "sprite-char-multifaceted"
             };
 
-            let globalPlayer = null;
-            let activeCharData = null; 
-            let currentMode = 'lobby'; 
-            let currentZoom = 1.0;
+            let globalPlayer = null; let activeCharData = null; let currentMode = 'lobby'; let currentZoom = 1.0;
             
             function saveCurrentConfig(charObj, costume) {
-                if(charObj) {
-                    localStorage.setItem('we_char', charObj.name);
-                    localStorage.setItem('we_spine', charObj.spineName);
-                }
-                if(costume) localStorage.setItem('we_costume', costume);
+                if(charObj) { SafeStorage.set('we_char', charObj.name); SafeStorage.set('we_spine', charObj.spineName); }
+                if(costume) SafeStorage.set('we_costume', costume);
             }
 
             window.onload = function() { 
                 applyTranslations(); initCharacterGrid(); 
-
-                const savedCharName = localStorage.getItem('we_char');
-                const savedSpine = localStorage.getItem('we_spine');
-                const savedCostume = localStorage.getItem('we_costume');
-                
-                let charObj = INITIAL_DATA[0];
-                let spineName = typeof SPINE_MAP !== 'undefined' ? (SPINE_MAP[charObj.name] || charObj.name) : charObj.name;
+                const savedCharName = SafeStorage.get('we_char'); const savedSpine = SafeStorage.get('we_spine'); const savedCostume = SafeStorage.get('we_costume');
+                let charObj = INITIAL_DATA[0]; let spineName = typeof SPINE_MAP !== 'undefined' ? (SPINE_MAP[charObj.name] || charObj.name) : charObj.name;
                 
                 if (savedCharName && INITIAL_DATA.find(c => c.name === savedCharName)) {
                     charObj = INITIAL_DATA.find(c => c.name === savedCharName);
                     spineName = savedSpine || (typeof SPINE_MAP !== 'undefined' ? SPINE_MAP[charObj.name] || charObj.name : charObj.name);
                 }
-                
-                window.pendingCostume = savedCostume; 
-                selectCharacter(charObj, spineName, ""); 
+                window.pendingCostume = savedCostume; selectCharacter(charObj, spineName, ""); 
             };
 
             document.addEventListener('click', (e) => {
-                if (!e.target.closest('#animDropdownWrapper')) {
-                    document.getElementById('animList').classList.add('hidden'); document.getElementById('animList').classList.remove('flex');
-                }
+                if (!e.target.closest('#animDropdownWrapper')) { document.getElementById('animList').classList.add('hidden'); document.getElementById('animList').classList.remove('flex'); }
             });
             
             function toggleCustomSelect(listId) {
@@ -382,33 +359,23 @@
                     header.onclick = () => togglePersonalityGroup(groupId, btnId);
                     const pSprite = SPRITE_CLASS_MAP[`p_${p}`] || "";
                     
-                    header.innerHTML = `
-                        <div class="flex items-center gap-1">
-                            <div class="sprite-base sprite-common ${pSprite} shrink-0 scale-[0.35] origin-left -ml-2"></div>
-                            <h3 class="text-xs sm:text-sm font-black border-l-4 ${borderClass} pl-1 -ml-3"><span class="${textClass}">${getI18n(p)}</span></h3>
-                        </div>
-                        <span id="${btnId}" class="text-xs text-gray-400">🔼</span>
-                    `;
+                    header.innerHTML = `<div class="flex items-center gap-1"><div class="sprite-base sprite-common ${pSprite} shrink-0 scale-[0.35] origin-left -ml-2"></div><h3 class="text-xs sm:text-sm font-black border-l-4 ${borderClass} pl-1 -ml-3"><span class="${textClass}">${getI18n(p)}</span></h3></div><span id="${btnId}" class="text-xs text-gray-400">🔼</span>`;
                     
                     const iconContainer = document.createElement('div');
                     iconContainer.id = groupId; iconContainer.className = "flex flex-wrap gap-1.5 pt-2 pl-1 collapsible-content";
                     iconContainer.style.maxHeight = "1000px"; iconContainer.style.opacity = "1";
             
                     chars.forEach(c => {
-                        const spineName = typeof SPINE_MAP !== 'undefined' ? SPINE_MAP[c.name] : c.name;
-                        const displayName = getI18n(c.name);
+                        const spineName = typeof SPINE_MAP !== 'undefined' ? SPINE_MAP[c.name] : c.name; const displayName = getI18n(c.name);
                         const btn = document.createElement('button');
                         btn.className = "group flex flex-col items-center gap-0.5 transition-transform hover:scale-110 active:scale-95 w-12 sm:w-14";
                         btn.onclick = () => selectCharacter(c, spineName, "");
             
                         const displayPersonality = c.personality.includes(",") ? "雙面" : c.personality;
-                        const charSpriteBase = CHAR_SPRITE_MAP[displayPersonality] || "sprite-char-innocence";
-                        const charSpriteClass = `sprite-${spineName}`;
-                        let raceKey = c.race === "???" ? "unknown" : c.race;
-                        const raceSprite = SPRITE_CLASS_MAP[`race_${raceKey}`] || "sprite-Bg_Unknown";
+                        const charSpriteBase = CHAR_SPRITE_MAP[displayPersonality] || "sprite-char-innocence"; const charSpriteClass = `sprite-${spineName}`;
+                        let raceKey = c.race === "???" ? "unknown" : c.race; const raceSprite = SPRITE_CLASS_MAP[`race_${raceKey}`] || "sprite-Bg_Unknown";
             
                         let charStyle = ""; let charBorderClass = borderClass; 
-                        
                         if (displayPersonality === "雙面") {
                             const parts = c.personality.split(',').map(s => s.trim());
                             const c1 = HEX_COLORS[parts[0]] || "#c084fc"; const c2 = HEX_COLORS[parts[1]] || "#4ade80";
@@ -425,7 +392,6 @@
                         `;
                         iconContainer.appendChild(btn);
                     });
-            
                     row.appendChild(header); row.appendChild(iconContainer); container.appendChild(row);
                 });
             }
@@ -512,10 +478,11 @@
             }
             
             // ==========================================
-            // 🌟 修復 3：移除舊版 WebGL 覆寫，讓主 Spine 恢復正常載入
+            // 🌟 修復 2：更寬的 Viewport 與正確的讀取與觸控綁定
             // ==========================================
             function loadSpine(baseFolderKey, costumeKey, mode) {
                const container = document.getElementById('spineCanvasContainer');
+               VoiceManager.init(baseFolderKey, costumeKey);
                if (globalPlayer) { globalPlayer.dispose(); globalPlayer = null; }
             
                container.innerHTML = '<div class="spine-player-loading-custom"></div>';
@@ -523,7 +490,8 @@
                let skelUrl = mode === 'lobby' ? `./spine_assets/${baseFolderKey}/${costumeKey}.skel.bytes` : `./spine_sd_assets/${costumeKey}.skel.bytes`;
                let atlasUrl = mode === 'lobby' ? `./spine_assets/${baseFolderKey}/${costumeKey}.atlas.txt` : `./spine_sd_assets/${costumeKey}.atlas.txt`;
                let targetZoom = mode === 'battle' ? 2.5 : 1.0;
-               let baseViewport = mode === 'lobby' ? { x: -400, y: 0, width: 800, height: 1000 } : { x: -750, y: -150, width: 1500, height: 3000 };
+               // 加寬 Viewport，避免某些大型 Spine 超出邊界
+               let baseViewport = mode === 'lobby' ? { x: -500, y: 0, width: 1000, height: 1000 } : { x: -750, y: -150, width: 1500, height: 3000 };
                currentZoom = targetZoom;
             
                globalPlayer = new spine.SpinePlayer(container, {
@@ -560,14 +528,32 @@
                                document.getElementById('btnPlayPause').innerText = '⏸️';
                            }
                            player.play();
+                           if (mode === 'lobby') VoiceManager.playSpawn();
+                           
+                           // 重新綁定滑鼠與觸控的互動功能
+                           setupComplexInteractions(player, container);
                            applyDefaultCamera();
                        }, 50);
                    },
-                   error: function () {
-                       container.innerHTML = `<div class="text-red-500 font-bold text-sm text-center p-4">載入失敗：檔案不存在或路徑錯誤</div>`;
+                   error: function (p, reason) {
+                       console.error("Spine載入失敗: ", reason);
+                       container.innerHTML = `<div class="text-red-500 font-bold text-sm text-center p-4">載入失敗：${skelUrl} 不存在</div>`;
                    }
                });
             }
+
+            // 🌟 修復 3：主 Spine 明確移到畫面靠右
+            function applyDefaultCamera() {
+                if (!globalPlayer || !globalPlayer.skeleton) return;
+                currentZoom = currentMode === 'battle' ? 2.5 : 1.0;
+                globalPlayer.skeleton.scaleX = currentZoom; globalPlayer.skeleton.scaleY = currentZoom;
+                
+                // 將座標設定在 350 (偏右)，與左側時鐘分開
+                globalPlayer.skeleton.x = currentMode === 'battle' ? 500 : 350; 
+                globalPlayer.skeleton.y = currentMode === 'lobby' ? 600 * (1 - currentZoom) : 0;
+                globalPlayer.skeleton.updateWorldTransform();
+            }
+            window.addEventListener('resize', applyDefaultCamera);
 
             function togglePlay() {
                 if (!globalPlayer) return;
@@ -592,17 +578,207 @@
                     animList.appendChild(btn);
                 });
             }
-            
-            function applyDefaultCamera() {
-                if (!globalPlayer || !globalPlayer.skeleton) return;
-                currentZoom = currentMode === 'battle' ? 2.5 : 1.0;
-                globalPlayer.skeleton.scaleX = currentZoom; globalPlayer.skeleton.scaleY = currentZoom;
+
+            // 🌟 補回完整的滑鼠拉扯、撫摸與點擊連動語音的腳本
+            function setupComplexInteractions(player, container) {
+                const canvas = container.querySelector('canvas');
+                if (!canvas) return;
+                canvas.style.touchAction = 'none';
                 
-                globalPlayer.skeleton.x = currentMode === 'battle' ? 500 : 250; 
-                globalPlayer.skeleton.y = currentMode === 'lobby' ? 600 * (1 - currentZoom) : 0;
-                globalPlayer.skeleton.updateWorldTransform();
+                function screenToWorldCoords(cam, screenX, screenY, rect) {
+                    let vec;
+                    if (typeof spine !== 'undefined' && spine.webgl && spine.webgl.Vector3) {
+                        vec = new spine.webgl.Vector3(screenX, screenY, 0);
+                    } else {
+                        vec = new spine.Vector3(screenX, screenY, 0);
+                    }
+                    cam.screenToWorld(vec, rect.width, rect.height);
+                    return { x: vec.x, y: vec.y };
+                }
+                
+                let pointers = {}; let isDragging = false;
+                let startX = 0, startY = 0; let lastMouseX = 0, lastMouseY = 0; let dragDistance = 0;
+                
+                let hitZoneOnDown = null; let activeInteractBone = null; let initialBoneX = 0, initialBoneY = 0;
+                let hasTriggeredRub = false; let tickleTimer = null; let voiceRecoveryTimer = null;
+            
+                const getIsLobby = () => typeof currentMode === 'undefined' || currentMode === 'lobby';
+                const updateUI = (text) => { const el = document.getElementById('animSelectText'); if (el) el.innerText = text; };
+                const safeClearIdle = () => { if (typeof globalIdleTimer !== 'undefined') clearTimeout(globalIdleTimer); };
+                const safeStartIdle = () => { if (typeof startRandomAnimationLoop === 'function') startRandomAnimationLoop(); };
+            
+                function getHitZone(mouseX, mouseY) {
+                    if (!getIsLobby()) return null;
+                    const rect = canvas.getBoundingClientRect();
+                    if (!globalPlayer || !globalPlayer.sceneRenderer || !globalPlayer.sceneRenderer.camera) return null;
+                    const cam = globalPlayer.sceneRenderer.camera;
+                    
+                    const worldPos = screenToWorldCoords(cam, mouseX, mouseY, rect);
+                    player.skeleton.updateWorldTransform();
+                 
+                    let clickedPart = null; let minDistance = Infinity;
+                 
+                    const hitZones = [
+                        { name: "臉頰", bones: ["Character_Ball_Move"], radius: 60 },
+                        { name: "頭部", bones: ["Character_Pat"], radius: 60 }, 
+                        { name: "身體", bones: ["Character_Tickle"], radius: 70 }
+                    ];
+                 
+                    hitZones.forEach(zone => {
+                        let targetBone = null;
+                        for (let bName of zone.bones) { targetBone = player.skeleton.findBone(bName); if (targetBone) break; }
+                        if (targetBone) {
+                            const distance = Math.hypot(worldPos.x - targetBone.worldX, worldPos.y - targetBone.worldY);
+                            if (distance < zone.radius && distance < minDistance) { 
+                                minDistance = distance; clickedPart = { ...zone, bone: targetBone }; 
+                            }
+                        }
+                    });
+                    return clickedPart;
+                }
+            
+                canvas.addEventListener('pointerdown', (e) => {
+                    pointers[e.pointerId] = { x: e.clientX, y: e.clientY }; clearTimeout(voiceRecoveryTimer);
+                    isDragging = true; startX = lastMouseX = e.clientX; startY = lastMouseY = e.clientY;
+                    dragDistance = 0; hasTriggeredRub = false; hitZoneOnDown = null; activeInteractBone = null;
+                    canvas.setPointerCapture(e.pointerId);
+            
+                    const rect = canvas.getBoundingClientRect();
+                    hitZoneOnDown = getHitZone(e.clientX - rect.left, e.clientY - rect.top);
+                    
+                    if (hitZoneOnDown && (hitZoneOnDown.name === "臉頰" || hitZoneOnDown.name === "頭部")) {
+                        activeInteractBone = hitZoneOnDown.bone; initialBoneX = activeInteractBone.x; initialBoneY = activeInteractBone.y;
+                    }
+                });
+            
+                canvas.addEventListener('pointermove', (e) => {
+                    if (pointers[e.pointerId]) { pointers[e.pointerId] = { x: e.clientX, y: e.clientY }; }
+                    if (!isDragging || !player.skeleton) return;
+                    const rect = canvas.getBoundingClientRect(); if (rect.width === 0) return;
+            
+                    const dx = e.clientX - lastMouseX; const dy = e.clientY - lastMouseY; dragDistance += Math.hypot(dx, dy);
+            
+                    if (dragDistance > 10 && hitZoneOnDown && !hasTriggeredRub) {
+                        hasTriggeredRub = true; clearTimeout(tickleTimer); safeClearIdle(); 
+                        const animNames = player.skeleton.data.animations.map(a => a.name);
+            
+                        if (hitZoneOnDown.name === "臉頰" && animNames.includes("Touch_Idle")) {
+                            player.animationState.setAnimation(0, "Touch_Idle", true); updateUI("Touch_Idle");
+                        } else if (hitZoneOnDown.name === "頭部" && animNames.includes("Pat_Idle")) {
+                            player.animationState.setAnimation(0, "Pat_Idle", true); updateUI("Pat_Idle");
+                       } else if (hitZoneOnDown.name === "身體" && animNames.includes("Tickle_Idle_1")) {
+                            player.animationState.setAnimation(0, "Tickle_Idle_1", true); updateUI("Tickle_Idle_1");
+                            VoiceManager.playTickleStart(() => {
+                                if (isDragging) {
+                                    if (animNames.includes("Tickle_Idle_2")) {
+                                        player.animationState.setAnimation(0, "Tickle_Idle_2", true); updateUI("Tickle_Idle_2");
+                                    }
+                                    VoiceManager.playTickleDuring();
+                                }
+                            });
+                        }
+                    }
+            
+                    if (hasTriggeredRub && hitZoneOnDown && activeInteractBone) {
+                        const isCheek = hitZoneOnDown.name === "臉頰"; const cam = globalPlayer.sceneRenderer.camera;
+                        const startWorld = screenToWorldCoords(cam, startX - rect.left, startY - rect.top, rect);
+                        const currentWorld = screenToWorldCoords(cam, e.clientX - rect.left, e.clientY - rect.top, rect);
+                        
+                        const stretchIntensity = isCheek ? 0.8 : 0.5; 
+                        let worldDx = (currentWorld.x - startWorld.x) * stretchIntensity; let worldDy = (currentWorld.y - startWorld.y) * stretchIntensity;
+                        if (isCheek && worldDx > 0) worldDx = 0; 
+                        
+                        let baseWorld = { x: initialBoneX, y: initialBoneY };
+                        if (activeInteractBone.parent) {
+                            activeInteractBone.parent.localToWorld(baseWorld);
+                        } else {
+                            baseWorld.x = player.skeleton.x + initialBoneX * player.skeleton.scaleX;
+                            baseWorld.y = player.skeleton.y + initialBoneY * player.skeleton.scaleY;
+                        }
+                        
+                        let targetWorld = { x: baseWorld.x + worldDx, y: baseWorld.y + worldDy };
+                        if (activeInteractBone.parent) activeInteractBone.parent.worldToLocal(targetWorld);
+                        
+                        let localDx = targetWorld.x - initialBoneX; let localDy = targetWorld.y - initialBoneY;
+                        let rawDistance = Math.hypot(localDx, localDy);
+                        const MAX_RADIUS = isCheek ? 55 : 20; 
+            
+                        if (rawDistance > 0) {
+                            let elasticDist = MAX_RADIUS * (1 - Math.exp(-rawDistance / (MAX_RADIUS * 1.2)));
+                            localDx = (localDx / rawDistance) * elasticDist; localDy = (localDy / rawDistance) * elasticDist;
+                        }
+                        activeInteractBone.x = initialBoneX + localDx; activeInteractBone.y = initialBoneY + localDy;
+                        player.skeleton.updateWorldTransform();
+                    } 
+                    lastMouseX = e.clientX; lastMouseY = e.clientY;
+                });
+            
+                canvas.addEventListener('mousemove', (e) => {
+                    const rect = canvas.getBoundingClientRect(); const hit = getHitZone(e.clientX - rect.left, e.clientY - rect.top);
+                    if (hit) { canvas.style.cursor = 'pointer'; } else { canvas.style.cursor = 'default'; }
+                });
+            
+                const stopDrag = (e) => { 
+                    delete pointers[e.pointerId];
+                    if (!isDragging) return;
+                    isDragging = false; clearTimeout(tickleTimer); VoiceManager.stop(0.5);
+            
+                    if (!getIsLobby()) return;
+                    const animNames = player.skeleton.data.animations.map(a => a.name);
+            
+                    if (activeInteractBone) {
+                        let targetX = initialBoneX, targetY = initialBoneY; let bouncingBone = activeInteractBone; activeInteractBone = null; 
+                        let velX = 0, velY = 0; const tension = 0.20, friction = 0.85; 
+                        
+                        function applyBounce() {
+                            let dx = targetX - bouncingBone.x; let dy = targetY - bouncingBone.y;
+                            velX += dx * tension; velY += dy * tension; velX *= friction; velY *= friction;
+                            bouncingBone.x += velX; bouncingBone.y += velY;
+                            if (Math.abs(dx) > 0.1 || Math.abs(velX) > 0.1 || Math.abs(dy) > 0.1 || Math.abs(velY) > 0.1) {
+                                requestAnimationFrame(applyBounce);
+                            } else { bouncingBone.x = targetX; bouncingBone.y = targetY; }
+                        }
+                        applyBounce();
+                    } 
+            
+                    if (hasTriggeredRub) {
+                        if (hitZoneOnDown && hitZoneOnDown.name === "臉頰" && animNames.includes("Touch_End")) {
+                            player.animationState.setAnimation(0, "Touch_End", true); updateUI("Touch_End");
+                            VoiceManager.playTouch(() => {
+                                voiceRecoveryTimer = setTimeout(() => {
+                                    player.animationState.setAnimation(0, "Idle_1", true); updateUI("Idle_1"); safeStartIdle();
+                                }, 500);
+                            });
+                        } else if (hitZoneOnDown && hitZoneOnDown.name === "頭部" && animNames.includes("Pat_End")) {
+                            player.animationState.setAnimation(0, "Pat_End", true); updateUI("Pat_End");
+                            VoiceManager.playPat(() => {
+                                voiceRecoveryTimer = setTimeout(() => {
+                                    player.animationState.setAnimation(0, "Idle_1", true); updateUI("Idle_1"); safeStartIdle();
+                                }, 500);
+                            });
+                        } else if (hitZoneOnDown && hitZoneOnDown.name === "身體" && animNames.includes("Tickle_End")) {
+                            player.animationState.setAnimation(0, "Tickle_End", false); player.animationState.addAnimation(0, "Idle_1", true, 0); updateUI("Tickle_End"); safeStartIdle();
+                        } else {
+                            player.animationState.setAnimation(0, "Idle_1", true); updateUI("Idle_1"); safeStartIdle();
+                        }
+                    } else if (hitZoneOnDown && dragDistance < 10) {
+                        if ((hitZoneOnDown.name === "頭部" || hitZoneOnDown.name === "臉頰") && animNames.includes("Smash_End_1")) {
+                            player.animationState.setAnimation(0, "Smash_End_1", false);
+                            if (animNames.includes("Smash_End_2")) { player.animationState.addAnimation(0, "Smash_End_2", true, 0); }
+                            updateUI("Smash_End");
+                            VoiceManager.playSmash(() => {
+                                voiceRecoveryTimer = setTimeout(() => {
+                                    player.animationState.setAnimation(0, "Idle_1", true); updateUI("Idle_1"); safeStartIdle();
+                                }, 500);
+                            });
+                        } else { safeStartIdle(); }
+                    } else { safeStartIdle(); }
+                };
+            
+                canvas.addEventListener('pointerup', stopDrag);
+                canvas.addEventListener('pointercancel', stopDrag);
+                canvas.addEventListener('pointerout', stopDrag);
             }
-            window.addEventListener('resize', applyDefaultCamera);
 
             // ==========================================
             // 超迷你小人背景生成
@@ -625,9 +801,7 @@
                     const randomAngle = Math.floor(Math.random() * 8) * 45; const randomScale = (Math.random() * 0.3 + 0.9).toFixed(2);
                     const wrapperId = `mini-wp-${i}`;
                     
-                    const wrapperHtml = `
-                        <div id="${wrapperId}" style="position: absolute; left: ${randomX}vw; top: ${randomY}vh; width: 150px; height: 150px; transform: rotate(${randomAngle}deg) scale(${randomScale}); opacity: 0.85; z-index: 5; pointer-events: none;"></div>
-                    `;
+                    const wrapperHtml = `<div id="${wrapperId}" style="position: absolute; left: ${randomX}vw; top: ${randomY}vh; width: 150px; height: 150px; transform: rotate(${randomAngle}deg) scale(${randomScale}); opacity: 0.85; z-index: 5; pointer-events: none;"></div>`;
                     container.insertAdjacentHTML('beforeend', wrapperHtml);
 
                     const miniPlayer = new spine.SpinePlayer(wrapperId, {
