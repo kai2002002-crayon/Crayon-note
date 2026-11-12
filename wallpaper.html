@@ -1229,8 +1229,10 @@ window.wallpaperMiniPlayers = [];
 
 function loadWallpaperMiniSpines(charName, costumeKey, count = 5) {
     const container = document.getElementById('wallpaperMiniContainer');
-    if (!container) return;
-
+    if (!container) {
+        console.warn("找不到 #wallpaperMiniContainer 容器！");
+        return;
+    }
     // 1. 清除舊的小人
     if (window.wallpaperMiniPlayers && window.wallpaperMiniPlayers.length > 0) {
         window.wallpaperMiniPlayers.forEach(p => p.dispose());
@@ -1240,6 +1242,7 @@ function loadWallpaperMiniSpines(charName, costumeKey, count = 5) {
 
     // 2. 取得對應的 Skin 名稱 (對照 char_detail.html 的寫法)
     const skinName = `Mini_${costumeKey}`;
+    console.log(`正在載入迷你小人，目標 Skin: ${skinName}`);
     
     // 如果該角色沒有定義 MINI_SPINE，則不渲染背景小人
     if (!skinName) {
@@ -1316,6 +1319,7 @@ function loadWallpaperMiniSpines(charName, costumeKey, count = 5) {
                 p.play();
                 
                 window.wallpaperMiniPlayers.push(p);
+                console.log(`[${wrapperId}] 迷你小人載入成功！`);
             },
             error: (p, reason) => {
                 console.warn(`超迷你 Spine [${wrapperId}] 載入失敗:`, reason);
