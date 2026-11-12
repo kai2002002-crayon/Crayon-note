@@ -1238,8 +1238,6 @@ function loadWallpaperMiniSpines(charName, costumeKey, count = 5) {
     container.innerHTML = '';
 
     const skinName = `Mini_${costumeKey}`;
-    const skelUrl = `./mini/Minimi.skel.bytes`;
-    const atlasUrl = `./mini/Minimi.atlas.txt`;
 
     for (let i = 0; i < count; i++) {
         // 隨機分佈在畫面上
@@ -1264,52 +1262,50 @@ function loadWallpaperMiniSpines(charName, costumeKey, count = 5) {
         `;
         container.insertAdjacentHTML('beforeend', wrapperHtml);
 
-        new spine.SpinePlayer(wrapperId, {
-            skelUrl: skelUrl,
-            atlasUrl: atlasUrl,
-            animation: "Idle", 
+        const miniPlayer = new spine.SpinePlayer(wrapperId, {
+            skelUrl: "./mini/Minimi.skel.bytes",
+            atlasUrl: "./mini/Minimi.atlas.txt",
+            skin: skinName,
+            animation: "Idle",
             showControls: false,
             showLoading: false,
             backgroundColor: "#00000000",
             alpha: true,
             premultipliedAlpha: true,
-            // 🌟 關鍵調整：將視口中心對準小人骨架的核心區域（如果原本看不到，可以嘗試調整 x 和 y）
-            viewport: { x: -150, y: -50, width: 300, height: 300 },
-            success: (p) => {
+            viewport: { x: -250, y: 0, width: 500, height: 500 },
+            
+            success: (player) => {
+                // 呼叫修復函數
                 if (typeof fixSpineMultiplyHole === 'function') {
-                    fixSpineMultiplyHole(p);
+                    fixSpineMultiplyHole(player);
                 }
                 
-                // 套用正確的 Skin
-                try {
-                    p.skeleton.setSkinByName(skinName);
-                    p.skeleton.setToSetupPose();
-                    p.skeleton.updateWorldTransform();
-                } catch (e) {
-                    console.warn(`[${wrapperId}] 套用 Skin 失敗: ${skinName}`, e);
-                }
-
-                const canvas = document.querySelector(`#${wrapperId} canvas`);
+                // 強制調整 canvas 樣式，確保順利渲染
+                const canvas = document.getElementById(wrapperId).querySelector('canvas');
                 if (canvas) {
                     canvas.style.width = '100%';
                     canvas.style.height = '100%';
+                    canvas.style.position = 'relative';
+                    canvas.style.zIndex = '99999';
                 }
 
-                const anims = p.skeleton.data.animations.map(a => a.name);
-                let targetAnim = anims.includes("Idle") ? "Idle" : (anims.includes("idle") ? "idle" : anims[0]);
-                if (targetAnim) {
-                    p.animationState.setAnimation(0, targetAnim, true);
+                const anims = player.skeleton.data.animations.map(a => a.name);
+                if (!anims.includes("Idle")) {
+                    let targetAnim = anims.includes("idle") ? "idle" : anims[0];
+                    if (targetAnim) {
+                        player.animationState.setAnimation(0, targetAnim, true);
+                    }
                 }
+            
+                player.animationState.timeScale = 0.5 + Math.random() * 0.5; // 錯開每個小人的速度
+                player.play();
                 
-                p.animationState.timeScale = (Math.random() * 0.4 + 0.8); 
-                p.play();
-                
-                window.wallpaperMiniPlayers.push(p);
+                window.wallpaperMiniPlayers.push(player);
             },
-            error: (p, reason) => {
-                console.error(`[${wrapperId}] 載入失敗:`, reason);
+            error: (player, reason) => {
+                console.warn(`超迷你 Spine [${wrapperId}] 載入失敗:`, reason);
                 const el = document.getElementById(wrapperId);
-                if(el) el.remove();
+                if (el) el.remove();
             }
         });
     }
