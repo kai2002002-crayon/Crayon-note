@@ -1223,96 +1223,108 @@
             }
 
             // ==========================================
-            // 🌟 4. 新增：超迷你小人背景隨機生成邏輯
-            // ==========================================
-            window.wallpaperMiniPlayers = [];
+// 🌟 4. 最終修正版：結合 MINI_SPINE 與 COSTUME_MAP 的超迷你小人背景生成
+// ==========================================
+window.wallpaperMiniPlayers = [];
 
-            function loadWallpaperMiniSpines(baseFolderKey, costumeKey, count = 5) {
-                const container = document.getElementById('wallpaperMiniContainer');
-                if (!container) return;
+function loadWallpaperMiniSpines(charName, costumeKey, count = 5) {
+    const container = document.getElementById('wallpaperMiniContainer');
+    if (!container) return;
 
-                // 1. 清除舊的小人
-                if (window.wallpaperMiniPlayers && window.wallpaperMiniPlayers.length > 0) {
-                    window.wallpaperMiniPlayers.forEach(p => p.dispose());
-                    window.wallpaperMiniPlayers = [];
+    // 1. 清除舊的小人
+    if (window.wallpaperMiniPlayers && window.wallpaperMiniPlayers.length > 0) {
+        window.wallpaperMiniPlayers.forEach(p => p.dispose());
+        window.wallpaperMiniPlayers = [];
+    }
+    container.innerHTML = '';
+
+    // 2. 取得對應的 Skin 名稱 (對照 char_detail.html 的寫法)
+    const skinName = `Mini_${costumeKey}`;
+    
+    // 如果該角色沒有定義 MINI_SPINE，則不渲染背景小人
+    if (!skinName) {
+        return;
+    }
+
+    // 3. 組合路徑邏輯：
+    const miniFileName = "Minimi";
+    
+    const skelUrl = `./mini/${miniFileName}.skel.bytes`;
+    const atlasUrl = `./mini/${miniFileName}.atlas.txt`;
+
+    // 4. 隨機生成指定數量的小人
+    for (let i = 0; i < count; i++) {
+        const randomX = Math.floor(Math.random() * 90);
+        const randomY = Math.floor(Math.random() * 90);
+        const randomAngle = Math.floor(Math.random() * 8) * 45;
+        const randomScale = (Math.random() * 0.4 + 0.8).toFixed(2);
+
+        const wrapperId = `mini-wp-${i}`;
+        const wrapperHtml = `
+            <div id="${wrapperId}" style="
+                position: absolute; 
+                left: ${randomX}vw; 
+                top: ${randomY}vh; 
+                width: 120px; 
+                height: 120px; 
+                transform: rotate(${randomAngle}deg) scale(${randomScale});
+                opacity: 0.6;
+                z-index: 5;
+            "></div>
+        `;
+        container.insertAdjacentHTML('beforeend', wrapperHtml);
+
+        new spine.SpinePlayer(wrapperId, {
+            skelUrl: skelUrl,
+            atlasUrl: atlasUrl,
+            animation: "Idle", 
+            showControls: false,
+            showLoading: false,
+            backgroundColor: "#00000000",
+            alpha: true,
+            premultipliedAlpha: true,
+            viewport: { x: -250, y: 0, width: 500, height: 500 },
+            success: (p) => {
+                if (typeof fixSpineMultiplyHole === 'function') {
+                    fixSpineMultiplyHole(p);
                 }
-                container.innerHTML = '';
-
-                // 2. 組合路徑邏輯
-                // 預設為 Mini_ 資料夾的寫法
-                const miniFileName = "Minimi"; 
                 
-                const skelUrl = `./mini/${miniFileName}.skel.bytes`;
-                const atlasUrl = `./mini/${miniFileName}.atlas.txt`;
-
-                // 💡【提示】如果你想要直接拿 SD 版角色來當背景迷你小人，請「取消註解」底下這兩行：
-                // skelUrl = `./spine_sd_assets/${costumeKey}.skel.bytes`;
-                // atlasUrl = `./spine_sd_assets/${costumeKey}.atlas.txt`;
-
-                // 3. 隨機生成指定數量的小人
-                for (let i = 0; i < count; i++) {
-                    const randomX = Math.floor(Math.random() * 90);
-                    const randomY = Math.floor(Math.random() * 90);
-                    const randomAngle = Math.floor(Math.random() * 8) * 45;
-                    const randomScale = (Math.random() * 0.4 + 0.8).toFixed(2);
-
-                    const wrapperId = `mini-wp-${i}`;
-                    const wrapperHtml = `
-                        <div id="${wrapperId}" style="
-                            position: absolute; 
-                            left: ${randomX}vw; 
-                            top: ${randomY}vh; 
-                            width: 120px; 
-                            height: 120px; 
-                            transform: rotate(${randomAngle}deg) scale(${randomScale});
-                            opacity: 0.6;
-                            z-index: 5;
-                        "></div>
-                    `;
-                    container.insertAdjacentHTML('beforeend', wrapperHtml);
-
-                    new spine.SpinePlayer(wrapperId, {
-                        skelUrl: skelUrl,
-                        atlasUrl: atlasUrl,
-                        animation: "Idle", 
-                        skin: "skinName", 
-                        showControls: false,
-                        showLoading: false,
-                        backgroundColor: "#00000000",
-                        alpha: true,
-                        premultipliedAlpha: true,
-                        viewport: { x: -250, y: 0, width: 500, height: 500 },
-                        success: (p) => {
-                            if (typeof fixSpineMultiplyHole === 'function') {
-                                fixSpineMultiplyHole(p);
-                            }
-                            
-                            const canvas = document.querySelector(`#${wrapperId} canvas`);
-                            if (canvas) {
-                                canvas.style.width = '100%';
-                                canvas.style.height = '100%';
-                            }
-
-                            const anims = p.skeleton.data.animations.map(a => a.name);
-                            let targetAnim = anims.includes("Idle") ? "Idle" : (anims.includes("idle") ? "idle" : anims[0]);
-                            if (targetAnim) {
-                                p.animationState.setAnimation(0, targetAnim, true);
-                            }
-                            
-                            // 錯開每隻小人的動畫播放速度
-                            p.animationState.timeScale = (Math.random() * 0.5 + 0.5); 
-                            p.play();
-                            
-                            window.wallpaperMiniPlayers.push(p);
-                        },
-                        error: (p, reason) => {
-                            console.warn(`超迷你 Spine [${wrapperId}] 載入失敗:`, reason);
-                            const el = document.getElementById(wrapperId);
-                            if(el) el.remove();
-                        }
-                    });
+                // 成功載入後直接套用正確的 skinName
+                if (skinName) {
+                    try {
+                        p.skeleton.setSkinByName(skinName);
+                        p.skeleton.setToSetupPose();
+                        p.skeleton.updateWorldTransform();
+                    } catch (e) {
+                        console.warn(`無法設定 Skin: ${skinName}`, e);
+                    }
                 }
+
+                const canvas = document.querySelector(`#${wrapperId} canvas`);
+                if (canvas) {
+                    canvas.style.width = '100%';
+                    canvas.style.height = '100%';
+                }
+
+                const anims = p.skeleton.data.animations.map(a => a.name);
+                let targetAnim = anims.includes("Idle") ? "Idle" : (anims.includes("idle") ? "idle" : anims[0]);
+                if (targetAnim) {
+                    p.animationState.setAnimation(0, targetAnim, true);
+                }
+                
+                p.animationState.timeScale = (Math.random() * 0.5 + 0.5); 
+                p.play();
+                
+                window.wallpaperMiniPlayers.push(p);
+            },
+            error: (p, reason) => {
+                console.warn(`超迷你 Spine [${wrapperId}] 載入失敗:`, reason);
+                const el = document.getElementById(wrapperId);
+                if(el) el.remove();
             }
+        });
+    }
+}
         </script>
     </body>
 </html>
