@@ -16,7 +16,6 @@
         <script src="./spine-player.min.js"></script>
         
         <script>
-            // 防護 WE 嚴格的安全權限導致 LocalStorage 崩潰
             const SafeStorage = {
                 get: (k) => { try { return localStorage.getItem(k); } catch(e) { return null; } },
                 set: (k, v) => { try { localStorage.setItem(k, v); } catch(e) {} }
@@ -24,6 +23,22 @@
             const isDarkMode = SafeStorage.get('theme') === 'dark' || (!SafeStorage.get('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
             if (isDarkMode) { document.documentElement.classList.add('dark'); }
             window.currentLang = SafeStorage.get('user_lang') || "zh-TW";
+            
+            // 🌟 全域音量變數 (預設 0.8)
+            window.weVolume = 0.8;
+
+            // 🌟 Wallpaper Engine 系統設定監聽器 (正確整合版)
+            window.wallpaperPropertyListener = {
+                applyUserProperties: function(properties) {
+                    if (properties.volume) {
+                        // 抓取 WE 的音量條數值 (0 到 100)，換算成 0 ~ 0.8 的比例
+                        window.weVolume = (properties.volume.value / 100) * 0.8;
+                        if (VoiceManager && VoiceManager.currentAudio) {
+                            VoiceManager.currentAudio.volume = window.weVolume;
+                        }
+                    }
+                }
+            };
         </script>
         <style>
             html, body {
@@ -85,8 +100,7 @@
         <div id="wallpaperMiniContainer" class="fixed inset-0 pointer-events-none z-[5] overflow-hidden"></div>
         <div id="uiBackdrop" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-[40] opacity-0 pointer-events-none transition-opacity duration-300" style="display: none !important;"></div>
 
-        <!-- 🌟 修復時鐘位置：牢牢釘在畫面最左下角，遠離主 Spine -->
-        <div id="desktopClock" class="fixed text-white desktop-clock-shadow pointer-events-none" style="bottom: 10vh; left: 33vw; z-index: 0; display: flex; flex-direction: column; align-items: flex-start;">
+        <div id="desktopClock" class="fixed text-white desktop-clock-shadow pointer-events-none" style="bottom: 10vh; left: 5vw; z-index: 0; display: flex; flex-direction: column; align-items: flex-start;">
             <div id="clockDate" class="text-3xl sm:text-4xl font-black tracking-widest text-amber-300 mb-1">DD/MM/YYYY</div>
             <div id="clockTime" class="text-5xl sm:text-6xl font-black tracking-wider flex items-baseline gap-2">
                 <span id="clockTimeDigits">HH:MM:SS</span> 
@@ -156,14 +170,13 @@
         </section>
 
         <script>
-            // 🌟 修復雙擊 UI：全域強制攔截，無視 WebGL 畫布的阻擋
             window.addEventListener('dblclick', function(e) {
-                if (e.target.closest('#uiWrapper')) return; // 點擊 UI 內部不關閉
+                if (e.target.closest('#uiWrapper')) return;
                 const backdrop = document.getElementById('uiBackdrop');
                 if (backdrop.style.opacity === '0' || !backdrop.style.opacity) {
                     toggleDesktopUI(true);
                 }
-            }, true); // useCapture = true 確保最優先攔截
+            }, true);
 
             function toggleDesktopUI(show) {
                 const backdrop = document.getElementById('uiBackdrop'); const uiWrapper = document.getElementById('uiWrapper');
@@ -198,7 +211,7 @@
             }
             setInterval(updateClock, 1000); updateClock();
 
-            // 🌟 強化語音管理器：加入字串空值防呆機制，避免互動觸發時當機
+            // 🌟 完整且安全的 VoiceManager
             const VoiceManager = {
                 currentAudio: null, fadeInterval: null, baseName: "", skinSuffix: "",
                 init(baseName, costumeKey) {
@@ -213,7 +226,7 @@
                         const audio = this.currentAudio; audio.loop = false;
                         this.fadeInterval = setInterval(() => {
                             if (audio.volume > 0.1) audio.volume -= 0.1; 
-                            else { audio.pause(); audio.currentTime = 0; audio.volume = 0.8; clearInterval(this.fadeInterval); }
+                            else { audio.pause(); audio.currentTime = 0; audio.volume = window.weVolume || 0.8; clearInterval(this.fadeInterval); }
                         }, (fadeDuration * 1000) / 10);
                     }
                 },
@@ -222,7 +235,9 @@
                     if (!this.currentAudio) { this.currentAudio = new Audio(); this.currentAudio.setAttribute('playsinline', 'true'); }
                     const audio = this.currentAudio;
                     audio.pause(); audio.onended = null;
-                    audio.src = `./${folder}/${filename}.mp3`; audio.volume = window.weVolume || 0.8; audio.loop = loop; audio.currentTime = 0; audio.load();
+                    audio.src = `./${folder}/${filename}.mp3`; 
+                    audio.volume = window.weVolume || 0.8; 
+                    audio.loop = loop; audio.currentTime = 0; audio.load();
                     if (onEnded && !loop) audio.onended = onEnded;
                     const playPromise = audio.play();
                     if (playPromise !== undefined) playPromise.catch(e => { if (onEnded) onEnded(); });
@@ -439,8 +454,6 @@
                 } else selectEl.style.display = 'none';
                 
                 saveCurrentConfig(null, targetCostume);
-                
-                // 🌟 修正點 1：先載入主 Spine，暫停同時間生成超迷你小人，避免 Context 崩潰
                 loadSpine(activeCharData.spineName, targetCostume, currentMode);
             }
 
@@ -460,8 +473,6 @@
                let skelUrl = mode === 'lobby' ? `./spine_assets/${baseFolderKey}/${costumeKey}.skel.bytes` : `./spine_sd_assets/${costumeKey}.skel.bytes`;
                let atlasUrl = mode === 'lobby' ? `./spine_assets/${baseFolderKey}/${costumeKey}.atlas.txt` : `./spine_sd_assets/${costumeKey}.atlas.txt`;
                let targetZoom = mode === 'battle' ? 2.5 : 1.0;
-               
-               // 🌟 修正點 2：大幅拓寬主視口並往左延伸，確保大型主 Spine 絕不被截斷
                let baseViewport = mode === 'lobby' ? { x: -750, y: 0, width: 1500, height: 1200 } : { x: -750, y: -150, width: 1500, height: 3000 };
                currentZoom = targetZoom;
             
@@ -501,11 +512,9 @@
                            player.play();
                            if (mode === 'lobby') VoiceManager.playSpawn();
                            
-                           // 重新啟用觸摸與點擊互動
                            setupComplexInteractions(player, container);
                            applyDefaultCamera();
 
-                           // 🌟 修正點 1 (續)：在主 Spine 成功載入後，延遲半秒才生成超迷你小人，保障 WE 不會當機
                            setTimeout(() => {
                                loadWallpaperMiniSpines(activeCharData.spineName, costumeKey, 5);
                            }, 500);
@@ -519,13 +528,10 @@
                });
             }
 
-            // 🌟 修正點 3：確保主 Spine 明確定位在畫面右側區域，遠離時鐘
             function applyDefaultCamera() {
                 if (!globalPlayer || !globalPlayer.skeleton) return;
                 currentZoom = currentMode === 'battle' ? 2.5 : 1.0;
                 globalPlayer.skeleton.scaleX = currentZoom; globalPlayer.skeleton.scaleY = currentZoom;
-                
-                // 將主 Spine 的中心 X 座標設為 450，會將其緊密靠在畫面的右半邊
                 globalPlayer.skeleton.x = currentMode === 'battle' ? 500 : 450; 
                 globalPlayer.skeleton.y = currentMode === 'lobby' ? 600 * (1 - currentZoom) : 0;
                 globalPlayer.skeleton.updateWorldTransform();
@@ -556,7 +562,6 @@
                 });
             }
 
-            // 🌟 重新接回撫摸與點擊互動腳本
             function setupComplexInteractions(player, container) {
                 const canvas = container.querySelector('canvas');
                 if (!canvas) return;
@@ -757,9 +762,6 @@
                 canvas.addEventListener('pointerout', stopDrag);
             }
 
-            // ==========================================
-            // 超迷你小人背景生成
-            // ==========================================
             window.wallpaperMiniPlayers = [];
             function loadWallpaperMiniSpines(charName, costumeKey, count = 5) {
                 const container = document.getElementById('wallpaperMiniContainer'); if (!container) return;
