@@ -5,17 +5,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>坨坨桌布</title>
 
-        <!-- 🌟 全域致命錯誤攔截器：只要系統死當，強制顯示在畫面左上角 -->
-        <script>
-            window.onerror = function(message, source, lineno, colno, error) {
-                const errDiv = document.createElement('div');
-                errDiv.style.cssText = "position: fixed; top: 10px; left: 10px; background: rgba(220, 38, 38, 0.9); color: white; padding: 12px; border-radius: 8px; z-index: 999999; font-size: 12px; font-family: monospace; max-width: 80vw; pointer-events: none; box-shadow: 0 4px 6px rgba(0,0,0,0.3);";
-                errDiv.innerHTML = `<b>🔥 系統致命錯誤 (Fatal Error)</b><br>訊息: ${message}<br>檔案: ${source}<br>行號: ${lineno}`;
-                document.body.appendChild(errDiv);
-                return false;
-            };
-        </script>
-        
         <script src="https://cdn.tailwindcss.com"></script>
         <script src="data_config.js"></script>
         <script src="data_core.js"></script>
@@ -54,12 +43,19 @@
                 overflow: hidden; background: transparent !important;
                 font-family: 'Noto Sans TC', sans-serif;
             }
+            
+            /* 🌟 整體 UI 放大與層級強制置頂 */
             #uiWrapper {
-                position: relative; z-index: 50 !important;
+                position: relative !important;
+                z-index: 99999 !important;
                 display: none !important; opacity: 0;
-                transition: opacity 0.3s ease-in-out;
-                max-width: 800px; margin: 0 auto; padding: 1rem;
+                transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+                max-width: 850px; margin: 0 auto; padding: 1.5rem;
+                transform: scale(1.12); /* 整體放大 12% */
+                transform-origin: center center;
+                pointer-events: auto !important;
             }
+            
             #spineViewerSection {
                 margin: 0; padding: 0; border: none; border-radius: 0;
                 width: 100vw; height: 100vh; position: absolute; inset: 0;
@@ -75,7 +71,9 @@
                 width: 100% !important; height: 100% !important;
                 display: block !important; touch-action: none; pointer-events: auto;
             }
-            .desktop-clock-shadow { text-shadow: 0 4px 15px rgba(0,0,0,0.6), 0 1px 3px rgba(0,0,0,0.8); }
+            .desktop-clock-shadow { 
+                text-shadow: 0 4px 15px rgba(0,0,0,0.8), 0 1px 3px rgba(0,0,0,0.9), 0 0 5px rgba(0,0,0,0.5); 
+            }
             .spine-player-loading-custom {
                 position: absolute; top: 50%; left: 50%; width: 80px; height: 80px; margin: -40px 0 0 -40px;
                 background: url('./golden_crayon.png') no-repeat center center; background-size: contain;
@@ -86,14 +84,27 @@
                 50% { transform: translateY(-10px) scale(1.05); filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.9)); }
             }
             
-            /* 🌟 自訂捲軸樣式，讓選單捲動時更美觀 */
-            ::-webkit-scrollbar { width: 6px; height: 6px; }
-            ::-webkit-scrollbar-track { background: transparent; }
+            /* 🌟 更明顯、更容易點擊的滾輪條樣式 */
+            ::-webkit-scrollbar { width: 10px; height: 10px; }
+            ::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); border-radius: 10px; }
+            .dark ::-webkit-scrollbar-track { background: rgba(255,255,255,0.1); }
             ::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 10px; border: 2px solid transparent; background-clip: padding-box; }
             .dark ::-webkit-scrollbar-thumb { background-color: #475569; }
+            ::-webkit-scrollbar-thumb:hover { background-color: #94a3b8; }
             
-            .collapsible-content { transition: max-height 0.3s ease-out, opacity 0.3s ease-out; overflow: hidden; }
-            .collapsed { max-height: 0; opacity: 0; margin-top: 0 !important; overflow: hidden;}
+            .collapsible-content { 
+                transition: max-height 0.3s ease-out, opacity 0.3s ease-out; 
+                overflow-x: hidden !important; 
+                overflow-y: auto !important; 
+                pointer-events: auto !important;
+            }
+            .collapsed { 
+                max-height: 0 !important; 
+                opacity: 0 !important; 
+                margin-top: 0 !important; 
+                overflow: hidden !important; 
+                pointer-events: none !important; 
+            }
             .custom-select-btn { -webkit-tap-highlight-color: transparent; }
             
             @keyframes dualColorPulse { 0% { border-color: var(--c1); box-shadow: 0 0 6px var(--c1); } 50% { border-color: var(--c2); box-shadow: 0 0 6px var(--c2); } 100% { border-color: var(--c1); box-shadow: 0 0 6px var(--c1); } }
@@ -107,7 +118,7 @@
         <div id="wallpaperMiniContainer" class="fixed inset-0 pointer-events-none z-[5] overflow-hidden"></div>
         <div id="uiBackdrop" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-[40] opacity-0 pointer-events-none transition-opacity duration-300" style="display: none !important;"></div>
 
-        <div id="desktopClock" class="fixed text-white desktop-clock-shadow pointer-events-none" style="bottom: 10vh; left: 5vw; z-index: 0; display: flex; flex-direction: column; align-items: flex-start;">
+        <div id="desktopClock" class="fixed text-white desktop-clock-shadow pointer-events-none" style="bottom: 12vh; right: 40vw; z-index: 0; display: flex; flex-direction: column; align-items: flex-start;">
             <div id="clockDate" class="text-3xl sm:text-4xl font-black tracking-widest text-amber-300 mb-1">DD/MM/YYYY</div>
             <div id="clockTime" class="text-5xl sm:text-6xl font-black tracking-wider flex items-baseline gap-2">
                 <span id="clockTimeDigits">HH:MM:SS</span> 
@@ -115,17 +126,17 @@
             </div>
         </div>
 
-        <div id="uiWrapper" class="space-y-4 relative z-50">
-            <header class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md p-4 sm:p-5 rounded-2xl shadow-md border-4 border-amber-400 dark:border-slate-600 flex justify-between items-center">
+        <div id="uiWrapper" class="space-y-15 relative z-50">
+            <header class="bg-white/95 dark:bg-slate-800/95 backdrop-blur-md p-5 rounded-2xl shadow-xl border-4 border-amber-400 dark:border-slate-600 flex justify-between items-center">
                 <div>
-                    <h1 class="text-xl sm:text-2xl font-black text-amber-950 dark:text-amber-400 mb-0.5 flex items-center gap-2">
-                        <div class="sprite-base sprite-common sprite-Title_Rim scale-[0.6] origin-center shrink-0"></div>
-                        <span class="-ml-2">坨坨桌布</span>
+                    <h1 class="text-2xl font-black text-amber-950 dark:text-amber-400 mb-0.5 flex items-center gap-2">
+                        <div class="sprite-base sprite-common sprite-Title_Rim scale-[0.7] origin-center shrink-0"></div>
+                        <span class="-ml-1">坨坨桌布</span>
                     </h1>
                 </div>
-                <div class="flex items-center gap-2 shrink-0">
-                    <button onclick="toggleTimeFormat()" class="px-2 py-1.5 sm:px-3 sm:py-2 text-[10px] sm:text-xs bg-slate-600 text-white font-bold rounded-lg shadow hover:bg-slate-700 transition shrink-0">🕒 <span id="timeFormatText">12H</span></button>
-                    <select id="langSelect" onchange="changeLanguage(this.value)" class="bg-amber-100 dark:bg-slate-700 text-amber-900 dark:text-white border border-amber-300 dark:border-slate-500 text-xs sm:text-sm font-bold rounded-lg px-2 py-1.5 outline-none shadow-sm cursor-pointer">
+                <div class="flex items-center gap-3 shrink-0">
+                    <button onclick="toggleTimeFormat()" class="px-3 py-2 text-sm bg-slate-600 text-white font-bold rounded-lg shadow hover:bg-slate-700 transition shrink-0">🕒 <span id="timeFormatText">12H</span></button>
+                    <select id="langSelect" onchange="changeLanguage(this.value)" class="bg-amber-100 dark:bg-slate-700 text-amber-900 dark:text-white border border-amber-300 dark:border-slate-500 text-sm font-bold rounded-lg px-3 py-2 outline-none shadow-sm cursor-pointer">
                         <option value="zh-TW">繁中</option>
                         <option value="ja">日本語</option>
                         <option value="en">EN</option>
@@ -133,41 +144,40 @@
                 </div>
             </header>
             
-            <section class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md p-4 sm:p-5 rounded-2xl shadow-md border border-amber-200 dark:border-slate-700 transition-all">
+            <section class="bg-white/95 dark:bg-slate-800/95 backdrop-blur-md p-5 rounded-2xl shadow-xl border border-amber-200 dark:border-slate-700 transition-all">
                 <div class="flex justify-between items-center mb-3 border-b border-amber-200 dark:border-slate-700 pb-2">
-                    <h2 class="text-base sm:text-lg font-bold text-amber-900 dark:text-amber-400" data-i18n="ui_select_char">👥 選擇坨坨</h2>
-                    <button id="toggleAllCharBtn" onclick="toggleAllCharacters()" class="px-3 py-1 text-xs font-bold bg-amber-100 dark:bg-slate-700 text-amber-800 dark:text-gray-300 rounded-lg hover:bg-amber-200 transition shadow-sm" data-i18n="ui_show_all">顯示全部 🔽</button>
+                    <h2 class="text-lg font-bold text-amber-900 dark:text-amber-400" data-i18n="ui_select_char">👥 選擇坨坨</h2>
+                    <button id="toggleAllCharBtn" onclick="toggleAllCharacters()" class="px-3 py-1.5 text-xs font-bold bg-amber-100 dark:bg-slate-700 text-amber-800 dark:text-gray-300 rounded-lg hover:bg-amber-200 transition shadow-sm" data-i18n="ui_show_all">顯示全部 🔽</button>
                 </div>
-                <!-- 🌟 加入 overflow-y-auto 與 pr-1，讓角色清單支援滾輪下拉，不會再被截斷 -->
-                <div id="charGridContainer" class="space-y-3 collapsible-content collapsed pr-1" style="max-height: 0px; opacity: 0; overflow-y: auto;"></div>
+                <div id="charGridContainer" class="space-y-3 collapsible-content collapsed pr-2" style="max-height: 0px; opacity: 0; overflow-y: auto;"></div>
             </section>
 
-            <div id="playerControls" class="bg-amber-50/90 dark:bg-slate-700/90 backdrop-blur-md p-4 rounded-xl border-2 border-amber-300 dark:border-slate-500 flex flex-col gap-3 transition-opacity w-full mx-auto shadow-lg">
+            <div id="playerControls" class="bg-amber-50/95 dark:bg-slate-700/95 backdrop-blur-md p-5 rounded-xl border-2 border-amber-300 dark:border-slate-500 flex flex-col gap-3 transition-opacity w-full mx-auto shadow-xl">
                 <div class="flex items-center justify-between border-b border-amber-200 dark:border-slate-600 pb-3">
                     <div class="flex items-center gap-3">
-                        <div id="activeCharIconContainer" class="w-10 h-10 rounded-lg border-2 border-amber-400 shadow-sm overflow-hidden bg-white dark:bg-slate-700 hidden relative items-center justify-center shrink-0"></div>
-                        <h2 id="activeCharName" class="text-lg font-black text-amber-900 dark:text-amber-300" data-i18n="ui_please_select">請先選擇坨坨</h2>
+                        <div id="activeCharIconContainer" class="w-12 h-12 rounded-lg border-2 border-amber-400 shadow-sm overflow-hidden bg-white dark:bg-slate-700 hidden relative items-center justify-center shrink-0"></div>
+                        <h2 id="activeCharName" class="text-xl font-black text-amber-900 dark:text-amber-300" data-i18n="ui_please_select">請先選擇坨坨</h2>
                     </div>
                 </div>
 
-                <div class="flex items-center justify-between gap-2 flex-wrap">
+                <div class="flex items-center justify-between gap-3 flex-wrap">
                     <div class="flex items-center gap-2">
-                        <button id="btnPlayPause" onclick="togglePlay()" class="w-9 h-9 flex items-center justify-center bg-amber-500 text-white rounded-lg shadow hover:bg-amber-600 transition" title="播放/暫停">⏸️</button>
+                        <button id="btnPlayPause" onclick="togglePlay()" class="w-10 h-10 flex items-center justify-center bg-amber-500 text-white rounded-lg shadow hover:bg-amber-600 transition text-base" title="播放/暫停">⏸️</button>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <button id="btnModeSwitch" onclick="toggleViewerMode()" class="px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold rounded-lg shadow whitespace-nowrap" data-i18n="ui_mode_lobby">🔄 模式: 大廳</button>
-                        <select id="costumeSelect" onchange="changeSpineCostume(this.value)" class="bg-white border border-gray-300 text-xs font-bold rounded-lg px-2 py-1.5 outline-none min-w-[100px]">
+                    <div class="flex items-center gap-3">
+                        <button id="btnModeSwitch" onclick="toggleViewerMode()" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white text-sm font-bold rounded-lg shadow whitespace-nowrap" data-i18n="ui_mode_lobby">🔄 模式: 大廳</button>
+                        <select id="costumeSelect" onchange="changeSpineCostume(this.value)" class="bg-white border border-gray-300 text-sm font-bold rounded-lg px-3 py-2 outline-none min-w-[120px]">
                             <option value="" data-i18n="ui_costume">服裝</option>
                         </select>
                     </div>
                 </div>
                 <div class="flex justify-between w-full relative z-[100] items-center gap-4">
                     <div class="relative w-full" id="animDropdownWrapper">
-                        <button onclick="toggleCustomSelect('animList')" class="custom-select-btn w-full bg-white border border-gray-300 text-xs font-bold rounded-lg px-2 py-1.5 flex justify-between items-center text-left shadow-sm">
+                        <button onclick="toggleCustomSelect('animList')" class="custom-select-btn w-full bg-white border border-gray-300 text-sm font-bold rounded-lg px-3 py-2.5 flex justify-between items-center text-left shadow-sm">
                             <span id="animSelectText" class="truncate text-amber-900" data-i18n="ui_select_anim">選擇動作</span>
-                            <span class="ml-1 text-gray-400 shrink-0 text-[10px]">▼</span>
+                            <span class="ml-1 text-gray-400 shrink-0 text-xs">▼</span>
                         </button>
-                        <div id="animList" class="hidden absolute top-[calc(100%+6px)] left-0 w-full bg-white border border-amber-300 rounded-lg shadow-2xl max-h-[240px] overflow-y-auto flex-col py-1 z-[110]"></div>
+                        <div id="animList" class="hidden absolute top-[calc(100%+6px)] left-0 w-full bg-white border border-amber-300 rounded-lg shadow-2xl max-h-[220px] overflow-y-auto flex-col py-1 z-[110]"></div>
                     </div>
                 </div>
             </div>
@@ -178,10 +188,20 @@
         </section>
 
         <script>
-            window.addEventListener('dblclick', function(e) {
+            // 🌟 終極 WE 雙擊解決方案
+            let lastClickTime = 0;
+            window.addEventListener('pointerdown', function(e) {
                 if (e.target.closest('#uiWrapper')) return;
-                const backdrop = document.getElementById('uiBackdrop');
-                if (backdrop.style.opacity === '0' || !backdrop.style.opacity) toggleDesktopUI(true);
+                let currentTime = new Date().getTime();
+                if (currentTime - lastClickTime < 400) {
+                    const backdrop = document.getElementById('uiBackdrop');
+                    if (window.getComputedStyle(backdrop).display === 'none' || backdrop.style.opacity === '0') {
+                        toggleDesktopUI(true);
+                    }
+                    lastClickTime = 0;
+                } else {
+                    lastClickTime = currentTime;
+                }
             }, true);
 
             function toggleDesktopUI(show) {
@@ -200,6 +220,23 @@
                 }
             }
             document.getElementById('uiBackdrop').addEventListener('click', () => { toggleDesktopUI(false); });
+
+            // 🌟 強制隔離 UI 事件並修復滾輪在容器內的滾動行為
+            const uiWrapperElement = document.getElementById('uiWrapper');
+            if (uiWrapperElement) {
+                ['pointerdown', 'mousedown', 'touchstart', 'click'].forEach(evt => {
+                    uiWrapperElement.addEventListener(evt, (e) => { e.stopPropagation(); }, { passive: false });
+                });
+                // 專門處理滾輪，手動將 delta 轉為容器的 scrollTop，確保滾輪 100% 有反應
+                uiWrapperElement.addEventListener('wheel', (e) => {
+                    e.stopPropagation();
+                    const scrollable = e.target.closest('.overflow-y-auto');
+                    if (scrollable) {
+                        scrollable.scrollTop += e.deltaY;
+                        e.preventDefault();
+                    }
+                }, { passive: false });
+            }
 
             let is24HourFormat = SafeStorage.get('we_time_format') === '24';
             function toggleTimeFormat() {
@@ -317,8 +354,7 @@
                 const container = document.getElementById('charGridContainer'); const btn = document.getElementById('toggleAllCharBtn');
                 if (container.classList.contains('collapsed')) {
                     container.classList.remove('collapsed'); 
-                    // 🌟 修正：使用視窗高度比例 (55vh) 代替固定高度，啟動完美捲動
-                    container.style.maxHeight = '55vh'; 
+                    container.style.maxHeight = '50vh'; 
                     container.style.opacity = '1'; btn.innerHTML = `${getI18n('ui_hide_all')} 🔼`;
                 } else {
                     container.classList.add('collapsed'); container.style.maxHeight = '0px'; container.style.opacity = '0'; btn.innerHTML = `${getI18n('ui_show_all')} 🔽`;
@@ -348,23 +384,23 @@
                     const groupId = `group_${index}`; const btnId = `btn_${index}`;
             
                     const row = document.createElement('div');
-                    row.className = "flex flex-col bg-amber-50/50 dark:bg-slate-800/50 p-2 rounded-xl border border-dashed border-amber-200 dark:border-slate-700";
+                    row.className = "flex flex-col bg-amber-50/50 dark:bg-slate-800/50 p-2.5 rounded-xl border border-dashed border-amber-200 dark:border-slate-700";
                     
                     const header = document.createElement('div');
-                    header.className = "flex justify-between items-center cursor-pointer hover:bg-amber-100/50 dark:hover:bg-slate-700/50 p-1.5 rounded-lg transition";
+                    header.className = "flex justify-between items-center cursor-pointer hover:bg-amber-100/50 dark:hover:bg-slate-700/50 p-2 rounded-lg transition";
                     header.onclick = () => togglePersonalityGroup(groupId, btnId);
                     const pSprite = SPRITE_CLASS_MAP[`p_${p}`] || "";
                     
-                    header.innerHTML = `<div class="flex items-center gap-1"><div class="sprite-base sprite-common ${pSprite} shrink-0 scale-[0.35] origin-left -ml-2"></div><h3 class="text-xs sm:text-sm font-black border-l-4 ${borderClass} pl-1 -ml-3"><span class="${textClass}">${getI18n(p)}</span></h3></div><span id="${btnId}" class="text-xs text-gray-400">🔼</span>`;
+                    header.innerHTML = `<div class="flex items-center gap-1.5"><div class="sprite-base sprite-common ${pSprite} shrink-0 scale-[0.4] origin-left -ml-2"></div><h3 class="text-sm sm:text-base font-black border-l-4 ${borderClass} pl-1.5 -ml-3"><span class="${textClass}">${getI18n(p)}</span></h3></div><span id="${btnId}" class="text-xs text-gray-400">🔼</span>`;
                     
                     const iconContainer = document.createElement('div');
-                    iconContainer.id = groupId; iconContainer.className = "flex flex-wrap gap-1.5 pt-2 pl-1 collapsible-content";
+                    iconContainer.id = groupId; iconContainer.className = "flex flex-wrap gap-2 pt-2 pl-1 collapsible-content";
                     iconContainer.style.maxHeight = "1000px"; iconContainer.style.opacity = "1";
             
                     chars.forEach(c => {
                         const spineName = typeof SPINE_MAP !== 'undefined' ? SPINE_MAP[c.name] : c.name; const displayName = getI18n(c.name);
                         const btn = document.createElement('button');
-                        btn.className = "group flex flex-col items-center gap-0.5 transition-transform hover:scale-110 active:scale-95 w-12 sm:w-14";
+                        btn.className = "group flex flex-col items-center gap-1 transition-transform hover:scale-110 active:scale-95 w-14 sm:w-16";
                         btn.onclick = () => selectCharacter(c, spineName, "");
             
                         const displayPersonality = c.personality.includes(",") ? "雙面" : c.personality;
@@ -379,12 +415,12 @@
                         }
 
                         btn.innerHTML = `
-                            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl border-2 ${charBorderClass} overflow-hidden shadow-sm group-hover:shadow-md transition-all relative flex items-center justify-center" ${charStyle}>
-                                <div class="absolute inset-0 flex items-center justify-center opacity-80"><div class="sprite-base sprite-common ${raceSprite} shrink-0 scale-[0.6]"></div></div>
+                            <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl border-2 ${charBorderClass} overflow-hidden shadow-sm group-hover:shadow-md transition-all relative flex items-center justify-center" ${charStyle}>
+                                <div class="absolute inset-0 flex items-center justify-center opacity-80"><div class="sprite-base sprite-common ${raceSprite} shrink-0 scale-[0.7]"></div></div>
                                 <div class="w-full h-full bg-white/20 dark:bg-black/20 backdrop-blur-[1px] absolute inset-0"></div>
-                                <div class="sprite-base ${charSpriteBase} ${charSpriteClass} shrink-0 scale-[0.35] relative z-10"></div>
+                                <div class="sprite-base ${charSpriteBase} ${charSpriteClass} shrink-0 scale-[0.4] relative z-10"></div>
                             </div>
-                            <span class="text-[9px] sm:text-[10px] font-bold text-gray-600 dark:text-gray-300 group-hover:text-amber-600 dark:group-hover:text-amber-400 text-center w-full truncate leading-tight">${displayName}</span>
+                            <span class="text-[10px] sm:text-xs font-bold text-gray-600 dark:text-gray-300 group-hover:text-amber-600 dark:group-hover:text-amber-400 text-center w-full truncate leading-tight">${displayName}</span>
                         `;
                         iconContainer.appendChild(btn);
                     });
@@ -397,7 +433,7 @@
                 currentMode = currentMode === 'lobby' ? 'battle' : 'lobby';
                 const btn = document.getElementById('btnModeSwitch');
                 btn.innerHTML = currentMode === 'lobby' ? getI18n('ui_mode_lobby') : getI18n('ui_mode_battle');
-                btn.className = currentMode === 'lobby' ? "px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold rounded-lg shadow whitespace-nowrap" : "px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-bold rounded-lg shadow whitespace-nowrap";
+                btn.className = currentMode === 'lobby' ? "px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white text-sm font-bold rounded-lg shadow whitespace-nowrap" : "px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-sm font-bold rounded-lg shadow whitespace-nowrap";
                 refreshCostumeDropdownAndLoad();
             }
 
@@ -418,17 +454,17 @@
                 const charSpriteBase = CHAR_SPRITE_MAP[displayPersonality] || "sprite-char-innocence"; const charSpriteClass = `sprite-${spineName}`;
                 
                 iconEl.innerHTML = `
-                <div class="absolute inset-0 flex items-center justify-center opacity-80"><div class="sprite-base sprite-common ${raceSprite} shrink-0 scale-[0.45]"></div></div>
+                <div class="absolute inset-0 flex items-center justify-center opacity-80"><div class="sprite-base sprite-common ${raceSprite} shrink-0 scale-[0.55]"></div></div>
                 <div class="w-full h-full bg-white/20 dark:bg-black/20 backdrop-blur-[1px] absolute inset-0"></div>
-                <div class="sprite-base ${charSpriteBase} ${charSpriteClass} shrink-0 scale-[0.36] relative z-10"></div>
+                <div class="sprite-base ${charSpriteBase} ${charSpriteClass} shrink-0 scale-[0.42] relative z-10"></div>
                 `;
                 
-                iconEl.className = `w-10 h-10 rounded-lg border-2 ${borderClass} shadow-sm overflow-hidden bg-white dark:bg-slate-700 flex items-center justify-center shrink-0 relative`;
+                iconEl.className = `w-12 h-12 rounded-lg border-2 ${borderClass} shadow-sm overflow-hidden bg-white dark:bg-slate-700 flex items-center justify-center shrink-0 relative`;
                 iconEl.style.display = 'flex';
                 if (customStyle) iconEl.setAttribute("style", customStyle); else iconEl.removeAttribute("style");
                 
                 const nameEl = document.getElementById('activeCharName');
-                nameEl.innerText = getI18n(charObj.name); nameEl.className = `text-lg font-black ${textClass}`;
+                nameEl.innerText = getI18n(charObj.name); nameEl.className = `text-xl font-black ${textClass}`;
                 if (customStyle) nameEl.setAttribute("style", customStyle); else nameEl.removeAttribute("style");
             
                 document.getElementById('animList').classList.add('hidden'); 
@@ -531,8 +567,6 @@
                    },
                    error: function (p, reason) {
                        console.error("Spine載入失敗: ", reason);
-                       // 如果沒死當，這裡會印出失敗原因
-                       container.innerHTML = `<div class="text-red-500 font-bold text-sm text-center p-4" style="background: rgba(0,0,0,0.7); display: inline-block;">⚠️ 載入失敗：WE 沒有抓到 ${skelUrl} 檔案<br>請手動將資料夾複製進專案目錄！</div>`;
                    }
                });
             }
@@ -541,7 +575,7 @@
                 if (!globalPlayer || !globalPlayer.skeleton) return;
                 currentZoom = currentMode === 'battle' ? 2.5 : 1.0;
                 globalPlayer.skeleton.scaleX = currentZoom; globalPlayer.skeleton.scaleY = currentZoom;
-                globalPlayer.skeleton.x = currentMode === 'battle' ? 500 : 450; 
+                globalPlayer.skeleton.x = currentMode === 'battle' ? 650 : 600; 
                 globalPlayer.skeleton.y = currentMode === 'lobby' ? 600 * (1 - currentZoom) : 0;
                 globalPlayer.skeleton.updateWorldTransform();
             }
@@ -558,7 +592,7 @@
                 const anims = player.skeleton.data.animations.map(a => a.name).sort();
                 anims.forEach(animName => {
                     const btn = document.createElement('button');
-                    btn.className = "text-left px-3 py-2 text-xs hover:bg-amber-100 w-full truncate transition-colors text-gray-700 flex-shrink-0 border-b border-gray-50";
+                    btn.className = "text-left px-4 py-2.5 text-sm hover:bg-amber-100 w-full truncate transition-colors text-gray-700 flex-shrink-0 border-b border-gray-50";
                     btn.innerText = animName;
                     btn.onclick = (e) => {
                         e.stopPropagation(); player.animationState.setAnimation(0, animName, true);
@@ -781,10 +815,13 @@
                 container.innerHTML = ''; const skinName = `Mini_${costumeKey}`;
 
                 for (let i = 0; i < count; i++) {
-                    let randomX, randomY, isRightBottom = true;
-                    while (isRightBottom) {
-                        randomX = Math.floor(Math.random() * 90) + 3; randomY = Math.floor(Math.random() * 85) + 5; 
-                        if (!(randomX > 60 && randomY > 50)) { isRightBottom = false; }
+                    let randomX, randomY, isValidPosition = false;
+                    while (!isValidPosition) {
+                        randomX = Math.floor(Math.random() * 80) + 5; 
+                        randomY = Math.floor(Math.random() * 80) + 5; 
+                        const inClockArea = (randomX < 35 && randomY > 65);
+                        const inMainCharacterArea = (randomX > 45 && randomY > 30);
+                        if (!inClockArea && !inMainCharacterArea) { isValidPosition = true; }
                     }
                     const randomAngle = Math.floor(Math.random() * 8) * 45; const randomScale = (Math.random() * 0.3 + 0.9).toFixed(2);
                     const wrapperId = `mini-wp-${i}`;
