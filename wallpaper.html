@@ -4,6 +4,17 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>坨坨桌布</title>
+
+        <!-- 🌟 全域致命錯誤攔截器：只要系統死當，強制顯示在畫面左上角 -->
+        <script>
+            window.onerror = function(message, source, lineno, colno, error) {
+                const errDiv = document.createElement('div');
+                errDiv.style.cssText = "position: fixed; top: 10px; left: 10px; background: rgba(220, 38, 38, 0.9); color: white; padding: 12px; border-radius: 8px; z-index: 999999; font-size: 12px; font-family: monospace; max-width: 80vw; pointer-events: none; box-shadow: 0 4px 6px rgba(0,0,0,0.3);";
+                errDiv.innerHTML = `<b>🔥 系統致命錯誤 (Fatal Error)</b><br>訊息: ${message}<br>檔案: ${source}<br>行號: ${lineno}`;
+                document.body.appendChild(errDiv);
+                return false;
+            };
+        </script>
         
         <script src="https://cdn.tailwindcss.com"></script>
         <script src="data_config.js"></script>
@@ -24,14 +35,11 @@
             if (isDarkMode) { document.documentElement.classList.add('dark'); }
             window.currentLang = SafeStorage.get('user_lang') || "zh-TW";
             
-            // 🌟 全域音量變數 (預設 0.8)
             window.weVolume = 0.8;
 
-            // 🌟 Wallpaper Engine 系統設定監聽器 (正確整合版)
             window.wallpaperPropertyListener = {
                 applyUserProperties: function(properties) {
                     if (properties.volume) {
-                        // 抓取 WE 的音量條數值 (0 到 100)，換算成 0 ~ 0.8 的比例
                         window.weVolume = (properties.volume.value / 100) * 0.8;
                         if (VoiceManager && VoiceManager.currentAudio) {
                             VoiceManager.currentAudio.volume = window.weVolume;
@@ -67,24 +75,23 @@
                 width: 100% !important; height: 100% !important;
                 display: block !important; touch-action: none; pointer-events: auto;
             }
-            .desktop-clock-shadow {
-                text-shadow: 0 4px 15px rgba(0,0,0,0.6), 0 1px 3px rgba(0,0,0,0.8);
-            }
+            .desktop-clock-shadow { text-shadow: 0 4px 15px rgba(0,0,0,0.6), 0 1px 3px rgba(0,0,0,0.8); }
             .spine-player-loading-custom {
-                position: absolute; top: 50%; left: 50%;
-                width: 80px; height: 80px; margin: -40px 0 0 -40px;
-                background: url('./golden_crayon.png') no-repeat center center;
-                background-size: contain;
+                position: absolute; top: 50%; left: 50%; width: 80px; height: 80px; margin: -40px 0 0 -40px;
+                background: url('./golden_crayon.png') no-repeat center center; background-size: contain;
                 animation: crayonFloat 1.5s ease-in-out infinite; z-index: 10;
             }
             @keyframes crayonFloat {
                 0%, 100% { transform: translateY(0) scale(1); filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.5)); }
                 50% { transform: translateY(-10px) scale(1.05); filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.9)); }
             }
+            
+            /* 🌟 自訂捲軸樣式，讓選單捲動時更美觀 */
             ::-webkit-scrollbar { width: 6px; height: 6px; }
             ::-webkit-scrollbar-track { background: transparent; }
-            ::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 10px; }
+            ::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 10px; border: 2px solid transparent; background-clip: padding-box; }
             .dark ::-webkit-scrollbar-thumb { background-color: #475569; }
+            
             .collapsible-content { transition: max-height 0.3s ease-out, opacity 0.3s ease-out; overflow: hidden; }
             .collapsed { max-height: 0; opacity: 0; margin-top: 0 !important; overflow: hidden;}
             .custom-select-btn { -webkit-tap-highlight-color: transparent; }
@@ -131,7 +138,8 @@
                     <h2 class="text-base sm:text-lg font-bold text-amber-900 dark:text-amber-400" data-i18n="ui_select_char">👥 選擇坨坨</h2>
                     <button id="toggleAllCharBtn" onclick="toggleAllCharacters()" class="px-3 py-1 text-xs font-bold bg-amber-100 dark:bg-slate-700 text-amber-800 dark:text-gray-300 rounded-lg hover:bg-amber-200 transition shadow-sm" data-i18n="ui_show_all">顯示全部 🔽</button>
                 </div>
-                <div id="charGridContainer" class="space-y-3 collapsible-content collapsed" style="max-height: 0px; opacity: 0;"></div>
+                <!-- 🌟 加入 overflow-y-auto 與 pr-1，讓角色清單支援滾輪下拉，不會再被截斷 -->
+                <div id="charGridContainer" class="space-y-3 collapsible-content collapsed pr-1" style="max-height: 0px; opacity: 0; overflow-y: auto;"></div>
             </section>
 
             <div id="playerControls" class="bg-amber-50/90 dark:bg-slate-700/90 backdrop-blur-md p-4 rounded-xl border-2 border-amber-300 dark:border-slate-500 flex flex-col gap-3 transition-opacity w-full mx-auto shadow-lg">
@@ -173,9 +181,7 @@
             window.addEventListener('dblclick', function(e) {
                 if (e.target.closest('#uiWrapper')) return;
                 const backdrop = document.getElementById('uiBackdrop');
-                if (backdrop.style.opacity === '0' || !backdrop.style.opacity) {
-                    toggleDesktopUI(true);
-                }
+                if (backdrop.style.opacity === '0' || !backdrop.style.opacity) toggleDesktopUI(true);
             }, true);
 
             function toggleDesktopUI(show) {
@@ -211,7 +217,6 @@
             }
             setInterval(updateClock, 1000); updateClock();
 
-            // 🌟 完整且安全的 VoiceManager
             const VoiceManager = {
                 currentAudio: null, fadeInterval: null, baseName: "", skinSuffix: "",
                 init(baseName, costumeKey) {
@@ -311,7 +316,10 @@
             function toggleAllCharacters() {
                 const container = document.getElementById('charGridContainer'); const btn = document.getElementById('toggleAllCharBtn');
                 if (container.classList.contains('collapsed')) {
-                    container.classList.remove('collapsed'); container.style.maxHeight = '2000px'; container.style.opacity = '1'; btn.innerHTML = `${getI18n('ui_hide_all')} 🔼`;
+                    container.classList.remove('collapsed'); 
+                    // 🌟 修正：使用視窗高度比例 (55vh) 代替固定高度，啟動完美捲動
+                    container.style.maxHeight = '55vh'; 
+                    container.style.opacity = '1'; btn.innerHTML = `${getI18n('ui_hide_all')} 🔼`;
                 } else {
                     container.classList.add('collapsed'); container.style.maxHeight = '0px'; container.style.opacity = '0'; btn.innerHTML = `${getI18n('ui_show_all')} 🔽`;
                 }
@@ -523,7 +531,8 @@
                    },
                    error: function (p, reason) {
                        console.error("Spine載入失敗: ", reason);
-                       container.innerHTML = `<div class="text-red-500 font-bold text-sm text-center p-4">載入失敗：檔案路徑錯誤或權限被阻擋</div>`;
+                       // 如果沒死當，這裡會印出失敗原因
+                       container.innerHTML = `<div class="text-red-500 font-bold text-sm text-center p-4" style="background: rgba(0,0,0,0.7); display: inline-block;">⚠️ 載入失敗：WE 沒有抓到 ${skelUrl} 檔案<br>請手動將資料夾複製進專案目錄！</div>`;
                    }
                });
             }
