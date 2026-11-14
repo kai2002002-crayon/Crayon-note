@@ -43,6 +43,20 @@
                 overflow: hidden; background: transparent !important;
                 font-family: 'Noto Sans TC', sans-serif;
             }
+
+            /* 🌟 大廳背景層：將 1105x800 等比例完全擴大覆蓋整個桌面 */
+            #desktopBgLayer {
+                position: fixed;
+                inset: 0;
+                width: 100vw;
+                height: 100vh;
+                background-size: cover;
+                background-position: center center;
+                background-repeat: no-repeat;
+                z-index: 0;
+                pointer-events: none;
+                transition: background-image 0.35s ease-in-out;
+            }
             
             /* 🌟 整體 UI 放大與層級強制置頂 */
             #uiWrapper {
@@ -51,9 +65,12 @@
                 display: none !important; opacity: 0;
                 transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
                 max-width: 850px; margin: 0 auto; padding: 1.5rem;
-                transform: scale(1.12); /* 整體放大 12% */
+                transform: scale(1.12);
                 transform-origin: center center;
                 pointer-events: auto !important;
+            }
+            #uiBackdrop {
+                z-index: 99990 !important;
             }
             
             #spineViewerSection {
@@ -84,7 +101,6 @@
                 50% { transform: translateY(-10px) scale(1.05); filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.9)); }
             }
             
-            /* 🌟 更明顯、更容易點擊的滾輪條樣式 */
             ::-webkit-scrollbar { width: 10px; height: 10px; }
             ::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); border-radius: 10px; }
             .dark ::-webkit-scrollbar-track { background: rgba(255,255,255,0.1); }
@@ -115,10 +131,14 @@
     </head>
     <body class="text-gray-800 dark:text-gray-200 transition-colors duration-300">
         
-        <div id="wallpaperMiniContainer" class="fixed inset-0 pointer-events-none z-[5] overflow-hidden"></div>
-        <div id="uiBackdrop" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-[40] opacity-0 pointer-events-none transition-opacity duration-300" style="display: none !important;"></div>
+        <!-- 🌟 最底層大廳背景 -->
+        <div id="desktopBgLayer"></div>
 
-        <div id="desktopClock" class="fixed text-white desktop-clock-shadow pointer-events-none" style="bottom: 12vh; right: 40vw; z-index: 0; display: flex; flex-direction: column; align-items: flex-start;">
+        <div id="wallpaperMiniContainer" class="fixed inset-0 pointer-events-none z-[5] overflow-hidden"></div>
+        <div id="uiBackdrop" class="fixed inset-0 bg-black/70 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300" style="display: none !important;"></div>
+
+        <!-- 🌟 z-index 提升為 2，確保在背景圖層之上 -->
+        <div id="desktopClock" class="fixed text-white desktop-clock-shadow pointer-events-none" style="bottom: 12vh; left: 3vw; z-index: 2; display: flex; flex-direction: column; align-items: flex-start;">
             <div id="clockDate" class="text-3xl sm:text-4xl font-black tracking-widest text-amber-300 mb-1">DD/MM/YYYY</div>
             <div id="clockTime" class="text-5xl sm:text-6xl font-black tracking-wider flex items-baseline gap-2">
                 <span id="clockTimeDigits">HH:MM:SS</span> 
@@ -126,7 +146,7 @@
             </div>
         </div>
 
-        <div id="uiWrapper" class="space-y-4 relative z-50">
+        <div id="uiWrapper" class="space-y-4 relative">
             <header class="bg-white/95 dark:bg-slate-800/95 backdrop-blur-md p-5 rounded-2xl shadow-xl border-4 border-amber-400 dark:border-slate-600 flex justify-between items-center">
                 <div>
                     <h1 class="text-2xl font-black text-amber-950 dark:text-amber-400 mb-0.5 flex items-center gap-2">
@@ -164,9 +184,19 @@
                     <div class="flex items-center gap-2">
                         <button id="btnPlayPause" onclick="togglePlay()" class="w-10 h-10 flex items-center justify-center bg-amber-500 text-white rounded-lg shadow hover:bg-amber-600 transition text-base" title="播放/暫停">⏸️</button>
                     </div>
-                    <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <!-- 🌟 大廳背景選擇器與快速切換按鈕 -->
+                        <div class="flex items-center gap-1 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-500 rounded-lg px-1.5 py-1 shadow-sm">
+                            <span class="text-xs pl-1">🖼️</span>
+                            <button onclick="stepLobbyBackground(-1)" class="px-1.5 py-1 text-xs font-bold text-gray-600 dark:text-gray-300 hover:bg-amber-100 dark:hover:bg-slate-700 rounded" title="上一張背景">◀</button>
+                            <select id="bgSelect" onchange="changeLobbyBackground(this.value)" class="bg-transparent text-gray-800 dark:text-gray-200 text-xs sm:text-sm font-bold px-1 py-1 outline-none cursor-pointer min-w-[110px]">
+                                <option value="none">無背景 (透明)</option>
+                            </select>
+                            <button onclick="stepLobbyBackground(1)" class="px-1.5 py-1 text-xs font-bold text-gray-600 dark:text-gray-300 hover:bg-amber-100 dark:hover:bg-slate-700 rounded" title="下一張背景">▶</button>
+                        </div>
+
                         <button id="btnModeSwitch" onclick="toggleViewerMode()" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white text-sm font-bold rounded-lg shadow whitespace-nowrap" data-i18n="ui_mode_lobby">🔄 模式: 大廳</button>
-                        <select id="costumeSelect" onchange="changeSpineCostume(this.value)" class="bg-white border border-gray-300 text-sm font-bold rounded-lg px-3 py-2 outline-none min-w-[120px]">
+                        <select id="costumeSelect" onchange="changeSpineCostume(this.value)" class="bg-white text-gray-800 border border-gray-300 text-sm font-bold rounded-lg px-3 py-2 outline-none min-w-[110px]">
                             <option value="" data-i18n="ui_costume">服裝</option>
                         </select>
                     </div>
@@ -188,6 +218,98 @@
         </section>
 
         <script>
+            // 🌟 大廳背景自動偵測與切換管理器
+            // 若你的編號超過 060，可調大 MAX_BG_SCAN 或在 EXTRA_BG_IDS 手動補充編號字串（例如 ["101", "102"]）
+            const MAX_BG_SCAN = 60;
+            const EXTRA_BG_IDS = [];
+            let detectedBgList = [];
+
+            function initLobbyBackgrounds() {
+                const candidateIds = new Set();
+                for (let i = 1; i <= MAX_BG_SCAN; i++) {
+                    candidateIds.add(String(i).padStart(3, '0'));
+                }
+                EXTRA_BG_IDS.forEach(id => candidateIds.add(String(id)));
+
+                const idsArray = Array.from(candidateIds);
+                let pendingChecks = idsArray.length * 2; // 同時檢查 ./bg/ 與根目錄 ./
+                const foundMap = new Map();
+
+                function onCheckDone() {
+                    pendingChecks--;
+                    if (pendingChecks <= 0) {
+                        // 依編號由小到大排序
+                        detectedBgList = Array.from(foundMap.entries())
+                            .sort((a, b) => a[0].localeCompare(b[0]))
+                            .map(([id, url]) => ({ id, url }));
+
+                        const bgSelect = document.getElementById('bgSelect');
+                        if (!bgSelect) return;
+                        bgSelect.innerHTML = '<option value="none">無背景 (透明)</option>';
+
+                        detectedBgList.forEach(item => {
+                            const opt = document.createElement('option');
+                            opt.value = item.url;
+                            opt.text = `大廳背景 ${item.id}`;
+                            bgSelect.appendChild(opt);
+                        });
+
+                        // 還原上次選擇的背景，若無紀錄則預設套用第一張找到的背景
+                        const savedBg = SafeStorage.get('we_lobby_bg');
+                        if (savedBg === 'none') {
+                            changeLobbyBackground('none');
+                        } else if (savedBg && detectedBgList.some(b => b.url === savedBg)) {
+                            changeLobbyBackground(savedBg);
+                        } else if (detectedBgList.length > 0) {
+                            changeLobbyBackground(detectedBgList[0].url);
+                        }
+                    }
+                }
+
+                idsArray.forEach(id => {
+                    const folders = ['./bg/', './'];
+                    folders.forEach(folder => {
+                        const url = `${folder}Lobby${id}.png`;
+                        const img = new Image();
+                        img.onload = () => {
+                            if (!foundMap.has(id)) {
+                                foundMap.set(id, url);
+                            }
+                            onCheckDone();
+                        };
+                        img.onerror = () => {
+                            onCheckDone();
+                        };
+                        img.src = url;
+                    });
+                });
+            }
+
+            function changeLobbyBackground(bgUrl) {
+                const bgLayer = document.getElementById('desktopBgLayer');
+                const bgSelect = document.getElementById('bgSelect');
+                if (!bgLayer) return;
+
+                if (!bgUrl || bgUrl === 'none') {
+                    bgLayer.style.backgroundImage = 'none';
+                    SafeStorage.set('we_lobby_bg', 'none');
+                    if (bgSelect) bgSelect.value = 'none';
+                } else {
+                    bgLayer.style.backgroundImage = `url('${bgUrl}')`;
+                    SafeStorage.set('we_lobby_bg', bgUrl);
+                    if (bgSelect) bgSelect.value = bgUrl;
+                }
+            }
+
+            function stepLobbyBackground(delta) {
+                const bgSelect = document.getElementById('bgSelect');
+                if (!bgSelect || bgSelect.options.length <= 1) return;
+                let nextIdx = bgSelect.selectedIndex + delta;
+                if (nextIdx >= bgSelect.options.length) nextIdx = 0;
+                if (nextIdx < 0) nextIdx = bgSelect.options.length - 1;
+                changeLobbyBackground(bgSelect.options[nextIdx].value);
+            }
+
             // 🌟 終極 WE 雙擊解決方案
             let lastClickTime = 0;
             window.addEventListener('pointerdown', function(e) {
@@ -227,7 +349,6 @@
                 ['pointerdown', 'mousedown', 'touchstart', 'click'].forEach(evt => {
                     uiWrapperElement.addEventListener(evt, (e) => { e.stopPropagation(); }, { passive: false });
                 });
-                // 專門處理滾輪，手動將 delta 轉為容器的 scrollTop，確保滾輪 100% 有反應
                 uiWrapperElement.addEventListener('wheel', (e) => {
                     e.stopPropagation();
                     const scrollable = e.target.closest('.overflow-y-auto');
@@ -329,7 +450,7 @@
             }
 
             window.onload = function() { 
-                applyTranslations(); initCharacterGrid(); 
+                applyTranslations(); initCharacterGrid(); initLobbyBackgrounds();
                 const savedCharName = SafeStorage.get('we_char'); const savedSpine = SafeStorage.get('we_spine'); const savedCostume = SafeStorage.get('we_costume');
                 let charObj = INITIAL_DATA[0]; let spineName = typeof SPINE_MAP !== 'undefined' ? (SPINE_MAP[charObj.name] || charObj.name) : charObj.name;
                 
@@ -823,12 +944,10 @@
                         const inMainCharacterArea = (randomX > 45 && randomY > 30);
                         if (!inClockArea && !inMainCharacterArea) { isValidPosition = true; }
                     }
-                    const randomAngle = Math.floor(Math.random() * 8) * 45;
-                    // 維持 0.5 倍率，因為外層與 viewport 同步擴大為 420，角色在桌面的實際視覺大小不會改變
+                    const randomAngle = Math.floor(Math.random() * 8) * 45; 
                     const visualScale = ((Math.random() * 0.3 + 0.9) * 0.5).toFixed(2);
                     const wrapperId = `mini-wp-${i}`;
-
-                    // 🌟 外層畫布擴大至 420x420，並用 translate(-50%, -50%) 精準置中
+                    
                     const wrapperHtml = `<div id="${wrapperId}" style="position: absolute; left: ${randomX}vw; top: ${randomY}vh; width: 420px; height: 420px; transform: translate(-50%, -50%) rotate(${randomAngle}deg) scale(${visualScale}); transform-origin: center center; opacity: 0.9; z-index: 5; pointer-events: none;"></div>`;
                     container.insertAdjacentHTML('beforeend', wrapperHtml);
 
@@ -836,7 +955,6 @@
                         skelUrl: "./mini/Minimi.skel.bytes", atlasUrl: "./mini/Minimi.atlas.txt",
                         skin: skinName, animation: "Idle", showControls: false, showLoading: false,
                         backgroundColor: "#00000000", alpha: true, premultipliedAlpha: true,
-                        // 🌟 同步將取景範圍擴大為 420x420，並將底部原點下移至 -35 防止武器下劈被切掉
                         viewport: { x: -210, y: -35, width: 420, height: 420 },
                         success: (player) => {
                             if (typeof fixSpineMultiplyHole === 'function') { fixSpineMultiplyHole(player); }
