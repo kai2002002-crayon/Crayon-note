@@ -2359,7 +2359,9 @@ const FOOD_MAP = {
     "Polan": {
         "super": "草莓切片蛋糕",
         "special": [
-            "草莓蛋糕"
+            "草莓蛋糕",
+            "一碗米飯",
+            "一碗糯米飯"
         ]
     },
     "Posher": {
@@ -2438,7 +2440,7 @@ const FOOD_MAP = {
         "super": "惡靈布丁",
         "special": [
             "幽靈布丁",
-            null,
+            "祕密葡萄汁",
             "一級祕密葡萄汁"
         ]
     },
