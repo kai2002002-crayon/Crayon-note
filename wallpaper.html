@@ -118,7 +118,7 @@
         <div id="wallpaperMiniContainer" class="fixed inset-0 pointer-events-none z-[5] overflow-hidden"></div>
         <div id="uiBackdrop" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-[40] opacity-0 pointer-events-none transition-opacity duration-300" style="display: none !important;"></div>
 
-        <div id="desktopClock" class="fixed text-white desktop-clock-shadow pointer-events-none" style="bottom: 12vh; right: 40vw; z-index: 0; display: flex; flex-direction: column; align-items: flex-start;">
+        <div id="desktopClock" class="fixed text-white desktop-clock-shadow pointer-events-none" style="bottom: 12vh; left: 3vw; z-index: 0; display: flex; flex-direction: column; align-items: flex-start;">
             <div id="clockDate" class="text-3xl sm:text-4xl font-black tracking-widest text-amber-300 mb-1">DD/MM/YYYY</div>
             <div id="clockTime" class="text-5xl sm:text-6xl font-black tracking-wider flex items-baseline gap-2">
                 <span id="clockTimeDigits">HH:MM:SS</span> 
@@ -126,7 +126,7 @@
             </div>
         </div>
 
-        <div id="uiWrapper" class="space-y-15 relative z-50">
+        <div id="uiWrapper" class="space-y-4 relative z-50">
             <header class="bg-white/95 dark:bg-slate-800/95 backdrop-blur-md p-5 rounded-2xl shadow-xl border-4 border-amber-400 dark:border-slate-600 flex justify-between items-center">
                 <div>
                     <h1 class="text-2xl font-black text-amber-950 dark:text-amber-400 mb-0.5 flex items-center gap-2">
@@ -823,17 +823,21 @@
                         const inMainCharacterArea = (randomX > 45 && randomY > 30);
                         if (!inClockArea && !inMainCharacterArea) { isValidPosition = true; }
                     }
-                    const randomAngle = Math.floor(Math.random() * 8) * 45; const randomScale = (Math.random() * 0.3 + 0.9).toFixed(2);
+                    const randomAngle = Math.floor(Math.random() * 8) * 45;
+                    // 因為畫布本身放大了 2 倍 (300px)，所以 CSS 縮放比例要減半 (0.45 ~ 0.60)，維持原本的桌面視覺大小
+                    const visualScale = ((Math.random() * 0.3 + 0.9) * 0.5).toFixed(2);
                     const wrapperId = `mini-wp-${i}`;
-                    
-                    const wrapperHtml = `<div id="${wrapperId}" style="position: absolute; left: ${randomX}vw; top: ${randomY}vh; width: 150px; height: 150px; transform: rotate(${randomAngle}deg) scale(${randomScale}); opacity: 0.85; z-index: 5; pointer-events: none;"></div>`;
+
+                    // 🌟 用 300x300 高解析度渲染，再用 CSS 縮小一半，搭配 margin 修正中心點偏移
+                    const wrapperHtml = `<div id="${wrapperId}" style="position: absolute; left: ${randomX}vw; top: ${randomY}vh; width: 300px; height: 300px; margin-left: -75px; margin-top: -75px; transform: rotate(${randomAngle}deg) scale(${visualScale}); transform-origin: center center; opacity: 0.9; z-index: 5; pointer-events: none;"></div>`;
                     container.insertAdjacentHTML('beforeend', wrapperHtml);
 
                     const miniPlayer = new spine.SpinePlayer(wrapperId, {
                         skelUrl: "./mini/Minimi.skel.bytes", atlasUrl: "./mini/Minimi.atlas.txt",
                         skin: skinName, animation: "Idle", showControls: false, showLoading: false,
                         backgroundColor: "#00000000", alpha: true, premultipliedAlpha: true,
-                        viewport: { x: -250, y: 0, width: 500, height: 500 },
+                        // 🌟 視口從 500x500 貼合至 300x300，讓 270x277 的角色吃滿整個畫布像素
+                        viewport: { x: -150, y: -10, width: 300, height: 300 },
                         success: (player) => {
                             if (typeof fixSpineMultiplyHole === 'function') { fixSpineMultiplyHole(player); }
                             const canvas = document.getElementById(wrapperId).querySelector('canvas');
