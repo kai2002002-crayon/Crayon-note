@@ -824,20 +824,20 @@
                         if (!inClockArea && !inMainCharacterArea) { isValidPosition = true; }
                     }
                     const randomAngle = Math.floor(Math.random() * 8) * 45;
-                    // 因為畫布本身放大了 2 倍 (300px)，所以 CSS 縮放比例要減半 (0.45 ~ 0.60)，維持原本的桌面視覺大小
+                    // 維持 0.5 倍率，因為外層與 viewport 同步擴大為 420，角色在桌面的實際視覺大小不會改變
                     const visualScale = ((Math.random() * 0.3 + 0.9) * 0.5).toFixed(2);
                     const wrapperId = `mini-wp-${i}`;
 
-                    // 🌟 用 300x300 高解析度渲染，再用 CSS 縮小一半，搭配 margin 修正中心點偏移
-                    const wrapperHtml = `<div id="${wrapperId}" style="position: absolute; left: ${randomX}vw; top: ${randomY}vh; width: 300px; height: 300px; margin-left: -75px; margin-top: -75px; transform: rotate(${randomAngle}deg) scale(${visualScale}); transform-origin: center center; opacity: 0.9; z-index: 5; pointer-events: none;"></div>`;
+                    // 🌟 外層畫布擴大至 420x420，並用 translate(-50%, -50%) 精準置中
+                    const wrapperHtml = `<div id="${wrapperId}" style="position: absolute; left: ${randomX}vw; top: ${randomY}vh; width: 420px; height: 420px; transform: translate(-50%, -50%) rotate(${randomAngle}deg) scale(${visualScale}); transform-origin: center center; opacity: 0.9; z-index: 5; pointer-events: none;"></div>`;
                     container.insertAdjacentHTML('beforeend', wrapperHtml);
 
                     const miniPlayer = new spine.SpinePlayer(wrapperId, {
                         skelUrl: "./mini/Minimi.skel.bytes", atlasUrl: "./mini/Minimi.atlas.txt",
                         skin: skinName, animation: "Idle", showControls: false, showLoading: false,
                         backgroundColor: "#00000000", alpha: true, premultipliedAlpha: true,
-                        // 🌟 視口從 500x500 貼合至 300x300，讓 270x277 的角色吃滿整個畫布像素
-                        viewport: { x: -150, y: -10, width: 300, height: 300 },
+                        // 🌟 同步將取景範圍擴大為 420x420，並將底部原點下移至 -35 防止武器下劈被切掉
+                        viewport: { x: -210, y: -35, width: 420, height: 420 },
                         success: (player) => {
                             if (typeof fixSpineMultiplyHole === 'function') { fixSpineMultiplyHole(player); }
                             const canvas = document.getElementById(wrapperId).querySelector('canvas');
