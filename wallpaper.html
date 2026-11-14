@@ -8,6 +8,7 @@
         <script src="https://cdn.tailwindcss.com"></script>
         <script src="data_config.js"></script>
         <script src="data_core.js"></script>
+        <script src="data_intro.js"></script>
         <link rel="stylesheet" href="sprites.css">
         <link rel="stylesheet" href="./style.css">
         <link id="dynamicFavicon" rel="icon" href="./Favicon.png" type="image/png">
@@ -165,13 +166,26 @@
         <div id="wallpaperMiniContainer" class="fixed inset-0 pointer-events-none z-[5] overflow-hidden"></div>
         <div id="uiBackdrop" class="fixed inset-0 bg-black/70 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300" style="display: none !important;"></div>
 
-        <!-- 🌟 桌面時鐘 -->
-        <div id="desktopClock" class="fixed text-white desktop-clock-shadow pointer-events-none" style="bottom: 12vh; right: 40vw; z-index: 2; display: flex; flex-direction: column; align-items: flex-start;">
-            <div id="clockDate" class="text-3xl sm:text-4xl font-black tracking-widest text-amber-300 mb-1">DD/MM/YYYY</div>
-            <div id="clockTime" class="text-5xl sm:text-6xl font-black tracking-wider flex items-baseline gap-2">
-                <span id="clockTimeDigits">HH:MM:SS</span> 
-                <span id="clockAmPm" class="text-2xl sm:text-3xl text-amber-500 font-bold">AM</span>
+        <!-- 🌟 角色簡介 + 桌面時鐘（固定於主 Spine 左側安全區） -->
+        <div id="desktopInfoContainer" class="fixed text-white desktop-clock-shadow pointer-events-none flex flex-col items-start gap-4" style="bottom: 12vh; right: 40vw; max-width: min(440px, 34vw); z-index: 2;">
+            
+            <!-- 角色名字與三段式簡介 -->
+            <div id="desktopCharIntro" class="flex flex-col items-start text-left break-words w-full">
+                <div id="introCharName" class="text-2xl sm:text-3xl font-black tracking-wide text-white mb-1.5"></div>
+                <div id="introLine1" class="text-lg sm:text-xl font-bold text-amber-200 leading-snug mb-1"></div>
+                <div id="introLine2" class="text-sm sm:text-base font-medium text-white/95 leading-relaxed mb-1"></div>
+                <div id="introLine3" class="text-xs sm:text-sm font-normal text-gray-200/90 leading-relaxed whitespace-pre-line"></div>
             </div>
+
+            <!-- 桌面時鐘 -->
+            <div id="desktopClock" class="flex flex-col items-start">
+                <div id="clockDate" class="text-3xl sm:text-4xl font-black tracking-widest text-amber-300 mb-1">DD/MM/YYYY</div>
+                <div id="clockTime" class="text-5xl sm:text-6xl font-black tracking-wider flex items-baseline gap-2">
+                    <span id="clockTimeDigits">HH:MM:SS</span> 
+                    <span id="clockAmPm" class="text-2xl sm:text-3xl text-amber-500 font-bold">AM</span>
+                </div>
+            </div>
+
         </div>
 
         <!-- 🌟 左右雙欄 UI 介面 -->
@@ -476,6 +490,36 @@
                 if (typeof LANG_DICT !== 'undefined' && LANG_DICT[safeLang] && LANG_DICT[safeLang][key]) return LANG_DICT[safeLang][key]; return key; 
             }
 
+            // 🌟 更新時鐘上方的角色名稱與三段式簡介
+            function updateCharacterIntro(charObj, spineName) {
+                const nameEl = document.getElementById('introCharName');
+                const p1El = document.getElementById('introLine1');
+                const p2El = document.getElementById('introLine2');
+                const p3El = document.getElementById('introLine3');
+                if (!nameEl || !p1El || !p2El || !p3El || !charObj) return;
+
+                nameEl.innerText = getI18n(charObj.name);
+
+                let rawIntro = "";
+                if (typeof INTRO_MAP !== 'undefined' && INTRO_MAP) {
+                    const langMap = INTRO_MAP[window.currentLang] || INTRO_MAP['zh-TW'] || {};
+                    rawIntro = langMap[spineName] || langMap[charObj.name] || "";
+                }
+
+                const lines = rawIntro
+                    ? rawIntro.replace(/\r\n/g, '\n').split('\n').map(s => s.trim()).filter(Boolean)
+                    : [];
+
+                p1El.innerText = lines[0] || "";
+                p1El.style.display = lines[0] ? "block" : "none";
+
+                p2El.innerText = lines[1] || "";
+                p2El.style.display = lines[1] ? "block" : "none";
+
+                p3El.innerText = lines.slice(2).join('\n') || "";
+                p3El.style.display = lines.length > 2 ? "block" : "none";
+            }
+
             const HEX_COLORS = { "天真": "#4ade80", "冷靜": "#60a5fa", "狂亂": "#f87171", "活潑": "#facc15", "憂鬱": "#c084fc" };
             const personalityColors = { "天真": "border-green-400 text-green-400", "冷靜": "border-blue-400 text-blue-400", "狂亂": "border-red-400 text-red-400", "活潑": "border-yellow-400 text-yellow-400", "憂鬱": "border-purple-400 text-purple-400", "雙面": "penta-border-title-anim penta-text-anim", "共鳴": "border-rainbow text-rainbow" };
             const SPRITE_CLASS_MAP = { race_龍族: "sprite-Bg_Dragon", race_精靈: "sprite-Bg_Elf", race_妖精: "sprite-Bg_Sprite", race_幽靈: "sprite-Bg_Phantom", race_魔靈: "sprite-Bg_Elemental", race_不明: "sprite-Bg_Unknown", race_獸人: "sprite-Bg_Werebeast", race_魔女: "sprite-Bg_Witch", race_unknown: "sprite-Bg_Unknown" };
@@ -607,6 +651,7 @@
 
             function selectCharacter(charObj, spineName, iconUrl) {
                 activeCharData = { ...charObj, spineName: spineName }; saveCurrentConfig(activeCharData, null);
+                updateCharacterIntro(charObj, spineName);
                 let pColors = "border-amber-400 text-amber-900"; const displayPersonality = charObj.personality.includes(",") ? "雙面" : charObj.personality; let customStyle = ""; 
 
                 pColors = personalityColors[displayPersonality] || pColors;
@@ -977,14 +1022,14 @@
                 const vw = window.innerWidth || 1920;
                 const vh = window.innerHeight || 1080;
 
-                // 動態偵測時鐘實際佔用矩形（包含 24px 安全邊距）
-                const clockEl = document.getElementById('desktopClock');
-                let clockBox = null;
-                if (clockEl) {
-                    const rect = clockEl.getBoundingClientRect();
+                // 動態偵測角色簡介 + 時鐘容器的實際佔用矩形（包含 24px 安全邊距）
+                const infoEl = document.getElementById('desktopInfoContainer');
+                let infoBox = null;
+                if (infoEl) {
+                    const rect = infoEl.getBoundingClientRect();
                     if (rect.width > 0 && rect.height > 0) {
                         const pad = 24;
-                        clockBox = {
+                        infoBox = {
                             left: rect.left - pad,
                             right: rect.right + pad,
                             top: rect.top - pad,
@@ -1014,20 +1059,20 @@
                         const cx = edgeMargin + Math.random() * Math.max(10, vw - edgeMargin * 2);
                         const cy = edgeMargin + Math.random() * Math.max(10, vh - edgeMargin * 2);
 
-                        // 1. 避開時鐘區域（圓形對矩形碰撞檢測）
-                        let hitsClock = false;
-                        if (clockBox) {
-                            const nearestX = Math.max(clockBox.left, Math.min(cx, clockBox.right));
-                            const nearestY = Math.max(clockBox.top, Math.min(cy, clockBox.bottom));
+                        // 1. 避開角色簡介與時鐘區域（圓形對矩形碰撞檢測）
+                        let hitsInfoArea = false;
+                        if (infoBox) {
+                            const nearestX = Math.max(infoBox.left, Math.min(cx, infoBox.right));
+                            const nearestY = Math.max(infoBox.top, Math.min(cy, infoBox.bottom));
                             if (Math.hypot(cx - nearestX, cy - nearestY) < radius) {
-                                hitsClock = true;
+                                hitsInfoArea = true;
                             }
                         } else {
                             const pctX = (cx / vw) * 100;
                             const pctY = (cy / vh) * 100;
-                            if (pctX > 32 && pctX < 68 && pctY > 68) hitsClock = true;
+                            if (pctX > 25 && pctX < 68 && pctY > 45) hitsInfoArea = true;
                         }
-                        if (hitsClock) continue;
+                        if (hitsInfoArea) continue;
 
                         // 2. 避開右側主 Spine 區域
                         const pctX = (cx / vw) * 100;
