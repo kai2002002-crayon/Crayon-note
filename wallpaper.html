@@ -58,7 +58,7 @@
                 transition: background-image 0.35s ease-in-out;
             }
             
-            /* 🌟 左右雙欄 UI 容器：移除造成模糊的 transform scale，改用原生高解析尺寸 */
+            /* 🌟 左右雙欄 UI 容器 */
             #uiWrapper {
                 position: fixed !important;
                 inset: 0;
@@ -71,7 +71,7 @@
                 padding: 2.5vh 3vw;
                 align-items: center;
                 justify-content: center;
-                pointer-events: none; /* 讓兩欄之間的空白處可直接點擊關閉背景 */
+                pointer-events: none;
             }
 
             #uiBackdrop {
@@ -125,7 +125,6 @@
             .dark ::-webkit-scrollbar-thumb { background-color: #475569; }
             ::-webkit-scrollbar-thumb:hover { background-color: #94a3b8; }
             
-            /* 性格群組展開時保持 overflow: visible，避免 hover 放大時觸發內部滾動條 */
             .group-grid-content {
                 transition: max-height 0.25s ease-out, opacity 0.25s ease-out;
                 overflow: visible;
@@ -182,7 +181,7 @@
                 <!-- ◀ 左邊欄：標題設定區 + 角色控制/背景/服裝/動作區 -->
                 <div id="uiLeftColumn" class="w-full lg:w-[440px] shrink-0 flex flex-col gap-4 pointer-events-auto">
                     
-                    <!-- 原最頂部標題與語言時間設定 -->
+                    <!-- 頂部標題與語言時間設定 -->
                     <header class="bg-white/95 dark:bg-slate-800/95 backdrop-blur-md p-5 rounded-2xl shadow-xl border-4 border-amber-400 dark:border-slate-600 flex justify-between items-center">
                         <div>
                             <h1 class="text-2xl font-black text-amber-950 dark:text-amber-400 mb-0.5 flex items-center gap-2">
@@ -200,16 +199,13 @@
                         </div>
                     </header>
 
-                    <!-- 原最底部控制區：移至左邊欄下方，保留充足空間展開動作下拉選單 -->
+                    <!-- 控制區（已移除播放暫停按鈕） -->
                     <div id="playerControls" class="bg-amber-50/95 dark:bg-slate-800/95 backdrop-blur-md p-5 rounded-2xl border-2 border-amber-300 dark:border-slate-600 flex flex-col gap-4 w-full shadow-xl">
                         
-                        <!-- 當前角色資訊 + 播放暫停 -->
-                        <div class="flex items-center justify-between border-b border-amber-200 dark:border-slate-600 pb-3.5">
-                            <div class="flex items-center gap-3.5 min-w-0">
-                                <div id="activeCharIconContainer" class="w-14 h-14 rounded-xl border-2 border-amber-400 shadow-sm overflow-hidden bg-white dark:bg-slate-700 hidden relative items-center justify-center shrink-0"></div>
-                                <h2 id="activeCharName" class="text-2xl font-black text-amber-900 dark:text-amber-300 truncate" data-i18n="ui_please_select">請先選擇坨坨</h2>
-                            </div>
-                            <button id="btnPlayPause" onclick="togglePlay()" class="w-11 h-11 flex items-center justify-center bg-amber-500 text-white rounded-xl shadow hover:bg-amber-600 transition text-lg shrink-0" title="播放/暫停">⏸️</button>
+                        <!-- 當前角色資訊 -->
+                        <div class="flex items-center gap-3.5 border-b border-amber-200 dark:border-slate-600 pb-3.5 min-w-0">
+                            <div id="activeCharIconContainer" class="w-14 h-14 rounded-xl border-2 border-amber-400 shadow-sm overflow-hidden bg-white dark:bg-slate-700 hidden relative items-center justify-center shrink-0"></div>
+                            <h2 id="activeCharName" class="text-2xl font-black text-amber-900 dark:text-amber-300 truncate" data-i18n="ui_please_select">請先選擇坨坨</h2>
                         </div>
 
                         <!-- 模式切換 & 服裝選擇 -->
@@ -562,7 +558,6 @@
                     
                     header.innerHTML = `<div class="flex items-center gap-1.5"><div class="sprite-base sprite-common ${pSprite} shrink-0 scale-[0.42] origin-left -ml-2 avatar-crisp"></div><h3 class="text-base font-black border-l-4 ${borderClass} pl-2 -ml-3"><span class="${textClass}">${getI18n(p)}</span></h3></div><span id="${btnId}" class="text-xs text-gray-400">🔼</span>`;
                     
-                    // 🌟 移除 .collapsible-content 的內部滾動條，並留出上下安全邊距避免 hover 放大時超出邊界
                     const iconContainer = document.createElement('div');
                     iconContainer.id = groupId;
                     iconContainer.className = "flex flex-wrap gap-3 pt-3 pb-1.5 px-1.5 group-grid-content";
@@ -586,7 +581,6 @@
                             charStyle = `style="--c1: ${c1}; --c2:${c2};"`; charBorderClass = "dual-border-anim"; 
                         }
 
-                        // 🌟 移除 backdrop-blur，使用更貼近原始精靈圖比例的 scale-[0.46] 與 avatar-crisp 確保頭像高清銳利
                         btn.innerHTML = `
                             <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-xl border-2 ${charBorderClass} overflow-hidden shadow-sm group-hover:scale-105 group-hover:shadow-md group-active:scale-95 transition-transform duration-150 relative flex items-center justify-center bg-slate-100 dark:bg-slate-800" ${charStyle}>
                                 <div class="absolute inset-0 flex items-center justify-center opacity-85"><div class="sprite-base sprite-common ${raceSprite} shrink-0 scale-[0.78] avatar-crisp"></div></div>
@@ -724,7 +718,6 @@
                            if (startAnim) {
                                player.animationState.setAnimation(0, startAnim, true);
                                document.getElementById('animSelectText').innerText = startAnim;
-                               document.getElementById('btnPlayPause').innerText = '⏸️';
                            }
                            player.play();
                            if (mode === 'lobby') VoiceManager.playSpawn();
@@ -753,12 +746,6 @@
                 globalPlayer.skeleton.updateWorldTransform();
             }
             window.addEventListener('resize', applyDefaultCamera);
-
-            function togglePlay() {
-                if (!globalPlayer) return;
-                if (globalPlayer.paused) { globalPlayer.play(); document.getElementById('btnPlayPause').innerText = '⏸️'; } 
-                else { globalPlayer.pause(); document.getElementById('btnPlayPause').innerText = '▶️'; }
-            }
             
             function buildAnimationDropdown(player) {
                 const animList = document.getElementById('animList'); animList.innerHTML = '';
@@ -771,7 +758,7 @@
                         e.stopPropagation(); player.animationState.setAnimation(0, animName, true);
                         document.getElementById('animSelectText').innerText = animName;
                         animList.classList.add('hidden'); animList.classList.remove('flex');
-                        player.play(); document.getElementById('btnPlayPause').innerText = '⏸️';
+                        player.play();
                         player.skeleton.updateWorldTransform();
                     };
                     animList.appendChild(btn);
