@@ -219,6 +219,11 @@
         <!-- 🌟 半透明背景遮罩 -->
         <div id="uiBackdrop" class="fixed inset-0 bg-black/25 opacity-0 pointer-events-none transition-opacity duration-300" style="display: none !important;"></div>
 
+        <!-- 🌟 左上角遊戲 Logo（原尺寸 497x309 等比例縮放） -->
+        <div id="desktopLogoContainer" class="fixed top-4 left-5 z-[6] pointer-events-none select-none">
+            <img src="./trickcal_gif.png" alt="Trickcal Logo" width="497" height="309" draggable="false" class="w-[220px] sm:w-[260px] lg:w-[290px] h-auto object-contain drop-shadow-[0_4px_12px_rgba(0,0,0,0.65)]">
+        </div>
+
         <!-- 🌟 左下角細字版權擁有者標示 -->
         <div id="desktopCopyright" data-i18n="footer_copyright" class="fixed bottom-3 left-4 text-[11px] sm:text-xs font-medium tracking-wide text-white/65 desktop-clock-shadow pointer-events-none select-none z-[6]">© 遊戲版權: EpidGames & Bilibili</div>
 
@@ -1128,6 +1133,22 @@
                     }
                 }
 
+                // 動態偵測左上角 Logo 容器的實際佔用矩形（包含 16px 安全邊距）
+                const logoEl = document.getElementById('desktopLogoContainer');
+                let logoBox = null;
+                if (logoEl) {
+                    const rect = logoEl.getBoundingClientRect();
+                    if (rect.width > 0 && rect.height > 0) {
+                        const pad = 16;
+                        logoBox = {
+                            left: rect.left - pad,
+                            right: rect.right + pad,
+                            top: rect.top - pad,
+                            bottom: rect.bottom + pad
+                        };
+                    }
+                }
+
                 // 記錄已放置的迷你 Spine（中心像素座標與碰撞半徑）
                 const placedMinis = [];
                 const BASE_SIZE = 420;
@@ -1163,6 +1184,15 @@
                             if (pctX > 25 && pctX < 68 && pctY > 45) hitsInfoArea = true;
                         }
                         if (hitsInfoArea) continue;
+
+                        // 1.5 避開左上角 Logo 區域
+                        if (logoBox) {
+                            const nearestLogoX = Math.max(logoBox.left, Math.min(cx, logoBox.right));
+                            const nearestLogoY = Math.max(logoBox.top, Math.min(cy, logoBox.bottom));
+                            if (Math.hypot(cx - nearestLogoX, cy - nearestLogoY) < radius) {
+                                continue;
+                            }
+                        }
 
                         // 2. 避開右側主 Spine 區域
                         const pctX = (cx / vw) * 100;
