@@ -1,63 +1,269 @@
-// ==========================================
-// 嘟嘟臉金蠟筆記事本 - 核心資料庫 (data_core.js)
-// 負責：首頁與詳細頁共用的基礎資料、圖片映射、多語系字典
-// ==========================================
-
-// ------------------------------------------
-// 多語系字典與翻譯系統
-// ------------------------------------------
-const LANG_DICT = {
+﻿const LANG_DICT = {
     "zh-TW": {
-        app_title: "嘟嘟臉金蠟筆記事本", app_subtitle: "祝各位教主日日出金蠟筆", stats_title: "📊 統計與加成資訊",
-        stats_stat: "統計", stats_character: "坨坨", stats_attack: "攻", stats_defence: "防", stats_hp: "血",
-        stats_critical: "爆", stats_resist: "抗", stats_personality: "🔮 性格：", stats_race: "🧬 種族：",
-        stats_position: "🗺️ 站位：", stats_job: "⚔️ 職業：", stats_cell: "🖍️ 金蠟筆格：", stats_crayon: "金蠟筆",
-        stats_level: "指定層數:", cell_kind: "格子種類:", level_1st: "第一層", level_2nd: "第二層", level_3rd: "第三層",
-        total_owned: "已擁有坨坨", crayon_used: "蠟筆消耗量", crayon_needed: "蠟筆需求量",
-        crayon_attack: "攻擊", crayon_defence: "防禦", crayon_hp: "血量", crayon_critical: "爆擊", crayon_resist: "爆抗",
-        personality_naive: "天真", personality_calm: "冷靜", personality_mad: "狂亂", personality_vivid: "活潑", personality_gloomy: "憂鬱", personality_resonance: "共鳴", personality_multifaceted: "雙面",
-        race_witch: "魔女", race_beast: "獸人", race_dragon: "龍族", race_spirit: "魔靈", race_fairy: "妖精", race_elf: "精靈", race_ghost: "幽靈", race_unknown: "???",
-        position_front: "前排", position_middle: "中排", position_back: "後排", position_all: "所有排", job_attacker: "輸出", job_defender: "肉盾", job_supporter: "輔助",
-		sort_title: "↕️ 排序：", sort_personality: "預設", sort_releaseDate: "實裝日期", sort_name: "名字", sort_race: "種族", sort_position: "站位", sort_job: "職業", sort_order_desc: "⬇️ 逆排", sort_order_asc: "⬆️ 順排", "所有坨坨": "所有坨坨",
-        visit_count_prefix: "累計利用回數", maintenance_msg: "🔧 維護更新中...", event_title: "🎪 今期活動",
-        auth_offline_title: "當前狀態：單機模式", auth_offline_desc: "紀錄保存在此裝置", auth_online_title: "🟢 ", auth_logout: "登出",
-        filter_title: "🔍 篩選器", filter_search_placeholder: "搜尋坨坨...", filter_reset: "重置全部篩選", filter_display_mode: "👁️ 版面顯示：",
-        filter_btn_all: "全部", filter_btn_show_all: "顯示全部", filter_btn_show_1: "僅第一層", filter_btn_show_2: "僅第二層", filter_btn_show_3: "僅第三層",
-		grid_status: "格子狀態", filter_btn_opened: "已開啟", filter_btn_unopened: "未開啟",
-        stats_toggle_hint: "點擊展開 / 收起", stats_layer_1_title: "🥇 第一層統計", stats_layer_2_title: "🥈 第二層統計", stats_layer_3_title: "🥉 第三層統計",
-        stats_layer_1_rule: "(每格+3%, 蠟筆×2)", stats_layer_2_rule: "(每格+4%, 蠟筆×4)", stats_layer_3_rule: "(每格+5%, 蠟筆×6)",
-        stats_global_bonus: "📊 全體屬性加成", stats_need_more_prefix: "尚要 ", stats_need_more_suffix: " 根蠟筆",
-		menu_system_title: "系統選單", menu_gacha: "招募模擬器", menu_viewer: "動態展示器", menu_tier_maker: "排行榜生成器", menu_checklist: "自訂角色清單", menu_story: "嘟嘟臉劇院", menu_toggle_anim: "開關頂部跑酷動畫",
-		quick_action_title: "⚡ 快捷操作", quick_action_all_chars: "全體坨坨:", quick_action_own_all: "一鍵全部擁有", quick_action_cancel_all: "一鍵全部取消", quick_action_fill_crayons: "填滿蠟筆:", quick_action_clear_crayons: "清空蠟筆:", quick_action_fill_all: "填滿全層", quick_action_clear_all: "清空全層", quick_action_layer_1: "第一層", quick_action_layer_2: "第二層", quick_action_layer_3: "第三層", quick_action_own: "擁有", quick_action_cancel: "取消擁有", quick_action_fill: "填滿", quick_action_clear: "清空", quick_action_all_layers: "所有層數", quick_action_layer_n: "第 {n} 層", quick_action_confirm_chars: "確定要一鍵「{action}」所有坨坨嗎？\n(此操作會覆蓋所有坨坨的擁有狀態！)", quick_action_confirm_grids: "確定要「{action}」全體坨坨【{layer}】的蠟筆格子嗎？\n(⚠️ 警告：此操作會直接覆蓋目前的紀錄，且無法復原！)",
-		path_image_hint: "查看路徑圖",
-		info_job_reward: "💰 打工獎勵", info_food: "🍲 喜好料理", aside_title: "願像", aside_loading: "看起來思念還不夠深",
-		stats_attribute: "攻擊類型", 物理: "物理", 魔法: "魔法", 艾爾丁: "艾爾丁", 普通坨坨: "普通坨坨", 身份: "身份",
-		x_label: "台港澳服官方X", official_x_url: "https://x.com/trickcal_TW",
-        footer_author: "📝 記事本製作者: 冷笑話幽靈", footer_copyright: "© 遊戲版權: EpidGames & Bilibili", footer_lastupdate: "最後更新日期：22/10/2026",
-        "天真": "天真", "冷靜": "冷靜", "狂亂": "狂亂", "活潑": "活潑", "憂鬱": "憂鬱", "共鳴": "共鳴", "雙面": "雙面",
-        "魔女": "魔女", "獸人": "獸人", "龍族": "龍族", "魔靈": "魔靈", "妖精": "妖精", "精靈": "精靈", "幽靈": "幽靈", "???": "???",
-        "前排": "前排", "中排": "中排", "後排": "後排", "所有排": "所有排", "輸出": "輸出", "肉盾": "肉盾", "輔助": "輔助",
-        "攻擊": "攻擊", "防禦": "防禦", "血量": "血量", "爆擊": "爆擊", "爆抗": "爆抗", "全部": "全部",
-		"克魯布魯斯": "克魯布魯斯", "蠟筆勇士": "蠟筆勇士", "R41雷內瓦": "R41雷內瓦", "莉1莉": "莉1莉", "M.E.O.W.": "M.E.O.W.", "雷內瓦(NPC)": "雷內瓦", "榮春": "榮春", "高蒂": "高蒂", "可麗餅": "可麗餅", "德莉亞": "德莉亞",
-        page_title_char_detail: "坨坨詳細資料", btn_close_page: "⬅️ 關閉此頁", loading: "載入中...", release_date_label: "實裝日期",
-        crayon_detail_title: "🖍️ 金蠟筆分佈詳情", layer_1_stats: "🥇 第一層屬性", layer_2_stats: "🥈 第二層屬性", layer_3_stats: "🥉 第三層屬性",
-        present_title: "坨坨珍藏品", present_loading: "寶箱開啟中...", btn_letter: "坨坨情信", btn_thought: "教主感想",
-        present_select_hint: "請選擇顯示內容...", no_letter_hint: "（這隻坨坨好像還沒寫信給你呢...）", no_thought_hint: "（教主目前還沒寫下對這個珍藏品的感想呢...）",
-        present_delivering: "珍藏品正在送遞中...", present_suffix: "的珍藏品", present_error: "⚠️ 珍藏品載入錯誤",
-        skill_detail_title: "⚔️ 技能詳細資料", skill_loading: "技能載入中...", skill_normal_attack: "普通攻擊",
-        skill_basic: "【基本】", skill_enhanced: "【強化】", skill_passive: "被動技能", skill_admission: "普通技能", skill_graduate: "高級技能",
-        costume_default: "預設", costume_prefix: "服裝",
-        comment_title: "💬 玩家評價與心得", comment_author_placeholder: "您的暱稱 (留白將以匿名顯示)", comment_content_placeholder: "寫下您對這位坨坨的評價、組隊心得或是發廚發言...",
-        btn_submit_comment: "送出評價 🚀", btn_submitting: "傳送中... ⏳", comment_loading: "連線至留言板中...",
-        no_comment_hint: "目前還沒有評價，來搶頭香吧！ 🐾", time_just_now: "剛剛", anonymous_leader: "匿名教主#",
-        error_no_char: "❌ 未指定坨坨，請從主頁點擊坨坨按鈕進入。", error_no_data: "❌ 載入失敗：找不到 INITIAL_DATA。",
-        error_char_not_found: "❌ 找不到該坨坨資料。", error_no_skill_data: "❌ 找不到 skill.js 資料，請確認檔案存在。",
-        error_char_skill_not_found: "⚠️ 找不到該坨坨的技能資料。", alert_empty_comment: "請輸入評價內容！",
-        alert_comment_too_long: "評價內容太長囉，請縮減至 500 字以內！", alert_comment_failed: "留言失敗，請稍後再試！", error_load_comment: "讀取留言失敗，請確認資料庫權限設定。",
-		ui_title: "坨坨動態展示器", ui_back: "⬅️ 返回", ui_select_char: "👥 選擇坨坨", ui_show_all: "顯示全部", ui_hide_all: "隱藏全部", ui_please_select: "請先選擇坨坨", ui_camera: "🔄 重置", ui_waiting: "等待載入...", ui_mode_lobby: "🔄 模式: 大廳", ui_mode_battle: "⚔️ 模式: 戰鬥", ui_ar_open: "📷 開啟AR", ui_ar_close: "❌ 關閉AR", ui_ar_panel: "📷 相機面板", ui_ar_flip: "🔄 翻轉鏡頭", ui_ar_capture: "📸 拍照儲存", ui_costume: "服裝", ui_default_costume: "預設服裝", ui_default_model: "預設模型", ui_select_anim: "選擇動作", ui_slots: "🧩 外觀插槽", ui_show_slots: "全顯", ui_hide_slots: "全隱", ui_loading_data: "讀取資料中...",
-		gacha_simulator: "嘟嘟臉角色招募模擬器", gacha_select_pool: "📍 選擇招募池", gacha_personality_hint: "🔮 指定性格：", gacha_1_pull: "1次招募", gacha_10_pull: "10次招募", gacha_waiting: "等待招募中...", gacha_history: "📜 招募紀錄", gacha_rate_up: "🎯 特選招募", gacha_normal: "🌟 普通招募", gacha_personality_pool: "🔮 性格選擇招募", gacha_result_title: "🎉 招募結果 🎉", gacha_prev_page: "上一頁", gacha_next_page: "下一頁", gacha_page: "第 {current} / {total} 頁", gacha_unknown_time: "未知時間", gacha_unknown_pool: "未知招募",
-		ui_tier_title: "排行榜生成器", ui_tier_add_row: "新增級別", ui_tier_reset: "全部重置", ui_tier_export: "輸出圖片", ui_tier_pool_title: "選擇角色 (拖曳至上方排行榜)", ui_tier_default_title: "我的最愛排行榜", ui_tier_reset_confirm: "確定要重置整個排行榜並將所有角色放回角色池嗎？", ui_tier_export_error: "匯出圖片失敗",
-		"愛麗絲": "愛麗絲",
+        "app_title": "嘟嘟臉金蠟筆記事本",
+        "app_subtitle": "祝各位教主日日出金蠟筆",
+        "stats_title": "📊 統計與加成資訊",
+        "stats_stat": "統計",
+        "stats_character": "坨坨",
+        "stats_attack": "攻",
+        "stats_defence": "防",
+        "stats_hp": "血",
+        "stats_critical": "爆",
+        "stats_resist": "抗",
+        "stats_personality": "🔮 性格：",
+        "stats_race": "🧬 種族：",
+        "stats_position": "🗺️ 站位：",
+        "stats_job": "⚔️ 職業：",
+        "stats_cell": "🖍️ 金蠟筆格：",
+        "stats_crayon": "金蠟筆",
+        "stats_level": "指定層數:",
+        "cell_kind": "格子種類:",
+        "level_1st": "第一層",
+        "level_2nd": "第二層",
+        "level_3rd": "第三層",
+        "total_owned": "已擁有坨坨",
+        "crayon_used": "蠟筆消耗量",
+        "crayon_needed": "蠟筆需求量",
+        "crayon_attack": "攻擊",
+        "crayon_defence": "防禦",
+        "crayon_hp": "血量",
+        "crayon_critical": "爆擊",
+        "crayon_resist": "爆抗",
+        "personality_naive": "天真",
+        "personality_calm": "冷靜",
+        "personality_mad": "狂亂",
+        "personality_vivid": "活潑",
+        "personality_gloomy": "憂鬱",
+        "personality_resonance": "共鳴",
+        "personality_multifaceted": "雙面",
+        "race_witch": "魔女",
+        "race_beast": "獸人",
+        "race_dragon": "龍族",
+        "race_spirit": "魔靈",
+        "race_fairy": "妖精",
+        "race_elf": "精靈",
+        "race_ghost": "幽靈",
+        "race_unknown": "???",
+        "position_front": "前排",
+        "position_middle": "中排",
+        "position_back": "後排",
+        "position_all": "所有排",
+        "job_attacker": "輸出",
+        "job_defender": "肉盾",
+        "job_supporter": "輔助",
+        "sort_title": "↕️ 排序：",
+        "sort_personality": "預設",
+        "sort_releaseDate": "實裝日期",
+        "sort_name": "名字",
+        "sort_race": "種族",
+        "sort_position": "站位",
+        "sort_job": "職業",
+        "sort_order_desc": "⬇️ 逆排",
+        "sort_order_asc": "⬆️ 順排",
+        "所有坨坨": "所有坨坨",
+        "visit_count_prefix": "累計利用回數",
+        "maintenance_msg": "🔧 維護更新中...",
+        "event_title": "🎪 今期活動",
+        "auth_offline_title": "當前狀態：單機模式",
+        "auth_offline_desc": "紀錄保存在此裝置",
+        "auth_online_title": "🟢 ",
+        "auth_logout": "登出",
+        "filter_title": "🔍 篩選器",
+        "filter_search_placeholder": "搜尋坨坨...",
+        "filter_reset": "重置全部篩選",
+        "filter_display_mode": "👁️ 版面顯示：",
+        "filter_btn_all": "全部",
+        "filter_btn_show_all": "顯示全部",
+        "filter_btn_show_1": "僅第一層",
+        "filter_btn_show_2": "僅第二層",
+        "filter_btn_show_3": "僅第三層",
+        "grid_status": "格子狀態",
+        "filter_btn_opened": "已開啟",
+        "filter_btn_unopened": "未開啟",
+        "stats_toggle_hint": "點擊展開 / 收起",
+        "stats_layer_1_title": "🥇 第一層統計",
+        "stats_layer_2_title": "🥈 第二層統計",
+        "stats_layer_3_title": "🥉 第三層統計",
+        "stats_layer_1_rule": "(每格+3%, 蠟筆×2)",
+        "stats_layer_2_rule": "(每格+4%, 蠟筆×4)",
+        "stats_layer_3_rule": "(每格+5%, 蠟筆×6)",
+        "stats_global_bonus": "📊 全體屬性加成",
+        "stats_need_more_prefix": "尚要 ",
+        "stats_need_more_suffix": " 根蠟筆",
+        "menu_system_title": "系統選單",
+        "menu_gacha": "招募模擬器",
+        "menu_viewer": "動態展示器",
+        "menu_tier_maker": "排行榜生成器",
+        "menu_checklist": "自訂角色清單",
+        "menu_story": "嘟嘟臉劇院",
+        "menu_toggle_anim": "開關頂部跑酷動畫",
+        "quick_action_title": "⚡ 快捷操作",
+        "quick_action_all_chars": "全體坨坨:",
+        "quick_action_own_all": "一鍵全部擁有",
+        "quick_action_cancel_all": "一鍵全部取消",
+        "quick_action_fill_crayons": "填滿蠟筆:",
+        "quick_action_clear_crayons": "清空蠟筆:",
+        "quick_action_fill_all": "填滿全層",
+        "quick_action_clear_all": "清空全層",
+        "quick_action_layer_1": "第一層",
+        "quick_action_layer_2": "第二層",
+        "quick_action_layer_3": "第三層",
+        "quick_action_own": "擁有",
+        "quick_action_cancel": "取消擁有",
+        "quick_action_fill": "填滿",
+        "quick_action_clear": "清空",
+        "quick_action_all_layers": "所有層數",
+        "quick_action_layer_n": "第 {n} 層",
+        "quick_action_confirm_chars": "確定要一鍵「{action}」所有坨坨嗎？\n(此操作會覆蓋所有坨坨的擁有狀態！)",
+        "quick_action_confirm_grids": "確定要「{action}」全體坨坨【{layer}】的蠟筆格子嗎？\n(⚠️ 警告：此操作會直接覆蓋目前的紀錄，且無法復原！)",
+        "path_image_hint": "查看路徑圖",
+        "info_job_reward": "💰 打工獎勵",
+        "info_food": "🍲 喜好料理",
+        "aside_title": "願像",
+        "aside_loading": "看起來思念還不夠深",
+        "stats_attribute": "攻擊類型",
+        "物理": "物理",
+        "魔法": "魔法",
+        "艾爾丁": "艾爾丁",
+        "普通坨坨": "普通坨坨",
+        "身份": "身份",
+        "x_label": "台港澳服官方X",
+        "official_x_url": "https://x.com/trickcal_TW",
+        "footer_author": "📝 記事本製作者: 冷笑話幽靈",
+        "footer_copyright": "© 遊戲版權: EpidGames & Bilibili",
+        "footer_lastupdate": "最後更新日期：22/10/2026",
+        "天真": "天真",
+        "冷靜": "冷靜",
+        "狂亂": "狂亂",
+        "活潑": "活潑",
+        "憂鬱": "憂鬱",
+        "共鳴": "共鳴",
+        "雙面": "雙面",
+        "魔女": "魔女",
+        "獸人": "獸人",
+        "龍族": "龍族",
+        "魔靈": "魔靈",
+        "妖精": "妖精",
+        "精靈": "精靈",
+        "幽靈": "幽靈",
+        "???": "???",
+        "前排": "前排",
+        "中排": "中排",
+        "後排": "後排",
+        "所有排": "所有排",
+        "輸出": "輸出",
+        "肉盾": "肉盾",
+        "輔助": "輔助",
+        "攻擊": "攻擊",
+        "防禦": "防禦",
+        "血量": "血量",
+        "爆擊": "爆擊",
+        "爆抗": "爆抗",
+        "全部": "全部",
+        "克魯布魯斯": "克魯布魯斯",
+        "蠟筆勇士": "蠟筆勇士",
+        "R41雷內瓦": "R41雷內瓦",
+        "莉1莉": "莉1莉",
+        "M.E.O.W.": "M.E.O.W.",
+        "雷內瓦(NPC)": "雷內瓦",
+        "榮春": "榮春",
+        "高蒂": "高蒂",
+        "可麗餅": "可麗餅",
+        "德莉亞": "德莉亞",
+        "page_title_char_detail": "坨坨詳細資料",
+        "btn_close_page": "⬅️ 關閉此頁",
+        "loading": "載入中...",
+        "release_date_label": "實裝日期",
+        "crayon_detail_title": "🖍️ 金蠟筆分佈詳情",
+        "layer_1_stats": "🥇 第一層屬性",
+        "layer_2_stats": "🥈 第二層屬性",
+        "layer_3_stats": "🥉 第三層屬性",
+        "present_title": "坨坨珍藏品",
+        "present_loading": "寶箱開啟中...",
+        "btn_letter": "坨坨情信",
+        "btn_thought": "教主感想",
+        "present_select_hint": "請選擇顯示內容...",
+        "no_letter_hint": "（這隻坨坨好像還沒寫信給你呢...）",
+        "no_thought_hint": "（教主目前還沒寫下對這個珍藏品的感想呢...）",
+        "present_delivering": "珍藏品正在送遞中...",
+        "present_suffix": "的珍藏品",
+        "present_error": "⚠️ 珍藏品載入錯誤",
+        "skill_detail_title": "⚔️ 技能詳細資料",
+        "skill_loading": "技能載入中...",
+        "skill_normal_attack": "普通攻擊",
+        "skill_basic": "【基本】",
+        "skill_enhanced": "【強化】",
+        "skill_passive": "被動技能",
+        "skill_admission": "普通技能",
+        "skill_graduate": "高級技能",
+        "costume_default": "預設",
+        "costume_prefix": "服裝",
+        "comment_title": "💬 玩家評價與心得",
+        "comment_author_placeholder": "您的暱稱 (留白將以匿名顯示)",
+        "comment_content_placeholder": "寫下您對這位坨坨的評價、組隊心得或是發廚發言...",
+        "btn_submit_comment": "送出評價 🚀",
+        "btn_submitting": "傳送中... ⏳",
+        "comment_loading": "連線至留言板中...",
+        "no_comment_hint": "目前還沒有評價，來搶頭香吧！ 🐾",
+        "time_just_now": "剛剛",
+        "anonymous_leader": "匿名教主#",
+        "error_no_char": "❌ 未指定坨坨，請從主頁點擊坨坨按鈕進入。",
+        "error_no_data": "❌ 載入失敗：找不到 INITIAL_DATA。",
+        "error_char_not_found": "❌ 找不到該坨坨資料。",
+        "error_no_skill_data": "❌ 找不到 skill.js 資料，請確認檔案存在。",
+        "error_char_skill_not_found": "⚠️ 找不到該坨坨的技能資料。",
+        "alert_empty_comment": "請輸入評價內容！",
+        "alert_comment_too_long": "評價內容太長囉，請縮減至 500 字以內！",
+        "alert_comment_failed": "留言失敗，請稍後再試！",
+        "error_load_comment": "讀取留言失敗，請確認資料庫權限設定。",
+        "ui_title": "坨坨動態展示器",
+        "ui_back": "⬅️ 返回",
+        "ui_select_char": "👥 選擇坨坨",
+        "ui_show_all": "顯示全部",
+        "ui_hide_all": "隱藏全部",
+        "ui_please_select": "請先選擇坨坨",
+        "ui_camera": "🔄 重置",
+        "ui_waiting": "等待載入...",
+        "ui_mode_lobby": "🔄 模式: 大廳",
+        "ui_mode_battle": "⚔️ 模式: 戰鬥",
+        "ui_ar_open": "📷 開啟AR",
+        "ui_ar_close": "❌ 關閉AR",
+        "ui_ar_panel": "📷 相機面板",
+        "ui_ar_flip": "🔄 翻轉鏡頭",
+        "ui_ar_capture": "📸 拍照儲存",
+        "ui_costume": "服裝",
+        "ui_default_costume": "預設服裝",
+        "ui_default_model": "預設模型",
+        "ui_select_anim": "選擇動作",
+        "ui_slots": "🧩 外觀插槽",
+        "ui_show_slots": "全顯",
+        "ui_hide_slots": "全隱",
+        "ui_loading_data": "讀取資料中...",
+        "gacha_simulator": "嘟嘟臉角色招募模擬器",
+        "gacha_select_pool": "📍 選擇招募池",
+        "gacha_personality_hint": "🔮 指定性格：",
+        "gacha_1_pull": "1次招募",
+        "gacha_10_pull": "10次招募",
+        "gacha_waiting": "等待招募中...",
+        "gacha_history": "📜 招募紀錄",
+        "gacha_rate_up": "🎯 特選招募",
+        "gacha_normal": "🌟 普通招募",
+        "gacha_personality_pool": "🔮 性格選擇招募",
+        "gacha_result_title": "🎉 招募結果 🎉",
+        "gacha_prev_page": "上一頁",
+        "gacha_next_page": "下一頁",
+        "gacha_page": "第 {current} / {total} 頁",
+        "gacha_unknown_time": "未知時間",
+        "gacha_unknown_pool": "未知招募",
+        "ui_tier_title": "排行榜生成器",
+        "ui_tier_add_row": "新增級別",
+        "ui_tier_reset": "全部重置",
+        "ui_tier_export": "輸出圖片",
+        "ui_tier_pool_title": "選擇角色 (拖曳至上方排行榜)",
+        "ui_tier_default_title": "我的最愛排行榜",
+        "ui_tier_reset_confirm": "確定要重置整個排行榜並將所有角色放回角色池嗎？",
+        "ui_tier_export_error": "匯出圖片失敗",
+        "愛麗絲": "愛麗絲",
         "阿萊特": "阿萊特",
         "艾蜜莉雅": "艾蜜莉雅",
         "艾舒爾": "艾舒爾",
@@ -139,59 +345,274 @@ const LANG_DICT = {
         "優米": "優米",
         "劉美美": "劉美美",
         "x乂錫安乂x": "x乂錫安乂x",
-		"波朗": "波朗"
+        "波朗": "波朗",
+        "斯皮奇(女僕)": "斯皮奇(女僕)"
     },
     "ja": {
-        app_title: "トリッカル特級クレヨンノート", app_subtitle: "教主が毎日特級クレヨンを受け取れますように", stats_title: "📊 統計とボーナス情報",
-        stats_stat: "統計", stats_character: "使徒", stats_attack: "攻撃", stats_defence: "防御", stats_hp: "HP",
-        stats_critical: "会心", stats_resist: "抵抗", stats_personality: "🔮 性格：", stats_race: "🧬 種族：",
-        stats_position: "🗺️ 配置：", stats_job: "⚔️ 職業：", stats_cell: "🖍️ 特級クレヨン：", stats_crayon: "特級クレヨン",
-        stats_level: "特定ボード:", cell_kind: "ステータス:", level_1st: "1段階目", level_2nd: "2段階目", level_3rd: "3段階目",
-        total_owned: "所有使徒", crayon_used: "消費クレヨン数", crayon_needed: "必要クレヨン数",
-        crayon_attack: "攻撃力", crayon_defence: "防御力", crayon_hp: "HP", crayon_critical: "会心", crayon_resist: "会心抵抗",
-        personality_naive: "純粋", personality_calm: "冷静", personality_mad: "狂気", personality_vivid: "活発", personality_gloomy: "憂鬱", personality_resonance: "共振", personality_multifaceted: "裏面",
-        race_witch: "魔女", race_beast: "獣人", race_dragon: "竜族", race_spirit: "精霊", race_fairy: "妖精", race_elf: "エルフ", race_ghost: "幽霊", race_unknown: "???",
-        position_front: "前列", position_middle: "中列", position_back: "後列", position_all: "全ての列", job_attacker: "攻撃", job_defender: "守備", job_supporter: "支援",
-		sort_title: "↕️ 並べ替え：", sort_personality: "デフォルト", sort_releaseDate: "実装日", sort_name: "名前", sort_race: "種族", sort_position: "配置", sort_job: "職業", sort_order_desc: "⬇️ 降順", sort_order_asc: "⬆️ 昇順", "所有坨坨": "すべての使徒",
-        visit_count_prefix: "総閲覧数", maintenance_msg: "🔧 メンテナンス中...", event_title: "🎪 開催中のイベント",
-        auth_offline_title: "現在の状態：オフラインモード", auth_offline_desc: "データはこの端末に保存されます", auth_online_title: "🟢 ", auth_logout: "ログアウト",
-        filter_title: "🔍 フィルター", filter_search_placeholder: "使徒を検索...", filter_reset: "すべてのフィルターをリセット", filter_display_mode: "👁️ ボード表示：",
-        filter_btn_all: "すべて", filter_btn_show_all: "すべて表示", filter_btn_show_1: "1段階目のみ", filter_btn_show_2: "2段階目のみ", filter_btn_show_3: "3段階目のみ",
-		grid_status: "状態", filter_btn_opened: "解放済み",filter_btn_unopened: "未解放",
-        stats_toggle_hint: "クリックで展開 / 折りたたみ", stats_layer_1_title: "🥇 1段階目の統計", stats_layer_2_title: "🥈 2段階目の統計", stats_layer_3_title: "🥉 3段階目の統計",
-        stats_layer_1_rule: "(各マス+3%, クレヨン×2)", stats_layer_2_rule: "(各マス+4%, クレヨン×4)", stats_layer_3_rule: "(各マス+5%, クレヨン×6)",
-        stats_global_bonus: "📊 全体ステータスバフ", stats_need_more_prefix: "必要クレヨン数: ", stats_need_more_suffix: " 本",
-		menu_system_title: "システムメニュー", menu_gacha: "ガチャシミュレーター", menu_viewer: "アニメーション展示", menu_tier_maker: "ティアメーカー", menu_checklist: "マイカスタムリスト", menu_story: "トリッカルシアター", menu_toggle_anim: "ランニングアニメーション切替",
-		quick_action_title: "⚡ クイック操作", quick_action_all_chars: "全使徒:", quick_action_own_all: "一括所有する", quick_action_cancel_all: "一括解除する", quick_action_fill_crayons: "クレヨンを埋める:", quick_action_clear_crayons: "クレヨンをクリア:", quick_action_fill_all: "全層を埋める", quick_action_clear_all: "全層をクリア", quick_action_layer_1: "1段階目", quick_action_layer_2: "2段階目", quick_action_layer_3: "3段階目", quick_action_own: "所有する", quick_action_cancel: "所有を解除", quick_action_fill: "埋める", quick_action_clear: "クリア", quick_action_all_layers: "すべての層", quick_action_layer_n: "{n} 段階目", quick_action_confirm_chars: "全使徒を「{action}」してもよろしいですか？\n(この操作はすべての使徒の所有状態を上書きします！)", quick_action_confirm_grids: "全使徒の【{layer}】のクレヨンマスを「{action}」してもよろしいですか？\n(⚠️ 警告: この操作は現在の記録を上書きし、元に戻すことはできません！)",
-		path_image_hint: "ルート図を見る",
-		info_job_reward: "💰 獲得報酬", info_food: "🍲 食べ物の好み", aside_title: "アサイド", aside_loading: "まだ思念が深くなさそう",
-		stats_attribute: "攻撃タイプ", 物理: "物理", 魔法: "魔法", 艾爾丁: "エルダイン", 普通坨坨: "ノーマル使徒", 身份: "身分",
-        x_label: "公式 X", official_x_url: "https://x.com/trickcal_jp",
-        footer_author: "📝 ノート作成者: 冷笑話幽靈", footer_copyright: "© ゲーム著作権: EpidGames & Bilibili", footer_lastupdate: "最終更新日：22/10/2026",
-        "天真": "純粋", "冷靜": "冷静", "狂亂": "狂気", "活潑": "活発", "憂鬱": "憂鬱", "共鳴": "共振", "雙面": "裏面",
-        "魔女": "魔女", "獸人": "獣人", "龍族": "竜族", "魔靈": "精霊", "妖精": "妖精", "精靈": "エルフ", "幽靈": "幽霊", "???": "???",
-        "前排": "前列", "中排": "中列", "後排": "後列", "所有排": "全ての列", "輸出": "攻撃", "肉盾": "守備", "輔助": "支援",
-        "攻擊": "攻撃", "防禦": "防御", "血量": "HP", "爆擊": "会心", "爆抗": "会心抵抗", "全部": "すべて",
-		"克魯布魯斯": "ケルベロス", "蠟筆勇士": "イサムレヨン", "R41雷內瓦": "R41 リニュア", "莉1莉": "リリー", "M.E.O.W.": "M.E.O.W.", "雷內瓦(NPC)": "リニュア", "榮春": "ブルミ", "高蒂": "ゴールディ", "可麗餅": "クレープ", "德莉亞": "デリア",
-        page_title_char_detail: "使徒詳細データ", btn_close_page: "⬅️ 閉じる", loading: "読み込み中...", release_date_label: "実装日",
-        crayon_detail_title: "🖍️ 特級クレヨン分布詳細", layer_1_stats: "🥇 1段階目ステータス", layer_2_stats: "🥈 2段階目ステータス", layer_3_stats: "🥉 3段階目ステータス",
-        present_title: "使徒の愛用品", present_loading: "宝箱を開封中...", btn_letter: "使徒からの手紙", btn_thought: "教主の感想",
-        present_select_hint: "表示内容を選択してください...", no_letter_hint: "（この使徒はまだ手紙を書いていないようです...）", no_thought_hint: "（教主はまだこの愛用品に対する感想を書いていないようです...）",
-        present_delivering: "愛用品を配達中...", present_suffix: "の愛用品", present_error: "⚠️ 愛用品読み込みエラー",
-        skill_detail_title: "⚔️ スキル詳細", skill_loading: "スキル読み込み中...", skill_normal_attack: "普通攻撃",
-        skill_basic: "【基本】", skill_enhanced: "【強化】", skill_passive: "パッシブスキル", skill_admission: "低学年スキル", skill_graduate: "高学年スキル",
-        costume_default: "デフォルト", costume_prefix: "衣装",
-        comment_title: "💬 教主の評価と感想", comment_author_placeholder: "ニックネーム (空欄の場合は匿名表示)", comment_content_placeholder: "この使徒に対する評価、編成の感想、または愛の叫びを書いてください...",
-        btn_submit_comment: "評価を送信 🚀", btn_submitting: "送信中... ⏳", comment_loading: "掲示板に接続中...",
-        no_comment_hint: "まだ評価がありません。最初の評価を書きましょう！ 🐾", time_just_now: "たった今", anonymous_leader: "匿名教主#",
-        error_no_char: "❌ 使徒が指定されていません。ホーム画面からキャラクターボタンをタップしてください。", error_no_data: "❌ 読み込み失敗：INITIAL_DATAが見つかりません。",
-        error_char_not_found: "❌ 該当する使徒データが見つかりません。", error_no_skill_data: "❌ skill.jsのデータが見つかりません。ファイルが存在するか確認してください。",
-        error_char_skill_not_found: "⚠️ 該当する使徒のスキルデータが見つかりません。", alert_empty_comment: "評価内容を入力してください！",
-        alert_comment_too_long: "評価内容が長すぎます。500文字以内に短縮してください！", alert_comment_failed: "送信に失敗しました。後でもう一度お試しください！", error_load_comment: "コメントの読み込みに失敗しました。データベースの権限設定を確認してください。",
-		ui_title: "使徒ビューアー", ui_back: "⬅️ 戻る", ui_select_char: "👥 使徒選択", ui_show_all: "全て表示", ui_hide_all: "全て隠す", ui_please_select: "先に選択してください", ui_camera: "🔄 リセット", ui_waiting: "ロード中...", ui_mode_lobby: "🔄 モード: ロビー", ui_mode_battle: "⚔️ モード: バトル", ui_ar_open: "📷 ARオン", ui_ar_close: "❌ ARオフ", ui_ar_panel: "📷 カメラパネル", ui_ar_flip: "🔄 反転", ui_ar_capture: "📸 撮影", ui_costume: "衣装", ui_default_costume: "デフォルト", ui_default_model: "基本モデル", ui_select_anim: "モーション", ui_slots: "🧩 スロット", ui_show_slots: "全表示", ui_hide_slots: "全非表示", ui_loading_data: "読み込み中...",
-		gacha_simulator: "使徒ガチャシミュレーター", gacha_select_pool: "📍 ガチャ選択", gacha_personality_hint: "🔮 指定性格：", gacha_1_pull: "1回募集", gacha_10_pull: "10回募集", gacha_waiting: "結果待ち...", gacha_history: "📜 ガチャ履歴", gacha_rate_up: "🎯 ピックアップ募集", gacha_normal: "🌟 一般募集", gacha_personality_pool: "🔮 性格選択募集", gacha_result_title: "🎉 ガチャ結果 🎉", gacha_prev_page: "前へ", gacha_next_page: "次へ", gacha_page: "{current} / {total} ページ", gacha_unknown_time: "不明な時間", gacha_unknown_pool: "不明なガチャ",
-		ui_tier_title: "ティアメーカー", ui_tier_add_row: "ランク追加", ui_tier_reset: "すべてリセット", ui_tier_export: "画像として保存", ui_tier_pool_title: "キャラクター一覧 (上のランクへドラッグ)", ui_tier_default_title: "私の最強ランキング", ui_tier_reset_confirm: "本当にすべてリセットしてキャラクターを一覧に戻しますか？", ui_tier_export_error: "画像の出力に失敗しました。",
-		"愛麗絲": "アリス",
+        "app_title": "トリッカル特級クレヨンノート",
+        "app_subtitle": "教主が毎日特級クレヨンを受け取れますように",
+        "stats_title": "📊 統計とボーナス情報",
+        "stats_stat": "統計",
+        "stats_character": "使徒",
+        "stats_attack": "攻撃",
+        "stats_defence": "防御",
+        "stats_hp": "HP",
+        "stats_critical": "会心",
+        "stats_resist": "抵抗",
+        "stats_personality": "🔮 性格：",
+        "stats_race": "🧬 種族：",
+        "stats_position": "🗺️ 配置：",
+        "stats_job": "⚔️ 職業：",
+        "stats_cell": "🖍️ 特級クレヨン：",
+        "stats_crayon": "特級クレヨン",
+        "stats_level": "特定ボード:",
+        "cell_kind": "ステータス:",
+        "level_1st": "1段階目",
+        "level_2nd": "2段階目",
+        "level_3rd": "3段階目",
+        "total_owned": "所有使徒",
+        "crayon_used": "消費クレヨン数",
+        "crayon_needed": "必要クレヨン数",
+        "crayon_attack": "攻撃力",
+        "crayon_defence": "防御力",
+        "crayon_hp": "HP",
+        "crayon_critical": "会心",
+        "crayon_resist": "会心抵抗",
+        "personality_naive": "純粋",
+        "personality_calm": "冷静",
+        "personality_mad": "狂気",
+        "personality_vivid": "活発",
+        "personality_gloomy": "憂鬱",
+        "personality_resonance": "共振",
+        "personality_multifaceted": "裏面",
+        "race_witch": "魔女",
+        "race_beast": "獣人",
+        "race_dragon": "竜族",
+        "race_spirit": "精霊",
+        "race_fairy": "妖精",
+        "race_elf": "エルフ",
+        "race_ghost": "幽霊",
+        "race_unknown": "???",
+        "position_front": "前列",
+        "position_middle": "中列",
+        "position_back": "後列",
+        "position_all": "全ての列",
+        "job_attacker": "攻撃",
+        "job_defender": "守備",
+        "job_supporter": "支援",
+        "sort_title": "↕️ 並べ替え：",
+        "sort_personality": "デフォルト",
+        "sort_releaseDate": "実装日",
+        "sort_name": "名前",
+        "sort_race": "種族",
+        "sort_position": "配置",
+        "sort_job": "職業",
+        "sort_order_desc": "⬇️ 降順",
+        "sort_order_asc": "⬆️ 昇順",
+        "所有坨坨": "すべての使徒",
+        "visit_count_prefix": "総閲覧数",
+        "maintenance_msg": "🔧 メンテナンス中...",
+        "event_title": "🎪 開催中のイベント",
+        "auth_offline_title": "現在の状態：オフラインモード",
+        "auth_offline_desc": "データはこの端末に保存されます",
+        "auth_online_title": "🟢 ",
+        "auth_logout": "ログアウト",
+        "filter_title": "🔍 フィルター",
+        "filter_search_placeholder": "使徒を検索...",
+        "filter_reset": "すべてのフィルターをリセット",
+        "filter_display_mode": "👁️ ボード表示：",
+        "filter_btn_all": "すべて",
+        "filter_btn_show_all": "すべて表示",
+        "filter_btn_show_1": "1段階目のみ",
+        "filter_btn_show_2": "2段階目のみ",
+        "filter_btn_show_3": "3段階目のみ",
+        "grid_status": "状態",
+        "filter_btn_opened": "解放済み",
+        "filter_btn_unopened": "未解放",
+        "stats_toggle_hint": "クリックで展開 / 折りたたみ",
+        "stats_layer_1_title": "🥇 1段階目の統計",
+        "stats_layer_2_title": "🥈 2段階目の統計",
+        "stats_layer_3_title": "🥉 3段階目の統計",
+        "stats_layer_1_rule": "(各マス+3%, クレヨン×2)",
+        "stats_layer_2_rule": "(各マス+4%, クレヨン×4)",
+        "stats_layer_3_rule": "(各マス+5%, クレヨン×6)",
+        "stats_global_bonus": "📊 全体ステータスバフ",
+        "stats_need_more_prefix": "必要クレヨン数: ",
+        "stats_need_more_suffix": " 本",
+        "menu_system_title": "システムメニュー",
+        "menu_gacha": "ガチャシミュレーター",
+        "menu_viewer": "アニメーション展示",
+        "menu_tier_maker": "ティアメーカー",
+        "menu_checklist": "マイカスタムリスト",
+        "menu_story": "トリッカルシアター",
+        "menu_toggle_anim": "ランニングアニメーション切替",
+        "quick_action_title": "⚡ クイック操作",
+        "quick_action_all_chars": "全使徒:",
+        "quick_action_own_all": "一括所有する",
+        "quick_action_cancel_all": "一括解除する",
+        "quick_action_fill_crayons": "クレヨンを埋める:",
+        "quick_action_clear_crayons": "クレヨンをクリア:",
+        "quick_action_fill_all": "全層を埋める",
+        "quick_action_clear_all": "全層をクリア",
+        "quick_action_layer_1": "1段階目",
+        "quick_action_layer_2": "2段階目",
+        "quick_action_layer_3": "3段階目",
+        "quick_action_own": "所有する",
+        "quick_action_cancel": "所有を解除",
+        "quick_action_fill": "埋める",
+        "quick_action_clear": "クリア",
+        "quick_action_all_layers": "すべての層",
+        "quick_action_layer_n": "{n} 段階目",
+        "quick_action_confirm_chars": "全使徒を「{action}」してもよろしいですか？\n(この操作はすべての使徒の所有状態を上書きします！)",
+        "quick_action_confirm_grids": "全使徒の【{layer}】のクレヨンマスを「{action}」してもよろしいですか？\n(⚠️ 警告: この操作は現在の記録を上書きし、元に戻すことはできません！)",
+        "path_image_hint": "ルート図を見る",
+        "info_job_reward": "💰 獲得報酬",
+        "info_food": "🍲 食べ物の好み",
+        "aside_title": "アサイド",
+        "aside_loading": "まだ思念が深くなさそう",
+        "stats_attribute": "攻撃タイプ",
+        "物理": "物理",
+        "魔法": "魔法",
+        "艾爾丁": "エルダイン",
+        "普通坨坨": "ノーマル使徒",
+        "身份": "身分",
+        "x_label": "公式 X",
+        "official_x_url": "https://x.com/trickcal_jp",
+        "footer_author": "📝 ノート作成者: 冷笑話幽靈",
+        "footer_copyright": "© ゲーム著作権: EpidGames & Bilibili",
+        "footer_lastupdate": "最終更新日：22/10/2026",
+        "天真": "純粋",
+        "冷靜": "冷静",
+        "狂亂": "狂気",
+        "活潑": "活発",
+        "憂鬱": "憂鬱",
+        "共鳴": "共振",
+        "雙面": "裏面",
+        "魔女": "魔女",
+        "獸人": "獣人",
+        "龍族": "竜族",
+        "魔靈": "精霊",
+        "妖精": "妖精",
+        "精靈": "エルフ",
+        "幽靈": "幽霊",
+        "???": "???",
+        "前排": "前列",
+        "中排": "中列",
+        "後排": "後列",
+        "所有排": "全ての列",
+        "輸出": "攻撃",
+        "肉盾": "守備",
+        "輔助": "支援",
+        "攻擊": "攻撃",
+        "防禦": "防御",
+        "血量": "HP",
+        "爆擊": "会心",
+        "爆抗": "会心抵抗",
+        "全部": "すべて",
+        "克魯布魯斯": "ケルベロス",
+        "蠟筆勇士": "イサムレヨン",
+        "R41雷內瓦": "R41 リニュア",
+        "莉1莉": "リリー",
+        "M.E.O.W.": "M.E.O.W.",
+        "雷內瓦(NPC)": "リニュア",
+        "榮春": "ブルミ",
+        "高蒂": "ゴールディ",
+        "可麗餅": "クレープ",
+        "德莉亞": "デリア",
+        "page_title_char_detail": "使徒詳細データ",
+        "btn_close_page": "⬅️ 閉じる",
+        "loading": "読み込み中...",
+        "release_date_label": "実装日",
+        "crayon_detail_title": "🖍️ 特級クレヨン分布詳細",
+        "layer_1_stats": "🥇 1段階目ステータス",
+        "layer_2_stats": "🥈 2段階目ステータス",
+        "layer_3_stats": "🥉 3段階目ステータス",
+        "present_title": "使徒の愛用品",
+        "present_loading": "宝箱を開封中...",
+        "btn_letter": "使徒からの手紙",
+        "btn_thought": "教主の感想",
+        "present_select_hint": "表示内容を選択してください...",
+        "no_letter_hint": "（この使徒はまだ手紙を書いていないようです...）",
+        "no_thought_hint": "（教主はまだこの愛用品に対する感想を書いていないようです...）",
+        "present_delivering": "愛用品を配達中...",
+        "present_suffix": "の愛用品",
+        "present_error": "⚠️ 愛用品読み込みエラー",
+        "skill_detail_title": "⚔️ スキル詳細",
+        "skill_loading": "スキル読み込み中...",
+        "skill_normal_attack": "普通攻撃",
+        "skill_basic": "【基本】",
+        "skill_enhanced": "【強化】",
+        "skill_passive": "パッシブスキル",
+        "skill_admission": "低学年スキル",
+        "skill_graduate": "高学年スキル",
+        "costume_default": "デフォルト",
+        "costume_prefix": "衣装",
+        "comment_title": "💬 教主の評価と感想",
+        "comment_author_placeholder": "ニックネーム (空欄の場合は匿名表示)",
+        "comment_content_placeholder": "この使徒に対する評価、編成の感想、または愛の叫びを書いてください...",
+        "btn_submit_comment": "評価を送信 🚀",
+        "btn_submitting": "送信中... ⏳",
+        "comment_loading": "掲示板に接続中...",
+        "no_comment_hint": "まだ評価がありません。最初の評価を書きましょう！ 🐾",
+        "time_just_now": "たった今",
+        "anonymous_leader": "匿名教主#",
+        "error_no_char": "❌ 使徒が指定されていません。ホーム画面からキャラクターボタンをタップしてください。",
+        "error_no_data": "❌ 読み込み失敗：INITIAL_DATAが見つかりません。",
+        "error_char_not_found": "❌ 該当する使徒データが見つかりません。",
+        "error_no_skill_data": "❌ skill.jsのデータが見つかりません。ファイルが存在するか確認してください。",
+        "error_char_skill_not_found": "⚠️ 該当する使徒のスキルデータが見つかりません。",
+        "alert_empty_comment": "評価内容を入力してください！",
+        "alert_comment_too_long": "評価内容が長すぎます。500文字以内に短縮してください！",
+        "alert_comment_failed": "送信に失敗しました。後でもう一度お試しください！",
+        "error_load_comment": "コメントの読み込みに失敗しました。データベースの権限設定を確認してください。",
+        "ui_title": "使徒ビューアー",
+        "ui_back": "⬅️ 戻る",
+        "ui_select_char": "👥 使徒選択",
+        "ui_show_all": "全て表示",
+        "ui_hide_all": "全て隠す",
+        "ui_please_select": "先に選択してください",
+        "ui_camera": "🔄 リセット",
+        "ui_waiting": "ロード中...",
+        "ui_mode_lobby": "🔄 モード: ロビー",
+        "ui_mode_battle": "⚔️ モード: バトル",
+        "ui_ar_open": "📷 ARオン",
+        "ui_ar_close": "❌ ARオフ",
+        "ui_ar_panel": "📷 カメラパネル",
+        "ui_ar_flip": "🔄 反転",
+        "ui_ar_capture": "📸 撮影",
+        "ui_costume": "衣装",
+        "ui_default_costume": "デフォルト",
+        "ui_default_model": "基本モデル",
+        "ui_select_anim": "モーション",
+        "ui_slots": "🧩 スロット",
+        "ui_show_slots": "全表示",
+        "ui_hide_slots": "全非表示",
+        "ui_loading_data": "読み込み中...",
+        "gacha_simulator": "使徒ガチャシミュレーター",
+        "gacha_select_pool": "📍 ガチャ選択",
+        "gacha_personality_hint": "🔮 指定性格：",
+        "gacha_1_pull": "1回募集",
+        "gacha_10_pull": "10回募集",
+        "gacha_waiting": "結果待ち...",
+        "gacha_history": "📜 ガチャ履歴",
+        "gacha_rate_up": "🎯 ピックアップ募集",
+        "gacha_normal": "🌟 一般募集",
+        "gacha_personality_pool": "🔮 性格選択募集",
+        "gacha_result_title": "🎉 ガチャ結果 🎉",
+        "gacha_prev_page": "前へ",
+        "gacha_next_page": "次へ",
+        "gacha_page": "{current} / {total} ページ",
+        "gacha_unknown_time": "不明な時間",
+        "gacha_unknown_pool": "不明なガチャ",
+        "ui_tier_title": "ティアメーカー",
+        "ui_tier_add_row": "ランク追加",
+        "ui_tier_reset": "すべてリセット",
+        "ui_tier_export": "画像として保存",
+        "ui_tier_pool_title": "キャラクター一覧 (上のランクへドラッグ)",
+        "ui_tier_default_title": "私の最強ランキング",
+        "ui_tier_reset_confirm": "本当にすべてリセットしてキャラクターを一覧に戻しますか？",
+        "ui_tier_export_error": "画像の出力に失敗しました。",
+        "愛麗絲": "アリス",
         "阿萊特": "アレット",
         "艾蜜莉雅": "アメリア",
         "艾舒爾": "エシュール",
@@ -273,59 +694,274 @@ const LANG_DICT = {
         "優米": "ヨミ",
         "劉美美": "ユミミ",
         "x乂錫安乂x": "シオン・ザ・DB",
-		"波朗": "ポラン"
+        "波朗": "ポラン",
+        "斯皮奇(女僕)": "スピッキー(メイド)"
     },
     "en": {
-        app_title: "Trickcal Crayon Notepad", app_subtitle: "May the Master get Ultra Crayons daily", stats_title: "📊 Stats & Bonus Info",
-        stats_stat: "Stats", stats_character: " Apostle", stats_attack: "ATK", stats_defence: "DEF", stats_hp: "HP",
-        stats_critical: "CRIT", stats_resist: "RES", stats_personality: "🔮 Personality:", stats_race: "🧬 Race:",
-        stats_position: "🗺️ Position:", stats_job: "⚔️ Class:", stats_cell: "🖍️ Crayon Node:", stats_crayon: "Ultra Crayon",
-        stats_level: "Target Board:", cell_kind: "Node Type:", level_1st: "Board 1", level_2nd: "Board 2", level_3rd: "Board 3",
-        total_owned: "Owned Apostles", crayon_used: "Crayons Used", crayon_needed: "Crayons Needed",
-        crayon_attack: "ATK", crayon_defence: "DEF", crayon_hp: "HP", crayon_critical: "CRIT", crayon_resist: "CRIT RES",
-        personality_naive: "Pure", personality_calm: "Calm", personality_mad: "Mad", personality_vivid: "Vivid", personality_gloomy: "Gloomy", personality_resonance: "Resonance", personality_multifaceted: "Multifaceted",
-        race_witch: "Witch", race_beast: "Beast", race_dragon: "Dragon", race_spirit: "Spirit", race_fairy: "Fairy", race_elf: "Elf", race_ghost: "Ghost", race_unknown: "???",
-        position_front: "Front", position_middle: "Mid", position_back: "Back", position_all: "All Columns", job_attacker: "Attacker", job_defender: "Tank", job_supporter: "Support",
-		sort_title: "↕️ Sort by:", sort_personality: "Default", sort_releaseDate: "Release Date", sort_name: "Name", sort_race: "Race", sort_position: "Position", sort_job: "Class", sort_order_desc: "⬇️ Desc", sort_order_asc: "⬆️ Asc", "所有坨坨": "All Apostles",
-        visit_count_prefix: "Total Visits", maintenance_msg: "🔧 Under Maintenance...", event_title: "🎪 Current Event",
-        auth_offline_title: "Status: Offline Mode", auth_offline_desc: "Data saved locally", auth_online_title: "🟢 ", auth_logout: "Logout",
-        filter_title: "🔍 Filter", filter_search_placeholder: "Search Apostle...", filter_reset: "Reset All", filter_display_mode: "👁️ View Mode:",
-        filter_btn_all: "All", filter_btn_show_all: "Show All", filter_btn_show_1: "Board 1 Only", filter_btn_show_2: "Board 2 Only", filter_btn_show_3: "Board 3 Only",
-		grid_status: "Status", filter_btn_opened: "Opened", filter_btn_unopened: "Unopened",
-        stats_toggle_hint: "Click to Expand / Collapse", stats_layer_1_title: "🥇 Board 1 Stats", stats_layer_2_title: "🥈 Board 2 Stats", stats_layer_3_title: "🥉 Board 3 Stats",
-        stats_layer_1_rule: "(Node+3%, Crayon×2)", stats_layer_2_rule: "(Node+4%, Crayon×4)", stats_layer_3_rule: "(Node+5%, Crayon×6)",
-        stats_global_bonus: "📊 Global Stat Bonus", stats_need_more_prefix: "Need ", stats_need_more_suffix: " Crayons",
-		menu_system_title: "System Menu", menu_gacha: "Gacha Simulator", menu_viewer: "Apostle Viewer", menu_tier_maker: "Tier List Maker", menu_checklist: "Custom Checklist", menu_story: "Trickcal Theater", menu_toggle_anim: "Toggle Running Animation",
-		quick_action_title: "⚡ Quick Actions", quick_action_all_chars: "All Apostles:", quick_action_own_all: "Own All", quick_action_cancel_all: "Cancel All", quick_action_fill_crayons: "Fill Crayons:", quick_action_clear_crayons: "Clear Crayons:", quick_action_fill_all: "Fill All Layers", quick_action_clear_all: "Clear All Layers", quick_action_layer_1: "Layer 1", quick_action_layer_2: "Layer 2", quick_action_layer_3: "Layer 3", quick_action_own: "Own", quick_action_cancel: "Cancel", quick_action_fill: "Fill", quick_action_clear: "Clear", quick_action_all_layers: "All Layers", quick_action_layer_n: "Layer {n}", quick_action_confirm_chars: "Are you sure you want to '{action}' all Apostles?\n(This will overwrite the ownership status of all Apostles!)", quick_action_confirm_grids: "Are you sure you want to '{action}' the crayon grids for all Apostles in [{layer}]?\n(⚠️ Warning: This will overwrite current records and cannot be undone!)",
-		path_image_hint: "View Path Chart",
-		info_job_reward: "💰 Acquired Rewards", info_food: "🍲 Favorite Food", aside_title: "Yearning", aside_loading: "The thoughts don't seem deep enough yet",
-		stats_attribute: "Attack Type", 物理: "Physical", 魔法: "Magical", 艾爾丁: "Eldain", 普通坨坨: "Normal Apostle", 身份: "Identity",
-        x_label: "Official Global X", official_x_url: "https://x.com/trickcal_en",
-        footer_author: "📝 Author: 冷笑話幽靈", footer_copyright: "© Copyright: EpidGames & Bilibili", footer_lastupdate: "last updated on: 22/10/2026",
-        "天真": "Innocence", "冷靜": "Composed", "狂亂": "Madness", "活潑": "Vivacious", "憂鬱": "Depressed", "共鳴": "Resonance", "雙面": "Multifaceted",
-        "魔女": "Witch", "獸人": "Werebeast", "龍族": "Dragon", "魔靈": "Elemental", "妖精": "Sprite", "精靈": "Elf", "幽靈": "Phantom", "???": "???",
-        "前排": "Front", "中排": "Middle", "後排": "Back", "所有排": "All Columns", "輸出": "DPS", "肉盾": "Tank", "輔助": "Support",
-        "攻擊": "ATK", "防禦": "DEF", "血量": "HP", "爆擊": "CRIT", "爆抗": "CRIT RES", "全部": "All",
-		"克魯布魯斯": "Cerberus", "蠟筆勇士": "Super Crayon", "R41雷內瓦": "R41 Renewa", "莉1莉": "L1ly", "M.E.O.W.": "M.E.O.W.", "雷內瓦(NPC)": "Renewa", "榮春": "Youngchun", "高蒂": "Goldy", "可麗餅": "Crepe", "德莉亞": "Delia",
-		page_title_char_detail: "Apostle Details", btn_close_page: "⬅️ Close", loading: "Loading...",  release_date_label: "Release Date",
-        crayon_detail_title: "🖍️ Ultra Crayon Details", layer_1_stats: "🥇 Board 1 Stats", layer_2_stats: "🥈 Board 2 Stats", layer_3_stats: "🥉 Board 3 Stats",
-        present_title: "Apostle's Cherished Items", present_loading: "Opening chest...", btn_letter: "Apostle's Letter", btn_thought: "Master's Thoughts",
-        present_select_hint: "Please select content to display...", no_letter_hint: "(This Apostle hasn't written a letter to you yet...)", no_thought_hint: "(The Master hasn't shared their thoughts on this item yet...)",
-        present_delivering: "Cherished item is being delivered...", present_suffix: "'s Cherished Item", present_error: "⚠️ Cherished Item Load Error",
-        skill_detail_title: "⚔️ Skill Details", skill_loading: "Loading skills...", skill_normal_attack: "Normal ATK",
-        skill_basic: "[Basic]", skill_enhanced: "[Enhance]", skill_passive: "Passive Skill", costume_default: "Default", costume_prefix: "Outfit ",
-        skill_admission: "Freshman Skill", skill_graduate: "Senior Skill",
-        comment_title: "💬 Master Reviews & Thoughts", comment_author_placeholder: "Your Nickname (Leave blank for anonymous)", comment_content_placeholder: "Write your review, team comp tips, or share your love for this Apostle...",
-        btn_submit_comment: "Submit Review 🚀", btn_submitting: "Submitting... ⏳", comment_loading: "Connecting to message board...",
-        no_comment_hint: "No reviews yet. Be the first to leave one! 🐾", time_just_now: "Just now", anonymous_leader: "Anon Leader #",
-        error_no_char: "❌ Apostle not specified. Please enter via the home page.", error_no_data: "❌ Load Failed: INITIAL_DATA not found.",
-        error_char_not_found: "❌ Apostle data not found.", error_no_skill_data: "❌ skill.js not found. Please check if the file exists.",
-        error_char_skill_not_found: "⚠️ Skill data for this Apostle not found.", alert_empty_comment: "Please enter your review content!",
-        alert_comment_too_long: "Review content is too long. Please keep it under 500 characters!", alert_comment_failed: "Failed to submit. Please try again later!", error_load_comment: "Failed to load comments. Please check database permissions.",
-		ui_title: "Apostle Viewer", ui_back: "⬅️ Back", ui_select_char: "👥 Select Apostle", ui_show_all: "Show All", ui_hide_all: "Hide All", ui_please_select: "Please select first", ui_camera: "🔄 Reset", ui_waiting: "Loading...", ui_mode_lobby: "🔄 Mode: Lobby", ui_mode_battle: "⚔️ Mode: Battle", ui_ar_open: "📷 AR On", ui_ar_close: "❌ AR Off", ui_ar_panel: "📷 Camera UI", ui_ar_flip: "🔄 Flip", ui_ar_capture: "📸 Capture", ui_costume: "Costume", ui_default_costume: "Default", ui_default_model: "Base Model", ui_select_anim: "Animation", ui_slots: "🧩 Slots", ui_show_slots: "Show All", ui_hide_slots: "Hide All", ui_loading_data: "Loading...",
-		gacha_simulator: "Apostle Gacha Simulator", gacha_select_pool: "📍 Select Pool", gacha_personality_hint: "🔮 Personality:", gacha_1_pull: "1 Pull", gacha_10_pull: "10 Pulls", gacha_waiting: "Waiting...", gacha_history: "📜 Gacha History", gacha_rate_up: "🎯 Rate Up", gacha_normal: "🌟 Normal Gacha", gacha_personality_pool: "🔮 Personality Gacha", gacha_result_title: "🎉 Gacha Results 🎉", gacha_prev_page: "Prev", gacha_next_page: "Next", gacha_page: "Page {current} / {total}", gacha_unknown_time: "Unknown Time", gacha_unknown_pool: "Unknown Pool",
-		ui_tier_title: "Tier List Maker", ui_tier_add_row: "Add Rank", ui_tier_reset: "Reset All", ui_tier_export: "Export Image", ui_tier_pool_title: "Character Pool (Drag to Rank)", ui_tier_default_title: "My Ultimate Tier List", ui_tier_reset_confirm: "Are you sure you want to reset the board and return all characters to the pool?", ui_tier_export_error: "Failed to export image.",
-		"愛麗絲": "Alice",
+        "app_title": "Trickcal Crayon Notepad",
+        "app_subtitle": "May the Master get Ultra Crayons daily",
+        "stats_title": "📊 Stats & Bonus Info",
+        "stats_stat": "Stats",
+        "stats_character": " Apostle",
+        "stats_attack": "ATK",
+        "stats_defence": "DEF",
+        "stats_hp": "HP",
+        "stats_critical": "CRIT",
+        "stats_resist": "RES",
+        "stats_personality": "🔮 Personality:",
+        "stats_race": "🧬 Race:",
+        "stats_position": "🗺️ Position:",
+        "stats_job": "⚔️ Class:",
+        "stats_cell": "🖍️ Crayon Node:",
+        "stats_crayon": "Ultra Crayon",
+        "stats_level": "Target Board:",
+        "cell_kind": "Node Type:",
+        "level_1st": "Board 1",
+        "level_2nd": "Board 2",
+        "level_3rd": "Board 3",
+        "total_owned": "Owned Apostles",
+        "crayon_used": "Crayons Used",
+        "crayon_needed": "Crayons Needed",
+        "crayon_attack": "ATK",
+        "crayon_defence": "DEF",
+        "crayon_hp": "HP",
+        "crayon_critical": "CRIT",
+        "crayon_resist": "CRIT RES",
+        "personality_naive": "Pure",
+        "personality_calm": "Calm",
+        "personality_mad": "Mad",
+        "personality_vivid": "Vivid",
+        "personality_gloomy": "Gloomy",
+        "personality_resonance": "Resonance",
+        "personality_multifaceted": "Multifaceted",
+        "race_witch": "Witch",
+        "race_beast": "Beast",
+        "race_dragon": "Dragon",
+        "race_spirit": "Spirit",
+        "race_fairy": "Fairy",
+        "race_elf": "Elf",
+        "race_ghost": "Ghost",
+        "race_unknown": "???",
+        "position_front": "Front",
+        "position_middle": "Mid",
+        "position_back": "Back",
+        "position_all": "All Columns",
+        "job_attacker": "Attacker",
+        "job_defender": "Tank",
+        "job_supporter": "Support",
+        "sort_title": "↕️ Sort by:",
+        "sort_personality": "Default",
+        "sort_releaseDate": "Release Date",
+        "sort_name": "Name",
+        "sort_race": "Race",
+        "sort_position": "Position",
+        "sort_job": "Class",
+        "sort_order_desc": "⬇️ Desc",
+        "sort_order_asc": "⬆️ Asc",
+        "所有坨坨": "All Apostles",
+        "visit_count_prefix": "Total Visits",
+        "maintenance_msg": "🔧 Under Maintenance...",
+        "event_title": "🎪 Current Event",
+        "auth_offline_title": "Status: Offline Mode",
+        "auth_offline_desc": "Data saved locally",
+        "auth_online_title": "🟢 ",
+        "auth_logout": "Logout",
+        "filter_title": "🔍 Filter",
+        "filter_search_placeholder": "Search Apostle...",
+        "filter_reset": "Reset All",
+        "filter_display_mode": "👁️ View Mode:",
+        "filter_btn_all": "All",
+        "filter_btn_show_all": "Show All",
+        "filter_btn_show_1": "Board 1 Only",
+        "filter_btn_show_2": "Board 2 Only",
+        "filter_btn_show_3": "Board 3 Only",
+        "grid_status": "Status",
+        "filter_btn_opened": "Opened",
+        "filter_btn_unopened": "Unopened",
+        "stats_toggle_hint": "Click to Expand / Collapse",
+        "stats_layer_1_title": "🥇 Board 1 Stats",
+        "stats_layer_2_title": "🥈 Board 2 Stats",
+        "stats_layer_3_title": "🥉 Board 3 Stats",
+        "stats_layer_1_rule": "(Node+3%, Crayon×2)",
+        "stats_layer_2_rule": "(Node+4%, Crayon×4)",
+        "stats_layer_3_rule": "(Node+5%, Crayon×6)",
+        "stats_global_bonus": "📊 Global Stat Bonus",
+        "stats_need_more_prefix": "Need ",
+        "stats_need_more_suffix": " Crayons",
+        "menu_system_title": "System Menu",
+        "menu_gacha": "Gacha Simulator",
+        "menu_viewer": "Apostle Viewer",
+        "menu_tier_maker": "Tier List Maker",
+        "menu_checklist": "Custom Checklist",
+        "menu_story": "Trickcal Theater",
+        "menu_toggle_anim": "Toggle Running Animation",
+        "quick_action_title": "⚡ Quick Actions",
+        "quick_action_all_chars": "All Apostles:",
+        "quick_action_own_all": "Own All",
+        "quick_action_cancel_all": "Cancel All",
+        "quick_action_fill_crayons": "Fill Crayons:",
+        "quick_action_clear_crayons": "Clear Crayons:",
+        "quick_action_fill_all": "Fill All Layers",
+        "quick_action_clear_all": "Clear All Layers",
+        "quick_action_layer_1": "Layer 1",
+        "quick_action_layer_2": "Layer 2",
+        "quick_action_layer_3": "Layer 3",
+        "quick_action_own": "Own",
+        "quick_action_cancel": "Cancel",
+        "quick_action_fill": "Fill",
+        "quick_action_clear": "Clear",
+        "quick_action_all_layers": "All Layers",
+        "quick_action_layer_n": "Layer {n}",
+        "quick_action_confirm_chars": "Are you sure you want to '{action}' all Apostles?\n(This will overwrite the ownership status of all Apostles!)",
+        "quick_action_confirm_grids": "Are you sure you want to '{action}' the crayon grids for all Apostles in [{layer}]?\n(⚠️ Warning: This will overwrite current records and cannot be undone!)",
+        "path_image_hint": "View Path Chart",
+        "info_job_reward": "💰 Acquired Rewards",
+        "info_food": "🍲 Favorite Food",
+        "aside_title": "Yearning",
+        "aside_loading": "The thoughts don't seem deep enough yet",
+        "stats_attribute": "Attack Type",
+        "物理": "Physical",
+        "魔法": "Magical",
+        "艾爾丁": "Eldain",
+        "普通坨坨": "Normal Apostle",
+        "身份": "Identity",
+        "x_label": "Official Global X",
+        "official_x_url": "https://x.com/trickcal_en",
+        "footer_author": "📝 Author: 冷笑話幽靈",
+        "footer_copyright": "© Copyright: EpidGames & Bilibili",
+        "footer_lastupdate": "last updated on: 22/10/2026",
+        "天真": "Innocence",
+        "冷靜": "Composed",
+        "狂亂": "Madness",
+        "活潑": "Vivacious",
+        "憂鬱": "Depressed",
+        "共鳴": "Resonance",
+        "雙面": "Multifaceted",
+        "魔女": "Witch",
+        "獸人": "Werebeast",
+        "龍族": "Dragon",
+        "魔靈": "Elemental",
+        "妖精": "Sprite",
+        "精靈": "Elf",
+        "幽靈": "Phantom",
+        "???": "???",
+        "前排": "Front",
+        "中排": "Middle",
+        "後排": "Back",
+        "所有排": "All Columns",
+        "輸出": "DPS",
+        "肉盾": "Tank",
+        "輔助": "Support",
+        "攻擊": "ATK",
+        "防禦": "DEF",
+        "血量": "HP",
+        "爆擊": "CRIT",
+        "爆抗": "CRIT RES",
+        "全部": "All",
+        "克魯布魯斯": "Cerberus",
+        "蠟筆勇士": "Super Crayon",
+        "R41雷內瓦": "R41 Renewa",
+        "莉1莉": "L1ly",
+        "M.E.O.W.": "M.E.O.W.",
+        "雷內瓦(NPC)": "Renewa",
+        "榮春": "Youngchun",
+        "高蒂": "Goldy",
+        "可麗餅": "Crepe",
+        "德莉亞": "Delia",
+        "page_title_char_detail": "Apostle Details",
+        "btn_close_page": "⬅️ Close",
+        "loading": "Loading...",
+        "release_date_label": "Release Date",
+        "crayon_detail_title": "🖍️ Ultra Crayon Details",
+        "layer_1_stats": "🥇 Board 1 Stats",
+        "layer_2_stats": "🥈 Board 2 Stats",
+        "layer_3_stats": "🥉 Board 3 Stats",
+        "present_title": "Apostle's Cherished Items",
+        "present_loading": "Opening chest...",
+        "btn_letter": "Apostle's Letter",
+        "btn_thought": "Master's Thoughts",
+        "present_select_hint": "Please select content to display...",
+        "no_letter_hint": "(This Apostle hasn't written a letter to you yet...)",
+        "no_thought_hint": "(The Master hasn't shared their thoughts on this item yet...)",
+        "present_delivering": "Cherished item is being delivered...",
+        "present_suffix": "'s Cherished Item",
+        "present_error": "⚠️ Cherished Item Load Error",
+        "skill_detail_title": "⚔️ Skill Details",
+        "skill_loading": "Loading skills...",
+        "skill_normal_attack": "Normal ATK",
+        "skill_basic": "[Basic]",
+        "skill_enhanced": "[Enhance]",
+        "skill_passive": "Passive Skill",
+        "costume_default": "Default",
+        "costume_prefix": "Outfit ",
+        "skill_admission": "Freshman Skill",
+        "skill_graduate": "Senior Skill",
+        "comment_title": "💬 Master Reviews & Thoughts",
+        "comment_author_placeholder": "Your Nickname (Leave blank for anonymous)",
+        "comment_content_placeholder": "Write your review, team comp tips, or share your love for this Apostle...",
+        "btn_submit_comment": "Submit Review 🚀",
+        "btn_submitting": "Submitting... ⏳",
+        "comment_loading": "Connecting to message board...",
+        "no_comment_hint": "No reviews yet. Be the first to leave one! 🐾",
+        "time_just_now": "Just now",
+        "anonymous_leader": "Anon Leader #",
+        "error_no_char": "❌ Apostle not specified. Please enter via the home page.",
+        "error_no_data": "❌ Load Failed: INITIAL_DATA not found.",
+        "error_char_not_found": "❌ Apostle data not found.",
+        "error_no_skill_data": "❌ skill.js not found. Please check if the file exists.",
+        "error_char_skill_not_found": "⚠️ Skill data for this Apostle not found.",
+        "alert_empty_comment": "Please enter your review content!",
+        "alert_comment_too_long": "Review content is too long. Please keep it under 500 characters!",
+        "alert_comment_failed": "Failed to submit. Please try again later!",
+        "error_load_comment": "Failed to load comments. Please check database permissions.",
+        "ui_title": "Apostle Viewer",
+        "ui_back": "⬅️ Back",
+        "ui_select_char": "👥 Select Apostle",
+        "ui_show_all": "Show All",
+        "ui_hide_all": "Hide All",
+        "ui_please_select": "Please select first",
+        "ui_camera": "🔄 Reset",
+        "ui_waiting": "Loading...",
+        "ui_mode_lobby": "🔄 Mode: Lobby",
+        "ui_mode_battle": "⚔️ Mode: Battle",
+        "ui_ar_open": "📷 AR On",
+        "ui_ar_close": "❌ AR Off",
+        "ui_ar_panel": "📷 Camera UI",
+        "ui_ar_flip": "🔄 Flip",
+        "ui_ar_capture": "📸 Capture",
+        "ui_costume": "Costume",
+        "ui_default_costume": "Default",
+        "ui_default_model": "Base Model",
+        "ui_select_anim": "Animation",
+        "ui_slots": "🧩 Slots",
+        "ui_show_slots": "Show All",
+        "ui_hide_slots": "Hide All",
+        "ui_loading_data": "Loading...",
+        "gacha_simulator": "Apostle Gacha Simulator",
+        "gacha_select_pool": "📍 Select Pool",
+        "gacha_personality_hint": "🔮 Personality:",
+        "gacha_1_pull": "1 Pull",
+        "gacha_10_pull": "10 Pulls",
+        "gacha_waiting": "Waiting...",
+        "gacha_history": "📜 Gacha History",
+        "gacha_rate_up": "🎯 Rate Up",
+        "gacha_normal": "🌟 Normal Gacha",
+        "gacha_personality_pool": "🔮 Personality Gacha",
+        "gacha_result_title": "🎉 Gacha Results 🎉",
+        "gacha_prev_page": "Prev",
+        "gacha_next_page": "Next",
+        "gacha_page": "Page {current} / {total}",
+        "gacha_unknown_time": "Unknown Time",
+        "gacha_unknown_pool": "Unknown Pool",
+        "ui_tier_title": "Tier List Maker",
+        "ui_tier_add_row": "Add Rank",
+        "ui_tier_reset": "Reset All",
+        "ui_tier_export": "Export Image",
+        "ui_tier_pool_title": "Character Pool (Drag to Rank)",
+        "ui_tier_default_title": "My Ultimate Tier List",
+        "ui_tier_reset_confirm": "Are you sure you want to reset the board and return all characters to the pool?",
+        "ui_tier_export_error": "Failed to export image.",
+        "愛麗絲": "Alice",
         "阿萊特": "Allet",
         "艾蜜莉雅": "Amelia",
         "艾舒爾": "Ashur",
@@ -407,449 +1043,2912 @@ const LANG_DICT = {
         "優米": "Yomi",
         "劉美美": "Yumimi",
         "x乂錫安乂x": "xXionx",
-		"波朗": "Polan"
+        "波朗": "Polan",
+        "斯皮奇(女僕)": "Maid Speaki"
     }
 };
-const currentLang = localStorage.getItem('user_lang') || 'zh-TW';
-function t(key) { return LANG_DICT[currentLang][key] || key; }
 
-// ------------------------------------------
-// 坨坨資料
-// ------------------------------------------
 const INITIAL_DATA = [
-	{ name: "波朗", personality: "狂亂", race: "妖精", position: "後排", job: "輔助", pathVersion: "V5", releaseDate: "2026-11-05T17:00:00+09:00" },
-	{ name: "瑰恩", personality: "冷靜", race: "獸人", position: "前排", job: "輔助", pathVersion: "V3", releaseDate: "2026-10-22T17:00:00+09:00" },
-	{ name: "麗息", personality: "冷靜", race: "幽靈", position: "前排", job: "肉盾", pathVersion: "V4", releaseDate: "2026-10-08T17:00:00+09:00" },
-	{ name: "柯米(泳裝)", personality: "冷靜", race: "獸人", position: "中排", job: "輔助", pathVersion: "V4", releaseDate: "2026-10-15T10:00:00+09:00" },
-	{ name: "瓊安", personality: "憂鬱, 天真", race: "妖精", position: "所有排", job: "輔助", pathVersion: "V4", releaseDate: "2026-09-24T17:00:00+09:00" },
-	{ name: "芭莉耶", personality: "憂鬱", race: "魔女", position: "後排", job: "輔助", pathVersion: "V4", releaseDate: "2026-09-10T17:00:00+09:00" },
-	{ name: "雪蘭", personality: "天真", race: "魔女", position: "前排", job: "輸出", pathVersion: "V1", releaseDate: "2026-09-10T17:00:00+09:00" },
-	{ name: "琵拉", personality: "狂亂", race: "龍族", position: "後排", job: "輔助", pathVersion: "V1", releaseDate: "2026-08-27T17:00:00+09:00" },
-	{ name: "羅蕾特", personality: "狂亂", race: "魔女", position: "後排", job: "輸出", pathVersion: "V1", releaseDate: "2026-07-30T17:00:00+09:00" },
-    { name: "洛涅", personality: "天真", race: "精靈", position: "前排", job: "肉盾", pathVersion: "V4", releaseDate: "2026-02-12" },
-    { name: "薇薇", personality: "天真", race: "龍族", position: "前排", job: "肉盾", pathVersion: "V4" },
-    { name: "卡洛特", personality: "天真", race: "妖精", position: "後排", job: "輔助", pathVersion: "V3", releaseDate: "2026-05-07" },
-    { name: "奈雅", personality: "天真", race: "魔靈", position: "中排", job: "輔助", pathVersion: "V1", releaseDate: "2026-02-26" },
-    { name: "艾爾芬", personality: "天真", race: "妖精", position: "後排", job: "輸出", pathVersion: "V2" },
-    { name: "馬爾", personality: "天真", race: "獸人", position: "中排", job: "輔助", pathVersion: "V1" },
-    { name: "加薇雅", personality: "天真", race: "魔靈", position: "中排", job: "輔助", pathVersion: "V2" },
-    { name: "希菲爾", personality: "天真", race: "龍族", position: "中排", job: "輸出", pathVersion: "V4" },
-    { name: "斯皮奇", personality: "天真", race: "幽靈", position: "後排", job: "輸出", pathVersion: "V1" },
-    { name: "海莉", personality: "天真", race: "精靈", position: "中排", job: "輸出", pathVersion: "V2" },
-    { name: "大木頭", personality: "天真", race: "魔靈", position: "前排", job: "肉盾", pathVersion: "V2" },
-    { name: "阿萊特", personality: "天真", race: "精靈", position: "前排", job: "肉盾", pathVersion: "V5" },
-    { name: "莎莉", personality: "天真", race: "幽靈", position: "中排", job: "輸出", pathVersion: "V2" },
-    { name: "路易", personality: "天真", race: "妖精", position: "中排", job: "輔助", pathVersion: "V3" },
-    { name: "修帕", personality: "活潑", race: "妖精", position: "後排", job: "輔助", pathVersion: "V5", releaseDate: "2026-03-12" },
-    { name: "奶油", personality: "活潑", race: "獸人", position: "後排", job: "輸出", pathVersion: "V3", releaseDate: "2025-10-23" },
-    { name: "桃桃", personality: "活潑", race: "獸人", position: "後排", job: "輸出", pathVersion: "V1" },
-    { name: "瑟琳娜", personality: "活潑", race: "幽靈", position: "前排", job: "肉盾", pathVersion: "V1", releaseDate: "2026-04-23" },
-    { name: "羽伊", personality: "活潑", race: "魔靈", position: "中排", job: "輔助", pathVersion: "V4" },
-    { name: "艾皮卡", personality: "活潑", race: "獸人", position: "中排", job: "輸出", pathVersion: "V5", releaseDate: "2026-01-01" },
-    { name: "路德", personality: "活潑", race: "龍族", position: "前排", job: "肉盾", pathVersion: "V4" },
-    { name: "康娜", personality: "活潑", race: "精靈", position: "後排", job: "輸出", pathVersion: "V2" },
-    { name: "班尼", personality: "活潑", race: "獸人", position: "前排", job: "輸出", pathVersion: "V4" },
-    { name: "盧波", personality: "活潑", race: "獸人", position: "中排", job: "輸出", pathVersion: "V5" },
-    { name: "茱蜜", personality: "活潑", race: "魔靈", position: "中排", job: "輸出", pathVersion: "V5" },
-    { name: "卡蓮", personality: "活潑", race: "妖精", position: "後排", job: "輔助", pathVersion: "V5" },
-    { name: "泰達", personality: "活潑", race: "精靈", position: "後排", job: "輸出", pathVersion: "V1" },
-    { name: "瑪麗", personality: "活潑", race: "妖精", position: "中排", job: "輸出", pathVersion: "V3" },
-    { name: "米雪", personality: "活潑", race: "獸人", position: "前排", job: "輸出", pathVersion: "V1" },
-    { name: "伊德", personality: "冷靜", race: "精靈", position: "前排", job: "肉盾", pathVersion: "V3", releaseDate: "2026-03-26" },
-    { name: "艾琳娜", personality: "冷靜", race: "精靈", position: "中排", job: "輸出", pathVersion: "V3", releaseDate: "2025-12-04" },
-    { name: "佩佩", personality: "冷靜", race: "魔女", position: "前排", job: "肉盾", pathVersion: "V5" },
-    { name: "希拉", personality: "冷靜", race: "魔靈", position: "後排", job: "輸出", pathVersion: "V2" },
-    { name: "皮可菈", personality: "冷靜", race: "魔女", position: "後排", job: "輔助", pathVersion: "V1" },
-    { name: "艾蜜莉雅", personality: "冷靜", race: "精靈", position: "後排", job: "輔助", pathVersion: "V2" },
-    { name: "芙莉可", personality: "冷靜", race: "魔女", position: "中排", job: "輸出", pathVersion: "V2" },
-    { name: "綾", personality: "冷靜", race: "魔女", position: "中排", job: "輸出", pathVersion: "V3" },
-    { name: "帕特拉", personality: "冷靜", race: "妖精", position: "前排", job: "輸出", pathVersion: "V2" },
-    { name: "梅露娜", personality: "冷靜", race: "魔靈", position: "後排", job: "輔助", pathVersion: "V2" },
-    { name: "傑德", personality: "冷靜", race: "龍族", position: "中排", job: "輸出", pathVersion: "V3" },
-    { name: "艾斯皮", personality: "冷靜", race: "幽靈", position: "中排", job: "輔助", pathVersion: "V4" },
-    { name: "雷吉", personality: "冷靜", race: "精靈", position: "後排", job: "輸出", pathVersion: "V2" },
-    { name: "瑪約", personality: "狂亂", race: "妖精", position: "後排", job: "輸出", pathVersion: "V1" },
-    { name: "莉茲", personality: "狂亂", race: "龍族", position: "前排", job: "輸出", pathVersion: "V2", releaseDate: "2025-12-18" },
-    { name: "謝蒂", personality: "狂亂", race: "幽靈", position: "前排", job: "輸出", pathVersion: "V1" },
-    { name: "庫洛艾", personality: "狂亂", race: "妖精", position: "前排", job: "肉盾", pathVersion: "V4" },
-    { name: "愛麗絲", personality: "狂亂", race: "幽靈", position: "中排", job: "輸出", pathVersion: "V2", releaseDate: "2025-11-06" },
-    { name: "蒂亞娜", personality: "狂亂", race: "獸人", position: "中排", job: "輔助", pathVersion: "V5" },
-    { name: "貝麗塔", personality: "狂亂", race: "魔女", position: "後排", job: "輸出", pathVersion: "V4" },
-    { name: "希瑟圖", personality: "狂亂", race: "龍族", position: "中排", job: "輸出", pathVersion: "V1" },
-    { name: "大師2號", personality: "狂亂", race: "精靈", position: "前排", job: "肉盾", pathVersion: "V4" },
-    { name: "梅森", personality: "狂亂", race: "幽靈", position: "後排", job: "輸出", pathVersion: "V4" },
-    { name: "伊弗利特", personality: "狂亂", race: "魔靈", position: "前排", job: "輸出", pathVersion: "V3" },
-    { name: "劉美美", personality: "狂亂", race: "獸人", position: "後排", job: "輸出", pathVersion: "V4" },
-    { name: "x乂錫安乂x", personality: "憂鬱", race: "幽靈", position: "後排", job: "輸出", pathVersion: "V3" },
-    { name: "基狄恩", personality: "憂鬱", race: "龍族", position: "前排", job: "輸出", pathVersion: "V3" },
-    { name: "布蘭切", personality: "憂鬱", race: "魔靈", position: "中排", job: "輸出", pathVersion: "V1", releaseDate: "2026-01-15" },
-    { name: "琳", personality: "憂鬱", race: "幽靈", position: "前排", job: "輸出", pathVersion: "V4" },
-    { name: "優米", personality: "憂鬱", race: "???", position: "中排", job: "輔助", pathVersion: "V1" },
-    { name: "希爾德", personality: "憂鬱", race: "精靈", position: "中排", job: "輔助", pathVersion: "V1", releaseDate: "2025-11-20" },
-    { name: "柯米", personality: "憂鬱", race: "獸人", position: "前排", job: "肉盾", pathVersion: "V2" },
-    { name: "珀榭", personality: "憂鬱", race: "魔女", position: "後排", job: "輔助", pathVersion: "V1" },
-    { name: "艾舒爾", personality: "憂鬱", race: "妖精", position: "後排", job: "輸出", pathVersion: "V5", releaseDate: "2026-01-29" },
-    { name: "斯諾奇", personality: "憂鬱", race: "魔女", position: "前排", job: "肉盾", pathVersion: "V3", releaseDate: "2026-04-09" },
-    { name: "貝魯", personality: "憂鬱", race: "幽靈", position: "中排", job: "輸出", pathVersion: "V1" },
-    { name: "佩斯塔", personality: "憂鬱", race: "精靈", position: "前排", job: "輔助", pathVersion: "V3" },
-    { name: "萊薇", personality: "憂鬱", race: "魔女", position: "中排", job: "輸出", pathVersion: "V5" },
-    { name: "喬菲", personality: "憂鬱", race: "獸人", position: "中排", job: "輸出", pathVersion: "V2" },
-    { name: "寧琉", personality: "狂亂", race: "妖精", position: "前排", job: "輔助", pathVersion: "V2", releaseDate: "2026-05-21" },
-    { name: "莉絲蒂", personality: "憂鬱", race: "精靈", position: "後排", job: "輸出", pathVersion: "V3", releaseDate: "2026-06-04" },
-    { name: "雷內瓦", personality: "狂亂", race: "精靈", position: "中排", job: "輸出", pathVersion: "V3", releaseDate: "2026-06-18T17:00:00+09:00" },
-    { name: "芭瓏", personality: "冷靜", race: "幽靈", position: "前排", job: "輸出", pathVersion: "V3", releaseDate: "2026-07-02T17:00:00+09:00" },
-	{ name: "達雅", personality: "天真", race: "龍族", position: "後排", job: "輸出", pathVersion: "V2", releaseDate: "2026-07-16T19:00:00+09:00" },
-	{ name: "提格", personality: "活潑", race: "獸人", position: "前排", job: "輸出", pathVersion: "V2", releaseDate: "2026-07-16T19:00:00+09:00" }
+    {
+        "name": "波朗",
+        "personality": "狂亂",
+        "race": "妖精",
+        "position": "後排",
+        "job": "輔助",
+        "pathVersion": "V5",
+        "releaseDate": "2026-11-05T17:00:00+09:00"
+    },
+    {
+        "name": "瑰恩",
+        "personality": "冷靜",
+        "race": "獸人",
+        "position": "前排",
+        "job": "輔助",
+        "pathVersion": "V3",
+        "releaseDate": "2026-10-22T17:00:00+09:00"
+    },
+    {
+        "name": "麗息",
+        "personality": "冷靜",
+        "race": "幽靈",
+        "position": "前排",
+        "job": "肉盾",
+        "pathVersion": "V4",
+        "releaseDate": "2026-10-08T17:00:00+09:00"
+    },
+    {
+        "name": "柯米(泳裝)",
+        "personality": "冷靜",
+        "race": "獸人",
+        "position": "中排",
+        "job": "輔助",
+        "pathVersion": "V4",
+        "releaseDate": "2026-10-15T10:00:00+09:00"
+    },
+    {
+        "name": "瓊安",
+        "personality": "憂鬱, 天真",
+        "race": "妖精",
+        "position": "所有排",
+        "job": "輔助",
+        "pathVersion": "V4",
+        "releaseDate": "2026-09-24T17:00:00+09:00"
+    },
+    {
+        "name": "芭莉耶",
+        "personality": "憂鬱",
+        "race": "魔女",
+        "position": "後排",
+        "job": "輔助",
+        "pathVersion": "V4",
+        "releaseDate": "2026-09-10T17:00:00+09:00"
+    },
+    {
+        "name": "雪蘭",
+        "personality": "天真",
+        "race": "魔女",
+        "position": "前排",
+        "job": "輸出",
+        "pathVersion": "V1",
+        "releaseDate": "2026-09-10T17:00:00+09:00"
+    },
+    {
+        "name": "琵拉",
+        "personality": "狂亂",
+        "race": "龍族",
+        "position": "後排",
+        "job": "輔助",
+        "pathVersion": "V1",
+        "releaseDate": "2026-08-27T17:00:00+09:00"
+    },
+    {
+        "name": "羅蕾特",
+        "personality": "狂亂",
+        "race": "魔女",
+        "position": "後排",
+        "job": "輸出",
+        "pathVersion": "V1",
+        "releaseDate": "2026-07-30T17:00:00+09:00"
+    },
+    {
+        "name": "洛涅",
+        "personality": "天真",
+        "race": "精靈",
+        "position": "前排",
+        "job": "肉盾",
+        "pathVersion": "V4",
+        "releaseDate": "2026-02-12"
+    },
+    {
+        "name": "薇薇",
+        "personality": "天真",
+        "race": "龍族",
+        "position": "前排",
+        "job": "肉盾",
+        "pathVersion": "V4"
+    },
+    {
+        "name": "卡洛特",
+        "personality": "天真",
+        "race": "妖精",
+        "position": "後排",
+        "job": "輔助",
+        "pathVersion": "V3",
+        "releaseDate": "2026-05-07"
+    },
+    {
+        "name": "奈雅",
+        "personality": "天真",
+        "race": "魔靈",
+        "position": "中排",
+        "job": "輔助",
+        "pathVersion": "V1",
+        "releaseDate": "2026-02-26"
+    },
+    {
+        "name": "艾爾芬",
+        "personality": "天真",
+        "race": "妖精",
+        "position": "後排",
+        "job": "輸出",
+        "pathVersion": "V2"
+    },
+    {
+        "name": "馬爾",
+        "personality": "天真",
+        "race": "獸人",
+        "position": "中排",
+        "job": "輔助",
+        "pathVersion": "V1"
+    },
+    {
+        "name": "加薇雅",
+        "personality": "天真",
+        "race": "魔靈",
+        "position": "中排",
+        "job": "輔助",
+        "pathVersion": "V2"
+    },
+    {
+        "name": "希菲爾",
+        "personality": "天真",
+        "race": "龍族",
+        "position": "中排",
+        "job": "輸出",
+        "pathVersion": "V4"
+    },
+    {
+        "name": "斯皮奇",
+        "personality": "天真",
+        "race": "幽靈",
+        "position": "後排",
+        "job": "輸出",
+        "pathVersion": "V1"
+    },
+    {
+        "name": "海莉",
+        "personality": "天真",
+        "race": "精靈",
+        "position": "中排",
+        "job": "輸出",
+        "pathVersion": "V2"
+    },
+    {
+        "name": "大木頭",
+        "personality": "天真",
+        "race": "魔靈",
+        "position": "前排",
+        "job": "肉盾",
+        "pathVersion": "V2"
+    },
+    {
+        "name": "阿萊特",
+        "personality": "天真",
+        "race": "精靈",
+        "position": "前排",
+        "job": "肉盾",
+        "pathVersion": "V5"
+    },
+    {
+        "name": "莎莉",
+        "personality": "天真",
+        "race": "幽靈",
+        "position": "中排",
+        "job": "輸出",
+        "pathVersion": "V2"
+    },
+    {
+        "name": "路易",
+        "personality": "天真",
+        "race": "妖精",
+        "position": "中排",
+        "job": "輔助",
+        "pathVersion": "V3"
+    },
+    {
+        "name": "修帕",
+        "personality": "活潑",
+        "race": "妖精",
+        "position": "後排",
+        "job": "輔助",
+        "pathVersion": "V5",
+        "releaseDate": "2026-03-12"
+    },
+    {
+        "name": "奶油",
+        "personality": "活潑",
+        "race": "獸人",
+        "position": "後排",
+        "job": "輸出",
+        "pathVersion": "V3",
+        "releaseDate": "2025-10-23"
+    },
+    {
+        "name": "桃桃",
+        "personality": "活潑",
+        "race": "獸人",
+        "position": "後排",
+        "job": "輸出",
+        "pathVersion": "V1"
+    },
+    {
+        "name": "瑟琳娜",
+        "personality": "活潑",
+        "race": "幽靈",
+        "position": "前排",
+        "job": "肉盾",
+        "pathVersion": "V1",
+        "releaseDate": "2026-04-23"
+    },
+    {
+        "name": "羽伊",
+        "personality": "活潑",
+        "race": "魔靈",
+        "position": "中排",
+        "job": "輔助",
+        "pathVersion": "V4"
+    },
+    {
+        "name": "艾皮卡",
+        "personality": "活潑",
+        "race": "獸人",
+        "position": "中排",
+        "job": "輸出",
+        "pathVersion": "V5",
+        "releaseDate": "2026-01-01"
+    },
+    {
+        "name": "路德",
+        "personality": "活潑",
+        "race": "龍族",
+        "position": "前排",
+        "job": "肉盾",
+        "pathVersion": "V4"
+    },
+    {
+        "name": "康娜",
+        "personality": "活潑",
+        "race": "精靈",
+        "position": "後排",
+        "job": "輸出",
+        "pathVersion": "V2"
+    },
+    {
+        "name": "班尼",
+        "personality": "活潑",
+        "race": "獸人",
+        "position": "前排",
+        "job": "輸出",
+        "pathVersion": "V4"
+    },
+    {
+        "name": "盧波",
+        "personality": "活潑",
+        "race": "獸人",
+        "position": "中排",
+        "job": "輸出",
+        "pathVersion": "V5"
+    },
+    {
+        "name": "茱蜜",
+        "personality": "活潑",
+        "race": "魔靈",
+        "position": "中排",
+        "job": "輸出",
+        "pathVersion": "V5"
+    },
+    {
+        "name": "卡蓮",
+        "personality": "活潑",
+        "race": "妖精",
+        "position": "後排",
+        "job": "輔助",
+        "pathVersion": "V5"
+    },
+    {
+        "name": "泰達",
+        "personality": "活潑",
+        "race": "精靈",
+        "position": "後排",
+        "job": "輸出",
+        "pathVersion": "V1"
+    },
+    {
+        "name": "瑪麗",
+        "personality": "活潑",
+        "race": "妖精",
+        "position": "中排",
+        "job": "輸出",
+        "pathVersion": "V3"
+    },
+    {
+        "name": "米雪",
+        "personality": "活潑",
+        "race": "獸人",
+        "position": "前排",
+        "job": "輸出",
+        "pathVersion": "V1"
+    },
+    {
+        "name": "伊德",
+        "personality": "冷靜",
+        "race": "精靈",
+        "position": "前排",
+        "job": "肉盾",
+        "pathVersion": "V3",
+        "releaseDate": "2026-03-26"
+    },
+    {
+        "name": "艾琳娜",
+        "personality": "冷靜",
+        "race": "精靈",
+        "position": "中排",
+        "job": "輸出",
+        "pathVersion": "V3",
+        "releaseDate": "2025-12-04"
+    },
+    {
+        "name": "佩佩",
+        "personality": "冷靜",
+        "race": "魔女",
+        "position": "前排",
+        "job": "肉盾",
+        "pathVersion": "V5"
+    },
+    {
+        "name": "希拉",
+        "personality": "冷靜",
+        "race": "魔靈",
+        "position": "後排",
+        "job": "輸出",
+        "pathVersion": "V2"
+    },
+    {
+        "name": "皮可菈",
+        "personality": "冷靜",
+        "race": "魔女",
+        "position": "後排",
+        "job": "輔助",
+        "pathVersion": "V1"
+    },
+    {
+        "name": "艾蜜莉雅",
+        "personality": "冷靜",
+        "race": "精靈",
+        "position": "後排",
+        "job": "輔助",
+        "pathVersion": "V2"
+    },
+    {
+        "name": "芙莉可",
+        "personality": "冷靜",
+        "race": "魔女",
+        "position": "中排",
+        "job": "輸出",
+        "pathVersion": "V2"
+    },
+    {
+        "name": "綾",
+        "personality": "冷靜",
+        "race": "魔女",
+        "position": "中排",
+        "job": "輸出",
+        "pathVersion": "V3"
+    },
+    {
+        "name": "帕特拉",
+        "personality": "冷靜",
+        "race": "妖精",
+        "position": "前排",
+        "job": "輸出",
+        "pathVersion": "V2"
+    },
+    {
+        "name": "梅露娜",
+        "personality": "冷靜",
+        "race": "魔靈",
+        "position": "後排",
+        "job": "輔助",
+        "pathVersion": "V2"
+    },
+    {
+        "name": "傑德",
+        "personality": "冷靜",
+        "race": "龍族",
+        "position": "中排",
+        "job": "輸出",
+        "pathVersion": "V3"
+    },
+    {
+        "name": "艾斯皮",
+        "personality": "冷靜",
+        "race": "幽靈",
+        "position": "中排",
+        "job": "輔助",
+        "pathVersion": "V4"
+    },
+    {
+        "name": "雷吉",
+        "personality": "冷靜",
+        "race": "精靈",
+        "position": "後排",
+        "job": "輸出",
+        "pathVersion": "V2"
+    },
+    {
+        "name": "瑪約",
+        "personality": "狂亂",
+        "race": "妖精",
+        "position": "後排",
+        "job": "輸出",
+        "pathVersion": "V1"
+    },
+    {
+        "name": "莉茲",
+        "personality": "狂亂",
+        "race": "龍族",
+        "position": "前排",
+        "job": "輸出",
+        "pathVersion": "V2",
+        "releaseDate": "2025-12-18"
+    },
+    {
+        "name": "謝蒂",
+        "personality": "狂亂",
+        "race": "幽靈",
+        "position": "前排",
+        "job": "輸出",
+        "pathVersion": "V1"
+    },
+    {
+        "name": "庫洛艾",
+        "personality": "狂亂",
+        "race": "妖精",
+        "position": "前排",
+        "job": "肉盾",
+        "pathVersion": "V4"
+    },
+    {
+        "name": "愛麗絲",
+        "personality": "狂亂",
+        "race": "幽靈",
+        "position": "中排",
+        "job": "輸出",
+        "pathVersion": "V2",
+        "releaseDate": "2025-11-06"
+    },
+    {
+        "name": "蒂亞娜",
+        "personality": "狂亂",
+        "race": "獸人",
+        "position": "中排",
+        "job": "輔助",
+        "pathVersion": "V5"
+    },
+    {
+        "name": "貝麗塔",
+        "personality": "狂亂",
+        "race": "魔女",
+        "position": "後排",
+        "job": "輸出",
+        "pathVersion": "V4"
+    },
+    {
+        "name": "希瑟圖",
+        "personality": "狂亂",
+        "race": "龍族",
+        "position": "中排",
+        "job": "輸出",
+        "pathVersion": "V1"
+    },
+    {
+        "name": "大師2號",
+        "personality": "狂亂",
+        "race": "精靈",
+        "position": "前排",
+        "job": "肉盾",
+        "pathVersion": "V4"
+    },
+    {
+        "name": "梅森",
+        "personality": "狂亂",
+        "race": "幽靈",
+        "position": "後排",
+        "job": "輸出",
+        "pathVersion": "V4"
+    },
+    {
+        "name": "伊弗利特",
+        "personality": "狂亂",
+        "race": "魔靈",
+        "position": "前排",
+        "job": "輸出",
+        "pathVersion": "V3"
+    },
+    {
+        "name": "劉美美",
+        "personality": "狂亂",
+        "race": "獸人",
+        "position": "後排",
+        "job": "輸出",
+        "pathVersion": "V4"
+    },
+    {
+        "name": "x乂錫安乂x",
+        "personality": "憂鬱",
+        "race": "幽靈",
+        "position": "後排",
+        "job": "輸出",
+        "pathVersion": "V3"
+    },
+    {
+        "name": "基狄恩",
+        "personality": "憂鬱",
+        "race": "龍族",
+        "position": "前排",
+        "job": "輸出",
+        "pathVersion": "V3"
+    },
+    {
+        "name": "布蘭切",
+        "personality": "憂鬱",
+        "race": "魔靈",
+        "position": "中排",
+        "job": "輸出",
+        "pathVersion": "V1",
+        "releaseDate": "2026-01-15"
+    },
+    {
+        "name": "琳",
+        "personality": "憂鬱",
+        "race": "幽靈",
+        "position": "前排",
+        "job": "輸出",
+        "pathVersion": "V4"
+    },
+    {
+        "name": "優米",
+        "personality": "憂鬱",
+        "race": "???",
+        "position": "中排",
+        "job": "輔助",
+        "pathVersion": "V1"
+    },
+    {
+        "name": "希爾德",
+        "personality": "憂鬱",
+        "race": "精靈",
+        "position": "中排",
+        "job": "輔助",
+        "pathVersion": "V1",
+        "releaseDate": "2025-11-20"
+    },
+    {
+        "name": "柯米",
+        "personality": "憂鬱",
+        "race": "獸人",
+        "position": "前排",
+        "job": "肉盾",
+        "pathVersion": "V2"
+    },
+    {
+        "name": "珀榭",
+        "personality": "憂鬱",
+        "race": "魔女",
+        "position": "後排",
+        "job": "輔助",
+        "pathVersion": "V1"
+    },
+    {
+        "name": "艾舒爾",
+        "personality": "憂鬱",
+        "race": "妖精",
+        "position": "後排",
+        "job": "輸出",
+        "pathVersion": "V5",
+        "releaseDate": "2026-01-29"
+    },
+    {
+        "name": "斯諾奇",
+        "personality": "憂鬱",
+        "race": "魔女",
+        "position": "前排",
+        "job": "肉盾",
+        "pathVersion": "V3",
+        "releaseDate": "2026-04-09"
+    },
+    {
+        "name": "貝魯",
+        "personality": "憂鬱",
+        "race": "幽靈",
+        "position": "中排",
+        "job": "輸出",
+        "pathVersion": "V1"
+    },
+    {
+        "name": "佩斯塔",
+        "personality": "憂鬱",
+        "race": "精靈",
+        "position": "前排",
+        "job": "輔助",
+        "pathVersion": "V3"
+    },
+    {
+        "name": "萊薇",
+        "personality": "憂鬱",
+        "race": "魔女",
+        "position": "中排",
+        "job": "輸出",
+        "pathVersion": "V5"
+    },
+    {
+        "name": "喬菲",
+        "personality": "憂鬱",
+        "race": "獸人",
+        "position": "中排",
+        "job": "輸出",
+        "pathVersion": "V2"
+    },
+    {
+        "name": "寧琉",
+        "personality": "狂亂",
+        "race": "妖精",
+        "position": "前排",
+        "job": "輔助",
+        "pathVersion": "V2",
+        "releaseDate": "2026-05-21"
+    },
+    {
+        "name": "莉絲蒂",
+        "personality": "憂鬱",
+        "race": "精靈",
+        "position": "後排",
+        "job": "輸出",
+        "pathVersion": "V3",
+        "releaseDate": "2026-06-04"
+    },
+    {
+        "name": "雷內瓦",
+        "personality": "狂亂",
+        "race": "精靈",
+        "position": "中排",
+        "job": "輸出",
+        "pathVersion": "V3",
+        "releaseDate": "2026-06-18T17:00:00+09:00"
+    },
+    {
+        "name": "芭瓏",
+        "personality": "冷靜",
+        "race": "幽靈",
+        "position": "前排",
+        "job": "輸出",
+        "pathVersion": "V3",
+        "releaseDate": "2026-07-02T17:00:00+09:00"
+    },
+    {
+        "name": "達雅",
+        "personality": "天真",
+        "race": "龍族",
+        "position": "後排",
+        "job": "輸出",
+        "pathVersion": "V2",
+        "releaseDate": "2026-07-16T19:00:00+09:00"
+    },
+    {
+        "name": "提格",
+        "personality": "活潑",
+        "race": "獸人",
+        "position": "前排",
+        "job": "輸出",
+        "pathVersion": "V2",
+        "releaseDate": "2026-07-16T19:00:00+09:00"
+    },
+    {
+        "name": "斯皮奇(女僕)",
+        "personality": "活潑",
+        "race": "幽靈",
+        "position": "後排",
+        "job": "輸出",
+        "releaseDate": "2026-11-19T17:00:00+09:00"
+    }
 ];
 
 const CV_MAP = {
-    "洛涅": "田向結月", "薇薇": "新井里美", "艾爾芬": "木野日菜", "x乂錫安乂x": "上坂すみれ", "伊弗利特": "安堂ななこ", "伊德": "内田真礼", "佩佩": "上田瞳", "佩斯塔": "仁見紗綾",
-    "修帕": "大空直美", "傑德": "行成とあ", "優米": "高野麻里佳", "劉美美": "兼田めぐみ", "加薇雅": "大谷衣里奈", "卡洛特": "牧野由依", "卡蓮": "咲谷怜奈", "喬菲": "漆山ゆうき",
-    "基狄恩": "鈴木愛唯", "大師2號": "田中音緒", "大木頭": "上田瞳", "奈雅": "佐伯伊織", "奶油": "長月あおい", "布蘭切": "和氣あず未", "希拉": "大木咲絵子", "希爾德": "秦佐和子",
-    "希瑟圖": "野口瑠璃子", "希菲爾": "葵あずさ", "帕特拉": "大園朱花子", "庫洛艾": "田村ゆかり", "康娜": "岡本美歌", "愛麗絲": "小見川千明", "班尼": "熊崎愛", "斯皮奇": "小坂井祐莉絵",
-    "斯諾奇": "高柳知葉", "柯米": "河瀨茉希", "桃桃": "平塚紗依", "梅森": "赤堀実華琉", "梅露娜": "美坂朱音", "海莉": "衣川里佳", "珀榭": "優木かな", "琳": "渕上舞",
-    "瑟琳娜": "石上靜香", "瑪約": "船戸ゆり絵", "瑪麗": "野村真悠華", "皮可菈": "小澤亜李", "盧波": "木村千咲", "米雪": "咲咲谷怜奈", "綾": "日笠陽子", "羽伊": "長縄まりあ",
-    "艾斯皮": "內海まり", "艾琳娜": "塚田悠衣", "艾皮卡": "日高里菜", "艾舒爾": "長尾玲奈", "艾蜜莉雅": "中林新夏", "芙莉可": "百瀨帆南", "茱蜜": "山田聖奈", "莉茲": "藤本侑里",
-    "莎莉": "漆山ゆうき", "萊薇": "上永紗也華", "蒂亞娜": "立花日菜", "謝蒂": "山城リアン", "貝魯": "若山なつみ", "貝麗塔": "松岡美里", "路德": "渡部惠子", "路易": "兼田めぐみ",
-    "阿萊特": "若山なつみ", "雷吉": "大園朱花子", "馬爾": "花咲心優", "泰達": "赤堀実華琉", "寧琉": "アンデルソンゆり子", "莉絲蒂": "黒沢ともよ", "雷內瓦": "花守ゆみり", "芭瓏": "橋本千波", "達雅": "羊宮妃那", "提格": "篠田南",
-	"羅蕾特": "日野麻里", "琵拉": "菱川花菜", "雪蘭": "安齋由香里", "芭莉耶": "寺澤百花", "瓊安": "雨宮天", "柯米(泳裝)": "河瀬茉希", "麗息": "藤咲野々花", "瑰恩": "南早紀", "波朗": "飯田友子"
+    "洛涅": "田向結月",
+    "薇薇": "新井里美",
+    "艾爾芬": "木野日菜",
+    "x乂錫安乂x": "上坂すみれ",
+    "伊弗利特": "安堂ななこ",
+    "伊德": "内田真礼",
+    "佩佩": "上田瞳",
+    "佩斯塔": "仁見紗綾",
+    "修帕": "大空直美",
+    "傑德": "行成とあ",
+    "優米": "高野麻里佳",
+    "劉美美": "兼田めぐみ",
+    "加薇雅": "大谷衣里奈",
+    "卡洛特": "牧野由依",
+    "卡蓮": "咲谷怜奈",
+    "喬菲": "漆山ゆうき",
+    "基狄恩": "鈴木愛唯",
+    "大師2號": "田中音緒",
+    "大木頭": "上田瞳",
+    "奈雅": "佐伯伊織",
+    "奶油": "長月あおい",
+    "布蘭切": "和氣あず未",
+    "希拉": "大木咲絵子",
+    "希爾德": "秦佐和子",
+    "希瑟圖": "野口瑠璃子",
+    "希菲爾": "葵あずさ",
+    "帕特拉": "大園朱花子",
+    "庫洛艾": "田村ゆかり",
+    "康娜": "岡本美歌",
+    "愛麗絲": "小見川千明",
+    "班尼": "熊崎愛",
+    "斯皮奇": "小坂井祐莉絵",
+    "斯諾奇": "高柳知葉",
+    "柯米": "河瀨茉希",
+    "桃桃": "平塚紗依",
+    "梅森": "赤堀実華琉",
+    "梅露娜": "美坂朱音",
+    "海莉": "衣川里佳",
+    "珀榭": "優木かな",
+    "琳": "渕上舞",
+    "瑟琳娜": "石上靜香",
+    "瑪約": "船戸ゆり絵",
+    "瑪麗": "野村真悠華",
+    "皮可菈": "小澤亜李",
+    "盧波": "木村千咲",
+    "米雪": "咲咲谷怜奈",
+    "綾": "日笠陽子",
+    "羽伊": "長縄まりあ",
+    "艾斯皮": "內海まり",
+    "艾琳娜": "塚田悠衣",
+    "艾皮卡": "日高里菜",
+    "艾舒爾": "長尾玲奈",
+    "艾蜜莉雅": "中林新夏",
+    "芙莉可": "百瀨帆南",
+    "茱蜜": "山田聖奈",
+    "莉茲": "藤本侑里",
+    "莎莉": "漆山ゆうき",
+    "萊薇": "上永紗也華",
+    "蒂亞娜": "立花日菜",
+    "謝蒂": "山城リアン",
+    "貝魯": "若山なつみ",
+    "貝麗塔": "松岡美里",
+    "路德": "渡部惠子",
+    "路易": "兼田めぐみ",
+    "阿萊特": "若山なつみ",
+    "雷吉": "大園朱花子",
+    "馬爾": "花咲心優",
+    "泰達": "赤堀実華琉",
+    "寧琉": "アンデルソンゆり子",
+    "莉絲蒂": "黒沢ともよ",
+    "雷內瓦": "花守ゆみり",
+    "芭瓏": "橋本千波",
+    "達雅": "羊宮妃那",
+    "提格": "篠田南",
+    "羅蕾特": "日野麻里",
+    "琵拉": "菱川花菜",
+    "雪蘭": "安齋由香里",
+    "芭莉耶": "寺澤百花",
+    "瓊安": "雨宮天",
+    "柯米(泳裝)": "河瀬茉希",
+    "麗息": "藤咲野々花",
+    "瑰恩": "南早紀",
+    "波朗": "飯田友子",
+    "斯皮奇(女僕)": "小坂井祐莉絵"
 };
 
 const GRADE_MAP = {
-    "洛涅": "3", "薇薇": "3", "艾爾芬": "3", "x乂錫安乂x": "3", "伊弗利特": "3", "伊德": "3", "佩佩": "3", "佩斯塔": "2",
-    "修帕": "3", "傑德": "3", "優米": "3", "劉美美": "2", "加薇雅": "3", "卡洛特": "3", "卡蓮": "2", "喬菲": "2",
-    "基狄恩": "3", "大師2號": "2", "大木頭": "2", "奈雅": "3", "奶油": "3", "布蘭切": "3", "希拉": "3", "希爾德": "3",
-    "希瑟圖": "3", "希菲爾": "3", "帕特拉": "1", "庫洛艾": "3", "康娜": "3", "愛麗絲": "3", "班尼": "3", "斯皮奇": "3",
-    "斯諾奇": "3", "柯米": "3", "桃桃": "3", "梅森": "1", "梅露娜": "2", "海莉": "3", "珀榭": "3", "琳": "3",
-    "瑟琳娜": "3", "瑪約": "3", "瑪麗": "2", "皮可菈": "3", "盧波": "3", "米雪": "1", "綾": "3", "羽伊": "3",
-    "艾斯皮": "2", "艾琳娜": "3", "艾皮卡": "3", "艾舒爾": "3", "艾蜜莉雅": "3", "芙莉可": "3", "茱蜜": "2", "莉茲": "3",
-    "莎莉": "2", "萊薇": "3", "蒂亞娜": "3", "謝蒂": "3", "貝魯": "1", "貝麗塔": "3", "路德": "3", "路易": "1",
-    "阿萊特": "2", "雷吉": "2", "馬爾": "3", "泰達": "2", "寧琉": "3", "莉絲蒂": "3", "雷內瓦": "3", "芭瓏": "3", "達雅": "3", "提格": "3", "羅蕾特": "3", "琵拉": "3", "雪蘭": "3", "芭莉耶": "2",
-	"瓊安": "3", "柯米(泳裝)": "3", "麗息": "2", "瑰恩": "3", "波朗": "3"
+    "洛涅": "3",
+    "薇薇": "3",
+    "艾爾芬": "3",
+    "x乂錫安乂x": "3",
+    "伊弗利特": "3",
+    "伊德": "3",
+    "佩佩": "3",
+    "佩斯塔": "2",
+    "修帕": "3",
+    "傑德": "3",
+    "優米": "3",
+    "劉美美": "2",
+    "加薇雅": "3",
+    "卡洛特": "3",
+    "卡蓮": "2",
+    "喬菲": "2",
+    "基狄恩": "3",
+    "大師2號": "2",
+    "大木頭": "2",
+    "奈雅": "3",
+    "奶油": "3",
+    "布蘭切": "3",
+    "希拉": "3",
+    "希爾德": "3",
+    "希瑟圖": "3",
+    "希菲爾": "3",
+    "帕特拉": "1",
+    "庫洛艾": "3",
+    "康娜": "3",
+    "愛麗絲": "3",
+    "班尼": "3",
+    "斯皮奇": "3",
+    "斯諾奇": "3",
+    "柯米": "3",
+    "桃桃": "3",
+    "梅森": "1",
+    "梅露娜": "2",
+    "海莉": "3",
+    "珀榭": "3",
+    "琳": "3",
+    "瑟琳娜": "3",
+    "瑪約": "3",
+    "瑪麗": "2",
+    "皮可菈": "3",
+    "盧波": "3",
+    "米雪": "1",
+    "綾": "3",
+    "羽伊": "3",
+    "艾斯皮": "2",
+    "艾琳娜": "3",
+    "艾皮卡": "3",
+    "艾舒爾": "3",
+    "艾蜜莉雅": "3",
+    "芙莉可": "3",
+    "茱蜜": "2",
+    "莉茲": "3",
+    "莎莉": "2",
+    "萊薇": "3",
+    "蒂亞娜": "3",
+    "謝蒂": "3",
+    "貝魯": "1",
+    "貝麗塔": "3",
+    "路德": "3",
+    "路易": "1",
+    "阿萊特": "2",
+    "雷吉": "2",
+    "馬爾": "3",
+    "泰達": "2",
+    "寧琉": "3",
+    "莉絲蒂": "3",
+    "雷內瓦": "3",
+    "芭瓏": "3",
+    "達雅": "3",
+    "提格": "3",
+    "羅蕾特": "3",
+    "琵拉": "3",
+    "雪蘭": "3",
+    "芭莉耶": "2",
+    "瓊安": "3",
+    "柯米(泳裝)": "3",
+    "麗息": "2",
+    "瑰恩": "3",
+    "波朗": "3",
+    "斯皮奇(女僕)": "3"
 };
 
-const ELDAIN_LIST = ['綾', '庫洛艾', '艾皮卡', '伊德', '羽伊', '薇薇', 'x乂錫安乂x', '優米', '雷內瓦', '瓊安'];
+const ELDAIN_LIST = [
+    "綾",
+    "庫洛艾",
+    "艾皮卡",
+    "伊德",
+    "羽伊",
+    "薇薇",
+    "x乂錫安乂x",
+    "優米",
+    "雷內瓦",
+    "瓊安"
+];
 
-// ------------------------------------------
-// 宴會廳
-// ------------------------------------------
 const FOOD_MAP = {
-    "Alice": { super: "有機檸檬茶", special: ["檸檬茶", "幽靈布丁", "惡靈布丁"] },
-    "Allet": { super: "ANSA太空食品", special: ["太空食品", "肉桂口味糖球", "肉桂口味健康糖球"] },
-    "Amelia": { super: "ANSA太空食品", special: ["太空食品", "巧克力冰淇淋", "深黑巧克力冰淇淋"] },
-    "Ashur": { super: "UFC炸蔬菜", special: ["UFC炸胡蘿蔔", "焦糖爆米花", "追劇焦糖爆米花"] },
-    "Aya": { super: "三重薄荷冰淇淋", special: ["薄荷巧克力冰淇淋", "巧克力冰淇淋", "深黑巧克力冰淇淋"] },
-    "Belita": { super: "草莓切片蛋糕", special: ["草莓蛋糕", "巧克力冰淇淋", "深黑巧克力冰淇淋"] },
-	"Barie": { super: "低糖棉花糖馬卡龍", special: ["棉花糖馬卡龍", "UFC炸胡蘿蔔", "UFC炸蔬菜"] },
-	"Barong": { super: "寶石蛋塔", special: ["寶石塔", "肉桂口味糖球", "肉桂口味健康糖球"] },
-    "Beni": { super: "甜甜蜂蜜罐", special: ["蜂蜜罐", "蜂蜜大蒜鮭魚", "皇家蜂蜜大蒜鮭魚"] },
-    "BigWood": { super: "椰子萬能青汁", special: ["椰子松針粥", "一碗米飯", "一碗糯米飯"] },
-    "Blanchet": { super: "有機檸檬茶", special: ["檸檬茶", "寶石塔", "寶石蛋塔"] },
-    "Butter": { super: "追劇焦糖爆米花", special: ["焦糖爆米花", "獸糧罐頭", "高級獸糧罐頭"] },
-    "Canna": { super: "一碗糯米飯", special: ["一碗米飯", "烤漫畫肉", "烤海賊漫畫肉"] },
-    "Carren": { super: "UFC炸蔬菜", special: ["UFC炸胡蘿蔔", "草莓蛋糕", "草莓切片蛋糕"] },
-    "Chloe": { super: "愛心扭結麵包", special: ["扭結麵包", "檸檬茶", "有機檸檬茶"] },
-    "Chopi": { super: "烤海賊漫畫肉", special: ["烤漫畫肉", "獸糧罐頭", "高級獸糧罐頭"] },
+    "Alice": {
+        "super": "有機檸檬茶",
+        "special": [
+            "檸檬茶",
+            "幽靈布丁",
+            "惡靈布丁"
+        ]
+    },
+    "Allet": {
+        "super": "ANSA太空食品",
+        "special": [
+            "太空食品",
+            "肉桂口味糖球",
+            "肉桂口味健康糖球"
+        ]
+    },
+    "Amelia": {
+        "super": "ANSA太空食品",
+        "special": [
+            "太空食品",
+            "巧克力冰淇淋",
+            "深黑巧克力冰淇淋"
+        ]
+    },
+    "Ashur": {
+        "super": "UFC炸蔬菜",
+        "special": [
+            "UFC炸胡蘿蔔",
+            "焦糖爆米花",
+            "追劇焦糖爆米花"
+        ]
+    },
+    "Aya": {
+        "super": "三重薄荷冰淇淋",
+        "special": [
+            "薄荷巧克力冰淇淋",
+            "巧克力冰淇淋",
+            "深黑巧克力冰淇淋"
+        ]
+    },
+    "Belita": {
+        "super": "草莓切片蛋糕",
+        "special": [
+            "草莓蛋糕",
+            "巧克力冰淇淋",
+            "深黑巧克力冰淇淋"
+        ]
+    },
+    "Barie": {
+        "super": "低糖棉花糖馬卡龍",
+        "special": [
+            "棉花糖馬卡龍",
+            "UFC炸胡蘿蔔",
+            "UFC炸蔬菜"
+        ]
+    },
+    "Barong": {
+        "super": "寶石蛋塔",
+        "special": [
+            "寶石塔",
+            "肉桂口味糖球",
+            "肉桂口味健康糖球"
+        ]
+    },
+    "Beni": {
+        "super": "甜甜蜂蜜罐",
+        "special": [
+            "蜂蜜罐",
+            "蜂蜜大蒜鮭魚",
+            "皇家蜂蜜大蒜鮭魚"
+        ]
+    },
+    "BigWood": {
+        "super": "椰子萬能青汁",
+        "special": [
+            "椰子松針粥",
+            "一碗米飯",
+            "一碗糯米飯"
+        ]
+    },
+    "Blanchet": {
+        "super": "有機檸檬茶",
+        "special": [
+            "檸檬茶",
+            "寶石塔",
+            "寶石蛋塔"
+        ]
+    },
+    "Butter": {
+        "super": "追劇焦糖爆米花",
+        "special": [
+            "焦糖爆米花",
+            "獸糧罐頭",
+            "高級獸糧罐頭"
+        ]
+    },
+    "Canna": {
+        "super": "一碗糯米飯",
+        "special": [
+            "一碗米飯",
+            "烤漫畫肉",
+            "烤海賊漫畫肉"
+        ]
+    },
+    "Carren": {
+        "super": "UFC炸蔬菜",
+        "special": [
+            "UFC炸胡蘿蔔",
+            "草莓蛋糕",
+            "草莓切片蛋糕"
+        ]
+    },
+    "Chloe": {
+        "super": "愛心扭結麵包",
+        "special": [
+            "扭結麵包",
+            "檸檬茶",
+            "有機檸檬茶"
+        ]
+    },
+    "Chopi": {
+        "super": "烤海賊漫畫肉",
+        "special": [
+            "烤漫畫肉",
+            "獸糧罐頭",
+            "高級獸糧罐頭"
+        ]
+    },
     "Cuee": "無",
-	"Daya": { super: "寶石蛋塔", special: ["寶石塔", "檸檬茶", "有機檸檬茶"] },
-    "Diana": { super: "烤海賊漫畫肉", special: ["烤漫畫肉", "扭結麵包", "愛心扭結麵包"] },
-    "Ed": { super: "一級祕密葡萄汁", special: ["祕密葡萄汁", "UFC炸胡蘿蔔", "UFC炸蔬菜"] },
-    "Elena": { super: "滾燙的冰美式咖啡", special: ["溫熱的冰美式咖啡", "太空食品", "ANSA太空食品"] },
-    "Epica": { super: "追劇焦糖爆米花", special: ["焦糖爆米花", "烤漫畫肉", "烤海賊漫畫肉"] },
-    "Erpin": { super: "草莓切片蛋糕", special: ["草莓蛋糕", "巧克力冰淇淋", "深黑巧克力冰淇淋"] },
-    "Espi": { super: "深黑巧克力冰淇淋", special: ["巧克力冰淇淋", "UFC炸胡蘿蔔", "UFC炸蔬菜"] },
-    "Festa": { super: "氫氣炸豬排", special: ["空氣炸豬排", "祕密葡萄汁", "一級祕密葡萄汁"] },
-    "Fricle": { super: "927穀麵茶", special: ["麵茶", "扭結麵包", "愛心扭結麵包"] },
-    "Gabia": { super: "肉桂口味健康糖球", special: ["肉桂口味糖球", "檸檬茶", "有機檸檬茶"] },
-    "Guin": { super: "皇家蜂蜜大蒜鮭魚", special: ["蜂蜜大蒜鮭魚", "薄荷巧克力冰淇淋", "三重薄荷冰淇淋"] },
-	"Haley": { super: "一碗糯米飯", special: ["一碗米飯", "檸檬茶", "有機檸檬茶"] },
-    "Hilde": { super: "皇家蜂蜜大蒜鮭魚", special: ["蜂蜜大蒜鮭魚", "太空食品", "ANSA太空食品"] },
-    "Ifrit": { super: "軟軟焦糖布丁", special: ["焦糖布丁", "龍族糖果", "龍族氣死你糖果"] },
-    "Jade": { super: "薄荷巧克力冰淇淋", special: ["巧克力冰淇淋", "龍族糖果", "龍族氣死你糖果"] },
-	"Joanne": { super: "927穀麵茶", special: ["麵茶", "薄荷巧克力冰淇淋", "巧克力冰淇淋"] },
-    "Jubee": { super: "甜甜蜂蜜罐", special: ["蜂蜜罐", "棉花糖馬卡龍", "低糖棉花糖馬卡龍"] },
-    "Kidian": { super: "愛心扭結麵包", special: ["扭結麵包", "獸糧罐頭", "高級獸糧罐頭"] },
-    "Kommy": { super: "高級獸糧罐頭", special: ["獸糧罐頭", "焦糖爆米花", "追劇焦糖爆米花"] },
-    "KommySwim": { super: "高級獸糧罐頭", special: ["獸糧罐頭", "焦糖爆米花", "追劇焦糖爆米花"] },
-	"Kyarot": { super: "兩口草生菜包", special: ["一口草生菜包", "蜂蜜罐", "甜甜蜂蜜罐"] },
-    "Lazy": { super: "高級獸糧罐頭", special: ["獸糧罐頭", "溫熱的冰美式咖啡", "滾燙的冰美式咖啡"] },
-    "Leets": { super: "龍族氣死你糖果", special: ["龍族糖果", "空氣炸豬排", "氫氣炸豬排"] },
-	"Lethe": { super: "龍族氣死你糖果", special: ["龍族糖果", "空氣炸豬排", "氫氣炸豬排"] },
-    "Levi": { super: "追劇焦糖爆米花", special: ["焦糖爆米花", "UFC炸胡蘿蔔", "UFC炸蔬菜"] },
-    "MaestroMK2": { super: "石榴甜茶", special: ["石榴果實", "祕密葡萄汁", "一級祕密葡萄汁"] },
-    "Mago": { super: "ANSA太空食品", special: ["太空食品", "獸糧罐頭", "高級獸糧罐頭"] },
+    "Daya": {
+        "super": "寶石蛋塔",
+        "special": [
+            "寶石塔",
+            "檸檬茶",
+            "有機檸檬茶"
+        ]
+    },
+    "Diana": {
+        "super": "烤海賊漫畫肉",
+        "special": [
+            "烤漫畫肉",
+            "扭結麵包",
+            "愛心扭結麵包"
+        ]
+    },
+    "Ed": {
+        "super": "一級祕密葡萄汁",
+        "special": [
+            "祕密葡萄汁",
+            "UFC炸胡蘿蔔",
+            "UFC炸蔬菜"
+        ]
+    },
+    "Elena": {
+        "super": "滾燙的冰美式咖啡",
+        "special": [
+            "溫熱的冰美式咖啡",
+            "太空食品",
+            "ANSA太空食品"
+        ]
+    },
+    "Epica": {
+        "super": "追劇焦糖爆米花",
+        "special": [
+            "焦糖爆米花",
+            "烤漫畫肉",
+            "烤海賊漫畫肉"
+        ]
+    },
+    "Erpin": {
+        "super": "草莓切片蛋糕",
+        "special": [
+            "草莓蛋糕",
+            "巧克力冰淇淋",
+            "深黑巧克力冰淇淋"
+        ]
+    },
+    "Espi": {
+        "super": "深黑巧克力冰淇淋",
+        "special": [
+            "巧克力冰淇淋",
+            "UFC炸胡蘿蔔",
+            "UFC炸蔬菜"
+        ]
+    },
+    "Festa": {
+        "super": "氫氣炸豬排",
+        "special": [
+            "空氣炸豬排",
+            "祕密葡萄汁",
+            "一級祕密葡萄汁"
+        ]
+    },
+    "Fricle": {
+        "super": "927穀麵茶",
+        "special": [
+            "麵茶",
+            "扭結麵包",
+            "愛心扭結麵包"
+        ]
+    },
+    "Gabia": {
+        "super": "肉桂口味健康糖球",
+        "special": [
+            "肉桂口味糖球",
+            "檸檬茶",
+            "有機檸檬茶"
+        ]
+    },
+    "Guin": {
+        "super": "皇家蜂蜜大蒜鮭魚",
+        "special": [
+            "蜂蜜大蒜鮭魚",
+            "薄荷巧克力冰淇淋",
+            "三重薄荷冰淇淋"
+        ]
+    },
+    "Haley": {
+        "super": "一碗糯米飯",
+        "special": [
+            "一碗米飯",
+            "檸檬茶",
+            "有機檸檬茶"
+        ]
+    },
+    "Hilde": {
+        "super": "皇家蜂蜜大蒜鮭魚",
+        "special": [
+            "蜂蜜大蒜鮭魚",
+            "太空食品",
+            "ANSA太空食品"
+        ]
+    },
+    "Ifrit": {
+        "super": "軟軟焦糖布丁",
+        "special": [
+            "焦糖布丁",
+            "龍族糖果",
+            "龍族氣死你糖果"
+        ]
+    },
+    "Jade": {
+        "super": "薄荷巧克力冰淇淋",
+        "special": [
+            "巧克力冰淇淋",
+            "龍族糖果",
+            "龍族氣死你糖果"
+        ]
+    },
+    "Joanne": {
+        "super": "927穀麵茶",
+        "special": [
+            "麵茶",
+            "薄荷巧克力冰淇淋",
+            "巧克力冰淇淋"
+        ]
+    },
+    "Jubee": {
+        "super": "甜甜蜂蜜罐",
+        "special": [
+            "蜂蜜罐",
+            "棉花糖馬卡龍",
+            "低糖棉花糖馬卡龍"
+        ]
+    },
+    "Kidian": {
+        "super": "愛心扭結麵包",
+        "special": [
+            "扭結麵包",
+            "獸糧罐頭",
+            "高級獸糧罐頭"
+        ]
+    },
+    "Kommy": {
+        "super": "高級獸糧罐頭",
+        "special": [
+            "獸糧罐頭",
+            "焦糖爆米花",
+            "追劇焦糖爆米花"
+        ]
+    },
+    "KommySwim": {
+        "super": "高級獸糧罐頭",
+        "special": [
+            "獸糧罐頭",
+            "焦糖爆米花",
+            "追劇焦糖爆米花"
+        ]
+    },
+    "Kyarot": {
+        "super": "兩口草生菜包",
+        "special": [
+            "一口草生菜包",
+            "蜂蜜罐",
+            "甜甜蜂蜜罐"
+        ]
+    },
+    "Lazy": {
+        "super": "高級獸糧罐頭",
+        "special": [
+            "獸糧罐頭",
+            "溫熱的冰美式咖啡",
+            "滾燙的冰美式咖啡"
+        ]
+    },
+    "Leets": {
+        "super": "龍族氣死你糖果",
+        "special": [
+            "龍族糖果",
+            "空氣炸豬排",
+            "氫氣炸豬排"
+        ]
+    },
+    "Lethe": {
+        "super": "龍族氣死你糖果",
+        "special": [
+            "龍族糖果",
+            "空氣炸豬排",
+            "氫氣炸豬排"
+        ]
+    },
+    "Levi": {
+        "super": "追劇焦糖爆米花",
+        "special": [
+            "焦糖爆米花",
+            "UFC炸胡蘿蔔",
+            "UFC炸蔬菜"
+        ]
+    },
+    "MaestroMK2": {
+        "super": "石榴甜茶",
+        "special": [
+            "石榴果實",
+            "祕密葡萄汁",
+            "一級祕密葡萄汁"
+        ]
+    },
+    "Mago": {
+        "super": "ANSA太空食品",
+        "special": [
+            "太空食品",
+            "獸糧罐頭",
+            "高級獸糧罐頭"
+        ]
+    },
     "Maison": "無",
-    "Marie": { super: "UFC炸蔬菜", special: ["UFC炸胡蘿蔔", "焦糖布丁", "軟軟焦糖布丁"] },
-    "Mayo": { super: "一級祕密葡萄汁", special: ["祕密葡萄汁", "一碗米飯", "一碗糯米飯"] },
-    "Meluna": { super: "麝香甜瓜博孔奇尼起司", special: ["哈密瓜博孔奇尼起司", "一口草生菜包", "兩口草生菜包"] },
-    "Momo": { super: "甜甜蜂蜜罐", special: ["蜂蜜罐", "空氣炸豬排", "氫氣炸豬排"] },
+    "Marie": {
+        "super": "UFC炸蔬菜",
+        "special": [
+            "UFC炸胡蘿蔔",
+            "焦糖布丁",
+            "軟軟焦糖布丁"
+        ]
+    },
+    "Mayo": {
+        "super": "一級祕密葡萄汁",
+        "special": [
+            "祕密葡萄汁",
+            "一碗米飯",
+            "一碗糯米飯"
+        ]
+    },
+    "Meluna": {
+        "super": "麝香甜瓜博孔奇尼起司",
+        "special": [
+            "哈密瓜博孔奇尼起司",
+            "一口草生菜包",
+            "兩口草生菜包"
+        ]
+    },
+    "Momo": {
+        "super": "甜甜蜂蜜罐",
+        "special": [
+            "蜂蜜罐",
+            "空氣炸豬排",
+            "氫氣炸豬排"
+        ]
+    },
     "Mynx": "無",
-    "Naia": { super: "夏威夷海藻蓋飯", special: ["海藻沙拉", "金糖葫蘆", "白金糖葫蘆"] },
-    "Ner": { super: "低糖棉花糖馬卡龍", special: ["棉花糖馬卡龍", "哈密瓜博孔奇尼起司", "麝香甜瓜博孔奇尼起司"] },
+    "Naia": {
+        "super": "夏威夷海藻蓋飯",
+        "special": [
+            "海藻沙拉",
+            "金糖葫蘆",
+            "白金糖葫蘆"
+        ]
+    },
+    "Ner": {
+        "super": "低糖棉花糖馬卡龍",
+        "special": [
+            "棉花糖馬卡龍",
+            "哈密瓜博孔奇尼起司",
+            "麝香甜瓜博孔奇尼起司"
+        ]
+    },
     "Patula": "無",
-    "Picora": { super: "白金糖葫蘆", special: ["金糖葫蘆", "溫熱的冰美式咖啡", "滾燙的冰美式咖啡"] },
-	"Pira": { super: "一級祕密葡萄汁", special: ["祕密葡萄汁", "龍族糖果", "龍族氣死你糖果"] },
-	"Polan": { super: "草莓切片蛋糕", special: ["草莓蛋糕"] },
-    "Posher": { super: "椰子萬能青汁", special: ["椰子松針粥", "太空食品", "ANSA太空食品"] },
-    "RenewaAwaken": { super: "有機檸檬茶", special: ["檸檬茶", "太空食品", "ANSA太空食品"] },
-    "Rim": { super: "燉南瓜", special: ["南瓜濃湯", "祕密葡萄汁", "一級祕密葡萄汁"] },
-    "Risty": { super: "石榴甜茶", special: ["石榴果實", "溫熱的冰美式咖啡", "滾燙的冰美式咖啡"] },
-    "Rohne": { super: "白金糖葫蘆", special: ["金糖葫蘆", "巧克力冰淇淋", "深黑巧克力冰淇淋"] },
-	"Rollett": {super: "軟軟焦糖布丁", special: ["焦糖布丁", "哈密瓜博孔奇尼起司", "麝香甜瓜博孔奇尼起司"] },
-    "Rude": { super: "927穀麵茶", special: ["麵茶", "太空食品", "ANSA太空食品"] },
-    "Rufo": { super: "皇家蜂蜜大蒜鮭魚", special: ["蜂蜜大蒜鮭魚", "哈密瓜博孔奇尼起司", "麝香甜瓜博孔奇尼起司"] },
-    "Sari": { super: "皇家蜂蜜大蒜鮭魚", special: ["蜂蜜大蒜鮭魚", "焦糖布丁", "軟軟焦糖布丁"] },
-    "Selline": { super: "惡靈布丁", special: ["幽靈布丁", , "一級祕密葡萄汁"] },
-    "Shady": { super: "惡靈布丁", special: ["幽靈布丁", "石榴果實", "石榴甜茶"] },
-	"Sherum": {special: ["棉花糖馬卡龍", "低糖棉花糖馬卡龍", "溫熱的冰美式咖啡", "滾燙的冰美式咖啡"] },
-    "Shoupan": { super: "ANSA太空食品", special: ["太空食品", "巧克力冰淇淋", "深黑巧克力冰淇淋"] },
-    "Silphir": { super: "白金糖葫蘆", special: ["金糖葫蘆", "幽靈布丁", "惡靈布丁"] },
-    "Sist": { super: "麝香甜瓜博孔奇尼起司", special: ["哈密瓜博孔奇尼起司", "溫熱的冰美式咖啡", "滾燙的冰美式咖啡"] },
-    "Snorky": { super: "一碗糯米飯", special: ["一碗米飯", "麵茶", "927穀麵茶"] },
-    "Speaki": { super: "肉桂口味健康糖球", special: ["肉桂口味糖球", "石榴果實", "石榴甜茶"] },
-    "Sylla": { super: "氫氣炸豬排", special: ["空氣炸豬排", "蜂蜜罐", "甜甜蜂蜜罐"] },
-    "Taida": { super: "滾燙的冰美式咖啡", special: ["溫熱的冰美式咖啡", "金糖葫蘆", "白金糖葫蘆"] },
-    "Tig": {super: "烤海賊漫畫肉", special: ["烤漫畫肉", "祕密葡萄汁", "一級祕密葡萄汁"]},
-	"Ui": { super: "夏威夷海藻蓋飯", special: ["海藻沙拉", "烤漫畫肉", "烤海賊漫畫肉"] },
-    "Velvet": { super: "兩口草生菜包", special: ["一口草生菜包", "椰子松針粥", "椰子萬能青汁"] },
+    "Picora": {
+        "super": "白金糖葫蘆",
+        "special": [
+            "金糖葫蘆",
+            "溫熱的冰美式咖啡",
+            "滾燙的冰美式咖啡"
+        ]
+    },
+    "Pira": {
+        "super": "一級祕密葡萄汁",
+        "special": [
+            "祕密葡萄汁",
+            "龍族糖果",
+            "龍族氣死你糖果"
+        ]
+    },
+    "Polan": {
+        "super": "草莓切片蛋糕",
+        "special": [
+            "草莓蛋糕"
+        ]
+    },
+    "Posher": {
+        "super": "椰子萬能青汁",
+        "special": [
+            "椰子松針粥",
+            "太空食品",
+            "ANSA太空食品"
+        ]
+    },
+    "RenewaAwaken": {
+        "super": "有機檸檬茶",
+        "special": [
+            "檸檬茶",
+            "太空食品",
+            "ANSA太空食品"
+        ]
+    },
+    "Rim": {
+        "super": "燉南瓜",
+        "special": [
+            "南瓜濃湯",
+            "祕密葡萄汁",
+            "一級祕密葡萄汁"
+        ]
+    },
+    "Risty": {
+        "super": "石榴甜茶",
+        "special": [
+            "石榴果實",
+            "溫熱的冰美式咖啡",
+            "滾燙的冰美式咖啡"
+        ]
+    },
+    "Rohne": {
+        "super": "白金糖葫蘆",
+        "special": [
+            "金糖葫蘆",
+            "巧克力冰淇淋",
+            "深黑巧克力冰淇淋"
+        ]
+    },
+    "Rollett": {
+        "super": "軟軟焦糖布丁",
+        "special": [
+            "焦糖布丁",
+            "哈密瓜博孔奇尼起司",
+            "麝香甜瓜博孔奇尼起司"
+        ]
+    },
+    "Rude": {
+        "super": "927穀麵茶",
+        "special": [
+            "麵茶",
+            "太空食品",
+            "ANSA太空食品"
+        ]
+    },
+    "Rufo": {
+        "super": "皇家蜂蜜大蒜鮭魚",
+        "special": [
+            "蜂蜜大蒜鮭魚",
+            "哈密瓜博孔奇尼起司",
+            "麝香甜瓜博孔奇尼起司"
+        ]
+    },
+    "Sari": {
+        "super": "皇家蜂蜜大蒜鮭魚",
+        "special": [
+            "蜂蜜大蒜鮭魚",
+            "焦糖布丁",
+            "軟軟焦糖布丁"
+        ]
+    },
+    "Selline": {
+        "super": "惡靈布丁",
+        "special": [
+            "幽靈布丁",
+            null,
+            "一級祕密葡萄汁"
+        ]
+    },
+    "Shady": {
+        "super": "惡靈布丁",
+        "special": [
+            "幽靈布丁",
+            "石榴果實",
+            "石榴甜茶"
+        ]
+    },
+    "Sherum": {
+        "special": [
+            "棉花糖馬卡龍",
+            "低糖棉花糖馬卡龍",
+            "溫熱的冰美式咖啡",
+            "滾燙的冰美式咖啡"
+        ]
+    },
+    "Shoupan": {
+        "super": "ANSA太空食品",
+        "special": [
+            "太空食品",
+            "巧克力冰淇淋",
+            "深黑巧克力冰淇淋"
+        ]
+    },
+    "Silphir": {
+        "super": "白金糖葫蘆",
+        "special": [
+            "金糖葫蘆",
+            "幽靈布丁",
+            "惡靈布丁"
+        ]
+    },
+    "Sist": {
+        "super": "麝香甜瓜博孔奇尼起司",
+        "special": [
+            "哈密瓜博孔奇尼起司",
+            "溫熱的冰美式咖啡",
+            "滾燙的冰美式咖啡"
+        ]
+    },
+    "Snorky": {
+        "super": "一碗糯米飯",
+        "special": [
+            "一碗米飯",
+            "麵茶",
+            "927穀麵茶"
+        ]
+    },
+    "Speaki": {
+        "super": "肉桂口味健康糖球",
+        "special": [
+            "肉桂口味糖球",
+            "石榴果實",
+            "石榴甜茶"
+        ]
+    },
+    "Sylla": {
+        "super": "氫氣炸豬排",
+        "special": [
+            "空氣炸豬排",
+            "蜂蜜罐",
+            "甜甜蜂蜜罐"
+        ]
+    },
+    "Taida": {
+        "super": "滾燙的冰美式咖啡",
+        "special": [
+            "溫熱的冰美式咖啡",
+            "金糖葫蘆",
+            "白金糖葫蘆"
+        ]
+    },
+    "Tig": {
+        "super": "烤海賊漫畫肉",
+        "special": [
+            "烤漫畫肉",
+            "祕密葡萄汁",
+            "一級祕密葡萄汁"
+        ]
+    },
+    "Ui": {
+        "super": "夏威夷海藻蓋飯",
+        "special": [
+            "海藻沙拉",
+            "烤漫畫肉",
+            "烤海賊漫畫肉"
+        ]
+    },
+    "Velvet": {
+        "super": "兩口草生菜包",
+        "special": [
+            "一口草生菜包",
+            "椰子松針粥",
+            "椰子萬能青汁"
+        ]
+    },
     "Veroo": "無",
-    "Vivi": { super: "滾燙的冰美式咖啡", special: ["溫熱的冰美式咖啡", "肉桂口味糖球", "肉桂口味健康糖球"] },
-    "xXionx": { super: "深黑巧克力冰淇淋", special: ["巧克力冰淇淋", "祕密葡萄汁", "一級祕密葡萄汁"] },
-    "Yomi": { super: "燉南瓜", special: ["南瓜濃湯", "一口草生菜包", "兩口草生菜包"] },
-    "Yumimi": { super: "兩口草生菜包", special: ["一口草生菜包", "太空食品", "ANSA太空食品"] }
+    "Vivi": {
+        "super": "滾燙的冰美式咖啡",
+        "special": [
+            "溫熱的冰美式咖啡",
+            "肉桂口味糖球",
+            "肉桂口味健康糖球"
+        ]
+    },
+    "xXionx": {
+        "super": "深黑巧克力冰淇淋",
+        "special": [
+            "巧克力冰淇淋",
+            "祕密葡萄汁",
+            "一級祕密葡萄汁"
+        ]
+    },
+    "Yomi": {
+        "super": "燉南瓜",
+        "special": [
+            "南瓜濃湯",
+            "一口草生菜包",
+            "兩口草生菜包"
+        ]
+    },
+    "Yumimi": {
+        "super": "兩口草生菜包",
+        "special": [
+            "一口草生菜包",
+            "太空食品",
+            "ANSA太空食品"
+        ]
+    }
 };
-// ------------------------------------------
-// 冒險協會
-// ------------------------------------------
+
 const REWARD_MAP = {
-    "Alice": ["細膩的鐵粉", "尖銳的針", "閃亮的玻璃"],
-    "Allet": ["軟棉棉的樹木", "堅硬的石頭", "牛肉"],
-    "Amelia": ["眨眼墨水", "可彎曲金屬", "濕潤的紙漿"],
-    "Ashur": ["魚", "巧克力", "槭樹樹液"],
-    "Aya": ["水果", "魚", "樹葉"],
-	"Barie": ["家禽肉", "寶石碎片", "尖銳的針"],
-	"Barong": ["樹葉", "堅硬的黑色果實", "寶石碎片"],
-    "Belita": ["起司", "寶石碎片", "麵粉"],
-    "Beni": ["閃亮的玻璃", "寶石碎片", "魚"],
-    "BigWood": ["眨眼墨水", "米", "濕潤的紙漿"],
-    "Blanchet": ["濕潤的紙漿", "雞蛋", "回收塑膠"],
-    "Butter": ["堅硬的石頭", "麵粉", "細膩的鐵粉"],
-    "Canna": ["雞蛋", "起司", "睡眠眼罩"],
-    "Carren": ["各式穀物", "堅硬的石頭", "雞蛋"],
-    "Chloe": ["麵粉", "柔軟的棉花", "巧克力"],
-    "Chopi": ["巧克力", "軟棉棉的樹木", "巧克力米"],
+    "Alice": [
+        "細膩的鐵粉",
+        "尖銳的針",
+        "閃亮的玻璃"
+    ],
+    "Allet": [
+        "軟棉棉的樹木",
+        "堅硬的石頭",
+        "牛肉"
+    ],
+    "Amelia": [
+        "眨眼墨水",
+        "可彎曲金屬",
+        "濕潤的紙漿"
+    ],
+    "Ashur": [
+        "魚",
+        "巧克力",
+        "槭樹樹液"
+    ],
+    "Aya": [
+        "水果",
+        "魚",
+        "樹葉"
+    ],
+    "Barie": [
+        "家禽肉",
+        "寶石碎片",
+        "尖銳的針"
+    ],
+    "Barong": [
+        "樹葉",
+        "堅硬的黑色果實",
+        "寶石碎片"
+    ],
+    "Belita": [
+        "起司",
+        "寶石碎片",
+        "麵粉"
+    ],
+    "Beni": [
+        "閃亮的玻璃",
+        "寶石碎片",
+        "魚"
+    ],
+    "BigWood": [
+        "眨眼墨水",
+        "米",
+        "濕潤的紙漿"
+    ],
+    "Blanchet": [
+        "濕潤的紙漿",
+        "雞蛋",
+        "回收塑膠"
+    ],
+    "Butter": [
+        "堅硬的石頭",
+        "麵粉",
+        "細膩的鐵粉"
+    ],
+    "Canna": [
+        "雞蛋",
+        "起司",
+        "睡眠眼罩"
+    ],
+    "Carren": [
+        "各式穀物",
+        "堅硬的石頭",
+        "雞蛋"
+    ],
+    "Chloe": [
+        "麵粉",
+        "柔軟的棉花",
+        "巧克力"
+    ],
+    "Chopi": [
+        "巧克力",
+        "軟棉棉的樹木",
+        "巧克力米"
+    ],
     "Cuee": [],
-	"Daya": ["回收塑膠", "家禽肉", "彩虹花汁"],
-    "Diana": ["家禽肉", "起司", "尖銳的針"],
-    "Ed": ["槭樹樹液", "濕潤的紙漿", "蜂蜜"],
-    "Elena": ["尖銳的針", "家禽肉", "皮革樹葉"],
-    "Epica": ["牛奶", "巧克力米", "眨眼墨水"],
-    "Erpin": ["堅硬的碎布", "樹葉", "糖"],
-    "Espi": ["皮革樹葉", "軟棉棉的樹木", "可彎曲金屬"],
-    "Festa": ["巧克力", "堅硬的石頭", "巧克力米"],
-    "Fricle": ["柔軟的棉花", "牛肉", "堅硬的碎布"],
-    "Gabia": ["米", "牛肉", "百老師萬能醬料"],
-    "Guin": ["巧克力", "睡眠眼罩", "巧克力米"],
-	"Haley": ["細膩的鐵粉", "軟棉棉的樹木", "閃亮的玻璃"],
-    "Hilde": ["可彎曲金屬", "魚", "軟棉棉的樹木"],
-    "Ifrit": ["銅湯匙", "蔬菜", "堅硬的黑色果實"],
-    "Jade": ["堅硬的黑色果實", "各式穀物", "水果"],
-	"Joanne": ["回收塑膠", "堅硬的黑色果實", "彩虹花汁"],
-    "Jubee": ["軟棉棉的樹木", "濕潤的紙漿", "牛肉"],
-    "Kidian": ["可彎曲金屬", "彩虹花汁", "軟棉棉的樹木"],
-    "Kommy": ["酥脆的金箔", "堅硬的黑色果實", "起司"],
-	"KommySwim": ["回收塑膠", "槭樹樹液", "彩虹花汁"],
-    "Kyarot": ["寶石碎片", "黏膩的黏土", "酥脆的金箔"],
-    "Lazy": ["堅硬的石頭", "雞蛋", "細膩的鐵粉"],
-    "Leets": ["酥脆的金箔", "細膩的鐵粉", "起司"],
-	"Lethe": ["尖銳的針", "濕潤的紙漿", "皮革樹葉"],
-    "Levi": ["堅硬的碎布", "水果", "糖"],
-    "MaestroMK2": ["牛肉", "尖銳的針", "銅湯匙"],
-    "Mago": ["堅硬的石頭", "百老師萬能醬料", "細膩的鐵粉"],
+    "Daya": [
+        "回收塑膠",
+        "家禽肉",
+        "彩虹花汁"
+    ],
+    "Diana": [
+        "家禽肉",
+        "起司",
+        "尖銳的針"
+    ],
+    "Ed": [
+        "槭樹樹液",
+        "濕潤的紙漿",
+        "蜂蜜"
+    ],
+    "Elena": [
+        "尖銳的針",
+        "家禽肉",
+        "皮革樹葉"
+    ],
+    "Epica": [
+        "牛奶",
+        "巧克力米",
+        "眨眼墨水"
+    ],
+    "Erpin": [
+        "堅硬的碎布",
+        "樹葉",
+        "糖"
+    ],
+    "Espi": [
+        "皮革樹葉",
+        "軟棉棉的樹木",
+        "可彎曲金屬"
+    ],
+    "Festa": [
+        "巧克力",
+        "堅硬的石頭",
+        "巧克力米"
+    ],
+    "Fricle": [
+        "柔軟的棉花",
+        "牛肉",
+        "堅硬的碎布"
+    ],
+    "Gabia": [
+        "米",
+        "牛肉",
+        "百老師萬能醬料"
+    ],
+    "Guin": [
+        "巧克力",
+        "睡眠眼罩",
+        "巧克力米"
+    ],
+    "Haley": [
+        "細膩的鐵粉",
+        "軟棉棉的樹木",
+        "閃亮的玻璃"
+    ],
+    "Hilde": [
+        "可彎曲金屬",
+        "魚",
+        "軟棉棉的樹木"
+    ],
+    "Ifrit": [
+        "銅湯匙",
+        "蔬菜",
+        "堅硬的黑色果實"
+    ],
+    "Jade": [
+        "堅硬的黑色果實",
+        "各式穀物",
+        "水果"
+    ],
+    "Joanne": [
+        "回收塑膠",
+        "堅硬的黑色果實",
+        "彩虹花汁"
+    ],
+    "Jubee": [
+        "軟棉棉的樹木",
+        "濕潤的紙漿",
+        "牛肉"
+    ],
+    "Kidian": [
+        "可彎曲金屬",
+        "彩虹花汁",
+        "軟棉棉的樹木"
+    ],
+    "Kommy": [
+        "酥脆的金箔",
+        "堅硬的黑色果實",
+        "起司"
+    ],
+    "KommySwim": [
+        "回收塑膠",
+        "槭樹樹液",
+        "彩虹花汁"
+    ],
+    "Kyarot": [
+        "寶石碎片",
+        "黏膩的黏土",
+        "酥脆的金箔"
+    ],
+    "Lazy": [
+        "堅硬的石頭",
+        "雞蛋",
+        "細膩的鐵粉"
+    ],
+    "Leets": [
+        "酥脆的金箔",
+        "細膩的鐵粉",
+        "起司"
+    ],
+    "Lethe": [
+        "尖銳的針",
+        "濕潤的紙漿",
+        "皮革樹葉"
+    ],
+    "Levi": [
+        "堅硬的碎布",
+        "水果",
+        "糖"
+    ],
+    "MaestroMK2": [
+        "牛肉",
+        "尖銳的針",
+        "銅湯匙"
+    ],
+    "Mago": [
+        "堅硬的石頭",
+        "百老師萬能醬料",
+        "細膩的鐵粉"
+    ],
     "Maison": [],
-    "Marie": ["軟棉棉的樹木", "百老師萬能醬料", "牛肉"],
-    "Mayo": ["軟棉棉的樹木", "蔬菜", "牛肉"],
-    "Meluna": ["堅硬的石頭", "魚", "細膩的鐵粉"],
-    "Momo": ["堅硬的石頭", "睡眠眼罩", "細膩的鐵粉"],
+    "Marie": [
+        "軟棉棉的樹木",
+        "百老師萬能醬料",
+        "牛肉"
+    ],
+    "Mayo": [
+        "軟棉棉的樹木",
+        "蔬菜",
+        "牛肉"
+    ],
+    "Meluna": [
+        "堅硬的石頭",
+        "魚",
+        "細膩的鐵粉"
+    ],
+    "Momo": [
+        "堅硬的石頭",
+        "睡眠眼罩",
+        "細膩的鐵粉"
+    ],
     "Mynx": [],
-    "Naia": ["酥脆的金箔", "眨眼墨水", "蜂蜜"],
-    "Ner": ["細膩的鐵粉", "可彎曲金屬", "閃亮的玻璃"],
+    "Naia": [
+        "酥脆的金箔",
+        "眨眼墨水",
+        "蜂蜜"
+    ],
+    "Ner": [
+        "細膩的鐵粉",
+        "可彎曲金屬",
+        "閃亮的玻璃"
+    ],
     "Patula": [],
-    "Picora": ["皮革樹葉", "巧克力", "可彎曲金屬"],
-	"Pira": ["糖", "回收塑膠", "堅硬的石頭"],
-	"Polan": ["百老師萬能醬料", "各式穀物", "牛奶"],
-    "Posher": ["黏膩的黏土", "閃亮的玻璃", "柔軟的棉花"],
-    "RenewaAwaken": ["各式穀物", "閃亮的玻璃", "雞蛋"],
-    "Rim": ["黏膩的黏土", "軟棉棉的樹木", "柔軟的棉花"],
-    "Risty": ["銅湯匙", "柔軟的棉花", "堅硬的黑色果實"],
-    "Rohne": ["黏膩的黏土", "巧克力米", "柔軟的棉花"],
-	"Rollett": ["閃亮的玻璃", "堅硬的碎布", "魚"],
-    "Rude": ["巧克力米", "彩虹花汁", "米"],
-    "Rufo": ["細膩的鐵粉", "蜂蜜", "閃亮的玻璃"],
-    "Sari": ["彩虹花汁", "回收塑膠", "黏膩的黏土"],
-    "Selline": ["糖", "皮革樹葉", "堅硬的石頭"],
-    "Shady": ["黏膩的黏土", "槭樹樹液", "柔軟的棉花"],
-	"Sherum": ["銅湯匙", "牛肉", "軟棉棉的樹木",],
-    "Shoupan": ["濕潤的紙漿", "各式穀物", "回收塑膠", "睡眠眼罩", "堅硬的黑色果實"],
-    "Silphir": ["百老師萬能醬料", "牛奶"],
-    "Sist": ["睡眠眼罩", "水果", "家禽肉"],
-    "Snorky": ["回收塑膠", "百老師萬能醬料", "彩虹花汁"],
-    "Speaki": ["回收塑膠", "牛奶", "彩虹花汁"],
-    "Sylla": ["軟棉棉的樹木", "蜂蜜", "牛肉"],
-    "Taida": ["蜂蜜", "糖", "軟棉棉的樹木", "睡眠眼罩", "蔬菜"],
-    "Tig": ["彩虹花汁", "各式穀物", "黏膩的黏土"],
-	"Ui": ["蔬菜", "麵粉", "各式穀物"],
-    "Velvet": ["堅硬的石頭", "眨眼墨水", "細膩的鐵粉"],
+    "Picora": [
+        "皮革樹葉",
+        "巧克力",
+        "可彎曲金屬"
+    ],
+    "Pira": [
+        "糖",
+        "回收塑膠",
+        "堅硬的石頭"
+    ],
+    "Polan": [
+        "百老師萬能醬料",
+        "各式穀物",
+        "牛奶"
+    ],
+    "Posher": [
+        "黏膩的黏土",
+        "閃亮的玻璃",
+        "柔軟的棉花"
+    ],
+    "RenewaAwaken": [
+        "各式穀物",
+        "閃亮的玻璃",
+        "雞蛋"
+    ],
+    "Rim": [
+        "黏膩的黏土",
+        "軟棉棉的樹木",
+        "柔軟的棉花"
+    ],
+    "Risty": [
+        "銅湯匙",
+        "柔軟的棉花",
+        "堅硬的黑色果實"
+    ],
+    "Rohne": [
+        "黏膩的黏土",
+        "巧克力米",
+        "柔軟的棉花"
+    ],
+    "Rollett": [
+        "閃亮的玻璃",
+        "堅硬的碎布",
+        "魚"
+    ],
+    "Rude": [
+        "巧克力米",
+        "彩虹花汁",
+        "米"
+    ],
+    "Rufo": [
+        "細膩的鐵粉",
+        "蜂蜜",
+        "閃亮的玻璃"
+    ],
+    "Sari": [
+        "彩虹花汁",
+        "回收塑膠",
+        "黏膩的黏土"
+    ],
+    "Selline": [
+        "糖",
+        "皮革樹葉",
+        "堅硬的石頭"
+    ],
+    "Shady": [
+        "黏膩的黏土",
+        "槭樹樹液",
+        "柔軟的棉花"
+    ],
+    "Sherum": [
+        "銅湯匙",
+        "牛肉",
+        "軟棉棉的樹木"
+    ],
+    "Shoupan": [
+        "濕潤的紙漿",
+        "各式穀物",
+        "回收塑膠",
+        "睡眠眼罩",
+        "堅硬的黑色果實"
+    ],
+    "Silphir": [
+        "百老師萬能醬料",
+        "牛奶"
+    ],
+    "Sist": [
+        "睡眠眼罩",
+        "水果",
+        "家禽肉"
+    ],
+    "Snorky": [
+        "回收塑膠",
+        "百老師萬能醬料",
+        "彩虹花汁"
+    ],
+    "Speaki": [
+        "回收塑膠",
+        "牛奶",
+        "彩虹花汁"
+    ],
+    "Sylla": [
+        "軟棉棉的樹木",
+        "蜂蜜",
+        "牛肉"
+    ],
+    "Taida": [
+        "蜂蜜",
+        "糖",
+        "軟棉棉的樹木",
+        "睡眠眼罩",
+        "蔬菜"
+    ],
+    "Tig": [
+        "彩虹花汁",
+        "各式穀物",
+        "黏膩的黏土"
+    ],
+    "Ui": [
+        "蔬菜",
+        "麵粉",
+        "各式穀物"
+    ],
+    "Velvet": [
+        "堅硬的石頭",
+        "眨眼墨水",
+        "細膩的鐵粉"
+    ],
     "Veroo": [],
-    "Vivi": ["濕潤的紙漿", "蔬菜", "回收塑膠"],
-    "xXionx": ["樹葉", "雞蛋", "寶石碎片"],
-    "Yomi": ["睡眠眼罩", "酥脆的金箔", "家禽肉"],
-    "Yumimi": ["麵粉", "銅湯匙", "巧克力"]
+    "Vivi": [
+        "濕潤的紙漿",
+        "蔬菜",
+        "回收塑膠"
+    ],
+    "xXionx": [
+        "樹葉",
+        "雞蛋",
+        "寶石碎片"
+    ],
+    "Yomi": [
+        "睡眠眼罩",
+        "酥脆的金箔",
+        "家禽肉"
+    ],
+    "Yumimi": [
+        "麵粉",
+        "銅湯匙",
+        "巧克力"
+    ]
 };
 
 const WORK_URL = {
-    "Alice": "https://youtu.be/JY58FJxViTA",
-    "Allet": "https://youtu.be/ktkGgvXn-ME",
-    "Amelia": "https://youtu.be/MpZsvsuNmqc",
-    "Ashur": "https://youtu.be/0DhptkL3r1c",
-    "Aya": "https://youtu.be/2VlyNDZ28Mc",
-	"Barie": "https://youtu.be/jHNKv0iYXCs",
-    "Barong": "https://youtu.be/riScYcKvJvE",
-    "Belita": "https://youtu.be/sctRJMHdx6w",
-    "Beni": "https://youtu.be/rqTyjkBImFg",
-    "BigWood": "https://youtu.be/tU7HeiZoPkc",
-    "Blanchet": "https://youtu.be/iTCr6Gd0ArY",
-    "Butter": "https://youtu.be/oapwQXy4f1g",
-    "Canna": "https://youtu.be/vfvP9HGL2Fs",
-    "Carren": "https://youtu.be/79y4iBON3WY",
-    "Chloe": "https://youtu.be/2bqGr1UlJ_w",
-    "Chopi": "https://youtu.be/3pcHOeayiuI",
-	"Daya": "https://youtu.be/B-oalCgpSOs",
-    "Diana": "https://youtu.be/btX9W6V8PrU",
-    "Ed": "https://youtu.be/HFj4FtrvjqI",
-    "Elena": "https://youtu.be/eyxQQ3LSL1A",
-    "Epica": "https://youtu.be/6dxpDLKWzJI",
-    "Erpin": "https://youtu.be/rgbOtvbLdB0",
-    "Espi": "https://youtu.be/hTyUw7ZfI28",
-    "Festa": "https://youtu.be/kdbGcSzzyqI",
-    "Fricle": "https://youtu.be/6dxpDLKWzJI",
-    "Gabia": "https://youtu.be/cu80mqXBiew",
-    "Guin": "https://youtu.be/DkVwzZPNEfk",
-	"Haley": "https://youtu.be/u6mmhB-zY3Y",
-    "Hilde": "https://youtu.be/rLfss0AWKtA",
-    "Ifrit": "https://youtu.be/ANWq6bxvkBo",
-    "Jade": "https://youtu.be/9zc4o0jcU8g",
-    "Jubee": "https://youtu.be/GQNFRFORdB0",
-	"Joanne": "https://youtu.be/RICRhocX9js",
-    "Kidian": "https://youtu.be/PcT_8VB1NrQ",
-    "Kommy": "https://youtu.be/2qZbcsuXL9U",
-	"KommySwim": "https://youtu.be/vcunqCQbuSw",
-    "Kyarot": "https://youtu.be/jDl4YWvYp-U",
-    "Lazy": "https://youtu.be/83peJu7yMEU",
-    "Leets": "https://youtu.be/5FtyGwPgt1Q",
-	"Lethe": "https://youtu.be/wOzPL--fJCY",
-    "Levi": "https://youtu.be/79nJ7h2hnc0",
-    "MaestroMK2": "https://youtu.be/IDJxotfwcx8",
-    "Mago": "https://youtu.be/S8HF0T-C8gc",
-    "Marie": "https://youtu.be/WhHGJSMyc1c",
-    "Mayo": "https://youtu.be/7InY25WhPd0",
-    "Meluna": "https://youtu.be/-ea50ioN8Gw",
-    "Momo": "https://youtu.be/0sjEHtYM_Cg",
-    "Naia": "https://youtu.be/CVmOFWk-Mkk",
-    "Ner": "https://youtu.be/yDeHfWHSUt8",
-    "Picora": "https://youtu.be/rd9O8naEQZ8",
-	"Pira": "https://youtu.be/HoF-S_d-7fI",
-	"Polan": "",
-    "Posher": "https://youtu.be/f00ZKS1IE-g",
-    "RenewaAwaken": "https://youtu.be/AXm1PhUQmjE",
-    "Rim": "https://youtu.be/0dde_RrWSGE",
-    "Risty": "https://youtu.be/aATZTJcM5q4",
-    "Rohne": "https://youtu.be/lsuZ4u_yR3c",
-	"Rollett": "https://youtu.be/wa7nDhnh9O0",
-    "Rude": "https://youtu.be/mh-UMouGGcs",
-    "Rufo": "https://youtu.be/LVocNQWYRuM",
-    "Sari": "https://youtu.be/mRU5nRoA3g0",
-    "Selline": "https://youtu.be/Yn53p8bsBb0",
-    "Shady": "https://youtu.be/1siB-6t2eL0",
-	"Sherum": "https://youtu.be/gJ6ljB5Khh0",
-    "Shoupan": "https://youtu.be/su0DhWANaeg",
-    "Silphir": "https://youtu.be/dPklHe2kZhs",
-    "Sist": "https://youtu.be/j3QVWfLrJUo",
-    "Snorky": "https://youtu.be/A6kjEYeavNM",
-    "Speaki": "https://youtu.be/N1tmPLmZoXQ",
-    "Sylla": "https://youtu.be/cSu06V-8GKY",
-    "Taida": "https://youtu.be/ZAJztHqI7uA",
-    "Tig": "https://youtu.be/Xb3_b3sjcm0",
-	"Ui": "https://youtu.be/sen1414Z3Rw",
-    "Velvet": "https://youtu.be/uiyfp0lMa7E",
-    "Vivi": "https://youtu.be/Bi_Hi3PfTjU",
-    "xXionx": "https://youtu.be/1VLD414k_kk",
-    "Yomi": "https://youtu.be/nBco3aJoSUw",
-    "Yumimi": "https://youtu.be/uC9ohB_CqF8"
+    "Alice": "https://youtu.be/JY58FJxViTA",
+    "Allet": "https://youtu.be/ktkGgvXn-ME",
+    "Amelia": "https://youtu.be/MpZsvsuNmqc",
+    "Ashur": "https://youtu.be/0DhptkL3r1c",
+    "Aya": "https://youtu.be/2VlyNDZ28Mc",
+    "Barie": "https://youtu.be/jHNKv0iYXCs",
+    "Barong": "https://youtu.be/riScYcKvJvE",
+    "Belita": "https://youtu.be/sctRJMHdx6w",
+    "Beni": "https://youtu.be/rqTyjkBImFg",
+    "BigWood": "https://youtu.be/tU7HeiZoPkc",
+    "Blanchet": "https://youtu.be/iTCr6Gd0ArY",
+    "Butter": "https://youtu.be/oapwQXy4f1g",
+    "Canna": "https://youtu.be/vfvP9HGL2Fs",
+    "Carren": "https://youtu.be/79y4iBON3WY",
+    "Chloe": "https://youtu.be/2bqGr1UlJ_w",
+    "Chopi": "https://youtu.be/3pcHOeayiuI",
+    "Daya": "https://youtu.be/B-oalCgpSOs",
+    "Diana": "https://youtu.be/btX9W6V8PrU",
+    "Ed": "https://youtu.be/HFj4FtrvjqI",
+    "Elena": "https://youtu.be/eyxQQ3LSL1A",
+    "Epica": "https://youtu.be/6dxpDLKWzJI",
+    "Erpin": "https://youtu.be/rgbOtvbLdB0",
+    "Espi": "https://youtu.be/hTyUw7ZfI28",
+    "Festa": "https://youtu.be/kdbGcSzzyqI",
+    "Fricle": "https://youtu.be/6dxpDLKWzJI",
+    "Gabia": "https://youtu.be/cu80mqXBiew",
+    "Guin": "https://youtu.be/DkVwzZPNEfk",
+    "Haley": "https://youtu.be/u6mmhB-zY3Y",
+    "Hilde": "https://youtu.be/rLfss0AWKtA",
+    "Ifrit": "https://youtu.be/ANWq6bxvkBo",
+    "Jade": "https://youtu.be/9zc4o0jcU8g",
+    "Jubee": "https://youtu.be/GQNFRFORdB0",
+    "Joanne": "https://youtu.be/RICRhocX9js",
+    "Kidian": "https://youtu.be/PcT_8VB1NrQ",
+    "Kommy": "https://youtu.be/2qZbcsuXL9U",
+    "KommySwim": "https://youtu.be/vcunqCQbuSw",
+    "Kyarot": "https://youtu.be/jDl4YWvYp-U",
+    "Lazy": "https://youtu.be/83peJu7yMEU",
+    "Leets": "https://youtu.be/5FtyGwPgt1Q",
+    "Lethe": "https://youtu.be/wOzPL--fJCY",
+    "Levi": "https://youtu.be/79nJ7h2hnc0",
+    "MaestroMK2": "https://youtu.be/IDJxotfwcx8",
+    "Mago": "https://youtu.be/S8HF0T-C8gc",
+    "Marie": "https://youtu.be/WhHGJSMyc1c",
+    "Mayo": "https://youtu.be/7InY25WhPd0",
+    "Meluna": "https://youtu.be/-ea50ioN8Gw",
+    "Momo": "https://youtu.be/0sjEHtYM_Cg",
+    "Naia": "https://youtu.be/CVmOFWk-Mkk",
+    "Ner": "https://youtu.be/yDeHfWHSUt8",
+    "Picora": "https://youtu.be/rd9O8naEQZ8",
+    "Pira": "https://youtu.be/HoF-S_d-7fI",
+    "Polan": "",
+    "Posher": "https://youtu.be/f00ZKS1IE-g",
+    "RenewaAwaken": "https://youtu.be/AXm1PhUQmjE",
+    "Rim": "https://youtu.be/0dde_RrWSGE",
+    "Risty": "https://youtu.be/aATZTJcM5q4",
+    "Rohne": "https://youtu.be/lsuZ4u_yR3c",
+    "Rollett": "https://youtu.be/wa7nDhnh9O0",
+    "Rude": "https://youtu.be/mh-UMouGGcs",
+    "Rufo": "https://youtu.be/LVocNQWYRuM",
+    "Sari": "https://youtu.be/mRU5nRoA3g0",
+    "Selline": "https://youtu.be/Yn53p8bsBb0",
+    "Shady": "https://youtu.be/1siB-6t2eL0",
+    "Sherum": "https://youtu.be/gJ6ljB5Khh0",
+    "Shoupan": "https://youtu.be/su0DhWANaeg",
+    "Silphir": "https://youtu.be/dPklHe2kZhs",
+    "Sist": "https://youtu.be/j3QVWfLrJUo",
+    "Snorky": "https://youtu.be/A6kjEYeavNM",
+    "Speaki": "https://youtu.be/N1tmPLmZoXQ",
+    "Sylla": "https://youtu.be/cSu06V-8GKY",
+    "Taida": "https://youtu.be/ZAJztHqI7uA",
+    "Tig": "https://youtu.be/Xb3_b3sjcm0",
+    "Ui": "https://youtu.be/sen1414Z3Rw",
+    "Velvet": "https://youtu.be/uiyfp0lMa7E",
+    "Vivi": "https://youtu.be/Bi_Hi3PfTjU",
+    "xXionx": "https://youtu.be/1VLD414k_kk",
+    "Yomi": "https://youtu.be/nBco3aJoSUw",
+    "Yumimi": "https://youtu.be/uC9ohB_CqF8"
 };
 
-
-// ------------------------------------------
-// Spine 與服裝對應表
-// ------------------------------------------
 const SPINE_MAP = {
-    "洛涅": "Rohne", "薇薇": "Vivi", "艾爾芬": "Erpin", "x乂錫安乂x": "xXionx", "伊弗利特": "Ifrit", "伊德": "Ed", "佩佩": "Velvet", "佩斯塔": "Festa",
-    "修帕": "Shoupan", "傑德": "Jade", "優米": "Yomi", "劉美美": "Yumimi", "加薇雅": "Gabia", "卡洛特": "Kyarot", "卡蓮": "Carren", "喬菲": "Chopi",
-    "基狄恩": "Kidian", "大師2號": "MaestroMK2", "大木頭": "BigWood", "奈雅": "Naia", "奶油": "Butter", "布蘭切": "Blanchet", "希拉": "Sylla", "希爾德": "Hilde",
-    "希瑟圖": "Sist", "希菲爾": "Silphir", "帕特拉": "Patula", "庫洛艾": "Chloe", "康娜": "Canna", "愛麗絲": "Alice", "班尼": "Beni", "斯皮奇": "Speaki",
-    "斯諾奇": "Snorky", "柯米": "Kommy", "桃桃": "Momo", "梅森": "Maison", "梅露娜": "Meluna", "海莉": "Haley", "珀榭": "Posher", "琳": "Rim",
-    "瑟琳娜": "Selline", "瑪約": "Mayo", "瑪麗": "Marie", "皮可菈": "Picora", "盧波": "Rufo", "米雪": "Mynx", "綾": "Aya", "羽伊": "Ui",
-    "艾斯皮": "Espi", "艾琳娜": "Elena", "艾皮卡": "Epica", "艾舒爾": "Ashur", "艾蜜莉雅": "Amelia", "芙莉可": "Fricle", "茱蜜": "Jubee", "莉茲": "Leets",
-    "莎莉": "Sari", "萊薇": "Levi", "蒂亞娜": "Diana", "謝蒂": "Shady", "貝魯": "Veroo", "貝麗塔": "Belita", "路德": "Rude", "路易": "Cuee",
-    "阿萊特": "Allet", "雷吉": "Lazy", "馬爾": "Mago", "泰達": "Taida", "寧琉": "Ner", "莉絲蒂": "Risty", "R41雷內瓦": "R41_Renewa", "雷內瓦": "RenewaAwaken", "芭瓏": "Barong", "達雅": "Daya", "提格": "Tig",
-	"羅蕾特": "Rollett", "琵拉": "Pira", "雪蘭": "Sherum", "芭莉耶": "Barie", "瓊安": "Joanne", "柯米(泳裝)": "KommySwim", "麗息": "Lethe", "瑰恩": "Guin", "波朗": "Polan"
+    "洛涅": "Rohne",
+    "薇薇": "Vivi",
+    "艾爾芬": "Erpin",
+    "x乂錫安乂x": "xXionx",
+    "伊弗利特": "Ifrit",
+    "伊德": "Ed",
+    "佩佩": "Velvet",
+    "佩斯塔": "Festa",
+    "修帕": "Shoupan",
+    "傑德": "Jade",
+    "優米": "Yomi",
+    "劉美美": "Yumimi",
+    "加薇雅": "Gabia",
+    "卡洛特": "Kyarot",
+    "卡蓮": "Carren",
+    "喬菲": "Chopi",
+    "基狄恩": "Kidian",
+    "大師2號": "MaestroMK2",
+    "大木頭": "BigWood",
+    "奈雅": "Naia",
+    "奶油": "Butter",
+    "布蘭切": "Blanchet",
+    "希拉": "Sylla",
+    "希爾德": "Hilde",
+    "希瑟圖": "Sist",
+    "希菲爾": "Silphir",
+    "帕特拉": "Patula",
+    "庫洛艾": "Chloe",
+    "康娜": "Canna",
+    "愛麗絲": "Alice",
+    "班尼": "Beni",
+    "斯皮奇": "Speaki",
+    "斯諾奇": "Snorky",
+    "柯米": "Kommy",
+    "桃桃": "Momo",
+    "梅森": "Maison",
+    "梅露娜": "Meluna",
+    "海莉": "Haley",
+    "珀榭": "Posher",
+    "琳": "Rim",
+    "瑟琳娜": "Selline",
+    "瑪約": "Mayo",
+    "瑪麗": "Marie",
+    "皮可菈": "Picora",
+    "盧波": "Rufo",
+    "米雪": "Mynx",
+    "綾": "Aya",
+    "羽伊": "Ui",
+    "艾斯皮": "Espi",
+    "艾琳娜": "Elena",
+    "艾皮卡": "Epica",
+    "艾舒爾": "Ashur",
+    "艾蜜莉雅": "Amelia",
+    "芙莉可": "Fricle",
+    "茱蜜": "Jubee",
+    "莉茲": "Leets",
+    "莎莉": "Sari",
+    "萊薇": "Levi",
+    "蒂亞娜": "Diana",
+    "謝蒂": "Shady",
+    "貝魯": "Veroo",
+    "貝麗塔": "Belita",
+    "路德": "Rude",
+    "路易": "Cuee",
+    "阿萊特": "Allet",
+    "雷吉": "Lazy",
+    "馬爾": "Mago",
+    "泰達": "Taida",
+    "寧琉": "Ner",
+    "莉絲蒂": "Risty",
+    "R41雷內瓦": "R41_Renewa",
+    "雷內瓦": "RenewaAwaken",
+    "芭瓏": "Barong",
+    "達雅": "Daya",
+    "提格": "Tig",
+    "羅蕾特": "Rollett",
+    "琵拉": "Pira",
+    "雪蘭": "Sherum",
+    "芭莉耶": "Barie",
+    "瓊安": "Joanne",
+    "柯米(泳裝)": "KommySwim",
+    "麗息": "Lethe",
+    "瑰恩": "Guin",
+    "波朗": "Polan",
+    "斯皮奇(女僕)": "SpeakiMaid"
 };
 
 const COSTUME_MAP = {
-    "劉美美": ["Yumimi"], "卡蓮": ["Carren"], "喬菲": ["Chopi"], "帕特拉": ["Patula"], "梅森": ["Maison"], "瑪麗": ["Marie"], "米雪": ["Mynx"], "茱蜜": ["Jubee"], "莎莉": ["Sari"], "貝魯": ["Veroo"], "路易": ["Cuee"], "阿萊特": ["Allet"], "雷吉": ["Lazy"], "泰達": ["Taida"],
-    "艾舒爾": ["Ashur", "AshurSkin1"], "貝麗塔": ["Belita", "BelitaSkin1"], "班尼": ["Beni", "BeniSkin1"], "大木頭": ["BigWood", "BigWoodSkin1"], "艾斯皮": ["Espi", "EspiSkin1"], "佩斯塔": ["Festa", "FestaSkin1"], "伊弗利特": ["Ifrit", "IfritSkin1"], "傑德": ["Jade", "JadeSkin1"],
-	"莉茲": ["Leets", "LeetsSkin1"], "萊薇": ["Levi", "LeviSkin1"], "大師2號": ["MaestroMK2", "MaestroMK2Skin1"], "馬爾": ["Mago", "MagoSkin1"], "瑪約": ["Mayo", "MayoSkin1"], "梅露娜": ["Meluna", "MelunaSkin1"], "路德": ["Rude", "RudeSkin1"], "盧波": ["Rufo", "RufoSkin1"],
-	"修帕": ["Shoupan", "ShoupanSkin1"], "希菲爾": ["Silphir", "SilphirSkin1"], "斯諾奇": ["Snorky", "SnorkySkin1"], "斯皮奇": ["Speaki", "SpeakiSkin1"], "佩佩": ["Velvet", "VelvetSkin1"],
-    "布蘭切": ["Blanchet", "BlanchetSkin1", "BlanchetSkin2"], "奶油": ["Butter", "ButterSkin1"], "康娜": ["Canna", "CannaSkin1", "CannaSkin3"], "伊德": ["Ed", "EdSkin1", "EdSkin2", "EdSkin3"], "艾琳娜": ["Elena", "ElenaSkin1", "ElenaSkin3"],
-	"艾皮卡": ["Epica", "EpicaSkin1", "EpicaSkin2", "EpicaSkin3"], "芙莉可": ["Fricle", "FricleSkin1"], "加薇雅": ["Gabia", "GabiaSkin1", "GabiaSkin2"], "海莉": ["Haley", "HaleySkin1", "HaleySkin2"], "希爾德": ["Hilde", "HildeSkin1"],
-	"基狄恩": ["Kidian", "KidianSkin1", "KidianSkin2", "KidianSkin3"], "柯米": ["Kommy", "KommySkin1", "KommySkin2"], "卡洛特": ["Kyarot", "KyarotSkin1"], "奈雅": ["Naia", "NaiaSkin1", "NaiaSkin2"], "寧琉": ["Ner", "NerSkin1", "NerSkin2"], "皮可菈": ["Picora", "PicoraSkin1"],
-	"珀榭": ["Posher", "PosherSkin1", "PosherSkin3"], "琳": ["Rim", "RimSkin1", "RimSkin2"], "洛涅": ["Rohne", "RohneSkin2"], "謝蒂": ["Shady", "ShadySkin1"], "希瑟圖": ["Sist", "SistSkin1"], "希拉": ["Sylla", "SyllaSkin1"], "優米": ["Yomi", "YomiSkin1", "YomiSkin2"],
-    "愛麗絲": ["Alice", "AliceSkin1", "AliceSkin2", "AliceSkin3"], "艾蜜莉雅": ["Amelia", "AmeliaSkin2", "AmeliaSkin3"], "綾": ["Aya", "AyaSkin1", "AyaSkin2", "AyaSkin3", "AyaSkin4"], "庫洛艾": ["Chloe", "ChloeSkin1", "ChloeSkin2", "ChloeSkin3", "ChloeSkin4"],
-	"蒂亞娜": ["Diana", "DianaSkin1", "DianaSkin2"], "桃桃": ["Momo", "MomoSkin3"], "瑟琳娜": ["Selline", "SellineSkin1", "SellineSkin3"], "羽伊": ["Ui", "UiSkin1", "UiSkin2", "UiSkin3", "UiSkin4"], "薇薇": ["Vivi", "ViviSkin1", "ViviSkin2", "ViviSkin3", "ViviSkin4", "ViviSkin5"], "x乂錫安乂x": ["xXionx", "xXionxSkin1", "xXionxSkin2", "xXionxSkin3", "xXionxSkin4"],
-    "艾爾芬": ["Erpin", "ErpinSkin1", "ErpinSkin3"], "莉絲蒂": ["Risty", "RistySkin1"], "雷內瓦": ["RenewaAwaken", "RenewaAwakenSkin1", "RenewaAwakenSkin2"],
-	"芭瓏": ["Barong", "BarongSkin1"], "達雅": ["Daya", "DayaSkin1"], "提格": ["Tig", "TigSkin1"], "柯米(泳裝)": ["KommySwim", "KommySwimSkin3"], "麗息": ["Lethe"], "瑰恩": ["Guin", "GuinSkin3"],
-	"羅蕾特": ["Rollett", "RollettSkin2"], "琵拉": ["Pira", "PiraSkin2"], "雪蘭": ["Sherum", "SherumSkin1"], "芭莉耶": ["Barie"], "瓊安": ["Joanne", "JoanneSkin2", "JoanneSkin5"], "波朗": ["Polan", "PolanSkin4"]
+    "劉美美": [
+        "Yumimi"
+    ],
+    "卡蓮": [
+        "Carren"
+    ],
+    "喬菲": [
+        "Chopi"
+    ],
+    "帕特拉": [
+        "Patula"
+    ],
+    "梅森": [
+        "Maison"
+    ],
+    "瑪麗": [
+        "Marie"
+    ],
+    "米雪": [
+        "Mynx"
+    ],
+    "茱蜜": [
+        "Jubee"
+    ],
+    "莎莉": [
+        "Sari"
+    ],
+    "貝魯": [
+        "Veroo"
+    ],
+    "路易": [
+        "Cuee"
+    ],
+    "阿萊特": [
+        "Allet"
+    ],
+    "雷吉": [
+        "Lazy"
+    ],
+    "泰達": [
+        "Taida"
+    ],
+    "艾舒爾": [
+        "Ashur",
+        "AshurSkin1"
+    ],
+    "貝麗塔": [
+        "Belita",
+        "BelitaSkin1"
+    ],
+    "班尼": [
+        "Beni",
+        "BeniSkin1"
+    ],
+    "大木頭": [
+        "BigWood",
+        "BigWoodSkin1"
+    ],
+    "艾斯皮": [
+        "Espi",
+        "EspiSkin1"
+    ],
+    "佩斯塔": [
+        "Festa",
+        "FestaSkin1"
+    ],
+    "伊弗利特": [
+        "Ifrit",
+        "IfritSkin1"
+    ],
+    "傑德": [
+        "Jade",
+        "JadeSkin1"
+    ],
+    "莉茲": [
+        "Leets",
+        "LeetsSkin1"
+    ],
+    "萊薇": [
+        "Levi",
+        "LeviSkin1"
+    ],
+    "大師2號": [
+        "MaestroMK2",
+        "MaestroMK2Skin1"
+    ],
+    "馬爾": [
+        "Mago",
+        "MagoSkin1"
+    ],
+    "瑪約": [
+        "Mayo",
+        "MayoSkin1"
+    ],
+    "梅露娜": [
+        "Meluna",
+        "MelunaSkin1"
+    ],
+    "路德": [
+        "Rude",
+        "RudeSkin1"
+    ],
+    "盧波": [
+        "Rufo",
+        "RufoSkin1"
+    ],
+    "修帕": [
+        "Shoupan",
+        "ShoupanSkin1"
+    ],
+    "希菲爾": [
+        "Silphir",
+        "SilphirSkin1"
+    ],
+    "斯諾奇": [
+        "Snorky",
+        "SnorkySkin1"
+    ],
+    "斯皮奇": [
+        "Speaki",
+        "SpeakiSkin1"
+    ],
+    "佩佩": [
+        "Velvet",
+        "VelvetSkin1"
+    ],
+    "布蘭切": [
+        "Blanchet",
+        "BlanchetSkin1",
+        "BlanchetSkin2"
+    ],
+    "奶油": [
+        "Butter",
+        "ButterSkin1"
+    ],
+    "康娜": [
+        "Canna",
+        "CannaSkin1",
+        "CannaSkin3"
+    ],
+    "伊德": [
+        "Ed",
+        "EdSkin1",
+        "EdSkin2",
+        "EdSkin3"
+    ],
+    "艾琳娜": [
+        "Elena",
+        "ElenaSkin1",
+        "ElenaSkin3"
+    ],
+    "艾皮卡": [
+        "Epica",
+        "EpicaSkin1",
+        "EpicaSkin2",
+        "EpicaSkin3"
+    ],
+    "芙莉可": [
+        "Fricle",
+        "FricleSkin1"
+    ],
+    "加薇雅": [
+        "Gabia",
+        "GabiaSkin1",
+        "GabiaSkin2"
+    ],
+    "海莉": [
+        "Haley",
+        "HaleySkin1",
+        "HaleySkin2"
+    ],
+    "希爾德": [
+        "Hilde",
+        "HildeSkin1"
+    ],
+    "基狄恩": [
+        "Kidian",
+        "KidianSkin1",
+        "KidianSkin2",
+        "KidianSkin3"
+    ],
+    "柯米": [
+        "Kommy",
+        "KommySkin1",
+        "KommySkin2"
+    ],
+    "卡洛特": [
+        "Kyarot",
+        "KyarotSkin1"
+    ],
+    "奈雅": [
+        "Naia",
+        "NaiaSkin1",
+        "NaiaSkin2"
+    ],
+    "寧琉": [
+        "Ner",
+        "NerSkin1",
+        "NerSkin2"
+    ],
+    "皮可菈": [
+        "Picora",
+        "PicoraSkin1"
+    ],
+    "珀榭": [
+        "Posher",
+        "PosherSkin1",
+        "PosherSkin3"
+    ],
+    "琳": [
+        "Rim",
+        "RimSkin1",
+        "RimSkin2"
+    ],
+    "洛涅": [
+        "Rohne",
+        "RohneSkin2"
+    ],
+    "謝蒂": [
+        "Shady",
+        "ShadySkin1"
+    ],
+    "希瑟圖": [
+        "Sist",
+        "SistSkin1"
+    ],
+    "希拉": [
+        "Sylla",
+        "SyllaSkin1"
+    ],
+    "優米": [
+        "Yomi",
+        "YomiSkin1",
+        "YomiSkin2"
+    ],
+    "愛麗絲": [
+        "Alice",
+        "AliceSkin1",
+        "AliceSkin2",
+        "AliceSkin3"
+    ],
+    "艾蜜莉雅": [
+        "Amelia",
+        "AmeliaSkin2",
+        "AmeliaSkin3"
+    ],
+    "綾": [
+        "Aya",
+        "AyaSkin1",
+        "AyaSkin2",
+        "AyaSkin3",
+        "AyaSkin4"
+    ],
+    "庫洛艾": [
+        "Chloe",
+        "ChloeSkin1",
+        "ChloeSkin2",
+        "ChloeSkin3",
+        "ChloeSkin4"
+    ],
+    "蒂亞娜": [
+        "Diana",
+        "DianaSkin1",
+        "DianaSkin2"
+    ],
+    "桃桃": [
+        "Momo",
+        "MomoSkin3"
+    ],
+    "瑟琳娜": [
+        "Selline",
+        "SellineSkin1",
+        "SellineSkin3"
+    ],
+    "羽伊": [
+        "Ui",
+        "UiSkin1",
+        "UiSkin2",
+        "UiSkin3",
+        "UiSkin4"
+    ],
+    "薇薇": [
+        "Vivi",
+        "ViviSkin1",
+        "ViviSkin2",
+        "ViviSkin3",
+        "ViviSkin4",
+        "ViviSkin5"
+    ],
+    "x乂錫安乂x": [
+        "xXionx",
+        "xXionxSkin1",
+        "xXionxSkin2",
+        "xXionxSkin3",
+        "xXionxSkin4"
+    ],
+    "艾爾芬": [
+        "Erpin",
+        "ErpinSkin1",
+        "ErpinSkin3"
+    ],
+    "莉絲蒂": [
+        "Risty",
+        "RistySkin1"
+    ],
+    "雷內瓦": [
+        "RenewaAwaken",
+        "RenewaAwakenSkin1",
+        "RenewaAwakenSkin2"
+    ],
+    "芭瓏": [
+        "Barong",
+        "BarongSkin1"
+    ],
+    "達雅": [
+        "Daya",
+        "DayaSkin1"
+    ],
+    "提格": [
+        "Tig",
+        "TigSkin1"
+    ],
+    "柯米(泳裝)": [
+        "KommySwim",
+        "KommySwimSkin3"
+    ],
+    "麗息": [
+        "Lethe"
+    ],
+    "瑰恩": [
+        "Guin",
+        "GuinSkin3"
+    ],
+    "羅蕾特": [
+        "Rollett",
+        "RollettSkin2"
+    ],
+    "琵拉": [
+        "Pira",
+        "PiraSkin2"
+    ],
+    "雪蘭": [
+        "Sherum",
+        "SherumSkin1"
+    ],
+    "芭莉耶": [
+        "Barie"
+    ],
+    "瓊安": [
+        "Joanne",
+        "JoanneSkin2",
+        "JoanneSkin5"
+    ],
+    "波朗": [
+        "Polan",
+        "PolanSkin4"
+    ],
+    "斯皮奇(女僕)": [
+        "SpeakiMaid"
+    ]
 };
-
 
 const SD_COSTUME = {
-    "劉美美": ["Yumimi"], "卡蓮": ["Carren"], "喬菲": ["Chopi"], "帕特拉": ["Patula"], "梅森": ["Maison"], "瑪麗": ["Marie"], "米雪": ["Mynx"], "茱蜜": ["Jubee"], "莎莉": ["Sari"], "貝魯": ["Veroo"], "路易": ["Cuee"], "阿萊特": ["Allet"], "雷吉": ["Lazy"], "泰達": ["Taida"],
-    "艾舒爾": ["Ashur", "AshurSkin1"], "貝麗塔": ["Belita", "BelitaSkin1"], "班尼": ["Beni", "BeniSkin1"], "大木頭": ["BigWood", "BigWoodSkin1"], "艾斯皮": ["Espi", "EspiSkin1"], "佩斯塔": ["Festa", "FestaSkin1"], "伊弗利特": ["Ifrit", "IfritSkin1"], "傑德": ["Jade", "JadeSkin1"],
-	"莉茲": ["Leets", "LeetsSkin1"], "萊薇": ["Levi", "LeviSkin1"], "大師2號": ["MaestroMK2", "MaestroMK2Skin1"], "馬爾": ["Mago", "MagoSkin1"], "瑪約": ["Mayo", "MayoSkin1"], "梅露娜": ["Meluna", "MelunaSkin1"], "路德": ["Rude", "RudeSkin1"], "盧波": ["Rufo", "RufoSkin1"],
-	"修帕": ["Shoupan", "ShoupanSkin1"], "希菲爾": ["Silphir", "SilphirSkin1"], "斯諾奇": ["Snorky", "SnorkySkin1"], "斯皮奇": ["Speaki", "SpeakiSkin1"], "佩佩": ["Velvet", "VelvetSkin1"],
-    "布蘭切": ["Blanchet", "BlanchetSkin1", "BlanchetSkin2"], "奶油": ["Butter", "ButterSkin1"], "康娜": ["Canna", "CannaSkin1", "CannaSkin3"], "伊德": ["Ed", "EdSkin1", "EdSkin2", "EdSkin3"], "艾琳娜": ["Elena", "ElenaSkin1", "ElenaSkin3"],
-	"艾皮卡": ["Epica", "EpicaSkin1", "EpicaSkin2", "EpicaSkin3"], "芙莉可": ["Fricle", "FricleSkin1"], "加薇雅": ["Gabia", "GabiaSkin1", "GabiaSkin2"], "海莉": ["Haley", "HaleySkin1", "HaleySkin2"], "希爾德": ["Hilde", "HildeSkin1"],
-	"基狄恩": ["Kidian", "KidianSkin1", "KidianSkin2", "KidianSkin3"], "柯米": ["Kommy", "KommySkin1", "KommySkin2"], "卡洛特": ["Kyarot", "KyarotSkin1"], "奈雅": ["Naia", "NaiaSkin1", "NaiaSkin2"], "寧琉": ["Ner", "NerSkin1", "NerSkin2"], "皮可菈": ["Picora", "PicoraSkin1"],
-	"珀榭": ["Posher", "PosherSkin1", "PosherSkin3"], "琳": ["Rim", "RimSkin1", "RimSkin2"], "洛涅": ["Rohne", "RohneSkin2"], "謝蒂": ["Shady", "ShadySkin1"], "希瑟圖": ["Sist", "SistSkin1"], "希拉": ["Sylla", "SyllaSkin1"], "優米": ["Yomi", "YomiSkin1", "YomiSkin2"],
-    "愛麗絲": ["Alice", "AliceSkin1", "AliceSkin2", "AliceSkin3"], "艾蜜莉雅": ["Amelia", "AmeliaSkin2", "AmeliaSkin3"], "綾": ["Aya", "AyaSkin1", "AyaSkin2", "AyaSkin3", "AyaSkin4"], "庫洛艾": ["Chloe", "ChloeSkin1", "ChloeSkin2", "ChloeSkin3", "ChloeSkin4"],
-	"蒂亞娜": ["Diana", "DianaSkin1", "DianaSkin2"], "桃桃": ["Momo", "MomoSkin3"], "瑟琳娜": ["Selline", "SellineSkin1", "SellineSkin3"], "羽伊": ["Ui", "UiSkin1", "UiSkin2", "UiSkin3", "UiSkin4"], "薇薇": ["Vivi", "ViviSkin1", "ViviSkin2", "ViviSkin3", "ViviSkin4", "ViviSkin5"], "x乂錫安乂x": ["xXionx", "xXionxSkin1", "xXionxSkin2", "xXionxSkin3", "xXionxSkin4"],
-    "艾爾芬": ["Erpin", "ErpinSkin1", "ErpinSkin3"], "莉絲蒂": ["Risty", "RistySkin1"], "雷內瓦": ["RenewaAwaken", "RenewaAwakenSkin1", "RenewaAwakenSkin2"],
-	"芭瓏": ["Barong", "BarongSkin1"], "達雅": ["Daya", "DayaSkin1"], "提格": ["Tig", "TigSkin1"], "柯米(泳裝)": ["KommySwim", "KommySwimSkin3"], "麗息": ["Lethe"], "瑰恩": ["Guin", "GuinSkin3"],
-	"羅蕾特": ["Rollett", "RollettSkin2"], "琵拉": ["Pira", "PiraSkin2"], "雪蘭": ["Sherum", "SherumSkin1"], "芭莉耶": ["Barie"], "瓊安": ["Joanne", "JoanneSkin2", "JoanneSkin5"], "波朗": ["Polan", "PolanSkin4"]
+    "劉美美": [
+        "Yumimi"
+    ],
+    "卡蓮": [
+        "Carren"
+    ],
+    "喬菲": [
+        "Chopi"
+    ],
+    "帕特拉": [
+        "Patula"
+    ],
+    "梅森": [
+        "Maison"
+    ],
+    "瑪麗": [
+        "Marie"
+    ],
+    "米雪": [
+        "Mynx"
+    ],
+    "茱蜜": [
+        "Jubee"
+    ],
+    "莎莉": [
+        "Sari"
+    ],
+    "貝魯": [
+        "Veroo"
+    ],
+    "路易": [
+        "Cuee"
+    ],
+    "阿萊特": [
+        "Allet"
+    ],
+    "雷吉": [
+        "Lazy"
+    ],
+    "泰達": [
+        "Taida"
+    ],
+    "艾舒爾": [
+        "Ashur",
+        "AshurSkin1"
+    ],
+    "貝麗塔": [
+        "Belita",
+        "BelitaSkin1"
+    ],
+    "班尼": [
+        "Beni",
+        "BeniSkin1"
+    ],
+    "大木頭": [
+        "BigWood",
+        "BigWoodSkin1"
+    ],
+    "艾斯皮": [
+        "Espi",
+        "EspiSkin1"
+    ],
+    "佩斯塔": [
+        "Festa",
+        "FestaSkin1"
+    ],
+    "伊弗利特": [
+        "Ifrit",
+        "IfritSkin1"
+    ],
+    "傑德": [
+        "Jade",
+        "JadeSkin1"
+    ],
+    "莉茲": [
+        "Leets",
+        "LeetsSkin1"
+    ],
+    "萊薇": [
+        "Levi",
+        "LeviSkin1"
+    ],
+    "大師2號": [
+        "MaestroMK2",
+        "MaestroMK2Skin1"
+    ],
+    "馬爾": [
+        "Mago",
+        "MagoSkin1"
+    ],
+    "瑪約": [
+        "Mayo",
+        "MayoSkin1"
+    ],
+    "梅露娜": [
+        "Meluna",
+        "MelunaSkin1"
+    ],
+    "路德": [
+        "Rude",
+        "RudeSkin1"
+    ],
+    "盧波": [
+        "Rufo",
+        "RufoSkin1"
+    ],
+    "修帕": [
+        "Shoupan",
+        "ShoupanSkin1"
+    ],
+    "希菲爾": [
+        "Silphir",
+        "SilphirSkin1"
+    ],
+    "斯諾奇": [
+        "Snorky",
+        "SnorkySkin1"
+    ],
+    "斯皮奇": [
+        "Speaki",
+        "SpeakiSkin1"
+    ],
+    "佩佩": [
+        "Velvet",
+        "VelvetSkin1"
+    ],
+    "布蘭切": [
+        "Blanchet",
+        "BlanchetSkin1",
+        "BlanchetSkin2"
+    ],
+    "奶油": [
+        "Butter",
+        "ButterSkin1"
+    ],
+    "康娜": [
+        "Canna",
+        "CannaSkin1",
+        "CannaSkin3"
+    ],
+    "伊德": [
+        "Ed",
+        "EdSkin1",
+        "EdSkin2",
+        "EdSkin3"
+    ],
+    "艾琳娜": [
+        "Elena",
+        "ElenaSkin1",
+        "ElenaSkin3"
+    ],
+    "艾皮卡": [
+        "Epica",
+        "EpicaSkin1",
+        "EpicaSkin2",
+        "EpicaSkin3"
+    ],
+    "芙莉可": [
+        "Fricle",
+        "FricleSkin1"
+    ],
+    "加薇雅": [
+        "Gabia",
+        "GabiaSkin1",
+        "GabiaSkin2"
+    ],
+    "海莉": [
+        "Haley",
+        "HaleySkin1",
+        "HaleySkin2"
+    ],
+    "希爾德": [
+        "Hilde",
+        "HildeSkin1"
+    ],
+    "基狄恩": [
+        "Kidian",
+        "KidianSkin1",
+        "KidianSkin2",
+        "KidianSkin3"
+    ],
+    "柯米": [
+        "Kommy",
+        "KommySkin1",
+        "KommySkin2"
+    ],
+    "卡洛特": [
+        "Kyarot",
+        "KyarotSkin1"
+    ],
+    "奈雅": [
+        "Naia",
+        "NaiaSkin1",
+        "NaiaSkin2"
+    ],
+    "寧琉": [
+        "Ner",
+        "NerSkin1",
+        "NerSkin2"
+    ],
+    "皮可菈": [
+        "Picora",
+        "PicoraSkin1"
+    ],
+    "珀榭": [
+        "Posher",
+        "PosherSkin1",
+        "PosherSkin3"
+    ],
+    "琳": [
+        "Rim",
+        "RimSkin1",
+        "RimSkin2"
+    ],
+    "洛涅": [
+        "Rohne",
+        "RohneSkin2"
+    ],
+    "謝蒂": [
+        "Shady",
+        "ShadySkin1"
+    ],
+    "希瑟圖": [
+        "Sist",
+        "SistSkin1"
+    ],
+    "希拉": [
+        "Sylla",
+        "SyllaSkin1"
+    ],
+    "優米": [
+        "Yomi",
+        "YomiSkin1",
+        "YomiSkin2"
+    ],
+    "愛麗絲": [
+        "Alice",
+        "AliceSkin1",
+        "AliceSkin2",
+        "AliceSkin3"
+    ],
+    "艾蜜莉雅": [
+        "Amelia",
+        "AmeliaSkin2",
+        "AmeliaSkin3"
+    ],
+    "綾": [
+        "Aya",
+        "AyaSkin1",
+        "AyaSkin2",
+        "AyaSkin3",
+        "AyaSkin4"
+    ],
+    "庫洛艾": [
+        "Chloe",
+        "ChloeSkin1",
+        "ChloeSkin2",
+        "ChloeSkin3",
+        "ChloeSkin4"
+    ],
+    "蒂亞娜": [
+        "Diana",
+        "DianaSkin1",
+        "DianaSkin2"
+    ],
+    "桃桃": [
+        "Momo",
+        "MomoSkin3"
+    ],
+    "瑟琳娜": [
+        "Selline",
+        "SellineSkin1",
+        "SellineSkin3"
+    ],
+    "羽伊": [
+        "Ui",
+        "UiSkin1",
+        "UiSkin2",
+        "UiSkin3",
+        "UiSkin4"
+    ],
+    "薇薇": [
+        "Vivi",
+        "ViviSkin1",
+        "ViviSkin2",
+        "ViviSkin3",
+        "ViviSkin4",
+        "ViviSkin5"
+    ],
+    "x乂錫安乂x": [
+        "xXionx",
+        "xXionxSkin1",
+        "xXionxSkin2",
+        "xXionxSkin3",
+        "xXionxSkin4"
+    ],
+    "艾爾芬": [
+        "Erpin",
+        "ErpinSkin1",
+        "ErpinSkin3"
+    ],
+    "莉絲蒂": [
+        "Risty",
+        "RistySkin1"
+    ],
+    "雷內瓦": [
+        "RenewaAwaken",
+        "RenewaAwakenSkin1",
+        "RenewaAwakenSkin2"
+    ],
+    "芭瓏": [
+        "Barong",
+        "BarongSkin1"
+    ],
+    "達雅": [
+        "Daya",
+        "DayaSkin1"
+    ],
+    "提格": [
+        "Tig",
+        "TigSkin1"
+    ],
+    "柯米(泳裝)": [
+        "KommySwim",
+        "KommySwimSkin3"
+    ],
+    "麗息": [
+        "Lethe"
+    ],
+    "瑰恩": [
+        "Guin",
+        "GuinSkin3"
+    ],
+    "羅蕾特": [
+        "Rollett",
+        "RollettSkin2"
+    ],
+    "琵拉": [
+        "Pira",
+        "PiraSkin2"
+    ],
+    "雪蘭": [
+        "Sherum",
+        "SherumSkin1"
+    ],
+    "芭莉耶": [
+        "Barie"
+    ],
+    "瓊安": [
+        "Joanne",
+        "JoanneSkin2",
+        "JoanneSkin5"
+    ],
+    "波朗": [
+        "Polan",
+        "PolanSkin4"
+    ],
+    "斯皮奇(女僕)": [
+        "SpeakiMaid"
+    ]
 };
 
-//迷你坨坨SPINE NAME
 const MINI_SPINE = {
-    "洛涅": "Mini_Rohne", "薇薇": "Mini_Vivi", "艾爾芬": "Mini_Erpin", "x乂錫安乂x": "Mini_xXionx", "伊弗利特": "Mini_Ifrit", "伊德": "Mini_Ed", "佩佩": "Mini_Velvet", "佩斯塔": "Mini_Festa",
-    "修帕": "Mini_Shoupan", "傑德": "Mini_Jade", "優米": "Mini_Yomi", "劉美美": "Mini_Yumimi", "加薇雅": "Mini_Gabia", "卡洛特": "Mini_Kyarot", "卡蓮": "Mini_Carren", "喬菲": "Mini_Chopi",
-    "基狄恩": "Mini_Kidian", "大師2號": "Mini_MaestroMK2", "大木頭": "Mini_BigWood", "奈雅": "Mini_Naia", "奶油": "Mini_Butter", "布蘭切": "Mini_Blanchet", "希拉": "Mini_Sylla", "希爾德": "Mini_Hilde",
-    "希瑟圖": "Mini_Sist", "希菲爾": "Mini_Silphir", "帕特拉": "Mini_Patula", "庫洛艾": "Mini_Chloe", "康娜": "Mini_Canna", "愛麗絲": "Mini_Alice", "班尼": "Mini_Beni", "斯皮奇": "Mini_Speaki",
-    "斯諾奇": "Mini_Snorky", "柯米": "Mini_Kommy", "桃桃": "Mini_Momo", "梅森": "Mini_Maison", "梅露娜": "Mini_Meluna", "海莉": "Mini_Haley", "珀榭": "Mini_Posher", "琳": "Mini_Rim",
-    "瑟琳娜": "Mini_Selline", "瑪約": "Mini_Mayo", "瑪麗": "Mini_Marie", "皮可菈": "Mini_Picora", "盧波": "Mini_Rufo", "米雪": "Mini_Mynx", "綾": "Mini_Aya", "羽伊": "Mini_Ui",
-    "艾斯皮": "Mini_Espi", "艾琳娜": "Mini_Elena", "艾皮卡": "Mini_Epica", "艾舒爾": "Mini_Ashur", "艾蜜莉雅": "Mini_Amelia", "芙莉可": "Mini_Fricle", "茱蜜": "Mini_Jubee", "莉茲": "Mini_Leets",
-    "莎莉": "Mini_Sari", "萊薇": "Mini_Levi", "蒂亞娜": "Mini_Diana", "謝蒂": "Mini_Shady", "貝魯": "Mini_Veroo", "貝麗塔": "Mini_Belita", "路德": "Mini_Rude", "路易": "Mini_Cuee",
-    "阿萊特": "Mini_Allet", "雷吉": "Mini_Lazy", "馬爾": "Mini_Mago", "泰達": "Mini_Taida", "寧琉": "Mini_Ner", "莉絲蒂": "Mini_Risty",  "雷內瓦": "Mini_RenewaAwaken", "芭瓏": "Mini_Barong", "達雅": "Mini_Daya", "提格": "Mini_Tig",
-	"羅蕾特": "Mini_Rollett", "琵拉": "Mini_Pira", "雪蘭": "Mini_Sherum", "芭莉耶": "Mini_Barie", "瓊安": "Mini_Joanne", "柯米(泳裝)": "Mini_KommySwim", "麗息": "Mini_Lethe", "瑰恩": "Mini_Guin", "波朗": "Mini_Polan"
+    "洛涅": "Mini_Rohne",
+    "薇薇": "Mini_Vivi",
+    "艾爾芬": "Mini_Erpin",
+    "x乂錫安乂x": "Mini_xXionx",
+    "伊弗利特": "Mini_Ifrit",
+    "伊德": "Mini_Ed",
+    "佩佩": "Mini_Velvet",
+    "佩斯塔": "Mini_Festa",
+    "修帕": "Mini_Shoupan",
+    "傑德": "Mini_Jade",
+    "優米": "Mini_Yomi",
+    "劉美美": "Mini_Yumimi",
+    "加薇雅": "Mini_Gabia",
+    "卡洛特": "Mini_Kyarot",
+    "卡蓮": "Mini_Carren",
+    "喬菲": "Mini_Chopi",
+    "基狄恩": "Mini_Kidian",
+    "大師2號": "Mini_MaestroMK2",
+    "大木頭": "Mini_BigWood",
+    "奈雅": "Mini_Naia",
+    "奶油": "Mini_Butter",
+    "布蘭切": "Mini_Blanchet",
+    "希拉": "Mini_Sylla",
+    "希爾德": "Mini_Hilde",
+    "希瑟圖": "Mini_Sist",
+    "希菲爾": "Mini_Silphir",
+    "帕特拉": "Mini_Patula",
+    "庫洛艾": "Mini_Chloe",
+    "康娜": "Mini_Canna",
+    "愛麗絲": "Mini_Alice",
+    "班尼": "Mini_Beni",
+    "斯皮奇": "Mini_Speaki",
+    "斯諾奇": "Mini_Snorky",
+    "柯米": "Mini_Kommy",
+    "桃桃": "Mini_Momo",
+    "梅森": "Mini_Maison",
+    "梅露娜": "Mini_Meluna",
+    "海莉": "Mini_Haley",
+    "珀榭": "Mini_Posher",
+    "琳": "Mini_Rim",
+    "瑟琳娜": "Mini_Selline",
+    "瑪約": "Mini_Mayo",
+    "瑪麗": "Mini_Marie",
+    "皮可菈": "Mini_Picora",
+    "盧波": "Mini_Rufo",
+    "米雪": "Mini_Mynx",
+    "綾": "Mini_Aya",
+    "羽伊": "Mini_Ui",
+    "艾斯皮": "Mini_Espi",
+    "艾琳娜": "Mini_Elena",
+    "艾皮卡": "Mini_Epica",
+    "艾舒爾": "Mini_Ashur",
+    "艾蜜莉雅": "Mini_Amelia",
+    "芙莉可": "Mini_Fricle",
+    "茱蜜": "Mini_Jubee",
+    "莉茲": "Mini_Leets",
+    "莎莉": "Mini_Sari",
+    "萊薇": "Mini_Levi",
+    "蒂亞娜": "Mini_Diana",
+    "謝蒂": "Mini_Shady",
+    "貝魯": "Mini_Veroo",
+    "貝麗塔": "Mini_Belita",
+    "路德": "Mini_Rude",
+    "路易": "Mini_Cuee",
+    "阿萊特": "Mini_Allet",
+    "雷吉": "Mini_Lazy",
+    "馬爾": "Mini_Mago",
+    "泰達": "Mini_Taida",
+    "寧琉": "Mini_Ner",
+    "莉絲蒂": "Mini_Risty",
+    "雷內瓦": "Mini_RenewaAwaken",
+    "芭瓏": "Mini_Barong",
+    "達雅": "Mini_Daya",
+    "提格": "Mini_Tig",
+    "羅蕾特": "Mini_Rollett",
+    "琵拉": "Mini_Pira",
+    "雪蘭": "Mini_Sherum",
+    "芭莉耶": "Mini_Barie",
+    "瓊安": "Mini_Joanne",
+    "柯米(泳裝)": "Mini_KommySwim",
+    "麗息": "Mini_Lethe",
+    "瑰恩": "Mini_Guin",
+    "波朗": "Mini_Polan",
+    "斯皮奇(女僕)": "Mini_SpeakiMaid"
 };
-
-console.log("LANG_DICT 內容:", LANG_DICT);
