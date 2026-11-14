@@ -219,6 +219,9 @@
         <!-- 🌟 半透明背景遮罩 -->
         <div id="uiBackdrop" class="fixed inset-0 bg-black/25 opacity-0 pointer-events-none transition-opacity duration-300" style="display: none !important;"></div>
 
+        <!-- 🌟 左下角細字版權擁有者標示 -->
+        <div id="desktopCopyright" data-i18n="footer_copyright" class="fixed bottom-3 left-4 text-[11px] sm:text-xs font-medium tracking-wide text-white/65 desktop-clock-shadow pointer-events-none select-none z-[6]">© 遊戲版權: EpidGames & Bilibili</div>
+
         <!-- 🌟 角色簡介 + 桌面時鐘（依角色性格動態變換色調，固定於主 Spine 左側安全區） -->
         <div id="desktopInfoContainer" class="fixed desktop-clock-shadow pointer-events-none flex flex-col items-start gap-4" style="bottom: 12vh; right: 40vw; max-width: min(440px, 34vw); z-index: 2;">
             
@@ -539,8 +542,14 @@
                 document.title = getI18n('wallpaper_title');
             }
             function getI18n(key) {
-                if (!key) return key; const safeLang = (typeof LANG_DICT !== 'undefined' && LANG_DICT[window.currentLang]) ? window.currentLang : 'zh-TW';
-                if (typeof LANG_DICT !== 'undefined' && LANG_DICT[safeLang] && LANG_DICT[safeLang][key]) return LANG_DICT[safeLang][key]; return key; 
+                if (!key) return key;
+                const safeLang = (typeof LANG_DICT !== 'undefined' && LANG_DICT[window.currentLang]) ? window.currentLang : 'zh-TW';
+                if (typeof LANG_DICT !== 'undefined') {
+                    if (LANG_DICT[safeLang] && LANG_DICT[safeLang][key]) return LANG_DICT[safeLang][key];
+                    if (LANG_DICT['zh-TW'] && LANG_DICT['zh-TW'][key]) return LANG_DICT['zh-TW'][key];
+                }
+                if (key === 'footer_copyright') return '© 遊戲版權: EpidGames & Bilibili';
+                return key; 
             }
 
             const HEX_COLORS = { "天真": "#4ade80", "冷靜": "#60a5fa", "狂亂": "#f87171", "活潑": "#facc15", "憂鬱": "#c084fc" };
