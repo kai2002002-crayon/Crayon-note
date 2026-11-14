@@ -696,7 +696,7 @@
                 if (!globalPlayer || !globalPlayer.skeleton) return;
                 currentZoom = currentMode === 'battle' ? 2.5 : 1.0;
                 globalPlayer.skeleton.scaleX = currentZoom; globalPlayer.skeleton.scaleY = currentZoom;
-                globalPlayer.skeleton.x = currentMode === 'battle' ? 650 : 600; 
+                globalPlayer.skeleton.x = currentMode === 'battle' ? 1450 : 600; 
                 globalPlayer.skeleton.y = currentMode === 'lobby' ? 600 * (1 - currentZoom) : 0;
                 globalPlayer.skeleton.updateWorldTransform();
             }
