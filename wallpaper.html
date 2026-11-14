@@ -219,10 +219,18 @@
         <!-- 🌟 半透明背景遮罩 -->
         <div id="uiBackdrop" class="fixed inset-0 bg-black/25 opacity-0 pointer-events-none transition-opacity duration-300" style="display: none !important;"></div>
 
-        <!-- 🌟 左上角遊戲 Logo（原尺寸 497x309 等比例縮放） -->
-        <div id="desktopLogoContainer" class="fixed top-4 right-5 z-[6] pointer-events-none select-none">
-            <img src="./trickcal_gif.png" alt="Trickcal Logo" width="497" height="309" draggable="false" class="w-[220px] sm:w-[260px] lg:w-[290px] h-auto object-contain drop-shadow-[0_4px_12px_rgba(0,0,0,0.65)]">
+        <!-- 🌟 左上角多語系遊戲 Logo（資料夾: ./Logo/，檔名: trickcal_gif_ZH / _JA / _EN.png，原尺寸 497x309 等比例縮放） -->
+        <div id="desktopLogoContainer" class="fixed top-4 left-5 z-[6] pointer-events-none select-none">
+            <img id="desktopLogoImg" src="./Logo/trickcal_gif_ZH.png" alt="Trickcal Logo" width="497" height="309" draggable="false" onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='./Logo/trickcal_gif_ZH.png';}" class="w-[220px] sm:w-[260px] lg:w-[290px] h-auto object-contain drop-shadow-[0_4px_12px_rgba(0,0,0,0.65)]">
         </div>
+        <script>
+            (function() {
+                const langMap = { 'zh-TW': 'ZH', 'ja': 'JA', 'en': 'EN' };
+                const suffix = langMap[window.currentLang] || 'ZH';
+                const img = document.getElementById('desktopLogoImg');
+                if (img) img.src = `./Logo/trickcal_gif_${suffix}.png`;
+            })();
+        </script>
 
         <!-- 🌟 左下角細字版權擁有者標示 -->
         <div id="desktopCopyright" data-i18n="footer_copyright" class="fixed bottom-3 left-4 text-[11px] sm:text-xs font-medium tracking-wide text-white/65 desktop-clock-shadow pointer-events-none select-none z-[6]">© 遊戲版權: EpidGames & Bilibili</div>
@@ -329,8 +337,8 @@
         </section>
 
         <script>
-            // 🌟 大廳背景自動偵測與切換管理器
-            const MAX_BG_SCAN = 60;
+            // 🌟 大廳背景自動偵測與切換管理器（資料夾: ./Lobby/，約 20 張，預設掃描 001~025）
+            const MAX_BG_SCAN = 25;
             const EXTRA_BG_IDS = [];
             let detectedBgList = [];
 
@@ -342,7 +350,8 @@
                 EXTRA_BG_IDS.forEach(id => candidateIds.add(String(id)));
 
                 const idsArray = Array.from(candidateIds);
-                let pendingChecks = idsArray.length * 2;
+                const folders = ['./Lobby/'];
+                let pendingChecks = idsArray.length * folders.length;
                 const foundMap = new Map();
 
                 function onCheckDone() {
@@ -363,7 +372,14 @@
                             bgSelect.appendChild(opt);
                         });
 
-                        const savedBg = SafeStorage.get('we_lobby_bg');
+                        let savedBg = SafeStorage.get('we_lobby_bg');
+                        if (savedBg && savedBg !== 'none') {
+                            const match = savedBg.match(/(Lobby\d+\.png)$/i);
+                            if (match) {
+                                savedBg = `./Lobby/${match[1]}`;
+                            }
+                        }
+
                         if (savedBg === 'none') {
                             changeLobbyBackground('none');
                         } else if (savedBg && detectedBgList.some(b => b.url === savedBg)) {
@@ -375,7 +391,6 @@
                 }
 
                 idsArray.forEach(id => {
-                    const folders = ['./bg/', './'];
                     folders.forEach(folder => {
                         const url = `${folder}Lobby${id}.png`;
                         const img = new Image();
@@ -539,10 +554,21 @@
                     }
                 });
             }
+
+            // 🌟 依目前語言切換 ./Logo/ 資料夾內的對應 Logo 圖檔
+            function updateLocalizedLogo() {
+                const logoImg = document.getElementById('desktopLogoImg');
+                if (!logoImg) return;
+                const langMap = { 'zh-TW': 'ZH', 'ja': 'JA', 'en': 'EN' };
+                const suffix = langMap[window.currentLang] || 'ZH';
+                delete logoImg.dataset.fallback;
+                logoImg.src = `./Logo/trickcal_gif_${suffix}.png`;
+            }
             
             function changeLanguage(lang) { SafeStorage.set('user_lang', lang); window.currentLang = lang; location.reload(); }
             function applyTranslations() {
                 const langSelect = document.getElementById('langSelect'); if (langSelect) langSelect.value = window.currentLang;
+                updateLocalizedLogo();
                 document.querySelectorAll('[data-i18n]').forEach(el => { el.innerText = getI18n(el.getAttribute('data-i18n')); });
                 document.title = getI18n('wallpaper_title');
             }
