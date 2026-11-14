@@ -219,8 +219,8 @@
         <!-- 🌟 半透明背景遮罩 -->
         <div id="uiBackdrop" class="fixed inset-0 bg-black/25 opacity-0 pointer-events-none transition-opacity duration-300" style="display: none !important;"></div>
 
-        <!-- 🌟 右上角遊戲 Logo（原尺寸 497x309 等比例縮放） -->
-        <div id="desktopLogoContainer" class="fixed top-4 right-5 z-[6] pointer-events-none select-none">
+        <!-- 🌟 左上角遊戲 Logo（原尺寸 497x309 等比例縮放） -->
+        <div id="desktopLogoContainer" class="fixed top-4 left-5 z-[6] pointer-events-none select-none">
             <img src="./trickcal_gif.png" alt="Trickcal Logo" width="497" height="309" draggable="false" class="w-[220px] sm:w-[260px] lg:w-[290px] h-auto object-contain drop-shadow-[0_4px_12px_rgba(0,0,0,0.65)]">
         </div>
 
@@ -249,11 +249,20 @@
 
         </div>
 
-        <!-- 🌟 左右雙欄半透明 UI 介面 -->
+        <!-- 🌟 左右雙欄半透明 UI 介面（左：選擇坨坨角色 / 右：標題與控制區） -->
         <div id="uiWrapper">
             <div class="w-full max-w-[1340px] h-full flex flex-col lg:flex-row gap-5 items-start justify-center">
                 
-                <!-- ◀ 左邊欄：標題設定區 + 角色控制/背景/服裝/動作區 -->
+                <!-- ◀ 左邊欄：選擇坨坨角色區域 -->
+                <section id="uiRightColumn" class="w-full flex-1 min-w-0 max-h-[92vh] flex flex-col bg-white/65 dark:bg-slate-800/65 backdrop-blur-md p-5 rounded-2xl shadow-xl border-2 border-amber-200/80 dark:border-slate-700/80 pointer-events-auto">
+                    <div class="flex justify-between items-center mb-3 border-b border-amber-200/70 dark:border-slate-700/70 pb-3 shrink-0">
+                        <h2 class="text-xl font-black text-amber-900 dark:text-amber-400" data-i18n="ui_select_char">👥 選擇坨坨</h2>
+                        <button id="toggleAllCharBtn" onclick="toggleAllCharacters()" class="px-3.5 py-1.5 text-xs font-bold bg-amber-100/80 dark:bg-slate-700/80 text-amber-800 dark:text-gray-200 rounded-lg hover:bg-amber-200 transition shadow-sm" data-i18n="ui_hide_all">隱藏全部 🔼</button>
+                    </div>
+                    <div id="charGridContainer" class="space-y-3.5 outer-collapsible pr-1 pb-2" style="max-height: 78vh; opacity: 1;"></div>
+                </section>
+
+                <!-- ▶ 右邊欄：標題設定區 + 角色控制/背景/服裝/動作區 -->
                 <div id="uiLeftColumn" class="w-full lg:w-[440px] shrink-0 flex flex-col gap-4 pointer-events-auto">
                     
                     <!-- 頂部標題與語言時間設定 -->
@@ -311,15 +320,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- ▶ 右邊欄：選擇坨坨角色區域 -->
-                <section id="uiRightColumn" class="w-full flex-1 min-w-0 max-h-[92vh] flex flex-col bg-white/65 dark:bg-slate-800/65 backdrop-blur-md p-5 rounded-2xl shadow-xl border-2 border-amber-200/80 dark:border-slate-700/80 pointer-events-auto">
-                    <div class="flex justify-between items-center mb-3 border-b border-amber-200/70 dark:border-slate-700/70 pb-3 shrink-0">
-                        <h2 class="text-xl font-black text-amber-900 dark:text-amber-400" data-i18n="ui_select_char">👥 選擇坨坨</h2>
-                        <button id="toggleAllCharBtn" onclick="toggleAllCharacters()" class="px-3.5 py-1.5 text-xs font-bold bg-amber-100/80 dark:bg-slate-700/80 text-amber-800 dark:text-gray-200 rounded-lg hover:bg-amber-200 transition shadow-sm" data-i18n="ui_hide_all">隱藏全部 🔼</button>
-                    </div>
-                    <div id="charGridContainer" class="space-y-3.5 outer-collapsible pr-1 pb-2" style="max-height: 78vh; opacity: 1;"></div>
-                </section>
 
             </div>
         </div>
