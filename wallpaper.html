@@ -974,20 +974,93 @@
                 }
                 container.innerHTML = ''; const skinName = `Mini_${costumeKey}`;
 
-                for (let i = 0; i < count; i++) {
-                    let randomX, randomY, isValidPosition = false;
-                    while (!isValidPosition) {
-                        randomX = Math.floor(Math.random() * 80) + 5; 
-                        randomY = Math.floor(Math.random() * 80) + 5; 
-                        const inClockArea = (randomX < 35 && randomY > 65);
-                        const inMainCharacterArea = (randomX > 45 && randomY > 30);
-                        if (!inClockArea && !inMainCharacterArea) { isValidPosition = true; }
+                const vw = window.innerWidth || 1920;
+                const vh = window.innerHeight || 1080;
+
+                // 動態偵測時鐘實際佔用矩形（包含 24px 安全邊距）
+                const clockEl = document.getElementById('desktopClock');
+                let clockBox = null;
+                if (clockEl) {
+                    const rect = clockEl.getBoundingClientRect();
+                    if (rect.width > 0 && rect.height > 0) {
+                        const pad = 24;
+                        clockBox = {
+                            left: rect.left - pad,
+                            right: rect.right + pad,
+                            top: rect.top - pad,
+                            bottom: rect.bottom + pad
+                        };
                     }
-                    const randomAngle = Math.floor(Math.random() * 8) * 45; 
-                    const visualScale = ((Math.random() * 0.3 + 0.9) * 0.5).toFixed(2);
+                }
+
+                // 記錄已放置的迷你 Spine（中心像素座標與碰撞半徑）
+                const placedMinis = [];
+                const BASE_SIZE = 420;
+
+                for (let i = 0; i < count; i++) {
+                    const randomAngle = Math.floor(Math.random() * 8) * 45;
+                    const visualScale = parseFloat(((Math.random() * 0.3 + 0.9) * 0.5).toFixed(2));
+                    const radius = (BASE_SIZE * visualScale) * 0.45;
+                    const edgeMargin = Math.max(radius * 0.7, 60);
+
+                    let chosenX = null;
+                    let chosenY = null;
+                    const maxAttempts = 400;
+
+                    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+                        // 優先保留 20px 額外呼吸間距，若螢幕較小則逐步放寬
+                        const extraGap = attempt < 250 ? 20 : (attempt < 350 ? 5 : 0);
+
+                        const cx = edgeMargin + Math.random() * Math.max(10, vw - edgeMargin * 2);
+                        const cy = edgeMargin + Math.random() * Math.max(10, vh - edgeMargin * 2);
+
+                        // 1. 避開時鐘區域（圓形對矩形碰撞檢測）
+                        let hitsClock = false;
+                        if (clockBox) {
+                            const nearestX = Math.max(clockBox.left, Math.min(cx, clockBox.right));
+                            const nearestY = Math.max(clockBox.top, Math.min(cy, clockBox.bottom));
+                            if (Math.hypot(cx - nearestX, cy - nearestY) < radius) {
+                                hitsClock = true;
+                            }
+                        } else {
+                            const pctX = (cx / vw) * 100;
+                            const pctY = (cy / vh) * 100;
+                            if (pctX > 32 && pctX < 68 && pctY > 68) hitsClock = true;
+                        }
+                        if (hitsClock) continue;
+
+                        // 2. 避開右側主 Spine 區域
+                        const pctX = (cx / vw) * 100;
+                        const pctY = (cy / vh) * 100;
+                        const inMainCharacterArea = (pctX > 45 && pctY > 26);
+                        if (inMainCharacterArea) continue;
+
+                        // 3. 避開其他已生成的迷你 Spine（圓形中心距離檢測）
+                        let overlapsOtherMini = false;
+                        for (const other of placedMinis) {
+                            const minDist = radius + other.radius + extraGap;
+                            if (Math.hypot(cx - other.x, cy - other.y) < minDist) {
+                                overlapsOtherMini = true;
+                                break;
+                            }
+                        }
+                        if (overlapsOtherMini) continue;
+
+                        chosenX = cx;
+                        chosenY = cy;
+                        break;
+                    }
+
+                    // 空間不足時安全跳過剩餘個數，防止無窮迴圈
+                    if (chosenX === null || chosenY === null) continue;
+
+                    placedMinis.push({ x: chosenX, y: chosenY, radius });
+
+                    const leftVw = ((chosenX / vw) * 100).toFixed(2);
+                    const topVh = ((chosenY / vh) * 100).toFixed(2);
                     const wrapperId = `mini-wp-${i}`;
-                    
-                    const wrapperHtml = `<div id="${wrapperId}" style="position: absolute; left: ${randomX}vw; top: ${randomY}vh; width: 420px; height: 420px; transform: translate(-50%, -50%) rotate(${randomAngle}deg) scale(${visualScale}); transform-origin: center center; opacity: 0.9; z-index: 5; pointer-events: none;"></div>`;
+
+                    const wrapperHtml = `<div id="${wrapperId}" style="position: absolute; left: ${leftVw}vw; top: ${topVh}vh; width: 420px; height: 420px; transform: translate(-50%, -50%) rotate(${randomAngle}deg) scale(${visualScale}); transform-origin: center center; opacity: 0.9; z-index: 5; pointer-events: none;"></div>`;
                     container.insertAdjacentHTML('beforeend', wrapperHtml);
 
                     const miniPlayer = new spine.SpinePlayer(wrapperId, {
