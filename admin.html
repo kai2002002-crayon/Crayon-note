@@ -218,6 +218,10 @@
                 <button onclick="downloadJS('data_collectibles.js', generateCollectiblesData())" class="w-full py-3 bg-slate-700 hover:bg-slate-600 rounded text-left px-4 font-mono text-sm border border-slate-600">⬇️ data_collectibles.js</button>
                 <button onclick="downloadJS('data_skills.js', generateDataMap('characterSkills', characterSkills))" class="w-full py-3 bg-slate-700 hover:bg-slate-600 rounded text-left px-4 font-mono text-sm border border-slate-600 text-rose-300">⬇️ data_skills.js</button>
                 <button onclick="downloadJS('data_aside.js', generateDataMap('ASIDE_DATA', ASIDE_DATA))" class="w-full py-3 bg-slate-700 hover:bg-slate-600 rounded text-left px-4 font-mono text-sm border border-slate-600 text-amber-300">⬇️ data_aside.js</button>
+                
+                <!-- 新增：產生 sitemap.xml 按鈕 -->
+                <div class="border-t border-slate-700 my-2"></div>
+                <button onclick="downloadXML('sitemap.xml', generateSitemapXML())" class="w-full py-3 bg-emerald-900/60 hover:bg-emerald-800/80 rounded text-left px-4 font-mono text-sm border border-emerald-600 text-emerald-300 font-bold">⬇️ sitemap.xml (含新角色)</button>
             </div>
             <div id="statusMsg" class="mt-4 p-3 rounded bg-green-900/50 text-green-400 text-sm font-bold hidden text-center border border-green-500">
                 ✅ 已更新記憶體！請點擊上方按鈕下載。
@@ -652,6 +656,66 @@
 
         function generateDataMap(varName, dataObj) {
             return `const ${varName} = ${JSON.stringify(dataObj, null, 4)};\n`;
+        }
+        function generateSitemapXML() {
+            const baseUrl = "https://crayon-note.vercel.app";
+            const today = new Date().toISOString().split('T')[0]; // 自動取得 YYYY-MM-DD
+
+            // 靜態頁面清單 (若有新增獨立 HTML 頁面可加在這裡)
+            const staticPages = [
+                "apostle_viewer.html",
+                "gacha.html",
+                "tier_maker.html",
+                "checklist.html",
+                "story.html"
+            ];
+
+            let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+            xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
+            
+            // 1. 首頁
+            xml += `    <url>\n`;
+            xml += `        <loc>${baseUrl}/</loc>\n`;
+            xml += `        <lastmod>${today}</lastmod>\n`;
+            xml += `        <changefreq>daily</changefreq>\n`;
+            xml += `        <priority>1.0</priority>\n`;
+            xml += `    </url>\n`;
+
+            // 2. 動態角色詳情頁 (自動遍歷 INITIAL_DATA，新角色會自動排入並帶編號註解)
+            INITIAL_DATA.forEach((char, idx) => {
+                if (!char.name) return;
+                // encodeURIComponent 預設不編碼括號 ( )，補上 %28 %29 以完全符合你原本 Sitemap 的格式
+                const encodedName = encodeURIComponent(char.name)
+                    .replace(/\(/g, '%28')
+                    .replace(/\)/g, '%29');
+                
+                xml += `    <url>\n`;
+                xml += `        <!--${idx + 1} ${char.name} -->\n`;
+                xml += `        <loc>${baseUrl}/char_detail.html?char=${encodedName}</loc>\n`;
+                xml += `    </url>\n`;
+            });
+
+            // 3. 其他靜態頁面
+            staticPages.forEach(page => {
+                xml += `    <url>\n`;
+                xml += `        <loc>${baseUrl}/${page}</loc>\n`;
+                xml += `    </url>\n`;
+            });
+
+            xml += `</urlset>`;
+            return xml;
+        }
+
+        function downloadXML(filename, content) {
+            // XML 標準建議不加 UTF-8 BOM (\ufeff)，避免部分爬蟲解析異常
+            const blob = new Blob([content], { type: 'application/xml;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            link.style.display = 'none';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 
         function downloadJS(filename, content) {
