@@ -81,6 +81,7 @@
 [class*="_Sist"] { background-image: url('Sistsheet.png'); }
 [class*="_Snorky"] { background-image: url('Snorkysheet.png'); }
 [class*="_Speaki"] { background-image: url('Speakisheet.png'); }
+[class*="_SpeakiMaid"] { background-image: url('SpeakiMaidsheet.png'); }
 [class*="_Sylla"] { background-image: url('Syllasheet.png'); }
 [class*="_Taida"] { background-image: url('Taidasheet.png'); }
 [class*="_Tig"] { background-image: url('Tigsheet.png'); }
@@ -740,6 +741,16 @@
 .sprite-Icon_NormalSkill_Speaki { width: 64px; height: 64px; background-position: -5px -525px; }
 .sprite-Icon_PassiveSkill_Speaki { width: 64px; height: 64px; background-position: -5px -599px; }
 .sprite-PresentList_Speaki { width: 245px; height: 208px; background-position: -5px -673px; }
+
+/* --- SpeakiMiad --- */
+.sprite-AsideIcon_SpeakiMiad { width: 256px; height: 256px; background-position: -5px -5px; }
+.sprite-Aside_Skill_SpeakiMiad_1 { width: 64px; height: 64px; background-position: -5px -271px; }
+.sprite-Aside_Skill_SpeakiMiad_2 { width: 64px; height: 64px; background-position: -5px -345px; }
+.sprite-Aside_Skill_SpeakiMiad_3 { width: 64px; height: 64px; background-position: -5px -419px; }
+.sprite-CG_Schedule_SpeakiMiad { width: 1024px; height: 512px; background-position: -5px -493px; }
+.sprite-Icon_NormalSkill_SpeakiMiad { width: 64px; height: 64px; background-position: -5px -1015px; }
+.sprite-Icon_PassiveSkill_SpeakiMiad { width: 64px; height: 64px; background-position: -5px -1089px; }
+.sprite-PresentList_SpeakiMiad { width: 232px; height: 222px; background-position: -5px -1163px; }
 
 /* --- Sylla --- */
 .sprite-AsideIcon_Sylla { width: 256px; height: 256px; background-position: -5px -5px; }
