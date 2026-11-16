@@ -219,9 +219,16 @@
                 <button onclick="downloadJS('data_skills.js', generateDataMap('characterSkills', characterSkills))" class="w-full py-3 bg-slate-700 hover:bg-slate-600 rounded text-left px-4 font-mono text-sm border border-slate-600 text-rose-300">⬇️ data_skills.js</button>
                 <button onclick="downloadJS('data_aside.js', generateDataMap('ASIDE_DATA', ASIDE_DATA))" class="w-full py-3 bg-slate-700 hover:bg-slate-600 rounded text-left px-4 font-mono text-sm border border-slate-600 text-amber-300">⬇️ data_aside.js</button>
                 
-                <!-- 新增：產生 sitemap.xml 按鈕 -->
-                <div class="border-t border-slate-700 my-2"></div>
-                <button onclick="downloadXML('sitemap.xml', generateSitemapXML())" class="w-full py-3 bg-emerald-900/60 hover:bg-emerald-800/80 rounded text-left px-4 font-mono text-sm border border-emerald-600 text-emerald-300 font-bold">⬇️ sitemap.xml (含新角色)</button>
+                <!-- Sitemap 匯入與產生區塊 -->
+                <div class="border-t border-slate-700 my-2 pt-2 space-y-2">
+                    <label class="block text-xs font-bold text-emerald-400">🗺️ Sitemap 增量更新</label>
+                    <label class="w-full py-2.5 bg-slate-700 hover:bg-slate-600 rounded text-center px-3 font-mono text-xs border border-dashed border-emerald-500/70 text-emerald-200 cursor-pointer block transition-colors">
+                        📂 匯入舊的 sitemap.xml
+                        <input type="file" id="sitemapFileInput" accept=".xml" onchange="handleSitemapUpload(event)" class="hidden">
+                    </label>
+                    <p id="sitemapStatus" class="text-[11px] text-slate-400 px-1">未匯入舊檔（將依 INITIAL_DATA 全部重建）</p>
+                    <button onclick="downloadXML('sitemap.xml', generateSitemapXML())" class="w-full py-3 bg-emerald-900/60 hover:bg-emerald-800/80 rounded text-left px-4 font-mono text-sm border border-emerald-600 text-emerald-300 font-bold">⬇️ sitemap.xml (含新角色)</button>
+                </div>
             </div>
             <div id="statusMsg" class="mt-4 p-3 rounded bg-green-900/50 text-green-400 text-sm font-bold hidden text-center border border-green-500">
                 ✅ 已更新記憶體！請點擊上方按鈕下載。
@@ -657,18 +664,90 @@
         function generateDataMap(varName, dataObj) {
             return `const ${varName} = ${JSON.stringify(dataObj, null, 4)};\n`;
         }
+        // 儲存從舊 sitemap.xml 解析出來的既有角色順序與靜態頁面
+        let importedCharOrder = null;
+        let importedStaticPages = null;
+
+        function handleSitemapUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const parser = new DOMParser();
+                    const xmlDoc = parser.parseFromString(e.target.result, "application/xml");
+                    
+                    if (xmlDoc.querySelector("parsererror")) {
+                        alert("XML 格式解析失敗，請確認檔案是否為有效的 sitemap.xml");
+                        return;
+                    }
+
+                    const locNodes = xmlDoc.querySelectorAll("url > loc");
+                    const chars = [];
+                    const statics = [];
+
+                    locNodes.forEach(node => {
+                        const urlStr = node.textContent.trim();
+                        if (urlStr.includes("char_detail.html?char=")) {
+                            const encodedParam = urlStr.split("char_detail.html?char=")[1];
+                            const decodedName = decodeURIComponent(encodedParam);
+                            if (decodedName && !chars.includes(decodedName)) {
+                                chars.push(decodedName);
+                            }
+                        } else if (urlStr !== "https://crayon-note.vercel.app/" && urlStr !== "https://crayon-note.vercel.app") {
+                            // 保留原本的靜態頁面順序 (例如 apostle_viewer.html 等)
+                            const pagePath = urlStr.replace("https://crayon-note.vercel.app/", "");
+                            if (pagePath && !statics.includes(pagePath)) {
+                                statics.push(pagePath);
+                            }
+                        }
+                    });
+
+                    importedCharOrder = chars;
+                    importedStaticPages = statics.length > 0 ? statics : null;
+
+                    // 計算 INITIAL_DATA 中有哪些是舊 Sitemap 還沒有的新角色
+                    const newChars = INITIAL_DATA
+                        .map(c => c.name)
+                        .filter(name => name && !importedCharOrder.includes(name));
+
+                    const statusEl = document.getElementById("sitemapStatus");
+                    statusEl.innerHTML = `✅ 已讀取 <b class="text-white">${importedCharOrder.length}</b> 名舊角色` +
+                        (newChars.length > 0 
+                            ? `，偵測到 <b class="text-amber-300">${newChars.length}</b> 名新角色 (${newChars.join('、')})` 
+                            : `，目前無新增角色`);
+                } catch (err) {
+                    alert("讀取 sitemap.xml 時發生錯誤：" + err.message);
+                }
+            };
+            reader.readAsText(file, "UTF-8");
+        }
+
         function generateSitemapXML() {
             const baseUrl = "https://crayon-note.vercel.app";
-            const today = new Date().toISOString().split('T')[0]; // 自動取得 YYYY-MM-DD
+            const today = new Date().toISOString().split('T')[0];
 
-            // 靜態頁面清單 (若有新增獨立 HTML 頁面可加在這裡)
-            const staticPages = [
+            const staticPages = importedStaticPages || [
                 "apostle_viewer.html",
                 "gacha.html",
                 "tier_maker.html",
                 "checklist.html",
                 "story.html"
             ];
+
+            // 決定最終角色順序：若有匯入舊檔，保留舊順序並把新角色附加在最後
+            let finalCharList = [];
+            if (importedCharOrder && importedCharOrder.length > 0) {
+                finalCharList = [...importedCharOrder];
+                INITIAL_DATA.forEach(char => {
+                    if (char.name && !finalCharList.includes(char.name)) {
+                        finalCharList.push(char.name);
+                    }
+                });
+            } else {
+                finalCharList = INITIAL_DATA.map(c => c.name).filter(Boolean);
+            }
 
             let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
             xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
@@ -681,21 +760,19 @@
             xml += `        <priority>1.0</priority>\n`;
             xml += `    </url>\n`;
 
-            // 2. 動態角色詳情頁 (自動遍歷 INITIAL_DATA，新角色會自動排入並帶編號註解)
-            INITIAL_DATA.forEach((char, idx) => {
-                if (!char.name) return;
-                // encodeURIComponent 預設不編碼括號 ( )，補上 %28 %29 以完全符合你原本 Sitemap 的格式
-                const encodedName = encodeURIComponent(char.name)
+            // 2. 動態角色詳情頁 (維持舊編號順序 + 新角色接續編號)
+            finalCharList.forEach((charName, idx) => {
+                const encodedName = encodeURIComponent(charName)
                     .replace(/\(/g, '%28')
                     .replace(/\)/g, '%29');
                 
                 xml += `    <url>\n`;
-                xml += `        <!--${idx + 1} ${char.name} -->\n`;
+                xml += `        <!--${idx + 1} ${charName} -->\n`;
                 xml += `        <loc>${baseUrl}/char_detail.html?char=${encodedName}</loc>\n`;
                 xml += `    </url>\n`;
             });
 
-            // 3. 其他靜態頁面
+            // 3. 靜態頁面
             staticPages.forEach(page => {
                 xml += `    <url>\n`;
                 xml += `        <loc>${baseUrl}/${page}</loc>\n`;
