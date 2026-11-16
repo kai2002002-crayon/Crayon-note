@@ -727,14 +727,14 @@
 .sprite-PresentList_Sist { width: 228px; height: 182px; background-position: -5px -1163px; }
 
 /* --- Snorky --- */
-.sprite-AsideIcon_Snorky { width: 64px; height: 64px; background-position: -5px -5px; }
-.sprite-Aside_Skill_Snorky_1 { width: 64px; height: 64px; background-position: -5px -79px; }
-.sprite-Aside_Skill_Snorky_2 { width: 64px; height: 64px; background-position: -5px -153px; }
-.sprite-Aside_Skill_Snorky_3 { width: 64px; height: 64px; background-position: -5px -227px; }
-.sprite-CG_Schedule_Snorky { width: 1024px; height: 512px; background-position: -5px -301px; }
-.sprite-Icon_NormalSkill_Snorky { width: 64px; height: 64px; background-position: -5px -823px; }
-.sprite-Icon_PassiveSkill_Snorky { width: 64px; height: 64px; background-position: -5px -897px; }
-.sprite-PresentList_Snorky { width: 183px; height: 222px; background-position: -5px -971px; }
+.sprite-AsideIcon_Snorky { width: 256px; height: 256px; background-position: -5px -5px; }
+.sprite-Aside_Skill_Snorky_1 { width: 64px; height: 64px; background-position: -5px -271px; }
+.sprite-Aside_Skill_Snorky_2 { width: 64px; height: 64px; background-position: -5px -345px; }
+.sprite-Aside_Skill_Snorky_3 { width: 64px; height: 64px; background-position: -5px -419px; }
+.sprite-CG_Schedule_Snorky { width: 1024px; height: 512px; background-position: -5px -493px; }
+.sprite-Icon_NormalSkill_Snorky { width: 64px; height: 64px; background-position: -5px -1015px; }
+.sprite-Icon_PassiveSkill_Snorky { width: 64px; height: 64px; background-position: -5px -1089px; }
+.sprite-PresentList_Snorky { width: 183px; height: 222px; background-position: -5px -1163px; }
 
 /* --- Speaki --- */
 .sprite-CG_Schedule_Speaki { width: 1020px; height: 510px; background-position: -5px -5px; }
