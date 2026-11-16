@@ -7,6 +7,21 @@
         <priority>1.0</priority>
     </url>
     <url>
+        <loc>https://crayon-note.vercel.app/apostle_viewer.html</loc>
+    </url>
+    <url>
+        <loc>https://crayon-note.vercel.app/gacha.html</loc>
+    </url>
+    <url>
+        <loc>https://crayon-note.vercel.app/tier_maker.html</loc>
+    </url>
+    <url>
+        <loc>https://crayon-note.vercel.app/checklist.html</loc>
+    </url>
+    <url>
+        <loc>https://crayon-note.vercel.app/story.html</loc>
+    </url>
+    <url>
         <!--1 洛涅 -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E6%B4%9B%E6%B6%85</loc>
     </url>
@@ -341,20 +356,5 @@
     <url>
         <!--84 斯皮奇(女僕) -->
         <loc>https://crayon-note.vercel.app/char_detail.html?char=%E6%96%AF%E7%9A%AE%E5%A5%87%28%E5%A5%B3%E5%83%95%29</loc>
-    </url>
-    <url>
-        <loc>https://crayon-note.vercel.app/apostle_viewer.html</loc>
-    </url>
-    <url>
-        <loc>https://crayon-note.vercel.app/gacha.html</loc>
-    </url>
-    <url>
-        <loc>https://crayon-note.vercel.app/tier_maker.html</loc>
-    </url>
-    <url>
-        <loc>https://crayon-note.vercel.app/checklist.html</loc>
-    </url>
-    <url>
-        <loc>https://crayon-note.vercel.app/story.html</loc>
     </url>
 </urlset>
