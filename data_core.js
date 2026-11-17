@@ -3262,7 +3262,8 @@ const COSTUME_MAP = {
     ],
     "斯諾奇": [
         "Snorky",
-        "SnorkySkin1"
+        "SnorkySkin1",
+        "SnorkySkin2"
     ],
     "斯皮奇": [
         "Speaki",
@@ -3334,7 +3335,8 @@ const COSTUME_MAP = {
     ],
     "卡洛特": [
         "Kyarot",
-        "KyarotSkin1"
+        "KyarotSkin1",
+        "KyarotSkin3"
     ],
     "奈雅": [
         "Naia",
@@ -3344,11 +3346,13 @@ const COSTUME_MAP = {
     "寧琉": [
         "Ner",
         "NerSkin1",
-        "NerSkin2"
+        "NerSkin2",
+        "NerSkin3"
     ],
     "皮可菈": [
         "Picora",
-        "PicoraSkin1"
+        "PicoraSkin1",
+        "PicoraSkin3"
     ],
     "珀榭": [
         "Posher",
@@ -3418,7 +3422,8 @@ const COSTUME_MAP = {
     "瑟琳娜": [
         "Selline",
         "SellineSkin1",
-        "SellineSkin3"
+        "SellineSkin3",
+        "SellineSkin4"
     ],
     "羽伊": [
         "Ui",
@@ -3625,7 +3630,8 @@ const SD_COSTUME = {
     ],
     "斯諾奇": [
         "Snorky",
-        "SnorkySkin1"
+        "SnorkySkin1",
+        "SnorkySkin2"
     ],
     "斯皮奇": [
         "Speaki",
@@ -3697,7 +3703,8 @@ const SD_COSTUME = {
     ],
     "卡洛特": [
         "Kyarot",
-        "KyarotSkin1"
+        "KyarotSkin1",
+        "KyarotSkin3"
     ],
     "奈雅": [
         "Naia",
@@ -3707,11 +3714,13 @@ const SD_COSTUME = {
     "寧琉": [
         "Ner",
         "NerSkin1",
-        "NerSkin2"
+        "NerSkin2",
+        "NerSkin3"
     ],
     "皮可菈": [
         "Picora",
-        "PicoraSkin1"
+        "PicoraSkin1",
+        "PicoraSkin3"
     ],
     "珀榭": [
         "Posher",
@@ -3781,7 +3790,8 @@ const SD_COSTUME = {
     "瑟琳娜": [
         "Selline",
         "SellineSkin1",
-        "SellineSkin3"
+        "SellineSkin3",
+        "SellineSkin4"
     ],
     "羽伊": [
         "Ui",
