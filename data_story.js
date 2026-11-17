@@ -168,7 +168,13 @@ const STORY_DATA = {
     ],
     // 活動劇情
     event: [
-        
+        {
+            id: "event_031",
+            chapterNumber: "031",
+            name: "機智的女僕生活",
+            episodes: [
+            ]
+        },
         {
             id: "event_030",
             chapterNumber: "030",
@@ -618,6 +624,14 @@ const STORY_DATA = {
     // 便服故事
     skin: [
         {
+            id: "event_sister",
+            chapterNumber: "001",
+            name: "任務完成！奇幻冒險團！",
+            episodes: [
+                { epNumber: "第0節", title: "官方PV", youtubeId: "0UQrh8W04Goyp7u-" }
+            ]
+        },
+        {
             id: "event_bunny",
             chapterNumber: "002",
             name: "兔兔，咖啡廳大作戰！",
@@ -626,6 +640,13 @@ const STORY_DATA = {
                 { epNumber: "第1節", title: "兔兔，大作戰！", youtubeId: "Tb4TJ3B3NYg" },
                 { epNumber: "第2節", title: "兔兔，蛋包飯！", youtubeId: "snYJeTKmsBY" },
                 { epNumber: "第3節", title: "兔兔，Happy！", youtubeId: "hoycHaW5U5U" },
+            ]
+        },
+        {
+            id: "event_party",
+            chapterNumber: "003",
+            name: "教團驚喜派對",
+            episodes: [
             ]
         }
     ]
