@@ -629,7 +629,7 @@ const STORY_DATA = {
             chapterNumber: "001",
             name: "任務完成！奇幻冒險團！",
             episodes: [
-                { epNumber: "第0節", title: "官方PV", youtubeId: "0UQrh8W04Goyp7u-" }
+                { epNumber: "第0節", title: "官方PV", youtubeId: "toI4c7LfUZM" }
             ]
         },
         {
