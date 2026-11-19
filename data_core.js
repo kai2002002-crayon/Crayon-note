@@ -3510,7 +3510,8 @@ const COSTUME_MAP = {
         "PolanSkin4"
     ],
     "斯皮奇(女僕)": [
-        "SpeakiMaid"
+        "SpeakiMaid",
+        "SpeakiMaidSkin1"
     ]
 };
 
@@ -3878,7 +3879,8 @@ const SD_COSTUME = {
         "PolanSkin4"
     ],
     "斯皮奇(女僕)": [
-        "SpeakiMaid"
+        "SpeakiMaid",
+        "SpeakiMaidSkin1"
     ]
 };
 
