@@ -3323,7 +3323,7 @@
             }
         }
     },
-     "Polan": {
+    "Polan": {
         "asideIcon": "",
         "totalName": {
             "zh": "內心的少女",
@@ -4834,7 +4834,7 @@
             }
         }
     },
-     "SpeakiMaid": {
+    "SpeakiMaid": {
         "asideIcon": "",
         "totalName": {
             "zh": "超級乾淨南瓜",
@@ -4845,86 +4845,104 @@
             "1": {
                 "icon": "",
                 "name": {
-                    "zh": "",
-                    "ja": "",
-                    "en": ""
+                    "zh": "世上最潔淨的南瓜",
+                    "ja": "世界一清潔なかぼちゃ",
+                    "en": "World's Most Spotless Pumpkin 27,036"
                 },
                 "desc": {
-                    "zh": "",
-                    "ja": "",
-                    "en": ""
+                    "zh": "增加穿載者的最大HP、魔法攻擊力、爆擊與爆擊傷害。",
+                    "ja": "着用者の最大HP、魔法攻撃力、会心、会心ダメージが増加する。",
+                    "en": "Increases the bearer's Max HP, Magical Attack, Critical Hit, and Critical Damage."
                 },
                 "effects": {
                     "zh": [
-                        ""
+                        "最大HP增加:6%",
+                        "魔法攻擊力增加:6%",
+                        "爆擊增加:6%",
+                        "爆擊傷害增加:6%"
                     ],
                     "ja": [
-                        ""
+                        "最大HP增加:6%",
+                        "魔法攻擊力增加:6%",
+                        "合必增加:6%",
+                        "会心ダメージ増加:6%"
                     ],
                     "en": [
-                        ""
+                        "Max HP Increase: 6%",
+                        "Magical ATK Increase: 6%",
+                        "CRIT Increase: 6%",
+                        "CRIT DMG Increase: 6%"
                     ]
                 }
             },
             "2": {
                 "icon": "",
                 "name": {
-                    "zh": "",
-                    "ja": "",
-                    "en": ""
+                    "zh": "自動清潔模式唷!",
+                    "ja": "自動掃除モードですよぉ!",
+                    "en": "Auto-Clean Mooode!"
                 },
                 "desc": {
-                    "zh": "",
-                    "ja": "",
-                    "en": ""
+                    "zh": "使用普通技能時,使被技能命中的友軍使者與自身在一定時間內受到的傷害量減少。\n高級技能傷害量增加,且每次以高級技能擊倒敵人時,立即減少目前的高級技能冷卻時間。",
+                    "ja": "低学年スキル使用時、命中した味方使徒と自身の被ダメージ量が一定時間減少する。\n高学年スキルダメージ量が増加し、高学年スキ儿て敵を倒すたびに、現在の高学年スキルのクールタイムが即時減少する。",
+                    "en": "When Freshman Skill is used, reduces Incoming Damage to herself and the hit allied Apostle for a set period of time. Increases Senior Skill Damage, and each time an enemy is defeated with the Senior Skill, instantly reduces the current Senior Skill Cooldown."
                 },
                 "effects": {
                     "zh": [
-                        ""
+                        "受到的傷害量減少:24%",
+                        "受到的傷害量減少持續時間:8秒",
+                        "高級技能傷害量增加:25%",
+                        "高級技能擊殺敵人時,立即減少冷卻時間:4秒"
                     ],
                     "ja": [
-                        ""
+                        "被ダメージ量減少:24%",
+                        "被ダメージ量減少の持続時間: 8秒",
+                        "高学年スキルダメージ量増加:25%",
+                        "高学年スキルで敵を倒す時、クールタイム即時減少:4秒"
                     ],
                     "en": [
-                        ""
+                        "Incoming DMG Reduction: 24%",
+                        "Incoming DMG Reduction Duration: 8s",
+                        "Senior Skill Damage Increase: 25%",
+                        "Instant Cooldown Reduction on Defeating an Enemy by Using Senior Skill: 4s"
                     ]
                 }
             },
             "3": {
                 "icon": "",
                 "name": {
-                    "zh": "",
-                    "ja": "",
-                    "en": ""
+                    "zh": "大掃除日",
+                    "ja": "大掃除の日",
+                    "en": "Spring Cleaning Day"
                 },
                 "desc": {
-                    "zh": "",
-                    "ja": "",
-                    "en": ""
+                    "zh": "增加所有友軍對敵人造成的傷害量。",
+                    "ja": "味方全員の敵への与ダメージ量を増加させる。",
+                    "en": "Increases all allies' Outgoing Damage to enemies."
                 },
                 "effects": {
                     "zh": [
-                        ""
+                        "傷害量增加:15%"
                     ],
                     "ja": [
-                        ""
+                        "ダメージ量増加:15%"
                     ],
                     "en": [
-                        ""
+                        "DMG Increase: 15%"
                     ]
                 },
                 "globalEffects": {
                     "zh": [
-                        "全體 %",
-                        "全體 %"
+                        "全體爆擊 3%",
+                        "全體爆擊傷害 3%"
                     ],
                     "ja": [
-                        "全体 %",
-                        "全体 %"
+                        "全体会心 3%",
+                        "全体会心ダメージ 3%"
                     ],
                     "en": [
-                        "All %",
-                        "All %"
+                        "All CRIT Hit 3%",
+                        "All CRIT DMG 3%"
                     ]
                 }
             }
