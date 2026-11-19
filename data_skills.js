@@ -86,7 +86,7 @@
             }
         }
     },
-     {
+    {
         "name": "波朗",
         "attribute": "物理",
         "skills": {
@@ -8504,5 +8504,122 @@
                 }
             }
         }
+    },
+    {
+        "name": "斯皮奇(女僕)",
+        "skills": {
+            "zh-TW": {
+                "normalAttack": {
+                    "basic": "用故障的吸塵器把雜物吹向敵人,造成魔法傷害。 [魔法傷害:125%]",
+                    "enhanced": "有一定機率啟動吸塵器,對前方敵人造成3次範圍魔法傷害。 [總魔法傷害:250%]"
+                },
+                "normalSkill": {
+                    "name": "乾乾淨淨太無聊了!",
+                    "desc": "用故障的吸塵器,將3種雜物中的1種吹向前方敵人。每次發動時會依固定順序更換雜物,並觸發不同效果。第一種:吹出傳單,造成範圍魔法傷害並減少SP。第二種:吹出糖果、造成範圍魔法傷害並增加受到的傷害量。第三種:把南瓜射向空中,再讓它落向前方,造成範圍魔法傷害。落下的南瓜會爆炸,造成更高傷害並給予敵人昏迷效果。",
+                    "stats": [
+                        "昏迷:無法進行任何行動。",
+                        "傳單魔法傷害:400%",
+                        "傳單SP減少量:50",
+                        "糖果魔法傷害:400%",
+                        "糖果受到的傷害量增加:15%",
+                        "糖果受到的傷害量增加持續時間:6秒",
+                        "南瓜落下魔法傷害:400%",
+                        "南瓜爆炸魔法傷害:580%",
+                        "南瓜昏迷持續時間:3秒"
+                    ]
+                },
+                "ultimateSkill": {
+                    "name": "渦輪清潔模式!",
+                    "desc": "被失控的吸塵器拖著到處跑,對陽機敵人共造成5次魔法傷害。施放技能進入敵陣後、不會成為敵人的攻擊目標,並進入無敵狀態。",
+                    "cooldown": "24秒",
+                    "stats": [
+                        "無敵:對所有傷害和減益效果免疫。",
+                        "總魔法傷害:3400%"
+                    ]
+                },
+                "passiveSkill": {
+                    "desc": "普通技能與高級技能每次命中敵人時,都會在一定時間內增加自身攻擊力。攻擊力增加效果最多可疊加5層。",
+                    "stats": [
+                        "攻擊力增加:21%",
+                        "攻擊力增加持續時間:8秒"
+                    ]
+                }
+            },
+            "ja": {
+                "normalAttack": {
+                    "basic": "壊れた掃除機でガラクタを飛ばして敵に魔法ダメージを与える。 [魔法ダメージ:125%]",
+                    "enhanced": "一定の確率で掃除機を作動させ、前方の敵に範囲魔法ダメージを3回与える。 [魔法ダメージ: 250%]"
+                },
+                "normalSkill": {
+                    "name": "綺麗になったら、やることがない よ!",
+                    "desc": "壊れた掃除機で3種類のガラクタのうち1つを前方の敵に飛ばす。 ガラクタは発動するたびに決められた順番で変わり、それぞれ異なる効果を発動する。1つ目: チラシを飛ばして囲魔法ダメージを与え、SPを減少させる。2つ目: キャンディを飛ばして範囲魔法ダメージを与え、被ダメージ量を増加させる。3つ目: かぼちゃを空中に打ち上げて前方に落とし、範囲魔法ダメージを与える。落下したかぼちゃは爆発してより大きなダメージを与え、気絶を付与する。",
+                    "stats": [
+                        "気絕:行動不能状態になる。",
+                        "チラシの魔法ダメージ: 400%",
+                        "チラシのSP減少量:50",
+                        "キャンティの魔法ダメージ: 400%",
+                        "キャンディの被ダメージ量増加:15%",
+                        "キャンティの被ダメージ量増加の持続時間: 6秒",
+                        "かぼちゃ落下の魔法ダメージ:400%",
+                        "かぼちゃ爆発の魔法ダメージ: 580%",
+                        "かぼちゃの気絶の持続時間: 3秒"
+                    ]
+                },
+                "ultimateSkill": {
+                    "name": "ターホクリーンモードオオ!",
+                    "desc": "暴走する掃除機に引きずり回され、ランダムな織に合計5回の魔法ダメージを与える。スキル発動で敵に進入した後は敵の目標対象にならず、無敵状態になる。",
+                    "cooldown": "24秒",
+                    "stats": [
+                        "無敵:全てのダメージ及びデバフの免疫を得る。",
+                        "総魔法ダメージ: 3400%"
+                    ]
+                },
+                "passiveSkill": {
+                    "desc": "低学年スキルおよび高学年スキルが織に命中するたびに、一定時同自身の攻撃力が増加する。攻撃力増加効果は最大5回までスタック可能。",
+                    "stats": [
+                        "攻擊力增加:21%",
+                        "攻撃力増加の持続時間:8秒"
+                    ]
+                }
+            },
+            "en": {
+                "normalAttack": {
+                    "basic": "Blows junk with a broken vacuum cleaner, dealing Magical Damage to the enemy. [Magical DMG: 125%]",
+                    "enhanced": "At a set chance, activates a vacuum cleaner to deal AoE Magical Damage to enemies in front 3 times. [Total Magical DMG: 250%]"
+                },
+                "normalSkill": {
+                    "name": "Nothing to Do When It's Clean!",
+                    "desc": "Blows one of three types of junk from a broken vacuum cleaner at enemies in front, The junk that is launched changes according to a set order with each activation, triggering different effects. First type: Launches flyers, dealing AoE Magical Damage and reducing SP. Second type: Launches candy, dealing AoE Magical Damage and increasing Incoming Damage. Third type: Launches a pumpkin into the air and drops it in front, dealing AoE Magical Damage. The dropped pumpkin explodes, dealing greater Damage and applying Stun.",
+                    "stats": [
+                        "Stun: Becomes unable to act",
+                        "Flyer Magical DMG: 400%",
+                        "Flyer SP Reduction: 50",
+                        "Candy Magical DMG: 400%",
+                        "Candy Incoming DMG Increase: 15%",
+                        "Candy Incoming DMG Increase Duration: 6s",
+                        "Pumpkin Drop Magical DMG: 400%",
+                        "Pumpkin Explosion Magical DMG: 580%",
+                        "Pumpkin Stun Duration: 3s"
+                    ]
+                },
+                "ultimateSkill": {
+                    "name": "Turbo Clean Mooode!",
+                    "desc": "Gets dragged around by an out-of-control vacuum cleaner, dealing Magical Damage to random enemies 5 times in total. When dragged into the enemy lines after casting this skill, she cannot be targeted by enemies and becomes Invincible.",
+                    "cooldown": "24s",
+                    "stats": [
+                        "Invincible: Immune to all damage and debuffs",
+                        "Total Magical DMG: 3400%"
+                    ]
+                },
+                "passiveSkill": {
+                    "desc": "Each time her Freshman or Senior Skill hits an enemy, increases her Attack for a set period of time. The Attack Increase effect can stack up to 5 times.",
+                    "stats": [
+                        "ATK Increase: 21%",
+                        "ATK Increase Duration: 8s"
+                    ]
+                }
+            }
+        },
+        "attribute": "魔法"
     }
 ];
