@@ -276,10 +276,10 @@ const REWARD_ICON = {
 
 const PICKUP_SCHEDULE = [
 	{
-        start: "2026-10-22T17:00:00+09:00",
-        end: "2026-11-05T03:59:59+09:00",
-        chars: ["瑰恩"],
-        note: "Guin"
+        start: "2026-11-19T17:00:00+09:00",
+        end: "2026-12-03T03:59:59+09:00",
+        chars: ["斯皮奇(女僕)"],
+        note: "SpeakiMaid"
     },
 	{
         start: "2026-11-05T17:00:00+09:00",
