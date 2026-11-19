@@ -1752,6 +1752,7 @@ const INITIAL_DATA = [
         "race": "幽靈",
         "position": "後排",
         "job": "輸出",
+        "pathVersion": "V5",
         "releaseDate": "2026-11-19T17:00:00+09:00"
     }
 ];
