@@ -323,8 +323,8 @@ const EVENT_SCHEDULE = [
         eventId: "GachaOnceSelectPickHero1" 
     },
 	{
-        start: "2026-09-25T12:00:00+09:00",
-        end: "2026-09-28T03:59:59+09:00",
+        start: "2026-11-20T12:00:00+09:00",
+        end: "2026-11-23T03:59:59+09:00",
         eventId: "TowerBattle" 
     },
 	{
