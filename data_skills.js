@@ -8621,5 +8621,74 @@
             }
         },
         "attribute": "魔法"
+    },
+    {
+        "name": "里昂",
+        "skills": {
+            "zh-TW": {
+                "normalAttack": {
+                    "basic": "",
+                    "enhanced": ""
+                },
+                "normalSkill": {
+                    "name": "",
+                    "desc": "",
+                    "stats": []
+                },
+                "ultimateSkill": {
+                    "name": "",
+                    "desc": "",
+                    "cooldown": "",
+                    "stats": []
+                },
+                "passiveSkill": {
+                    "desc": "",
+                    "stats": []
+                }
+            },
+            "ja": {
+                "normalAttack": {
+                    "basic": "",
+                    "enhanced": ""
+                },
+                "normalSkill": {
+                    "name": "",
+                    "desc": "",
+                    "stats": []
+                },
+                "ultimateSkill": {
+                    "name": "",
+                    "desc": "",
+                    "cooldown": "",
+                    "stats": []
+                },
+                "passiveSkill": {
+                    "desc": "",
+                    "stats": []
+                }
+            },
+            "en": {
+                "normalAttack": {
+                    "basic": "",
+                    "enhanced": ""
+                },
+                "normalSkill": {
+                    "name": "",
+                    "desc": "",
+                    "stats": []
+                },
+                "ultimateSkill": {
+                    "name": "",
+                    "desc": "",
+                    "cooldown": "",
+                    "stats": []
+                },
+                "passiveSkill": {
+                    "desc": "",
+                    "stats": []
+                }
+            }
+        },
+        "attribute": "物理"
     }
 ];

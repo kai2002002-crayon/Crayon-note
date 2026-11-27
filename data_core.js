@@ -347,7 +347,8 @@
         "劉美美": "劉美美",
         "x乂錫安乂x": "x乂錫安乂x",
         "波朗": "波朗",
-        "斯皮奇(女僕)": "斯皮奇(女僕)"
+        "斯皮奇(女僕)": "斯皮奇(女僕)",
+        "里昂": "里昂"
     },
     "ja": {
         "app_title": "トリッカル特級クレヨンノート",
@@ -1047,7 +1048,8 @@
         "劉美美": "Yumimi",
         "x乂錫安乂x": "xXionx",
         "波朗": "Polan",
-        "斯皮奇(女僕)": "Maid Speaki"
+        "斯皮奇(女僕)": "Maid Speaki",
+        "里昂": "Lion"
     }
 };
 
@@ -1754,6 +1756,14 @@ const INITIAL_DATA = [
         "job": "輸出",
         "pathVersion": "V5",
         "releaseDate": "2026-11-19T17:00:00+09:00"
+    },
+    {
+        "name": "里昂",
+        "personality": "憂鬱",
+        "race": "獸人",
+        "position": "前排",
+        "job": "肉盾",
+        "releaseDate": "2026-12-03T17:00:00+09:00"
     }
 ];
 
@@ -1928,7 +1938,8 @@ const GRADE_MAP = {
     "麗息": "2",
     "瑰恩": "3",
     "波朗": "3",
-    "斯皮奇(女僕)": "3"
+    "斯皮奇(女僕)": "3",
+    "里昂": "3"
 };
 
 const ELDAIN_LIST = [
@@ -3148,7 +3159,8 @@ const SPINE_MAP = {
     "麗息": "Lethe",
     "瑰恩": "Guin",
     "波朗": "Polan",
-    "斯皮奇(女僕)": "SpeakiMaid"
+    "斯皮奇(女僕)": "SpeakiMaid",
+    "里昂": "Lion"
 };
 
 const COSTUME_MAP = {
@@ -3517,6 +3529,9 @@ const COSTUME_MAP = {
     "斯皮奇(女僕)": [
         "SpeakiMaid",
         "SpeakiMaidSkin1"
+    ],
+    "里昂": [
+        "Lion"
     ]
 };
 
@@ -3886,6 +3901,9 @@ const SD_COSTUME = {
     "斯皮奇(女僕)": [
         "SpeakiMaid",
         "SpeakiMaidSkin1"
+    ],
+    "里昂": [
+        "Lion"
     ]
 };
 
@@ -3973,5 +3991,6 @@ const MINI_SPINE = {
     "麗息": "Mini_Lethe",
     "瑰恩": "Mini_Guin",
     "波朗": "Mini_Polan",
-    "斯皮奇(女僕)": "Mini_SpeakiMaid"
+    "斯皮奇(女僕)": "Mini_SpeakiMaid",
+    "里昂": "Mini_Lion"
 };
