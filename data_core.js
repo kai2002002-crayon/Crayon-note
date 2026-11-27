@@ -2512,6 +2512,14 @@ const FOOD_MAP = {
             "石榴甜茶"
         ]
     },
+    "SpeakiMaid": {
+        "super": "肉桂口味健康糖球",
+        "special": [
+            "肉桂口味糖球",
+            "石榴果實",
+            "石榴甜茶"
+        ]
+    },
     "Sylla": {
         "super": "氫氣炸豬排",
         "special": [
