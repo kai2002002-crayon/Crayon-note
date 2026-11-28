@@ -83,7 +83,8 @@
         "xXionx": "黑暗魔彈射手\n我是從光明和黑暗的邊界回來的人！\n艾利亞斯的暗之光，自詡為「魔彈射手」。沉浸在自己的世界，無法自拔的幽靈。乍看難以相處，但只要迎合她喜歡的黑暗及莊嚴取向，似乎很容易就能成為朋友。",
         "Yomi": "故事中的向月花\n當太陽沉睡時，月亮便會照亮世界。\n在月光皎潔的夜晚，我偶然遇見了一位月亮祭司。據寧琉所說，追隨月亮的祭司乃古老傳說中的存在……看她時不時來教團找我，表現出追隨我的樣子，感覺她就是個溫柔善良的傢伙。",
         "Yumimi": "懶散獵人\n啊～草的味道好好聞～\n滿足自身現況與處境的自給自足型獸人。據說很少去村子，主要都在森林裡生活。劉美美空置的房子有時會被調皮的獸人們當作遊樂場使用。",
-        "SpeakiMaid": "南瓜派對女僕\n我是掃蕩教主家的清掃女僕可麗餅哦！寧琉是誰啊﹖\n斯皮奇開始模仿教團女僕可麗餅的外貌和行為。她的全身掛滿南瓜裝飾，手上還拿著吸塵器，看起來就像她本人一樣。雖然還是有點笨拙、經常出錯，但意外地展現出了比想像中更認真的一面。"
+        "SpeakiMaid": "南瓜派對女僕\n我是掃蕩教主家的清掃女僕可麗餅哦！寧琉是誰啊﹖\n斯皮奇開始模仿教團女僕可麗餅的外貌和行為。她的全身掛滿南瓜裝飾，手上還拿著吸塵器，看起來就像她本人一樣。雖然還是有點笨拙、經常出錯，但意外地展現出了比想像中更認真的一面。",
+        "Lion": "謎之英雄\n沒有壞蛋能逃過我的判決。\n以英雄「斯芬克斯」活動的獸人。平時靠揮舞錘子的怪力做裝卸工維持生計。似乎對不成熟的提格和辛苦的蒂亞娜頗為擔憂。"
     },
     "ja": {
         "Alice": "カード占い専門\nあなたの未来を預かってあげるわ!\n予知能力が込められたカードで占いをしてくれる愛想の良い幽霊。退屈しのぎにカード占いを頼むと、運勢は凶だけが出て、後悔することになる。",
@@ -169,7 +170,8 @@
         "xXionx": "黒い魔弾の射手\n光と闇の境界を見て来たのだ!\nエーリアスの黒い力、自称「魔弾の射手」。自分だけの世界に深く浸っている幽霊。一見気難しそうに見えるが、ダークでシリアスなものが好きな趣味さえ合わせてあげれば、簡単に友達になれる。",
         "Yomi": "物語の中の向月葵\n太陽が眠りにつけば、月が世界を照らすのです。\n月の明るいある夜に、偶然出会った月の司祭。ネルの話によると月を崇拝する司祭は昔話の中の存在だというが……時折、教団を訪れて私を慕うところを見ると優しい性格の持ち主のようだ。",
         "Yumimi": "気だるげなハンター\nわぁ~やっぱり草の香りがいいわ~\n自分の状況と境遇に満足して暮らす自給自足型の獣人。獣人の村にもあまり立ち寄らず、森で主に生活しているという。ユミミが空けた家は、獣人の子供たちの遊び場になっている。",
-        "SpeakiMaid": "パンフキンパーティーメイド\n教主様の家を荒らす掃除メイド、クレープですっ!\nネルって誰ですか?\n教団メイドのクレープの姿と行動を真似し始めたスピッキー。あちこちに付いているかぼちゃの飾りや、手にした掃除機を見れば、どう見てもただのスピッキーそのものだ。やはりどこか不器用でミスだらけだが、思ったよりも真面目な一面も見せてくれるようだ。"
+        "SpeakiMaid": "パンフキンパーティーメイド\n教主様の家を荒らす掃除メイド、クレープですっ!\nネルって誰ですか?\n教団メイドのクレープの姿と行動を真似し始めたスピッキー。あちこちに付いているかぼちゃの飾りや、手にした掃除機を見れば、どう見てもただのスピッキーそのものだ。やはりどこか不器用でミスだらけだが、思ったよりも真面目な一面も見せてくれるようだ。",
+        "Lion": "謎のヒーロー\n私の判決から逃れられるヴィランはいません。\nヒーロー「スフィンクス」として活動する獣人。普段はハンマーを振り回すその怪力を活かし、荷下ろしのアルバイトをして生計を立てている。いつまで経っても大人にならないティグと、苦労しているディアナへの心配が絶えないようだ。"
     },
     "en": {
         "Alice": "Fortune Card Expert\nLet me be responsible for your future!\nAn affable phantom who reads cards filled with the power of foresight. Getting a card reading done for fun will lead to certain regret after realizing how unlucky you are",
@@ -255,6 +257,7 @@
         "xXionx": "Black Magic Bullet Slinger\nI have seen the boundary between light and darkness!\nThe black light of Elias who calls herself the 'Magic Bullet Slinger'. She's a phantom who is deeply lost in her own world. She may seem difficult at first glance, but it seems easy to befriend her if you cater to her liking for dark and serious things.",
         "Yomi": "Moonflower From the Stories\nWhen the sun falls asleep, the moon illuminates the world.\nA priestess of the moon who I met in a chance encounter one bright, moonlit night. According to Ner, priestesses that shadow the moon are just old wives' tales... But judging by the way she frequently comes to the Order and follows me around, she just seems nice and friendly.",
         "Yumimi": "Lethargic Hunter\nAhhh- I love the smell of grass...\nA self-reliant werebeast who is satisfied with her situation and circumstances. She mostly dwells in the forest and seldom visits the village. Yumimi's house is sometimes used as a playground by some mischievous werebeasts when she's not around,",
-        "SpeakiMaid": "Pumpkin Party Maid\nI'm Crepe, the cleaning maid who dusts the Master's house! Who is Ner?\nSpeaki has begun to imitate the appearance and behavior of Crepe, the Order maid. The pumpkin accessories and the vacuum cleaner in her hand give her away immediately. She's clumsy and full of mistakes but is also unexpectedly serious about her job."
+        "SpeakiMaid": "Pumpkin Party Maid\nI'm Crepe, the cleaning maid who dusts the Master's house! Who is Ner?\nSpeaki has begun to imitate the appearance and behavior of Crepe, the Order maid. The pumpkin accessories and the vacuum cleaner in her hand give her away immediately. She's clumsy and full of mistakes but is also unexpectedly serious about her job.",
+        "Lion": "Heroine of Riddles\nNo villain escapes my judgement.\nA werebeast who is active as the heroine, Sphinx. She wields a mighty hammer with incredible strength, but she also uses that strength to work part-time as a warehouse loader to make a living. She is very worried about Tig, who refuses to grow up, and Diana, who is having a hard time because of Tig."
     }
 };
